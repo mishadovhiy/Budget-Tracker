@@ -544,6 +544,7 @@
                                                     </button>
                                                     <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JJR-Nl-rYc">
                                                         <rect key="frame" x="251.5" y="0.0" width="83.5" height="70"/>
+                                                        <color key="tintColor" name="yellowColor"/>
                                                         <state key="normal" image="minus">
                                                             <color key="titleColor" name="yellowColor"/>
                                                         </state>
