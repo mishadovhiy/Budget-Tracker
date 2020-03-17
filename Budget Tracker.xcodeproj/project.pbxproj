@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5206662421695200772CD5 /* StatisticBrain.swift */; };
+		8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D52066824216A2900772CD5 /* StatisticVC.swift */; };
+		8D52066B24216A6200772CD5 /* HistoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D52066A24216A6200772CD5 /* HistoryVC.swift */; };
 		8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */; };
 		8DBA7E5223F0316F00D8214C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5123F0316F00D8214C /* SceneDelegate.swift */; };
 		8DBA7E5423F0316F00D8214C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5323F0316F00D8214C /* ViewController.swift */; };
@@ -15,7 +18,6 @@
 		8DBA7E5C23F0317100D8214C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5B23F0317100D8214C /* Assets.xcassets */; };
 		8DBA7E5F23F0317100D8214C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5D23F0317100D8214C /* LaunchScreen.storyboard */; };
 		8DD89D8323F1468E00273904 /* mainVCcell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8223F1468E00273904 /* mainVCcell.swift */; };
-		8DD89D8523F146B800273904 /* categoriesVCcell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8423F146B800273904 /* categoriesVCcell.swift */; };
 		8DD89D8723F1471400273904 /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8623F1471400273904 /* AppData.swift */; };
 		8DD89D8A23F1472E00273904 /* Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8923F1472E00273904 /* Alerts.swift */; };
 		8DD89D8C23F1485700273904 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8B23F1485700273904 /* Constants.swift */; };
@@ -24,6 +26,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8D5206662421695200772CD5 /* StatisticBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticBrain.swift; sourceTree = "<group>"; };
+		8D52066824216A2900772CD5 /* StatisticVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticVC.swift; sourceTree = "<group>"; };
+		8D52066A24216A6200772CD5 /* HistoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryVC.swift; sourceTree = "<group>"; };
 		8DBA7E4C23F0316F00D8214C /* Budget Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Budget Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8DBA7E5123F0316F00D8214C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -34,7 +39,6 @@
 		8DBA7E5E23F0317100D8214C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8DBA7E6023F0317100D8214C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DD89D8223F1468E00273904 /* mainVCcell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mainVCcell.swift; sourceTree = "<group>"; };
-		8DD89D8423F146B800273904 /* categoriesVCcell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = categoriesVCcell.swift; sourceTree = "<group>"; };
 		8DD89D8623F1471400273904 /* AppData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
 		8DD89D8923F1472E00273904 /* Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alerts.swift; sourceTree = "<group>"; };
 		8DD89D8B23F1485700273904 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -99,7 +103,6 @@
 			children = (
 				8DBA7E5523F0316F00D8214C /* Main.storyboard */,
 				8DD89D8223F1468E00273904 /* mainVCcell.swift */,
-				8DD89D8423F146B800273904 /* categoriesVCcell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -110,6 +113,8 @@
 				8DBA7E5323F0316F00D8214C /* ViewController.swift */,
 				8DD89D8D23F1495300273904 /* TransactionVC.swift */,
 				8DD89D8F23F1496100273904 /* CategoriesVC.swift */,
+				8D52066824216A2900772CD5 /* StatisticVC.swift */,
+				8D52066A24216A6200772CD5 /* HistoryVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -127,6 +132,7 @@
 			children = (
 				8DD89D8623F1471400273904 /* AppData.swift */,
 				8DD89D8923F1472E00273904 /* Alerts.swift */,
+				8D5206662421695200772CD5 /* StatisticBrain.swift */,
 			);
 			path = Modal;
 			sourceTree = "<group>";
@@ -202,8 +208,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8DD89D8523F146B800273904 /* categoriesVCcell.swift in Sources */,
 				8DD89D8323F1468E00273904 /* mainVCcell.swift in Sources */,
+				8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */,
+				8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */,
 				8DD89D8A23F1472E00273904 /* Alerts.swift in Sources */,
 				8DD89D8E23F1495300273904 /* TransactionVC.swift in Sources */,
 				8DBA7E5423F0316F00D8214C /* ViewController.swift in Sources */,
@@ -212,6 +219,7 @@
 				8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */,
 				8DBA7E5223F0316F00D8214C /* SceneDelegate.swift in Sources */,
 				8DD89D8723F1471400273904 /* AppData.swift in Sources */,
+				8D52066B24216A6200772CD5 /* HistoryVC.swift in Sources */,
 				8DD89D8C23F1485700273904 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -357,13 +365,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6Z5472JJ8U;
+				DEVELOPMENT_TEAM = J668Y85NX9;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "Dovhiy.Levcuk.Budget-Tracker";
+				PRODUCT_BUNDLE_IDENTIFIER = "Dovhiy.Mikhail.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -375,13 +383,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 6Z5472JJ8U;
+				DEVELOPMENT_TEAM = J668Y85NX9;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "Dovhiy.Levcuk.Budget-Tracker";
+				PRODUCT_BUNDLE_IDENTIFIER = "Dovhiy.Mikhail.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

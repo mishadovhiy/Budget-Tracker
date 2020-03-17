@@ -13,12 +13,18 @@ struct K {
     static let mainCellIdent = "TableViewCell"
     static let catCellIdent = "categoriesVCTableViewCell"
     static let settCellIdent = "settingsTableViewCell"
+    static let plotCellIdent = "plotCellIdentifier"
     static let redIndicator = "negativeValue"
     static let greenIndicator = "positiveValue"
     static let income = "Incomes"
     static let expense = "Expenses"
     static let quitVC = "quitTransitionVC"
     static let editVC = "goToEditVC"
+    static let statisticSeque = "toStatisticVC"
+    static let statisticCellIdent = "statisticCellIdent"
+    static let historySeque = "toHistorySeque"
+    static let historyCellIdent = "historyCellIdent"
+    static let historyCellTotalIdent = "historyCellTotalIdent"
     
     struct Text {
         static let unknExpense = "Uncategorized Expense"
@@ -33,5 +39,6 @@ struct K {
         static let negative = UIColor(named: "negativeColor")
         static let separetor = UIColor(named: "separetorColor")
         static let yellow = UIColor(named: "yellowColor")
+        static let pink = UIColor(named: "pinkColor")
     }
 }

@@ -8,7 +8,14 @@
 
 import UIKit
 import CoreData
+
 var appData = AppData()
+var statisticBrain = StatisticBrain()
+var sumAllCategories: [String: Double] = [:]
+var allSelectedTransactionsData: [Transactions] = []
+var expenseLabelPressed = true
+var selectedPeroud = ""
+
 
 class ViewController: UIViewController {
 
@@ -22,7 +29,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var expenseLabel: UILabel!
     var tableData = appData.transactions.sorted{ $0.dateFromString > $1.dateFromString }
     var alerts = Alerts()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUI()
@@ -62,6 +68,8 @@ class ViewController: UIViewController {
             appendFiltered(dates: mydates)
         }
         showNoDataLabel()
+        allSelectedTransactionsData = tableData
+        
     }
     
     func appendFiltered(dates: [String]) {
@@ -75,6 +83,7 @@ class ViewController: UIViewController {
                     arr.append(appData.transactions[i])
                 }}}
         tableData = arr.sorted{ $0.dateFromString > $1.dateFromString }
+        
     }
     
     func loadItems(_ request: NSFetchRequest<Transactions> = Transactions.fetchRequest(), predicate: NSPredicate? = nil) {
@@ -83,6 +92,9 @@ class ViewController: UIViewController {
         } catch { print("\n\nERROR FETCHING DATA FROM CONTEXTE\n\n", error)}
         mainTableView.reloadData()
         appData.recalculation(b: balanceLabel, i: incomeLabel, e: expenseLabel, data: tableData)
+    
+        statisticBrain.getData(from: self.tableData)
+        sumAllCategories = statisticBrain.statisticData
     }
     
     func saveItems() {
@@ -130,7 +142,10 @@ class ViewController: UIViewController {
         if show == true {
             UIView.animate(withDuration: 0.2) {
                 self.customDatesLabel.alpha = 0.5
-                self.customDatesLabel.text = "\(appData.filter.from) →  \(appData.filter.to)" }
+                self.customDatesLabel.text = "\(appData.filter.from) →  \(appData.filter.to)"
+                selectedPeroud = "\(appData.filter.from) → \(appData.filter.to)"
+            }
+            
         } else {
             self.customDatesLabel.alpha = 0
             self.customDatesLabel.text = ""
@@ -161,7 +176,8 @@ class ViewController: UIViewController {
             performFiltering()
             loadItems()
             showCutomDateLabel(show: false)
-
+            selectedPeroud = "All time"
+            
         case 1:
             appData.filter.showAll = false
             appData.filter.from = appData.filter.getFirstDay(appData.filter.filterObjects.currentDate)
@@ -169,6 +185,7 @@ class ViewController: UIViewController {
             performFiltering()
             loadItems()
             showCutomDateLabel(show: false)
+            selectedPeroud = "This month"
 
         case 2:
             appData.filter.showAll = false
@@ -177,6 +194,7 @@ class ViewController: UIViewController {
             performFiltering()
             loadItems()
             showCutomDateLabel(show: false)
+            selectedPeroud = "Today"
             
         case 3:
             showFilterAlert()
@@ -188,7 +206,22 @@ class ViewController: UIViewController {
             performFiltering()
             loadItems()
         }
+        
     }
+    
+    @IBAction func statisticLabelPressed(_ sender: UIButton) {
+        switch sender.tag {
+        case 0:
+            expenseLabelPressed = true
+        case 1:
+            expenseLabelPressed = false
+        default:
+            expenseLabelPressed = true
+        }
+        performSegue(withIdentifier: K.statisticSeque, sender: self)
+        
+    }
+    
     
     @IBAction func unwindToViewControllerA(segue: UIStoryboardSegue) {
         DispatchQueue.global(qos: .userInitiated).async {
@@ -204,33 +237,72 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableData.count
+        if section == 0 {
+            return tableData.count
+        } else {
+            if tableData.count < 3 {
+                return 0
+            } else { return 1 }
+        }
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let data = tableData[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: K.mainCellIdent, for: indexPath) as! mainVCcell
         
-        if data.value > 0 {
-            cell.valueLabel.textColor = K.Colors.category
+        if indexPath.section == 0 {
+            let data = tableData[indexPath.row]
+            let cell = tableView.dequeueReusableCell(withIdentifier: K.mainCellIdent, for: indexPath) as! mainVCcell
+            if data.value > 0 {
+                cell.valueLabel.textColor = K.Colors.category
+            } else {
+                cell.valueLabel.textColor = K.Colors.negative
+            }
+            cell.valueLabel.text = "\(Int(data.value))"
+            cell.categoryLabel.text = "\(data.category ?? K.Text.unknCat)"
+            cell.dateLabel.text = data.date
+            return cell
+            
         } else {
-            cell.valueLabel.textColor = K.Colors.negative
+
+            let cell = tableView.dequeueReusableCell(withIdentifier: K.plotCellIdent, for: indexPath) as! PlotCell
+            cell.categoryLabel.text = statisticBrain.maxExpenceName
+            if statisticBrain.minValue < Double(Int.max) {
+                cell.valueLabel.text = "\(Int(statisticBrain.minValue))"
+            } else { cell.valueLabel.text = "\(statisticBrain.minValue)" }
+            cell.setupView()
+            return cell
+
         }
-        cell.valueLabel.text = "\(Int(data.value))"
-        cell.categoryLabel.text = "\(data.category ?? K.Text.unknCat)"
-        cell.dateLabel.text = data.date
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        return cell
+        if indexPath.section == 1 {
+            expenseLabelPressed = true
+            performSegue(withIdentifier: K.statisticSeque, sender: self)
+        }
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == UITableViewCell.EditingStyle.delete {
-            
-            appData.context.delete(self.tableData[indexPath.row])
-            self.tableData.remove(at: indexPath.row)
-            self.saveItems()
-            self.loadItems()
+
+        if indexPath.section == 0 {
+            if editingStyle == UITableViewCell.EditingStyle.delete {
+                appData.context.delete(self.tableData[indexPath.row])
+                self.tableData.remove(at: indexPath.row)
+                self.saveItems()
+                self.loadItems()
+            }
         }
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        
+        if indexPath.section == 0 {
+            return UITableViewCell.EditingStyle.delete
+        } else { return UITableViewCell.EditingStyle.none }
     }
 
 }
