@@ -67,5 +67,4 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    
 }

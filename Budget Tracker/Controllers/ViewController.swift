@@ -16,7 +16,6 @@ var allSelectedTransactionsData: [Transactions] = []
 var expenseLabelPressed = true
 var selectedPeroud = ""
 
-
 class ViewController: UIViewController {
 
     @IBOutlet weak var filterView: UIView!
@@ -152,17 +151,10 @@ class ViewController: UIViewController {
         
         appData.filter.from = appData.filter.filterObjects.startDateField.text!
         appData.filter.to = appData.filter.filterObjects.endDateField.text!
-        showCutomDateLabel(show: true)
+        selectedPeroud = "\(appData.filter.from) → \(appData.filter.to)"
+        filterTextLabel.text = "Filter: \(selectedPeroud)"
     }
-    
-    func showCutomDateLabel(show: Bool) {
-        //find where used and replace call to code inside
-        if show == true {
-            selectedPeroud = "\(appData.filter.from) → \(appData.filter.to)"
-            filterTextLabel.text = "Filter: \(selectedPeroud) ▾"
-        }
-    }
-    
+
     func showNoDataLabel() {
         
         if tableData.count == 0 {
@@ -176,6 +168,8 @@ class ViewController: UIViewController {
     }
     
     func removeBackground() {
+        
+        buttonsFilterView.alpha = 0
         thisMonthFilterButton.backgroundColor = K.Colors.pink
         customButton.backgroundColor = K.Colors.pink
         todayButton.backgroundColor = K.Colors.pink
@@ -189,24 +183,21 @@ class ViewController: UIViewController {
                 self.buttonsFilterView.alpha = 0
                 self.pressToShowFilterButtons.backgroundColor = K.Colors.background
                 self.filterTextLabel.textColor = K.Colors.balanceT
-                
                 self.pressToShowFilterButtons.layer.shadowColor = UIColor.clear.cgColor
-                self.pressToShowFilterButtons.layer.shadowOpacity = 0
-                self.pressToShowFilterButtons.layer.shadowOffset = .zero
-                self.pressToShowFilterButtons.layer.shadowRadius = 0
-                
             }
+            pressToShowFilterButtons.layer.shadowOpacity = 0
+            pressToShowFilterButtons.layer.shadowOffset = .zero
+            pressToShowFilterButtons.layer.shadowRadius = 0
         } else {
             UIView.animate(withDuration: 0.3) {
                 self.buttonsFilterView.alpha = 1
                 self.pressToShowFilterButtons.backgroundColor = K.Colors.pink
                 self.filterTextLabel.textColor = K.Colors.balanceV
-                
                 self.pressToShowFilterButtons.layer.shadowColor = UIColor.black.cgColor
-                self.pressToShowFilterButtons.layer.shadowOpacity = 0.2
-                self.pressToShowFilterButtons.layer.shadowOffset = .zero
-                self.pressToShowFilterButtons.layer.shadowRadius = 6
             }
+            pressToShowFilterButtons.layer.shadowOpacity = 0.2
+            pressToShowFilterButtons.layer.shadowOffset = .zero
+            pressToShowFilterButtons.layer.shadowRadius = 6
         }
     }
     
@@ -216,8 +207,8 @@ class ViewController: UIViewController {
     
     @IBAction func filterOptionsPressed(_ sender: UIButton) {
         
-        if sender.backgroundColor == K.Colors.yellow{
-            sender.backgroundColor = K.Colors.negative
+        UIView.animate(withDuration: 0.3) {
+            self.pressToShowFilterButtons.backgroundColor = K.Colors.background
         }
         
         switch sender.tag {
@@ -227,9 +218,8 @@ class ViewController: UIViewController {
             appData.filter.to = ""
             performFiltering()
             loadItems()
-            showCutomDateLabel(show: false)
             selectedPeroud = "All time"
-            filterTextLabel.text = "Filter: All Time ▾"
+            filterTextLabel.text = "Filter: All Time"
             removeBackground()
             sender.backgroundColor = K.Colors.yellow
             
@@ -239,9 +229,8 @@ class ViewController: UIViewController {
             appData.filter.to = appData.filter.getLastDay(appData.filter.filterObjects.currentDate)
             performFiltering()
             loadItems()
-            showCutomDateLabel(show: false)
             selectedPeroud = "This month"
-            filterTextLabel.text = "Filter: This month ▾"
+            filterTextLabel.text = "Filter: This month"
             removeBackground()
             sender.backgroundColor = K.Colors.yellow
 
@@ -251,9 +240,8 @@ class ViewController: UIViewController {
             appData.filter.to = appData.stringDate(appData.filter.filterObjects.currentDate)
             performFiltering()
             loadItems()
-            showCutomDateLabel(show: false)
             selectedPeroud = "Today"
-            filterTextLabel.text = "Filter: Today ▾"
+            filterTextLabel.text = "Filter: Today"
             removeBackground()
             sender.backgroundColor = K.Colors.yellow
             
@@ -261,19 +249,11 @@ class ViewController: UIViewController {
             showFilterAlert()
             removeBackground()
             filterTextLabel.text = "Filter: Custom..."
+            pressToShowFilterButtons.layer.shadowColor = UIColor.clear.cgColor
             sender.backgroundColor = K.Colors.yellow
             
         default:
-            appData.filter.showAll = true
-            appData.filter.from = ""
-            appData.filter.to = ""
-            performFiltering()
             loadItems()
-        }
-        
-        UIView.animate(withDuration: 0.3) {
-            self.buttonsFilterView.alpha = 0
-            self.pressToShowFilterButtons.backgroundColor = K.Colors.background
         }
         
     }
@@ -325,32 +305,20 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         
         switch indexPath.section {
         case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: K.calcCellIdent, for: indexPath) as! calcCell
-            
-            appData.recalculation(b: cell.balanceLabel, i: cell.incomeLabel, e: cell.expensesLabel, data: tableData)
-            return cell
+            let calculationCell = tableView.dequeueReusableCell(withIdentifier: K.calcCellIdent, for: indexPath) as! calcCell
+            appData.recalculation(b: calculationCell.balanceLabel, i: calculationCell.incomeLabel, e: calculationCell.expensesLabel, data: tableData)
+            return calculationCell
             
         case 1:
             let data = tableData[indexPath.row]
-            let cell = tableView.dequeueReusableCell(withIdentifier: K.mainCellIdent, for: indexPath) as! mainVCcell
-            if data.value > 0 {
-                cell.valueLabel.textColor = K.Colors.category
-            } else {
-                cell.valueLabel.textColor = K.Colors.negative
-            }
-            cell.valueLabel.text = "\(Int(data.value))"
-            cell.categoryLabel.text = "\(data.category ?? K.Text.unknCat)"
-            cell.dateLabel.text = data.date
-            return cell
+            let transactionsCell = tableView.dequeueReusableCell(withIdentifier: K.mainCellIdent, for: indexPath) as! mainVCcell
+            transactionsCell.setupCell(data)
+            return transactionsCell
             
         case 2:
-            let cell = tableView.dequeueReusableCell(withIdentifier: K.plotCellIdent, for: indexPath) as! PlotCell
-            cell.categoryLabel.text = statisticBrain.maxExpenceName
-            if statisticBrain.minValue < Double(Int.max) {
-                cell.valueLabel.text = "\(Int(statisticBrain.minValue))"
-            } else { cell.valueLabel.text = "\(statisticBrain.minValue)" }
-            cell.setupView()
-            return cell
+            let highestExpenseCell = tableView.dequeueReusableCell(withIdentifier: K.plotCellIdent, for: indexPath) as! PlotCell
+            highestExpenseCell.setupCell()
+            return highestExpenseCell
             
         default:
             return UITableViewCell()

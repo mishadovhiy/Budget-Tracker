@@ -41,6 +41,7 @@ class StatisticVC: UIViewController {
                 }
             }
             titleLabel.text = "Expenses for \(selectedPeroud)"
+            ifNoData()
             return allData.sorted(by: { $1.value > $0.value})
         } else {
             for (key, value) in sumAllCategories {
@@ -49,7 +50,18 @@ class StatisticVC: UIViewController {
                 }
             }
             titleLabel.text = "Incomes for \(selectedPeroud)"
+            ifNoData()
             return allData.sorted(by: { $0.value > $1.value})
+        }
+        
+    }
+    
+    func ifNoData() {
+        if allData.count == 0 {
+            titleLabel.textAlignment = .center
+            titleLabel.text = "No " + (titleLabel.text ?? "Data")
+        } else {
+            titleLabel.textAlignment = .left
         }
     }
     
@@ -104,10 +116,8 @@ extension StatisticVC: UITableViewDelegate, UITableViewDataSource {
             }
         }
         
-        
     }
-    
-    
+
 }
 
 struct GraphDataStruct {
