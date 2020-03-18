@@ -10,6 +10,7 @@ import UIKit
 
 struct K {
     
+    static let calcCellIdent = "calcCellIdent"
     static let mainCellIdent = "TableViewCell"
     static let catCellIdent = "categoriesVCTableViewCell"
     static let settCellIdent = "settingsTableViewCell"

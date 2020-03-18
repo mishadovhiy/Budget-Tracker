@@ -16,6 +16,14 @@ class mainVCcell: UITableViewCell {
     
 }
 
+class calcCell: UITableViewCell {
+    
+    @IBOutlet weak var balanceLabel: UILabel!
+    @IBOutlet weak var expensesLabel: UILabel!
+    @IBOutlet weak var incomeLabel: UILabel!
+    
+}
+
 class categoriesVCcell: UITableViewCell {
     
     @IBOutlet weak var categoryNameLabel: UILabel!

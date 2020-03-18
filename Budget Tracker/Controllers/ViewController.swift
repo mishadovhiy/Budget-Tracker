@@ -19,21 +19,30 @@ var selectedPeroud = ""
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var filterView: UIView!
+    @IBOutlet weak var buttonsFilterView: UIView!
+    @IBOutlet weak var pressToShowFilterButtons: UIButton!
+    @IBOutlet weak var thisMonthFilterButton: UIButton!
+    @IBOutlet weak var customButton: UIButton!
+    @IBOutlet weak var todayButton: UIButton!
+    @IBOutlet weak var allTimeButton: UIButton!
+    @IBOutlet weak var filterTextLabel: UILabel!
+    
+    @IBOutlet weak var calculationSView: UIStackView!
     @IBOutlet weak var mainTableView: UITableView!
-    @IBOutlet weak var filterSegmentedControl: UISegmentedControl!
     @IBOutlet weak var addTransitionButton: UIButton!
-    @IBOutlet weak var customDatesLabel: UILabel!
     @IBOutlet weak var noTableDataLabel: UILabel!
     @IBOutlet weak var balanceLabel: UILabel!
     @IBOutlet weak var incomeLabel: UILabel!
     @IBOutlet weak var expenseLabel: UILabel!
     var tableData = appData.transactions.sorted{ $0.dateFromString > $1.dateFromString }
     var alerts = Alerts()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUI()
-        filterSegmentedControl.selectedSegmentIndex = 1
-        filterPressed(filterSegmentedControl)
+        buttonsFilterView.alpha = 0
+        filterOptionsPressed(thisMonthFilterButton)
     }
     
     func updateUI() {
@@ -42,6 +51,16 @@ class ViewController: UIViewController {
         mainTableView.delegate = self
         mainTableView.dataSource = self
         loadItems()
+        pressToShowFilterButtons.layer.cornerRadius = 6
+        buttonsFilterView.layer.cornerRadius = 6
+        buttonsFilterView.layer.shadowColor = UIColor.black.cgColor
+        buttonsFilterView.layer.shadowOpacity = 0.2
+        buttonsFilterView.layer.shadowOffset = .zero
+        buttonsFilterView.layer.shadowRadius = 6
+        customButton.layer.cornerRadius = 6
+        todayButton.layer.cornerRadius = 6
+        allTimeButton.layer.cornerRadius = 6
+        thisMonthFilterButton.layer.cornerRadius = 6
     }
     
     func performFiltering() {
@@ -113,8 +132,7 @@ class ViewController: UIViewController {
             self.loadItems()
         }
         alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: { (cancel) in
-            self.filterSegmentedControl.selectedSegmentIndex = 1
-            self.filterPressed(self.filterSegmentedControl)
+            self.filterOptionsPressed(self.thisMonthFilterButton)
         }))
         alerts.alertTextField(alert: alert)
         alert.addAction(action)
@@ -138,17 +156,10 @@ class ViewController: UIViewController {
     }
     
     func showCutomDateLabel(show: Bool) {
-        
+        //find where used and replace call to code inside
         if show == true {
-            UIView.animate(withDuration: 0.2) {
-                self.customDatesLabel.alpha = 0.5
-                self.customDatesLabel.text = "\(appData.filter.from) →  \(appData.filter.to)"
-                selectedPeroud = "\(appData.filter.from) → \(appData.filter.to)"
-            }
-            
-        } else {
-            self.customDatesLabel.alpha = 0
-            self.customDatesLabel.text = ""
+            selectedPeroud = "\(appData.filter.from) → \(appData.filter.to)"
+            filterTextLabel.text = "Filter: \(selectedPeroud) ▾"
         }
     }
     
@@ -163,12 +174,53 @@ class ViewController: UIViewController {
             }
         }
     }
+    
+    func removeBackground() {
+        thisMonthFilterButton.backgroundColor = K.Colors.pink
+        customButton.backgroundColor = K.Colors.pink
+        todayButton.backgroundColor = K.Colors.pink
+        allTimeButton.backgroundColor = K.Colors.pink
 
-    @IBAction func filterPressed(_ sender: UISegmentedControl) {
+    }
+    
+    func toggleFilterView() {
+        if buttonsFilterView.alpha == 1 {
+            UIView.animate(withDuration: 0.3) {
+                self.buttonsFilterView.alpha = 0
+                self.pressToShowFilterButtons.backgroundColor = K.Colors.background
+                self.filterTextLabel.textColor = K.Colors.balanceT
+                
+                self.pressToShowFilterButtons.layer.shadowColor = UIColor.clear.cgColor
+                self.pressToShowFilterButtons.layer.shadowOpacity = 0
+                self.pressToShowFilterButtons.layer.shadowOffset = .zero
+                self.pressToShowFilterButtons.layer.shadowRadius = 0
+                
+            }
+        } else {
+            UIView.animate(withDuration: 0.3) {
+                self.buttonsFilterView.alpha = 1
+                self.pressToShowFilterButtons.backgroundColor = K.Colors.pink
+                self.filterTextLabel.textColor = K.Colors.balanceV
+                
+                self.pressToShowFilterButtons.layer.shadowColor = UIColor.black.cgColor
+                self.pressToShowFilterButtons.layer.shadowOpacity = 0.2
+                self.pressToShowFilterButtons.layer.shadowOffset = .zero
+                self.pressToShowFilterButtons.layer.shadowRadius = 6
+            }
+        }
+    }
+    
+    @IBAction func showFilterPressed(_ sender: UIButton) {
+        toggleFilterView()
+    }
+    
+    @IBAction func filterOptionsPressed(_ sender: UIButton) {
         
-        let index = sender.selectedSegmentIndex
-        switch index {
-           
+        if sender.backgroundColor == K.Colors.yellow{
+            sender.backgroundColor = K.Colors.negative
+        }
+        
+        switch sender.tag {
         case 0:
             appData.filter.showAll = true
             appData.filter.from = ""
@@ -177,6 +229,9 @@ class ViewController: UIViewController {
             loadItems()
             showCutomDateLabel(show: false)
             selectedPeroud = "All time"
+            filterTextLabel.text = "Filter: All Time ▾"
+            removeBackground()
+            sender.backgroundColor = K.Colors.yellow
             
         case 1:
             appData.filter.showAll = false
@@ -186,6 +241,9 @@ class ViewController: UIViewController {
             loadItems()
             showCutomDateLabel(show: false)
             selectedPeroud = "This month"
+            filterTextLabel.text = "Filter: This month ▾"
+            removeBackground()
+            sender.backgroundColor = K.Colors.yellow
 
         case 2:
             appData.filter.showAll = false
@@ -195,9 +253,15 @@ class ViewController: UIViewController {
             loadItems()
             showCutomDateLabel(show: false)
             selectedPeroud = "Today"
+            filterTextLabel.text = "Filter: Today ▾"
+            removeBackground()
+            sender.backgroundColor = K.Colors.yellow
             
         case 3:
             showFilterAlert()
+            removeBackground()
+            filterTextLabel.text = "Filter: Custom..."
+            sender.backgroundColor = K.Colors.yellow
             
         default:
             appData.filter.showAll = true
@@ -205,6 +269,11 @@ class ViewController: UIViewController {
             appData.filter.to = ""
             performFiltering()
             loadItems()
+        }
+        
+        UIView.animate(withDuration: 0.3) {
+            self.buttonsFilterView.alpha = 0
+            self.pressToShowFilterButtons.backgroundColor = K.Colors.background
         }
         
     }
@@ -222,7 +291,6 @@ class ViewController: UIViewController {
         
     }
     
-    
     @IBAction func unwindToViewControllerA(segue: UIStoryboardSegue) {
         DispatchQueue.global(qos: .userInitiated).async {
             DispatchQueue.main.async {
@@ -237,22 +305,32 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return tableData.count
-        } else {
+        
+        switch section {
+        case 0: return 1
+        case 1: return tableData.count
+        case 2:
             if tableData.count < 3 {
                 return 0
             } else { return 1 }
+        default: return 0
         }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if indexPath.section == 0 {
+        switch indexPath.section {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: K.calcCellIdent, for: indexPath) as! calcCell
+            
+            appData.recalculation(b: cell.balanceLabel, i: cell.incomeLabel, e: cell.expensesLabel, data: tableData)
+            return cell
+            
+        case 1:
             let data = tableData[indexPath.row]
             let cell = tableView.dequeueReusableCell(withIdentifier: K.mainCellIdent, for: indexPath) as! mainVCcell
             if data.value > 0 {
@@ -265,8 +343,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             cell.dateLabel.text = data.date
             return cell
             
-        } else {
-
+        case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: K.plotCellIdent, for: indexPath) as! PlotCell
             cell.categoryLabel.text = statisticBrain.maxExpenceName
             if statisticBrain.minValue < Double(Int.max) {
@@ -274,21 +351,32 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             } else { cell.valueLabel.text = "\(statisticBrain.minValue)" }
             cell.setupView()
             return cell
-
+            
+        default:
+            return UITableViewCell()
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if indexPath.section == 1 {
+        switch indexPath.section {
+        case 0:
             expenseLabelPressed = true
             performSegue(withIdentifier: K.statisticSeque, sender: self)
+        case 1:
+            print("")
+        case 2:
+            expenseLabelPressed = true
+            performSegue(withIdentifier: K.statisticSeque, sender: self)
+        default:
+            print("")
         }
+        
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
 
-        if indexPath.section == 0 {
+        if indexPath.section == 1 {
             if editingStyle == UITableViewCell.EditingStyle.delete {
                 appData.context.delete(self.tableData[indexPath.row])
                 self.tableData.remove(at: indexPath.row)
@@ -296,13 +384,47 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 self.loadItems()
             }
         }
+        
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         
-        if indexPath.section == 0 {
+        switch indexPath.section {
+        case 0:
+            return UITableViewCell.EditingStyle.none
+        case 1:
             return UITableViewCell.EditingStyle.delete
-        } else { return UITableViewCell.EditingStyle.none }
+        case 2:
+            return UITableViewCell.EditingStyle.none
+        default:
+            return UITableViewCell.EditingStyle.none
+        }
+        
     }
-
+    
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.section == 0 {
+            UIView.animate(withDuration: 0.3) {
+                self.calculationSView.alpha = 1
+            }
+            filterView.alpha = 0
+            buttonsFilterView.alpha = 0
+            pressToShowFilterButtons.backgroundColor = K.Colors.background
+            filterTextLabel.textColor = K.Colors.balanceT
+            pressToShowFilterButtons.layer.shadowColor = UIColor.clear.cgColor
+            pressToShowFilterButtons.layer.shadowOpacity = 0.2
+            pressToShowFilterButtons.layer.shadowOffset = .zero
+            pressToShowFilterButtons.layer.shadowRadius = 6
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.section == 0 {
+            filterView.alpha = 1
+            UIView.animate(withDuration: 0.3) {
+                self.calculationSView.alpha = 0
+            }
+        }
+    }
+    
 }
