@@ -124,7 +124,7 @@ class ViewController: UIViewController {
     
     func showFilterAlert() {
         
-        let alert = UIAlertController(title: "Custom Periud", message: "", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Custom period", message: "", preferredStyle: .alert)
         let action = UIAlertAction(title: "Done", style: .default) { (acrion) in
             self.setFilterDates()
             self.performFiltering()
