@@ -105,7 +105,6 @@ class ViewController: UIViewController {
     }
     
     func loadItems(_ request: NSFetchRequest<Transactions> = Transactions.fetchRequest(), predicate: NSPredicate? = nil) {
-        
         do { appData.transactions = try appData.context.fetch(request).sorted{ $0.dateFromString > $1.dateFromString }
         } catch { print("\n\nERROR FETCHING DATA FROM CONTEXTE\n\n", error)}
         mainTableView.reloadData()
@@ -116,7 +115,6 @@ class ViewController: UIViewController {
     }
     
     func saveItems() {
-        
         do { try appData.context.save()
         } catch { print("\n\nERROR ENCODING CONTEXT\n\n", error) }
         loadItems()
@@ -177,28 +175,35 @@ class ViewController: UIViewController {
 
     }
     
+    func hideFilterView() {
+        UIView.animate(withDuration: 0.3) {
+            self.buttonsFilterView.alpha = 0
+            self.pressToShowFilterButtons.backgroundColor = K.Colors.background
+            self.filterTextLabel.textColor = K.Colors.balanceT
+            self.pressToShowFilterButtons.layer.shadowColor = UIColor.clear.cgColor
+        }
+        pressToShowFilterButtons.layer.shadowOpacity = 0
+        pressToShowFilterButtons.layer.shadowOffset = .zero
+        pressToShowFilterButtons.layer.shadowRadius = 0
+    }
+    
+    func showFilterView() {
+        UIView.animate(withDuration: 0.3) {
+            self.buttonsFilterView.alpha = 1
+            self.pressToShowFilterButtons.backgroundColor = K.Colors.pink
+            self.filterTextLabel.textColor = K.Colors.balanceV
+            self.pressToShowFilterButtons.layer.shadowColor = UIColor.black.cgColor
+        }
+        pressToShowFilterButtons.layer.shadowOpacity = 0.2
+        pressToShowFilterButtons.layer.shadowOffset = .zero
+        pressToShowFilterButtons.layer.shadowRadius = 6
+        
+    }
+    
     func toggleFilterView() {
         if buttonsFilterView.alpha == 1 {
-            UIView.animate(withDuration: 0.3) {
-                self.buttonsFilterView.alpha = 0
-                self.pressToShowFilterButtons.backgroundColor = K.Colors.background
-                self.filterTextLabel.textColor = K.Colors.balanceT
-                self.pressToShowFilterButtons.layer.shadowColor = UIColor.clear.cgColor
-            }
-            pressToShowFilterButtons.layer.shadowOpacity = 0
-            pressToShowFilterButtons.layer.shadowOffset = .zero
-            pressToShowFilterButtons.layer.shadowRadius = 0
-        } else {
-            UIView.animate(withDuration: 0.3) {
-                self.buttonsFilterView.alpha = 1
-                self.pressToShowFilterButtons.backgroundColor = K.Colors.pink
-                self.filterTextLabel.textColor = K.Colors.balanceV
-                self.pressToShowFilterButtons.layer.shadowColor = UIColor.black.cgColor
-            }
-            pressToShowFilterButtons.layer.shadowOpacity = 0.2
-            pressToShowFilterButtons.layer.shadowOffset = .zero
-            pressToShowFilterButtons.layer.shadowRadius = 6
-        }
+            hideFilterView()
+        } else { showFilterView() }
     }
     
     @IBAction func showFilterPressed(_ sender: UIButton) {
@@ -252,20 +257,16 @@ class ViewController: UIViewController {
             pressToShowFilterButtons.layer.shadowColor = UIColor.clear.cgColor
             sender.backgroundColor = K.Colors.yellow
             
-        default:
-            loadItems()
+        default: loadItems()
         }
         
     }
     
     @IBAction func statisticLabelPressed(_ sender: UIButton) {
         switch sender.tag {
-        case 0:
-            expenseLabelPressed = true
-        case 1:
-            expenseLabelPressed = false
-        default:
-            expenseLabelPressed = true
+        case 0: expenseLabelPressed = true
+        case 1: expenseLabelPressed = false
+        default: expenseLabelPressed = true
         }
         performSegue(withIdentifier: K.statisticSeque, sender: self)
         
@@ -285,7 +286,6 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         switch section {
         case 0: return 1
         case 1: return tableData.count
@@ -302,7 +302,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         switch indexPath.section {
         case 0:
             let calculationCell = tableView.dequeueReusableCell(withIdentifier: K.calcCellIdent, for: indexPath) as! calcCell
@@ -320,30 +319,26 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             highestExpenseCell.setupCell()
             return highestExpenseCell
             
-        default:
-            return UITableViewCell()
+        default: return UITableViewCell()
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         switch indexPath.section {
         case 0:
             expenseLabelPressed = true
             performSegue(withIdentifier: K.statisticSeque, sender: self)
         case 1:
-            print("")
+            hideFilterView()
         case 2:
             expenseLabelPressed = true
             performSegue(withIdentifier: K.statisticSeque, sender: self)
         default:
-            print("")
+            hideFilterView()
         }
-        
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-
         if indexPath.section == 1 {
             if editingStyle == UITableViewCell.EditingStyle.delete {
                 appData.context.delete(self.tableData[indexPath.row])
@@ -352,20 +347,15 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 self.loadItems()
             }
         }
-        
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         
         switch indexPath.section {
-        case 0:
-            return UITableViewCell.EditingStyle.none
-        case 1:
-            return UITableViewCell.EditingStyle.delete
-        case 2:
-            return UITableViewCell.EditingStyle.none
-        default:
-            return UITableViewCell.EditingStyle.none
+        case 0: return UITableViewCell.EditingStyle.none
+        case 1: return UITableViewCell.EditingStyle.delete
+        case 2: return UITableViewCell.EditingStyle.none
+        default: return UITableViewCell.EditingStyle.none
         }
         
     }
@@ -376,13 +366,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 self.calculationSView.alpha = 1
             }
             filterView.alpha = 0
-            buttonsFilterView.alpha = 0
-            pressToShowFilterButtons.backgroundColor = K.Colors.background
-            filterTextLabel.textColor = K.Colors.balanceT
-            pressToShowFilterButtons.layer.shadowColor = UIColor.clear.cgColor
-            pressToShowFilterButtons.layer.shadowOpacity = 0.2
-            pressToShowFilterButtons.layer.shadowOffset = .zero
-            pressToShowFilterButtons.layer.shadowRadius = 6
+            hideFilterView()
         }
     }
     

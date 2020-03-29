@@ -62,12 +62,12 @@ class PlotCell: UITableViewCell {
         } else { valueLabel.text = "\(statisticBrain.minValue)" }
     }
     
-    
-    
 }
 
 class StatisticCell: UITableViewCell {
 
+    @IBOutlet weak var colorView: UIView!
+    @IBOutlet weak var percentLabel: UILabel!
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var amountLabel: UILabel!
 }

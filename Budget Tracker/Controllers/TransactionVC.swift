@@ -135,12 +135,14 @@ class TransitionVC: UIViewController {
             
         case 0:
             minusPlusLabel.text = "-"
+            categoryTextField.text = ""
             categoryTextField.inputView = appData.objects.expensesPicker
             categoryTextField.placeholder = expenseArr[appData.selectedExpense]
             showPadPressed(showValueButton)
             
         case 1:
             minusPlusLabel.text = "+"
+            categoryTextField.text = ""
             categoryTextField.inputView = appData.objects.incomePicker
             categoryTextField.placeholder = incomeArr[appData.selectedIncome]
             showPadPressed(showValueButton)
@@ -168,6 +170,9 @@ class TransitionVC: UIViewController {
         if pressedValue.count != 7 {
             pressedValue = pressedValue + sender.currentTitle!
             AudioServicesPlaySystemSound(1104)
+            if pressedValue != "0" {
+                minusPlusLabel.alpha = 1
+            }
         } else {
             UIImpactFeedbackGenerator().impactOccurred()
         }
@@ -185,12 +190,14 @@ class TransitionVC: UIViewController {
             if pressedValue.count == 0 {
                 pressedValue.removeAll()
                 valueLabel.text? = "0"
+                minusPlusLabel.alpha = 0
             }
         }
         if sender.tag == 2 {
             AudioServicesPlaySystemSound(1156)
             pressedValue.removeAll()
             valueLabel.text? = "0"
+            minusPlusLabel.alpha = 0
         }
     }
     
