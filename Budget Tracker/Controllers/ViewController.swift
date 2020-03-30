@@ -70,7 +70,6 @@ class ViewController: UIViewController {
         let fmt = DateFormatter()
         if appData.filter.showAll == true {
             tableData = appData.transactions
-            appData.recalculation(b: balanceLabel, i: incomeLabel, e: expenseLabel, data: tableData)
         } else {
             fmt.dateFormat = "dd.MM.yyyy"
             dateFrom = fmt.date(from: appData.filter.from)!
@@ -87,6 +86,33 @@ class ViewController: UIViewController {
         }
         showNoDataLabel()
         allSelectedTransactionsData = tableData
+        
+    }
+    
+    var totalBalance = 0.0
+    func calculateBalance() {
+        
+        var totalExpenses = 0.0
+        var totalIncomes = 0.0
+        
+        for i in 0..<appData.transactions.count {
+            if appData.transactions[i].value > 0.0 {
+                totalIncomes = totalIncomes + appData.transactions[i].value
+            } else {
+                totalExpenses = totalExpenses + appData.transactions[i].value
+            }
+        }
+        
+        totalBalance = totalIncomes + totalExpenses
+        if totalBalance < Double(Int.max) {
+            balanceLabel.text = "\(Int(totalBalance))"
+        } else { balanceLabel.text = "\(totalBalance)" }
+        
+        if totalBalance < 0.0 {
+            balanceLabel.textColor = K.Colors.negative
+        } else {
+            balanceLabel.textColor = K.Colors.balanceV
+        }
         
     }
     
@@ -112,6 +138,7 @@ class ViewController: UIViewController {
     
         statisticBrain.getData(from: self.tableData)
         sumAllCategories = statisticBrain.statisticData
+        calculateBalance()
     }
     
     func saveItems() {
@@ -215,6 +242,8 @@ class ViewController: UIViewController {
         UIView.animate(withDuration: 0.3) {
             self.pressToShowFilterButtons.backgroundColor = K.Colors.background
         }
+        removeBackground()
+        sender.backgroundColor = K.Colors.yellow
         
         switch sender.tag {
         case 0:
@@ -224,9 +253,6 @@ class ViewController: UIViewController {
             performFiltering()
             loadItems()
             selectedPeroud = "All time"
-            filterTextLabel.text = "Filter: All Time"
-            removeBackground()
-            sender.backgroundColor = K.Colors.yellow
             
         case 1:
             appData.filter.showAll = false
@@ -234,10 +260,7 @@ class ViewController: UIViewController {
             appData.filter.to = appData.filter.getLastDay(appData.filter.filterObjects.currentDate)
             performFiltering()
             loadItems()
-            selectedPeroud = "This month"
-            filterTextLabel.text = "Filter: This month"
-            removeBackground()
-            sender.backgroundColor = K.Colors.yellow
+            selectedPeroud = "This Month"
 
         case 2:
             appData.filter.showAll = false
@@ -246,18 +269,16 @@ class ViewController: UIViewController {
             performFiltering()
             loadItems()
             selectedPeroud = "Today"
-            filterTextLabel.text = "Filter: Today"
-            removeBackground()
-            sender.backgroundColor = K.Colors.yellow
             
         case 3:
             showFilterAlert()
-            removeBackground()
-            filterTextLabel.text = "Filter: Custom..."
             pressToShowFilterButtons.layer.shadowColor = UIColor.clear.cgColor
-            sender.backgroundColor = K.Colors.yellow
             
-        default: loadItems()
+        default: loadItems() }
+        
+        filterTextLabel.text = "Filter: \(selectedPeroud)"
+        if sender.tag == 3 {
+            filterTextLabel.text = "Filter: Custom..."
         }
         
     }
@@ -305,7 +326,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         switch indexPath.section {
         case 0:
             let calculationCell = tableView.dequeueReusableCell(withIdentifier: K.calcCellIdent, for: indexPath) as! calcCell
-            appData.recalculation(b: calculationCell.balanceLabel, i: calculationCell.incomeLabel, e: calculationCell.expensesLabel, data: tableData)
+            calculationCell.setupCell(totalBalance)
             return calculationCell
             
         case 1:

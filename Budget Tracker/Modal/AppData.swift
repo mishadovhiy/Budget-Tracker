@@ -25,16 +25,19 @@ class AppData {
         return dateFormatter.string(from: sender.date)
     }
     
+    var sumIncomes: Double = 0.0
+    var sumExpenses: Double = 0.0
+    var sumPeriodBalance: Double = 0.0
     func recalculation(b: UILabel, i:UILabel, e: UILabel, data: [Transactions]) {
 
-        var sumBalance: Double = 0.0
-        var sumIncomes: Double = 0.0
-        var sumExpenses: Double = 0.0
+        sumIncomes = 0.0
+        sumExpenses = 0.0
+        sumPeriodBalance = 0.0
         var arreyNegative: [Double] = [0.0]
         var arreyPositive: [Double] = [0.0]
         
         for i in 0..<data.count {
-            sumBalance = sumBalance + data[i].value
+            sumPeriodBalance = sumPeriodBalance + data[i].value
             
             if data[i].value > 0 {
                 arreyPositive.append(data[i].value)
@@ -45,19 +48,13 @@ class AppData {
                 sumExpenses = sumExpenses + data[i].value
             }}
         
-        if sumBalance < 0 {
-            b.textColor = K.Colors.negative
-        } else {
-            b.textColor = K.Colors.balanceV
-        }
-        
-        if sumBalance < Double(Int.max), sumIncomes < Double(Int.max), sumExpenses < Double(Int.max) {
-            b.text = "\(Int(sumBalance))"
+        if sumPeriodBalance < Double(Int.max), sumIncomes < Double(Int.max), sumExpenses < Double(Int.max) {
+            //b.text = "\(Int(sumPeriodBalance))"
             i.text = "\(Int(sumIncomes))"
             e.text = "\(Int(sumExpenses) * -1)"
             
         } else {
-            b.text = "\(sumBalance)"
+            //b.text = "\(sumPeriodBalance)"
             i.text = "\(sumIncomes)"
             e.text = "\(sumExpenses * -1)"
         }

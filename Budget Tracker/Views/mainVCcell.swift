@@ -33,6 +33,31 @@ class calcCell: UITableViewCell {
     @IBOutlet weak var balanceLabel: UILabel!
     @IBOutlet weak var expensesLabel: UILabel!
     @IBOutlet weak var incomeLabel: UILabel!
+    @IBOutlet weak var periodBalanceTitleLabel: UILabel!
+    @IBOutlet weak var periodBalanceValueLabel: UILabel!
+    
+    
+    func setupCell(_ totalBalance: Double) {
+        if totalBalance < Double(Int.max), appData.sumExpenses < Double(Int.max), appData.sumIncomes < Double(Int.max), appData.sumPeriodBalance < Double(Int.max) {
+            balanceLabel.text = "\(Int(totalBalance))"
+            periodBalanceValueLabel.text = "\(Int(appData.sumPeriodBalance))"
+            expensesLabel.text = "\(Int(appData.sumExpenses * -1))"
+            incomeLabel.text = "\(Int(appData.sumIncomes))"
+        } else {
+            balanceLabel.text = "\(totalBalance)"
+            periodBalanceValueLabel.text = "\(appData.sumPeriodBalance)"
+            expensesLabel.text = "\(appData.sumExpenses * -1)"
+            incomeLabel.text = "\(appData.sumIncomes)"
+        }
+        
+        if totalBalance < 0.0 {
+            balanceLabel.textColor = K.Colors.negative
+        } else {
+            balanceLabel.textColor = K.Colors.balanceV
+        }
+        
+        periodBalanceTitleLabel.text = "Balance for \(selectedPeroud):"
+    }
     
 }
 
