@@ -56,7 +56,7 @@ class calcCell: UITableViewCell {
             balanceLabel.textColor = K.Colors.balanceV
         }
         
-        periodBalanceTitleLabel.text = "Balance for \(selectedPeroud):"
+        //periodBalanceTitleLabel.text = "Balance for \(selectedPeroud):"
     }
     
 }

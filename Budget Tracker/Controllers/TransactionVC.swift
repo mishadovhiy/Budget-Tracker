@@ -43,7 +43,8 @@ class TransitionVC: UIViewController {
         appData.objects.datePicker.datePickerMode = .date
         dateTextField.inputView = appData.objects.datePicker
         appData.objects.datePicker.addTarget(self, action: #selector(datePickerChangedValue(sender:)), for: .valueChanged)
-        dateTextField.placeholder = appData.stringDate(appData.objects.datePicker)
+        dateTextField.text = "\(appData.stringDate(appData.objects.datePicker))"
+        //dateTextField.placeholder = appData.stringDate(appData.objects.datePicker)
         pressedValue = "0"
         valueLabel.text = pressedValue
     }
@@ -56,7 +57,6 @@ class TransitionVC: UIViewController {
         for i in 0..<appData.categories.count {
             if appData.categories[i].purpose == K.expense {
                 expenseArr.append(appData.categories[i].name ?? K.Text.unknCat)
-                
             } else {
                 incomeArr.append(appData.categories[i].name ?? K.Text.unknCat)
             }}
@@ -102,12 +102,11 @@ class TransitionVC: UIViewController {
     
     @objc func valueLabelColor() {
         
-        valueLabel.textColor = K.Colors.category
-        minusPlusLabel.textColor = K.Colors.category
+        valueLabel.textColor = K.Colors.balanceV
+        minusPlusLabel.textColor = K.Colors.balanceV
     }
     
     @objc func datePickerChangedValue(sender: UIDatePicker) {
-        
         dateTextField.text = appData.stringDate(sender)
     }
     
@@ -116,15 +115,40 @@ class TransitionVC: UIViewController {
         if valueLabel.text != "0" {
             addNew()
         } else {
-            UIImpactFeedbackGenerator().impactOccurred()
-            valueLabel.textColor = K.Colors.negative
-            minusPlusLabel.textColor = K.Colors.negative
-            Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(valueLabelColor), userInfo: nil, repeats: false)
+            errorSaving()
         }
     }
     
-    @IBAction func cancelPressed(_ sender: UIButton) {
+    func errorSaving() {
+        var wasHidden = false
+        let bounds = valueLabel.bounds
+        if minusPlusLabel.alpha == 0 {
+            wasHidden = true
+            minusPlusLabel.alpha = 0
+        }
         
+        UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 10, options: .curveEaseInOut, animations: {
+            self.valueLabel.bounds = CGRect(x: bounds.origin.x, y: bounds.origin.y, width: bounds.size.width + 10, height: bounds.size.height)
+        }) { (success:Bool) in
+            if success {
+                UIView.animate(withDuration: 0.5, animations: {
+                    self.valueLabel.bounds = bounds
+                })
+                if wasHidden == false {
+                    self.minusPlusLabel.alpha = 1
+                }
+            }
+        }
+        UIImpactFeedbackGenerator().impactOccurred()
+        valueLabel.textColor = K.Colors.negative
+        minusPlusLabel.textColor = K.Colors.negative
+        Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(valueLabelColor), userInfo: nil, repeats: false)
+        
+    }
+    
+    
+    
+    @IBAction func cancelPressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -135,16 +159,16 @@ class TransitionVC: UIViewController {
             
         case 0:
             minusPlusLabel.text = "-"
-            categoryTextField.text = ""
             categoryTextField.inputView = appData.objects.expensesPicker
-            categoryTextField.placeholder = expenseArr[appData.selectedExpense]
+            categoryTextField.text = "\(expenseArr[appData.selectedExpense])"
+            //categoryTextField.placeholder = expenseArr[appData.selectedExpense]
             showPadPressed(showValueButton)
             
         case 1:
             minusPlusLabel.text = "+"
-            categoryTextField.text = ""
             categoryTextField.inputView = appData.objects.incomePicker
-            categoryTextField.placeholder = incomeArr[appData.selectedIncome]
+            categoryTextField.text = "\(incomeArr[appData.selectedIncome])"
+            //categoryTextField.placeholder = incomeArr[appData.selectedIncome]
             showPadPressed(showValueButton)
             
         default:

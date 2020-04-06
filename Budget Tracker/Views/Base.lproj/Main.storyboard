@@ -36,10 +36,10 @@
                                 <inset key="separatorInset" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="calcCellIdent" id="2M8-ex-hH0" customClass="calcCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="124.5"/>
+                                        <rect key="frame" x="0.0" y="28" width="375" height="189.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="2M8-ex-hH0" id="rAH-8U-e22">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="124.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="189.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="w8y-YJ-7j5">
@@ -98,29 +98,32 @@
                                                         </stackView>
                                                     </subviews>
                                                 </stackView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Usv-GA-nDE">
-                                                    <rect key="frame" x="48.5" y="87" width="27.5" height="12.5"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="10"/>
-                                                    <color key="textColor" name="balanceTitleColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OyJ-pP-66Q">
-                                                    <rect key="frame" x="20" y="87" width="26.5" height="12.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                                    <color key="textColor" name="balanceTitleColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="-5" translatesAutoresizingMaskIntoConstraints="NO" id="ITM-V9-am7">
+                                                    <rect key="frame" x="20" y="92" width="335" height="62.5"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Period Balance" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="OyJ-pP-66Q">
+                                                            <rect key="frame" x="0.0" y="0.0" width="335" height="34"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                            <color key="textColor" name="balanceTitleColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="5" translatesAutoresizingMaskIntoConstraints="NO" id="Usv-GA-nDE">
+                                                            <rect key="frame" x="0.0" y="29" width="335" height="33.5"/>
+                                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="28"/>
+                                                            <color key="textColor" name="balanceValueColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </stackView>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="w8y-YJ-7j5" firstAttribute="leading" secondItem="rAH-8U-e22" secondAttribute="leading" constant="20" id="2wr-AY-BHW"/>
-                                                <constraint firstItem="w8y-YJ-7j5" firstAttribute="top" secondItem="rAH-8U-e22" secondAttribute="top" constant="20" id="7Ld-eE-5RI"/>
-                                                <constraint firstItem="OyJ-pP-66Q" firstAttribute="top" secondItem="w8y-YJ-7j5" secondAttribute="bottom" constant="5" id="7cA-Wh-ga0"/>
-                                                <constraint firstItem="Usv-GA-nDE" firstAttribute="leading" secondItem="OyJ-pP-66Q" secondAttribute="trailing" constant="2" id="EGQ-cT-2Hr"/>
-                                                <constraint firstItem="Usv-GA-nDE" firstAttribute="top" secondItem="w8y-YJ-7j5" secondAttribute="bottom" constant="5" id="Klm-hu-3b6"/>
+                                                <constraint firstAttribute="bottom" secondItem="ITM-V9-am7" secondAttribute="bottom" constant="35" id="Bmn-RW-ytt"/>
+                                                <constraint firstItem="ITM-V9-am7" firstAttribute="top" secondItem="w8y-YJ-7j5" secondAttribute="bottom" constant="10" id="EQm-DJ-Sfd"/>
+                                                <constraint firstAttribute="trailing" secondItem="ITM-V9-am7" secondAttribute="trailing" constant="20" id="Ktq-F5-aWl"/>
                                                 <constraint firstAttribute="trailing" secondItem="w8y-YJ-7j5" secondAttribute="trailing" constant="20" id="aI5-cp-WRI"/>
-                                                <constraint firstAttribute="bottom" secondItem="OyJ-pP-66Q" secondAttribute="bottom" constant="25" id="dca-o5-R7C"/>
-                                                <constraint firstAttribute="bottom" secondItem="Usv-GA-nDE" secondAttribute="bottom" constant="25" id="rOZ-Pl-WuR"/>
-                                                <constraint firstItem="OyJ-pP-66Q" firstAttribute="leading" secondItem="rAH-8U-e22" secondAttribute="leading" constant="20" id="ujn-DS-CbG"/>
+                                                <constraint firstItem="ITM-V9-am7" firstAttribute="leading" secondItem="rAH-8U-e22" secondAttribute="leading" constant="20" id="ezG-bm-8Jn"/>
+                                                <constraint firstItem="w8y-YJ-7j5" firstAttribute="top" secondItem="rAH-8U-e22" secondAttribute="top" constant="20" id="tX6-hI-qmS"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" name="backgroundColor"/>
@@ -133,7 +136,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="TableViewCell" id="Yoe-FZ-wge" customClass="mainVCcell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="152.5" width="375" height="54.5"/>
+                                        <rect key="frame" x="0.0" y="217.5" width="375" height="54.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Yoe-FZ-wge" id="rhd-hO-2oH" userLabel="Cell View">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="54.5"/>
@@ -183,7 +186,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="plotCellIdentifier" id="CHQ-dZ-3ec" customClass="PlotCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="207" width="375" height="90.5"/>
+                                        <rect key="frame" x="0.0" y="272" width="375" height="90.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="CHQ-dZ-3ec" id="8ty-W8-U6L">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="90.5"/>
@@ -526,7 +529,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="139" y="118"/>
+            <point key="canvasLocation" x="138.40000000000001" y="117.39130434782609"/>
         </scene>
         <!--CategoriesVC-->
         <scene sceneID="sAf-l1-oTj">
