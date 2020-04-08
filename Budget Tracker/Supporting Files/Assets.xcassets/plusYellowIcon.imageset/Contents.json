@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "eraseIcon.pdf",
+      "filename" : "plus-2.pdf",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "light"
         }
       ],
-      "filename" : "eraseIcon-1.pdf",
+      "filename" : "plus.pdf",
       "idiom" : "universal"
     },
     {
@@ -21,7 +21,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "eraseIcon-2.pdf",
+      "filename" : "plus-1.pdf",
       "idiom" : "universal"
     }
   ],

@@ -572,19 +572,21 @@
                                     <constraint firstAttribute="width" constant="30" id="2UR-AX-IvZ"/>
                                     <constraint firstAttribute="height" constant="30" id="B8f-VA-4ms"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                 <color key="tintColor" name="yellowColor"/>
-                                <state key="normal" image="plus" catalog="system"/>
+                                <state key="normal" image="plusYellowIcon"/>
                                 <connections>
                                     <action selector="addCategoryPressed:" destination="cP3-cv-3dE" eventType="touchUpInside" id="3nv-nm-qwb"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lez-zf-TS4">
-                                <rect key="frame" x="50" y="15" width="275" height="30"/>
+                                <rect key="frame" x="15" y="15" width="30" height="30"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="4wo-Ad-ucY"/>
+                                    <constraint firstAttribute="width" constant="30" id="Mpa-6f-WcG"/>
+                                    <constraint firstAttribute="height" constant="30" id="Pzf-tc-co3"/>
                                 </constraints>
                                 <color key="tintColor" name="yellowColor"/>
-                                <state key="normal" image="chevron.compact.down" catalog="system"/>
+                                <state key="normal" image="cancel"/>
                                 <connections>
                                     <action selector="closePressed:" destination="cP3-cv-3dE" eventType="touchUpInside" id="yuy-Pt-eTB"/>
                                 </connections>
@@ -657,13 +659,12 @@
                         <constraints>
                             <constraint firstItem="SQF-Ky-vUp" firstAttribute="trailing" secondItem="HUT-8J-uo4" secondAttribute="trailing" constant="15" id="2VS-d6-33n"/>
                             <constraint firstAttribute="bottom" secondItem="kTa-v1-Lr8" secondAttribute="bottom" id="2Vf-0v-fHv"/>
-                            <constraint firstItem="SQF-Ky-vUp" firstAttribute="trailing" secondItem="lez-zf-TS4" secondAttribute="trailing" constant="50" id="DQt-7C-WOx"/>
-                            <constraint firstItem="lez-zf-TS4" firstAttribute="leading" secondItem="SQF-Ky-vUp" secondAttribute="leading" constant="50" id="FcG-Zz-vB5"/>
-                            <constraint firstItem="kTa-v1-Lr8" firstAttribute="top" secondItem="lez-zf-TS4" secondAttribute="bottom" constant="5" id="K9u-ZT-u8f"/>
                             <constraint firstItem="kTa-v1-Lr8" firstAttribute="leading" secondItem="SQF-Ky-vUp" secondAttribute="leading" id="YVt-nW-I8C"/>
                             <constraint firstItem="HUT-8J-uo4" firstAttribute="top" secondItem="SQF-Ky-vUp" secondAttribute="top" constant="15" id="fLJ-vf-rlc"/>
-                            <constraint firstItem="lez-zf-TS4" firstAttribute="top" secondItem="SQF-Ky-vUp" secondAttribute="top" constant="15" id="j8q-nj-c5E"/>
+                            <constraint firstItem="kTa-v1-Lr8" firstAttribute="top" secondItem="HUT-8J-uo4" secondAttribute="bottom" constant="5" id="pRM-uk-3gq"/>
                             <constraint firstItem="SQF-Ky-vUp" firstAttribute="trailing" secondItem="kTa-v1-Lr8" secondAttribute="trailing" id="t8m-Yn-4Ua"/>
+                            <constraint firstItem="lez-zf-TS4" firstAttribute="top" secondItem="SQF-Ky-vUp" secondAttribute="top" constant="15" id="trZ-nT-OuH"/>
+                            <constraint firstItem="lez-zf-TS4" firstAttribute="leading" secondItem="SQF-Ky-vUp" secondAttribute="leading" constant="15" id="uG0-bw-NKU"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="SQF-Ky-vUp"/>
                     </view>
@@ -916,10 +917,9 @@
                                                             <action selector="numberPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="k34-vH-mPK"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1vj-92-UOQ">
+                                                    <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1vj-92-UOQ">
                                                         <rect key="frame" x="251.5" y="0.0" width="83.5" height="70"/>
-                                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="34"/>
-                                                        <state key="normal" title="c">
+                                                        <state key="normal" image="cIcon">
                                                             <color key="titleColor" name="yellowColor"/>
                                                         </state>
                                                         <connections>
@@ -1154,8 +1154,22 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="fKf-fZ-nVc"/>
                     </view>
-                    <navigationItem key="navigationItem" title="       " id="4WM-Ja-2yB">
+                    <navigationItem key="navigationItem" title="       " leftItemsSupplementBackButton="YES" id="4WM-Ja-2yB">
                         <barButtonItem key="backBarButtonItem" title="    " id="BHQ-y8-WmV"/>
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="IWq-Cs-BAs">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="0nm-il-wo9">
+                                <rect key="frame" x="16" y="12" width="32" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="0BK-wK-12E"/>
+                                    <constraint firstAttribute="width" constant="30" id="w7e-JK-AYV"/>
+                                </constraints>
+                                <state key="normal" image="cancel"/>
+                                <connections>
+                                    <action selector="clodePressed:" destination="U5Q-a5-Vkx" eventType="touchUpInside" id="yQk-UY-8QN"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="E5p-kp-ybx">
                             <rect key="frame" x="109" y="12" width="157" height="32"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1168,20 +1182,6 @@
                                 <action selector="selectedSegment:" destination="U5Q-a5-Vkx" eventType="valueChanged" id="y8U-rJ-d6w"/>
                             </connections>
                         </segmentedControl>
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="IWq-Cs-BAs">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="0nm-il-wo9">
-                                <rect key="frame" x="327" y="12" width="32" height="32"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="0BK-wK-12E"/>
-                                    <constraint firstAttribute="width" constant="30" id="w7e-JK-AYV"/>
-                                </constraints>
-                                <state key="normal" image="cancel"/>
-                                <connections>
-                                    <action selector="clodePressed:" destination="U5Q-a5-Vkx" eventType="touchUpInside" id="yQk-UY-8QN"/>
-                                </connections>
-                            </button>
-                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="hostView" destination="6Si-ee-0c7" id="ah6-eX-X67"/>
@@ -1340,13 +1340,13 @@
         </scene>
     </scenes>
     <resources>
+        <image name="cIcon" width="11" height="18"/>
         <image name="cancel" width="16" height="16"/>
         <image name="categoriesIcon" width="19" height="18"/>
-        <image name="chevron.compact.down" catalog="system" width="128" height="43"/>
         <image name="done" width="16" height="16"/>
-        <image name="minus" width="11" height="19"/>
-        <image name="plus" catalog="system" width="128" height="113"/>
+        <image name="minus" width="11" height="20"/>
         <image name="plusIcon" width="12" height="12"/>
+        <image name="plusYellowIcon" width="22" height="22"/>
         <namedColor name="CategoryColor">
             <color red="0.078000001609325409" green="0.078000001609325409" blue="0.078000001609325409" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
