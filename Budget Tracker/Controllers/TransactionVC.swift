@@ -39,6 +39,8 @@ class TransitionVC: UIViewController {
         purposeSwitcher.selectedSegmentIndex = 0
         purposeSwitched(purposeSwitcher)
         getEditingdata()
+        
+        self.isModalInPresentation = true
     }
     
     func updateUI() {
@@ -274,6 +276,7 @@ class TransitionVC: UIViewController {
             minusPlusLabel.alpha = 0
         }
     }
+    
     
 }
 
