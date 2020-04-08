@@ -10,11 +10,13 @@ import UIKit
 
 class mainVCcell: UITableViewCell {
     
+    @IBOutlet weak var bigDate: UILabel!
     @IBOutlet weak var categoryLabel: UILabel!
-    @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var valueLabel: UILabel!
+    @IBOutlet weak var dailyTotalLabel: UILabel!
+    @IBOutlet weak var sectionView: UIView!
     
-    func setupCell(_ data: Transactions) {
+    func setupCell(_ data: Transactions, i: Int, tableData: [Transactions]) {
         if data.value > 0 {
             valueLabel.textColor = K.Colors.category
         } else {
@@ -22,8 +24,56 @@ class mainVCcell: UITableViewCell {
         }
         valueLabel.text = "\(Int(data.value))"
         categoryLabel.text = "\(data.category ?? K.Text.unknCat)"
-        dateLabel.text = data.date
-
+        sectionView.layer.cornerRadius = 3
+        
+        if selectedPeroud == "Today" {
+            bigDate.text = ""
+            sectionView.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
+            dailyTotalLabel.text = ""
+        } else {
+            if i != 0 {
+                if tableData[i - 1].date != data.date {
+                    bigDate.text = "\(data.date ?? "")"
+                    sectionView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+                    dailyTotalLabel.text = "\(getDailyTotal(day: data.date ?? "", tableData: tableData))"
+                } else {
+                    bigDate.text = ""
+                    sectionView.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
+                    dailyTotalLabel.text = ""
+                }
+            } else {
+                bigDate.text = "\(data.date ?? "")"
+                sectionView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+                dailyTotalLabel.text = "\(getDailyTotal(day: data.date ?? "", tableData: tableData))"
+            }
+        }
+        
+    }
+    
+    func getDailyTotal(day: String, tableData: [Transactions]) -> String {
+        
+        var total: Double = 0.0
+        for i in 0..<tableData.count {
+            if tableData[i].date == day {
+                total = total + tableData[i].value
+            }
+        }
+        
+        var amount = ""
+        var intTotal = Int(total)
+        if total > Double(Int.max) {
+            amount = "\(total)"
+            intTotal = 1
+            return amount
+        }
+        
+        if total > 0 {
+            amount = "+\(intTotal)"
+        } else {
+            amount = "\(intTotal)"
+        }
+        
+        return amount
     }
     
 }

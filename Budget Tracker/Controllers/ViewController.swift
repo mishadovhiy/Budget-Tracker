@@ -69,7 +69,7 @@ class ViewController: UIViewController {
         var dateTo = Date()
         let fmt = DateFormatter()
         if appData.filter.showAll == true {
-            tableData = appData.transactions
+            tableData = appData.transactions.sorted{ $0.dateFromString > $1.dateFromString }
         } else {
             fmt.dateFormat = "dd.MM.yyyy"
             dateFrom = fmt.date(from: appData.filter.from)!
@@ -131,6 +131,7 @@ class ViewController: UIViewController {
     }
     
     func loadItems(_ request: NSFetchRequest<Transactions> = Transactions.fetchRequest(), predicate: NSPredicate? = nil) {
+        
         do { appData.transactions = try appData.context.fetch(request).sorted{ $0.dateFromString > $1.dateFromString }
         } catch { print("\n\nERROR FETCHING DATA FROM CONTEXTE\n\n", error)}
         mainTableView.reloadData()
@@ -301,6 +302,7 @@ class ViewController: UIViewController {
             }
         }
     }
+    
 }
 
 //MARK: - extension
@@ -332,7 +334,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         case 1:
             let data = tableData[indexPath.row]
             let transactionsCell = tableView.dequeueReusableCell(withIdentifier: K.mainCellIdent, for: indexPath) as! mainVCcell
-            transactionsCell.setupCell(data)
+            transactionsCell.setupCell(data, i: indexPath.row, tableData: tableData)
             return transactionsCell
             
         case 2:
@@ -362,7 +364,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if indexPath.section == 1 {
             if editingStyle == UITableViewCell.EditingStyle.delete {
-                appData.context.delete(self.tableData[indexPath.row])
+                appData.context.delete(tableData[indexPath.row])
                 self.tableData.remove(at: indexPath.row)
                 self.saveItems()
                 self.loadItems()
