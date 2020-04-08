@@ -184,7 +184,7 @@
                                                             </subviews>
                                                         </stackView>
                                                     </subviews>
-                                                    <color key="backgroundColor" red="0.76099997758865356" green="0.76099997758865356" blue="0.76099997758865356" alpha="0.20382063356164384" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="backgroundColor" name="sectionBackgroundColor"/>
                                                     <constraints>
                                                         <constraint firstItem="ghc-Nv-vh1" firstAttribute="top" secondItem="jsT-UF-Apk" secondAttribute="top" constant="2" id="5td-ZP-8wP"/>
                                                         <constraint firstAttribute="trailing" secondItem="ghc-Nv-vh1" secondAttribute="trailing" constant="5" id="fzf-mT-ObT"/>
@@ -1043,7 +1043,7 @@
             <objects>
                 <viewController id="U5Q-a5-Vkx" customClass="StatisticVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="T0c-ZB-hQq">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="591"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Xz5-Md-Dy3">
@@ -1200,7 +1200,7 @@
             <objects>
                 <viewController id="Zmr-vi-AsB" customClass="HistoryVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4Hr-9J-3zH">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="591"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nMe-Ik-tvJ">
@@ -1361,6 +1361,9 @@
         </namedColor>
         <namedColor name="pinkColor">
             <color red="0.76099997758865356" green="0.76099997758865356" blue="0.76099997758865356" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="sectionBackgroundColor">
+            <color red="0.76078431372549016" green="0.76078431372549016" blue="0.76078431372549016" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="separetorColor">
             <color red="0.81599998474121094" green="0.78799998760223389" blue="0.78799998760223389" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

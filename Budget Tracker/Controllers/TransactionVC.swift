@@ -16,7 +16,7 @@ var editingCategory = ""
 var editingValue = 0.0
 
 class TransitionVC: UIViewController {
-    
+
     @IBOutlet weak var dateTextField: CustomTextField!
     @IBOutlet weak var categoryTextField: CustomTextField!
     @IBOutlet weak var purposeSwitcher: UISegmentedControl!
@@ -38,9 +38,6 @@ class TransitionVC: UIViewController {
         purposeSwitcher.selectedSegmentIndex = 0
         purposeSwitched(purposeSwitcher)
         getEditingdata()
-        
-        
-        
         self.isModalInPresentation = true
     }
     
@@ -58,7 +55,6 @@ class TransitionVC: UIViewController {
         dateTextField.inputView = appData.objects.datePicker
         appData.objects.datePicker.addTarget(self, action: #selector(datePickerChangedValue(sender:)), for: .valueChanged)
         dateTextField.text = "\(appData.stringDate(appData.objects.datePicker))"
-        //dateTextField.placeholder = appData.stringDate(appData.objects.datePicker)
         pressedValue = "0"
         valueLabel.text = pressedValue
     }
@@ -214,14 +210,12 @@ class TransitionVC: UIViewController {
             minusPlusLabel.text = "-"
             categoryTextField.inputView = appData.objects.expensesPicker
             categoryTextField.text = "\(expenseArr[appData.selectedExpense])"
-            //categoryTextField.placeholder = expenseArr[appData.selectedExpense]
             showPadPressed(showValueButton)
             
         case 1:
             minusPlusLabel.text = "+"
             categoryTextField.inputView = appData.objects.incomePicker
             categoryTextField.text = "\(incomeArr[appData.selectedIncome])"
-            //categoryTextField.placeholder = incomeArr[appData.selectedIncome]
             showPadPressed(showValueButton)
             
         default:
@@ -278,13 +272,10 @@ class TransitionVC: UIViewController {
         }
     }
     
-    
-    
 }
 
 
 //MARK: - extensions
-
 extension TransitionVC: UIPickerViewDelegate, UIPickerViewDataSource {
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -319,16 +310,13 @@ extension TransitionVC: UIPickerViewDelegate, UIPickerViewDataSource {
     
 }
 
-
 //textfield
-
 extension TransitionVC: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         UIView.animate(withDuration: 0.2) {
             self.numbarPadView.alpha = 0
         }
-        
     }
     
 }

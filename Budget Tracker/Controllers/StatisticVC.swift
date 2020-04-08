@@ -13,7 +13,6 @@ var selectedCategoryName = ""
 var sum = 0.0
 
 class StatisticVC: UIViewController, CALayerDelegate {
-    
     @IBOutlet weak var hostView: CPTGraphHostingView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentControll: UISegmentedControl!
@@ -22,7 +21,6 @@ class StatisticVC: UIViewController, CALayerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         updateUI()
     }
     
@@ -239,11 +237,10 @@ extension StatisticVC: UITableViewDelegate, UITableViewDataSource {
         }
     }
 
-
 }
 
 
-// core plot
+//MARK: - core plot
 extension StatisticVC: CPTPieChartDataSource, CPTPieChartDelegate {
     
     func numberOfRecords(for plot: CPTPlot) -> UInt {

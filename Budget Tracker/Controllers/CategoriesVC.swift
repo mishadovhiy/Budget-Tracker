@@ -10,7 +10,6 @@ import UIKit
 import CoreData
 
 class CategoriesVC: UIViewController {
-    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var categoriesTableView: UITableView!
     var catData = appData.categoryVC
@@ -94,6 +93,7 @@ class CategoriesVC: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
 }
+
 
 //MARK: - extensions
 extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {

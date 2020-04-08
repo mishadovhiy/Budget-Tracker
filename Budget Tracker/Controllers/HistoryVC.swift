@@ -9,15 +9,14 @@
 import UIKit
 
 class HistoryVC: UIViewController {
-    
     @IBOutlet weak var tableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         tableView.delegate = self
         tableView.dataSource = self
         title = selectedCategoryName.capitalized
-        //
+
     }
     
     func totalSum(label: UILabel) {
@@ -29,7 +28,7 @@ class HistoryVC: UIViewController {
             label.text = "\(Int(sum))"
         } else { label.text = "\(sum)" }
     }
-    
+
 }
 
 extension HistoryVC: UITableViewDelegate, UITableViewDataSource {

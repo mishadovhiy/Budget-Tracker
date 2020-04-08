@@ -405,7 +405,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             performSegue(withIdentifier: K.statisticSeque, sender: self)
         case 1:
             hideFilterView()
-            
         case 2:
             hideFilterView()
             expenseLabelPressed = true
@@ -424,9 +423,9 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
                 self.deleteRow(at: indexPath.row)
             }
-            editeAction.backgroundColor = K.Colors.balanceT
+            editeAction.backgroundColor = K.Colors.yellow
             deleteAction.backgroundColor = K.Colors.negative
-            return UISwipeActionsConfiguration(actions: [deleteAction, editeAction])
+            return UISwipeActionsConfiguration(actions: [editeAction, deleteAction])
         } else {
             return UISwipeActionsConfiguration(actions: [])
         }
@@ -451,7 +450,5 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             }
         }
     }
-    
-    
     
 }

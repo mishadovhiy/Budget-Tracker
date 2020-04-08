@@ -42,5 +42,6 @@ struct K {
         static let separetor = UIColor(named: "separetorColor")
         static let yellow = UIColor(named: "yellowColor")
         static let pink = UIColor(named: "pinkColor")
+        static let sectionBackground = UIColor(named: "sectionBackgroundColor")
     }
 }
