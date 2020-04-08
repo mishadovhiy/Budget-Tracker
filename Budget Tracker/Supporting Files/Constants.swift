@@ -26,6 +26,7 @@ struct K {
     static let historySeque = "toHistorySeque"
     static let historyCellIdent = "historyCellIdent"
     static let historyCellTotalIdent = "historyCellTotalIdent"
+    static let goToEditVCSeq = "goToEditVC"
     
     struct Text {
         static let unknExpense = "Uncategorized Expense"

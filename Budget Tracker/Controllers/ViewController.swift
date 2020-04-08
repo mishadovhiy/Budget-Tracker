@@ -17,7 +17,6 @@ var expenseLabelPressed = true
 var selectedPeroud = ""
 
 class ViewController: UIViewController {
-
     @IBOutlet weak var filterView: UIView!
     @IBOutlet weak var buttonsFilterView: UIView!
     @IBOutlet weak var pressToShowFilterButtons: UIButton!
@@ -40,7 +39,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUI()
-        buttonsFilterView.alpha = 0
         filterOptionsPressed(thisMonthFilterButton)
     }
     
@@ -60,6 +58,7 @@ class ViewController: UIViewController {
         todayButton.layer.cornerRadius = 6
         allTimeButton.layer.cornerRadius = 6
         thisMonthFilterButton.layer.cornerRadius = 6
+        buttonsFilterView.alpha = 0
     }
     
     func performFiltering() {
@@ -295,12 +294,43 @@ class ViewController: UIViewController {
     }
     
     @IBAction func unwindToViewControllerA(segue: UIStoryboardSegue) {
+        
         DispatchQueue.global(qos: .userInitiated).async {
             DispatchQueue.main.async {
                 self.performFiltering()
                 self.loadItems()
+                
+                editingDate = ""
+                editingCategory = ""
+                editingValue = 0.0
             }
         }
+    }
+    
+    func dimNewCell(_ transactionsCell: mainVCcell, index: Int) {
+
+        if transactionsCell.bigDate.text == highliteDate {
+            DispatchQueue.main.async {
+                self.mainTableView.scrollToRow(at: IndexPath(row: index, section: 1), at: .top, animated: true)
+            }
+            UIView.animate(withDuration: 0.6) {
+                transactionsCell.contentView.backgroundColor = K.Colors.separetor
+            }
+            Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (timer) in
+                UIView.animate(withDuration: 0.6) {
+                    transactionsCell.contentView.backgroundColor = K.Colors.background
+                    highliteDate = " "
+                }
+            }
+        }
+    }
+    
+    func delereRow(at: Int) {
+        
+        appData.context.delete(tableData[at])
+        self.tableData.remove(at: at)
+        self.saveItems()
+        self.loadItems()
     }
     
 }
@@ -333,8 +363,10 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             
         case 1:
             let data = tableData[indexPath.row]
+            //crash after adding scroll to
             let transactionsCell = tableView.dequeueReusableCell(withIdentifier: K.mainCellIdent, for: indexPath) as! mainVCcell
             transactionsCell.setupCell(data, i: indexPath.row, tableData: tableData)
+            dimNewCell(transactionsCell, index: indexPath.row)
             return transactionsCell
             
         case 2:
@@ -349,11 +381,19 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
+            hideFilterView()
             expenseLabelPressed = true
             performSegue(withIdentifier: K.statisticSeque, sender: self)
         case 1:
             hideFilterView()
+            editingDate = tableData[indexPath.row].date ?? ""
+            editingValue = tableData[indexPath.row].value
+            editingCategory = tableData[indexPath.row].category ?? ""
+            performSegue(withIdentifier: K.goToEditVCSeq, sender: self)
+            delereRow(at: indexPath.row)
+            
         case 2:
+            hideFilterView()
             expenseLabelPressed = true
             performSegue(withIdentifier: K.statisticSeque, sender: self)
         default:
@@ -362,12 +402,10 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
         if indexPath.section == 1 {
             if editingStyle == UITableViewCell.EditingStyle.delete {
-                appData.context.delete(tableData[indexPath.row])
-                self.tableData.remove(at: indexPath.row)
-                self.saveItems()
-                self.loadItems()
+                delereRow(at: indexPath.row)
             }
         }
     }
@@ -394,6 +432,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        
         if indexPath.section == 0 {
             filterView.alpha = 1
             UIView.animate(withDuration: 0.3) {

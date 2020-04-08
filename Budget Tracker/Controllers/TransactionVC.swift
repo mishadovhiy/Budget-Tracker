@@ -10,6 +10,12 @@ import UIKit
 import CoreData
 import AVFoundation
 
+var highliteDate = " "
+
+var editingDate = ""
+var editingCategory = ""
+var editingValue = 0.0
+
 class TransitionVC: UIViewController {
     
     @IBOutlet weak var purposeSwitcher: UISegmentedControl!
@@ -23,11 +29,16 @@ class TransitionVC: UIViewController {
     var expenseArr = [""]
     var incomeArr = [""]
     
+    var editingDateHolder = ""
+    var editingCategoryHolder = ""
+    var editingValueHolder = 0.0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUI()
         purposeSwitcher.selectedSegmentIndex = 0
         purposeSwitched(purposeSwitcher)
+        getEditingdata()
     }
     
     func updateUI() {
@@ -47,6 +58,29 @@ class TransitionVC: UIViewController {
         //dateTextField.placeholder = appData.stringDate(appData.objects.datePicker)
         pressedValue = "0"
         valueLabel.text = pressedValue
+    }
+    
+    func getEditingdata() {
+        
+        if editingDate != "" {
+            minusPlusLabel.alpha = 1
+            categoryTextField.text = editingCategory
+            dateTextField.text = editingDate
+            editingCategoryHolder = editingCategory
+            editingDateHolder = editingDate
+            editingValueHolder = editingValue
+            if editingValue > 0.0 {
+                self.purposeSwitcher.selectedSegmentIndex = 1
+                self.purposeSwitched(self.purposeSwitcher)
+                valueLabel.text = "\(Int(editingValue))"
+                pressedValue = "\(Int(editingValue))"
+            } else {
+                self.purposeSwitcher.selectedSegmentIndex = 0
+                self.purposeSwitched(self.purposeSwitcher)
+                valueLabel.text = "\(Int(editingValue * -1))"
+                pressedValue = "\(Int(editingValue) * -1)"
+            }
+        }
     }
     
     func appendPurposes() {
@@ -87,6 +121,7 @@ class TransitionVC: UIViewController {
             dateTextField.text = "\(appData.stringDate(appData.objects.datePicker))"
         }
         new.date = dateTextField.text
+        highliteDate = new.date ?? ""
         
         UIImpactFeedbackGenerator().impactOccurred()
         do { try appData.context.save()
@@ -146,10 +181,25 @@ class TransitionVC: UIViewController {
         
     }
     
-    
-    
     @IBAction func cancelPressed(_ sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
+        
+        if editingDate != "" {
+            let new = Transactions(context: appData.context)
+            new.category = editingCategoryHolder
+            new.value = editingValueHolder
+            new.date = editingDateHolder
+            appData.transactions.insert(new, at: 0)
+            highliteDate = " "
+            
+            UIImpactFeedbackGenerator().impactOccurred()
+            do { try appData.context.save()
+            } catch { print("\n\nERROR ENCODING CONTEXT\n\n", error) }
+            self.performSegue(withIdentifier: K.quitVC, sender: self)
+            
+        } else {
+            self.dismiss(animated: true, completion: nil)
+        }
+        
     }
     
     @IBAction func purposeSwitched(_ sender: UISegmentedControl) {

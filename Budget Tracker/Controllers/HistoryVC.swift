@@ -17,6 +17,7 @@ class HistoryVC: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         title = selectedCategoryName.capitalized
+        //
     }
     
     func totalSum(label: UILabel) {
