@@ -11,18 +11,17 @@ import CoreData
 import AVFoundation
 
 var highliteDate = " "
-
 var editingDate = ""
 var editingCategory = ""
 var editingValue = 0.0
 
 class TransitionVC: UIViewController {
     
+    @IBOutlet weak var dateTextField: CustomTextField!
+    @IBOutlet weak var categoryTextField: CustomTextField!
     @IBOutlet weak var purposeSwitcher: UISegmentedControl!
     @IBOutlet weak var showValueButton: UIButton!
     @IBOutlet weak var numbarPadView: UIView!
-    @IBOutlet weak var categoryTextField: UITextField!
-    @IBOutlet weak var dateTextField: UITextField!
     @IBOutlet weak var valueLabel: UILabel!
     @IBOutlet weak var minusPlusLabel: UILabel!
     var pressedValue = "0"
@@ -39,6 +38,8 @@ class TransitionVC: UIViewController {
         purposeSwitcher.selectedSegmentIndex = 0
         purposeSwitched(purposeSwitcher)
         getEditingdata()
+        
+        
         
         self.isModalInPresentation = true
     }
@@ -278,17 +279,11 @@ class TransitionVC: UIViewController {
     }
     
     
+    
 }
 
+
 //MARK: - extensions
-extension TransitionVC: UITextFieldDelegate {
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        UIView.animate(withDuration: 0.2) {
-            self.numbarPadView.alpha = 0
-        }
-    }
-}
 
 extension TransitionVC: UIPickerViewDelegate, UIPickerViewDataSource {
     
@@ -320,6 +315,37 @@ extension TransitionVC: UIPickerViewDelegate, UIPickerViewDataSource {
             categoryTextField.text = incomeArr[row]
             appData.selectedIncome = row
         }
+    }
+    
+}
+
+
+//textfield
+
+extension TransitionVC: UITextFieldDelegate {
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        UIView.animate(withDuration: 0.2) {
+            self.numbarPadView.alpha = 0
+        }
+        
+    }
+    
+}
+
+class CustomTextField: UITextField {
+    
+    var enableLongPressActions = false
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)!
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        return enableLongPressActions
     }
     
 }

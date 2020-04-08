@@ -33,6 +33,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var balanceLabel: UILabel!
     @IBOutlet weak var incomeLabel: UILabel!
     @IBOutlet weak var expenseLabel: UILabel!
+    var refreshControl = UIRefreshControl()
     var tableData = appData.transactions.sorted{ $0.dateFromString > $1.dateFromString }
     var alerts = Alerts()
     
@@ -59,6 +60,16 @@ class ViewController: UIViewController {
         allTimeButton.layer.cornerRadius = 6
         thisMonthFilterButton.layer.cornerRadius = 6
         buttonsFilterView.alpha = 0
+        refreshControl.addTarget(self, action: #selector(refresh(sender:)), for: UIControl.Event.valueChanged)
+        refreshControl.tintColor = K.Colors.separetor
+        mainTableView.addSubview(refreshControl)
+    }
+    
+    @objc func refresh(sender:AnyObject) {
+        performSegue(withIdentifier: K.goToEditVCSeq, sender: self)
+        Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (timer) in
+            self.refreshControl.endRefreshing()
+        }
     }
     
     func performFiltering() {
@@ -325,12 +336,21 @@ class ViewController: UIViewController {
         }
     }
     
-    func delereRow(at: Int) {
+    func deleteRow(at: Int) {
         
         appData.context.delete(tableData[at])
         self.tableData.remove(at: at)
         self.saveItems()
         self.loadItems()
+    }
+    
+    func editRow(at: Int) {
+        
+        editingDate = tableData[at].date ?? ""
+        editingValue = tableData[at].value
+        editingCategory = tableData[at].category ?? ""
+        performSegue(withIdentifier: K.goToEditVCSeq, sender: self)
+        deleteRow(at: at)
     }
     
 }
@@ -363,7 +383,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             
         case 1:
             let data = tableData[indexPath.row]
-            //crash after adding scroll to
             let transactionsCell = tableView.dequeueReusableCell(withIdentifier: K.mainCellIdent, for: indexPath) as! mainVCcell
             transactionsCell.setupCell(data, i: indexPath.row, tableData: tableData)
             dimNewCell(transactionsCell, index: indexPath.row)
@@ -386,11 +405,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             performSegue(withIdentifier: K.statisticSeque, sender: self)
         case 1:
             hideFilterView()
-            editingDate = tableData[indexPath.row].date ?? ""
-            editingValue = tableData[indexPath.row].value
-            editingCategory = tableData[indexPath.row].category ?? ""
-            performSegue(withIdentifier: K.goToEditVCSeq, sender: self)
-            delereRow(at: indexPath.row)
             
         case 2:
             hideFilterView()
@@ -400,25 +414,22 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             hideFilterView()
         }
     }
-
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         if indexPath.section == 1 {
-            if editingStyle == UITableViewCell.EditingStyle.delete {
-                delereRow(at: indexPath.row)
+            let editeAction = UIContextualAction(style: .destructive, title: "Edit") {  (contextualAction, view, boolValue) in
+                self.editRow(at: indexPath.row)
             }
+            let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
+                self.deleteRow(at: indexPath.row)
+            }
+            editeAction.backgroundColor = K.Colors.balanceT
+            deleteAction.backgroundColor = K.Colors.negative
+            return UISwipeActionsConfiguration(actions: [deleteAction, editeAction])
+        } else {
+            return UISwipeActionsConfiguration(actions: [])
         }
-    }
-    
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        
-        switch indexPath.section {
-        case 0: return UITableViewCell.EditingStyle.none
-        case 1: return UITableViewCell.EditingStyle.delete
-        case 2: return UITableViewCell.EditingStyle.none
-        default: return UITableViewCell.EditingStyle.none
-        }
-        
     }
     
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -440,5 +451,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             }
         }
     }
+    
+    
     
 }
