@@ -84,6 +84,7 @@ class calcCell: UITableViewCell {
     @IBOutlet weak var expensesLabel: UILabel!
     @IBOutlet weak var incomeLabel: UILabel!
     @IBOutlet weak var periodBalanceTitleLabel: UILabel!
+    @IBOutlet weak var periodStack: UIStackView!
     @IBOutlet weak var periodBalanceValueLabel: UILabel!
     
     
@@ -106,8 +107,19 @@ class calcCell: UITableViewCell {
             balanceLabel.textColor = K.Colors.balanceV
         }
         
-        //periodBalanceTitleLabel.text = "Balance for \(selectedPeroud):"
+        if selectedPeroud == "All time" {
+            periodStack.isHidden = true
+            UIView.animate(withDuration: 0.3) {
+                self.periodStack.alpha = 0
+            }
+        } else {
+            periodStack.isHidden = false
+            UIView.animate(withDuration: 0.3) {
+                self.periodStack.alpha = 1
+            }
+        }
     }
+
     
 }
 

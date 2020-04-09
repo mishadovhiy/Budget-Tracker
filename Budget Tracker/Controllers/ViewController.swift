@@ -322,15 +322,15 @@ class ViewController: UIViewController {
 
         if transactionsCell.bigDate.text == highliteDate {
             DispatchQueue.main.async {
-                self.mainTableView.scrollToRow(at: IndexPath(row: index, section: 1), at: .top, animated: true)
+                self.mainTableView.scrollToRow(at: IndexPath(row: index, section: 1), at: .bottom, animated: true)
             }
             UIView.animate(withDuration: 0.6) {
                 transactionsCell.contentView.backgroundColor = K.Colors.separetor
             }
             Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (timer) in
+                highliteDate = " "
                 UIView.animate(withDuration: 0.6) {
                     transactionsCell.contentView.backgroundColor = K.Colors.background
-                    highliteDate = " "
                 }
             }
         }

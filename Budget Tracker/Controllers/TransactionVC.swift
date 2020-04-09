@@ -38,7 +38,6 @@ class TransitionVC: UIViewController {
         purposeSwitcher.selectedSegmentIndex = 0
         purposeSwitched(purposeSwitcher)
         getEditingdata()
-        self.isModalInPresentation = true
     }
     
     func updateUI() {
@@ -62,6 +61,7 @@ class TransitionVC: UIViewController {
     func getEditingdata() {
         
         if editingDate != "" {
+            self.isModalInPresentation = true
             minusPlusLabel.alpha = 1
             categoryTextField.text = editingCategory
             dateTextField.text = editingDate
@@ -79,6 +79,8 @@ class TransitionVC: UIViewController {
                 valueLabel.text = "\(Int(editingValue * -1))"
                 pressedValue = "\(Int(editingValue) * -1)"
             }
+        } else {
+            self.isModalInPresentation = false
         }
     }
     
