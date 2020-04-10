@@ -26,6 +26,12 @@ class ViewController: UIViewController {
     @IBOutlet weak var allTimeButton: UIButton!
     @IBOutlet weak var filterTextLabel: UILabel!
     
+    @IBOutlet weak var allTimeIpad: UIButton!
+    @IBOutlet weak var thisMonthIpad: UIButton!
+    @IBOutlet weak var todayIpad: UIButton!
+    @IBOutlet weak var customIpad: UIButton!
+    @IBOutlet weak var customDateLabelIpad: UILabel!
+    
     @IBOutlet weak var calculationSView: UIStackView!
     @IBOutlet weak var mainTableView: UITableView!
     @IBOutlet weak var addTransitionButton: UIButton!
@@ -44,21 +50,12 @@ class ViewController: UIViewController {
     }
     
     func updateUI() {
-        
-        addTransitionButton.layer.cornerRadius = 15
+
         mainTableView.delegate = self
         mainTableView.dataSource = self
         loadItems()
-        pressToShowFilterButtons.layer.cornerRadius = 6
-        buttonsFilterView.layer.cornerRadius = 6
-        buttonsFilterView.layer.shadowColor = UIColor.black.cgColor
-        buttonsFilterView.layer.shadowOpacity = 0.2
-        buttonsFilterView.layer.shadowOffset = .zero
-        buttonsFilterView.layer.shadowRadius = 6
-        customButton.layer.cornerRadius = 6
-        todayButton.layer.cornerRadius = 6
-        allTimeButton.layer.cornerRadius = 6
-        thisMonthFilterButton.layer.cornerRadius = 6
+        appData.styles.shadow(view: buttonsFilterView)
+        appData.styles.cornerRadius(buttons: [pressToShowFilterButtons, customButton, todayButton, allTimeButton, allTimeIpad, thisMonthIpad, todayIpad, customIpad, thisMonthFilterButton], view: buttonsFilterView)
         buttonsFilterView.alpha = 0
         refreshControl.addTarget(self, action: #selector(refresh(sender:)), for: UIControl.Event.valueChanged)
         refreshControl.tintColor = K.Colors.separetor
@@ -70,6 +67,24 @@ class ViewController: UIViewController {
         Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (timer) in
             self.refreshControl.endRefreshing()
         }
+    }
+    
+    func loadItems(_ request: NSFetchRequest<Transactions> = Transactions.fetchRequest(), predicate: NSPredicate? = nil) {
+        
+        do { appData.transactions = try appData.context().fetch(request).sorted{ $0.dateFromString > $1.dateFromString }
+        } catch { print("\n\nERROR FETCHING DATA FROM CONTEXTE\n\n", error)}
+        mainTableView.reloadData()
+        appData.calculation.recalculation(i: incomeLabel, e: expenseLabel, data: tableData)
+    
+        statisticBrain.getData(from: self.tableData)
+        sumAllCategories = statisticBrain.statisticData
+        appData.calculation.calculateBalance(balanceLabel: balanceLabel)
+    }
+    
+    func saveItems() {
+        do { try appData.context().save()
+        } catch { print("\n\nERROR ENCODING CONTEXT\n\n", error) }
+        loadItems()
     }
     
     func performFiltering() {
@@ -93,76 +108,32 @@ class ViewController: UIViewController {
                 dateFrom = Calendar.current.date(byAdding: .day, value: 1, to: dateFrom)!
             }
             appendFiltered(dates: mydates)
+            
         }
-        showNoDataLabel()
+        appData.styles.showNoDataLabel(noTableDataLabel, tableData: tableData)//
         allSelectedTransactionsData = tableData
         
     }
     
-    var totalBalance = 0.0
-    func calculateBalance() {
-        
-        var totalExpenses = 0.0
-        var totalIncomes = 0.0
-        
-        for i in 0..<appData.transactions.count {
-            if appData.transactions[i].value > 0.0 {
-                totalIncomes = totalIncomes + appData.transactions[i].value
-            } else {
-                totalExpenses = totalExpenses + appData.transactions[i].value
-            }
-        }
-        
-        totalBalance = totalIncomes + totalExpenses
-        if totalBalance < Double(Int.max) {
-            balanceLabel.text = "\(Int(totalBalance))"
-        } else { balanceLabel.text = "\(totalBalance)" }
-        
-        if totalBalance < 0.0 {
-            balanceLabel.textColor = K.Colors.negative
-        } else {
-            balanceLabel.textColor = K.Colors.balanceV
-        }
-        
-    }
-    
     func appendFiltered(dates: [String]) {
-        
+           
         var arr = appData.transactions
         arr.removeAll()
         for number in 0..<dates.count {
-            
+               
             for i in 0..<appData.transactions.count {
                 if dates[number] == appData.transactions[i].date {
                     arr.append(appData.transactions[i])
                 }}}
         tableData = arr.sorted{ $0.dateFromString > $1.dateFromString }
-        
-    }
-    
-    func loadItems(_ request: NSFetchRequest<Transactions> = Transactions.fetchRequest(), predicate: NSPredicate? = nil) {
-        
-        do { appData.transactions = try appData.context.fetch(request).sorted{ $0.dateFromString > $1.dateFromString }
-        } catch { print("\n\nERROR FETCHING DATA FROM CONTEXTE\n\n", error)}
-        mainTableView.reloadData()
-        appData.recalculation(b: balanceLabel, i: incomeLabel, e: expenseLabel, data: tableData)
-    
-        statisticBrain.getData(from: self.tableData)
-        sumAllCategories = statisticBrain.statisticData
-        calculateBalance()
-    }
-    
-    func saveItems() {
-        do { try appData.context.save()
-        } catch { print("\n\nERROR ENCODING CONTEXT\n\n", error) }
-        loadItems()
+           
     }
     
     func showFilterAlert() {
         
         let alert = UIAlertController(title: "Custom period", message: "", preferredStyle: .alert)
         let action = UIAlertAction(title: "Done", style: .default) { (acrion) in
-            self.setFilterDates()
+            appData.filter.setFilterDates(iphoneLabel: self.filterTextLabel, ipadLabel: self.customDateLabelIpad)
             self.performFiltering()
             self.loadItems()
         }
@@ -172,136 +143,93 @@ class ViewController: UIViewController {
         alerts.alertTextField(alert: alert)
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
+        
     }
     
-    func setFilterDates() {
+    func toggleFilterView(filetButtonsOpasityShadow: Float, viewOpasity: Int, filetButtonsBackground: UIColor?, textColor: UIColor?, shadowColor: CGColor) {
         
-        appData.filter.showAll = false
-        if appData.filter.filterObjects.startDateField.text == "" {
-            appData.filter.filterObjects.startDateField.text = "\(appData.stringDate(appData.filter.filterObjects.startDatePicker))"
-        }
-        
-        if appData.filter.filterObjects.endDateField.text == "" {
-            appData.filter.filterObjects.endDateField.text = "\(appData.stringDate(appData.filter.filterObjects.endDatePicker))"
-        }
-        
-        appData.filter.from = appData.filter.filterObjects.startDateField.text!
-        appData.filter.to = appData.filter.filterObjects.endDateField.text!
-        selectedPeroud = "\(appData.filter.from) → \(appData.filter.to)"
-        filterTextLabel.text = "Filter: \(selectedPeroud)"
-    }
-
-    func showNoDataLabel() {
-        
-        if tableData.count == 0 {
-            UIView.animate(withDuration: 0.2) {
-                self.noTableDataLabel.alpha = 0.5 }
-        } else {
-            UIView.animate(withDuration: 0.2) {
-                self.noTableDataLabel.alpha = 0
-            }
-        }
-    }
-    
-    func removeBackground() {
-        
-        buttonsFilterView.alpha = 0
-        thisMonthFilterButton.backgroundColor = K.Colors.pink
-        customButton.backgroundColor = K.Colors.pink
-        todayButton.backgroundColor = K.Colors.pink
-        allTimeButton.backgroundColor = K.Colors.pink
-
-    }
-    
-    func hideFilterView() {
         UIView.animate(withDuration: 0.3) {
-            self.buttonsFilterView.alpha = 0
-            self.pressToShowFilterButtons.backgroundColor = K.Colors.background
-            self.filterTextLabel.textColor = K.Colors.balanceT
-            self.pressToShowFilterButtons.layer.shadowColor = UIColor.clear.cgColor
+            self.buttonsFilterView.alpha = CGFloat(viewOpasity)
+            self.pressToShowFilterButtons.backgroundColor = filetButtonsBackground
+            self.filterTextLabel.textColor = textColor
+            self.pressToShowFilterButtons.layer.shadowColor = shadowColor
         }
-        pressToShowFilterButtons.layer.shadowOpacity = 0
+        pressToShowFilterButtons.layer.shadowOpacity = filetButtonsOpasityShadow / 30
         pressToShowFilterButtons.layer.shadowOffset = .zero
-        pressToShowFilterButtons.layer.shadowRadius = 0
-    }
-    
-    func showFilterView() {
-        UIView.animate(withDuration: 0.3) {
-            self.buttonsFilterView.alpha = 1
-            self.pressToShowFilterButtons.backgroundColor = K.Colors.pink
-            self.filterTextLabel.textColor = K.Colors.balanceV
-            self.pressToShowFilterButtons.layer.shadowColor = UIColor.black.cgColor
-        }
-        pressToShowFilterButtons.layer.shadowOpacity = 0.2
-        pressToShowFilterButtons.layer.shadowOffset = .zero
-        pressToShowFilterButtons.layer.shadowRadius = 6
+        pressToShowFilterButtons.layer.shadowRadius = CGFloat(filetButtonsOpasityShadow)
         
-    }
-    
-    func toggleFilterView() {
-        if buttonsFilterView.alpha == 1 {
-            hideFilterView()
-        } else { showFilterView() }
     }
     
     @IBAction func showFilterPressed(_ sender: UIButton) {
-        toggleFilterView()
+        if buttonsFilterView.alpha == 1 {
+            toggleFilterView(filetButtonsOpasityShadow: 0, viewOpasity: 0, filetButtonsBackground:  K.Colors.background, textColor: K.Colors.balanceT, shadowColor: UIColor.clear.cgColor)
+        } else {
+            toggleFilterView(filetButtonsOpasityShadow: 6, viewOpasity: 1, filetButtonsBackground: K.Colors.pink, textColor: K.Colors.balanceV, shadowColor: UIColor.black.cgColor)
+        }
     }
     
     @IBAction func filterOptionsPressed(_ sender: UIButton) {
         
+        appData.styles.removeBackground(buttons: [thisMonthFilterButton, customButton, todayButton, allTimeButton, allTimeIpad, thisMonthIpad, todayIpad, customIpad], labels: [customDateLabelIpad], views: [buttonsFilterView])
         UIView.animate(withDuration: 0.3) {
             self.pressToShowFilterButtons.backgroundColor = K.Colors.background
+            sender.backgroundColor = K.Colors.yellow
         }
-        removeBackground()
-        sender.backgroundColor = K.Colors.yellow
+        DispatchQueue.main.async {
+            self.filterCases(sender.tag)
+        }
+        selectedPeroud = sender.titleLabel?.text ?? "kfk"
+        filterTextLabel.text = "Filter: \(selectedPeroud)"
+        if sender.tag == 3 {
+            filterTextLabel.text = "Filter: Custom..."
+            customDateLabelIpad.text = "Custom..."
+        }
         
-        switch sender.tag {
-        case 0:
+    }
+    
+    func filterCases(_ n: Int) {
+        
+        if n == 0 {
             appData.filter.showAll = true
+        } else {
+            appData.filter.showAll = false
+        }
+        
+        switch n {
+        case 0:
             appData.filter.from = ""
             appData.filter.to = ""
-            performFiltering()
-            loadItems()
-            selectedPeroud = "All time"
             
         case 1:
-            appData.filter.showAll = false
             appData.filter.from = appData.filter.getFirstDay(appData.filter.filterObjects.currentDate)
             appData.filter.to = appData.filter.getLastDay(appData.filter.filterObjects.currentDate)
-            performFiltering()
-            loadItems()
-            selectedPeroud = "This Month"
-
+            
         case 2:
-            appData.filter.showAll = false
             appData.filter.from = appData.stringDate(appData.filter.filterObjects.currentDate)
             appData.filter.to = appData.stringDate(appData.filter.filterObjects.currentDate)
-            performFiltering()
-            loadItems()
-            selectedPeroud = "Today"
             
         case 3:
             showFilterAlert()
             pressToShowFilterButtons.layer.shadowColor = UIColor.clear.cgColor
+            customDateLabelIpad.alpha = 1
             
         default: loadItems() }
         
-        filterTextLabel.text = "Filter: \(selectedPeroud)"
-        if sender.tag == 3 {
-            filterTextLabel.text = "Filter: Custom..."
+        if n != 3 {
+            performFiltering()
+            loadItems()
         }
         
     }
     
     @IBAction func statisticLabelPressed(_ sender: UIButton) {
+        
         switch sender.tag {
         case 0: expenseLabelPressed = true
         case 1: expenseLabelPressed = false
         default: expenseLabelPressed = true
         }
         performSegue(withIdentifier: K.statisticSeque, sender: self)
-        
     }
     
     @IBAction func unwindToViewControllerA(segue: UIStoryboardSegue) {
@@ -310,7 +238,6 @@ class ViewController: UIViewController {
             DispatchQueue.main.async {
                 self.performFiltering()
                 self.loadItems()
-                
                 editingDate = ""
                 editingCategory = ""
                 editingValue = 0.0
@@ -318,27 +245,9 @@ class ViewController: UIViewController {
         }
     }
     
-    func dimNewCell(_ transactionsCell: mainVCcell, index: Int) {
-
-        if transactionsCell.bigDate.text == highliteDate {
-            DispatchQueue.main.async {
-                self.mainTableView.scrollToRow(at: IndexPath(row: index, section: 1), at: .bottom, animated: true)
-            }
-            UIView.animate(withDuration: 0.6) {
-                transactionsCell.contentView.backgroundColor = K.Colors.separetor
-            }
-            Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (timer) in
-                highliteDate = " "
-                UIView.animate(withDuration: 0.6) {
-                    transactionsCell.contentView.backgroundColor = K.Colors.background
-                }
-            }
-        }
-    }
-    
     func deleteRow(at: Int) {
         
-        appData.context.delete(tableData[at])
+        appData.context().delete(tableData[at])
         self.tableData.remove(at: at)
         self.saveItems()
         self.loadItems()
@@ -378,14 +287,14 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         switch indexPath.section {
         case 0:
             let calculationCell = tableView.dequeueReusableCell(withIdentifier: K.calcCellIdent, for: indexPath) as! calcCell
-            calculationCell.setupCell(totalBalance)
+            calculationCell.setupCell(appData.calculation.totalBalance)
             return calculationCell
             
         case 1:
             let data = tableData[indexPath.row]
             let transactionsCell = tableView.dequeueReusableCell(withIdentifier: K.mainCellIdent, for: indexPath) as! mainVCcell
             transactionsCell.setupCell(data, i: indexPath.row, tableData: tableData)
-            dimNewCell(transactionsCell, index: indexPath.row)
+            appData.styles.dimNewCell(transactionsCell, index: indexPath.row, tableView: mainTableView)
             return transactionsCell
             
         case 2:
@@ -400,17 +309,17 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
-            hideFilterView()
+            toggleFilterView(filetButtonsOpasityShadow: 0, viewOpasity: 0, filetButtonsBackground:  K.Colors.background, textColor: K.Colors.balanceT, shadowColor: UIColor.clear.cgColor)
             expenseLabelPressed = true
             performSegue(withIdentifier: K.statisticSeque, sender: self)
         case 1:
-            hideFilterView()
+            toggleFilterView(filetButtonsOpasityShadow: 0, viewOpasity: 0, filetButtonsBackground:  K.Colors.background, textColor: K.Colors.balanceT, shadowColor: UIColor.clear.cgColor)
         case 2:
-            hideFilterView()
+            toggleFilterView(filetButtonsOpasityShadow: 0, viewOpasity: 0, filetButtonsBackground:  K.Colors.background, textColor: K.Colors.balanceT, shadowColor: UIColor.clear.cgColor)
             expenseLabelPressed = true
             performSegue(withIdentifier: K.statisticSeque, sender: self)
         default:
-            hideFilterView()
+            toggleFilterView(filetButtonsOpasityShadow: 0, viewOpasity: 0, filetButtonsBackground:  K.Colors.background, textColor: K.Colors.balanceT, shadowColor: UIColor.clear.cgColor)
         }
     }
     
@@ -433,11 +342,9 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
-            UIView.animate(withDuration: 0.3) {
-                self.calculationSView.alpha = 1
-            }
+            calculationSView.alpha = 1
             filterView.alpha = 0
-            hideFilterView()
+            toggleFilterView(filetButtonsOpasityShadow: 0, viewOpasity: 0, filetButtonsBackground:  K.Colors.background, textColor: K.Colors.balanceT, shadowColor: UIColor.clear.cgColor)
         }
     }
     
@@ -445,9 +352,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         
         if indexPath.section == 0 {
             filterView.alpha = 1
-            UIView.animate(withDuration: 0.3) {
-                self.calculationSView.alpha = 0
-            }
+            calculationSView.alpha = 0
         }
     }
     

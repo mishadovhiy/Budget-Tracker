@@ -61,13 +61,6 @@ class TransitionVC: UIViewController {
     func getEditingdata() {
         
         if editingDate != "" {
-            self.isModalInPresentation = true
-            minusPlusLabel.alpha = 1
-            categoryTextField.text = editingCategory
-            dateTextField.text = editingDate
-            editingCategoryHolder = editingCategory
-            editingDateHolder = editingDate
-            editingValueHolder = editingValue
             if editingValue > 0.0 {
                 self.purposeSwitcher.selectedSegmentIndex = 1
                 self.purposeSwitched(self.purposeSwitcher)
@@ -79,8 +72,19 @@ class TransitionVC: UIViewController {
                 valueLabel.text = "\(Int(editingValue * -1))"
                 pressedValue = "\(Int(editingValue) * -1)"
             }
+            if #available(iOS 13.0, *) {
+                self.isModalInPresentation = true
+            }
+            minusPlusLabel.alpha = 1
+            categoryTextField.text = editingCategory
+            dateTextField.text = editingDate
+            editingCategoryHolder = editingCategory
+            editingDateHolder = editingDate
+            editingValueHolder = editingValue
         } else {
-            self.isModalInPresentation = false
+            if #available(iOS 13.0, *) {
+                self.isModalInPresentation = false
+            }
         }
     }
     
@@ -107,7 +111,7 @@ class TransitionVC: UIViewController {
     
     func addNew() {
         
-        let new = Transactions(context: appData.context)
+        let new = Transactions(context: appData.context())
         let n = Double(valueLabel.text!) ?? 0.0
         
         if purposeSwitcher.selectedSegmentIndex == 0 {
@@ -125,14 +129,14 @@ class TransitionVC: UIViewController {
         highliteDate = new.date ?? ""
         
         UIImpactFeedbackGenerator().impactOccurred()
-        do { try appData.context.save()
+        do { try appData.context().save()
         } catch { print("\n\nERROR ENCODING CONTEXT\n\n", error) }
         self.performSegue(withIdentifier: K.quitVC, sender: self)
     }
     
     func loadCategoriesData(_ request: NSFetchRequest<Categories> = Categories.fetchRequest(), predicate: NSPredicate? = nil) {
         
-        do { appData.categories = try appData.context.fetch(request)
+        do { appData.categories = try appData.context().fetch(request)
         } catch { print("\n\nERROR FETCHING DATA FROM CONTEXTE\n\n", error)}
     }
     
@@ -185,7 +189,7 @@ class TransitionVC: UIViewController {
     @IBAction func cancelPressed(_ sender: UIButton) {
         
         if editingDate != "" {
-            let new = Transactions(context: appData.context)
+            let new = Transactions(context: appData.context())
             new.category = editingCategoryHolder
             new.value = editingValueHolder
             new.date = editingDateHolder
@@ -193,7 +197,7 @@ class TransitionVC: UIViewController {
             highliteDate = " "
             
             UIImpactFeedbackGenerator().impactOccurred()
-            do { try appData.context.save()
+            do { try appData.context().save()
             } catch { print("\n\nERROR ENCODING CONTEXT\n\n", error) }
             self.performSegue(withIdentifier: K.quitVC, sender: self)
             

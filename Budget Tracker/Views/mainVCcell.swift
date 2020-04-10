@@ -78,6 +78,7 @@ class mainVCcell: UITableViewCell {
     
 }
 
+
 class calcCell: UITableViewCell {
     
     @IBOutlet weak var balanceLabel: UILabel!
@@ -87,18 +88,17 @@ class calcCell: UITableViewCell {
     @IBOutlet weak var periodStack: UIStackView!
     @IBOutlet weak var periodBalanceValueLabel: UILabel!
     
-    
     func setupCell(_ totalBalance: Double) {
-        if totalBalance < Double(Int.max), appData.sumExpenses < Double(Int.max), appData.sumIncomes < Double(Int.max), appData.sumPeriodBalance < Double(Int.max) {
+        if totalBalance < Double(Int.max), appData.calculation.sumExpenses < Double(Int.max), appData.calculation.sumIncomes < Double(Int.max), appData.calculation.sumPeriodBalance < Double(Int.max) {
             balanceLabel.text = "\(Int(totalBalance))"
-            periodBalanceValueLabel.text = "\(Int(appData.sumPeriodBalance))"
-            expensesLabel.text = "\(Int(appData.sumExpenses * -1))"
-            incomeLabel.text = "\(Int(appData.sumIncomes))"
+            periodBalanceValueLabel.text = "\(Int(appData.calculation.sumPeriodBalance))"
+            expensesLabel.text = "\(Int(appData.calculation.sumExpenses * -1))"
+            incomeLabel.text = "\(Int(appData.calculation.sumIncomes))"
         } else {
             balanceLabel.text = "\(totalBalance)"
-            periodBalanceValueLabel.text = "\(appData.sumPeriodBalance)"
-            expensesLabel.text = "\(appData.sumExpenses * -1)"
-            incomeLabel.text = "\(appData.sumIncomes)"
+            periodBalanceValueLabel.text = "\(appData.calculation.sumPeriodBalance)"
+            expensesLabel.text = "\(appData.calculation.sumExpenses * -1)"
+            incomeLabel.text = "\(appData.calculation.sumIncomes)"
         }
         
         if totalBalance < 0.0 {
@@ -107,7 +107,7 @@ class calcCell: UITableViewCell {
             balanceLabel.textColor = K.Colors.balanceV
         }
         
-        if selectedPeroud == "All time" {
+        if balanceLabel.text == periodBalanceValueLabel.text {
             periodStack.isHidden = true
             UIView.animate(withDuration: 0.3) {
                 self.periodStack.alpha = 0
@@ -120,8 +120,8 @@ class calcCell: UITableViewCell {
         }
     }
 
-    
 }
+
 
 class categoriesVCcell: UITableViewCell {
     
@@ -129,6 +129,7 @@ class categoriesVCcell: UITableViewCell {
     @IBOutlet weak var categoryPurposeLabel: UILabel!
     
 }
+
 
 class PlotCell: UITableViewCell {
 
@@ -151,6 +152,7 @@ class PlotCell: UITableViewCell {
     
 }
 
+
 class StatisticCell: UITableViewCell {
 
     @IBOutlet weak var colorView: UIView!
@@ -159,12 +161,14 @@ class StatisticCell: UITableViewCell {
     @IBOutlet weak var amountLabel: UILabel!
 }
 
+
 class HistoryCell: UITableViewCell {
 
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var valueLabel: UILabel!
     
 }
+
 
 class HistoryCellTotal: UITableViewCell {
     

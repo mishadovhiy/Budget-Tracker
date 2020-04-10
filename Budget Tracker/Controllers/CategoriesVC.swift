@@ -30,7 +30,7 @@ class CategoriesVC: UIViewController {
     
     func loadData(_ request: NSFetchRequest<Categories> = Categories.fetchRequest(), predicate: NSPredicate? = nil) {
         
-        do { appData.categories = try appData.context.fetch(request)
+        do { appData.categories = try appData.context().fetch(request)
         } catch { print("\n\nERROR FETCHING DATA FROM CONTEXTE\n\n", error)}
         categoriesTableView.reloadData()
         whenNoCategories()
@@ -49,7 +49,7 @@ class CategoriesVC: UIViewController {
     
     func saveItems() {
         
-        do { try appData.context.save()
+        do { try appData.context().save()
         } catch { print("\n\nERROR ENCODING CONTEXT\n\n", error) }
         categoriesTableView.reloadData()
         whenNoCategories()
@@ -77,7 +77,7 @@ class CategoriesVC: UIViewController {
         alert.addAction(UIAlertAction(title: "Done", style: .default, handler: { (action) in
             
             if self.catData.categoryTextField.text != "" {
-                let new = Categories(context: appData.context)
+                let new = Categories(context: appData.context())
                 new.purpose = self.catData.allPurposes[self.catData.selectedPurpose]
                 new.name = self.catData.categoryTextField.text
                 appData.categories.insert(new, at: 0)
@@ -114,7 +114,7 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCell.EditingStyle.delete {
             
-            appData.context.delete(appData.categories[indexPath.row])
+            appData.context().delete(appData.categories[indexPath.row])
             appData.categories.remove(at: indexPath.row)
             self.saveItems()
             
