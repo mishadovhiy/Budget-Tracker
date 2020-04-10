@@ -241,6 +241,7 @@ class ViewController: UIViewController {
                 editingDate = ""
                 editingCategory = ""
                 editingValue = 0.0
+                editingComment = ""
             }
         }
     }
@@ -258,6 +259,7 @@ class ViewController: UIViewController {
         editingDate = tableData[at].date ?? ""
         editingValue = tableData[at].value
         editingCategory = tableData[at].category ?? ""
+        editingComment = tableData[at].comment ?? ""
         performSegue(withIdentifier: K.goToEditVCSeq, sender: self)
         deleteRow(at: at)
     }

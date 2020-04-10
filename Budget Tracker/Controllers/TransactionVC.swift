@@ -14,6 +14,7 @@ var highliteDate = " "
 var editingDate = ""
 var editingCategory = ""
 var editingValue = 0.0
+var editingComment = ""
 
 class TransitionVC: UIViewController {
 
@@ -24,6 +25,8 @@ class TransitionVC: UIViewController {
     @IBOutlet weak var numbarPadView: UIView!
     @IBOutlet weak var valueLabel: UILabel!
     @IBOutlet weak var minusPlusLabel: UILabel!
+    @IBOutlet weak var commentTextField: UITextField!
+    @IBOutlet weak var commentCountLabel: UILabel!
     var pressedValue = "0"
     var expenseArr = [""]
     var incomeArr = [""]
@@ -31,6 +34,7 @@ class TransitionVC: UIViewController {
     var editingDateHolder = ""
     var editingCategoryHolder = ""
     var editingValueHolder = 0.0
+    var editingCommentHolder = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +42,7 @@ class TransitionVC: UIViewController {
         purposeSwitcher.selectedSegmentIndex = 0
         purposeSwitched(purposeSwitcher)
         getEditingdata()
+        
     }
     
     func updateUI() {
@@ -56,6 +61,28 @@ class TransitionVC: UIViewController {
         dateTextField.text = "\(appData.stringDate(appData.objects.datePicker))"
         pressedValue = "0"
         valueLabel.text = pressedValue
+        commentTextField.smartInsertDeleteType = UITextSmartInsertDeleteType.no
+        commentTextField.delegate = self
+        commentTextField.addTarget(self, action: #selector(commentCount), for: .editingChanged)
+    }
+    
+    @objc func commentCount() {
+        
+        commentCountLabel.text = "\(30 - (commentTextField.text?.count ?? 0))"
+        if commentTextField.text?.count == 30 {
+            commentCountLabel.textColor = K.Colors.negative
+        } else {
+            commentCountLabel.textColor = K.Colors.balanceT
+        }
+        if commentTextField.text?.count == 0 {
+            UIView.animate(withDuration: 0.2) {
+                self.commentCountLabel.alpha = 0
+            }
+        } else {
+            UIView.animate(withDuration: 0.2) {
+                self.commentCountLabel.alpha = 1
+            }
+        }
     }
     
     func getEditingdata() {
@@ -78,9 +105,11 @@ class TransitionVC: UIViewController {
             minusPlusLabel.alpha = 1
             categoryTextField.text = editingCategory
             dateTextField.text = editingDate
+            commentTextField.text = editingComment
             editingCategoryHolder = editingCategory
             editingDateHolder = editingDate
             editingValueHolder = editingValue
+            editingCommentHolder = editingComment
         } else {
             if #available(iOS 13.0, *) {
                 self.isModalInPresentation = false
@@ -99,11 +128,9 @@ class TransitionVC: UIViewController {
             } else {
                 incomeArr.append(appData.categories[i].name ?? K.Text.unknCat)
             }}
-        
         if expenseArr.count == 0 {
             expenseArr.append(K.Text.unknExpense)
         }
-        
         if incomeArr.count == 0 {
             incomeArr.append(K.Text.unknIncome)
         }
@@ -113,7 +140,6 @@ class TransitionVC: UIViewController {
         
         let new = Transactions(context: appData.context())
         let n = Double(valueLabel.text!) ?? 0.0
-        
         if purposeSwitcher.selectedSegmentIndex == 0 {
             new.category = expenseArr[appData.selectedExpense]
             new.value = -n
@@ -121,13 +147,15 @@ class TransitionVC: UIViewController {
             new.category = incomeArr[appData.selectedIncome]
             new.value = n
         }
-        appData.transactions.insert(new, at: 0)
         if dateTextField.text == "" {
             dateTextField.text = "\(appData.stringDate(appData.objects.datePicker))"
         }
+        if commentTextField.text != "" {
+            new.comment = commentTextField.text
+        }
         new.date = dateTextField.text
         highliteDate = new.date ?? ""
-        
+        appData.transactions.insert(new, at: 0)
         UIImpactFeedbackGenerator().impactOccurred()
         do { try appData.context().save()
         } catch { print("\n\nERROR ENCODING CONTEXT\n\n", error) }
@@ -176,8 +204,7 @@ class TransitionVC: UIViewController {
                 })
                 if wasHidden == false {
                     self.minusPlusLabel.alpha = 1
-                }
-            }
+                }}
         }
         UIImpactFeedbackGenerator().impactOccurred()
         valueLabel.textColor = K.Colors.negative
@@ -195,7 +222,6 @@ class TransitionVC: UIViewController {
             new.date = editingDateHolder
             appData.transactions.insert(new, at: 0)
             highliteDate = " "
-            
             UIImpactFeedbackGenerator().impactOccurred()
             do { try appData.context().save()
             } catch { print("\n\nERROR ENCODING CONTEXT\n\n", error) }
@@ -234,6 +260,7 @@ class TransitionVC: UIViewController {
         
         categoryTextField.endEditing(true)
         dateTextField.endEditing(true)
+        commentTextField.endEditing(true)
         UIView.animate(withDuration: 0.2) {
             self.numbarPadView.alpha = 1
         }
@@ -324,6 +351,20 @@ extension TransitionVC: UITextFieldDelegate {
             self.numbarPadView.alpha = 0
         }
     }
+    
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        guard let textFieldText = textField.text,
+            let rangeOfTextToReplace = Range(range, in: textFieldText) else {
+                return false
+        }
+        let substringToReplace = textFieldText[rangeOfTextToReplace]
+        let count = textFieldText.count - substringToReplace.count + string.count
+        return count <= 30
+    }
+    
+    
     
 }
 

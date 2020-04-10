@@ -15,6 +15,7 @@ class mainVCcell: UITableViewCell {
     @IBOutlet weak var valueLabel: UILabel!
     @IBOutlet weak var dailyTotalLabel: UILabel!
     @IBOutlet weak var sectionView: UIView!
+    @IBOutlet weak var commentLabel: UILabel!
     
     func setupCell(_ data: Transactions, i: Int, tableData: [Transactions]) {
         if data.value > 0 {
@@ -25,27 +26,28 @@ class mainVCcell: UITableViewCell {
         valueLabel.text = "\(Int(data.value))"
         categoryLabel.text = "\(data.category ?? K.Text.unknCat)"
         sectionView.layer.cornerRadius = 3
-        
-        if selectedPeroud == "Today" {
-            bigDate.text = ""
-            sectionView.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
-            dailyTotalLabel.text = ""
+        commentLabel.text = data.comment
+
+        if (data.comment?.count ?? 0) > 0 {
+            categoryLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -8, 0)
         } else {
-            if i != 0 {
-                if tableData[i - 1].date != data.date {
-                    bigDate.text = "\(data.date ?? "")"
-                    sectionView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-                    dailyTotalLabel.text = "\(getDailyTotal(day: data.date ?? "", tableData: tableData))"
-                } else {
-                    bigDate.text = ""
-                    sectionView.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
-                    dailyTotalLabel.text = ""
-                }
-            } else {
+            categoryLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+        }
+        
+        if i != 0 {
+            if tableData[i - 1].date != data.date {
                 bigDate.text = "\(data.date ?? "")"
                 sectionView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
                 dailyTotalLabel.text = "\(getDailyTotal(day: data.date ?? "", tableData: tableData))"
+            } else {
+                bigDate.text = ""
+                sectionView.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
+                dailyTotalLabel.text = ""
             }
+        } else {
+            bigDate.text = "\(data.date ?? "")"
+            sectionView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+            dailyTotalLabel.text = "\(getDailyTotal(day: data.date ?? "", tableData: tableData))"
         }
         
     }
