@@ -634,9 +634,9 @@
                             <mask key="constraints">
                                 <exclude reference="SfU-HI-V3l"/>
                                 <exclude reference="WJH-Ce-B0n"/>
-                                <exclude reference="bSh-HL-ElZ"/>
                                 <exclude reference="TXO-Bg-M5I"/>
                                 <exclude reference="nAI-36-pP6"/>
+                                <exclude reference="bSh-HL-ElZ"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -651,10 +651,10 @@
                                 <include reference="SfU-HI-V3l"/>
                                 <include reference="WJH-Ce-B0n"/>
                                 <exclude reference="sid-nH-VvD"/>
-                                <include reference="bSh-HL-ElZ"/>
                                 <exclude reference="TPd-ZP-Fql"/>
                                 <include reference="TXO-Bg-M5I"/>
                                 <include reference="nAI-36-pP6"/>
+                                <include reference="bSh-HL-ElZ"/>
                             </mask>
                         </variation>
                     </view>
@@ -1196,7 +1196,7 @@
             <objects>
                 <viewController id="U5Q-a5-Vkx" customClass="StatisticVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="T0c-ZB-hQq">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="591"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Xz5-Md-Dy3">
@@ -1350,7 +1350,7 @@
             <objects>
                 <viewController id="Zmr-vi-AsB" customClass="HistoryVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4Hr-9J-3zH">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="591"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nMe-Ik-tvJ">

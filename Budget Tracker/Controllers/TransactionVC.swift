@@ -49,12 +49,7 @@ class TransitionVC: UIViewController {
         
         loadCategoriesData()
         appendPurposes()
-        categoryTextField.delegate = self
-        dateTextField.delegate = self
-        appData.objects.expensesPicker.delegate = self
-        appData.objects.expensesPicker.dataSource = self
-        appData.objects.incomePicker.delegate = self
-        appData.objects.incomePicker.dataSource = self
+        delegates(fields: [categoryTextField, dateTextField, commentTextField], pickes: [appData.objects.expensesPicker, appData.objects.incomePicker])
         appData.objects.datePicker.datePickerMode = .date
         dateTextField.inputView = appData.objects.datePicker
         appData.objects.datePicker.addTarget(self, action: #selector(datePickerChangedValue(sender:)), for: .valueChanged)
@@ -62,15 +57,27 @@ class TransitionVC: UIViewController {
         pressedValue = "0"
         valueLabel.text = pressedValue
         commentTextField.smartInsertDeleteType = UITextSmartInsertDeleteType.no
-        commentTextField.delegate = self
         commentTextField.addTarget(self, action: #selector(commentCount), for: .editingChanged)
+        
     }
+    
+    func delegates(fields: [UITextField], pickes: [UIPickerView]) {
+        for i in 0..<fields.count {
+            fields[i].delegate = self
+        }
+        for i in 0..<pickes.count {
+            pickes[i].delegate = self
+            pickes[i].dataSource = self
+        }
+    }
+    
     
     @objc func commentCount() {
         
         commentCountLabel.text = "\(30 - (commentTextField.text?.count ?? 0))"
         if commentTextField.text?.count == 30 {
             commentCountLabel.textColor = K.Colors.negative
+            UIImpactFeedbackGenerator().impactOccurred()
         } else {
             commentCountLabel.textColor = K.Colors.balanceT
         }
@@ -89,15 +96,9 @@ class TransitionVC: UIViewController {
         
         if editingDate != "" {
             if editingValue > 0.0 {
-                self.purposeSwitcher.selectedSegmentIndex = 1
-                self.purposeSwitched(self.purposeSwitcher)
-                valueLabel.text = "\(Int(editingValue))"
-                pressedValue = "\(Int(editingValue))"
+                editingValueAmount(segment: 1, multiply: 1)
             } else {
-                self.purposeSwitcher.selectedSegmentIndex = 0
-                self.purposeSwitched(self.purposeSwitcher)
-                valueLabel.text = "\(Int(editingValue * -1))"
-                pressedValue = "\(Int(editingValue) * -1)"
+                editingValueAmount(segment: 0, multiply: -1)
             }
             if #available(iOS 13.0, *) {
                 self.isModalInPresentation = true
@@ -110,18 +111,31 @@ class TransitionVC: UIViewController {
             editingDateHolder = editingDate
             editingValueHolder = editingValue
             editingCommentHolder = editingComment
+            if (commentTextField.text?.count ?? 0) > 0 {
+                commentCountLabel.text = "\(30 - (commentTextField.text?.count ?? 0))"
+                UIView.animate(withDuration: 0.2) {
+                    self.commentCountLabel.alpha = 1
+                }
+            }
         } else {
             if #available(iOS 13.0, *) {
                 self.isModalInPresentation = false
             }
         }
+        
+    }
+    
+    func editingValueAmount(segment: Int, multiply: Int) {
+        self.purposeSwitcher.selectedSegmentIndex = segment
+        self.purposeSwitched(self.purposeSwitcher)
+        valueLabel.text = "\(Int(editingValue) * multiply)"
+        pressedValue = "\(Int(editingValue) * multiply)"
     }
     
     func appendPurposes() {
         
         expenseArr.removeAll()
         incomeArr.removeAll()
-        
         for i in 0..<appData.categories.count {
             if appData.categories[i].purpose == K.expense {
                 expenseArr.append(appData.categories[i].name ?? K.Text.unknCat)
@@ -169,7 +183,6 @@ class TransitionVC: UIViewController {
     }
     
     @objc func valueLabelColor() {
-        
         valueLabel.textColor = K.Colors.balanceV
         minusPlusLabel.textColor = K.Colors.balanceV
     }
@@ -179,7 +192,6 @@ class TransitionVC: UIViewController {
     }
     
     @IBAction func donePressed(_ sender: UIButton) {
-        
         if valueLabel.text != "0" {
             addNew()
         } else {
@@ -216,21 +228,23 @@ class TransitionVC: UIViewController {
     @IBAction func cancelPressed(_ sender: UIButton) {
         
         if editingDate != "" {
-            let new = Transactions(context: appData.context())
-            new.category = editingCategoryHolder
-            new.value = editingValueHolder
-            new.date = editingDateHolder
-            appData.transactions.insert(new, at: 0)
-            highliteDate = " "
-            UIImpactFeedbackGenerator().impactOccurred()
-            do { try appData.context().save()
-            } catch { print("\n\nERROR ENCODING CONTEXT\n\n", error) }
-            self.performSegue(withIdentifier: K.quitVC, sender: self)
-            
+            cancelEditing()
         } else {
             self.dismiss(animated: true, completion: nil)
         }
-        
+    }
+    
+    func cancelEditing() {
+        let new = Transactions(context: appData.context())
+        new.category = editingCategoryHolder
+        new.value = editingValueHolder
+        new.date = editingDateHolder
+        appData.transactions.insert(new, at: 0)
+        highliteDate = " "
+        UIImpactFeedbackGenerator().impactOccurred()
+        do { try appData.context().save()
+        } catch { print("\n\nERROR ENCODING CONTEXT\n\n", error) }
+        self.performSegue(withIdentifier: K.quitVC, sender: self)
     }
     
     @IBAction func purposeSwitched(_ sender: UISegmentedControl) {
@@ -368,6 +382,7 @@ extension TransitionVC: UITextFieldDelegate {
     
 }
 
+// custom field
 class CustomTextField: UITextField {
     
     var enableLongPressActions = false

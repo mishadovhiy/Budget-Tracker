@@ -89,7 +89,6 @@ class CategoriesVC: UIViewController {
     }
     
     @IBAction func closePressed(_ sender: UIButton) {
-        
         self.dismiss(animated: true, completion: nil)
     }
 }
