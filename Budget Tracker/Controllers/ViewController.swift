@@ -188,7 +188,6 @@ class ViewController: UIViewController {
         DispatchQueue.global(qos: .userInitiated).async {
             DispatchQueue.main.async {
                 if appData.filter.from == "" && appData.filter.to == "" && appData.filter.showAll == false {
-                    print("def")
                     self.defaultFilter()
                 } else {
                     self.filterTextLabel.text = "Filter: \(selectedPeroud)"

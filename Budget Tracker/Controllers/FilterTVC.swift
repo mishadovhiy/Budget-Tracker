@@ -108,13 +108,7 @@ class FilterTVC: UITableViewController {
             self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
             
         case 1:
-            let month = appData.filter.getMonthFromString(s: today)
-            let year = appData.filter.getYearFromString(s: today)
-            let dayTo = appData.filter.getLastDayOf(month: month, year: year)
-            
-            appData.filter.from = "01.\(appData.filter.makeTwo(n: month)).\(year)"
-            appData.filter.to = "\(dayTo).\(appData.filter.makeTwo(n: month)).\(year)"
-            print(appData.filter.from)
+            defaultFilter()
             self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
             
         case 2:
@@ -152,6 +146,16 @@ class FilterTVC: UITableViewController {
         
     }
     
+    func defaultFilter() {
+        let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
+        let month = appData.filter.getMonthFromString(s: today)
+        let year = appData.filter.getYearFromString(s: today)
+        let dayTo = appData.filter.getLastDayOf(month: month, year: year)
+        
+        appData.filter.from = "01.\(appData.filter.makeTwo(n: month)).\(year)"
+        appData.filter.to = "\(dayTo).\(appData.filter.makeTwo(n: month)).\(year)"
+    }
+    
     func convertMonthFrom(int: Int) -> String {
         
         let monthes = [
@@ -183,22 +187,35 @@ class FilterTVC: UITableViewController {
         DispatchQueue.global(qos: .userInitiated).async {
             DispatchQueue.main.async {
                 if appData.filter.from == "" || appData.filter.to == "" {
-                    self.firstSectionSelected(i: 1)
+                    self.defaultFilter()
+                    selectedPeroud = "\(self.buttonTitle[1])"
                     ifCustom = false
+                    appData.filter.showAll = false
+                    self.tableView.reloadData()
                 } else {
-                    let day = appData.filter.getDayFromString(s: appData.filter.from)
-                    let month = appData.filter.getMonthFromString(s: appData.filter.from)
-                    let year = appData.filter.getYearFromString(s: appData.filter.from)
-                    
-                    let dayTo = appData.filter.getDayFromString(s: appData.filter.to)
-                    let monthTo = appData.filter.getMonthFromString(s: appData.filter.to)
-                    let yearTo = appData.filter.getYearFromString(s: appData.filter.to)
-                    ifCustom = true
-                    selectedPeroud = "\(self.convertMonthFrom(int: month)), \(day) of \(year) → \(self.convertMonthFrom(int: monthTo)), \(dayTo) of \(yearTo)"
-                    self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
+                    self.tableView.reloadData()
+                    self.prepareCustomDates()
                 }
             }
         }
+    }
+    
+    func prepareCustomDates() {
+        let day = appData.filter.getDayFromString(s: appData.filter.from)
+        let month = appData.filter.getMonthFromString(s: appData.filter.from)
+        let year = appData.filter.getYearFromString(s: appData.filter.from)
+        
+        let dayTo = appData.filter.getDayFromString(s: appData.filter.to)
+        let monthTo = appData.filter.getMonthFromString(s: appData.filter.to)
+        let yearTo = appData.filter.getYearFromString(s: appData.filter.to)
+        ifCustom = true
+        if yearTo == year {
+            selectedPeroud = "\(convertMonthFrom(int: month)), \(day) → \(convertMonthFrom(int: monthTo)), \(dayTo) of \(yearTo)"
+        } else {
+            selectedPeroud = "\(convertMonthFrom(int: month)), \(day) of \(year) → \(convertMonthFrom(int: monthTo)), \(dayTo) of \(yearTo)"
+        }
+        
+        self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
     }
     
     

@@ -25,16 +25,16 @@ class CalendarVC: UIViewController {
     var selectedToDayInt = 0
     
     var year = 1996
-    var month = 1
+    var month = 11
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         updaiteUI()
     }
+
     
-    override func viewWillAppear(_ animated: Bool) {
-        
+    override func viewDidAppear(_ animated: Bool) {
         if ifCustom {
             selectedFrom = appData.filter.from
             selectedTo = appData.filter.to
@@ -49,6 +49,9 @@ class CalendarVC: UIViewController {
             doneIsActive = true
             doneButtonIsActive()
             ifEndInvisible()
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
         }
     }
     
@@ -69,7 +72,6 @@ class CalendarVC: UIViewController {
         }
     }
     
-    
     func updaiteUI() {
         
         collectionView.delegate = self
@@ -85,33 +87,18 @@ class CalendarVC: UIViewController {
         view.addGestureRecognizer(swipeRight)
         startButton.layer.cornerRadius = 6
         endButton.layer.cornerRadius = 6
+        
         let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
         year = appData.filter.getYearFromString(s: today)
         month = appData.filter.getMonthFromString(s: today)
         getDays()
+        
+        print("called")
         if selectedTo == "" && selectedFrom == "" {
             toggleButton(b: startButton, hidden: true)
             toggleButton(b: endButton, hidden: true)
             doneButtonIsActive()
         }
-    }
-
-    @IBAction func swipeForward(gestureRecognizer:UISwipeGestureRecognizer) {
-        
-        month = month + 1
-        setYear()
-        getDays()
-        collectionView.reloadData()
-        goButtonsTitle()
-    }
-    
-    @IBAction func swipeBack(gestureRecognizer:UISwipeGestureRecognizer) {
-        
-        month = month - 1
-        setYear()
-        getDays()
-        collectionView.reloadData()
-        goButtonsTitle()
     }
     
     func getDays() {
@@ -159,6 +146,29 @@ class CalendarVC: UIViewController {
             setYear()
             getDays()
         }
+        collectionView.reloadData()
+        if selectedFrom != "" || selectedTo != "" {
+            goButtonsTitle()
+        }
+    }
+    
+    
+    @IBAction func swipeForward(gestureRecognizer:UISwipeGestureRecognizer) {
+        
+        month = month + 1
+        setYear()
+        getDays()
+        collectionView.reloadData()
+        if selectedFrom != "" || selectedTo != "" {
+            goButtonsTitle()
+        }
+    }
+    
+    @IBAction func swipeBack(gestureRecognizer:UISwipeGestureRecognizer) {
+        
+        month = month - 1
+        setYear()
+        getDays()
         collectionView.reloadData()
         if selectedFrom != "" || selectedTo != "" {
             goButtonsTitle()
@@ -218,24 +228,28 @@ class CalendarVC: UIViewController {
     
     func getMonthFrom(string: String) -> Int {
         
-        var month = string
-        for _ in 0..<3 {
-            month.removeFirst()
+        if string != "" {
+            var monthS = string
+            for _ in 0..<3 {
+                monthS.removeFirst()
+            }
+            for _ in 0..<5 {
+                monthS.removeLast()
+            }
+            return Int(monthS) ?? 11
+        } else {
+            return 11
         }
-        for _ in 0..<5 {
-            month.removeLast()
-        }
-        return Int(month) ?? 23
     }
     
     func getYearFrom(string: String) -> Int {
         
         if string != "" {
-            var year = string
+            var yearS = string
             for _ in 0..<6 {
-                year.removeFirst()
+                yearS.removeFirst()
             }
-            return Int(year) ?? 1996
+            return Int(yearS) ?? 1996
             
         } else {
             return 1996
@@ -452,7 +466,9 @@ class CalendarVC: UIViewController {
     }
     
     @IBAction func closePressed(_ sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
+        appData.filter.from = ""
+        appData.filter.to = ""
+        self.performSegue(withIdentifier: K.calendarClosed, sender: self)
     }
     
     @IBAction func donePressed(_ sender: UIButton) {
