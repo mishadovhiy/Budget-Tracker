@@ -85,8 +85,7 @@ class CalendarVC: UIViewController {
         
         view.addGestureRecognizer(swipeLeft)
         view.addGestureRecognizer(swipeRight)
-        startButton.layer.cornerRadius = 6
-        endButton.layer.cornerRadius = 6
+        appData.styles.cornerRadius(buttons: [startButton, endButton])
         
         let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
         year = appData.filter.getYearFromString(s: today)

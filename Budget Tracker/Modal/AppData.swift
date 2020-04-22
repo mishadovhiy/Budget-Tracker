@@ -40,13 +40,7 @@ class AppData {
     
     var styles = Styles()
     struct Styles {
-        
-        func shadow(view: UIView) {
-            view.layer.shadowColor = UIColor.black.cgColor
-            view.layer.shadowOpacity = 0.2
-            view.layer.shadowOffset = .zero
-        }
-        
+
         func cornerRadius(buttons: [UIButton]) {
             
             for i in 0..<buttons.count {
@@ -70,21 +64,7 @@ class AppData {
                         transactionsCell.contentView.backgroundColor = K.Colors.background
                     }}}
         }
-        
-        func removeBackground(buttons: [UIButton], labels: [UILabel], views: [UIView]) {
-            
-            for i in 0..<buttons.count {
-                buttons[i].backgroundColor = K.Colors.pink
-            }
-            for i in 0..<labels.count {
-                labels[i].alpha = 0
-            }
-            for i in 0..<views.count {
-                views[i].alpha = 0
-            }
-        
-        }
-        
+
         func showNoDataLabel(_ label: UILabel, tableData: [Transactions]) {
             
             if tableData.count == 0 {
@@ -193,7 +173,6 @@ class AppData {
             let date = calendar.date(from: dateComponents)!
 
             let range = calendar.range(of: .day, in: .month, for: date)!
-            print("last day of \(month), \(year) is = \(range.count)")
             return range.count
         
         }
@@ -209,7 +188,6 @@ class AppData {
                 let date = calendar.date(from: dateComponents)!
 
                 let range = calendar.range(of: .day, in: .month, for: date)!
-                print("last day of \(month), \(year) is = \(range.count)")
                 return range.count
             } else {
                 return 28
@@ -278,28 +256,6 @@ class AppData {
                 return 1996
             }
 
-        }
-        
-        
-        mutating func setFilterDates(iphoneLabel: UILabel, ipadLabel: UILabel) {
-            
-            showAll = false
-            if filterObjects.startDateField.text == "" {
-                filterObjects.startDateField.text = "\(appData.stringDate(filterObjects.startDatePicker))"
-            }
-            
-            if filterObjects.endDateField.text == "" {
-                filterObjects.endDateField.text = "\(appData.stringDate(filterObjects.endDatePicker))"
-            }
-            
-            from = filterObjects.startDateField.text!
-            to = filterObjects.endDateField.text!
-            selectedPeroud = "\(from) → \(to)"
-            DispatchQueue.main.async {
-                iphoneLabel.text = "Filter: \(selectedPeroud)"
-                ipadLabel.text = "Transactions for: \(selectedPeroud)"
-            }
-            
         }
         
         
