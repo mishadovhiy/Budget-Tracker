@@ -36,6 +36,8 @@ class AppData {
         
     }
     
+    
+    
     var styles = Styles()
     struct Styles {
         
@@ -45,14 +47,11 @@ class AppData {
             view.layer.shadowOffset = .zero
         }
         
-        func cornerRadius(buttons: [UIButton], view: UIView) {
+        func cornerRadius(buttons: [UIButton]) {
             
             for i in 0..<buttons.count {
                 buttons[i].layer.cornerRadius = 6
             }
-            
-            view.layer.cornerRadius = 6
-            view.layer.shadowRadius = 6
 
         }
         
@@ -98,6 +97,8 @@ class AppData {
         }
         
     }
+    
+    
     
     var calculation = Calculation()
     struct Calculation {
@@ -163,6 +164,8 @@ class AppData {
         }
     }
     
+    
+    
     var objects = Objects()
     struct Objects {
         
@@ -174,26 +177,107 @@ class AppData {
         
     }
     
+    
+    
     var filter = Filter()
     struct Filter {
         
         var showAll = true
         var from: String = ""
         var to: String = ""
-        var lastNumber = 31
         
-        func getFirstDay(_ sender: UIDatePicker) -> String {
+        func getLastDayOf(month: Int, year: Int) -> Int {
+            
+            let dateComponents = DateComponents(year: year, month: month)
+            let calendar = Calendar.current
+            let date = calendar.date(from: dateComponents)!
+
+            let range = calendar.range(of: .day, in: .month, for: date)!
+            print("last day of \(month), \(year) is = \(range.count)")
+            return range.count
+        
+        }
+        
+        func getLastDayOf(fullDate: String) -> Int {
+            
+            if fullDate != "" {
+                let month = getMonthFromString(s: fullDate)
+                let year = getMonthFromString(s: fullDate)
+                
+                let dateComponents = DateComponents(year: year, month: month)
+                let calendar = Calendar.current
+                let date = calendar.date(from: dateComponents)!
+
+                let range = calendar.range(of: .day, in: .month, for: date)!
+                print("last day of \(month), \(year) is = \(range.count)")
+                return range.count
+            } else {
+                return 28
+            }
+        
+        }
+        
+        
+        
+        func getToday(_ sender: UIDatePicker) -> String {
             
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "01.MM.yyyy"
+            dateFormatter.dateFormat = "dd.MM.yyyy"
             return dateFormatter.string(from: sender.date)
         }
-
-        func getLastDay(_ sender: UIDatePicker) -> String {
+        
+        func makeTwo(n: Int) -> String {
+            if n < 10 {
+                return "0\(n)"
+            } else {
+                return "\(n)"
+            }
+        }
+        
+        func getDayFromString(s: String) -> Int {
             
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "\(lastNumber).MM.yyyy"
-            return dateFormatter.string(from: sender.date)
+            if s != "" {
+                var day = s
+                for _ in 0..<8 {
+                    day.removeLast()
+                }
+                return Int(day) ?? 23
+            } else {
+                return 11
+            }
+            
+        }
+        
+        
+        func getMonthFromString(s: String) -> Int {
+            
+            if s != "" {
+                var month = s
+                for _ in 0..<3 {
+                    month.removeFirst()
+                }
+                for _ in 0..<5 {
+                    month.removeLast()
+                }
+                return Int(month) ?? 11
+            } else {
+                return 11
+            }
+        }
+        
+        func getYearFromString(s: String) -> Int {
+            
+            if s != "" {
+                var year = s
+                for _ in 0..<6 {
+                    year.removeFirst()
+                }
+                return Int(year) ?? 1996
+                
+            } else {
+                return 1996
+            }
+
         }
         
         
@@ -219,9 +303,6 @@ class AppData {
         }
         
         
-        
-        
-        
         var filterObjects = FilterObjects()
         struct FilterObjects {
             
@@ -233,6 +314,7 @@ class AppData {
             
         }
     }
+    
     
     var categoryVC = CategoryVCBrain()
     struct CategoryVCBrain {

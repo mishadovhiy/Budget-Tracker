@@ -29,6 +29,11 @@ struct K {
     static let historyCellIdent = "historyCellIdent"
     static let historyCellTotalIdent = "historyCellTotalIdent"
     static let goToEditVCSeq = "goToEditVC"
+    static let toCalendar = "toCalendar"
+    static let filterCell = "filterCell"
+    static let quitFilterTVC = "quitFilterTVC"
+    static let collectionCell = "collectionCell"
+    static let calendarClosed = "CalendarClosed"
     
     struct Text {
         static let unknExpense = "Uncategorized Expense"
@@ -47,3 +52,4 @@ struct K {
         static let sectionBackground = UIColor(named: "sectionBackgroundColor")
     }
 }
+

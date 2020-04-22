@@ -27,12 +27,7 @@ class mainVCcell: UITableViewCell {
         categoryLabel.text = "\(data.category ?? K.Text.unknCat)"
         sectionView.layer.cornerRadius = 3
         commentLabel.text = data.comment
-
-        if (data.comment?.count ?? 0) > 0 {
-            categoryLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -8, 0)
-        } else {
-            categoryLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
-        }
+        categoryLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -2, 0)
         
         if i != 0 {
             if tableData[i - 1].date != data.date {
@@ -177,4 +172,23 @@ class HistoryCellTotal: UITableViewCell {
     @IBOutlet weak var valueLabel: UILabel!
     @IBOutlet weak var perioudLabel: UILabel!
     
+}
+
+class FilterCell: UITableViewCell {
+    
+    @IBOutlet weak var backgroundCell: UIView!
+    @IBOutlet weak var titleLabel: UILabel!
+    
+}
+
+class CVCell: UICollectionViewCell {
+    
+    @IBOutlet weak var backgroundCell: UIView!
+    @IBOutlet weak var dayLabel: UILabel!
+    @IBOutlet weak var cellTypeLabel: UILabel!
+    
+    func setupCell() {
+        backgroundCell.layer.masksToBounds = true
+        backgroundCell.layer.cornerRadius = backgroundCell.bounds.width / 2
+    }
 }

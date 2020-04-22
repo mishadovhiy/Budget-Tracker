@@ -11,6 +11,8 @@
 		8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5206662421695200772CD5 /* StatisticBrain.swift */; };
 		8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D52066824216A2900772CD5 /* StatisticVC.swift */; };
 		8D52066B24216A6200772CD5 /* HistoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D52066A24216A6200772CD5 /* HistoryVC.swift */; };
+		8D8B6C3C245023D0007260A0 /* FilterTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8B6C3B245023D0007260A0 /* FilterTVC.swift */; };
+		8D8B6C3E245023EC007260A0 /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8B6C3D245023EC007260A0 /* CalendarVC.swift */; };
 		8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */; };
 		8DBA7E5223F0316F00D8214C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5123F0316F00D8214C /* SceneDelegate.swift */; };
 		8DBA7E5423F0316F00D8214C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5323F0316F00D8214C /* ViewController.swift */; };
@@ -33,6 +35,8 @@
 		8D5206662421695200772CD5 /* StatisticBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticBrain.swift; sourceTree = "<group>"; };
 		8D52066824216A2900772CD5 /* StatisticVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticVC.swift; sourceTree = "<group>"; };
 		8D52066A24216A6200772CD5 /* HistoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryVC.swift; sourceTree = "<group>"; };
+		8D8B6C3B245023D0007260A0 /* FilterTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterTVC.swift; sourceTree = "<group>"; };
+		8D8B6C3D245023EC007260A0 /* CalendarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarVC.swift; sourceTree = "<group>"; };
 		8DBA7E4C23F0316F00D8214C /* Budget Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Budget Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8DBA7E5123F0316F00D8214C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -139,6 +143,8 @@
 				8DD89D8F23F1496100273904 /* CategoriesVC.swift */,
 				8D52066824216A2900772CD5 /* StatisticVC.swift */,
 				8D52066A24216A6200772CD5 /* HistoryVC.swift */,
+				8D8B6C3B245023D0007260A0 /* FilterTVC.swift */,
+				8D8B6C3D245023EC007260A0 /* CalendarVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -281,8 +287,10 @@
 				8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */,
 				8DD89D8A23F1472E00273904 /* Alerts.swift in Sources */,
 				8DD89D8E23F1495300273904 /* TransactionVC.swift in Sources */,
+				8D8B6C3E245023EC007260A0 /* CalendarVC.swift in Sources */,
 				8DBA7E5423F0316F00D8214C /* ViewController.swift in Sources */,
 				8DBA7E5A23F0316F00D8214C /* Budget_Tracker.xcdatamodeld in Sources */,
+				8D8B6C3C245023D0007260A0 /* FilterTVC.swift in Sources */,
 				8DD89D9023F1496100273904 /* CategoriesVC.swift in Sources */,
 				8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */,
 				8DBA7E5223F0316F00D8214C /* SceneDelegate.swift in Sources */,
