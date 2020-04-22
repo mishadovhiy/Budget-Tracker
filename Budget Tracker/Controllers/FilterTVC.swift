@@ -317,9 +317,10 @@ class FilterTVC: UITableViewController {
         
         if let cell = tableView.cellForRow(at: indexPath) as? FilterCell {
             selectedPeroud = cell.titleLabel.text ?? "Unknown"
-            if cell.titleLabel.text != "Custom" {
+            
+            /*if cell.titleLabel.text != "Custom" {
                 ifCustom = false
-            }
+            }*/
         }
         
         switch indexPath.section {

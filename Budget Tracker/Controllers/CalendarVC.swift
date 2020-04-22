@@ -465,9 +465,24 @@ class CalendarVC: UIViewController {
     }
     
     @IBAction func closePressed(_ sender: UIButton) {
-        appData.filter.from = ""
-        appData.filter.to = ""
-        self.performSegue(withIdentifier: K.calendarClosed, sender: self)
+        if ifCustom == false {
+            appData.filter.from = ""
+            appData.filter.to = ""
+            self.performSegue(withIdentifier: K.calendarClosed, sender: self)
+        } else {
+            let day = appData.filter.getDayFromString(s: selectedFrom)
+            let month = appData.filter.getMonthFromString(s: selectedFrom)
+            let year = appData.filter.getYearFromString(s: selectedFrom)
+            let dayTo = appData.filter.getDayFromString(s: selectedTo)
+            let monthTo = appData.filter.getMonthFromString(s: selectedTo)
+            let yearTo = appData.filter.getYearFromString(s: selectedTo)
+            if yearTo == year {
+                selectedPeroud = "\(returnMonth(month)), \(day) → \(returnMonth(monthTo)), \(dayTo) of \(yearTo)"
+            } else {
+                selectedPeroud = "\(returnMonth(month)), \(day) of \(year) → \(returnMonth(monthTo)), \(dayTo) of \(yearTo)"
+            }
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     
     @IBAction func donePressed(_ sender: UIButton) {
