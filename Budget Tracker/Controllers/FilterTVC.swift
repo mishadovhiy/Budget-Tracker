@@ -286,14 +286,14 @@ class FilterTVC: UITableViewController {
         if section == 0 {
             return 0
         } else {
-            return 30
+            return 20
         }
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
         let label = UILabel()
-        label.frame = CGRect(x: 15, y: 10, width: UIScreen.main.bounds.width, height: 10)
+        label.frame = CGRect(x: 15, y: 0, width: UIScreen.main.bounds.width, height: 20)
         label.font = label.font.withSize(10)
         label.textColor = K.Colors.balanceT
         
@@ -318,9 +318,9 @@ class FilterTVC: UITableViewController {
         if let cell = tableView.cellForRow(at: indexPath) as? FilterCell {
             selectedPeroud = cell.titleLabel.text ?? "Unknown"
             
-            /*if cell.titleLabel.text != "Custom" {
+            if cell.titleLabel.text != "Custom" {
                 ifCustom = false
-            }*/
+            }
         }
         
         switch indexPath.section {
