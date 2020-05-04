@@ -19,12 +19,6 @@ var selectedPeroud = ""
 class ViewController: UIViewController {
     @IBOutlet weak var filterView: UIView!
     @IBOutlet weak var filterTextLabel: UILabel!
-
-    @IBOutlet weak var allTimeIpad: UIButton!
-    @IBOutlet weak var thisMonthIpad: UIButton!
-    @IBOutlet weak var todayIpad: UIButton!
-    @IBOutlet weak var customIpad: UIButton!
-    @IBOutlet weak var customDateLabelIpad: UILabel!
     
     @IBOutlet weak var calculationSView: UIStackView!
     @IBOutlet weak var mainTableView: UITableView!
@@ -42,7 +36,10 @@ class ViewController: UIViewController {
         
         updateUI()
         defaultFilter()
+        
+
     }
+
     
     override func viewWillAppear(_ animated: Bool) {
         print("today is", appData.filter.getToday(appData.filter.filterObjects.currentDate))
