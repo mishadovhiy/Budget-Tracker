@@ -39,12 +39,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     @available(iOS 13.0, *)
     lazy var persistentContainer: NSPersistentCloudKitContainer = {
+        
         let container = NSPersistentCloudKitContainer(name: "Budget_Tracker")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
+        
+        container.viewContext.automaticallyMergesChangesFromParent = true
+        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        
         return container
     }()
     
@@ -56,6 +61,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
+        
+        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        container.viewContext.undoManager = nil
+        container.viewContext.shouldDeleteInaccessibleFaults = true
+        container.viewContext.automaticallyMergesChangesFromParent = true
+        
         return container
     }()
 
