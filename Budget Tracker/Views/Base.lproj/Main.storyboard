@@ -26,14 +26,14 @@
                                 <inset key="separatorInset" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="calcCellIdent" id="2M8-ex-hH0" customClass="calcCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="320" height="189.5"/>
+                                        <rect key="frame" x="0.0" y="28" width="320" height="209.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="2M8-ex-hH0" id="rAH-8U-e22">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="189.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="209.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="gle-MX-Tpe">
-                                                    <rect key="frame" x="20" y="20" width="280" height="139.5"/>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="gle-MX-Tpe">
+                                                    <rect key="frame" x="20" y="25" width="280" height="134.5"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="w8y-YJ-7j5">
                                                             <rect key="frame" x="0.0" y="0.0" width="280" height="62.5"/>
@@ -92,7 +92,7 @@
                                                             </subviews>
                                                         </stackView>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="-5" translatesAutoresizingMaskIntoConstraints="NO" id="ITM-V9-am7">
-                                                            <rect key="frame" x="0.0" y="77.5" width="280" height="62"/>
+                                                            <rect key="frame" x="0.0" y="72.5" width="280" height="62"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Period Balance" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="OyJ-pP-66Q">
                                                                     <rect key="frame" x="0.0" y="0.0" width="280" height="33.5"/>
@@ -114,10 +114,10 @@
                                             <constraints>
                                                 <constraint firstItem="gle-MX-Tpe" firstAttribute="leading" secondItem="rAH-8U-e22" secondAttribute="leading" constant="20" id="0M1-dd-D97"/>
                                                 <constraint firstAttribute="bottom" secondItem="gle-MX-Tpe" secondAttribute="bottom" constant="20" id="H2Q-73-JNN">
-                                                    <variation key="widthClass=compact" constant="30"/>
+                                                    <variation key="widthClass=compact" constant="50"/>
                                                 </constraint>
                                                 <constraint firstItem="gle-MX-Tpe" firstAttribute="top" secondItem="rAH-8U-e22" secondAttribute="top" constant="40" id="O0F-6a-dY7">
-                                                    <variation key="widthClass=compact" constant="20"/>
+                                                    <variation key="widthClass=compact" constant="25"/>
                                                 </constraint>
                                                 <constraint firstAttribute="trailing" secondItem="gle-MX-Tpe" secondAttribute="trailing" constant="20" id="OOI-cZ-lNn"/>
                                             </constraints>
@@ -133,7 +133,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="TableViewCell" id="Yoe-FZ-wge" customClass="mainVCcell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="217.5" width="320" height="67.5"/>
+                                        <rect key="frame" x="0.0" y="237.5" width="320" height="67.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Yoe-FZ-wge" id="rhd-hO-2oH" userLabel="Cell View">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="67.5"/>
@@ -220,7 +220,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="plotCellIdentifier" id="CHQ-dZ-3ec" customClass="PlotCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="285" width="320" height="90.5"/>
+                                        <rect key="frame" x="0.0" y="305" width="320" height="90.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="CHQ-dZ-3ec" id="8ty-W8-U6L">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="90.5"/>
@@ -307,7 +307,7 @@
                                 <inset key="contentEdgeInsets" minX="15" minY="4" maxX="0.0" maxY="0.0"/>
                                 <state key="normal" image="categoriesIcon"/>
                                 <connections>
-                                    <segue destination="cP3-cv-3dE" kind="presentation" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="GQS-kS-MqP"/>
+                                    <segue destination="cP3-cv-3dE" kind="presentation" identifier="toCatsVC" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="GQS-kS-MqP"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No data to display" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="3" translatesAutoresizingMaskIntoConstraints="NO" id="Aut-cX-vhd">
@@ -492,7 +492,7 @@
                         <outlet property="incomeLabel" destination="prR-dZ-II2" id="ZZL-NV-0pg"/>
                         <outlet property="mainTableView" destination="4SO-16-o5D" id="XX5-hT-ThU"/>
                         <outlet property="noTableDataLabel" destination="Aut-cX-vhd" id="Fra-8G-ivQ"/>
-                        <segue destination="C7B-yY-yq9" kind="presentation" identifier="toStatisticVC" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical" id="0xb-dh-W2N"/>
+                        <segue destination="C7B-yY-yq9" kind="presentation" identifier="toStatisticVC" modalPresentationStyle="automatic" modalTransitionStyle="coverVertical" id="0xb-dh-W2N"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -508,10 +508,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HUT-8J-uo4">
-                                <rect key="frame" x="260" y="0.0" width="60" height="60"/>
+                                <rect key="frame" x="260" y="0.0" width="60" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="2UR-AX-IvZ"/>
-                                    <constraint firstAttribute="height" constant="60" id="B8f-VA-4ms"/>
+                                    <constraint firstAttribute="height" constant="45" id="B8f-VA-4ms"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                 <color key="tintColor" name="yellowColor"/>
@@ -521,10 +521,10 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lez-zf-TS4">
-                                <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                <rect key="frame" x="0.0" y="0.0" width="60" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="Mpa-6f-WcG"/>
-                                    <constraint firstAttribute="height" constant="60" id="Pzf-tc-co3"/>
+                                    <constraint firstAttribute="height" constant="45" id="Pzf-tc-co3"/>
                                 </constraints>
                                 <color key="tintColor" name="yellowColor"/>
                                 <state key="normal" image="cancel"/>
@@ -533,7 +533,7 @@
                                 </connections>
                             </button>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kTa-v1-Lr8">
-                                <rect key="frame" x="0.0" y="65" width="320" height="503"/>
+                                <rect key="frame" x="0.0" y="50" width="320" height="518"/>
                                 <color key="backgroundColor" name="backgroundColor"/>
                                 <color key="separatorColor" name="separetorColor"/>
                                 <inset key="separatorInset" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
@@ -595,6 +595,12 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Categories" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z8e-LP-mN7">
+                                <rect key="frame" x="60" y="12" width="200" height="21"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
+                                <color key="textColor" name="CategoryColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" name="backgroundColor"/>
                         <constraints>
@@ -602,6 +608,9 @@
                             <constraint firstAttribute="bottom" secondItem="kTa-v1-Lr8" secondAttribute="bottom" id="2Vf-0v-fHv"/>
                             <constraint firstItem="kTa-v1-Lr8" firstAttribute="leading" secondItem="SQF-Ky-vUp" secondAttribute="leading" id="YVt-nW-I8C"/>
                             <constraint firstItem="HUT-8J-uo4" firstAttribute="top" secondItem="SQF-Ky-vUp" secondAttribute="top" id="fLJ-vf-rlc"/>
+                            <constraint firstItem="z8e-LP-mN7" firstAttribute="leading" secondItem="lez-zf-TS4" secondAttribute="trailing" id="gKG-kn-40p"/>
+                            <constraint firstItem="z8e-LP-mN7" firstAttribute="top" secondItem="SQF-Ky-vUp" secondAttribute="top" constant="12" id="jdt-Fu-8Gd"/>
+                            <constraint firstItem="HUT-8J-uo4" firstAttribute="leading" secondItem="z8e-LP-mN7" secondAttribute="trailing" id="n9L-vQ-QN4"/>
                             <constraint firstItem="kTa-v1-Lr8" firstAttribute="top" secondItem="HUT-8J-uo4" secondAttribute="bottom" constant="5" id="pRM-uk-3gq"/>
                             <constraint firstItem="SQF-Ky-vUp" firstAttribute="trailing" secondItem="kTa-v1-Lr8" secondAttribute="trailing" id="t8m-Yn-4Ua"/>
                             <constraint firstItem="lez-zf-TS4" firstAttribute="top" secondItem="SQF-Ky-vUp" secondAttribute="top" id="trZ-nT-OuH"/>
@@ -611,7 +620,9 @@
                     </view>
                     <navigationItem key="navigationItem" id="OPF-2E-z7N"/>
                     <connections>
+                        <outlet property="addButton" destination="HUT-8J-uo4" id="bQc-uH-SJR"/>
                         <outlet property="categoriesTableView" destination="kTa-v1-Lr8" id="TzW-xh-0om"/>
+                        <outlet property="hiddenTitle" destination="z8e-LP-mN7" id="OBv-nc-R4K"/>
                         <outlet property="titleLabel" destination="Tgf-6a-Yag" id="A5u-jF-92Q"/>
                     </connections>
                 </viewController>
@@ -1009,11 +1020,11 @@
             <objects>
                 <viewController id="U5Q-a5-Vkx" customClass="StatisticVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="T0c-ZB-hQq">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="492"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Xz5-Md-Dy3">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="524"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="492"/>
                                 <color key="backgroundColor" name="backgroundColor"/>
                                 <color key="separatorColor" name="separetorColor"/>
                                 <inset key="separatorInset" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
@@ -1124,7 +1135,7 @@
                         <barButtonItem key="backBarButtonItem" title="    " id="BHQ-y8-WmV"/>
                         <barButtonItem key="leftBarButtonItem" width="60" style="plain" id="IWq-Cs-BAs">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="0nm-il-wo9">
-                                <rect key="frame" x="16" y="6" width="60" height="32"/>
+                                <rect key="frame" x="16" y="12" width="60" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="30" maxY="0.0"/>
                                 <state key="normal" image="cancel"/>
@@ -1134,7 +1145,7 @@
                             </button>
                         </barButtonItem>
                         <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="E5p-kp-ybx">
-                            <rect key="frame" x="82" y="6" width="157" height="32"/>
+                            <rect key="frame" x="82" y="12" width="157" height="32"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <segments>
                                 <segment title="Expenses"/>
@@ -1163,11 +1174,11 @@
             <objects>
                 <viewController id="Zmr-vi-AsB" customClass="HistoryVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4Hr-9J-3zH">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="492"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nMe-Ik-tvJ">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="524"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="492"/>
                                 <color key="backgroundColor" name="backgroundColor"/>
                                 <color key="separatorColor" name="separetorColor"/>
                                 <inset key="separatorInset" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
@@ -1287,7 +1298,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="KV8-7M-kNo"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="F3j-aD-U8y">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="56"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" name="yellowColor"/>
                         <color key="barTintColor" name="backgroundColor"/>
@@ -1306,7 +1317,7 @@
             <objects>
                 <tableViewController id="Odi-0a-yME" customClass="FilterTVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="XCw-6V-bR5">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="492"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" name="backgroundColor"/>
                         <color key="separatorColor" name="separetorColor"/>

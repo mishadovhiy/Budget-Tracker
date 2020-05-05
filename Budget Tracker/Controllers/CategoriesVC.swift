@@ -10,9 +10,12 @@ import UIKit
 import CoreData
 
 class CategoriesVC: UIViewController {
+    @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var hiddenTitle: UILabel!
     @IBOutlet weak var categoriesTableView: UITableView!
     var catData = appData.categoryVC
+    var refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +29,31 @@ class CategoriesVC: UIViewController {
         catData.purposPicker.dataSource = self
         categoriesTableView.delegate = self
         categoriesTableView.dataSource = self
+        addRefreshControll()
+        
+        let hiseCatsSwipe: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(hideCats(_:)))
+        hiseCatsSwipe.direction = .left
+        view.addGestureRecognizer(hiseCatsSwipe);
+    }
+    
+    @objc func hideCats(_ gesture: UISwipeGestureRecognizer) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    
+    func addRefreshControll() {
+        refreshControl.addTarget(self, action: #selector(refresh(sender:)), for: UIControl.Event.valueChanged)
+        refreshControl.attributedTitle = NSAttributedString(string: "+")
+        refreshControl.backgroundColor = UIColor.clear
+        refreshControl.tintColor = UIColor.clear
+        categoriesTableView.addSubview(refreshControl)
+    }
+    
+    @objc func refresh(sender:AnyObject) {
+        addCategoryPressed(addButton)
+        Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (timer) in
+            self.refreshControl.endRefreshing()
+        }
     }
     
     func loadData(_ request: NSFetchRequest<Categories> = Categories.fetchRequest(), predicate: NSPredicate? = nil) {
@@ -119,6 +147,28 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
             
         }
     }
+    
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+
+        if indexPath.row == 0 {
+            UIView.animate(withDuration: 0.3) {
+                self.hiddenTitle.alpha = 1
+            }
+        }
+        
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        
+        if indexPath.row == 0 {
+            UIView.animate(withDuration: 0.3) {
+                self.hiddenTitle.alpha = 0
+            }
+        }
+        
+    }
+    
+    
 }
 
 extension CategoriesVC: UIPickerViewDelegate, UIPickerViewDataSource {

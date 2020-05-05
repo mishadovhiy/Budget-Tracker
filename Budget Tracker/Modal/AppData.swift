@@ -62,7 +62,9 @@ class AppData {
                     highliteDate = " "
                     UIView.animate(withDuration: 0.6) {
                         transactionsCell.contentView.backgroundColor = K.Colors.background
-                    }}}
+                    }
+                }
+            }
         }
 
         func showNoDataLabel(_ label: UILabel, tableData: [Transactions]) {

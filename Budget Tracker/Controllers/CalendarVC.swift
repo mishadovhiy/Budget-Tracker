@@ -76,13 +76,10 @@ class CalendarVC: UIViewController {
         
         collectionView.delegate = self
         collectionView.dataSource = self
-
         let swipeLeft:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(swipeForward))
         swipeLeft.direction = .left;
-
         let swipeRight:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(swipeBack))
         swipeRight.direction = .right;
-        
         view.addGestureRecognizer(swipeLeft)
         view.addGestureRecognizer(swipeRight)
         appData.styles.cornerRadius(buttons: [startButton, endButton])
@@ -91,8 +88,6 @@ class CalendarVC: UIViewController {
         year = appData.filter.getYearFromString(s: today)
         month = appData.filter.getMonthFromString(s: today)
         getDays()
-        
-        print("called")
         if selectedTo == "" && selectedFrom == "" {
             toggleButton(b: startButton, hidden: true)
             toggleButton(b: endButton, hidden: true)

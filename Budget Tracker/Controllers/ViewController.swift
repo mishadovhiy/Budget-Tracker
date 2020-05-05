@@ -37,10 +37,8 @@ class ViewController: UIViewController {
         updateUI()
         defaultFilter()
         
-
     }
 
-    
     override func viewWillAppear(_ animated: Bool) {
         print("today is", appData.filter.getToday(appData.filter.filterObjects.currentDate))
     }
@@ -50,10 +48,23 @@ class ViewController: UIViewController {
         mainTableView.delegate = self
         mainTableView.dataSource = self
         loadItems()
-        refreshControl.addTarget(self, action: #selector(refresh(sender:)), for: UIControl.Event.valueChanged)
-        refreshControl.tintColor = K.Colors.separetor
-        mainTableView.addSubview(refreshControl)
+        addRefreshControll()
+        let showCatsSwipe: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(showCats(_:)))
+        showCatsSwipe.direction = .right
+        view.addGestureRecognizer(showCatsSwipe);
         
+    }
+    
+    @objc func showCats(_ gesture: UISwipeGestureRecognizer) {
+        performSegue(withIdentifier: "toCatsVC", sender: self)
+    }
+    
+    func addRefreshControll() {
+        refreshControl.addTarget(self, action: #selector(refresh(sender:)), for: UIControl.Event.valueChanged)
+        refreshControl.attributedTitle = NSAttributedString(string: "+")
+        refreshControl.backgroundColor = UIColor.clear
+        refreshControl.tintColor = UIColor.clear
+        mainTableView.addSubview(refreshControl)
     }
     
     func defaultFilter() {
@@ -66,7 +77,6 @@ class ViewController: UIViewController {
         let monthInt = appData.filter.getMonthFromString(s: today)
         let yearInt = appData.filter.getYearFromString(s: today)
         let dayTo = appData.filter.getLastDayOf(month: monthInt, year: yearInt)
-        
         appData.filter.from = "01.\(appData.filter.makeTwo(n: monthInt)).\(yearInt)"
         appData.filter.to = "\(dayTo).\(appData.filter.makeTwo(n: monthInt)).\(yearInt)"
         performFiltering(from: appData.filter.from, to: appData.filter.to, all: appData.filter.showAll)
@@ -129,7 +139,7 @@ class ViewController: UIViewController {
         var arr = appData.transactions
         arr.removeAll()
         for number in 0..<dates.count {
-               
+            
             for i in 0..<appData.transactions.count {
                 if dates[number] == appData.transactions[i].date {
                     arr.append(appData.transactions[i])
