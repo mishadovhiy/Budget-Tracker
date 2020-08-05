@@ -38,6 +38,7 @@ class TransitionVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         updateUI()
         purposeSwitcher.selectedSegmentIndex = 0
         purposeSwitched(purposeSwitcher)
@@ -47,7 +48,6 @@ class TransitionVC: UIViewController {
     
     func updateUI() {
         
-        loadCategoriesData()
         appendPurposes()
         delegates(fields: [categoryTextField, dateTextField, commentTextField], pickes: [appData.objects.expensesPicker, appData.objects.incomePicker])
         appData.objects.datePicker.datePickerMode = .date
@@ -62,6 +62,7 @@ class TransitionVC: UIViewController {
     }
     
     func delegates(fields: [UITextField], pickes: [UIPickerView]) {
+        
         for i in 0..<fields.count {
             fields[i].delegate = self
         }
@@ -70,7 +71,6 @@ class TransitionVC: UIViewController {
             pickes[i].dataSource = self
         }
     }
-    
     
     @objc func commentCount() {
         
@@ -126,6 +126,7 @@ class TransitionVC: UIViewController {
     }
     
     func editingValueAmount(segment: Int, multiply: Int) {
+        
         self.purposeSwitcher.selectedSegmentIndex = segment
         self.purposeSwitched(self.purposeSwitcher)
         valueLabel.text = "\(Int(editingValue) * multiply)"
@@ -136,11 +137,12 @@ class TransitionVC: UIViewController {
         
         expenseArr.removeAll()
         incomeArr.removeAll()
-        for i in 0..<appData.categories.count {
-            if appData.categories[i].purpose == K.expense {
-                expenseArr.append(appData.categories[i].name ?? K.Text.unknCat)
+        let categories = appData.getCategories()
+        for i in 0..<categories.count {
+            if categories[i].purpose == K.expense {
+                expenseArr.append(categories[i].name)
             } else {
-                incomeArr.append(appData.categories[i].name ?? K.Text.unknCat)
+                incomeArr.append(categories[i].name)
             }}
         if expenseArr.count == 0 {
             expenseArr.append(K.Text.unknExpense)
@@ -152,46 +154,36 @@ class TransitionVC: UIViewController {
     
     func addNew() {
         
-        let new = Transactions(context: appData.context())
-        let n = Double(valueLabel.text!) ?? 0.0
-        if purposeSwitcher.selectedSegmentIndex == 0 {
-            new.category = expenseArr[appData.selectedExpense]
-            new.value = -n
-        } else {
-            new.category = incomeArr[appData.selectedIncome]
-            new.value = n
-        }
-        if dateTextField.text == "" {
-            dateTextField.text = "\(appData.stringDate(appData.objects.datePicker))"
-        }
-        if commentTextField.text != "" {
-            new.comment = commentTextField.text
-        }
-        new.date = dateTextField.text
-        highliteDate = new.date ?? ""
-        appData.transactions.insert(new, at: 0)
+        var allData = appData.getTransactions()
+        let Value = purposeSwitcher.selectedSegmentIndex == 0 ? "\((Double(valueLabel.text ?? "") ?? 0.0) * (-1))" : valueLabel.text ?? ""
+        print(Value)
+        print((Double(valueLabel.text ?? "") ?? 0.0) * (-1))
+        let Category = purposeSwitcher.selectedSegmentIndex == 0 ? expenseArr[appData.selectedExpense] : incomeArr[appData.selectedIncome]
+        let Date = dateTextField.text ?? ""
+        let Comment = commentTextField.text ?? ""
+        highliteDate = Date
         UIImpactFeedbackGenerator().impactOccurred()
-        do { try appData.context().save()
-        } catch { print("\n\nERROR ENCODING CONTEXT\n\n", error) }
         self.performSegue(withIdentifier: K.quitVC, sender: self)
-    }
-    
-    func loadCategoriesData(_ request: NSFetchRequest<Categories> = Categories.fetchRequest(), predicate: NSPredicate? = nil) {
-        
-        do { appData.categories = try appData.context().fetch(request)
-        } catch { print("\n\nERROR FETCHING DATA FROM CONTEXTE\n\n", error)}
+        allData.insert(TransactionsStruct(value: Value, category: Category, date: Date, comment: Comment), at: 0)
+        print(TransactionsStruct(value: Value, category: Category, date: Date, comment: Comment))
+        appData.saveTransations(allData)
+        //and upload to db if username != nil and password is correct
+
     }
     
     @objc func valueLabelColor() {
+        
         valueLabel.textColor = K.Colors.balanceV
         minusPlusLabel.textColor = K.Colors.balanceV
     }
     
     @objc func datePickerChangedValue(sender: UIDatePicker) {
+        
         dateTextField.text = appData.stringDate(sender)
     }
     
     @IBAction func donePressed(_ sender: UIButton) {
+        
         if valueLabel.text != "0" {
             addNew()
         } else {
@@ -200,6 +192,7 @@ class TransitionVC: UIViewController {
     }
     
     func errorSaving() {
+        
         var wasHidden = false
         let bounds = valueLabel.bounds
         if minusPlusLabel.alpha == 0 {
@@ -228,23 +221,10 @@ class TransitionVC: UIViewController {
     @IBAction func cancelPressed(_ sender: UIButton) {
         
         if editingDate != "" {
-            cancelEditing()
+            addNew()
         } else {
             self.dismiss(animated: true, completion: nil)
         }
-    }
-    
-    func cancelEditing() {
-        let new = Transactions(context: appData.context())
-        new.category = editingCategoryHolder
-        new.value = editingValueHolder
-        new.date = editingDateHolder
-        appData.transactions.insert(new, at: 0)
-        highliteDate = " "
-        UIImpactFeedbackGenerator().impactOccurred()
-        do { try appData.context().save()
-        } catch { print("\n\nERROR ENCODING CONTEXT\n\n", error) }
-        self.performSegue(withIdentifier: K.quitVC, sender: self)
     }
     
     @IBAction func purposeSwitched(_ sender: UISegmentedControl) {
@@ -322,7 +302,8 @@ class TransitionVC: UIViewController {
 }
 
 
-//MARK: - extensions
+//MARK: - TableView
+
 extension TransitionVC: UIPickerViewDelegate, UIPickerViewDataSource {
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -357,7 +338,9 @@ extension TransitionVC: UIPickerViewDelegate, UIPickerViewDataSource {
     
 }
 
-//textfield
+
+//MARK: - TextField
+
 extension TransitionVC: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -382,7 +365,9 @@ extension TransitionVC: UITextFieldDelegate {
     
 }
 
-// custom field
+
+//MARK: - Custom Text Field
+
 class CustomTextField: UITextField {
     
     var enableLongPressActions = false

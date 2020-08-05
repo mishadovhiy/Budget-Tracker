@@ -16,6 +16,7 @@ class FilterTVC: UITableViewController {
     var years = [""]
     var sectionsCount = 3
     var buttonTitle = ["All Time", "This Month", "Today", "Yesterday", "Custom"]
+    let data = appData.getTransactions()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +24,7 @@ class FilterTVC: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
         getData()
         if months.first == "" {
             months.removeFirst()
@@ -32,26 +34,27 @@ class FilterTVC: UITableViewController {
         }
         
     }
-
     
     func getData() {
-        loadItems()
+        
         appendMatches()
     }
-    
+
     func appendMatches() {
-        for i in 0..<appData.transactions.count {
-            if !months.contains(removeDayFromString(appData.transactions[i].date ?? "")) {
-                months.append(removeDayFromString(appData.transactions[i].date ?? ""))
+        
+        for i in 0..<data.count {
+            if !months.contains(removeDayFromString(data[i].date)) {
+                months.append(removeDayFromString(data[i].date))
             }
             
-            if !years.contains(removeDayMonthFromString(appData.transactions[i].date ?? "")) {
-                years.append(removeDayMonthFromString(appData.transactions[i].date ?? ""))
+            if !years.contains(removeDayMonthFromString(data[i].date)) {
+                years.append(removeDayMonthFromString(data[i].date))
             }
         }
     }
     
     func removeDayFromString(_ s: String) -> String {
+        
         var m = s
         for _ in 0..<3 {
             m.removeFirst()
@@ -60,6 +63,7 @@ class FilterTVC: UITableViewController {
     }
     
     func removeDayMonthFromString(_ s: String) -> String {
+        
         var m = s
         for _ in 0..<6 {
             m.removeFirst()
@@ -67,15 +71,8 @@ class FilterTVC: UITableViewController {
         return m
     }
     
-    func loadItems(_ request: NSFetchRequest<Transactions> = Transactions.fetchRequest(), predicate: NSPredicate? = nil) {
-        
-        do { appData.transactions = try appData.context().fetch(request).sorted{ $0.dateFromString > $1.dateFromString }
-        } catch { print("\n\nERROR FETCHING DATA FROM CONTEXTE\n\n", error)}
-
-    }
-
-    
     @IBAction func closePressed(_ sender: UIButton) {
+        
         self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
     }
     
@@ -105,6 +102,7 @@ class FilterTVC: UITableViewController {
         case 0:
             appData.filter.from = ""
             appData.filter.to = ""
+            appData.filter.showAll = true
             self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
             
         case 1:
@@ -147,6 +145,7 @@ class FilterTVC: UITableViewController {
     }
     
     func defaultFilter() {
+        
         let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
         let month = appData.filter.getMonthFromString(s: today)
         let year = appData.filter.getYearFromString(s: today)
@@ -167,6 +166,7 @@ class FilterTVC: UITableViewController {
     
     func secondSectionSelected(i: Int) {
 
+        appData.filter.showAll = false
         let date = "01.\(months[i])"
         let toIntDay = appData.filter.getLastDayOf(fullDate: date)
         appData.filter.from = date
@@ -176,11 +176,12 @@ class FilterTVC: UITableViewController {
     }
     
     func thirdSectionSelected(i: Int) {
+        
+        appData.filter.showAll = false
         appData.filter.from = "01.01.\(years[i])"
         appData.filter.to = "31.12.\(years[i])"
         self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
     }
-    
     
     @IBAction func unwindCalendarClosed(segue: UIStoryboardSegue) {
         
@@ -201,6 +202,7 @@ class FilterTVC: UITableViewController {
     }
     
     func prepareCustomDates() {
+        
         let day = appData.filter.getDayFromString(s: appData.filter.from)
         let month = appData.filter.getMonthFromString(s: appData.filter.from)
         let year = appData.filter.getYearFromString(s: appData.filter.from)
@@ -217,8 +219,6 @@ class FilterTVC: UITableViewController {
         
         self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
     }
-    
-    
     
     
 // MARK: - Table view data source
@@ -238,11 +238,9 @@ class FilterTVC: UITableViewController {
         }
     }
     
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: K.filterCell, for: indexPath) as! FilterCell
-        
         switch indexPath.section {
         case 0:
             let data = buttonTitle[indexPath.row]
@@ -291,6 +289,7 @@ class FilterTVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
         let view = UIView()
         let label = UILabel()
         label.frame = CGRect(x: 15, y: 0, width: UIScreen.main.bounds.width, height: 20)
@@ -309,9 +308,6 @@ class FilterTVC: UITableViewController {
         view.backgroundColor = K.Colors.sectionBackground
         return view
     }
-    
-    
-    
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
@@ -333,6 +329,4 @@ class FilterTVC: UITableViewController {
         
     }
     
-    
-
 }

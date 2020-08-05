@@ -11,8 +11,8 @@ import CoreData
 
 class AppData {
     
-    var transactions = [Transactions]()
-    var categories = [Categories]()
+    var transactionsCoreData = [Transactions]()
+    var categoriesCoreData = [Categories]()
     
     func context() -> NSManagedObjectContext {
         
@@ -23,6 +23,67 @@ class AppData {
             return (UIApplication.shared.delegate as! AppDelegate).persistentContainer2.viewContext
         }
         
+    }
+    
+    let defaults = UserDefaults.standard
+    
+    func setUsername(_ username: String) {
+        defaults.set(username, forKey: "username")
+    }
+    func username() -> String {
+        return defaults.value(forKey: "username") as? String ?? ""
+    }
+    
+    func saveTransations(_ data: [TransactionsStruct]) {
+        var dict: [[String]] = []
+        for i in 0..<data.count {
+            let nickname = username()
+            let value = data[i].value
+            let category = data[i].category
+            let date = data[i].date
+            let comment = data[i].comment
+            
+            dict.append([nickname, value, category, date, comment])
+        }
+        print("transactions saved to user defaults")
+        defaults.set(dict, forKey: "transactionsData")
+    }
+
+    func getTransactions() -> [TransactionsStruct] {
+        let localData = defaults.value(forKey: "transactionsData") as? [[String]] ?? []
+        var results: [TransactionsStruct] = []
+        for i in 0..<localData.count {
+            let value = localData[i][1]
+            let category = localData[i][2]
+            let date = localData[i][3]
+            let comment = localData[i][4]
+            results.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
+        }
+        return results
+    }
+
+    func saveCategories(_ data: [CategoriesStruct]) {
+        var dict: [[String]] = []
+        for i in 0..<data.count {
+            let nickname = username()
+            let name = data[i].name
+            let purpose = data[i].purpose
+            
+            dict.append([nickname, name, purpose])
+        }
+        print("categories saved to user defaults")
+        defaults.set(dict, forKey: "categoriesData")
+    }
+    
+    func getCategories() -> [CategoriesStruct] {
+        let localData = defaults.value(forKey: "categoriesData") as? [[String]] ?? []
+        var results: [CategoriesStruct] = []
+        for i in 0..<localData.count {
+            let name = localData[i][1]
+            let purpose = localData[i][2]
+            results.append(CategoriesStruct(name: name, purpose: purpose))
+        }
+        return results
     }
     
     var selectedExpense = 0
@@ -67,7 +128,7 @@ class AppData {
             }
         }
 
-        func showNoDataLabel(_ label: UILabel, tableData: [Transactions]) {
+        func showNoDataLabel(_ label: UILabel, tableData: [TransactionsStruct]) {
             
             if tableData.count == 0 {
                 UIView.animate(withDuration: 0.2) {
@@ -88,7 +149,7 @@ class AppData {
         var sumExpenses: Double = 0.0
         var sumPeriodBalance: Double = 0.0
         
-        mutating func recalculation(i:UILabel, e: UILabel, data: [Transactions]) {
+        mutating func recalculation(i:UILabel, e: UILabel, data: [TransactionsStruct]) {
 
             sumIncomes = 0.0
             sumExpenses = 0.0
@@ -97,15 +158,15 @@ class AppData {
             var arreyPositive: [Double] = [0.0]
             
             for i in 0..<data.count {
-                sumPeriodBalance = sumPeriodBalance + data[i].value
+                sumPeriodBalance = sumPeriodBalance + (Double(data[i].value) ?? 0.0)
                 
-                if data[i].value > 0 {
-                    arreyPositive.append(data[i].value)
-                    sumIncomes = sumIncomes + data[i].value
+                if (Double(data[i].value) ?? 0.0) > 0 {
+                    arreyPositive.append((Double(data[i].value) ?? 0.0))
+                    sumIncomes = sumIncomes + (Double(data[i].value) ?? 0.0)
                     
                 } else {
-                    arreyNegative.append(data[i].value)
-                    sumExpenses = sumExpenses + data[i].value
+                    arreyNegative.append((Double(data[i].value) ?? 0.0))
+                    sumExpenses = sumExpenses + (Double(data[i].value) ?? 0.0)
                 }}
             
             if sumPeriodBalance < Double(Int.max), sumIncomes < Double(Int.max), sumExpenses < Double(Int.max) {
@@ -116,6 +177,8 @@ class AppData {
                 i.text = "\(sumIncomes)"
                 e.text = "\(sumExpenses * -1)"
             }
+            
+            print("recalculating labels")
         }
         
         var totalBalance = 0.0
@@ -124,11 +187,11 @@ class AppData {
             var totalExpenses = 0.0
             var totalIncomes = 0.0
             
-            for i in 0..<appData.transactions.count {
-                if appData.transactions[i].value > 0.0 {
-                    totalIncomes = totalIncomes + appData.transactions[i].value
+            for i in 0..<appData.transactionsCoreData.count {
+                if appData.transactionsCoreData[i].value > 0.0 {
+                    totalIncomes = totalIncomes + appData.transactionsCoreData[i].value
                 } else {
-                    totalExpenses = totalExpenses + appData.transactions[i].value
+                    totalExpenses = totalExpenses + appData.transactionsCoreData[i].value
                 }
             }
             
@@ -289,7 +352,8 @@ class AppData {
 
 //MARK: - sort Item Extension
 
-extension Transactions {
+
+extension TransactionsStruct {
     
     static let isoFormatter: ISO8601DateFormatter = {
         let formatter = ISO8601DateFormatter()
@@ -298,7 +362,21 @@ extension Transactions {
     }()
 
     var dateFromString: Date {
-        let dateString = date!.components(separatedBy: ".").reversed().joined(separator: ".")
-        return Transactions.isoFormatter.date(from: dateString)!
+        let dateString = date.components(separatedBy: ".").reversed().joined(separator: ".")
+        return TransactionsStruct.isoFormatter.date(from: dateString)!
     }
+    
+}
+
+struct TransactionsStruct {
+    let value: String
+    let category: String
+    let date: String
+    let comment: String
+}
+
+
+struct CategoriesStruct {
+    let name: String
+    let purpose: String
 }

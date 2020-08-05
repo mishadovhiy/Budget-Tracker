@@ -140,7 +140,10 @@ class CalendarVC: UIViewController {
             setYear()
             getDays()
         }
-        collectionView.reloadData()
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+        
         if selectedFrom != "" || selectedTo != "" {
             goButtonsTitle()
         }
@@ -152,7 +155,10 @@ class CalendarVC: UIViewController {
         month = month + 1
         setYear()
         getDays()
-        collectionView.reloadData()
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+        
         if selectedFrom != "" || selectedTo != "" {
             goButtonsTitle()
         }
@@ -163,7 +169,10 @@ class CalendarVC: UIViewController {
         month = month - 1
         setYear()
         getDays()
-        collectionView.reloadData()
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+        
         if selectedFrom != "" || selectedTo != "" {
             goButtonsTitle()
         }
@@ -361,7 +370,10 @@ class CalendarVC: UIViewController {
             year = getYearFrom(string: selectedTo)
         }
         getDays()
-        collectionView.reloadData()
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+        
         goButtonsTitle()
     }
     

@@ -17,42 +17,48 @@ class mainVCcell: UITableViewCell {
     @IBOutlet weak var sectionView: UIView!
     @IBOutlet weak var commentLabel: UILabel!
     
-    func setupCell(_ data: Transactions, i: Int, tableData: [Transactions]) {
-        if data.value > 0 {
+    func setupCell(_ data: TransactionsStruct, i: Int, tableData: [TransactionsStruct], selectedCell: IndexPath?) {
+        if (Double(data.value) ?? 0.0) > 0 {
             valueLabel.textColor = K.Colors.category
         } else {
             valueLabel.textColor = K.Colors.negative
         }
-        valueLabel.text = "\(Int(data.value))"
-        categoryLabel.text = "\(data.category ?? K.Text.unknCat)"
+        valueLabel.text = String(format:"%.0f", Double(data.value) ?? 0.0)
+        
+        categoryLabel.text = data.comment == "" ? data.category : "\(data.category)  ✎"
         sectionView.layer.cornerRadius = 3
         commentLabel.text = data.comment
-        categoryLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -2, 0)
+        commentLabel.isHidden = true
+        if selectedCell != nil {
+            if selectedCell!.row == i && commentLabel.text != "" {
+                commentLabel.isHidden = false
+            }
+        }
         
         if i != 0 {
             if tableData[i - 1].date != data.date {
-                bigDate.text = "\(data.date ?? "")"
+                bigDate.text = "\(data.date)"
                 sectionView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-                dailyTotalLabel.text = "\(getDailyTotal(day: data.date ?? "", tableData: tableData))"
+                dailyTotalLabel.text = "\(getDailyTotal(day: data.date, tableData: tableData))"
             } else {
                 bigDate.text = ""
                 sectionView.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
                 dailyTotalLabel.text = ""
             }
         } else {
-            bigDate.text = "\(data.date ?? "")"
+            bigDate.text = "\(data.date)"
             sectionView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-            dailyTotalLabel.text = "\(getDailyTotal(day: data.date ?? "", tableData: tableData))"
+            dailyTotalLabel.text = "\(getDailyTotal(day: data.date, tableData: tableData))"
         }
         
     }
     
-    func getDailyTotal(day: String, tableData: [Transactions]) -> String {
+    func getDailyTotal(day: String, tableData: [TransactionsStruct]) -> String {
         
         var total: Double = 0.0
         for i in 0..<tableData.count {
             if tableData[i].date == day {
-                total = total + tableData[i].value
+                total = total + (Double(tableData[i].value) ?? 0.0)
             }
         }
         

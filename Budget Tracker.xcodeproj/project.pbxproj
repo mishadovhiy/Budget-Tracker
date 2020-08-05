@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		297BDB649113044757C2CEF2 /* Pods_Budget_Tracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F84A1AEB24B0EC857F848E0 /* Pods_Budget_Tracker.framework */; };
+		8D36724224D315BC00CE90A9 /* dbModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D36724124D315BC00CE90A9 /* dbModel.swift */; };
 		8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5206662421695200772CD5 /* StatisticBrain.swift */; };
 		8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D52066824216A2900772CD5 /* StatisticVC.swift */; };
 		8D52066B24216A6200772CD5 /* HistoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D52066A24216A6200772CD5 /* HistoryVC.swift */; };
@@ -33,6 +34,7 @@
 		4495115F0F67B3D07EA6B233 /* Pods-Budget Tracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Budget Tracker.debug.xcconfig"; path = "Target Support Files/Pods-Budget Tracker/Pods-Budget Tracker.debug.xcconfig"; sourceTree = "<group>"; };
 		5F84A1AEB24B0EC857F848E0 /* Pods_Budget_Tracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Budget_Tracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60EB2258A12489890A827616 /* Pods-Budget Tracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Budget Tracker.release.xcconfig"; path = "Target Support Files/Pods-Budget Tracker/Pods-Budget Tracker.release.xcconfig"; sourceTree = "<group>"; };
+		8D36724124D315BC00CE90A9 /* dbModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dbModel.swift; sourceTree = "<group>"; };
 		8D5206662421695200772CD5 /* StatisticBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticBrain.swift; sourceTree = "<group>"; };
 		8D52066824216A2900772CD5 /* StatisticVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticVC.swift; sourceTree = "<group>"; };
 		8D52066A24216A6200772CD5 /* HistoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryVC.swift; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 				8DD89D8623F1471400273904 /* AppData.swift */,
 				8DD89D8923F1472E00273904 /* Alerts.swift */,
 				8D5206662421695200772CD5 /* StatisticBrain.swift */,
+				8D36724124D315BC00CE90A9 /* dbModel.swift */,
 			);
 			path = Modal;
 			sourceTree = "<group>";
@@ -303,6 +306,7 @@
 				8DD89D8723F1471400273904 /* AppData.swift in Sources */,
 				8D52066B24216A6200772CD5 /* HistoryVC.swift in Sources */,
 				8DD89D8C23F1485700273904 /* Constants.swift in Sources */,
+				8D36724224D315BC00CE90A9 /* dbModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

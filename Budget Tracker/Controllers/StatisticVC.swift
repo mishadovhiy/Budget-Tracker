@@ -94,6 +94,7 @@ class StatisticVC: UIViewController, CALayerDelegate {
     }
     
     func ifNoData() {
+        
         if allData.count == 0 {
             titleLabel.textAlignment = .center
             titleLabel.text = "No " + (titleLabel.text ?? "Data")
@@ -107,7 +108,9 @@ class StatisticVC: UIViewController, CALayerDelegate {
         sum = 0.0
         getMaxSum()
         initPlot()
-        tableView.reloadData()
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
         hideandShowGrapg()
     }
     
@@ -120,7 +123,7 @@ class StatisticVC: UIViewController, CALayerDelegate {
         for i in 0..<allSelectedTransactionsData.count {
             if allData[indexPathRow].category == allSelectedTransactionsData[i].category {
                 let data = allSelectedTransactionsData[i]
-                historyDataStruct.append(HistoryDataStruct(value: data.value, date: data.date ?? ""))
+                historyDataStruct.append(HistoryDataStruct(value: Double(data.value) ?? 0.0, date: data.date))
             }
         }
         selectedCategoryName = allData[indexPathRow].category

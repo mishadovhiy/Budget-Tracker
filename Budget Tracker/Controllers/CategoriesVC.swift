@@ -12,10 +12,10 @@ import CoreData
 class CategoriesVC: UIViewController {
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var hiddenTitle: UILabel!
     @IBOutlet weak var categoriesTableView: UITableView!
     var catData = appData.categoryVC
     var refreshControl = UIRefreshControl()
+    var tableData = appData.getCategories()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,13 +24,12 @@ class CategoriesVC: UIViewController {
     
     func updateUI() {
         
-        loadData()
         catData.purposPicker.delegate = self
         catData.purposPicker.dataSource = self
         categoriesTableView.delegate = self
         categoriesTableView.dataSource = self
         addRefreshControll()
-        
+        whenNoCategories()
         let hiseCatsSwipe: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(hideCats(_:)))
         hiseCatsSwipe.direction = .left
         view.addGestureRecognizer(hiseCatsSwipe);
@@ -40,8 +39,8 @@ class CategoriesVC: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
-    
     func addRefreshControll() {
+        
         refreshControl.addTarget(self, action: #selector(refresh(sender:)), for: UIControl.Event.valueChanged)
         refreshControl.attributedTitle = NSAttributedString(string: "+")
         refreshControl.backgroundColor = UIColor.clear
@@ -50,37 +49,22 @@ class CategoriesVC: UIViewController {
     }
     
     @objc func refresh(sender:AnyObject) {
+        
         addCategoryPressed(addButton)
         Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (timer) in
             self.refreshControl.endRefreshing()
         }
     }
     
-    func loadData(_ request: NSFetchRequest<Categories> = Categories.fetchRequest(), predicate: NSPredicate? = nil) {
-        
-        do { appData.categories = try appData.context().fetch(request)
-        } catch { print("\n\nERROR FETCHING DATA FROM CONTEXTE\n\n", error)}
-        categoriesTableView.reloadData()
-        whenNoCategories()
-    }
-    
     func whenNoCategories() {
         
-        if appData.categories.count == 0 {
+        if tableData.count == 0 {
             titleLabel.text = "No categories"
             titleLabel.textAlignment = .center
         } else {
             titleLabel.text = "Categories"
             titleLabel.textAlignment = .left
         }
-    }
-    
-    func saveItems() {
-        
-        do { try appData.context().save()
-        } catch { print("\n\nERROR ENCODING CONTEXT\n\n", error) }
-        categoriesTableView.reloadData()
-        whenNoCategories()
     }
     
     func alertTextFields(alert: UIAlertController) {
@@ -105,11 +89,15 @@ class CategoriesVC: UIViewController {
         alert.addAction(UIAlertAction(title: "Done", style: .default, handler: { (action) in
             
             if self.catData.categoryTextField.text != "" {
-                let new = Categories(context: appData.context())
-                new.purpose = self.catData.allPurposes[self.catData.selectedPurpose]
-                new.name = self.catData.categoryTextField.text
-                appData.categories.insert(new, at: 0)
-                self.saveItems()
+                let name = self.catData.categoryTextField.text ?? ""
+                let value = self.catData.allPurposes[self.catData.selectedPurpose]
+                self.tableData.insert(CategoriesStruct(name: name, purpose: value), at: 0)
+                appData.saveCategories(self.tableData)
+                self.whenNoCategories()
+                
+                DispatchQueue.main.async {
+                    self.categoriesTableView.reloadData()
+                }
             }
             
         }))
@@ -122,54 +110,42 @@ class CategoriesVC: UIViewController {
 }
 
 
-//MARK: - extensions
+//MARK: - Table View
+
 extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return appData.categories.count
+        return tableData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent, for: indexPath) as! categoriesVCcell
         
-        cell.categoryNameLabel.text = "\(appData.categories[indexPath.row].name ?? K.Text.unknCat),"
-        cell.categoryPurposeLabel.text = appData.categories[indexPath.row].purpose
+        cell.categoryNameLabel.text = "\(tableData[indexPath.row].name),"
+        cell.categoryPurposeLabel.text = tableData[indexPath.row].purpose
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCell.EditingStyle.delete {
-            
-            appData.context().delete(appData.categories[indexPath.row])
-            appData.categories.remove(at: indexPath.row)
-            self.saveItems()
-            
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 
-        if indexPath.row == 0 {
-            UIView.animate(withDuration: 0.3) {
-                self.hiddenTitle.alpha = 1
+            tableData.remove(at: indexPath.row)
+            appData.saveCategories(tableData)
+            whenNoCategories()
+            
+            DispatchQueue.main.async {
+                self.categoriesTableView.reloadData()
             }
         }
-        
     }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        
-        if indexPath.row == 0 {
-            UIView.animate(withDuration: 0.3) {
-                self.hiddenTitle.alpha = 0
-            }
-        }
-        
-    }
+
     
     
 }
+
+
+//MARK: - PickerView
 
 extension CategoriesVC: UIPickerViewDelegate, UIPickerViewDataSource {
     

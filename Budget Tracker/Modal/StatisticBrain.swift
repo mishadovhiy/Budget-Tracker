@@ -18,7 +18,7 @@ class StatisticBrain {
     var maxIncomeName = ""
     var maxExpenceName = ""
     
-    func getData(from tableData: [Transactions]) {
+    func getlocalData(from tableData: [TransactionsStruct]) {
         
         statisticArreyNames = [""]
         statisticData = [:]
@@ -28,15 +28,15 @@ class StatisticBrain {
         
         var index = 0
         for i in 0..<tableData.count {
-            if statisticArreyNames[index] != tableData[i].category ?? "" {
-                statisticArreyNames.append(tableData[i].category ?? "")
+            if statisticArreyNames[index] != tableData[i].category {
+                statisticArreyNames.append(tableData[i].category)
                 index += 1
             }
         }
         statisticArreyNames.removeFirst()
         
         for i in 0..<tableData.count {
-            if statisticArreyNames[index2] == tableData[i].category ?? "" {
+            if statisticArreyNames[index2] == tableData[i].category {
                 updateGraphValue(i: i, tableData: tableData)
             } else {
                 index2 += 1
@@ -46,9 +46,9 @@ class StatisticBrain {
         getMax()
     }
     
-    func updateGraphValue(i: Int, tableData: [Transactions]) {
+    func updateGraphValue(i: Int, tableData: [TransactionsStruct]) {
             
-        statisticData.updateValue(tableData[i].value + (statisticData[tableData[i].category ?? ""] ?? 0.0), forKey: tableData[i].category ?? "")
+        statisticData.updateValue((Double(tableData[i].value) ?? 0.0) + (statisticData[tableData[i].category] ?? 0.0), forKey: tableData[i].category)
         
     }
     
