@@ -152,23 +152,24 @@ class TransitionVC: UIViewController {
         }
     }
     
-    func addNew() {
-        
+    func addNew(value: String, category: String, date: String, comment: String) {
         var allData = appData.getTransactions()
-        let Value = purposeSwitcher.selectedSegmentIndex == 0 ? "\((Double(valueLabel.text ?? "") ?? 0.0) * (-1))" : valueLabel.text ?? ""
-        print(Value)
-        print((Double(valueLabel.text ?? "") ?? 0.0) * (-1))
-        let Category = purposeSwitcher.selectedSegmentIndex == 0 ? expenseArr[appData.selectedExpense] : incomeArr[appData.selectedIncome]
-        let Date = dateTextField.text ?? ""
-        let Comment = commentTextField.text ?? ""
-        highliteDate = Date
-        UIImpactFeedbackGenerator().impactOccurred()
-        self.performSegue(withIdentifier: K.quitVC, sender: self)
-        allData.insert(TransactionsStruct(value: Value, category: Category, date: Date, comment: Comment), at: 0)
-        print(TransactionsStruct(value: Value, category: Category, date: Date, comment: Comment))
-        appData.saveTransations(allData)
-        //and upload to db if username != nil and password is correct
 
+        highliteDate = date
+        UIImpactFeedbackGenerator().impactOccurred()
+        allData.insert(TransactionsStruct(value: value, category: category, date: date, comment: comment), at: 0)
+        print(TransactionsStruct(value: value, category: category, date: date, comment: comment))
+        appData.saveTransations(allData)
+        let Nickname = appData.username()
+        if Nickname != "" {
+            let toDataString = "&Nickname=\(Nickname)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
+            
+            let save = SaveToDB()
+            save.Transactions(toDataString: toDataString)
+        } else {
+            print(Nickname, "Nickname is nil")
+        }
+        self.performSegue(withIdentifier: K.quitVC, sender: self)
     }
     
     @objc func valueLabelColor() {
@@ -185,7 +186,13 @@ class TransitionVC: UIViewController {
     @IBAction func donePressed(_ sender: UIButton) {
         
         if valueLabel.text != "0" {
-            addNew()
+            
+            let value = purposeSwitcher.selectedSegmentIndex == 0 ? "\((Double(valueLabel.text ?? "") ?? 0.0) * (-1))" : valueLabel.text ?? ""
+            let category = purposeSwitcher.selectedSegmentIndex == 0 ? expenseArr[appData.selectedExpense] : incomeArr[appData.selectedIncome]
+            let date = dateTextField.text ?? ""
+            let comment = commentTextField.text ?? ""
+            addNew(value: value, category: category, date: date, comment: comment)
+            
         } else {
             errorSaving()
         }
@@ -221,7 +228,12 @@ class TransitionVC: UIViewController {
     @IBAction func cancelPressed(_ sender: UIButton) {
         
         if editingDate != "" {
-            addNew()
+
+            let value = "\(editingValueHolder)"
+            let category = editingCategoryHolder
+            let date = editingDateHolder
+            let comment = editingCommentHolder
+            addNew(value: value, category: category, date: date, comment: comment)
         } else {
             self.dismiss(animated: true, completion: nil)
         }

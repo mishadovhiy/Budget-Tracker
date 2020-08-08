@@ -20,35 +20,40 @@ class mainVCcell: UITableViewCell {
     func setupCell(_ data: TransactionsStruct, i: Int, tableData: [TransactionsStruct], selectedCell: IndexPath?) {
         if (Double(data.value) ?? 0.0) > 0 {
             valueLabel.textColor = K.Colors.category
+
         } else {
             valueLabel.textColor = K.Colors.negative
         }
-        valueLabel.text = String(format:"%.0f", Double(data.value) ?? 0.0)
-        
-        categoryLabel.text = data.comment == "" ? data.category : "\(data.category)  ✎"
         sectionView.layer.cornerRadius = 3
-        commentLabel.text = data.comment
+        
         commentLabel.isHidden = true
+        
+        let value = String(format:"%.0f", Double(data.value) ?? 0.0)
+        let category = data.comment == "" ? data.category : "\(data.category)  ✎"
+        valueLabel.text = value
+        categoryLabel.text = category
+        commentLabel.text = data.comment
         if selectedCell != nil {
             if selectedCell!.row == i && commentLabel.text != "" {
                 commentLabel.isHidden = false
+                
             }
         }
         
         if i != 0 {
             if tableData[i - 1].date != data.date {
-                bigDate.text = "\(data.date)"
                 sectionView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+                bigDate.text = "\(data.date)"
                 dailyTotalLabel.text = "\(getDailyTotal(day: data.date, tableData: tableData))"
             } else {
-                bigDate.text = ""
                 sectionView.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
+                bigDate.text = ""
                 dailyTotalLabel.text = ""
             }
         } else {
-            bigDate.text = "\(data.date)"
             sectionView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-            dailyTotalLabel.text = "\(getDailyTotal(day: data.date, tableData: tableData))"
+            bigDate.text = "\(data.date)"
+            dailyTotalLabel.text = "\(self.getDailyTotal(day: data.date, tableData: tableData))"
         }
         
     }
@@ -91,35 +96,35 @@ class calcCell: UITableViewCell {
     @IBOutlet weak var periodStack: UIStackView!
     @IBOutlet weak var periodBalanceValueLabel: UILabel!
     
-    func setupCell(_ totalBalance: Double) {
-        if totalBalance < Double(Int.max), appData.calculation.sumExpenses < Double(Int.max), appData.calculation.sumIncomes < Double(Int.max), appData.calculation.sumPeriodBalance < Double(Int.max) {
+    func setupCell(_ totalBalance: Double, sumExpenses: Double, sumPeriodBalance: Double, sumIncomes: Double) {
+        print("setupCell totalBalance", totalBalance)
+        if totalBalance < Double(Int.max), sumExpenses < Double(Int.max), sumIncomes < Double(Int.max), sumPeriodBalance < Double(Int.max) {
+            
             balanceLabel.text = "\(Int(totalBalance))"
-            periodBalanceValueLabel.text = "\(Int(appData.calculation.sumPeriodBalance))"
-            expensesLabel.text = "\(Int(appData.calculation.sumExpenses * -1))"
-            incomeLabel.text = "\(Int(appData.calculation.sumIncomes))"
+            periodBalanceValueLabel.text = "\(Int(sumPeriodBalance))"
+            expensesLabel.text = "\(Int(sumExpenses * -1))"
+            incomeLabel.text = "\(Int(sumIncomes))"
         } else {
             balanceLabel.text = "\(totalBalance)"
-            periodBalanceValueLabel.text = "\(appData.calculation.sumPeriodBalance)"
-            expensesLabel.text = "\(appData.calculation.sumExpenses * -1)"
-            incomeLabel.text = "\(appData.calculation.sumIncomes)"
+            periodBalanceValueLabel.text = "\(sumPeriodBalance)"
+            expensesLabel.text = "\(sumExpenses * -1)"
+            incomeLabel.text = "\(sumIncomes)"
+            
         }
         
         if totalBalance < 0.0 {
             balanceLabel.textColor = K.Colors.negative
+            
         } else {
             balanceLabel.textColor = K.Colors.balanceV
         }
         
         if balanceLabel.text == periodBalanceValueLabel.text {
             periodStack.isHidden = true
-            UIView.animate(withDuration: 0.3) {
-                self.periodStack.alpha = 0
-            }
+            periodStack.alpha = 0
         } else {
             periodStack.isHidden = false
-            UIView.animate(withDuration: 0.3) {
-                self.periodStack.alpha = 1
-            }
+            periodStack.alpha = 1
         }
     }
 
@@ -146,11 +151,15 @@ class PlotCell: UITableViewCell {
         highValueView.layer.shadowOpacity = 0.2
         highValueView.layer.shadowOffset = .zero
         highValueView.layer.shadowRadius = 6
-        
         categoryLabel.text = statisticBrain.maxExpenceName
         if statisticBrain.minValue < Double(Int.max) {
             valueLabel.text = "\(Int(statisticBrain.minValue))"
-        } else { valueLabel.text = "\(statisticBrain.minValue)" }
+            
+        } else {
+            valueLabel.text = "\(statisticBrain.minValue)"
+            
+            
+        }
     }
     
 }

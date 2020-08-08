@@ -55,7 +55,9 @@ struct LoadFromDB {
             
         }
 
-        task.resume()
+        DispatchQueue.main.async {
+            task.resume()
+        }
         
     }
     
@@ -103,7 +105,9 @@ struct LoadFromDB {
             
         }
 
-        task.resume()
+        DispatchQueue.main.async {
+            task.resume()
+        }
         
     }
     
@@ -146,7 +150,9 @@ struct LoadFromDB {
             
         }
 
-        task.resume()
+        DispatchQueue.main.async {
+            task.resume()
+        }
         
     }
     
@@ -215,23 +221,13 @@ struct SaveToDB {
 struct DeleteFromDB {
     
     func Transactions(toDataString: String) {
-        
-        let Nickname = "Misha"
-        let Category = "inapp"
-        let Date = "12.12.2020"
-        let Value = "981"
-        let Comment = ""
-        let test = "&Nickname=\(Nickname)" + "&Category=\(Category)" + "&Date=\(Date)" + "&Value=\(Value)" + "&Comment=\(Comment)"
-        delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-transaction.php", toDataString: test)
+
+        delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-transaction.php", toDataString: toDataString)
     }
     
-    func Categories() {
+    func Categories(toDataString: String) {
 
-        let Nickname = "Misha"
-        let Title = "Projects"
-        let Purpose = "Income"
-        let test = "&Nickname=\(Nickname)" + "&Title=\(Title)" + "&Purpose=\(Purpose)"
-        delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-category.php", toDataString: test)
+        delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-category.php", toDataString: toDataString)
     }
     
     private func delete(dbFileURL: String, toDataString: String) {
@@ -265,6 +261,7 @@ struct DeleteFromDB {
                 
             }
             uploadJob.resume()
+            
         }
             
     }

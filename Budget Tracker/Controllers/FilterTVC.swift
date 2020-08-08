@@ -92,11 +92,6 @@ class FilterTVC: UITableViewController {
     func firstSectionSelected(i: Int) {
         
         let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
-        if i == 0 {
-            appData.filter.showAll = true
-        } else {
-            appData.filter.showAll = false
-        }
         
         switch i {
         case 0:
@@ -106,15 +101,18 @@ class FilterTVC: UITableViewController {
             self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
             
         case 1:
+            appData.filter.showAll = false
             defaultFilter()
             self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
             
         case 2:
+            appData.filter.showAll = false
             appData.filter.from = today
             appData.filter.to = today
             self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
             
         case 3:
+            appData.filter.showAll = false
             let todayInt = appData.filter.getDayFromString(s: today)
             let month = appData.filter.getMonthFromString(s: today)
             let year = appData.filter.getYearFromString(s: today)
@@ -136,6 +134,7 @@ class FilterTVC: UITableViewController {
             self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
             
         case 4:
+            appData.filter.showAll = false
             self.performSegue(withIdentifier: K.toCalendar, sender: self)
             
         default:

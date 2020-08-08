@@ -182,22 +182,28 @@ class AppData {
         }
         
         var totalBalance = 0.0
+        
         mutating func calculateBalance(balanceLabel: UILabel) {
             
             var totalExpenses = 0.0
             var totalIncomes = 0.0
+            let transactions = appData.getTransactions()
             
-            for i in 0..<appData.transactionsCoreData.count {
-                if appData.transactionsCoreData[i].value > 0.0 {
-                    totalIncomes = totalIncomes + appData.transactionsCoreData[i].value
+            for i in 0..<transactions.count {
+
+                let value = Double(transactions[i].value) ?? 0.0
+                if value > 0.0 {
+                    totalIncomes = totalIncomes + value
                 } else {
-                    totalExpenses = totalExpenses + appData.transactionsCoreData[i].value
+                    totalExpenses = totalExpenses + value
                 }
             }
             
             totalBalance = totalIncomes + totalExpenses
+            
             if totalBalance < Double(Int.max) {
-                balanceLabel.text = "\(Int(totalBalance))"
+                balanceLabel.text = "\(Int(self.totalBalance))"
+                
             } else { balanceLabel.text = "\(totalBalance)" }
             
             if totalBalance < 0.0 {
@@ -266,7 +272,12 @@ class AppData {
             
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd.MM.yyyy"
-            return dateFormatter.string(from: sender.date)
+            var date: Date? = nil
+            DispatchQueue.main.async {
+                date = sender.date
+            }
+            let results = dateFormatter.string(from: date ?? Date())
+            return results
         }
         
         func makeTwo(n: Int) -> String {

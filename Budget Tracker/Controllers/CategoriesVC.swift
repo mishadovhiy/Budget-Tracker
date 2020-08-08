@@ -81,6 +81,31 @@ class CategoriesVC: UIViewController {
         }
     }
     
+    func sendToDB() {
+        
+        let Nickname = appData.username()
+        if Nickname != "" {
+            let Title = catData.categoryTextField.text ?? ""
+            let Purpose = catData.allPurposes[catData.selectedPurpose]
+            let toDataString = "&Nickname=\(Nickname)" + "&Title=\(Title)" + "&Purpose=\(Purpose)"
+            let save = SaveToDB()
+            save.Categories(toDataString: toDataString)
+        } else {
+            print(Nickname, "Nickname is nil")
+        }
+
+    }
+    
+    func deteteFromDB(at: Int) {
+        let delete = DeleteFromDB()
+        
+        let Nickname = appData.username()
+        let Title = tableData[at].name
+        let Purpose = tableData[at].purpose
+        let toDataString = "&Nickname=\(Nickname)" + "&Title=\(Title)" + "&Purpose=\(Purpose)"
+        delete.Categories(toDataString: toDataString)
+    }
+    
     @IBAction func addCategoryPressed(_ sender: UIButton) {
         
         let alert = UIAlertController(title: "Add Category", message: "", preferredStyle: .alert)
@@ -94,6 +119,7 @@ class CategoriesVC: UIViewController {
                 self.tableData.insert(CategoriesStruct(name: name, purpose: value), at: 0)
                 appData.saveCategories(self.tableData)
                 self.whenNoCategories()
+                self.sendToDB()
                 
                 DispatchQueue.main.async {
                     self.categoriesTableView.reloadData()
@@ -130,6 +156,8 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCell.EditingStyle.delete {
 
+            
+            deteteFromDB(at: indexPath.row)
             tableData.remove(at: indexPath.row)
             appData.saveCategories(tableData)
             whenNoCategories()

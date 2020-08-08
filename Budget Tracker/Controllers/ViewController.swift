@@ -36,32 +36,37 @@ class ViewController: UIViewController {
         
         appData.setUsername("Misha")
         updateUI()
-        defaultFilter()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        print("today is", appData.filter.getToday(appData.filter.filterObjects.currentDate))
+        
     }
     
     func updateUI() {
 
-        switchFromCoreData()
-        mainTableView.delegate = self
-        mainTableView.dataSource = self
+        let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
+        let lastLoad = appData.defaults.value(forKey: "LastLoad") as? String ?? ""
+        
+        if today != lastLoad {
+            downloadFromDB()
+        }
+        
+        defaultFilter()
         addRefreshControll()
         let showCatsSwipe: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(showCats(_:)))
         showCatsSwipe.direction = .right
         view.addGestureRecognizer(showCatsSwipe)
-        calculateLabels()
         
+        calculateLabels()
+        mainTableView.delegate = self
+        mainTableView.dataSource = self
+        switchFromCoreData()
     }
     
     func defaultFilter() {
         
         selectedPeroud = "This Month"
-        filterTextLabel.text = "Filter: \(selectedPeroud)"
+        DispatchQueue.main.async {
+            self.filterTextLabel.text = "Filter: \(selectedPeroud)"
+        }
         appData.filter.showAll = false
-
         let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
         let monthInt = appData.filter.getMonthFromString(s: today)
         let yearInt = appData.filter.getYearFromString(s: today)
@@ -70,14 +75,6 @@ class ViewController: UIViewController {
         appData.filter.to = "\(dayTo).\(appData.filter.makeTwo(n: monthInt)).\(yearInt)"
         performFiltering(from: appData.filter.from, to: appData.filter.to, all: appData.filter.showAll)
         
-    }
-    
-    @objc func refresh(sender:AnyObject) {
-        
-        performSegue(withIdentifier: K.goToEditVCSeq, sender: self)
-        Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (timer) in
-            self.refreshControl.endRefreshing()
-        }
     }
     
     func performFiltering(from: String, to: String, all: Bool) {
@@ -102,46 +99,30 @@ class ViewController: UIViewController {
                 mydates.append(fmt.string(from: dateFrom))
                 dateFrom = Calendar.current.date(byAdding: .day, value: 1, to: dateFrom)!
             }
-            appendFiltered(dates: mydates)
+
+            var arr = appData.getTransactions()
+            arr.removeAll()
+            for number in 0..<mydates.count {
+                
+                for i in 0..<appData.getTransactions().count {
+                    if mydates[number] == appData.getTransactions()[i].date {
+                        arr.append(appData.getTransactions()[i])
+                    }
+                }
+            }
+            tableData = arr.sorted{ $0.dateFromString > $1.dateFromString }
+            DispatchQueue.main.async {
+                self.mainTableView.reloadData()
+            }
         }
-        appData.styles.showNoDataLabel(noTableDataLabel, tableData: tableData)
         allSelectedTransactionsData = tableData
         print("performFiltering FROM: \(from), TO: \(to), SHOW ALL: \(all)")
         
     }
     
-    func appendFiltered(dates: [String]) {
-           
-        var arr = appData.getTransactions()
-        arr.removeAll()
-        for number in 0..<dates.count {
-            
-            for i in 0..<appData.getTransactions().count {
-                if dates[number] == appData.getTransactions()[i].date {
-                    arr.append(appData.getTransactions()[i])
-                }
-            }
-        }
-        tableData = arr.sorted{ $0.dateFromString > $1.dateFromString }
-        DispatchQueue.main.async {
-            self.mainTableView.reloadData()
-        }
-        
-        print("appendFiltered")
-    }
-    
-    @IBAction func statisticLabelPressed(_ sender: UIButton) {
-        
-        switch sender.tag {
-        case 0: expenseLabelPressed = true
-        case 1: expenseLabelPressed = false
-        default: expenseLabelPressed = true
-        }
-        performSegue(withIdentifier: K.statisticSeque, sender: self)
-    }
-    
     func deleteRow(at: Int) {
         
+        deleteFromDB(at: at)
         tableData.remove(at: at)
         DispatchQueue.main.async {
             self.mainTableView.reloadData()
@@ -176,6 +157,21 @@ class ViewController: UIViewController {
         }
     }
     
+    func filter() {
+        if appData.filter.from == "" && appData.filter.to == "" && appData.filter.showAll == false {
+            self.defaultFilter()
+            self.calculateLabels()
+            print("no selected for filter, showing default filter")
+        } else {
+            DispatchQueue.main.async {
+                self.filterTextLabel.text = "Filter: \(selectedPeroud)"
+            }
+            self.performFiltering(from: appData.filter.from, to: appData.filter.to, all: appData.filter.showAll)
+            self.calculateLabels()
+            print("Filter: \(selectedPeroud)")
+        }
+    }
+    
     @IBAction func unwindToFilter(segue: UIStoryboardSegue) {
         
         DispatchQueue.global(qos: .userInitiated).async {
@@ -203,21 +199,102 @@ class ViewController: UIViewController {
         mainTableView.addSubview(refreshControl)
     }
     
-    @objc func showCats(_ gesture: UISwipeGestureRecognizer) {
+    @objc func refresh(sender:AnyObject) {
         
-        performSegue(withIdentifier: "toCatsVC", sender: self)
+        //performSegue(withIdentifier: K.goToEditVCSeq, sender: self)
+        downloadFromDB()
+        filter()
+        Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (timer) in
+            self.refreshControl.endRefreshing()
+        }
     }
     
     func calculateLabels() {
         
-        appData.calculation.recalculation(i: incomeLabel, e: expenseLabel, data: tableData)
+        recalculation(i: self.incomeLabel, e: self.expenseLabel, data: self.tableData)
+        calculateBalance(balanceLabel: self.balanceLabel)
+        
         statisticBrain.getlocalData(from: self.tableData)
         sumAllCategories = statisticBrain.statisticData
-        appData.calculation.calculateBalance(balanceLabel: balanceLabel)
+        
+        
+    }
+    
+    @objc func showCats(_ gesture: UISwipeGestureRecognizer) {
+        performSegue(withIdentifier: "toCatsVC", sender: self)
+    }
+    
+    @IBAction func statisticLabelPressed(_ sender: UIButton) {
+        
+        switch sender.tag {
+        case 0: expenseLabelPressed = true
+        case 1: expenseLabelPressed = false
+        default: expenseLabelPressed = true
+        }
+        performSegue(withIdentifier: K.statisticSeque, sender: self)
     }
     
     var previusSelected: IndexPath? = nil
     var selectedCell: IndexPath? = nil
+   
+    
+        
+//MARK: - MySQL
+    
+    func downloadFromDB() {
+        let load = LoadFromDB()
+        DispatchQueue.main.async {
+            load.Transactions { (loadedData) in
+                print("loaded \(loadedData.count) transactions from DB")
+                var dataStruct: [TransactionsStruct] = []
+                for i in 0..<loadedData.count {
+                    
+                    let value = loadedData[i][3]
+                    let category = loadedData[i][1]
+                    let date = loadedData[i][2]
+                    let comment = loadedData[i][4]
+                    dataStruct.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
+                }
+                appData.saveTransations(dataStruct)
+                //self.filter()
+            }
+        }
+        
+        DispatchQueue.main.async {
+            load.Categories { (loadedData) in
+                print("loaded \(loadedData.count) Categories from DB")
+                var dataStruct: [CategoriesStruct] = []
+                for i in 0..<loadedData.count {
+                    
+                    let name = loadedData[i][1]
+                    let purpose = loadedData[i][2]
+                    dataStruct.append(CategoriesStruct(name: name, purpose: purpose))
+                }
+                appData.saveCategories(dataStruct)
+            }
+        }
+        
+        
+        appData.defaults.setValue(appData.filter.getToday(appData.filter.filterObjects.currentDate), forKey: "LastLoad")
+        
+    }
+    func deleteFromDB(at: Int) {
+        
+        let Nickname = appData.username()
+        if Nickname != "" {
+            let Category = tableData[at].category
+            let Date = tableData[at].date
+            let Value = tableData[at].value
+            let Comment = tableData[at].comment
+            
+            let toDataString = "&Nickname=\(Nickname)" + "&Category=\(Category)" + "&Date=\(Date)" + "&Value=\(Value)" + "&Comment=\(Comment)"
+            let delete = DeleteFromDB()
+            delete.Transactions(toDataString: toDataString)
+            
+        } else {
+            print("noNickname")
+        }
+    }
     
     
 //MARK: - Core Data
@@ -270,15 +347,104 @@ class ViewController: UIViewController {
         }
         
     }
-    
     func loadItemsCoreData(_ request: NSFetchRequest<Transactions> = Transactions.fetchRequest(), predicate: NSPredicate? = nil) {
-        
+    
         do { appData.transactionsCoreData = try appData.context().fetch(request)
         } catch { print("\n\nERROR FETCHING DATA FROM CONTEXTE\n\n", error)}
         
         let catRequest: NSFetchRequest<Categories> = Categories.fetchRequest()
         do { appData.categoriesCoreData = try appData.context().fetch(catRequest)
         } catch { print("\n\nERROR FETCHING DATA FROM CONTEXTE\n\n", error)}
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        print("today is", appData.filter.getToday(appData.filter.filterObjects.currentDate))
+    }
+    
+
+//MARK: - Calculation
+    var sumIncomes: Double = 0.0
+    var sumExpenses: Double = 0.0
+    var sumPeriodBalance: Double = 0.0
+    var totalBalance = 0.0
+    
+    func recalculation(i:UILabel, e: UILabel, data: [TransactionsStruct]) {
+
+        sumIncomes = 0.0
+        sumExpenses = 0.0
+        sumPeriodBalance = 0.0
+        var arreyNegative: [Double] = [0.0]
+        var arreyPositive: [Double] = [0.0]
+        
+        for i in 0..<data.count {
+            sumPeriodBalance = sumPeriodBalance + (Double(data[i].value) ?? 0.0)
+            
+            if (Double(data[i].value) ?? 0.0) > 0 {
+                arreyPositive.append((Double(data[i].value) ?? 0.0))
+                sumIncomes = sumIncomes + (Double(data[i].value) ?? 0.0)
+                
+            } else {
+                arreyNegative.append((Double(data[i].value) ?? 0.0))
+                sumExpenses = sumExpenses + (Double(data[i].value) ?? 0.0)
+            }}
+        
+        if sumPeriodBalance < Double(Int.max), sumIncomes < Double(Int.max), sumExpenses < Double(Int.max) {
+            DispatchQueue.main.async {
+                i.text = "\(Int(self.sumIncomes))"
+                e.text = "\(Int(self.sumExpenses) * -1)"
+            }
+            
+            
+        } else {
+            DispatchQueue.main.async {
+                i.text = "\(self.sumIncomes)"
+                e.text = "\(self.sumExpenses * -1)"
+            }
+            
+        }
+        
+        print("recalculating labels")
+    }
+    func calculateBalance(balanceLabel: UILabel) {
+        
+        var totalExpenses = 0.0
+        var totalIncomes = 0.0
+        let transactions = appData.getTransactions()
+        
+        for i in 0..<transactions.count {
+
+            let value = Double(transactions[i].value) ?? 0.0
+            if value > 0.0 {
+                totalIncomes = totalIncomes + value
+            } else {
+                totalExpenses = totalExpenses + value
+            }
+        }
+        
+        totalBalance = totalIncomes + totalExpenses
+        
+        if totalBalance < Double(Int.max) {
+            DispatchQueue.main.async {
+                balanceLabel.text = "\(Int(self.totalBalance))"
+            }
+            
+            
+        } else {
+            DispatchQueue.main.async {
+                balanceLabel.text = "\(self.totalBalance)"
+            }
+            
+        }
+        
+        if totalBalance < 0.0 {
+            DispatchQueue.main.async {
+                balanceLabel.textColor = K.Colors.negative
+            }
+        } else {
+            DispatchQueue.main.async {
+                balanceLabel.textColor = K.Colors.balanceV
+            }
+        }
+        
     }
     
 }
@@ -306,8 +472,8 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            let calculationCell = tableView.dequeueReusableCell(withIdentifier: K.calcCellIdent, for: indexPath) as! calcCell
-            calculationCell.setupCell(appData.calculation.totalBalance)
+            guard let calculationCell = mainTableView.dequeueReusableCell(withIdentifier: K.calcCellIdent, for: IndexPath(row: 0, section: 0)) as? calcCell else {return UITableViewCell()}
+            calculationCell.setupCell(totalBalance, sumExpenses: sumExpenses, sumPeriodBalance: sumPeriodBalance, sumIncomes: sumIncomes)
             return calculationCell
             
         case 1:
@@ -315,6 +481,11 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             let transactionsCell = tableView.dequeueReusableCell(withIdentifier: K.mainCellIdent, for: indexPath) as! mainVCcell
             transactionsCell.setupCell(data, i: indexPath.row, tableData: tableData, selectedCell: selectedCell)
             appData.styles.dimNewCell(transactionsCell, index: indexPath.row, tableView: mainTableView)
+            if tableData.count == 0 {
+                noTableDataLabel.alpha = 0.5
+            } else {
+                noTableDataLabel.alpha = 0
+            }
             return transactionsCell
             
         case 2:
