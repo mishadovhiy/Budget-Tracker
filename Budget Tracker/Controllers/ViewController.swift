@@ -40,13 +40,6 @@ class ViewController: UIViewController {
     }
     
     func updateUI() {
-
-        let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
-        let lastLoad = appData.defaults.value(forKey: "LastLoad") as? String ?? ""
-        
-        if today != lastLoad {
-            downloadFromDB()
-        }
         
         defaultFilter()
         addRefreshControll()
@@ -256,24 +249,9 @@ class ViewController: UIViewController {
                     dataStruct.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
                 }
                 appData.saveTransations(dataStruct)
-                //self.filter()
+
             }
         }
-        
-        DispatchQueue.main.async {
-            load.Categories { (loadedData) in
-                print("loaded \(loadedData.count) Categories from DB")
-                var dataStruct: [CategoriesStruct] = []
-                for i in 0..<loadedData.count {
-                    
-                    let name = loadedData[i][1]
-                    let purpose = loadedData[i][2]
-                    dataStruct.append(CategoriesStruct(name: name, purpose: purpose))
-                }
-                appData.saveCategories(dataStruct)
-            }
-        }
-        
         
         appData.defaults.setValue(appData.filter.getToday(appData.filter.filterObjects.currentDate), forKey: "LastLoad")
         
@@ -362,6 +340,7 @@ class ViewController: UIViewController {
     
 
 //MARK: - Calculation
+    
     var sumIncomes: Double = 0.0
     var sumExpenses: Double = 0.0
     var sumPeriodBalance: Double = 0.0
@@ -449,7 +428,9 @@ class ViewController: UIViewController {
     
 }
 
+
 //MARK: - extension
+
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

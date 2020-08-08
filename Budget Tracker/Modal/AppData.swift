@@ -374,7 +374,11 @@ extension TransactionsStruct {
 
     var dateFromString: Date {
         let dateString = date.components(separatedBy: ".").reversed().joined(separator: ".")
-        return TransactionsStruct.isoFormatter.date(from: dateString)!
+        if TransactionsStruct.isoFormatter.date(from: dateString) == nil {
+            return Date.init(timeIntervalSince1970: 1)
+        } else {
+            return TransactionsStruct.isoFormatter.date(from: dateString)!
+        }
     }
     
 }

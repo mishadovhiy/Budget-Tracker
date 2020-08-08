@@ -49,8 +49,22 @@ class CategoriesVC: UIViewController {
     }
     
     @objc func refresh(sender:AnyObject) {
-        
-        addCategoryPressed(addButton)
+        let load = LoadFromDB()
+        load.Categories { (loadedData) in
+            print("loaded \(loadedData.count) Categories from DB")
+            var dataStruct: [CategoriesStruct] = []
+            for i in 0..<loadedData.count {
+                
+                let name = loadedData[i][1]
+                let purpose = loadedData[i][2]
+                dataStruct.append(CategoriesStruct(name: name, purpose: purpose))
+            }
+            appData.saveCategories(dataStruct)
+            self.tableData = appData.getCategories()
+            DispatchQueue.main.async {
+                self.categoriesTableView.reloadData()
+            }
+        }
         Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (timer) in
             self.refreshControl.endRefreshing()
         }
@@ -90,6 +104,7 @@ class CategoriesVC: UIViewController {
             let toDataString = "&Nickname=\(Nickname)" + "&Title=\(Title)" + "&Purpose=\(Purpose)"
             let save = SaveToDB()
             save.Categories(toDataString: toDataString)
+            
         } else {
             print(Nickname, "Nickname is nil")
         }
@@ -156,7 +171,6 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCell.EditingStyle.delete {
 
-            
             deteteFromDB(at: indexPath.row)
             tableData.remove(at: indexPath.row)
             appData.saveCategories(tableData)
