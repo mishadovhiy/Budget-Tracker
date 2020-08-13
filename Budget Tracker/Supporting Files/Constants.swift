@@ -39,6 +39,8 @@ struct K {
         static let unknExpense = "Uncategorized Expense"
         static let unknIncome = "Uncategorized Income"
         static let unknCat = "Uncategorized Category"
+        
+        static let errorInternet = "Bad internet, you still can use app in offline mode"
     }
     struct Colors {
         static let background = UIColor(named: "backgroundColor")

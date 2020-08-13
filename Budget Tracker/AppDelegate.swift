@@ -16,8 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func downloadFromDB() {
         let load = LoadFromDB()
-        DispatchQueue.main.async {
-            load.Transactions { (loadedData) in
+
+        load.Transactions(mainView: nil) { (loadedData) in
                 print("loaded \(loadedData.count) transactions from DB")
                 var dataStruct: [TransactionsStruct] = []
                 for i in 0..<loadedData.count {
@@ -29,12 +29,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     dataStruct.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
                 }
                 appData.saveTransations(dataStruct)
-                //self.filter()
-            }
         }
+
         
-        DispatchQueue.main.async {
-            load.Categories { (loadedData) in
+        load.Categories(mainView: nil) { (loadedData) in
                 print("loaded \(loadedData.count) Categories from DB")
                 var dataStruct: [CategoriesStruct] = []
                 for i in 0..<loadedData.count {
@@ -44,7 +42,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     dataStruct.append(CategoriesStruct(name: name, purpose: purpose))
                 }
                 appData.saveCategories(dataStruct)
-            }
         }
         
         
@@ -59,7 +56,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
          
          if today != lastLoad {
              downloadFromDB()
-         }
+         } else {
+            downloadFromDB()
+        }
         return true
     }
 

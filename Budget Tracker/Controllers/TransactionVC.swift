@@ -36,6 +36,11 @@ class TransitionVC: UIViewController {
     var editingValueHolder = 0.0
     var editingCommentHolder = ""
     
+    lazy var message: MessageView = {
+        let message = MessageView(self)
+        return message
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -153,19 +158,19 @@ class TransitionVC: UIViewController {
     }
     
     func addNew(value: String, category: String, date: String, comment: String) {
-        var allData = appData.getTransactions()
+        var allData = appData.transactions
 
         highliteDate = date
         UIImpactFeedbackGenerator().impactOccurred()
         allData.insert(TransactionsStruct(value: value, category: category, date: date, comment: comment), at: 0)
         print(TransactionsStruct(value: value, category: category, date: date, comment: comment))
         appData.saveTransations(allData)
-        let Nickname = appData.username()
+        let Nickname = appData.username
         if Nickname != "" {
             let toDataString = "&Nickname=\(Nickname)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
             
             let save = SaveToDB()
-            save.Transactions(toDataString: toDataString)
+            save.Transactions(toDataString: toDataString, mainView: self)
         } else {
             print(Nickname, "Nickname is nil")
         }

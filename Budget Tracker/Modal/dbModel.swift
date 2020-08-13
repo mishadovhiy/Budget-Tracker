@@ -10,8 +10,13 @@ import UIKit
 
 struct LoadFromDB {
     
-    func Transactions(completion: @escaping ([[String]]) -> ()) {
-        appData.defaults.setValue([], forKey: "transactionsData")
+    func showMessage(vc: UIViewController) {
+        let message = MessageView(vc)
+        message.showMessage(text: K.Text.errorInternet, type: .error, windowHeight: 50)
+    }
+    
+    func Transactions(mainView: UIViewController?, completion: @escaping ([[String]]) -> ()) {
+        
         var loadedData: [[String]] = []
         let urlPath = "https://www.dovhiy.com/apps/budget-tracker-db/transactions.php"
         let url: URL = URL(string: urlPath)!
@@ -19,7 +24,16 @@ struct LoadFromDB {
         let task = defaultSession.dataTask(with: url) { (data, response, error) in
             
             if error != nil {
-                print("downloadItems - Failed to download data from server")
+                if mainView != nil {
+                    DispatchQueue.main.async {
+                        self.showMessage(vc: mainView!)
+                    }
+                    return
+                } else {
+                    appData.unshowedErrors = "Transactions: " + K.Text.errorInternet
+                    return
+                }
+                
             } else {
                 var jsonResult = NSArray()
                 do{
@@ -33,8 +47,9 @@ struct LoadFromDB {
                 for i in 0..<jsonResult.count {
                     jsonElement = jsonResult[i] as! NSDictionary
                     
-                    if appData.username() != "" {
-                        if appData.username() == (jsonElement["Nickname"] as? String ?? "") {
+                    if appData.username != "" {
+                        if appData.username == (jsonElement["Nickname"] as? String ?? "") {
+                            appData.defaults.setValue([], forKey: "transactionsData")
                             if let name = jsonElement["Nickname"] as? String,
                                let category = jsonElement["Category"] as? String,
                                let date = jsonElement["Date"] as? String,
@@ -54,16 +69,16 @@ struct LoadFromDB {
             }
             
         }
-
+        
         DispatchQueue.main.async {
             task.resume()
         }
+
         
     }
     
-    func Categories(completion: @escaping ([[String]]) -> ()) {
+    func Categories(mainView: UIViewController?, completion: @escaping ([[String]]) -> ()) {
         
-        appData.defaults.setValue([], forKey: "categoriesData")
         var loadedData: [[String]] = []
         let urlPath = "https://www.dovhiy.com/apps/budget-tracker-db/categories.php"
         let url: URL = URL(string: urlPath)!
@@ -71,7 +86,16 @@ struct LoadFromDB {
         let task = defaultSession.dataTask(with: url) { (data, response, error) in
             
             if error != nil {
-                print("downloadItems - Failed to download data from server")
+                if mainView != nil {
+                    DispatchQueue.main.async {
+                        self.showMessage(vc: mainView!)
+                    }
+                    return
+                } else {
+                    appData.unshowedErrors = "Categories: " + K.Text.errorInternet
+                    return
+                }
+                
             } else {
                 var jsonResult = NSArray()
                 do{
@@ -85,8 +109,9 @@ struct LoadFromDB {
                 for i in 0..<jsonResult.count {
                     jsonElement = jsonResult[i] as! NSDictionary
                     
-                    if appData.username() != "" {
-                        if appData.username() == (jsonElement["Nickname"] as? String ?? "") {
+                    if appData.username != "" {
+                        if appData.username == (jsonElement["Nickname"] as? String ?? "") {
+                            appData.defaults.setValue([], forKey: "categoriesData")
                             if let name = jsonElement["Nickname"] as? String,
                                let title = jsonElement["Title"] as? String,
                                let purpose = jsonElement["Purpose"] as? String
@@ -111,7 +136,7 @@ struct LoadFromDB {
         
     }
     
-    func Users(completion: @escaping ([[String]]) -> ()) {
+    func Users(mainView: UIViewController?, completion: @escaping ([[String]]) -> ()) {
         
         var loadedData: [[String]] = []
         let urlPath = "https://www.dovhiy.com/apps/budget-tracker-db/users.php"
@@ -120,13 +145,23 @@ struct LoadFromDB {
         let task = defaultSession.dataTask(with: url) { (data, response, error) in
             
             if error != nil {
-                print("downloadItems - Failed to download data from server")
+                if mainView != nil {
+                    DispatchQueue.main.async {
+                        self.showMessage(vc: mainView!)
+                    }
+                    return
+                } else {
+                    appData.unshowedErrors = "User Data: " + K.Text.errorInternet
+                    return
+                }
+                
             } else {
                 var jsonResult = NSArray()
                 do{
                     jsonResult = try JSONSerialization.jsonObject(with: data!, options:JSONSerialization.ReadingOptions.allowFragments) as! NSArray
                 } catch let error as NSError {
                     print(error, "parseJSON - wrong db")
+                    return
                 }
                 
                 var jsonElement = NSDictionary()
@@ -163,23 +198,28 @@ struct LoadFromDB {
 
 struct SaveToDB {
     
-    func Transactions(toDataString: String) {
-        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-transaction.php", toDataString: toDataString)
+    func showMessage(vc: UIViewController) {
+        let message = MessageView(vc)
+        message.showMessage(text: K.Text.errorInternet, type: .error, windowHeight: 50)
     }
     
-    func Categories(toDataString: String) {
-        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-category.php", toDataString: toDataString)
+    func Transactions(toDataString: String, mainView: UIViewController) {
+        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-transaction.php", toDataString: toDataString, mainView: mainView, errorLoading: "Transactions")
     }
     
-    func Users(toDataString: String) {
-        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-user.php", toDataString: toDataString)
+    func Categories(toDataString: String, mainView: UIViewController) {
+        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-category.php", toDataString: toDataString, mainView: mainView, errorLoading: "Categories")
     }
     
-    func NewPassword(toDataString: String) {
-        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/user-password.php", toDataString: toDataString)
+    func Users(toDataString: String, mainView: UIViewController) {
+        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-user.php", toDataString: toDataString, mainView: mainView, errorLoading: "User Data")
+    }
+    
+    func NewPassword(toDataString: String, mainView: UIViewController) {
+        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/user-password.php", toDataString: toDataString, mainView: mainView, errorLoading: "User Data")
     }
 
-    private func save(dbFileURL: String, toDataString: String) {
+    private func save(dbFileURL: String, toDataString: String, mainView: UIViewController?, errorLoading: String) {
         
         let url = NSURL(string: dbFileURL)
         var request = URLRequest(url: url! as URL)
@@ -192,7 +232,16 @@ struct SaveToDB {
             let uploadJob = URLSession.shared.uploadTask(with: request, from: dataD) { data, response, error in
                 
                 if error != nil {
-                    print("no internet")
+                    if mainView != nil {
+                        DispatchQueue.main.async {
+                            self.showMessage(vc: mainView!)
+                        }
+                        return
+                    } else {
+                        appData.unshowedErrors = errorLoading + ": " + K.Text.errorInternet
+                        return
+                    }
+                    
                 } else {
                     if let unwrappedData = data {
                         let returnedData = NSString(data: unwrappedData, encoding: String.Encoding.utf8.rawValue)
@@ -220,17 +269,22 @@ struct SaveToDB {
 
 struct DeleteFromDB {
     
-    func Transactions(toDataString: String) {
-
-        delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-transaction.php", toDataString: toDataString)
+    func showMessage(vc: UIViewController) {
+        let message = MessageView(vc)
+        message.showMessage(text: K.Text.errorInternet, type: .error, windowHeight: 50)
     }
     
-    func Categories(toDataString: String) {
+    func Transactions(toDataString: String, mainView: UIViewController?) {
 
-        delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-category.php", toDataString: toDataString)
+        delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-transaction.php", toDataString: toDataString, mainView: mainView, errorLoading: "Transactions")
     }
     
-    private func delete(dbFileURL: String, toDataString: String) {
+    func Categories(toDataString: String, mainView: UIViewController?) {
+
+        delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-category.php", toDataString: toDataString, mainView: mainView, errorLoading: "Categories")
+    }
+    
+    private func delete(dbFileURL: String, toDataString: String, mainView: UIViewController?, errorLoading: String) {
         let url = NSURL(string: dbFileURL)
         var request = URLRequest(url: url! as URL)
         request.httpMethod = "POST"
@@ -244,7 +298,16 @@ struct DeleteFromDB {
             let uploadJob = URLSession.shared.uploadTask(with: request, from: dataD) { data, response, error in
                 
                 if error != nil {
-                    print("no internet")
+                    if mainView != nil {
+                        DispatchQueue.main.async {
+                            self.showMessage(vc: mainView!)
+                        }
+                        return
+                    } else {
+                        appData.unshowedErrors = errorLoading + ": " + K.Text.errorInternet
+                        return
+                    }
+                    
                 } else {
                     if let unwrappedData = data {
                         let returnedData = NSString(data: unwrappedData, encoding: String.Encoding.utf8.rawValue)

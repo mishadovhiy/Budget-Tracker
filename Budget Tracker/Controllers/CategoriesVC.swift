@@ -50,7 +50,7 @@ class CategoriesVC: UIViewController {
     
     @objc func refresh(sender:AnyObject) {
         let load = LoadFromDB()
-        load.Categories { (loadedData) in
+        load.Categories(mainView: self) { (loadedData) in
             print("loaded \(loadedData.count) Categories from DB")
             var dataStruct: [CategoriesStruct] = []
             for i in 0..<loadedData.count {
@@ -97,13 +97,13 @@ class CategoriesVC: UIViewController {
     
     func sendToDB() {
         
-        let Nickname = appData.username()
+        let Nickname = appData.username
         if Nickname != "" {
             let Title = catData.categoryTextField.text ?? ""
             let Purpose = catData.allPurposes[catData.selectedPurpose]
             let toDataString = "&Nickname=\(Nickname)" + "&Title=\(Title)" + "&Purpose=\(Purpose)"
             let save = SaveToDB()
-            save.Categories(toDataString: toDataString)
+            save.Categories(toDataString: toDataString, mainView: self)
             
         } else {
             print(Nickname, "Nickname is nil")
@@ -114,11 +114,11 @@ class CategoriesVC: UIViewController {
     func deteteFromDB(at: Int) {
         let delete = DeleteFromDB()
         
-        let Nickname = appData.username()
+        let Nickname = appData.username
         let Title = tableData[at].name
         let Purpose = tableData[at].purpose
         let toDataString = "&Nickname=\(Nickname)" + "&Title=\(Title)" + "&Purpose=\(Purpose)"
-        delete.Categories(toDataString: toDataString)
+        delete.Categories(toDataString: toDataString, mainView: self)
     }
     
     @IBAction func addCategoryPressed(_ sender: UIButton) {

@@ -16,7 +16,7 @@ class FilterTVC: UITableViewController {
     var years = [""]
     var sectionsCount = 3
     var buttonTitle = ["All Time", "This Month", "Today", "Yesterday", "Custom"]
-    let data = appData.getTransactions()
+    let data = appData.transactions
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,8 +72,7 @@ class FilterTVC: UITableViewController {
     }
     
     @IBAction func closePressed(_ sender: UIButton) {
-        
-        self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
+        self.dismiss(animated: true, completion: nil)
     }
     
     func getTitleSectionFor(data: [String], title: String) -> String {

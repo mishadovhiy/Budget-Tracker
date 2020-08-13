@@ -28,17 +28,21 @@ class ViewController: UIViewController {
     @IBOutlet weak var incomeLabel: UILabel!
     @IBOutlet weak var expenseLabel: UILabel!
     var refreshControl = UIRefreshControl()
-    var tableData = appData.getTransactions().sorted{ $0.dateFromString > $1.dateFromString }
+    var tableData = appData.transactions.sorted{ $0.dateFromString > $1.dateFromString }
     var alerts = Alerts()
     
+    
+    lazy var message: MessageView = {
+        let message = MessageView(self)
+        return message
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        appData.setUsername("Misha")
         updateUI()
-        
     }
-    
+
     func updateUI() {
         
         defaultFilter()
@@ -46,7 +50,6 @@ class ViewController: UIViewController {
         let showCatsSwipe: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(showCats(_:)))
         showCatsSwipe.direction = .right
         view.addGestureRecognizer(showCatsSwipe)
-        
         calculateLabels()
         mainTableView.delegate = self
         mainTableView.dataSource = self
@@ -79,7 +82,7 @@ class ViewController: UIViewController {
         var dateTo = Date()
         let fmt = DateFormatter()
         if all == true {
-            tableData = appData.getTransactions().sorted{ $0.dateFromString > $1.dateFromString }
+            tableData = appData.transactions.sorted{ $0.dateFromString > $1.dateFromString }
             DispatchQueue.main.async {
                 self.mainTableView.reloadData()
             }
@@ -93,13 +96,13 @@ class ViewController: UIViewController {
                 dateFrom = Calendar.current.date(byAdding: .day, value: 1, to: dateFrom)!
             }
 
-            var arr = appData.getTransactions()
+            var arr = appData.transactions
             arr.removeAll()
             for number in 0..<mydates.count {
                 
-                for i in 0..<appData.getTransactions().count {
-                    if mydates[number] == appData.getTransactions()[i].date {
-                        arr.append(appData.getTransactions()[i])
+                for i in 0..<appData.transactions.count {
+                    if mydates[number] == appData.transactions[i].date {
+                        arr.append(appData.transactions[i])
                     }
                 }
             }
@@ -150,7 +153,18 @@ class ViewController: UIViewController {
         }
     }
     
+    @IBAction func homeVC(segue: UIStoryboardSegue) {
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            DispatchQueue.main.async {
+                self.downloadFromDB()
+                self.filter()
+            }
+        }
+    }
+    
     func filter() {
+        
         if appData.filter.from == "" && appData.filter.to == "" && appData.filter.showAll == false {
             self.defaultFilter()
             self.calculateLabels()
@@ -194,7 +208,6 @@ class ViewController: UIViewController {
     
     @objc func refresh(sender:AnyObject) {
         
-        //performSegue(withIdentifier: K.goToEditVCSeq, sender: self)
         downloadFromDB()
         filter()
         Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (timer) in
@@ -206,15 +219,13 @@ class ViewController: UIViewController {
         
         recalculation(i: self.incomeLabel, e: self.expenseLabel, data: self.tableData)
         calculateBalance(balanceLabel: self.balanceLabel)
-        
         statisticBrain.getlocalData(from: self.tableData)
         sumAllCategories = statisticBrain.statisticData
-        
         
     }
     
     @objc func showCats(_ gesture: UISwipeGestureRecognizer) {
-        performSegue(withIdentifier: "toCatsVC", sender: self)
+        performSegue(withIdentifier: K.goToEditVCSeq, sender: self)
     }
     
     @IBAction func statisticLabelPressed(_ sender: UIButton) {
@@ -237,7 +248,7 @@ class ViewController: UIViewController {
     func downloadFromDB() {
         let load = LoadFromDB()
         DispatchQueue.main.async {
-            load.Transactions { (loadedData) in
+            load.Transactions(mainView: self) { (loadedData) in
                 print("loaded \(loadedData.count) transactions from DB")
                 var dataStruct: [TransactionsStruct] = []
                 for i in 0..<loadedData.count {
@@ -258,7 +269,7 @@ class ViewController: UIViewController {
     }
     func deleteFromDB(at: Int) {
         
-        let Nickname = appData.username()
+        let Nickname = appData.username
         if Nickname != "" {
             let Category = tableData[at].category
             let Date = tableData[at].date
@@ -267,13 +278,16 @@ class ViewController: UIViewController {
             
             let toDataString = "&Nickname=\(Nickname)" + "&Category=\(Category)" + "&Date=\(Date)" + "&Value=\(Value)" + "&Comment=\(Comment)"
             let delete = DeleteFromDB()
-            delete.Transactions(toDataString: toDataString)
+            delete.Transactions(toDataString: toDataString, mainView: self)
             
         } else {
             print("noNickname")
         }
     }
     
+    @IBAction func settingsPressed(_ sender: UIButton) {
+        performSegue(withIdentifier: "toSettings", sender: self)
+    }
     
 //MARK: - Core Data
     
@@ -281,7 +295,7 @@ class ViewController: UIViewController {
         
         loadItemsCoreData()
         if appData.transactionsCoreData.count != 0 {
-            var alldata = appData.getTransactions()
+            var alldata = appData.transactions
             
             for i in 0..<appData.transactionsCoreData.count  {
                 let value = "\(appData.transactionsCoreData[i].value)"
@@ -293,7 +307,7 @@ class ViewController: UIViewController {
                 
             }
             appData.saveTransations(alldata)
-            print(appData.getTransactions(), "transactions setted to defaults")
+            print(appData.transactions, "transactions setted to defaults")
             
             DispatchQueue.main.async {
                 self.mainTableView.reloadData()
@@ -387,7 +401,7 @@ class ViewController: UIViewController {
         
         var totalExpenses = 0.0
         var totalIncomes = 0.0
-        let transactions = appData.getTransactions()
+        let transactions = appData.transactions
         
         for i in 0..<transactions.count {
 

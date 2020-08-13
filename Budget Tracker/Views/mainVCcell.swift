@@ -36,7 +36,7 @@ class mainVCcell: UITableViewCell {
         if selectedCell != nil {
             if selectedCell!.row == i && commentLabel.text != "" {
                 commentLabel.isHidden = false
-                
+                categoryLabel.text = data.category
             }
         }
         

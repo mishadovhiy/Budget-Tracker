@@ -27,17 +27,42 @@ class AppData {
     
     let defaults = UserDefaults.standard
     
-    func setUsername(_ username: String) {
-        defaults.set(username, forKey: "username")
+    var unshowedErrors = ""
+    
+    var username: String {
+        get{
+            return defaults.value(forKey: "username") as? String ?? ""
+        }
+        set(value){
+            print("new username setted - \(value)")
+            defaults.set(value, forKey: "username")
+        }
     }
-    func username() -> String {
-        return defaults.value(forKey: "username") as? String ?? ""
+    var password: String {
+        get{
+            return defaults.value(forKey: "password") as? String ?? ""
+        }
+        set(value){
+            print("new password setted - \(value)")
+            defaults.set(value, forKey: "password")
+        }
     }
+    
+    var unshowedError: String {
+        get{
+            return defaults.value(forKey: "unshowedError") as? String ?? ""
+        }
+        set(value){
+            print("error saved - \(value)")
+            defaults.set(value, forKey: "unshowedError")
+        }
+    }
+    
     
     func saveTransations(_ data: [TransactionsStruct]) {
         var dict: [[String]] = []
         for i in 0..<data.count {
-            let nickname = username()
+            let nickname = username
             let value = data[i].value
             let category = data[i].category
             let date = data[i].date
@@ -49,23 +74,25 @@ class AppData {
         defaults.set(dict, forKey: "transactionsData")
     }
 
-    func getTransactions() -> [TransactionsStruct] {
-        let localData = defaults.value(forKey: "transactionsData") as? [[String]] ?? []
-        var results: [TransactionsStruct] = []
-        for i in 0..<localData.count {
-            let value = localData[i][1]
-            let category = localData[i][2]
-            let date = localData[i][3]
-            let comment = localData[i][4]
-            results.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
+    var transactions: [TransactionsStruct] {
+        get {
+            let localData = defaults.value(forKey: "transactionsData") as? [[String]] ?? []
+            var results: [TransactionsStruct] = []
+            for i in 0..<localData.count {
+                let value = localData[i][1]
+                let category = localData[i][2]
+                let date = localData[i][3]
+                let comment = localData[i][4]
+                results.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
+            }
+            return results
         }
-        return results
     }
 
     func saveCategories(_ data: [CategoriesStruct]) {
         var dict: [[String]] = []
         for i in 0..<data.count {
-            let nickname = username()
+            let nickname = username
             let name = data[i].name
             let purpose = data[i].purpose
             
@@ -94,7 +121,6 @@ class AppData {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy"
         return dateFormatter.string(from: sender.date)
-        
     }
     
     
@@ -187,7 +213,7 @@ class AppData {
             
             var totalExpenses = 0.0
             var totalIncomes = 0.0
-            let transactions = appData.getTransactions()
+            let transactions = appData.transactions
             
             for i in 0..<transactions.count {
 
