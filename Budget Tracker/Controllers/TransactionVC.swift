@@ -36,6 +36,8 @@ class TransitionVC: UIViewController {
     var editingValueHolder = 0.0
     var editingCommentHolder = ""
     
+    var pressedValueArrey: [String] =  []
+    
     lazy var message: MessageView = {
         let message = MessageView(self)
         return message
@@ -283,15 +285,19 @@ class TransitionVC: UIViewController {
             pressedValue = ""
         }
         if pressedValue.count != 7 {
-            pressedValue = pressedValue + sender.currentTitle!
             AudioServicesPlaySystemSound(1104)
+            pressedValue = pressedValue + (sender.currentTitle ?? "")
             if pressedValue != "0" {
                 minusPlusLabel.alpha = 1
             }
         } else {
             UIImpactFeedbackGenerator().impactOccurred()
         }
-        valueLabel.text = pressedValue
+        DispatchQueue.main.async {
+            self.valueLabel.text = self.pressedValue
+        }
+        
+        
     }
     
     @IBAction func erasePressed(_ sender: UIButton) {

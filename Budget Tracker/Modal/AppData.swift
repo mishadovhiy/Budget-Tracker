@@ -29,6 +29,8 @@ class AppData {
     
     var unshowedErrors = ""
     
+    var internetPresend = false
+    
     var username: String {
         get{
             return defaults.value(forKey: "username") as? String ?? ""
@@ -111,6 +113,19 @@ class AppData {
             results.append(CategoriesStruct(name: name, purpose: purpose))
         }
         return results
+    }
+    
+    func createFirstData() {
+        let transactions = [
+            TransactionsStruct(value: "5000", category: "Freelance", date: "\(filter.getToday(appData.filter.filterObjects.currentDate))", comment: ""),
+            TransactionsStruct(value: "-350", category: "Food", date: "\(filter.getToday(appData.filter.filterObjects.currentDate))", comment: "")
+        ]
+        let categories = [
+            CategoriesStruct(name: "Food", purpose: K.expense),
+            CategoriesStruct(name: "Work", purpose: K.income)
+        ]
+        saveTransations(transactions)
+        saveCategories(categories)
     }
     
     var selectedExpense = 0

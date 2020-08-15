@@ -14,7 +14,7 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
 
     let tableData = [
-        SettingsSctruct(title: "Sing Out", description: appData.username, segue: appData.username == "" ? "toSingIn" : "toDontGo"),
+        SettingsSctruct(title: appData.username == "" ? "Sing Out" : "Sing in", description: appData.username, segue: appData.username == "" ? "toSingIn" : "toDontGo"),
         SettingsSctruct(title: "Categories", description: "All Categories (\(appData.getCategories().count))", segue: "settingsToCategories"),
         SettingsSctruct(title: "Filter", description: selectedPeroud, segue: "settingsToFilter")
     ]

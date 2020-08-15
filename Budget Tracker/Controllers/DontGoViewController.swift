@@ -80,13 +80,18 @@ class DontGoViewController: UIViewController {
             self.dismiss(animated: true, completion: nil)
         case 2:
             print("don't save")
+            appData.username = ""
+            appData.saveTransations([])
+            appData.saveCategories([])
             self.performSegue(withIdentifier: "toSingIn", sender: self)
         case 3:
             print("save")
-            self.dismiss(animated: true, completion: nil)
+            appData.username = ""
+            self.performSegue(withIdentifier: "toSingIn", sender: self)
 
         default:
             print("error")
+            self.dismiss(animated: true, completion: nil)
         }
     }
     

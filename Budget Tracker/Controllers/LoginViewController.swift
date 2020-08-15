@@ -40,9 +40,6 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        //if no internet
-        //u cant create an account now, plese come back when you'll be connected to the internet and try again later
         
         message.initMessage()
         print("username: \(appData.username)")
@@ -67,6 +64,10 @@ class LoginViewController: UIViewController {
         for i in 0..<textfields.count {
             textfields[i].delegate = self
             textfields[i].addTarget(self, action: #selector(textfieldValueChanged), for: .editingChanged)
+            textfields[i].layer.masksToBounds = true
+            textfields[i].layer.cornerRadius = 6
+            textfields[i].setRightPaddingPoints(5)
+            textfields[i].setLeftPaddingPoints(5)
         }
         
         let hideKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboardTapped))
@@ -96,17 +97,25 @@ class LoginViewController: UIViewController {
         
         let bounds = UIScreen.main.bounds
         let height = bounds.height
+        let secondAnimation = animation == 0 ? 0 : animation - 0.4
+        let thirdAnimation = animation == 0 ? 0 : animation + 0.5
         
         switch options {
         case .logIn:
             obthervValues = false
             for i in 0..<textfields.count {
-                textfields[i].backgroundColor = K.Colors.background
+                textfields[i].backgroundColor = K.Colors.loginColor
             }
             message.hideMessage()
             UIView.animate(withDuration: animation) {
                 self.createAcount.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, height * (-2), 0)
                 self.logIn.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+            }
+            UIView.animate(withDuration: secondAnimation) {
+                self.createAcount.alpha = 0
+            }
+            UIView.animate(withDuration: thirdAnimation) {
+                self.logIn.alpha = 1
             }
             createOrLogLabel.text = "Don't have an account?"
             createOrLogButton.setTitle("Create", for: .normal)
@@ -115,12 +124,18 @@ class LoginViewController: UIViewController {
         case .singIn:
             obthervValues = false
             for i in 0..<textfields.count {
-                textfields[i].backgroundColor = K.Colors.background
+                textfields[i].backgroundColor = K.Colors.loginColor
             }
             message.hideMessage()
             UIView.animate(withDuration: animation) {
                 self.createAcount.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
                 self.logIn.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, height * (2), 0)
+            }
+            UIView.animate(withDuration: secondAnimation) {
+                self.logIn.alpha = 0
+            }
+            UIView.animate(withDuration: thirdAnimation) {
+                self.createAcount.alpha = 1
             }
             createOrLogLabel.text = "Already have an account?"
             createOrLogButton.setTitle("Log in", for: .normal)
@@ -201,7 +216,7 @@ class LoginViewController: UIViewController {
         
         UIView.animate(withDuration: 0.3) {
             for i in 0..<self.textfields.count {
-                self.textfields[i].backgroundColor = self.textfields[i].text == "" ? K.Colors.negative : K.Colors.background
+                self.textfields[i].backgroundColor = self.textfields[i].text == "" ? K.Colors.negative : K.Colors.loginColor
             }
         }
         
@@ -233,9 +248,7 @@ class LoginViewController: UIViewController {
                     if password != psswordFromDB {
                         if self.wrongPasswordCount < 3 {
                             self.wrongPasswordCount += 1
-                            DispatchQueue.main.async {
-                                self.message.showMessage(text: "wrong password \nYou have \(4 - self.wrongPasswordCount) attemps", type: .staticError, windowHeight: 50)
-                            }
+                            self.message.showMessage(text: "wrong password \nYou have \(4 - self.wrongPasswordCount) attemps", type: .staticError, windowHeight: 50)
                                     
                         } else {
                             self.message.showMessage(text: "reseting password..", type: .staticError, windowHeight: 30)
@@ -246,6 +259,7 @@ class LoginViewController: UIViewController {
                     } else {
                         appData.username = nickname
                         appData.password = password
+                        self.message.showMessage(text: "wellcome, \(nickname)", type: .succsess, windowHeight: 30)
                         DispatchQueue.main.async {
                             self.performSegue(withIdentifier: "homeVC", sender: self)
                         }
@@ -322,5 +336,19 @@ extension LoginViewController: UITextFieldDelegate {
         }
 
         return true
+    }
+}
+
+
+extension UITextField {
+    func setLeftPaddingPoints(_ amount:CGFloat){
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.size.height))
+        self.leftView = paddingView
+        self.leftViewMode = .always
+    }
+    func setRightPaddingPoints(_ amount:CGFloat) {
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.size.height))
+        self.rightView = paddingView
+        self.rightViewMode = .always
     }
 }

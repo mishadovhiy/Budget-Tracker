@@ -24,6 +24,7 @@ struct LoadFromDB {
         let task = defaultSession.dataTask(with: url) { (data, response, error) in
             
             if error != nil {
+                appData.internetPresend = false
                 if mainView != nil {
                     DispatchQueue.main.async {
                         self.showMessage(vc: mainView!)
@@ -35,6 +36,7 @@ struct LoadFromDB {
                 }
                 
             } else {
+                appData.internetPresend = true
                 var jsonResult = NSArray()
                 do{
                     jsonResult = try JSONSerialization.jsonObject(with: data!, options:JSONSerialization.ReadingOptions.allowFragments) as! NSArray
@@ -86,6 +88,7 @@ struct LoadFromDB {
         let task = defaultSession.dataTask(with: url) { (data, response, error) in
             
             if error != nil {
+                appData.internetPresend = false
                 if mainView != nil {
                     DispatchQueue.main.async {
                         self.showMessage(vc: mainView!)
@@ -97,6 +100,7 @@ struct LoadFromDB {
                 }
                 
             } else {
+                appData.internetPresend = true
                 var jsonResult = NSArray()
                 do{
                     jsonResult = try JSONSerialization.jsonObject(with: data!, options:JSONSerialization.ReadingOptions.allowFragments) as! NSArray
@@ -145,6 +149,7 @@ struct LoadFromDB {
         let task = defaultSession.dataTask(with: url) { (data, response, error) in
             
             if error != nil {
+                appData.internetPresend = false
                 if mainView != nil {
                     DispatchQueue.main.async {
                         self.showMessage(vc: mainView!)
@@ -156,6 +161,7 @@ struct LoadFromDB {
                 }
                 
             } else {
+                appData.internetPresend = true
                 var jsonResult = NSArray()
                 do{
                     jsonResult = try JSONSerialization.jsonObject(with: data!, options:JSONSerialization.ReadingOptions.allowFragments) as! NSArray
@@ -232,6 +238,7 @@ struct SaveToDB {
             let uploadJob = URLSession.shared.uploadTask(with: request, from: dataD) { data, response, error in
                 
                 if error != nil {
+                    appData.internetPresend = false
                     if mainView != nil {
                         DispatchQueue.main.async {
                             self.showMessage(vc: mainView!)
@@ -247,7 +254,7 @@ struct SaveToDB {
                         let returnedData = NSString(data: unwrappedData, encoding: String.Encoding.utf8.rawValue)
                         
                         if returnedData == "1" {
-                            print("ok")
+                            appData.internetPresend = true
                         } else {
                             print("db error for (cats, etc), developer fault")
                         }
@@ -313,7 +320,7 @@ struct DeleteFromDB {
                         let returnedData = NSString(data: unwrappedData, encoding: String.Encoding.utf8.rawValue)
                         
                         if returnedData == "1" {
-                            print("ok")
+                            appData.internetPresend = true
                         } else {
                             print("db error for (cats, etc), developer fault")
                         }

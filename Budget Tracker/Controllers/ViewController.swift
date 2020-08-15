@@ -28,7 +28,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var incomeLabel: UILabel!
     @IBOutlet weak var expenseLabel: UILabel!
     var refreshControl = UIRefreshControl()
-    var tableData = appData.transactions.sorted{ $0.dateFromString > $1.dateFromString }
+    lazy var tableData = appData.transactions.sorted{ $0.dateFromString > $1.dateFromString }
     var alerts = Alerts()
     
     
@@ -41,6 +41,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         updateUI()
+        
     }
 
     func updateUI() {
@@ -54,6 +55,20 @@ class ViewController: UIViewController {
         mainTableView.delegate = self
         mainTableView.dataSource = self
         switchFromCoreData()
+        
+        appData.defaults.set(false, forKey: "firstLaunch")
+        if !(appData.defaults.value(forKey: "firstLaunch") as? Bool ?? false) {
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "toFirstLoad", sender: self)
+                Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { (a) in
+                    appData.createFirstData()
+                    self.filter()
+                }
+            }
+            appData.defaults.set(true, forKey: "firstLaunch")
+        }
+        
+    
     }
     
     func defaultFilter() {

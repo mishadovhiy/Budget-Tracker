@@ -52,6 +52,7 @@ struct K {
         static let yellow = UIColor(named: "yellowColor")
         static let pink = UIColor(named: "pinkColor")
         static let sectionBackground = UIColor(named: "sectionBackgroundColor")
+        static let loginColor = UIColor(named: "loginColor")
     }
 }
 

@@ -15,7 +15,7 @@ class CategoriesVC: UIViewController {
     @IBOutlet weak var categoriesTableView: UITableView!
     var catData = appData.categoryVC
     var refreshControl = UIRefreshControl()
-    var tableData = appData.getCategories()
+    lazy var tableData = appData.getCategories()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -181,7 +181,6 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
             }
         }
     }
-
     
     
 }
