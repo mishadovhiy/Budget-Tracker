@@ -71,34 +71,9 @@ class ViewController: UIViewController {
             }
             appData.defaults.set(false, forKey: "firstLaunch")
         }
-        
-        
-
     }
     
-    func invalidateTimer() {
-        print("invalidateTimer")
-        ckeckInternetTimer.invalidate()
-    }
-    lazy var ckeckInternetTimer = {
-        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (a) in
-            print("timer: ")
-            if appData.internetPresend == false {
-                print("refresh: appData.internetPresend == false")
-                self.filter()
-                self.invalidateTimer()
-            } else {
-                print("checking internet")
-                if appData.internetPresend == true {
-                    self.invalidateTimer()
-                }
-            }
-        }
-        
-    }()
     
-    
-    //its slow!
     func filter() {
         
         DispatchQueue.main.async {
@@ -176,22 +151,22 @@ class ViewController: UIViewController {
             var arr = tableData
             arr.removeAll()
             var matches = 0
-
-            for number in 0..<daysBetween.count {
-        
-                for i in 0..<appData.transactions.count {
-                    if daysBetween.count > number {
-                        if daysBetween[number] == appData.transactions[i].date {
+            
+            
+            let days = Array(daysBetween)
+            let transactions = Array(appData.transactions)
+            
+            for number in 0..<days.count {
+                for i in 0..<transactions.count {
+                    if days.count > number {
+                        if days[number] == transactions[i].date {
                             matches += 1
                             print("\(matches) performFiltering: arr.appended at \(i)")
-                            arr.append(appData.transactions[i])
-                            
+                            arr.append(transactions[i])
                         }
                     }
-                    
                 }
             }
-            
             self.tableData = arr.sorted{ $0.dateFromString > $1.dateFromString }
             allSelectedTransactionsData = self.tableData
             print("end performFiltering FROM: \(from), TO: \(to), SHOW ALL: \(all)")
@@ -263,6 +238,27 @@ class ViewController: UIViewController {
     var unsavedTransactionsCount = 0
     var previusSelected: IndexPath? = nil
     var selectedCell: IndexPath? = nil
+    
+    func invalidateTimer() {
+        print("invalidateTimer")
+        ckeckInternetTimer.invalidate()
+    }
+    lazy var ckeckInternetTimer = {
+        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (a) in
+            print("timer: ")
+            if appData.internetPresend == false {
+                print("refresh: appData.internetPresend == false")
+                self.filter()
+                self.invalidateTimer()
+            } else {
+                print("checking internet")
+                if appData.internetPresend == true {
+                    self.invalidateTimer()
+                }
+            }
+        }
+        
+    }()
    
     
         
