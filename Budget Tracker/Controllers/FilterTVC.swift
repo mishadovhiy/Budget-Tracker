@@ -5,7 +5,6 @@
 //  Created by Misha Dovhiy on 22.04.2020.
 //  Copyright © 2020 Misha Dovhiy. All rights reserved.
 //
-
 import UIKit
 import CoreData
 
@@ -140,6 +139,8 @@ class FilterTVC: UITableViewController {
             print("def")
         }
         
+        
+        
     }
     
     func defaultFilter() {
@@ -220,7 +221,6 @@ class FilterTVC: UITableViewController {
     
     
 // MARK: - Table view data source
-
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 3
     }
@@ -324,6 +324,8 @@ class FilterTVC: UITableViewController {
         default:
             print("def")
         }
+        
+        print("filterVC: appData.filter.from: \(appData.filter.from), appData.filter.to: \(appData.filter.to)")
         
     }
     

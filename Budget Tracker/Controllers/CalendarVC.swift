@@ -178,6 +178,9 @@ class CalendarVC: UIViewController {
         }
     }
     
+    //get all days for today year and month
+    //
+    
     func ifToSmaller() {
     
         if selectedFrom != "" && selectedTo != "" {
@@ -288,6 +291,7 @@ class CalendarVC: UIViewController {
     func allDaysBetween() {
         
         if getYearFrom(string: selectedTo) == getYearFrom(string: selectedFrom) {
+            
             let monthDifference = (getMonthFrom(string: selectedTo) - getMonthFrom(string: selectedFrom)) - 1
             var amount = selectedToDayInt + (31 - selectedFromDayInt) + (monthDifference * 31)
             if amount < 0 {

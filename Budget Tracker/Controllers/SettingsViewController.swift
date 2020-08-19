@@ -14,16 +14,25 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
 
     let tableData = [
-        SettingsSctruct(title: appData.username == "" ? "Sing Out" : "Sing in", description: appData.username, segue: appData.username == "" ? "toSingIn" : "toDontGo"),
+        SettingsSctruct(title: appData.username == "" ? "Sing in" : "Sing out", description: appData.username, segue: appData.username == "" ? "toSingIn" : "toDontGo"),
         SettingsSctruct(title: "Categories", description: "All Categories (\(appData.getCategories().count))", segue: "settingsToCategories"),
         SettingsSctruct(title: "Filter", description: selectedPeroud, segue: "settingsToFilter")
     ]
+    
+    lazy var message: MessageView = {
+        let message = MessageView(self)
+        return message
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         updateUI()
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        reloadAllfromDB()
     }
     
     func updateUI() {
@@ -59,6 +68,67 @@ class SettingsViewController: UIViewController {
         }
     }
     
+    func reloadAllfromDB() {
+        
+        print("reloadAllfromDB")
+        let load = LoadFromDB()
+        load.Users(mainView: self) { (loadedData) in
+            if loadedData.count > 0 {
+                appData.allUsers = loadedData
+                appData.internetPresend = true
+            } else {
+                print("users: appData.internetPresend = false")
+                appData.internetPresend = false
+                return
+            }
+        }
+        
+        load.Transactions(mainView: self) { (loadedData) in
+            print("loaded \(loadedData.count) transactions from DB")
+            var dataStruct: [TransactionsStruct] = []
+            for i in 0..<loadedData.count {
+                    
+                let value = loadedData[i][3]
+                let category = loadedData[i][1]
+                let date = loadedData[i][2]
+                let comment = loadedData[i][4]
+                dataStruct.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
+            }
+                
+            if loadedData.count > 0 {
+                appData.saveTransations(dataStruct)
+                appData.internetPresend = true
+
+            }
+        }
+
+        
+        load.Categories(mainView: self) { (loadedData) in
+            print("loaded \(loadedData.count) Categories from DB")
+            var dataStruct: [CategoriesStruct] = []
+            for i in 0..<loadedData.count {
+                    
+                let name = loadedData[i][1]
+                let purpose = loadedData[i][2]
+                dataStruct.append(CategoriesStruct(name: name, purpose: purpose))
+            }
+                
+            if loadedData.count > 0 {
+                appData.saveCategories(dataStruct)
+                appData.internetPresend = true
+                refreshDataComlition = true
+            }
+        }
+
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toSingIn" {
+            let vc = segue.destination as! LoginViewController
+            vc.selectedScreen = .logIn
+        }
+    }
+    
     
     
 //close
@@ -90,10 +160,30 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: tableData[indexPath.row].segue, sender: self)
+        
+        if indexPath.row != 0 {
+            performSegue(withIdentifier: tableData[indexPath.row].segue, sender: self)
+        } else {
+            if appData.internetPresend ?? false {
+                self.performSegue(withIdentifier: self.tableData[indexPath.row].segue, sender: self)
+                
+            } else {
+                DispatchQueue.init(label: "loaddata").async {
+                //    let _ = AppData.DB(username: appData.username, mainView: self)
+                }
+                self.message.showMessage(text: "No internet", type: .error)
+                
+            }
+            
+        }
+        
+        
+        
+        
         DispatchQueue.main.async {
             tableView.deselectRow(at: indexPath, animated: true)
         }
+        
         
     }
     

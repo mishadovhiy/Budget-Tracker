@@ -105,8 +105,6 @@ class CategoriesVC: UIViewController {
             let save = SaveToDB()
             save.Categories(toDataString: toDataString, mainView: self)
             
-        } else {
-            print(Nickname, "Nickname is nil")
         }
 
     }

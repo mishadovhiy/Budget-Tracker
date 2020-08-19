@@ -10,10 +10,11 @@ import UIKit
 
 class LoginViewController: UIViewController {
 
-    @IBOutlet weak var createOrLogLabel: UILabel!
-    @IBOutlet weak var createOrLogButton: UIButton!
     @IBOutlet weak var logIn: UIStackView!
     @IBOutlet weak var createAcount: UIStackView!
+    
+    @IBOutlet weak var createOrLogLabel: UILabel!
+    @IBOutlet weak var createOrLogButton: UIButton!
     @IBOutlet weak var logInButton: UIButton!
     @IBOutlet weak var createAccButton: UIButton!
     
@@ -24,6 +25,8 @@ class LoginViewController: UIViewController {
     
     @IBOutlet weak var nicknameLogLabel: UITextField!
     @IBOutlet weak var passwordLogLabel: UITextField!
+    @IBOutlet weak var closeButton: UIButton!
+    @IBOutlet var titleLabels: [UILabel]!
     
     var canUseThisName: Bool = true
     enum screenType {
@@ -31,27 +34,91 @@ class LoginViewController: UIViewController {
         case singIn
     }
     var selectedScreen: screenType = .singIn
-    var allUsers:[[String]] = []
     
     lazy var message: MessageView = {
         let message = MessageView(self)
         return message
     }()
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        message.initMessage()
+        downloadFromDB()
         print("username: \(appData.username)")
-        let load = LoadFromDB()
-        load.Users(mainView: self) { (data) in
-            print(data, "allusers")
-            for i in 0..<data.count {
-                self.allUsers.append([data[i][0], data[i][1], data[i][2], data[i][3]])
+        updateUI()
+        NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+
+    }
+    
+    func downloadFromDB() {
+           
+           appData.internetPresend = nil
+           let load = LoadFromDB()
+           load.Users(mainView: self) { (loadedData) in
+               appData.allUsers = loadedData
+           }
+    }
+
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+            if keyboardHeight > 1.0 {
+                
+                if selectedScreen == .singIn {
+                    UIView.animate(withDuration: 0.6) {
+                        self.view.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, self.createAcount.frame.minY * (-1) + 20, 0)
+                    }
+                } else {
+                    UIView.animate(withDuration: 0.6) {
+                        self.view.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, self.logIn.frame.minY * (-1) + 20, 0)
+                    }
+                }
+                UIView.animate(withDuration: 0.3) {
+                    self.closeButton.alpha = 0
+                }
+                for i in 0..<titleLabels.count {
+                    UIView.animate(withDuration: 0.2) {
+                        self.titleLabels[i].textColor = K.Colors.balanceT
+                    }
+                }
+                
             }
         }
-        updateUI()
-
+        
+        
+    }
+    
+    @objc func keyboardWillHide(_ notification: Notification) {
+        
+        if selectedScreen == .singIn {
+            UIView.animate(withDuration: 0.6) {
+                self.view.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+            }
+        } else {
+            UIView.animate(withDuration: 0.6) {
+                self.view.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+            }
+        }
+        UIView.animate(withDuration: 0.6) {
+            self.closeButton.alpha = 1
+        }
+        for i in 0..<titleLabels.count {
+            UIView.animate(withDuration: 0.2) {
+                self.titleLabels[i].textColor = K.Colors.category
+            }
+        }
+        
+        
+    }
+    
+    @objc func textfieldValueChanged(_ textField: UITextField) {
+        message.hideMessage()
+        if obthervValues {
+            showWrongFields()
+        }
     }
 
     var textfields: [UITextField] {
@@ -86,19 +153,13 @@ class LoginViewController: UIViewController {
         }
     }
     
-    @objc func textfieldValueChanged(_ textField: UITextField) {
-        message.hideMessage()
-        if obthervValues {
-            showWrongFields()
-        }
-    }
-    
     func toggleScreen(options: screenType, animation: TimeInterval = 0.6) {
         
         let bounds = UIScreen.main.bounds
         let height = bounds.height
         let secondAnimation = animation == 0 ? 0 : animation - 0.4
         let thirdAnimation = animation == 0 ? 0 : animation + 0.5
+        selectedScreen = options
         
         switch options {
         case .logIn:
@@ -159,56 +220,90 @@ class LoginViewController: UIViewController {
     
     @IBAction func logInPressed(_ sender: UIButton) {
         
-        hideKeyboard()
-        let name = nicknameLogLabel.text ?? ""
-        let password = passwordLogLabel.text ?? ""
-        
-        if name != "" && password != "" {
-            logIn(nickname: name, password: password)
-        } else {
-            message.showMessage(text: "All fields are required", type: .staticError, windowHeight: 50)
-            obthervValues = true
-            showWrongFields()
+        DispatchQueue.main.async {
+            self.downloadFromDB()
         }
+        if appData.internetPresend != false {
+            hideKeyboard()
+            let name = nicknameLogLabel.text ?? ""
+            let password = passwordLogLabel.text ?? ""
+            
+            if name != "" && password != "" {
+                self.message.showMessage(text: "Checking data...", type: .succsess)
+                logIn(nickname: name, password: password)
+                
+            } else {
+                message.showMessage(text: "All fields are required", type: .staticError, windowHeight: 50)
+                obthervValues = true
+                showWrongFields()
+            }
+            
+        }
+        
         
     }
     
     @IBAction func createAccountPressed(_ sender: Any) {
         
-        hideKeyboard()
-        let name = nicknameLabelCreate.text ?? ""
-        let email = emailLabel.text ?? ""
-        let password = passwordLabel.text ?? ""
-        let regDate = appData.filter.getToday(appData.filter.filterObjects.currentDate)
-        
-        print("createAccountPressed")
-        
-        if password == confirmPasswordLabel.text ?? "" {
-            if name != "" && email != "" && password != "" {
-                if userExists(name: name) == false  {
-                    registration(nickname: name, email: email, password: password, registrationDate: regDate)
-                    appData.username = name
-                    appData.password = password
-                    self.message.showMessage(text: "new user: \(name) has created", type: .succsess)
-                    DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: "homeVC", sender: self)
-                    }
-                    print("new user: \(name) has created")
-                } else {
-                    message.showMessage(text: "username '\(name)' is already taken", type: .staticError, windowHeight: 50)
-                    print("username '\(name)' is already taken")
-                }
-            
-            } else {
-                obthervValues = true
-                showWrongFields()
-                message.showMessage(text: "all fields are required", type: .staticError, windowHeight: 50)
-                print("all fields are required")
-            }
-        } else {
-            message.showMessage(text: "passwords not much", type: .staticError, windowHeight: 50)
-            print("passwords not much")
+        DispatchQueue.main.async {
+            self.downloadFromDB()
         }
+     //   if appData.internetPresend != false {
+            hideKeyboard()
+            let name = nicknameLabelCreate.text ?? ""
+            let email = emailLabel.text ?? ""
+            let password = passwordLabel.text ?? ""
+            let regDate = appData.filter.getToday(appData.filter.filterObjects.currentDate)
+            
+            print("createAccountPressed")
+            
+            if password == confirmPasswordLabel.text ?? "" {
+                if name != "" && email != "" && password != "" {
+                    if userExists(name: name) == false  {
+                        appData.username = name
+                        self.message.showMessage(text: "Checking data...\nfor: \(name), \(name)", type: .succsess, windowHeight: 30)
+                        appData.username = name
+                        if appData.internetPresend != nil {
+                            if (appData.internetPresend ?? false) {
+                                appData.password = password
+                                self.message.showMessage(text: "wellcome, \(name)", type: .succsess, windowHeight: 30)
+                                
+                                if appData.transactions.count > 0 {
+                                    print(appData.transactions.count, "appData.transactions.count")
+                                } else {
+                                    Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { (a) in
+                                        DispatchQueue.main.async {
+                                            self.performSegue(withIdentifier: "homeVC", sender: self)
+                                        }
+                                    }
+                                }
+                                
+                                
+                            } else {
+                                appData.username = ""
+                            }
+                        }
+                        
+                        print("new user: \(name) has created")
+                    } else {
+                        message.showMessage(text: "username '\(name)' is already taken", type: .staticError, windowHeight: 50)
+                        print("username '\(name)' is already taken")
+                    }
+                
+                } else {
+                    obthervValues = true
+                    showWrongFields()
+                    message.showMessage(text: "all fields are required", type: .staticError, windowHeight: 50)
+                    print("all fields are required")
+                }
+            } else {
+                message.showMessage(text: "passwords not much", type: .staticError, windowHeight: 50)
+                print("passwords not much")
+            }
+            
+      //  }
+        
+        
     }
     
     var obthervValues = false
@@ -225,7 +320,7 @@ class LoginViewController: UIViewController {
     var wrongPasswordCount = 0
     func logIn(nickname: String, password: String) {
         
-        print(allUsers)
+        print(appData.allUsers)
 
         let DBusernameIndex = 0
         let DBemailIndex = 1
@@ -236,13 +331,12 @@ class LoginViewController: UIViewController {
         var emailFromDB = ""
         var registrationDateFromDB = ""
             
-        
         if userExists(name: nickname) {
-            for i in 0..<allUsers.count {
-                if allUsers[i][DBusernameIndex] == nickname {
-                    psswordFromDB = allUsers[i][DBpasswordIndex]
-                    emailFromDB = allUsers[i][DBemailIndex]
-                    registrationDateFromDB = allUsers[i][DBRegDateIndex]
+            for i in 0..<appData.allUsers.count {
+                if appData.allUsers[i][DBusernameIndex] == nickname {
+                    psswordFromDB = appData.allUsers[i][DBpasswordIndex]
+                    emailFromDB = appData.allUsers[i][DBemailIndex]
+                    registrationDateFromDB = appData.allUsers[i][DBRegDateIndex]
                     print("user's password is ", psswordFromDB, "\nuser's email is - ", emailFromDB)
                     
                     if password != psswordFromDB {
@@ -257,12 +351,26 @@ class LoginViewController: UIViewController {
                         }
                     
                     } else {
+                        self.message.showMessage(text: "Checking data...\nfor: \(nickname), \(nickname)", type: .succsess, windowHeight: 30)
                         appData.username = nickname
-                        appData.password = password
-                        self.message.showMessage(text: "wellcome, \(nickname)", type: .succsess, windowHeight: 30)
-                        DispatchQueue.main.async {
-                            self.performSegue(withIdentifier: "homeVC", sender: self)
+                        if appData.internetPresend != nil {
+                            if (appData.internetPresend ?? false) {
+                                appData.password = password
+                                self.message.showMessage(text: "wellcome, \(nickname)", type: .succsess, windowHeight: 30)
+                                if appData.transactions.count > 0 {
+                                    print(appData.transactions.count, "appData.transactions.count")
+                                } else {
+                                    Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { (a) in
+                                        DispatchQueue.main.async {
+                                            self.performSegue(withIdentifier: "homeVC", sender: self)
+                                        }
+                                    }
+                                }
+                            } else {
+                                appData.username = ""
+                            }
                         }
+                        
                     }
                 }
             }
@@ -284,8 +392,8 @@ class LoginViewController: UIViewController {
     func userExists(name: String) -> Bool {
         var userExists = false
         
-        for i in 0..<allUsers.count {
-            if allUsers[i][0] == name {
+        for i in 0..<appData.allUsers.count {
+            if appData.allUsers[i][0] == name {
                 userExists = true
                 return userExists
             }

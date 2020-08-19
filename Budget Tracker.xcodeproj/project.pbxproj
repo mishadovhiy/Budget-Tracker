@@ -27,7 +27,7 @@
 		8DBA7E5F23F0317100D8214C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5D23F0317100D8214C /* LaunchScreen.storyboard */; };
 		8DD89D8323F1468E00273904 /* mainVCcell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8223F1468E00273904 /* mainVCcell.swift */; };
 		8DD89D8723F1471400273904 /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8623F1471400273904 /* AppData.swift */; };
-		8DD89D8A23F1472E00273904 /* Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8923F1472E00273904 /* Alerts.swift */; };
+		8DD89D8A23F1472E00273904 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8923F1472E00273904 /* MessageView.swift */; };
 		8DD89D8C23F1485700273904 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8B23F1485700273904 /* Constants.swift */; };
 		8DD89D8E23F1495300273904 /* TransactionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8D23F1495300273904 /* TransactionVC.swift */; };
 		8DD89D9023F1496100273904 /* CategoriesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8F23F1496100273904 /* CategoriesVC.swift */; };
@@ -59,7 +59,7 @@
 		8DBA7E6023F0317100D8214C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DD89D8223F1468E00273904 /* mainVCcell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mainVCcell.swift; sourceTree = "<group>"; };
 		8DD89D8623F1471400273904 /* AppData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
-		8DD89D8923F1472E00273904 /* Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alerts.swift; sourceTree = "<group>"; };
+		8DD89D8923F1472E00273904 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		8DD89D8B23F1485700273904 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		8DD89D8D23F1495300273904 /* TransactionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionVC.swift; sourceTree = "<group>"; };
 		8DD89D8F23F1496100273904 /* CategoriesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesVC.swift; sourceTree = "<group>"; };
@@ -181,7 +181,7 @@
 			isa = PBXGroup;
 			children = (
 				8DD89D8623F1471400273904 /* AppData.swift */,
-				8DD89D8923F1472E00273904 /* Alerts.swift */,
+				8DD89D8923F1472E00273904 /* MessageView.swift */,
 				8D5206662421695200772CD5 /* StatisticBrain.swift */,
 				8D36724124D315BC00CE90A9 /* dbModel.swift */,
 			);
@@ -308,7 +308,7 @@
 				8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */,
 				8DB1A6FE24E1A46F002DE486 /* DontGoViewController.swift in Sources */,
 				8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */,
-				8DD89D8A23F1472E00273904 /* Alerts.swift in Sources */,
+				8DD89D8A23F1472E00273904 /* MessageView.swift in Sources */,
 				8DD89D8E23F1495300273904 /* TransactionVC.swift in Sources */,
 				8D8B6C3E245023EC007260A0 /* CalendarVC.swift in Sources */,
 				8DBA7E5423F0316F00D8214C /* ViewController.swift in Sources */,

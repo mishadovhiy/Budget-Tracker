@@ -104,7 +104,9 @@ class calcCell: UITableViewCell {
             periodBalanceValueLabel.text = "\(Int(sumPeriodBalance))"
             expensesLabel.text = "\(Int(sumExpenses * -1))"
             incomeLabel.text = "\(Int(sumIncomes))"
+            
         } else {
+            
             balanceLabel.text = "\(totalBalance)"
             periodBalanceValueLabel.text = "\(sumPeriodBalance)"
             expensesLabel.text = "\(sumExpenses * -1)"

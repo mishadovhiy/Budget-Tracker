@@ -24,7 +24,12 @@ class DontGoViewController: UIViewController {
             actionButtons[i].layer.masksToBounds = true
             actionButtons[i].layer.cornerRadius = 4
         }
+        
+        
+        
+        
     }
+    
     
     enum screenOptions {
         case singOut

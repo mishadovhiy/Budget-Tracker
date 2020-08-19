@@ -28,8 +28,9 @@ class AppData {
     let defaults = UserDefaults.standard
     
     var unshowedErrors = ""
+    var newValue = [""]
     
-    var internetPresend = false
+    var internetPresend: Bool?
     
     var username: String {
         get{
@@ -38,6 +39,26 @@ class AppData {
         set(value){
             print("new username setted - \(value)")
             defaults.set(value, forKey: "username")
+        }
+    }
+    var canShowInternetError: Bool {
+        get{
+            let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
+            let last = defaults.value(forKey: "lastTimeShowedInternetError") as? String ?? "true"
+            
+            if last == "true" {
+                return true
+            } else {
+                if today == last {
+                    return false
+                } else {
+                    return true
+                }
+            }
+            
+        }
+        set(value){
+            defaults.set(value, forKey: "lastTimeShowedInternetError")
         }
     }
     var password: String {
@@ -60,6 +81,29 @@ class AppData {
         }
     }
     
+    var allUsers:[[String]] {
+        
+        get{
+            return defaults.value(forKey: "AllUsers") as? [[String]] ?? []
+        }
+        set(value) {
+            defaults.set(value, forKey: "AllUsers")
+        }
+        
+    }
+    
+    var unsendedData:[[String]] {
+        //0 - type (delete transaction)
+        //1 - toDataString
+        get {
+            return defaults.value(forKey: "unsendedData") as? [[String]] ?? []
+        }
+        set(value){
+            defaults.set(value, forKey: "unsendedData")
+        }
+    }
+    
+    
     
     func saveTransations(_ data: [TransactionsStruct]) {
         var dict: [[String]] = []
@@ -72,12 +116,12 @@ class AppData {
             
             dict.append([nickname, value, category, date, comment])
         }
-        print("transactions saved to user defaults")
+        print("transactions saved to user defaults, count: \(dict.count)")
         defaults.set(dict, forKey: "transactionsData")
     }
 
     var transactions: [TransactionsStruct] {
-        get {
+        get{
             let localData = defaults.value(forKey: "transactionsData") as? [[String]] ?? []
             var results: [TransactionsStruct] = []
             for i in 0..<localData.count {
@@ -90,6 +134,26 @@ class AppData {
             return results
         }
     }
+    
+    var unsavedTransactions: [TransactionsStruct] {
+        get{
+            var results: [TransactionsStruct] = []
+            let localData = defaults.value(forKey: "unsavedTransactions") as? [[String]] ?? []
+            
+            for i in 0..<localData.count {
+                let value = localData[i][1]
+                let category = localData[i][2]
+                let date = localData[i][3]
+                let comment = localData[i][4]
+                results.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
+            }
+            
+            return results
+        }
+        set(value) {
+            defaults.set(value, forKey: "unsavedTransactions")
+        }
+    }
 
     func saveCategories(_ data: [CategoriesStruct]) {
         var dict: [[String]] = []
@@ -100,7 +164,7 @@ class AppData {
             
             dict.append([nickname, name, purpose])
         }
-        print("categories saved to user defaults")
+        print("categories saved to user defaults, count: \(dict.count)")
         defaults.set(dict, forKey: "categoriesData")
     }
     
@@ -115,7 +179,7 @@ class AppData {
         return results
     }
     
-    func createFirstData() {
+    func createFirstData(_ tableview: UITableView) {
         let transactions = [
             TransactionsStruct(value: "5000", category: "Freelance", date: "\(filter.getToday(appData.filter.filterObjects.currentDate))", comment: ""),
             TransactionsStruct(value: "-350", category: "Food", date: "\(filter.getToday(appData.filter.filterObjects.currentDate))", comment: "")
@@ -126,10 +190,19 @@ class AppData {
         ]
         saveTransations(transactions)
         saveCategories(categories)
+        
+        DispatchQueue.main.async {
+            tableview.reloadData()
+        }
+        
     }
     
     var selectedExpense = 0
     var selectedIncome = 0
+    
+
+    
+    
     
     func stringDate(_ sender: UIDatePicker) -> String {
         
@@ -153,18 +226,16 @@ class AppData {
         
         func dimNewCell(_ transactionsCell: mainVCcell, index: Int, tableView: UITableView) {
 
-            if transactionsCell.bigDate.text == highliteDate {
-                DispatchQueue.main.async {
-                    tableView.scrollToRow(at: IndexPath(row: index, section: 1), at: .bottom, animated: true)
-                }
+            DispatchQueue.main.async {
+                tableView.scrollToRow(at: IndexPath(row: index, section: 1), at: .bottom, animated: true)
+            }
+            UIView.animate(withDuration: 0.6) {
+                transactionsCell.contentView.backgroundColor = K.Colors.separetor
+            }
+            Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (timer) in
+                highliteDate = " "
                 UIView.animate(withDuration: 0.6) {
-                    transactionsCell.contentView.backgroundColor = K.Colors.separetor
-                }
-                Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (timer) in
-                    highliteDate = " "
-                    UIView.animate(withDuration: 0.6) {
-                        transactionsCell.contentView.backgroundColor = K.Colors.background
-                    }
+                    transactionsCell.contentView.backgroundColor = K.Colors.background
                 }
             }
         }
@@ -274,7 +345,7 @@ class AppData {
     var filter = Filter()
     struct Filter {
         
-        var showAll = true
+        var showAll = false
         var from: String = ""
         var to: String = ""
         
@@ -436,3 +507,4 @@ struct CategoriesStruct {
     let name: String
     let purpose: String
 }
+

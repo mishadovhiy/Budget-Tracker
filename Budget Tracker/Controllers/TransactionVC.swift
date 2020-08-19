@@ -53,6 +53,32 @@ class TransitionVC: UIViewController {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        reloadAllfromDB()
+    }
+    
+    func reloadAllfromDB() {
+        
+        if appData.username != "" {
+            appData.internetPresend = nil
+      //      let _ = AppData.DB(username: appData.username, mainView: self)
+            print(appData.internetPresend ?? "appData.internetPresend is nil", "internetPresend")
+            while appData.internetPresend != nil {
+                 if appData.internetPresend == false {
+                     DispatchQueue.main.async {
+                         self.message.showMessage(text: "No internet, but you stiil can use app", type: .internetError, windowHeight: 50)
+                        print("reloadAllfromDB main vc : no internet")
+                     }
+                     break
+                 }
+                 
+             }
+
+        }
+        
+    }
+    
+    
     func updateUI() {
         
         appendPurposes()
@@ -160,21 +186,39 @@ class TransitionVC: UIViewController {
     }
     
     func addNew(value: String, category: String, date: String, comment: String) {
-        var allData = appData.transactions
 
         highliteDate = date
+        appData.newValue = [value, category, date, comment]
+        //toDo
+        //for i in 0..<alldata.count
+        //if value == alldata[i].value ...etc
+        //let selected = i
+        //return
+        
+        //on main - scroll to selected, higlite selected
+        //indeed dim label
         UIImpactFeedbackGenerator().impactOccurred()
-        allData.insert(TransactionsStruct(value: value, category: category, date: date, comment: comment), at: 0)
-        print(TransactionsStruct(value: value, category: category, date: date, comment: comment))
-        appData.saveTransations(allData)
-        let Nickname = appData.username
-        if Nickname != "" {
-            let toDataString = "&Nickname=\(Nickname)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
+        
+        if appData.username != "" {
+            if !(appData.internetPresend ?? false) {
+                var unsavedData = appData.unsavedTransactions
+                unsavedData.insert(TransactionsStruct(value: value, category: category, date: date, comment: comment), at: 0)
+            } else {
+                var allData = appData.transactions
+                allData.insert(TransactionsStruct(value: value, category: category, date: date, comment: comment), at: 0)
+                print(TransactionsStruct(value: value, category: category, date: date, comment: comment))
+                appData.saveTransations(allData)
+                let toDataString = "&Nickname=\(appData.username)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
+                
+                let save = SaveToDB()
+                save.Transactions(toDataString: toDataString, mainView: self)
             
-            let save = SaveToDB()
-            save.Transactions(toDataString: toDataString, mainView: self)
+            }
         } else {
-            print(Nickname, "Nickname is nil")
+            var allData = appData.transactions
+            allData.insert(TransactionsStruct(value: value, category: category, date: date, comment: comment), at: 0)
+            print(TransactionsStruct(value: value, category: category, date: date, comment: comment))
+            appData.saveTransations(allData)
         }
         self.performSegue(withIdentifier: K.quitVC, sender: self)
     }

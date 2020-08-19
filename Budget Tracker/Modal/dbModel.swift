@@ -12,7 +12,10 @@ struct LoadFromDB {
     
     func showMessage(vc: UIViewController) {
         let message = MessageView(vc)
-        message.showMessage(text: K.Text.errorInternet, type: .error, windowHeight: 50)
+        DispatchQueue.main.async {
+            message.showMessage(text: K.Text.errorInternet, type: .error, windowHeight: 50)
+        }
+        
     }
     
     func Transactions(mainView: UIViewController?, completion: @escaping ([[String]]) -> ()) {
@@ -20,21 +23,11 @@ struct LoadFromDB {
         var loadedData: [[String]] = []
         let urlPath = "https://www.dovhiy.com/apps/budget-tracker-db/transactions.php"
         let url: URL = URL(string: urlPath)!
-        let defaultSession = Foundation.URLSession(configuration: URLSessionConfiguration.default)
-        let task = defaultSession.dataTask(with: url) { (data, response, error) in
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             
             if error != nil {
                 appData.internetPresend = false
-                if mainView != nil {
-                    DispatchQueue.main.async {
-                        self.showMessage(vc: mainView!)
-                    }
-                    return
-                } else {
-                    appData.unshowedErrors = "Transactions: " + K.Text.errorInternet
-                    return
-                }
-                
+                return
             } else {
                 appData.internetPresend = true
                 var jsonResult = NSArray()
@@ -84,20 +77,11 @@ struct LoadFromDB {
         var loadedData: [[String]] = []
         let urlPath = "https://www.dovhiy.com/apps/budget-tracker-db/categories.php"
         let url: URL = URL(string: urlPath)!
-        let defaultSession = Foundation.URLSession(configuration: URLSessionConfiguration.default)
-        let task = defaultSession.dataTask(with: url) { (data, response, error) in
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             
             if error != nil {
                 appData.internetPresend = false
-                if mainView != nil {
-                    DispatchQueue.main.async {
-                        self.showMessage(vc: mainView!)
-                    }
-                    return
-                } else {
-                    appData.unshowedErrors = "Categories: " + K.Text.errorInternet
-                    return
-                }
+                return
                 
             } else {
                 appData.internetPresend = true
@@ -124,7 +108,7 @@ struct LoadFromDB {
                             }
                             
                         }
-                    }
+                    } 
                     
                 }
 
@@ -145,20 +129,14 @@ struct LoadFromDB {
         var loadedData: [[String]] = []
         let urlPath = "https://www.dovhiy.com/apps/budget-tracker-db/users.php"
         let url: URL = URL(string: urlPath)!
-        let defaultSession = Foundation.URLSession(configuration: URLSessionConfiguration.default)
-        let task = defaultSession.dataTask(with: url) { (data, response, error) in
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             
             if error != nil {
                 appData.internetPresend = false
                 if mainView != nil {
-                    DispatchQueue.main.async {
-                        self.showMessage(vc: mainView!)
-                    }
-                    return
-                } else {
-                    appData.unshowedErrors = "User Data: " + K.Text.errorInternet
-                    return
+                    self.showMessage(vc: mainView!)
                 }
+                return
                 
             } else {
                 appData.internetPresend = true
@@ -206,7 +184,10 @@ struct SaveToDB {
     
     func showMessage(vc: UIViewController) {
         let message = MessageView(vc)
-        message.showMessage(text: K.Text.errorInternet, type: .error, windowHeight: 50)
+        DispatchQueue.main.async {
+             message.showMessage(text: K.Text.errorInternet, type: .error, windowHeight: 50)
+        }
+       
     }
     
     func Transactions(toDataString: String, mainView: UIViewController) {
@@ -240,14 +221,9 @@ struct SaveToDB {
                 if error != nil {
                     appData.internetPresend = false
                     if mainView != nil {
-                        DispatchQueue.main.async {
-                            self.showMessage(vc: mainView!)
-                        }
-                        return
-                    } else {
-                        appData.unshowedErrors = errorLoading + ": " + K.Text.errorInternet
-                        return
+                        self.showMessage(vc: mainView!)
                     }
+                    return
                     
                 } else {
                     if let unwrappedData = data {
@@ -264,7 +240,11 @@ struct SaveToDB {
                 }
                 
             }
-            uploadJob.resume()
+            
+            DispatchQueue.main.async {
+                uploadJob.resume()
+            }
+            
         }
             
     }
@@ -276,22 +256,25 @@ struct SaveToDB {
 
 struct DeleteFromDB {
     
-    func showMessage(vc: UIViewController) {
+    func showMessage(vc: UIViewController, error: Bool = true) {
         let message = MessageView(vc)
-        message.showMessage(text: K.Text.errorInternet, type: .error, windowHeight: 50)
+        DispatchQueue.main.async {
+            message.showMessage(text: K.Text.errorInternet, type: error == true ?  .error : .succsess, windowHeight: 50)
+        }
+        
     }
     
-    func Transactions(toDataString: String, mainView: UIViewController?) {
+    func Transactions(toDataString: String, mainView: UIViewController?, showSucssess: Bool = false) {
 
-        delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-transaction.php", toDataString: toDataString, mainView: mainView, errorLoading: "Transactions")
+        delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-transaction.php", toDataString: toDataString, mainView: mainView, errorLoading: "Transactions", showSuscssess: showSucssess)
     }
     
-    func Categories(toDataString: String, mainView: UIViewController?) {
+    func Categories(toDataString: String, mainView: UIViewController?, showSucssess: Bool = false) {
 
-        delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-category.php", toDataString: toDataString, mainView: mainView, errorLoading: "Categories")
+        delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-category.php", toDataString: toDataString, mainView: mainView, errorLoading: "Categories", showSuscssess: showSucssess)
     }
     
-    private func delete(dbFileURL: String, toDataString: String, mainView: UIViewController?, errorLoading: String) {
+    private func delete(dbFileURL: String, toDataString: String, mainView: UIViewController?, errorLoading: String, showSuscssess: Bool) {
         let url = NSURL(string: dbFileURL)
         var request = URLRequest(url: url! as URL)
         request.httpMethod = "POST"
@@ -305,15 +288,12 @@ struct DeleteFromDB {
             let uploadJob = URLSession.shared.uploadTask(with: request, from: dataD) { data, response, error in
                 
                 if error != nil {
+                    appData.internetPresend = false
+                    appData.unsendedData.append(["delete", dataString])
                     if mainView != nil {
-                        DispatchQueue.main.async {
-                            self.showMessage(vc: mainView!)
-                        }
-                        return
-                    } else {
-                        appData.unshowedErrors = errorLoading + ": " + K.Text.errorInternet
-                        return
+                        self.showMessage(vc: mainView!)
                     }
+                    return
                     
                 } else {
                     if let unwrappedData = data {
@@ -321,6 +301,12 @@ struct DeleteFromDB {
                         
                         if returnedData == "1" {
                             appData.internetPresend = true
+                            if showSuscssess {
+                                if mainView != nil {
+                                    self.showMessage(vc: mainView!, error: false)
+                                }
+                                
+                            }
                         } else {
                             print("db error for (cats, etc), developer fault")
                         }
@@ -330,7 +316,9 @@ struct DeleteFromDB {
                 }
                 
             }
-            uploadJob.resume()
+            DispatchQueue.main.async {
+                uploadJob.resume()
+            }
             
         }
             

@@ -14,51 +14,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    func downloadFromDB() {
-        let load = LoadFromDB()
-
-        load.Transactions(mainView: nil) { (loadedData) in
-                print("loaded \(loadedData.count) transactions from DB")
-                var dataStruct: [TransactionsStruct] = []
-                for i in 0..<loadedData.count {
-                    
-                    let value = loadedData[i][3]
-                    let category = loadedData[i][1]
-                    let date = loadedData[i][2]
-                    let comment = loadedData[i][4]
-                    dataStruct.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
-                }
-                appData.saveTransations(dataStruct)
-        }
-
-        
-        load.Categories(mainView: nil) { (loadedData) in
-                print("loaded \(loadedData.count) Categories from DB")
-                var dataStruct: [CategoriesStruct] = []
-                for i in 0..<loadedData.count {
-                    
-                    let name = loadedData[i][1]
-                    let purpose = loadedData[i][2]
-                    dataStruct.append(CategoriesStruct(name: name, purpose: purpose))
-                }
-                appData.saveCategories(dataStruct)
-        }
-        
-        
-        appData.defaults.setValue(appData.filter.getToday(appData.filter.filterObjects.currentDate), forKey: "LastLoad")
-        
-    }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
-         let lastLoad = appData.defaults.value(forKey: "LastLoad") as? String ?? ""
-         
-         if today != lastLoad {
-             downloadFromDB()
-         } else {
-            downloadFromDB()
-        }
+        let _ = appData.filter.getToday(appData.filter.filterObjects.currentDate)
+        
         return true
     }
 

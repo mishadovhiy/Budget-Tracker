@@ -329,7 +329,7 @@
                                             <segue destination="6dz-dh-DXT" kind="show" id="i9R-6M-C6M"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Filter For" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="5" translatesAutoresizingMaskIntoConstraints="NO" id="WWk-Hp-IW7">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Filter For ..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="5" translatesAutoresizingMaskIntoConstraints="NO" id="WWk-Hp-IW7">
                                         <rect key="frame" x="10" y="0.0" width="200" height="40"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                         <color key="textColor" name="balanceTitleColor"/>
@@ -1926,7 +1926,6 @@ Budget Tracker</string>
                                                 <state key="normal" title="Log in"/>
                                                 <connections>
                                                     <action selector="CreateAccPressed:" destination="Y7C-10-uv7" eventType="touchUpInside" id="74I-7r-EiC"/>
-                                                    <segue destination="0Eo-nu-zqD" kind="show" identifier="toLogIN" id="3VM-YO-Yca"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F8S-Fu-dl0">
@@ -1935,7 +1934,6 @@ Budget Tracker</string>
                                                 <state key="normal" title="Create account"/>
                                                 <connections>
                                                     <action selector="singInPressed:" destination="Y7C-10-uv7" eventType="touchUpInside" id="8It-t1-M52"/>
-                                                    <segue destination="0Eo-nu-zqD" kind="show" identifier="toCreate" id="r57-dY-pSQ"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -1988,6 +1986,8 @@ Budget Tracker</string>
                         <outletCollection property="cornerButtons" destination="3UH-Wh-tA2" collectionClass="NSMutableArray" id="GdN-IU-4eb"/>
                         <outletCollection property="cornerButtons" destination="F8S-Fu-dl0" collectionClass="NSMutableArray" id="Ul9-bG-ynh"/>
                         <segue destination="Elh-Mk-EGD" kind="unwind" unwindAction="homeVCWithSegue:" id="hed-n7-EbR"/>
+                        <segue destination="0Eo-nu-zqD" kind="show" identifier="toLogIn" id="QqS-Yf-O2f"/>
+                        <segue destination="0Eo-nu-zqD" kind="show" identifier="toSingIn" id="ByR-mm-xFN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wpC-KF-2yS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -2000,7 +2000,7 @@ Budget Tracker</string>
             <objects>
                 <viewController id="0Eo-nu-zqD" customClass="LoginViewController" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5D2-tn-xUE">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Mj-XW-BxI">
@@ -2016,7 +2016,7 @@ Budget Tracker</string>
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="AtE-QO-VWI">
-                                <rect key="frame" x="20" y="131" width="280" height="306"/>
+                                <rect key="frame" x="20" y="121" width="280" height="306"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Create an account" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="9fS-GY-DEx">
                                         <rect key="frame" x="0.0" y="0.0" width="280" height="38.5"/>
@@ -2069,7 +2069,7 @@ Budget Tracker</string>
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="bti-UC-r4O">
-                                <rect key="frame" x="20" y="184.5" width="280" height="199"/>
+                                <rect key="frame" x="20" y="174.5" width="280" height="199"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Log in" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6K5-57-gim">
                                         <rect key="frame" x="0.0" y="0.0" width="280" height="38.5"/>
@@ -2108,7 +2108,7 @@ Budget Tracker</string>
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="AMq-j6-RyC">
-                                <rect key="frame" x="10" y="510" width="300" height="48"/>
+                                <rect key="frame" x="10" y="490" width="300" height="48"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don't have an cccount?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4zQ-jx-F6i">
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="18"/>
@@ -2145,6 +2145,7 @@ Budget Tracker</string>
                     </view>
                     <navigationItem key="navigationItem" id="5KN-P1-1qs"/>
                     <connections>
+                        <outlet property="closeButton" destination="2Mj-XW-BxI" id="xnL-N6-jle"/>
                         <outlet property="confirmPasswordLabel" destination="0ba-YT-Zzz" id="h7E-dz-rYc"/>
                         <outlet property="createAccButton" destination="2Nh-vd-wKg" id="zL2-r2-yTe"/>
                         <outlet property="createAcount" destination="AtE-QO-VWI" id="fS4-gc-jAL"/>
@@ -2157,7 +2158,10 @@ Budget Tracker</string>
                         <outlet property="nicknameLogLabel" destination="ts5-aX-D2m" id="hVp-sl-oag"/>
                         <outlet property="passwordLabel" destination="knY-zE-qZO" id="wGW-R3-qU1"/>
                         <outlet property="passwordLogLabel" destination="vmH-uz-wvx" id="Mhb-Ih-YNV"/>
+                        <outletCollection property="titleLabels" destination="6K5-57-gim" collectionClass="NSMutableArray" id="vfU-PN-aIA"/>
+                        <outletCollection property="titleLabels" destination="9fS-GY-DEx" collectionClass="NSMutableArray" id="lun-ie-qkb"/>
                         <segue destination="7t2-W2-1Ex" kind="unwind" identifier="homeVC" unwindAction="homeVCWithSegue:" id="4v4-fT-i4a"/>
+                        <segue destination="N38-Gt-7xN" kind="show" id="Hvk-jT-MFr"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4BD-hh-6da" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -2165,10 +2169,33 @@ Budget Tracker</string>
             </objects>
             <point key="canvasLocation" x="2796" y="-1366"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="3OA-jO-RQi">
+            <objects>
+                <viewController id="N38-Gt-7xN" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="96d-Lu-9lY">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7hK-MU-rWA">
+                                <rect key="frame" x="40" y="191" width="240" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" name="backgroundColor"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="qLC-82-kmQ"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="weB-eZ-zky"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Nk8-an-n2U" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3758" y="-1374"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="nQl-g6-e4b"/>
-        <segue reference="geB-if-iC4"/>
+        <segue reference="QqS-Yf-O2f"/>
+        <segue reference="i9R-6M-C6M"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="cIcon" width="11" height="18"/>

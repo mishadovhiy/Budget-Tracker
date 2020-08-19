@@ -30,11 +30,17 @@ class FirstLaunchViewController: UIViewController {
     //data from Database will stored on your device
 
     
+    lazy var message: MessageView = {
+        let message = MessageView(self)
+        return message
+    }()
+    
     @IBOutlet var cornerButtons: [UIButton]!
     @IBOutlet weak var contentView: UIView!
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        appData.internetPresend = nil
         contentView.layer.masksToBounds = true
         contentView.layer.cornerRadius = 9
         contentView.layer.shadowColor = UIColor.black.cgColor
@@ -47,6 +53,17 @@ class FirstLaunchViewController: UIViewController {
             cornerButtons[i].layer.cornerRadius = 6
         }
         
+        downloadFromDB()
+        
+    }
+    
+    func downloadFromDB() {
+           
+           appData.internetPresend = nil
+           let load = LoadFromDB()
+           load.Users(mainView: self) { (loadedData) in
+               appData.allUsers = loadedData
+           }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -71,14 +88,31 @@ class FirstLaunchViewController: UIViewController {
     }
     
     @IBAction func CreateAccPressed(_ sender: UIButton) {
-        DispatchQueue.main.async {
-            self.performSegue(withIdentifier: "toCreate", sender: self)
+        if appData.internetPresend != nil {
+            if (appData.internetPresend ?? false) {
+                DispatchQueue.main.async {
+                    print("performSegue")
+                    self.performSegue(withIdentifier: "toSingIn", sender: self)
+                }
+            } else {
+                message.showMessage(text: "no intrnet", type: .error)
+                downloadFromDB()
+            }
         }
     }
     
     @IBAction func singInPressed(_ sender: UIButton) {
-        DispatchQueue.main.async {
-            self.performSegue(withIdentifier: "toLogIN", sender: self)
+        if appData.internetPresend != nil {
+            if (appData.internetPresend ?? false) {
+                DispatchQueue.main.async {
+                    print("performSegue")
+                    self.performSegue(withIdentifier: "toLogIn", sender: self)
+                }
+            } else {
+                message.showMessage(text: "no intrnet", type: .error)
+                downloadFromDB()
+            }
         }
+        
     }
 }
