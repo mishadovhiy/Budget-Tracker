@@ -96,18 +96,24 @@ class FilterTVC: UITableViewController {
             appData.filter.from = ""
             appData.filter.to = ""
             appData.filter.showAll = true
-            self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
+            }
             
         case 1:
             appData.filter.showAll = false
             defaultFilter()
-            self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
+            }
             
         case 2:
             appData.filter.showAll = false
             appData.filter.from = today
             appData.filter.to = today
-            self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
+            }
             
         case 3:
             appData.filter.showAll = false
@@ -129,11 +135,15 @@ class FilterTVC: UITableViewController {
                     appData.filter.to = appData.filter.from
                 }
             }
-            self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
+            }
             
         case 4:
             appData.filter.showAll = false
-            self.performSegue(withIdentifier: K.toCalendar, sender: self)
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: K.toCalendar, sender: self)
+            }
             
         default:
             print("def")
@@ -149,7 +159,6 @@ class FilterTVC: UITableViewController {
         let month = appData.filter.getMonthFromString(s: today)
         let year = appData.filter.getYearFromString(s: today)
         let dayTo = appData.filter.getLastDayOf(month: month, year: year)
-        
         appData.filter.from = "01.\(appData.filter.makeTwo(n: month)).\(year)"
         appData.filter.to = "\(dayTo).\(appData.filter.makeTwo(n: month)).\(year)"
     }
@@ -170,8 +179,10 @@ class FilterTVC: UITableViewController {
         let toIntDay = appData.filter.getLastDayOf(fullDate: date)
         appData.filter.from = date
         appData.filter.to = "\(toIntDay).\(months[i])"
-        self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
-        
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
+        }
+
     }
     
     func thirdSectionSelected(i: Int) {
@@ -179,23 +190,28 @@ class FilterTVC: UITableViewController {
         appData.filter.showAll = false
         appData.filter.from = "01.01.\(years[i])"
         appData.filter.to = "31.12.\(years[i])"
-        self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
+        }
+        
     }
     
     @IBAction func unwindCalendarClosed(segue: UIStoryboardSegue) {
         
         DispatchQueue.global(qos: .userInitiated).async {
-            DispatchQueue.main.async {
-                if appData.filter.from == "" || appData.filter.to == "" {
-                    self.defaultFilter()
-                    selectedPeroud = "\(self.buttonTitle[1])"
-                    ifCustom = false
-                    appData.filter.showAll = false
+            if appData.filter.from == "" || appData.filter.to == "" {
+                self.defaultFilter()
+                selectedPeroud = "\(self.buttonTitle[1])"
+                ifCustom = false
+                appData.filter.showAll = false
+                DispatchQueue.main.async {
                     self.tableView.reloadData()
-                } else {
-                    self.tableView.reloadData()
-                    self.prepareCustomDates()
                 }
+            } else {
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+                self.prepareCustomDates()
             }
         }
     }
@@ -216,7 +232,10 @@ class FilterTVC: UITableViewController {
             selectedPeroud = "\(convertMonthFrom(int: month)), \(day) of \(year) → \(convertMonthFrom(int: monthTo)), \(dayTo) of \(yearTo)"
         }
         
-        self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
+        }
+        
     }
     
     

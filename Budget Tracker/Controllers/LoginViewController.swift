@@ -416,7 +416,9 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func withoutAccount(_ sender: UIButton) {
-        performSegue(withIdentifier: "homeVC", sender: self)
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: "homeVC", sender: self)
+        }
     }
 
 }

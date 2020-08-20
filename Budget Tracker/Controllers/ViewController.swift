@@ -30,7 +30,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var expenseLabel: UILabel!
     var refreshControl = UIRefreshControl()
     var tableData = appData.transactions.sorted{ $0.dateFromString > $1.dateFromString }
-    
     lazy var message: MessageView = {
         let message = MessageView(self)
         return message
@@ -39,9 +38,13 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        
         appData.username = "Misha"
         updateUI()
         print("username: \(appData.username)")
+        
+        
         
     }
     
@@ -52,14 +55,13 @@ class ViewController: UIViewController {
         let showCatsSwipe: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(showCats(_:)))
         showCatsSwipe.direction = .right
         DispatchQueue.main.async {
+            self.noTableDataLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, self.view.frame.height, 0)
+            self.noTableDataLabel.alpha = 0
             self.view.addGestureRecognizer(showCatsSwipe)
             self.mainTableView.delegate = self
             self.mainTableView.dataSource = self
         }
-        DispatchQueue.main.async {
-            self.switchFromCoreData()
-        }
-        
+        switchFromCoreData()
         if appData.defaults.value(forKey: "firstLaunch") as? Bool ?? false {
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: "toFirstLoad", sender: self)
@@ -72,7 +74,6 @@ class ViewController: UIViewController {
             appData.defaults.set(false, forKey: "firstLaunch")
         }
     }
-    
     
     func filter() {
         
@@ -90,7 +91,6 @@ class ViewController: UIViewController {
     func allDaysBetween() {
         
         if getYearFrom(string: appData.filter.to) == getYearFrom(string: appData.filter.from) {
-            
             let lastDay = "31.\(makeTwo(n: appData.filter.getMonthFromString(s: appData.filter.getToday(appData.filter.filterObjects.currentDate)))).\(appData.filter.getYearFromString(s: appData.filter.getToday(appData.filter.filterObjects.currentDate)))"
             let firstDay = "01.\(makeTwo(n: appData.filter.getMonthFromString(s: appData.filter.getToday(appData.filter.filterObjects.currentDate)))).\(appData.filter.getYearFromString(s: appData.filter.getToday(appData.filter.filterObjects.currentDate)))"
             appData.filter.to = appData.filter.to == "" ? lastDay : appData.filter.to
@@ -114,10 +114,7 @@ class ViewController: UIViewController {
                 amount *= -1
             }
             print("amount \(amount)")
-            
             calculateDifference(amount: amount)
-            
-            
 
         } else {
             let yearDifference = (getYearFrom(string: appData.filter.to) - getYearFrom(string: appData.filter.from)) - 1
@@ -132,6 +129,7 @@ class ViewController: UIViewController {
         
         
     }
+    
     func performFiltering(from: String, to: String, all: Bool) {
         
         print("performFiltering called")
@@ -151,8 +149,7 @@ class ViewController: UIViewController {
             var arr = tableData
             arr.removeAll()
             var matches = 0
-            
-            
+
             let days = Array(daysBetween)
             let transactions = Array(appData.transactions)
             
@@ -182,6 +179,7 @@ class ViewController: UIViewController {
         }
         
     }
+    
     func calculateDifference(amount: Int) {
         if appData.filter.to != appData.filter.from {
             print("calculateDifference: appData.filter.from: \(appData.filter.from), appData.filter.to: \(appData.filter.to ), amount: \(amount)")
@@ -216,10 +214,11 @@ class ViewController: UIViewController {
         
         
        }
-    @objc func refresh(sender:AnyObject) {
     
+    @objc func refresh(sender:AnyObject) {
         if appData.username != "" {
-            
+            ckeckInternetTimer?.fire()
+            canFilter = true
             appData.internetPresend = nil
             self.downloadFromDB()
             
@@ -238,38 +237,43 @@ class ViewController: UIViewController {
     var unsavedTransactionsCount = 0
     var previusSelected: IndexPath? = nil
     var selectedCell: IndexPath? = nil
-    
-    func invalidateTimer() {
-        print("invalidateTimer")
-        ckeckInternetTimer.invalidate()
-    }
-    lazy var ckeckInternetTimer = {
+    var canFilter: Bool = true
+    var ckeckInternetTimer: Timer? {
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (a) in
-            print("timer: ")
-            if appData.internetPresend == false {
-                print("refresh: appData.internetPresend == false")
-                self.filter()
-                self.invalidateTimer()
-            } else {
-                print("checking internet")
-                if appData.internetPresend == true {
-                    self.invalidateTimer()
+            print("timer")
+            if self.canFilter {
+                print("timer: canFilter")
+                if appData.internetPresend == false {
+                    print("timer: internetPresend == false")
+                    self.canFilter = false
+                    a.invalidate()
+                    self.filter()
+                } else {
+                    if appData.internetPresend == true {
+                        print("timer: internetPresend == true")
+                        self.canFilter = false
+                        a.invalidate()
+                    }
                 }
+            } else {
+                print("timer: canFilter = false")
+                self.canFilter = false
+                a.invalidate()
             }
+            
         }
         
-    }()
-   
+    }
     
-        
+    
+    
 //MARK: - MySQL
     
-    
-    //its ok
     func downloadFromDB() {
         
-        ckeckInternetTimer.fire()
         if appData.username != "" {
+            ckeckInternetTimer?.fire()
+            canFilter = true
             appData.internetPresend = nil
             print("downloadFromDB: username: \(appData.username), not nill")
             let load = LoadFromDB()
@@ -295,9 +299,8 @@ class ViewController: UIViewController {
                 }
                 appData.saveTransations(dataStruct)
                 self.invalidateTimer()
-                //DispatchQueue.main.async {
-                    self.filter()
-               // }
+                self.canFilter = false
+                self.filter()
 
             }
             
@@ -315,20 +318,12 @@ class ViewController: UIViewController {
                 appData.saveCategories(dataStruct)
             }
             
-        }/* else {
-            let load = LoadFromDB()
-            load.Users(mainView: self) { (loadedData) in
-                appData.allUsers = loadedData
-                
-                DispatchQueue.main.async {
-                    self.filter()
-                }
-            }
-            
-        }*/
-    
-        
+        } else {
+            filter()
+        }
+
     }
+    
     func deleteFromDB(at: Int) {
         
         let Nickname = appData.username
@@ -346,14 +341,13 @@ class ViewController: UIViewController {
             print("noNickname")
         }
     }
+    
     func checkUnsaved() {
 
         let delete = DeleteFromDB()
         let save = SaveToDB()
-        
         print(appData.unsendedData.count, "appData.unsendedData.count")
         for i in 0..<appData.unsendedData.count {
-            
             switch appData.unsendedData[i][0] {
             case "delete":
                 print("delete unsendedData")
@@ -380,7 +374,6 @@ class ViewController: UIViewController {
             DispatchQueue.main.async {
                 self.loadItemsCoreData()
             }
-            
             if appData.transactionsCoreData.count != 0 {
                 var alldata = appData.transactions
                 
@@ -432,28 +425,19 @@ class ViewController: UIViewController {
         
     }
     func loadItemsCoreData(_ request: NSFetchRequest<Transactions> = Transactions.fetchRequest(), predicate: NSPredicate? = nil) {
-        
         print("Loading core data")
-        
         do { appData.transactionsCoreData = try appData.context().fetch(request)
         } catch { print("\n\nERROR FETCHING DATA FROM CONTEXTE\n\n", error)}
-        
         let catRequest: NSFetchRequest<Categories> = Categories.fetchRequest()
         do { appData.categoriesCoreData = try appData.context().fetch(catRequest)
         } catch { print("\n\nERROR FETCHING DATA FROM CONTEXTE\n\n", error)}
-        
     }
     override func viewWillAppear(_ animated: Bool) {
         print("today is", appData.filter.getToday(appData.filter.filterObjects.currentDate))
     }
     
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        invalidateTimer()
-        print("prepare")
-    }
-    
 
+    
 //MARK: - Calculation
     
     var sumIncomes: Double = 0.0
@@ -470,8 +454,23 @@ class ViewController: UIViewController {
         DispatchQueue.main.async {
             self.filterTextLabel.text = "Filter: \(selectedPeroud)"
         }
-        
+        if tableData.count == 0 {
+            DispatchQueue.main.async {
+                self.mainTableView.isScrollEnabled = false
+                UIView.animate(withDuration: 0.6) {
+                    self.noTableDataLabel.alpha = 0.5
+                    self.noTableDataLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+                }
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.noTableDataLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, self.view.frame.height, 0)
+                self.mainTableView.isScrollEnabled = true
+                self.noTableDataLabel.alpha = 0
+            }
+        }
     }
+    
     func recalculation(i:UILabel, e: UILabel, data: [TransactionsStruct]) {
 
         sumIncomes = 0.0
@@ -510,6 +509,7 @@ class ViewController: UIViewController {
         
         print("recalculating labels")
     }
+    
     func calculateBalance(balanceLabel: UILabel) {
         
         var totalExpenses = 0.0
@@ -554,8 +554,8 @@ class ViewController: UIViewController {
     }
     
 
-//MARK: - Other
     
+//MARK: - Other
     
     var daysBetween = [""]
     var selectedFromDayInt = 0
@@ -568,7 +568,6 @@ class ViewController: UIViewController {
         }
     }
     func getMonthFrom(string: String) -> Int {
-        
         if string != "" {
             if string.count == 10 {
                 var monthS = string
@@ -588,8 +587,6 @@ class ViewController: UIViewController {
         }
     }
     func getYearFrom(string: String) -> Int {
-        
-        
         if string != "" {
             if string.count == 10 {
                 var yearS = string
@@ -606,23 +603,7 @@ class ViewController: UIViewController {
             return 1996
         }
     }
-    
-    @objc func showCats(_ gesture: UISwipeGestureRecognizer) {
-        performSegue(withIdentifier: K.goToEditVCSeq, sender: self)
-    }
-    func addRefreshControll() {
-        
-        DispatchQueue.main.async {
-            self.refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
-            self.refreshControl.backgroundColor = UIColor.clear
-            self.refreshControl.tintColor = K.Colors.pink
-            self.mainTableView.addSubview(self.refreshControl)
-        }
-
-    }
-    
     func deleteRow(at: Int) {
-        
         deleteFromDB(at: at)
         tableData.remove(at: at)
         DispatchQueue.main.async {
@@ -666,16 +647,28 @@ class ViewController: UIViewController {
             }
         }
     }
-    
     var newValue: String?
     var newCategory: String?
     var newDate: String?
     var newComment: String?
+    func addRefreshControll() {
+        DispatchQueue.main.async {
+            self.refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
+            self.refreshControl.backgroundColor = UIColor.clear
+            self.refreshControl.tintColor = K.Colors.pink
+            self.mainTableView.addSubview(self.refreshControl)
+        }
+    }
+    @objc func showCats(_ gesture: UISwipeGestureRecognizer) {
+        performSegue(withIdentifier: K.goToEditVCSeq, sender: self)
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        invalidateTimer()
+        print("prepare")
+    }
     @IBAction func unwindToViewControllerA(segue: UIStoryboardSegue) {
-        
         DispatchQueue.global(qos: .userInitiated).async {
             self.filter()
-            
             if self.newValue != nil && self.newCategory != nil && self.newDate != nil && self.newComment != nil {
                 DispatchQueue.main.async {
                     self.scrollToNew(date: self.newDate!, category: self.newCategory!, value: self.newValue!, comment: self.newComment!)
@@ -685,7 +678,6 @@ class ViewController: UIViewController {
             self.newCategory = nil
             self.newDate = nil
             self.newComment = nil
-
             editingDate = ""
             editingCategory = ""
             editingValue = 0.0
@@ -693,13 +685,11 @@ class ViewController: UIViewController {
         }
     }
     @IBAction func homeVC(segue: UIStoryboardSegue) {
-        
         DispatchQueue.global(qos: .userInitiated).async {
             self.downloadFromDB()
         }
     }
     @IBAction func unwindToFilter(segue: UIStoryboardSegue) {
-        
         DispatchQueue.global(qos: .userInitiated).async {
             self.filter()
             print("unwindToFilter filter: \(selectedPeroud)")
@@ -739,6 +729,11 @@ class ViewController: UIViewController {
         }
         
     }
+    func invalidateTimer() {
+        print("invalidateTimer")
+        ckeckInternetTimer?.invalidate()
+    }
+    
 
 }
 
@@ -788,11 +783,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             let data = tableData[indexPath.row]
             let transactionsCell = tableView.dequeueReusableCell(withIdentifier: K.mainCellIdent, for: indexPath) as! mainVCcell
             transactionsCell.setupCell(data, i: indexPath.row, tableData: tableData, selectedCell: selectedCell)
-            if tableData.count == 0 {
-                noTableDataLabel.alpha = 0.5
-            } else {
-                noTableDataLabel.alpha = 0
-            }
             return transactionsCell
             
         case 2:

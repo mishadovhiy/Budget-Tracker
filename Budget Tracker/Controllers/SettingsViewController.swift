@@ -162,15 +162,19 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if indexPath.row != 0 {
-            performSegue(withIdentifier: tableData[indexPath.row].segue, sender: self)
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: self.tableData[indexPath.row].segue, sender: self)
+            }
+            
         } else {
             if appData.internetPresend ?? false {
-                self.performSegue(withIdentifier: self.tableData[indexPath.row].segue, sender: self)
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: self.tableData[indexPath.row].segue, sender: self)
+                }
+                
                 
             } else {
-                DispatchQueue.init(label: "loaddata").async {
-                //    let _ = AppData.DB(username: appData.username, mainView: self)
-                }
+
                 self.message.showMessage(text: "No internet", type: .error)
                 
             }

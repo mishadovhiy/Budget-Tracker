@@ -91,7 +91,6 @@ class FirstLaunchViewController: UIViewController {
         if appData.internetPresend != nil {
             if (appData.internetPresend ?? false) {
                 DispatchQueue.main.async {
-                    print("performSegue")
                     self.performSegue(withIdentifier: "toSingIn", sender: self)
                 }
             } else {
@@ -105,7 +104,6 @@ class FirstLaunchViewController: UIViewController {
         if appData.internetPresend != nil {
             if (appData.internetPresend ?? false) {
                 DispatchQueue.main.async {
-                    print("performSegue")
                     self.performSegue(withIdentifier: "toLogIn", sender: self)
                 }
             } else {

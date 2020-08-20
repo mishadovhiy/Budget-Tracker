@@ -220,7 +220,10 @@ class TransitionVC: UIViewController {
             print(TransactionsStruct(value: value, category: category, date: date, comment: comment))
             appData.saveTransations(allData)
         }
-        self.performSegue(withIdentifier: K.quitVC, sender: self)
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: K.quitVC, sender: self)
+        }
+
     }
     
     @objc func valueLabelColor() {

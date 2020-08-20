@@ -107,7 +107,10 @@ class CalendarVC: UIViewController {
         for i in 0..<numDays {
             days.append(i+1)
         }
-        textField.text = "\(returnMonth(month)), \(year)"
+        DispatchQueue.main.async {
+            self.textField.text = "\(self.returnMonth(self.month)), \(self.year)"
+        }
+        
         
     }
     
@@ -178,8 +181,6 @@ class CalendarVC: UIViewController {
         }
     }
     
-    //get all days for today year and month
-    //
     
     func ifToSmaller() {
     
@@ -479,7 +480,10 @@ class CalendarVC: UIViewController {
         if ifCustom == false {
             appData.filter.from = ""
             appData.filter.to = ""
-            self.performSegue(withIdentifier: K.calendarClosed, sender: self)
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: K.calendarClosed, sender: self)
+            }
+            
         } else {
             let day = appData.filter.getDayFromString(s: selectedFrom)
             let month = appData.filter.getMonthFromString(s: selectedFrom)
@@ -500,7 +504,10 @@ class CalendarVC: UIViewController {
         if doneIsActive {
             appData.filter.from = selectedFrom
             appData.filter.to = selectedTo
-            self.performSegue(withIdentifier: K.calendarClosed, sender: self)
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: K.calendarClosed, sender: self)
+            }
+           
         }
     }
     

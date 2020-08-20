@@ -88,11 +88,16 @@ class DontGoViewController: UIViewController {
             appData.username = ""
             appData.saveTransations([])
             appData.saveCategories([])
-            self.performSegue(withIdentifier: "toSingIn", sender: self)
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "toSingIn", sender: self)
+            }
+            
         case 3:
             print("save")
             appData.username = ""
-            self.performSegue(withIdentifier: "toSingIn", sender: self)
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "toSingIn", sender: self)
+            }
 
         default:
             print("error")
