@@ -15,7 +15,28 @@ class CategoriesVC: UIViewController {
     @IBOutlet weak var categoriesTableView: UITableView!
     var catData = appData.categoryVC
     var refreshControl = UIRefreshControl()
-    lazy var tableData = appData.getCategories()
+    var allCategoriesData = Array(appData.getCategories())
+    
+    func getDataFromLocal() {
+        expenses = []
+        incomes = []
+        for i in 0..<allCategoriesData.count {
+            if allCategoriesData[i].purpose == K.expense {
+                expenses.append(allCategoriesData[i].name)
+            } else {
+                incomes.append(allCategoriesData[i].name)
+            }
+        }
+        
+        print("expenses: \(expenses.count), incomes: \(incomes.count)")
+        DispatchQueue.main.async {
+            self.categoriesTableView.reloadData()
+        }
+        
+    }
+    
+    var expenses: [String] = []
+    var incomes: [String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +45,7 @@ class CategoriesVC: UIViewController {
     
     func updateUI() {
         
+        getDataFromLocal()
         catData.purposPicker.delegate = self
         catData.purposPicker.dataSource = self
         categoriesTableView.delegate = self
@@ -60,7 +82,7 @@ class CategoriesVC: UIViewController {
                 dataStruct.append(CategoriesStruct(name: name, purpose: purpose))
             }
             appData.saveCategories(dataStruct)
-            self.tableData = appData.getCategories()
+            self.getDataFromLocal()
             DispatchQueue.main.async {
                 self.categoriesTableView.reloadData()
             }
@@ -72,7 +94,7 @@ class CategoriesVC: UIViewController {
     
     func whenNoCategories() {
         
-        if tableData.count == 0 {
+        if expenses.count == 0 && incomes.count == 0 {
             titleLabel.text = "No categories"
             titleLabel.textAlignment = .center
         } else {
@@ -103,20 +125,39 @@ class CategoriesVC: UIViewController {
             let Purpose = catData.allPurposes[catData.selectedPurpose]
             let toDataString = "&Nickname=\(Nickname)" + "&Title=\(Title)" + "&Purpose=\(Purpose)"
             let save = SaveToDB()
-            save.Categories(toDataString: toDataString, mainView: self)
+          //  save.Categories(toDataString: toDataString, mainView: self)
             
         }
 
     }
     
-    func deteteFromDB(at: Int) {
-        let delete = DeleteFromDB()
+    func deteteCategory(at: IndexPath) {
         
+        let delete = DeleteFromDB()
         let Nickname = appData.username
-        let Title = tableData[at].name
-        let Purpose = tableData[at].purpose
-        let toDataString = "&Nickname=\(Nickname)" + "&Title=\(Title)" + "&Purpose=\(Purpose)"
-        delete.Categories(toDataString: toDataString, mainView: self)
+        let Title = at.section == 0 ? expenses[at.row] : incomes[at.row]
+        let Purpose = at.section == 0 ? K.expense : K.income
+        
+        if appData.username != "" {
+            let toDataString = "&Nickname=\(Nickname)" + "&Title=\(Title)" + "&Purpose=\(Purpose)"
+            delete.Categories(toDataString: toDataString, mainView: self)
+        }
+        
+
+        if at.section == 0 {
+            expenses.remove(at: at.row)
+        } else {
+            incomes.remove(at: at.row)
+        }
+        var result: [CategoriesStruct] = []
+        for i in 0..<incomes.count {
+            result.append(CategoriesStruct(name: incomes[i], purpose: K.income))
+        }
+        for i in 0..<expenses.count {
+            result.append(CategoriesStruct(name: expenses[i], purpose: K.expense))
+        }
+        allCategoriesData = result
+        appData.saveCategories(allCategoriesData)
     }
     
     @IBAction func addCategoryPressed(_ sender: UIButton) {
@@ -128,11 +169,18 @@ class CategoriesVC: UIViewController {
             
             if self.catData.categoryTextField.text != "" {
                 let name = self.catData.categoryTextField.text ?? ""
-                let value = self.catData.allPurposes[self.catData.selectedPurpose]
-                self.tableData.insert(CategoriesStruct(name: name, purpose: value), at: 0)
-                appData.saveCategories(self.tableData)
+                let purpose = self.catData.allPurposes[self.catData.selectedPurpose]
+                self.allCategoriesData.append(CategoriesStruct(name: name, purpose: purpose))
+                appData.saveCategories(self.allCategoriesData)
+                self.getDataFromLocal()
                 self.whenNoCategories()
-                self.sendToDB()
+                
+                if appData.internetPresend != nil {
+                    if appData.internetPresend! == false {
+                        self.sendToDB()
+                    }
+                }
+                
                 
                 DispatchQueue.main.async {
                     self.categoriesTableView.reloadData()
@@ -152,28 +200,54 @@ class CategoriesVC: UIViewController {
 //MARK: - Table View
 
 extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableData.count
+        switch section {
+        case 0: return expenses.count
+        case 1: return incomes.count
+        default:
+            return expenses.count
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch section {
+        case 0: return K.expense
+        case 1: return K.income
+        default:
+            return K.income
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent, for: indexPath) as! categoriesVCcell
+
+        switch indexPath.section {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent, for: indexPath) as! categoriesVCcell
+            cell.categoryNameLabel.text = expenses[indexPath.row]
+            return cell
+        case 1:
+            let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent, for: indexPath) as! categoriesVCcell
+            cell.categoryNameLabel.text = incomes[indexPath.row]
+            return cell
+        default:
+            let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent, for: indexPath) as! categoriesVCcell
+            cell.categoryNameLabel.text = incomes[indexPath.row]
+            return cell
+        }
         
-        cell.categoryNameLabel.text = "\(tableData[indexPath.row].name),"
-        cell.categoryPurposeLabel.text = tableData[indexPath.row].purpose
         
-        return cell
+        
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCell.EditingStyle.delete {
 
-            deteteFromDB(at: indexPath.row)
-            tableData.remove(at: indexPath.row)
-            appData.saveCategories(tableData)
+            deteteCategory(at: indexPath)
             whenNoCategories()
-            
             DispatchQueue.main.async {
                 self.categoriesTableView.reloadData()
             }

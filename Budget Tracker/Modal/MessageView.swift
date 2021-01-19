@@ -29,13 +29,16 @@ class MessageView {
     func hideMessage(duration: TimeInterval = 0.2) {
         stopTimers()
         
-        closeButton?.alpha = 0
-        UIView.animate(withDuration: duration) {
-            self.subview?.frame = CGRect(x: 0, y: -80, width: 10, height: 30)
-            self.textLabel?.alpha = 0
-            self.textLabel?.textColor = K.Colors.background
-            self.subview?.backgroundColor = K.Colors.category
+        DispatchQueue.main.async {
+            self.closeButton?.alpha = 0
+            UIView.animate(withDuration: duration) {
+                self.subview?.frame = CGRect(x: 0, y: -80, width: 10, height: 30)
+                self.textLabel?.alpha = 0
+                self.textLabel?.textColor = K.Colors.background
+                self.subview?.backgroundColor = K.Colors.category
+            }
         }
+        
     }
     
     
@@ -51,61 +54,79 @@ class MessageView {
         hideMessage(duration: 0)
         DispatchQueue.main.async {
             self.textLabel?.text = text
+            self.subview?.frame = CGRect(x: 40, y: -80, width: self.mainView.view.bounds.width - 40, height: windowHeight)
+            UIView.animate(withDuration: 0.4) {
+                self.subview?.frame = CGRect(x: 20, y: self.mainView.view.safeAreaInsets.top + 5, width: self.mainView.view.bounds.width - 40, height: windowHeight)
+                self.textLabel?.alpha = 1
+            }
+            UIView.animate(withDuration: 0.8) {
+                self.closeButton?.alpha = 1
+            }
+            self.textLabel?.frame = CGRect(x: 5, y: 5, width: (self.subview?.frame.width ?? 0) - 5 - 30, height: windowHeight - 10)
+            self.closeButton?.frame = CGRect(x: (self.subview?.frame.width ?? 0) - 30, y: 0, width: 30, height: windowHeight)
         }
-        self.subview?.frame = CGRect(x: 40, y: -80, width: self.mainView.view.bounds.width - 40, height: windowHeight)
-        UIView.animate(withDuration: 0.4) {
-            self.subview?.frame = CGRect(x: 20, y: self.mainView.view.safeAreaInsets.top + 5, width: self.mainView.view.bounds.width - 40, height: windowHeight)
-            self.textLabel?.alpha = 1
-        }
-        UIView.animate(withDuration: 0.8) {
-            self.closeButton?.alpha = 1
-        }
-        self.textLabel?.frame = CGRect(x: 5, y: 5, width: (self.subview?.frame.width ?? 0) - 5 - 30, height: windowHeight - 10)
-        self.closeButton?.frame = CGRect(x: (self.subview?.frame.width ?? 0) - 30, y: 0, width: 30, height: windowHeight)
+        
         
         
         switch type {
         case .error:
-            UIView.animate(withDuration: 0.4) {
-                self.textLabel?.textColor = K.Colors.balanceV
-                self.subview?.backgroundColor = UIColor.red
+            
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.4) {
+                    self.textLabel?.textColor = K.Colors.balanceV
+                    self.subview?.backgroundColor = UIColor.red
+                }
             }
+            
             let timer = Timer.scheduledTimer(withTimeInterval: 7.0, repeats: false) { (action) in
                 self.hideMessage()
             }
             timers.append(timer)
         case .succsess:
-            UIView.animate(withDuration: 0.4) {
-                self.textLabel?.textColor = K.Colors.balanceT
-                self.subview?.backgroundColor = K.Colors.pink
-              //  self.textLabel.backgroundColor = K.Colors.sectionBackground
+            
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.4) {
+                    self.textLabel?.textColor = K.Colors.balanceT
+                    self.subview?.backgroundColor = K.Colors.pink
+                  //  self.textLabel.backgroundColor = K.Colors.sectionBackground
+                }
+                let timer = Timer.scheduledTimer(withTimeInterval: 7.0, repeats: false) { (action) in
+                    self.hideMessage()
+                }
+                self.timers.append(timer)
+                UIView.animate(withDuration: 0.4) {
+                    self.subview?.frame = CGRect(x: 20, y: (self.mainView.view.frame.height - self.mainView.view.safeAreaInsets.bottom) - (5 + windowHeight), width: self.mainView.view.bounds.width - 40, height: windowHeight)
+                    self.textLabel?.frame = CGRect(x: 10, y: 5, width: (self.subview?.frame.width ?? 0) - 10 - 30, height: windowHeight - 10)
+                }
             }
-            let timer = Timer.scheduledTimer(withTimeInterval: 7.0, repeats: false) { (action) in
-                self.hideMessage()
-            }
-            timers.append(timer)
-            UIView.animate(withDuration: 0.4) {
-                self.subview?.frame = CGRect(x: 20, y: (self.mainView.view.frame.height - self.mainView.view.safeAreaInsets.bottom) - (5 + windowHeight), width: self.mainView.view.bounds.width - 40, height: windowHeight)
-                self.textLabel?.frame = CGRect(x: 10, y: 5, width: (self.subview?.frame.width ?? 0) - 10 - 30, height: windowHeight - 10)
-            }
+            
         case .internetError:
             print(appData.canShowInternetError)
             if !appData.canShowInternetError {
                // hideMessage(duration: 0)
                 //comment all to else
-                UIView.animate(withDuration: 0.4) {
-                    self.textLabel?.textColor = K.Colors.balanceV
-                    self.subview?.backgroundColor = UIColor.yellow
+                
+                DispatchQueue.main.async {
+                    UIView.animate(withDuration: 0.4) {
+                        self.textLabel?.textColor = K.Colors.balanceV
+                        self.subview?.backgroundColor = UIColor.yellow
+                    }
+                    
                 }
                 let timer = Timer.scheduledTimer(withTimeInterval: 4.0, repeats: false) { (action) in
                     self.hideMessage()
                 }
                 timers.append(timer)
+                
             } else {
-                UIView.animate(withDuration: 0.4) {
-                    self.textLabel?.textColor = K.Colors.balanceV
-                    self.subview?.backgroundColor = UIColor.yellow
+                
+                DispatchQueue.main.async {
+                    UIView.animate(withDuration: 0.4) {
+                        self.textLabel?.textColor = K.Colors.balanceV
+                        self.subview?.backgroundColor = UIColor.yellow
+                    }
                 }
+                
                 let timer = Timer.scheduledTimer(withTimeInterval: 4.0, repeats: false) { (action) in
                     self.hideMessage()
                 }

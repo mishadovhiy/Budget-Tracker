@@ -70,59 +70,52 @@ class SettingsViewController: UIViewController {
     
     func reloadAllfromDB() {
         
+        ckeckInternetTimer?.fire()
+        appData.internetPresend = nil
         print("reloadAllfromDB")
         let load = LoadFromDB()
-        load.Users(mainView: self) { (loadedData) in
-            if loadedData.count > 0 {
-                appData.allUsers = loadedData
-                appData.internetPresend = true
-            } else {
-                print("users: appData.internetPresend = false")
-                appData.internetPresend = false
-                return
-            }
-        }
-        
-        load.Transactions(mainView: self) { (loadedData) in
-            print("loaded \(loadedData.count) transactions from DB")
-            var dataStruct: [TransactionsStruct] = []
-            for i in 0..<loadedData.count {
-                    
-                let value = loadedData[i][3]
-                let category = loadedData[i][1]
-                let date = loadedData[i][2]
-                let comment = loadedData[i][4]
-                dataStruct.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
-            }
-                
-            if loadedData.count > 0 {
-                appData.saveTransations(dataStruct)
-                appData.internetPresend = true
-
-            }
-        }
-
-        
-        load.Categories(mainView: self) { (loadedData) in
-            print("loaded \(loadedData.count) Categories from DB")
-            var dataStruct: [CategoriesStruct] = []
-            for i in 0..<loadedData.count {
-                    
-                let name = loadedData[i][1]
-                let purpose = loadedData[i][2]
-                dataStruct.append(CategoriesStruct(name: name, purpose: purpose))
-            }
-                
-            if loadedData.count > 0 {
-                appData.saveCategories(dataStruct)
-                appData.internetPresend = true
-                refreshDataComlition = true
-            }
+        load.Users(mainView: nil) { (loadedData) in
+            appData.allUsers = loadedData
+            self.ckeckInternetTimer?.invalidate()
         }
 
     }
     
+    
+    var toLoginPressed = false
+    var ckeckInternetTimer: Timer? {
+        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (a) in
+            print("timer")
+
+            if appData.internetPresend == false {
+                print("timer: internetPresend == false")
+                if self.toLoginPressed {
+                    DispatchQueue.main.async {
+                        self.message.showMessage(text: "No internet", type: .error)
+                    }
+                    
+                    self.toLoginPressed = false
+                }
+                a.invalidate()
+            } else {
+                if appData.internetPresend == true {
+                    print("timer: internetPresend == true")
+                    if self.toLoginPressed {
+                        self.toLoginPressed = false
+                        DispatchQueue.main.async {
+                            self.performSegue(withIdentifier: self.tableData[0].segue, sender: self)
+                        }
+                    }
+                    a.invalidate()
+                }
+            }
+            
+        }
+        
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        ckeckInternetTimer?.invalidate()
         if segue.identifier == "toSingIn" {
             let vc = segue.destination as! LoginViewController
             vc.selectedScreen = .logIn
@@ -167,22 +160,9 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
             }
             
         } else {
-            if appData.internetPresend ?? false {
-                DispatchQueue.main.async {
-                    self.performSegue(withIdentifier: self.tableData[indexPath.row].segue, sender: self)
-                }
-                
-                
-            } else {
-
-                self.message.showMessage(text: "No internet", type: .error)
-                
-            }
-            
+            self.toLoginPressed = true
+            reloadAllfromDB()
         }
-        
-        
-        
         
         DispatchQueue.main.async {
             tableView.deselectRow(at: indexPath, animated: true)

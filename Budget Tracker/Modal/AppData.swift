@@ -103,7 +103,9 @@ class AppData {
         }
     }
     
-    
+    var unsavedTransactionsAppended = false
+    var unsavedCategoriesAppended = false
+    var fromLoginVCMessage = ""
     
     func saveTransations(_ data: [TransactionsStruct]) {
         var dict: [[String]] = []
@@ -151,7 +153,13 @@ class AppData {
             return results
         }
         set(value) {
-            defaults.set(value, forKey: "unsavedTransactions")
+            
+            var results: [[String]] = []
+            for i in 0..<value.count {
+                results.append([username, value[i].value, value[i].category, value[i].date, value[i].comment])
+            }
+            
+            defaults.set(results, forKey: "unsavedTransactions")
         }
     }
 
@@ -224,7 +232,7 @@ class AppData {
 
         }
         
-        func dimNewCell(_ transactionsCell: mainVCcell, index: Int, tableView: UITableView) {
+        /*func dimNewCell(_ transactionsCell: mainVCcell, index: Int, tableView: UITableView) {
 
             DispatchQueue.main.async {
                 tableView.scrollToRow(at: IndexPath(row: index, section: 1), at: .bottom, animated: true)
@@ -233,12 +241,11 @@ class AppData {
                 transactionsCell.contentView.backgroundColor = K.Colors.separetor
             }
             Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (timer) in
-                highliteDate = " "
                 UIView.animate(withDuration: 0.6) {
                     transactionsCell.contentView.backgroundColor = K.Colors.background
                 }
             }
-        }
+        }*/
 
         func showNoDataLabel(_ label: UILabel, tableData: [TransactionsStruct]) {
             

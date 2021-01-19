@@ -10,13 +10,15 @@ import UIKit
 import CoreData
 import AVFoundation
 
-var highliteDate = " "
-var editingDate = ""
-var editingCategory = ""
-var editingValue = 0.0
-var editingComment = ""
+protocol TransitionVCProtocol {
+    func addNewTransaction(value: String, category: String, date: String, comment: String)
+    func quiteTransactionVC()
+}
 
 class TransitionVC: UIViewController {
+
+    
+    
 
     @IBOutlet weak var dateTextField: CustomTextField!
     @IBOutlet weak var categoryTextField: CustomTextField!
@@ -31,10 +33,17 @@ class TransitionVC: UIViewController {
     var expenseArr = [""]
     var incomeArr = [""]
     
+    var delegate:TransitionVCProtocol?;
+    
     var editingDateHolder = ""
     var editingCategoryHolder = ""
     var editingValueHolder = 0.0
     var editingCommentHolder = ""
+    
+    var editingDate = ""
+    var editingCategory = ""
+    var editingValue = 0.0
+    var editingComment = ""
     
     var pressedValueArrey: [String] =  []
     
@@ -45,7 +54,7 @@ class TransitionVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         updateUI()
         purposeSwitcher.selectedSegmentIndex = 0
         purposeSwitched(purposeSwitcher)
@@ -53,30 +62,12 @@ class TransitionVC: UIViewController {
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        reloadAllfromDB()
+    override func viewWillDisappear(_ animated: Bool) {
+       /* DispatchQueue.main.async {
+            self.performSegue(withIdentifier: K.quitVC, sender: self)
+        }*/
     }
-    
-    func reloadAllfromDB() {
-        
-        if appData.username != "" {
-            appData.internetPresend = nil
-      //      let _ = AppData.DB(username: appData.username, mainView: self)
-            print(appData.internetPresend ?? "appData.internetPresend is nil", "internetPresend")
-            while appData.internetPresend != nil {
-                 if appData.internetPresend == false {
-                     DispatchQueue.main.async {
-                         self.message.showMessage(text: "No internet, but you stiil can use app", type: .internetError, windowHeight: 50)
-                        print("reloadAllfromDB main vc : no internet")
-                     }
-                     break
-                 }
-                 
-             }
 
-        }
-        
-    }
     
     
     func updateUI() {
@@ -84,6 +75,9 @@ class TransitionVC: UIViewController {
         appendPurposes()
         delegates(fields: [categoryTextField, dateTextField, commentTextField], pickes: [appData.objects.expensesPicker, appData.objects.incomePicker])
         appData.objects.datePicker.datePickerMode = .date
+        if #available(iOS 13.4, *) {
+            appData.objects.datePicker.preferredDatePickerStyle = .wheels
+        }
         dateTextField.inputView = appData.objects.datePicker
         appData.objects.datePicker.addTarget(self, action: #selector(datePickerChangedValue(sender:)), for: .valueChanged)
         dateTextField.text = "\(appData.stringDate(appData.objects.datePicker))"
@@ -187,42 +181,32 @@ class TransitionVC: UIViewController {
     
     func addNew(value: String, category: String, date: String, comment: String) {
 
-        highliteDate = date
-        appData.newValue = [value, category, date, comment]
-        //toDo
-        //for i in 0..<alldata.count
-        //if value == alldata[i].value ...etc
-        //let selected = i
-        //return
-        
-        //on main - scroll to selected, higlite selected
-        //indeed dim label
         UIImpactFeedbackGenerator().impactOccurred()
-        
+        print("addNew called")
         if appData.username != "" {
-            if !(appData.internetPresend ?? false) {
-                var unsavedData = appData.unsavedTransactions
-                unsavedData.insert(TransactionsStruct(value: value, category: category, date: date, comment: comment), at: 0)
-            } else {
-                var allData = appData.transactions
-                allData.insert(TransactionsStruct(value: value, category: category, date: date, comment: comment), at: 0)
-                print(TransactionsStruct(value: value, category: category, date: date, comment: comment))
-                appData.saveTransations(allData)
-                let toDataString = "&Nickname=\(appData.username)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
-                
-                let save = SaveToDB()
-                save.Transactions(toDataString: toDataString, mainView: self)
-            
+            var allData = appData.transactions
+            let new = TransactionsStruct(value: value, category: category, date: date, comment: comment)
+            allData.insert(new, at: 0)
+            appData.newValue = [value, category, date, comment]
+            //print(new, "new")
+            appData.saveTransations(allData)
+
+           // self.delegate?.addNewTransaction(value: value, category: category, date: date, comment: comment)
+            self.dismiss(animated: true) {
+                self.delegate?.addNewTransaction(value: value, category: category, date: date, comment: comment)
             }
         } else {
             var allData = appData.transactions
             allData.insert(TransactionsStruct(value: value, category: category, date: date, comment: comment), at: 0)
             print(TransactionsStruct(value: value, category: category, date: date, comment: comment))
             appData.saveTransations(allData)
+            appData.newValue = [value, category, date, comment]
+            
+            self.dismiss(animated: true) {
+                self.delegate?.addNewTransaction(value: value, category: category, date: date, comment: comment)
+            }
         }
-        DispatchQueue.main.async {
-            self.performSegue(withIdentifier: K.quitVC, sender: self)
-        }
+        
 
     }
     
@@ -289,7 +273,7 @@ class TransitionVC: UIViewController {
             let comment = editingCommentHolder
             addNew(value: value, category: category, date: date, comment: comment)
         } else {
-            self.dismiss(animated: true, completion: nil)
+            //
         }
     }
     

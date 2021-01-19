@@ -18,7 +18,7 @@ struct LoadFromDB {
         
     }
     
-    func Transactions(mainView: UIViewController?, completion: @escaping ([[String]]) -> ()) {
+    func Transactions(mainView: UIViewController?, completion: @escaping ([[String]], String) -> ()) {
         
         var loadedData: [[String]] = []
         let urlPath = "https://www.dovhiy.com/apps/budget-tracker-db/transactions.php"
@@ -27,6 +27,7 @@ struct LoadFromDB {
             
             if error != nil {
                 appData.internetPresend = false
+                completion([], "error")
                 return
             } else {
                 appData.internetPresend = true
@@ -36,7 +37,8 @@ struct LoadFromDB {
                 } catch let error as NSError {
                     print(error, "parseJSON - wrong db")
                 }
-                
+                print(data, "datadatadatadata")
+                print(jsonResult, "jsonResultjsonResultjsonResultjsonResult")
                 var jsonElement = NSDictionary()
                 
                 for i in 0..<jsonResult.count {
@@ -44,7 +46,7 @@ struct LoadFromDB {
                     
                     if appData.username != "" {
                         if appData.username == (jsonElement["Nickname"] as? String ?? "") {
-                            appData.defaults.setValue([], forKey: "transactionsData")
+                           //20.08 - 9:43pm appData.defaults.setValue([], forKey: "transactionsData")
                             if let name = jsonElement["Nickname"] as? String,
                                let category = jsonElement["Category"] as? String,
                                let date = jsonElement["Date"] as? String,
@@ -59,7 +61,7 @@ struct LoadFromDB {
                     
                 }
 
-                completion(loadedData)
+                completion(loadedData, "")
             
             }
             
@@ -99,7 +101,7 @@ struct LoadFromDB {
                     
                     if appData.username != "" {
                         if appData.username == (jsonElement["Nickname"] as? String ?? "") {
-                            appData.defaults.setValue([], forKey: "categoriesData")
+                         //20.08 - 9:43pm appData.defaults.setValue([], forKey: "categoriesData")
                             if let name = jsonElement["Nickname"] as? String,
                                let title = jsonElement["Title"] as? String,
                                let purpose = jsonElement["Purpose"] as? String
@@ -182,6 +184,12 @@ struct LoadFromDB {
 
 struct SaveToDB {
     
+    enum dataType {
+        case transactions
+        case categories
+        case non
+    }
+    
     func showMessage(vc: UIViewController) {
         let message = MessageView(vc)
         DispatchQueue.main.async {
@@ -190,23 +198,33 @@ struct SaveToDB {
        
     }
     
-    func Transactions(toDataString: String, mainView: UIViewController) {
-        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-transaction.php", toDataString: toDataString, mainView: mainView, errorLoading: "Transactions")
+    func Transactions(transactionStruct: TransactionsStruct, mainView: UIViewController?,completion: @escaping (Bool) -> ()) {
+        let toDataString = "&Nickname=\(appData.username)" + "&Category=\(transactionStruct.category)" + "&Date=\(transactionStruct.date)" + "&Value=\(transactionStruct.value)" + "&Comment=\(transactionStruct.comment)"
+        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-transaction.php", toDataString: toDataString, mainView: mainView, errorLoading: "Transactions", dataType: .categories, completion: { (error) in
+            completion(error)
+        })
     }
     
-    func Categories(toDataString: String, mainView: UIViewController) {
-        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-category.php", toDataString: toDataString, mainView: mainView, errorLoading: "Categories")
+    func Categories(toDataString: String, mainView: UIViewController, completion: @escaping (Bool) -> ()) {
+        //в этой функции вместо toDataString принимать categoriesStruct
+        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-category.php", toDataString: toDataString, mainView: mainView, errorLoading: "Categories", dataType: .categories, completion: { (error) in
+            completion(error)
+        })
     }
     
-    func Users(toDataString: String, mainView: UIViewController) {
-        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-user.php", toDataString: toDataString, mainView: mainView, errorLoading: "User Data")
+    func Users(toDataString: String, mainView: UIViewController, completion: @escaping (Bool) -> ()) {
+        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-user.php", toDataString: toDataString, mainView: mainView, errorLoading: "User Data", dataType: .non, completion: { (error) in
+            completion(error)
+        })
     }
     
-    func NewPassword(toDataString: String, mainView: UIViewController) {
-        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/user-password.php", toDataString: toDataString, mainView: mainView, errorLoading: "User Data")
+    func NewPassword(toDataString: String, mainView: UIViewController, completion: @escaping (Bool) -> ()) {
+        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/user-password.php", toDataString: toDataString, mainView: mainView, errorLoading: "User Data", dataType: .non, completion: { (error) in
+            completion(error)
+        })
     }
 
-    private func save(dbFileURL: String, toDataString: String, mainView: UIViewController?, errorLoading: String) {
+    private func save(dbFileURL: String, toDataString: String, mainView: UIViewController?, errorLoading: String, dataType: dataType, completion: @escaping (Bool) -> ()) {
         
         let url = NSURL(string: dbFileURL)
         var request = URLRequest(url: url! as URL)
@@ -219,10 +237,12 @@ struct SaveToDB {
             let uploadJob = URLSession.shared.uploadTask(with: request, from: dataD) { data, response, error in
                 
                 if error != nil {
-                    appData.internetPresend = false
-                    if mainView != nil {
-                        self.showMessage(vc: mainView!)
-                    }
+                    print("save: internet error")
+                    //append transactions or categories to unsended
+                    ///todo
+                    //check if transactions or categories
+                    //remove on sendButtonPressed in transVC/catsVC if internet pressend and on quitSegues check unsended data qnt of bigger then was - show error
+                    completion(true)
                     return
                     
                 } else {
@@ -231,9 +251,14 @@ struct SaveToDB {
                         
                         if returnedData == "1" {
                             appData.internetPresend = true
+                            print("save: sended \(dataToSend)")
+                            completion(false)
                         } else {
-                            print("db error for (cats, etc), developer fault")
+                            appData.internetPresend = false
+                            print("save: db error for (cats, etc), developer fault")
+                            completion(true)
                         }
+                        
                         
                     }
                     
@@ -289,6 +314,8 @@ struct DeleteFromDB {
                 
                 if error != nil {
                     appData.internetPresend = false
+                    //or let
+                    let r = appData.unsendedData
                     appData.unsendedData.append(["delete", dataString])
                     if mainView != nil {
                         self.showMessage(vc: mainView!)

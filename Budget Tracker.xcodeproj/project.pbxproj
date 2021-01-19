@@ -25,6 +25,7 @@
 		8DBA7E5A23F0316F00D8214C /* Budget_Tracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5823F0316F00D8214C /* Budget_Tracker.xcdatamodeld */; };
 		8DBA7E5C23F0317100D8214C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5B23F0317100D8214C /* Assets.xcassets */; };
 		8DBA7E5F23F0317100D8214C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5D23F0317100D8214C /* LaunchScreen.storyboard */; };
+		8DD7E88624EE58050060EE62 /* localDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD7E88524EE58050060EE62 /* localDataViewController.swift */; };
 		8DD89D8323F1468E00273904 /* mainVCcell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8223F1468E00273904 /* mainVCcell.swift */; };
 		8DD89D8723F1471400273904 /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8623F1471400273904 /* AppData.swift */; };
 		8DD89D8A23F1472E00273904 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8923F1472E00273904 /* MessageView.swift */; };
@@ -57,6 +58,7 @@
 		8DBA7E5B23F0317100D8214C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8DBA7E5E23F0317100D8214C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8DBA7E6023F0317100D8214C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8DD7E88524EE58050060EE62 /* localDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = localDataViewController.swift; sourceTree = "<group>"; };
 		8DD89D8223F1468E00273904 /* mainVCcell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mainVCcell.swift; sourceTree = "<group>"; };
 		8DD89D8623F1471400273904 /* AppData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
 		8DD89D8923F1472E00273904 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
@@ -161,10 +163,11 @@
 				8D52066A24216A6200772CD5 /* HistoryVC.swift */,
 				8D8B6C3B245023D0007260A0 /* FilterTVC.swift */,
 				8D8B6C3D245023EC007260A0 /* CalendarVC.swift */,
+				8DA8A46A24E893D4003B693F /* FirstLaunchViewController.swift */,
 				8DB1A6F924E19069002DE486 /* SettingsViewController.swift */,
 				8DB1A6FD24E1A46F002DE486 /* DontGoViewController.swift */,
 				8DB1A6FB24E1A43C002DE486 /* LoginViewController.swift */,
-				8DA8A46A24E893D4003B693F /* FirstLaunchViewController.swift */,
+				8DD7E88524EE58050060EE62 /* localDataViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -318,6 +321,7 @@
 				8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */,
 				8DBA7E5223F0316F00D8214C /* SceneDelegate.swift in Sources */,
 				8DB1A6FA24E19069002DE486 /* SettingsViewController.swift in Sources */,
+				8DD7E88624EE58050060EE62 /* localDataViewController.swift in Sources */,
 				8DD89D8723F1471400273904 /* AppData.swift in Sources */,
 				8DA8A46B24E893D5003B693F /* FirstLaunchViewController.swift in Sources */,
 				8D52066B24216A6200772CD5 /* HistoryVC.swift in Sources */,
@@ -469,6 +473,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
@@ -476,8 +481,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "Dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -490,6 +497,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
@@ -497,8 +505,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "Dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

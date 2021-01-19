@@ -10,20 +10,62 @@ import CoreData
 
 var ifCustom = false
 
-class FilterTVC: UITableViewController {
+class FilterTVC: UIViewController {
     var months = [""]
     var years = [""]
     var sectionsCount = 3
     var buttonTitle = ["All Time", "This Month", "Today", "Yesterday", "Custom"]
     let data = appData.transactions
     
+    @IBOutlet weak var tableview: UITableView!
+    
+    var frame = CGRect.zero
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(frame, "filtervc")
+        
+        tableview.delegate = self
+        tableview.dataSource = self
+        tableview.translatesAutoresizingMaskIntoConstraints = true
 
+        self.tableview.frame = CGRect(x: self.frame.minX, y: self.frame.minY - 30, width: self.frame.width, height: self.frame.minX)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let touch = touches.first {
+            if touch.view != tableview {
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
+    }
+    
+    var vcAppeared = false
+
+    
+    override func viewWillLayoutSubviews() {
+        if !vcAppeared {
+            vcAppearence()
+        }
+    }
+    
+    func vcAppearence() {
+        self.tableview.layer.masksToBounds = true
+        self.tableview.layer.cornerRadius = 6
+        tableview.cellLayoutMarginsFollowReadableWidth = true
+
+        DispatchQueue.main.async {
+            self.tableview.beginUpdates()
+            UIView.animate(withDuration: 0.2) {
+                self.tableview.layer.frame = self.frame
+            } completion: { (a) in
+                
+            }
+            self.tableview.endUpdates()
+        }
+        vcAppeared = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
         getData()
         if months.first == "" {
             months.removeFirst()
@@ -35,12 +77,10 @@ class FilterTVC: UITableViewController {
     }
     
     func getData() {
-        
         appendMatches()
     }
 
     func appendMatches() {
-        
         for i in 0..<data.count {
             if !months.contains(removeDayFromString(data[i].date)) {
                 months.append(removeDayFromString(data[i].date))
@@ -53,7 +93,6 @@ class FilterTVC: UITableViewController {
     }
     
     func removeDayFromString(_ s: String) -> String {
-        
         var m = s
         for _ in 0..<3 {
             m.removeFirst()
@@ -198,18 +237,18 @@ class FilterTVC: UITableViewController {
     
     @IBAction func unwindCalendarClosed(segue: UIStoryboardSegue) {
         
-        DispatchQueue.global(qos: .userInitiated).async {
+        DispatchQueue.global(qos: .userInteractive).async {
             if appData.filter.from == "" || appData.filter.to == "" {
                 self.defaultFilter()
                 selectedPeroud = "\(self.buttonTitle[1])"
                 ifCustom = false
                 appData.filter.showAll = false
                 DispatchQueue.main.async {
-                    self.tableView.reloadData()
+                    self.tableview.reloadData()
                 }
             } else {
                 DispatchQueue.main.async {
-                    self.tableView.reloadData()
+                    self.tableview.reloadData()
                 }
                 self.prepareCustomDates()
             }
@@ -240,11 +279,17 @@ class FilterTVC: UITableViewController {
     
     
 // MARK: - Table view data source
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    
+    
+}
+
+
+extension FilterTVC: UITableViewDelegate, UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 3
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         switch section {
         case 0: return buttonTitle.count
@@ -255,9 +300,10 @@ class FilterTVC: UITableViewController {
         }
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: K.filterCell, for: indexPath) as! FilterCell
+        
         switch indexPath.section {
         case 0:
             let data = buttonTitle[indexPath.row]
@@ -276,27 +322,27 @@ class FilterTVC: UITableViewController {
         default:
             return UITableViewCell()
         }
-        
+
         if cell.titleLabel.text == selectedPeroud {
-            cell.backgroundCell.layer.masksToBounds = true
-            cell.backgroundCell.layer.cornerRadius = 6
-            cell.backgroundCell.backgroundColor = K.Colors.pink
+            cell.layer.masksToBounds = true
+            cell.layer.cornerRadius = 6
+            cell.backgroundColor = K.Colors.yellow
         } else {
-            cell.backgroundCell.backgroundColor = UIColor.clear
+            cell.backgroundColor = K.Colors.separetor
         }
         if ifCustom {
             if cell.titleLabel.text == "Custom" {
-                cell.backgroundCell.layer.masksToBounds = true
-                cell.backgroundCell.layer.cornerRadius = 6
-                cell.backgroundCell.backgroundColor = K.Colors.pink
+                cell.layer.masksToBounds = true
+                cell.layer.cornerRadius = 6
+                cell.backgroundColor = K.Colors.yellow
             }
         }
-        
+    
         return cell
         
     }
 
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         if section == 0 {
             return 0
@@ -305,11 +351,11 @@ class FilterTVC: UITableViewController {
         }
     }
     
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         let view = UIView()
         let label = UILabel()
-        label.frame = CGRect(x: 15, y: 0, width: UIScreen.main.bounds.width, height: 20)
+        label.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.width, height: 20)
         label.font = label.font.withSize(10)
         label.textColor = K.Colors.balanceT
         
@@ -322,15 +368,14 @@ class FilterTVC: UITableViewController {
         }
         
         view.addSubview(label)
-        view.backgroundColor = K.Colors.sectionBackground
+        view.backgroundColor = K.Colors.separetor
         return view
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if let cell = tableView.cellForRow(at: indexPath) as? FilterCell {
             selectedPeroud = cell.titleLabel.text ?? "Unknown"
-            
             if cell.titleLabel.text != "Custom" {
                 ifCustom = false
             }
@@ -347,5 +392,4 @@ class FilterTVC: UITableViewController {
         print("filterVC: appData.filter.from: \(appData.filter.from), appData.filter.to: \(appData.filter.to)")
         
     }
-    
 }

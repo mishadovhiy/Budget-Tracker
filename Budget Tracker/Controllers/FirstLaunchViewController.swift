@@ -53,7 +53,26 @@ class FirstLaunchViewController: UIViewController {
             cornerButtons[i].layer.cornerRadius = 6
         }
         
-        downloadFromDB()
+        //downloadFromDB()
+        
+        createFirstData()
+        appData.defaults.set(false, forKey: "firstLaunch")
+        
+    }
+    
+    func createFirstData() {
+        
+        let transactions = [
+            TransactionsStruct(value: "5000", category: "Freelance", date: "\(appData.filter.getToday(appData.filter.filterObjects.currentDate))", comment: ""),
+            TransactionsStruct(value: "-350", category: "Food", date: "\(appData.filter.getToday(appData.filter.filterObjects.currentDate))", comment: "")
+        ]
+        let categories = [
+            CategoriesStruct(name: "Food", purpose: K.expense),
+            CategoriesStruct(name: "Work", purpose: K.income)
+        ]
+        appData.saveTransations(transactions)
+        appData.saveCategories(categories)
+
         
     }
     
