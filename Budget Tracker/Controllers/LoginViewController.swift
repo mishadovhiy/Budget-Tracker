@@ -8,6 +8,9 @@
 
 import UIKit
 
+//sing in pressed
+//if transCount > 0 save trans to savedData and loaded transactions > 0
+//performing back show message - wellcome, username /n your data has been saved to another account
 
 class LoginViewController: UIViewController {
 

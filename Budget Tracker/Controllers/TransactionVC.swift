@@ -16,10 +16,6 @@ protocol TransitionVCProtocol {
 }
 
 class TransitionVC: UIViewController {
-
-    
-    
-
     @IBOutlet weak var dateTextField: CustomTextField!
     @IBOutlet weak var categoryTextField: CustomTextField!
     @IBOutlet weak var purposeSwitcher: UISegmentedControl!
@@ -63,12 +59,30 @@ class TransitionVC: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-       /* DispatchQueue.main.async {
-            self.performSegue(withIdentifier: K.quitVC, sender: self)
-        }*/
+        delegate?.quiteTransactionVC()
     }
 
     
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case "toCalendar":
+            print("toCalendar")
+            let vc = segue.destination as! CalendarVC
+            vc.delegate = self
+            vc.title = "Calendar"
+            if let date = dateTextField.text {
+                vc.selectedFrom = date
+            }
+            
+            
+        default:
+            print("segue default")
+        }
+    }
     
     func updateUI() {
         
@@ -78,14 +92,23 @@ class TransitionVC: UIViewController {
         if #available(iOS 13.4, *) {
             appData.objects.datePicker.preferredDatePickerStyle = .wheels
         }
-        dateTextField.inputView = appData.objects.datePicker
+        dateTextField.inputView = UIView(frame: .zero)//appData.objects.datePicker
         appData.objects.datePicker.addTarget(self, action: #selector(datePickerChangedValue(sender:)), for: .valueChanged)
+        dateTextField.isUserInteractionEnabled = false
+        dateTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(datePressed)))
         dateTextField.text = "\(appData.stringDate(appData.objects.datePicker))"
         pressedValue = "0"
         valueLabel.text = pressedValue
         commentTextField.smartInsertDeleteType = UITextSmartInsertDeleteType.no
         commentTextField.addTarget(self, action: #selector(commentCount), for: .editingChanged)
         
+    }
+    
+    @objc func datePressed(_ sender: UITapGestureRecognizer) {
+        print("datePressed")
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: "toCalendar", sender: self)
+        }
     }
     
     func delegates(fields: [UITextField], pickes: [UIPickerView]) {
@@ -216,6 +239,7 @@ class TransitionVC: UIViewController {
         minusPlusLabel.textColor = K.Colors.balanceV
     }
     
+    //delete
     @objc func datePickerChangedValue(sender: UIDatePicker) {
         
         dateTextField.text = appData.stringDate(sender)
@@ -303,7 +327,7 @@ class TransitionVC: UIViewController {
     @IBAction func showPadPressed(_ sender: UIButton) {
         
         categoryTextField.endEditing(true)
-        dateTextField.endEditing(true)
+       // dateTextField.endEditing(true)
         commentTextField.endEditing(true)
         UIView.animate(withDuration: 0.2) {
             self.numbarPadView.alpha = 1
@@ -436,5 +460,13 @@ class CustomTextField: UITextField {
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         return enableLongPressActions
     }
+    
+}
+
+extension TransitionVC: CalendarVCProtocol {
+    func dateSelected(date: String) {
+        dateTextField.text = date
+    }
+    
     
 }

@@ -14,7 +14,7 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
 
     let tableData = [
-        SettingsSctruct(title: appData.username == "" ? "Sing in" : "Sing out", description: appData.username, segue: appData.username == "" ? "toSingIn" : "toDontGo"),
+        SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: "toSingIn"),
         SettingsSctruct(title: "Categories", description: "All Categories (\(appData.getCategories().count))", segue: "settingsToCategories"),
         SettingsSctruct(title: "Filter", description: selectedPeroud, segue: "settingsToFilter")
     ]
@@ -29,6 +29,20 @@ class SettingsViewController: UIViewController {
 
         updateUI()
         
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let touch = touches.first {
+            if touch.view != contentView{
+                DispatchQueue.main.async {
+                    UIView.animate(withDuration: 0.23) {
+                        self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 300, 0)
+                    } completion: { (_) in
+                        self.dismiss(animated: true, completion: nil)
+                    }
+                }
+            }
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -46,10 +60,8 @@ class SettingsViewController: UIViewController {
         contentView.layer.shadowRadius = 10
         contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 300, 0)
         
-        view.isUserInteractionEnabled = true
-        let hideOnSwipe = UISwipeGestureRecognizer(target: self, action: #selector(closeSwipe))
-        hideOnSwipe.direction = .down
-        view.addGestureRecognizer(hideOnSwipe)
+        //view.isUserInteractionEnabled = true
+
         
     }
     
@@ -121,16 +133,15 @@ class SettingsViewController: UIViewController {
             vc.selectedScreen = .logIn
         }
     }
-    
-    
-    
-//close
-    
-    @objc func closeSwipe(_ gesture: UISwipeGestureRecognizer) {
-        self.dismiss(animated: true, completion: nil)
-    }
+
     @IBAction func closePressed(_ sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 0.23) {
+                self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 300, 0)
+            } completion: { (_) in
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
     }
     
 }

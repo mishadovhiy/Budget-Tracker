@@ -8,14 +8,21 @@
 
 import UIKit
 
+protocol CalendarVCProtocol {
+    func dateSelected(date: String)
+}
+
 class CalendarVC: UIViewController {
     
+    @IBOutlet weak var headerView: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var endButton: UIButton!
     @IBOutlet weak var buttonsStack: UIStackView!
     @IBOutlet weak var doneButton: UIButton!
+    
+    var delegate: CalendarVCProtocol?
     
     var selectedFrom = ""
     var selectedTo = ""
@@ -33,6 +40,13 @@ class CalendarVC: UIViewController {
         updaiteUI()
     }
 
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if delegate != nil {
+            navigationController?.setNavigationBarHidden(false, animated: true)
+            headerView.isHidden = true
+        }
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         if ifCustom {
@@ -85,13 +99,18 @@ class CalendarVC: UIViewController {
         appData.styles.cornerRadius(buttons: [startButton, endButton])
         
         let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
-        year = appData.filter.getYearFromString(s: today)
-        month = appData.filter.getMonthFromString(s: today)
+        year = appData.filter.getYearFromString(s: selectedFrom == "" ? today : selectedFrom)
+        month = appData.filter.getMonthFromString(s: selectedFrom == "" ? today : selectedFrom)
         getDays()
         if selectedTo == "" && selectedFrom == "" {
             toggleButton(b: startButton, hidden: true)
             toggleButton(b: endButton, hidden: true)
             doneButtonIsActive()
+        }
+        
+        if selectedTo == "" {
+            toggleButton(b: endButton, hidden: true)
+            toggleButton(b: startButton, hidden: true)
         }
     }
     
@@ -545,27 +564,39 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
         let monthCell = makeTwo(n: month)
         let yearCell = makeTwo(n: year)
         
-        if cell.cellTypeLabel.text == selectedFrom || cell.cellTypeLabel.text == selectedTo {
-            removeSelected(cell: cell)
-        } else {
-            if selectedFrom == "" {
-                selectedFrom = "\(dayCell).\(monthCell).\(yearCell)"
-                selectedFromDayInt = indexPath.row + 1
+        if delegate == nil {
+            
+            
+            if cell.cellTypeLabel.text == selectedFrom || cell.cellTypeLabel.text == selectedTo {
+                removeSelected(cell: cell)
             } else {
-                selectedTo = "\(dayCell).\(monthCell).\(yearCell)"
-                selectedToDayInt = indexPath.row + 1
+                if selectedFrom == "" {
+                    selectedFrom = "\(dayCell).\(monthCell).\(yearCell)"
+                    selectedFromDayInt = indexPath.row + 1
+                } else {
+                    selectedTo = "\(dayCell).\(monthCell).\(yearCell)"
+                    selectedToDayInt = indexPath.row + 1
+                }
+                ifToSmaller()
+                
             }
-            ifToSmaller()
+            doneButtonIsActive()
+            DispatchQueue.init(label: "reloadCollection").async {
+                self.ifToSmaller()
+                self.getBetweens()
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
+            }
+        } else {
+            let day = cell.cellTypeLabel.text
+            if let result = day {
+                delegate?.dateSelected(date: result)
+                navigationController?.popToRootViewController(animated: true)
+            }
             
         }
-        doneButtonIsActive()
-        DispatchQueue.init(label: "reloadCollection").async {
-            self.ifToSmaller()
-            self.getBetweens()
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
-        }
+        
         
     }
     

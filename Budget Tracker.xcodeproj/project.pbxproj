@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		297BDB649113044757C2CEF2 /* Pods_Budget_Tracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F84A1AEB24B0EC857F848E0 /* Pods_Budget_Tracker.framework */; };
+		8BD2E77C25B8622100D4DFBF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */; };
 		8D36724224D315BC00CE90A9 /* dbModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D36724124D315BC00CE90A9 /* dbModel.swift */; };
 		8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5206662421695200772CD5 /* StatisticBrain.swift */; };
 		8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D52066824216A2900772CD5 /* StatisticVC.swift */; };
@@ -16,8 +17,6 @@
 		8D8B6C3E245023EC007260A0 /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8B6C3D245023EC007260A0 /* CalendarVC.swift */; };
 		8DA8A46B24E893D5003B693F /* FirstLaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA8A46A24E893D4003B693F /* FirstLaunchViewController.swift */; };
 		8DB1A6FA24E19069002DE486 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB1A6F924E19069002DE486 /* SettingsViewController.swift */; };
-		8DB1A6FC24E1A43C002DE486 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB1A6FB24E1A43C002DE486 /* LoginViewController.swift */; };
-		8DB1A6FE24E1A46F002DE486 /* DontGoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB1A6FD24E1A46F002DE486 /* DontGoViewController.swift */; };
 		8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */; };
 		8DBA7E5223F0316F00D8214C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5123F0316F00D8214C /* SceneDelegate.swift */; };
 		8DBA7E5423F0316F00D8214C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5323F0316F00D8214C /* ViewController.swift */; };
@@ -25,7 +24,6 @@
 		8DBA7E5A23F0316F00D8214C /* Budget_Tracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5823F0316F00D8214C /* Budget_Tracker.xcdatamodeld */; };
 		8DBA7E5C23F0317100D8214C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5B23F0317100D8214C /* Assets.xcassets */; };
 		8DBA7E5F23F0317100D8214C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5D23F0317100D8214C /* LaunchScreen.storyboard */; };
-		8DD7E88624EE58050060EE62 /* localDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD7E88524EE58050060EE62 /* localDataViewController.swift */; };
 		8DD89D8323F1468E00273904 /* mainVCcell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8223F1468E00273904 /* mainVCcell.swift */; };
 		8DD89D8723F1471400273904 /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8623F1471400273904 /* AppData.swift */; };
 		8DD89D8A23F1472E00273904 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8923F1472E00273904 /* MessageView.swift */; };
@@ -39,6 +37,7 @@
 		4495115F0F67B3D07EA6B233 /* Pods-Budget Tracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Budget Tracker.debug.xcconfig"; path = "Target Support Files/Pods-Budget Tracker/Pods-Budget Tracker.debug.xcconfig"; sourceTree = "<group>"; };
 		5F84A1AEB24B0EC857F848E0 /* Pods_Budget_Tracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Budget_Tracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60EB2258A12489890A827616 /* Pods-Budget Tracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Budget Tracker.release.xcconfig"; path = "Target Support Files/Pods-Budget Tracker/Pods-Budget Tracker.release.xcconfig"; sourceTree = "<group>"; };
+		8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8D36724124D315BC00CE90A9 /* dbModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dbModel.swift; sourceTree = "<group>"; };
 		8D5206662421695200772CD5 /* StatisticBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticBrain.swift; sourceTree = "<group>"; };
 		8D52066824216A2900772CD5 /* StatisticVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticVC.swift; sourceTree = "<group>"; };
@@ -47,8 +46,6 @@
 		8D8B6C3D245023EC007260A0 /* CalendarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarVC.swift; sourceTree = "<group>"; };
 		8DA8A46A24E893D4003B693F /* FirstLaunchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstLaunchViewController.swift; sourceTree = "<group>"; };
 		8DB1A6F924E19069002DE486 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
-		8DB1A6FB24E1A43C002DE486 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		8DB1A6FD24E1A46F002DE486 /* DontGoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DontGoViewController.swift; sourceTree = "<group>"; };
 		8DBA7E4C23F0316F00D8214C /* Budget Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Budget Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8DBA7E5123F0316F00D8214C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -58,7 +55,6 @@
 		8DBA7E5B23F0317100D8214C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8DBA7E5E23F0317100D8214C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8DBA7E6023F0317100D8214C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8DD7E88524EE58050060EE62 /* localDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = localDataViewController.swift; sourceTree = "<group>"; };
 		8DD89D8223F1468E00273904 /* mainVCcell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mainVCcell.swift; sourceTree = "<group>"; };
 		8DD89D8623F1471400273904 /* AppData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
 		8DD89D8923F1472E00273904 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
@@ -164,10 +160,8 @@
 				8D8B6C3B245023D0007260A0 /* FilterTVC.swift */,
 				8D8B6C3D245023EC007260A0 /* CalendarVC.swift */,
 				8DA8A46A24E893D4003B693F /* FirstLaunchViewController.swift */,
+				8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */,
 				8DB1A6F924E19069002DE486 /* SettingsViewController.swift */,
-				8DB1A6FD24E1A46F002DE486 /* DontGoViewController.swift */,
-				8DB1A6FB24E1A43C002DE486 /* LoginViewController.swift */,
-				8DD7E88524EE58050060EE62 /* localDataViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -306,22 +300,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8DB1A6FC24E1A43C002DE486 /* LoginViewController.swift in Sources */,
 				8DD89D8323F1468E00273904 /* mainVCcell.swift in Sources */,
 				8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */,
-				8DB1A6FE24E1A46F002DE486 /* DontGoViewController.swift in Sources */,
 				8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */,
 				8DD89D8A23F1472E00273904 /* MessageView.swift in Sources */,
 				8DD89D8E23F1495300273904 /* TransactionVC.swift in Sources */,
 				8D8B6C3E245023EC007260A0 /* CalendarVC.swift in Sources */,
 				8DBA7E5423F0316F00D8214C /* ViewController.swift in Sources */,
 				8DBA7E5A23F0316F00D8214C /* Budget_Tracker.xcdatamodeld in Sources */,
+				8BD2E77C25B8622100D4DFBF /* LoginViewController.swift in Sources */,
 				8D8B6C3C245023D0007260A0 /* FilterTVC.swift in Sources */,
 				8DD89D9023F1496100273904 /* CategoriesVC.swift in Sources */,
 				8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */,
 				8DBA7E5223F0316F00D8214C /* SceneDelegate.swift in Sources */,
 				8DB1A6FA24E19069002DE486 /* SettingsViewController.swift in Sources */,
-				8DD7E88624EE58050060EE62 /* localDataViewController.swift in Sources */,
 				8DD89D8723F1471400273904 /* AppData.swift in Sources */,
 				8DA8A46B24E893D5003B693F /* FirstLaunchViewController.swift in Sources */,
 				8D52066B24216A6200772CD5 /* HistoryVC.swift in Sources */,

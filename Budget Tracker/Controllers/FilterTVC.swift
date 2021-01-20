@@ -15,7 +15,7 @@ class FilterTVC: UIViewController {
     var years = [""]
     var sectionsCount = 3
     var buttonTitle = ["All Time", "This Month", "Today", "Yesterday", "Custom"]
-    let data = appData.transactions
+    let data = appData.transactions.sorted{ $0.dateFromString > $1.dateFromString }
     
     @IBOutlet weak var tableview: UITableView!
     
@@ -34,18 +34,23 @@ class FilterTVC: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first {
             if touch.view != tableview {
-                self.dismiss(animated: true, completion: nil)
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
+                }
+                //self.dismiss(animated: true, completion: nil)
             }
         }
     }
     
     var vcAppeared = false
-
-    
     override func viewWillLayoutSubviews() {
         if !vcAppeared {
             vcAppearence()
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        
     }
     
     func vcAppearence() {
@@ -101,7 +106,6 @@ class FilterTVC: UIViewController {
     }
     
     func removeDayMonthFromString(_ s: String) -> String {
-        
         var m = s
         for _ in 0..<6 {
             m.removeFirst()
@@ -110,7 +114,10 @@ class FilterTVC: UIViewController {
     }
     
     @IBAction func closePressed(_ sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
+       // self.dismiss(animated: true, completion: nil)
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
+        }
     }
     
     func getTitleSectionFor(data: [String], title: String) -> String {

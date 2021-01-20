@@ -32,32 +32,7 @@ var refreshDataComlition: Bool?
  show from up to down
  */
 
-class ViewController: UIViewController, TransitionVCProtocol {
-    func addNewTransaction(value: String, category: String, date: String, comment: String) {
-        let new = TransactionsStruct(value: value, category: category, date: date, comment: comment)
-        let save = SaveToDB()
-        save.Transactions(transactionStruct: new, mainView: self, completion: { (error) in
-            if error {
-                var allunsended = appData.unsavedTransactions
-                allunsended.append(new)
-                appData.unsavedTransactions = allunsended
-                self.filter()
-                DispatchQueue.main.async {
-                    self.message.showMessage(text: "Error saving data", type: .error)
-                }
-                print("error saving new data - save to unsended")
-                
-            } else {
-                self.filter()
-                print("new dana has sended")
-            }
-            self.editingIndexPath = nil
-        })
-    }
-    
-    func quiteTransactionVC() {
-        print("mk bvgyhkmhjk")
-    }
+class ViewController: UIViewController {
     
     
     
@@ -207,9 +182,9 @@ class ViewController: UIViewController, TransitionVCProtocol {
         allDaysBetween()
         let allFilteredData = performFiltering(from: appData.filter.from, to: appData.filter.to, all: appData.filter.showAll).sorted{ $0.dateFromString < $1.dateFromString }
         print("filterrrr: all filtered: ", allFilteredData)
-        
-        newTableData = createTableData(filteredData: allFilteredData)
         calculateLabels()
+        newTableData = createTableData(filteredData: allFilteredData)
+        
         /*let tableTrans = Array(allFilteredData) + Array(unsendedTransactions)
         let allTrans = Array(appData.transactions) + Array(unsendedTransactions)
         //recalculation(i: self.incomeLabel, e: self.expenseLabel, periudData: tableTrans, allData: allTrans)
@@ -609,7 +584,7 @@ class ViewController: UIViewController, TransitionVCProtocol {
     var totalBalance = 0.0
     
     func calculateLabels() {
-        let tableTrans = Array(tableData) + Array(appData.unsavedTransactions)
+        let tableTrans = Array(tableData)
         let allTrans = Array(appData.transactions)
         recalculation(i: self.incomeLabel, e: self.expenseLabel, periudData: tableTrans)
         var totalExpenses = 0.0
@@ -774,21 +749,26 @@ class ViewController: UIViewController, TransitionVCProtocol {
     }
     var editingIndexPath: IndexPath?
     
-    
+    var prevSelectedPer = selectedPeroud
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         print("prepare")
 
         switch segue.identifier {
         case "toFiterVC":
+            prevSelectedPer = selectedPeroud
             print("toFiterVC")
-            UIView.animate(withDuration: 0.2) {
-                self.filterView.backgroundColor = K.Colors.separetor
-            }
             let vc = segue.destination as? FilterTVC
-            vc?.frame = CGRect(x: filterView.frame.origin.x, y: filterView.frame.origin.y + filterView.frame.height + 5, width: (filterView.frame.width + 50) / 2, height: 200)
+            vc?.frame = CGRect(x: filterView.frame.origin.x, y: filterView.frame.origin.y + filterView.frame.height + 5, width: (filterView.frame.width + 50) / 2, height: filterView.frame.width)
+            DispatchQueue.main.async {
+                
+                UIView.animate(withDuration: 0.2) {
+                    self.filterView.backgroundColor = K.Colors.separetor
+                }
+            }
             
         case K.goToEditVCSeq:
-            let vc = segue.destination as! TransitionVC
+            let nav = segue.destination as! UINavigationController
+            let vc = nav.topViewController as! TransitionVC
             vc.delegate = self
             if let i = editingIndexPath {
                 print("prepare:", i)
@@ -811,10 +791,18 @@ class ViewController: UIViewController, TransitionVCProtocol {
             }
         }
     }
+    //from filter
     @IBAction func unwindToFilter(segue: UIStoryboardSegue) {
         DispatchQueue.global(qos: .userInteractive).async {
-            self.filter()
-            print("unwindToFilter filter: \(selectedPeroud)")
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.2) {
+                    self.filterView.backgroundColor = .clear
+                }
+            }
+            if self.prevSelectedPer != selectedPeroud {
+                self.filter()
+                print("unwindToFilter filter: \(selectedPeroud)")
+            }
         }
     }
     @IBAction func settingsPressed(_ sender: UIButton) {
@@ -861,26 +849,27 @@ class ViewController: UIViewController, TransitionVCProtocol {
             self.refreshSubview.alpha = self.refreshData ? 0 : alpha
         }
         
+        let lastCellVisible = self.newTableData.count > 8 ? true : false
         
-        
-        if scrollView.contentOffset.y < 0.0 {
-            let y = self.whiteBackgroundFrame.minY + (scrollView.contentOffset.y * (-1))
-            print(y, "jvfghjkmbgujkmng")
-//            DispatchQueue.main.async { //badacc
+        if !lastCellVisible {
+            if scrollView.contentOffset.y < 0.0 {
+                let y = self.whiteBackgroundFrame.minY + (scrollView.contentOffset.y * (-1))
+                print(y, "jvfghjkmbgujkmng")
                 self.whiteBackground.frame = CGRect(x: 0, y: y, width: self.whiteBackgroundFrame.width, height: self.whiteBackgroundFrame.height)
-//            }
-            if scrollView.contentOffset.y <= addTransitionButton.frame.maxY * (-1) {
-                print("too far")
-                DispatchQueue.main.async {
-                    self.refreshControl.endRefreshing()
+                if scrollView.contentOffset.y <= addTransitionButton.frame.maxY * (-1) {
+                    print("too far")
+                    DispatchQueue.main.async {
+                        self.refreshControl.endRefreshing()
+                    }
+                    
                 }
-                
-            }
-        } else {
-            if scrollView.contentSize.height - 200 <= scrollView.contentOffset.y {
-                scrollView.contentOffset.y = scrollView.contentSize.height - 200
+            } else {
+                if scrollView.contentSize.height - 200 <= scrollView.contentOffset.y {
+                    scrollView.contentOffset.y = scrollView.contentSize.height - 200
+                }
             }
         }
+        
         
 
     }
@@ -1072,14 +1061,40 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
-/*extension ViewController: TransitionVCProtocol {
+extension ViewController: TransitionVCProtocol {
     func addNewTransaction(value: String, category: String, date: String, comment: String) {
-        print("khujnhjgvhkjlkmnjbh")
+        let new = TransactionsStruct(value: value, category: category, date: date, comment: comment)
+        let save = SaveToDB()
+        save.Transactions(transactionStruct: new, mainView: self, completion: { (error) in
+            if error {
+                var allunsended = appData.unsavedTransactions
+                allunsended.append(new)
+                appData.unsavedTransactions = allunsended
+                self.filter()
+                DispatchQueue.main.async {
+                    self.message.showMessage(text: "Error saving data", type: .error)
+                }
+                print("error saving new data - save to unsended")
+                
+            } else {
+                self.filter()
+                print("new dana has sended")
+            }
+            self.editingIndexPath = nil
+        })
     }
     
     func quiteTransactionVC() {
-        print("quit")
+        print("mainvc:quit")
+        DispatchQueue.main.async {
+            //     if self.refreshControl.isRefreshing {
+                
+                self.mainTableView.reloadData()
+                self.refreshControl.endRefreshing()
+                    // }
+            
+        }
     }
     
     
-}*/
+}
