@@ -126,7 +126,7 @@ struct LoadFromDB {
         
     }
     
-    func Users(mainView: UIViewController?, completion: @escaping ([[String]]) -> ()) {
+    func Users(completion: @escaping ([[String]], Bool) -> ()) {
         
         var loadedData: [[String]] = []
         let urlPath = "https://www.dovhiy.com/apps/budget-tracker-db/users.php"
@@ -134,10 +134,7 @@ struct LoadFromDB {
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             
             if error != nil {
-                appData.internetPresend = false
-                if mainView != nil {
-                    self.showMessage(vc: mainView!)
-                }
+                completion([], true)
                 return
                 
             } else {
@@ -147,6 +144,7 @@ struct LoadFromDB {
                     jsonResult = try JSONSerialization.jsonObject(with: data!, options:JSONSerialization.ReadingOptions.allowFragments) as! NSArray
                 } catch let error as NSError {
                     print(error, "parseJSON - wrong db")
+                    completion([], true)
                     return
                 }
                 
@@ -165,7 +163,7 @@ struct LoadFromDB {
                     
                 }
 
-                completion(loadedData)
+                completion(loadedData, false)
             
             }
             
@@ -238,10 +236,6 @@ struct SaveToDB {
                 
                 if error != nil {
                     print("save: internet error")
-                    //append transactions or categories to unsended
-                    ///todo
-                    //check if transactions or categories
-                    //remove on sendButtonPressed in transVC/catsVC if internet pressend and on quitSegues check unsended data qnt of bigger then was - show error
                     completion(true)
                     return
                     

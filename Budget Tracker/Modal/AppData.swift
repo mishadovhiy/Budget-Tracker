@@ -107,7 +107,7 @@ class AppData {
     var unsavedCategoriesAppended = false
     var fromLoginVCMessage = ""
     
-    func saveTransations(_ data: [TransactionsStruct]) {
+    func saveTransations(_ data: [TransactionsStruct], key: String = "transactionsData") {
         var dict: [[String]] = []
         for i in 0..<data.count {
             let nickname = username
@@ -119,12 +119,27 @@ class AppData {
             dict.append([nickname, value, category, date, comment])
         }
         print("transactions saved to user defaults, count: \(dict.count)")
-        defaults.set(dict, forKey: "transactionsData")
+        defaults.set(dict, forKey: key)
     }
 
     var transactions: [TransactionsStruct] {
         get{
             let localData = defaults.value(forKey: "transactionsData") as? [[String]] ?? []
+            var results: [TransactionsStruct] = []
+            for i in 0..<localData.count {
+                let value = localData[i][1]
+                let category = localData[i][2]
+                let date = localData[i][3]
+                let comment = localData[i][4]
+                results.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
+            }
+            return results
+        }
+    }
+    
+    var savedTransactions: [TransactionsStruct] {
+        get{
+            let localData = defaults.value(forKey: "savedTransactions") as? [[String]] ?? []
             var results: [TransactionsStruct] = []
             for i in 0..<localData.count {
                 let value = localData[i][1]
@@ -163,7 +178,7 @@ class AppData {
         }
     }
 
-    func saveCategories(_ data: [CategoriesStruct]) {
+    func saveCategories(_ data: [CategoriesStruct], key: String = "categoriesData") {
         var dict: [[String]] = []
         for i in 0..<data.count {
             let nickname = username
@@ -172,9 +187,22 @@ class AppData {
             
             dict.append([nickname, name, purpose])
         }
-        print("categories saved to user defaults, count: \(dict.count)")
-        defaults.set(dict, forKey: "categoriesData")
+        print("categories saved to user defaults, count: \(dict.count), \(dict)")
+        defaults.set(dict, forKey: key)
     }
+    var savedCategories: [CategoriesStruct] {
+        get{
+            let localData = defaults.value(forKey: "savedCategories") as? [[String]] ?? []
+            var results: [CategoriesStruct] = []
+            for i in 0..<localData.count {
+                let name = localData[i][1]
+                let purpose = localData[i][2]
+                results.append(CategoriesStruct(name: name, purpose: purpose))
+            }
+            return results
+        }
+    }
+    
     
     func getCategories() -> [CategoriesStruct] {
         let localData = defaults.value(forKey: "categoriesData") as? [[String]] ?? []

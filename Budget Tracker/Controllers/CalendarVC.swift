@@ -49,24 +49,27 @@ class CalendarVC: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        if ifCustom {
-            selectedFrom = appData.filter.from
-            selectedTo = appData.filter.to
-            selectedFromDayInt = appData.filter.getDayFromString(s: selectedFrom)
-            selectedToDayInt = appData.filter.getDayFromString(s: selectedTo)
-            ifToSmaller()
-            
-            year = getYearFrom(string: selectedFrom)
-            month = getMonthFrom(string: selectedFrom)
-            getDays()
-            getBetweens()
-            doneIsActive = true
-            doneButtonIsActive()
-            ifEndInvisible()
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
+        if delegate == nil {
+            if ifCustom {
+                selectedFrom = appData.filter.from
+                selectedTo = appData.filter.to
+                selectedFromDayInt = appData.filter.getDayFromString(s: selectedFrom)
+                selectedToDayInt = appData.filter.getDayFromString(s: selectedTo)
+                ifToSmaller()
+                
+                year = getYearFrom(string: selectedFrom)
+                month = getMonthFrom(string: selectedFrom)
+                getDays()
+                getBetweens()
+                doneIsActive = true
+                doneButtonIsActive()
+                ifEndInvisible()
+                DispatchQueue.main.async {
+                    self.collectionView.reloadData()
+                }
             }
         }
+        
     }
     
     func ifEndInvisible() {
@@ -86,8 +89,8 @@ class CalendarVC: UIViewController {
         }
     }
     
+    let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
     func updaiteUI() {
-        
         collectionView.delegate = self
         collectionView.dataSource = self
         let swipeLeft:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(swipeForward))
@@ -98,7 +101,7 @@ class CalendarVC: UIViewController {
         view.addGestureRecognizer(swipeRight)
         appData.styles.cornerRadius(buttons: [startButton, endButton])
         
-        let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
+        
         year = appData.filter.getYearFromString(s: selectedFrom == "" ? today : selectedFrom)
         month = appData.filter.getMonthFromString(s: selectedFrom == "" ? today : selectedFrom)
         getDays()
@@ -554,6 +557,9 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
         cell.cellTypeLabel.text = "\(dayCell).\(monthCell).\(yearCell)"
         cellBackground(cell: cell)
         backgroundBetween(cell: cell)
+        if cell.cellTypeLabel.text == today {
+            cell.dayLabel.textColor = K.Colors.negative
+        }
         return cell
     }
     

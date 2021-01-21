@@ -431,13 +431,7 @@ class ViewController: UIViewController {
             appData.internetPresend = nil
             print("downloadFromDB: username: \(appData.username), not nill")
             let load = LoadFromDB()
-            load.Users(mainView: self) { (loadedData) in
-                appData.allUsers = loadedData
-                if loadedData.count == 0 {
-                    appData.internetPresend = false
-                }
-                print("loaded")
-            }
+
             
             load.Transactions(mainView: self) { (loadedData, error) in
                 if error == "" {
@@ -787,7 +781,9 @@ class ViewController: UIViewController {
         DispatchQueue.global(qos: .userInteractive).async {
             self.downloadFromDB()
             if appData.fromLoginVCMessage != "" {
-                self.message.showMessage(text: appData.fromLoginVCMessage, type: .succsess)
+                DispatchQueue.main.async {
+                    self.message.showMessage(text: appData.fromLoginVCMessage, type: .succsess, windowHeight: 200)
+                }
             }
         }
     }

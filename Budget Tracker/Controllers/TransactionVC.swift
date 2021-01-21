@@ -78,7 +78,11 @@ class TransitionVC: UIViewController {
                 vc.selectedFrom = date
             }
             
-            
+        case "toCategories":
+            print("toCalendar")
+            let vc = segue.destination as! CategoriesVC
+            vc.delegate = self
+            vc.title = "Calendar"
         default:
             print("segue default")
         }
@@ -96,11 +100,14 @@ class TransitionVC: UIViewController {
         appData.objects.datePicker.addTarget(self, action: #selector(datePickerChangedValue(sender:)), for: .valueChanged)
         dateTextField.isUserInteractionEnabled = false
         dateTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(datePressed)))
-        dateTextField.text = "\(appData.stringDate(appData.objects.datePicker))"
+        
+        dateTextField.text = UserDefaults.standard.value(forKey: "lastSelectedDate") as? String ?? appData.stringDate(appData.objects.datePicker)
         pressedValue = "0"
         valueLabel.text = pressedValue
         commentTextField.smartInsertDeleteType = UITextSmartInsertDeleteType.no
         commentTextField.addTarget(self, action: #selector(commentCount), for: .editingChanged)
+        categoryTextField.isUserInteractionEnabled = false
+        categoryTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(categoryPressed)))
         
     }
     
@@ -110,6 +117,14 @@ class TransitionVC: UIViewController {
             self.performSegue(withIdentifier: "toCalendar", sender: self)
         }
     }
+    
+    @objc func categoryPressed(_ sender: UITapGestureRecognizer) {
+        print("toCategories")
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: "toCategories", sender: self)
+        }
+    }
+    
     
     func delegates(fields: [UITextField], pickes: [UIPickerView]) {
         
@@ -297,7 +312,7 @@ class TransitionVC: UIViewController {
             let comment = editingCommentHolder
             addNew(value: value, category: category, date: date, comment: comment)
         } else {
-            //
+            self.dismiss(animated: true, completion: nil)
         }
     }
     
@@ -308,18 +323,18 @@ class TransitionVC: UIViewController {
             
         case 0:
             minusPlusLabel.text = "-"
-            categoryTextField.inputView = appData.objects.expensesPicker
+            //categoryTextField.inputView = appData.objects.expensesPicker
             categoryTextField.text = "\(expenseArr[appData.selectedExpense])"
             showPadPressed(showValueButton)
             
         case 1:
             minusPlusLabel.text = "+"
-            categoryTextField.inputView = appData.objects.incomePicker
+            //categoryTextField.inputView = appData.objects.incomePicker
             categoryTextField.text = "\(incomeArr[appData.selectedIncome])"
             showPadPressed(showValueButton)
             
         default:
-            categoryTextField.inputView = appData.objects.expensesPicker
+           // categoryTextField.inputView = appData.objects.expensesPicker
             categoryTextField.placeholder = expenseArr[appData.selectedExpense]
         }
     }
@@ -466,6 +481,18 @@ class CustomTextField: UITextField {
 extension TransitionVC: CalendarVCProtocol {
     func dateSelected(date: String) {
         dateTextField.text = date
+        UserDefaults.standard.setValue(date, forKey: "lastSelectedDate")
+    }
+    
+    
+}
+
+extension TransitionVC: CategoriesVCProtocol {
+    func categorySelected(category: String, purpose: Int) {
+        purposeSwitcher.selectedSegmentIndex = purpose
+        purposeSwitched(purposeSwitcher)
+        categoryTextField.text = category
+        UserDefaults.standard.setValue(category, forKey: "lastSelectedCategory")
     }
     
     

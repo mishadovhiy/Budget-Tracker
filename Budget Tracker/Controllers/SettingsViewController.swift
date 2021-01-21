@@ -44,10 +44,7 @@ class SettingsViewController: UIViewController {
             }
         }
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        reloadAllfromDB()
-    }
+
     
     func updateUI() {
         tableView.delegate = self
@@ -66,10 +63,10 @@ class SettingsViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        UIView.animate(withDuration: 0.3) {
-            self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
-        }
         DispatchQueue.main.async {
+            UIView.animate(withDuration: 0.3) {
+                self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+            }
             self.tableView.reloadData()
         }
     }
@@ -80,18 +77,6 @@ class SettingsViewController: UIViewController {
         }
     }
     
-    func reloadAllfromDB() {
-        
-        ckeckInternetTimer?.fire()
-        appData.internetPresend = nil
-        print("reloadAllfromDB")
-        let load = LoadFromDB()
-        load.Users(mainView: nil) { (loadedData) in
-            appData.allUsers = loadedData
-            self.ckeckInternetTimer?.invalidate()
-        }
-
-    }
     
     
     var toLoginPressed = false
@@ -130,7 +115,7 @@ class SettingsViewController: UIViewController {
         ckeckInternetTimer?.invalidate()
         if segue.identifier == "toSingIn" {
             let vc = segue.destination as! LoginViewController
-            vc.selectedScreen = .logIn
+            vc.selectedScreen = .createAccount
         }
     }
 
@@ -165,14 +150,8 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if indexPath.row != 0 {
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: self.tableData[indexPath.row].segue, sender: self)
-            }
-            
-        } else {
-            self.toLoginPressed = true
-            reloadAllfromDB()
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: self.tableData[indexPath.row].segue, sender: self)
         }
         
         DispatchQueue.main.async {

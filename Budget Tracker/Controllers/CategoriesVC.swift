@@ -9,6 +9,10 @@
 import UIKit
 import CoreData
 
+protocol CategoriesVCProtocol {
+    func categorySelected(category: String, purpose: Int)
+}
+
 class CategoriesVC: UIViewController {
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
@@ -16,6 +20,9 @@ class CategoriesVC: UIViewController {
     var catData = appData.categoryVC
     var refreshControl = UIRefreshControl()
     var allCategoriesData = Array(appData.getCategories())
+    @IBOutlet weak var headerView: UIView!
+    
+    var delegate: CategoriesVCProtocol?
     
     func getDataFromLocal() {
         expenses = []
@@ -43,6 +50,12 @@ class CategoriesVC: UIViewController {
         updateUI()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        if delegate != nil {
+            navigationController?.setNavigationBarHidden(false, animated: true)
+        }
+    }
+    
     func updateUI() {
         
         getDataFromLocal()
@@ -55,6 +68,10 @@ class CategoriesVC: UIViewController {
         let hiseCatsSwipe: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(hideCats(_:)))
         hiseCatsSwipe.direction = .left
         view.addGestureRecognizer(hiseCatsSwipe);
+        
+        if delegate != nil {
+            headerView.isHidden = true
+        }
     }
     
     @objc func hideCats(_ gesture: UISwipeGestureRecognizer) {
@@ -117,7 +134,7 @@ class CategoriesVC: UIViewController {
         }
     }
     
-    func sendToDB() {
+    func sendToDBCategory() {
         
         let Nickname = appData.username
         if Nickname != "" {
@@ -177,7 +194,7 @@ class CategoriesVC: UIViewController {
                 
                 if appData.internetPresend != nil {
                     if appData.internetPresend! == false {
-                        self.sendToDB()
+                        self.sendToDBCategory()
                     }
                 }
                 
@@ -194,6 +211,8 @@ class CategoriesVC: UIViewController {
     @IBAction func closePressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
+    
+    
 }
 
 
@@ -254,6 +273,13 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if delegate != nil {
+            delegate?.categorySelected(category: indexPath.section == 0 ? expenses[indexPath.row] : incomes[indexPath.row], purpose: indexPath.section)
+            navigationController?.popToRootViewController(animated: true)
+        }
+    }
+    
     
 }
 
@@ -275,6 +301,7 @@ extension CategoriesVC: UIPickerViewDelegate, UIPickerViewDataSource {
         
         catData.purposeField.text = "\(catData.allPurposes[row])"
         catData.selectedPurpose = row
+    
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {

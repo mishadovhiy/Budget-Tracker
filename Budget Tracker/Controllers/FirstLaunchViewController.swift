@@ -75,15 +75,7 @@ class FirstLaunchViewController: UIViewController {
 
         
     }
-    
-    func downloadFromDB() {
-           
-           appData.internetPresend = nil
-           let load = LoadFromDB()
-           load.Users(mainView: self) { (loadedData) in
-               appData.allUsers = loadedData
-           }
-    }
+
     
     override func viewDidAppear(_ animated: Bool) {
         UIView.animate(withDuration: 0.6) {
@@ -94,7 +86,7 @@ class FirstLaunchViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toLogIN" {
             let vc = segue.destination as! LoginViewController
-            vc.selectedScreen = .logIn
+            vc.selectedScreen = .createAccount
         }
         if segue.identifier == "toCreate" {
             let vc = segue.destination as! LoginViewController
@@ -114,7 +106,6 @@ class FirstLaunchViewController: UIViewController {
                 }
             } else {
                 message.showMessage(text: "no intrnet", type: .error)
-                downloadFromDB()
             }
         }
     }
@@ -127,7 +118,6 @@ class FirstLaunchViewController: UIViewController {
                 }
             } else {
                 message.showMessage(text: "no intrnet", type: .error)
-                downloadFromDB()
             }
         }
         
