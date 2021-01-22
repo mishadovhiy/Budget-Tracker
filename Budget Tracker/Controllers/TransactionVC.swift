@@ -73,7 +73,6 @@ class TransitionVC: UIViewController {
             print("toCalendar")
             let vc = segue.destination as! CalendarVC
             vc.delegate = self
-            vc.title = "Calendar"
             if let date = dateTextField.text {
                 vc.selectedFrom = date
             }
@@ -82,7 +81,6 @@ class TransitionVC: UIViewController {
             print("toCalendar")
             let vc = segue.destination as! CategoriesVC
             vc.delegate = self
-            vc.title = "Calendar"
         default:
             print("segue default")
         }

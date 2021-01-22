@@ -17,24 +17,8 @@ var expenseLabelPressed = true
 var selectedPeroud = ""
 var refreshDataComlition: Bool?
 
-/* animation
- transactionVC:
- - when add pressed - vc.frame = add button frame and to init frame
- orange background, (pluss icon maybe)
- - when editing - vc.frame = cell frame
- white background, labels positions - cell.labels positions
- 
- when quiting, done sucs - vc.frame = oval and going down
- */
-
-/*
- if unsended data - show view (view pressed - perform vc)
- show from up to down
- */
 
 class ViewController: UIViewController {
-    
-    
     
     @IBOutlet weak var filterView: UIView!
     @IBOutlet weak var filterTextLabel: UILabel!
@@ -48,7 +32,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var expenseLabel: UILabel!
     var refreshControl = UIRefreshControl()
     var tableData = appData.transactions.sorted{ $0.dateFromString < $1.dateFromString }
-   // var newTableData: [tableStuct] = []
     var _TableData: [tableStuct] = []
     var newTableData: [tableStuct] {
         get {
@@ -58,7 +41,7 @@ class ViewController: UIViewController {
             _TableData = newValue
             print("self.tableData.count:", self.tableData.count)
             DispatchQueue.main.async {
-                
+                self.filterTextLabel.text = "Filter: \(selectedPeroud)"
                 self.mainTableView.reloadData()
                 if self.refreshControl.isRefreshing {
                     self.refreshControl.endRefreshing()
@@ -76,7 +59,8 @@ class ViewController: UIViewController {
                 }
                 
                 if self.forseSendUnsendedData {
-                    if appData.unsavedTransactions.count > 0 {
+                    let alldata = appData.unsavedTransactions.count + appData.getCategories(key: "unsavedCategories").count
+                    if alldata > 0 {
                         print("table data reloaded, unse count:", appData.unsavedTransactions.count)
                         self.sendUnsaved()
                     }
@@ -184,18 +168,6 @@ class ViewController: UIViewController {
         print("filterrrr: all filtered: ", allFilteredData)
         calculateLabels()
         newTableData = createTableData(filteredData: allFilteredData)
-        
-        /*let tableTrans = Array(allFilteredData) + Array(unsendedTransactions)
-        let allTrans = Array(appData.transactions) + Array(unsendedTransactions)
-        //recalculation(i: self.incomeLabel, e: self.expenseLabel, periudData: tableTrans, allData: allTrans)
-       // calculateBalance(balanceLabel: self.balanceLabel, transactions: allTrans)
-        statisticBrain.getlocalData(from: tableTrans)
-        sumAllCategories = statisticBrain.statisticData
-        DispatchQueue.main.async {
-            self.filterTextLabel.text = "Filter: \(selectedPeroud)"
-        }
-        calculateLabels()*/
-       // calculateLabels()
 
     }
     
@@ -276,12 +248,7 @@ class ViewController: UIViewController {
         print("performFiltering called")
         if all == true {
             tableData = appData.transactions.sorted{ $0.dateFromString < $1.dateFromString }
-            /*mmmDispatchQueue.main.async {
-                self.mainTableView.reloadData()
-                if self.refreshControl.isRefreshing {
-                    self.refreshControl.endRefreshing()
-                }
-            }*/
+
             print("showing for all time")
             allSelectedTransactionsData = tableData
 
@@ -316,14 +283,6 @@ class ViewController: UIViewController {
             allSelectedTransactionsData = self.tableData
             print(allSelectedTransactionsData, "allSelectedTransactionsDataallSelectedTransactionsData")
             print("end performFiltering FROM: \(from), TO: \(to), SHOW ALL: \(all)")
-            print("table data reloaded")
-            
-            /*DispatchQueue.main.async {
-                self.mainTableView.reloadData()
-                if self.refreshControl.isRefreshing {
-                    self.refreshControl.endRefreshing()
-                }
-            }*/
             return arr.sorted{ $0.dateFromString < $1.dateFromString }
             
         }
@@ -331,25 +290,56 @@ class ViewController: UIViewController {
     }
     
     
+    var sendSavedData = false
     func sendUnsaved() {
-
         var transactions = appData.unsavedTransactions
-        let save = SaveToDB()
-        if let transaction = transactions.first {
-            save.Transactions(transactionStruct: transaction, mainView: self) { (error) in
-                if error {
-                    self.filter()
-                    print("sendUnsaved: ERROR")
-                    self.forseSendUnsendedData = false
-                } else {
-                    transactions.removeFirst()
-                    appData.unsavedTransactions = transactions
-                    var alldata = appData.transactions
-                    alldata.append(transaction)
-                    appData.saveTransations(alldata)
-                    self.filter()
-                    print("sendUnsaved: unsended count:", appData.unsavedTransactions)
+        print("sendUnsaved trans count", transactions.count)
+        if transactions.count > 0 {
+            let save = SaveToDB()
+            if let transaction = transactions.first {
+                save.Transactions(transactionStruct: transaction, mainView: self) { (error) in
+                    if error {
+                        self.filter()
+                        print("sendUnsaved: ERROR")
+                        self.forseSendUnsendedData = false
+                    } else {
+                        transactions.removeFirst()
+                        appData.unsavedTransactions = transactions
+                        var alldata = appData.transactions
+                        alldata.append(transaction)
+                        appData.saveTransations(alldata)
+                        self.filter()
+                        print("sendUnsaved: unsended count:", appData.unsavedTransactions)
+                    }
                 }
+            }
+        }
+        if transactions.count == 0 {
+            var categories = appData.getCategories(key: "unsavedCategories")
+            print("sendUnsaved unsaved cats", categories.count)
+            let save = SaveToDB()
+            if let category = categories.first {
+                let toDataString = "&Nickname=\(appData.username)" + "&Title=\(category.name)" + "&Purpose=\(category.purpose)"
+                save.Categories(toDataString: toDataString) { (error) in
+                    if error {
+                        self.filter()
+                        self.forseSendUnsendedData = false
+                        print("Error saving category")
+                    } else {
+                        print("cat: unsended sended")
+                        var allCats = appData.getCategories()
+                        allCats.append(category)
+                        appData.saveCategories(allCats)
+                        categories.removeFirst()
+                        appData.saveCategories(categories, key: "unsavedCategories")
+                        self.filter()
+                    }
+                }
+            }
+            
+            
+            if sendSavedData == true {
+                
             }
         }
         
@@ -399,6 +389,7 @@ class ViewController: UIViewController {
     @objc func refresh(sender:AnyObject) {
         //add transaction
         //scrolltop (other, similier function) - to ask if user whants to refresh db
+        
         forseSendUnsendedData = true
         if refreshData {
             if appData.username != "" {
@@ -426,14 +417,16 @@ class ViewController: UIViewController {
 //MARK: - MySQL
     
     func downloadFromDB() {
-        
+        DispatchQueue.main.async {
+            self.filterTextLabel.text = "Downloading ..."
+        }
         if appData.username != "" {
             appData.internetPresend = nil
             print("downloadFromDB: username: \(appData.username), not nill")
             let load = LoadFromDB()
 
             
-            load.Transactions(mainView: self) { (loadedData, error) in
+            load.Transactions{(loadedData, error) in
                 if error == "" {
                     print("loaded \(loadedData.count) transactions from DB")
                     print("Transactions:was: \(appData.transactions.count)\nNow: \(loadedData.count)")
@@ -450,24 +443,30 @@ class ViewController: UIViewController {
                     self.filter()
                 } else {
                     print("error loading data")
+                    self.filter()
+                    DispatchQueue.main.async {
+                        self.message.showMessage(text: "Error", type: .error)
+                    }
+                    
                 }
 
             }
             
-            load.Categories(mainView: self) { (loadedData) in
-                print("loaded \(loadedData.count) Categories from DB")
-                print("Categories:was: \(appData.categoriesCoreData.count)\nNow: \(loadedData.count)")
-                var dataStruct: [CategoriesStruct] = []
-                for i in 0..<loadedData.count {
-                    
-                    let name = loadedData[i][1]
-                    let purpose = loadedData[i][2]
-                    dataStruct.append(CategoriesStruct(name: name, purpose: purpose))
+            load.Categories{(loadedData, error) in
+                if error == "" {
+                    print("loaded \(loadedData.count) Categories from DB")
+                    print("Categories:was: \(appData.categoriesCoreData.count)\nNow: \(loadedData.count)")
+                    var dataStruct: [CategoriesStruct] = []
+                    for i in 0..<loadedData.count {
+                        
+                        let name = loadedData[i][1]
+                        let purpose = loadedData[i][2]
+                        dataStruct.append(CategoriesStruct(name: name, purpose: purpose))
+                    }
+     
+                    appData.saveCategories(dataStruct)
                 }
- 
-                appData.saveCategories(dataStruct)
             }
-            //sendUnsendedToDB()
             
         } else {
             filter()
@@ -612,9 +611,6 @@ class ViewController: UIViewController {
         }
         statisticBrain.getlocalData(from: tableTrans)
         sumAllCategories = statisticBrain.statisticData
-        DispatchQueue.main.async {
-            self.filterTextLabel.text = "Filter: \(selectedPeroud)"
-        }
     }
     
     func recalculation(i:UILabel, e: UILabel, periudData: [TransactionsStruct]) {
@@ -771,8 +767,16 @@ class ViewController: UIViewController {
                 vc.editingCategory = newTableData[i.section].transactions[i.row].category
                 vc.editingComment = newTableData[i.section].transactions[i.row].comment
             }
+        case "toUnsendedVC":
+            let vc = segue.destination as! UnsendedDataVC
+            vc.delegate = self
+            if !savedPressed {
+                vc.keyPrefix = "saved"
+            } else {
+                vc.keyPrefix = "unsaved"
+            }
             
-        default: return // print("default")
+        default: return
         }
  
     }
@@ -865,9 +869,26 @@ class ViewController: UIViewController {
                 }
             }
         }
-        
-        
-
+    }
+    
+    var savedPressed = true
+    @objc func savedTransPressed(_ sender: UITapGestureRecognizer) {
+        savedPressed = false
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: "toUnsendedVC", sender: self)
+        }
+    }
+    @objc func unsavedPtransPressed(_ sender: UITapGestureRecognizer) {
+        savedPressed = true
+        if forseSendUnsendedData {
+            DispatchQueue.main.async {
+                self.message.showMessage(text: "Data is sending now", type: .succsess)
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "toUnsendedVC", sender: self)
+            }
+        }
     }
 
 }
@@ -897,34 +918,22 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-       // guard let calculationCell = mainTableView.dequeueReusableCell(withIdentifier: K.calcCellIdent, for: IndexPath(row: 0, section: 0)) as? calcCell else {return UITableViewCell()}
             let calculationCell = mainTableView.dequeueReusableCell(withIdentifier: K.calcCellIdent, for: indexPath) as! calcCell
-            //DispatchQueue.main.async {
-                //calculationCell.setupCell(self.totalBalance, sumExpenses: self.sumExpenses, sumPeriodBalance: self.sumPeriodBalance, sumIncomes: self.sumIncomes)
-          //  }
             calculationCell.balanceLabel.textColor = totalBalance < 0.0 ? K.Colors.negative : K.Colors.balanceV
             if totalBalance == sumPeriodBalance {
-               // DispatchQueue.main.async {
-                    calculationCell.periodStack.isHidden = true
-                    calculationCell.periodStack.alpha = 0
-               // }
-                
+                calculationCell.periodStack.isHidden = true
+                calculationCell.periodStack.alpha = 0
             } else {
-               // DispatchQueue.main.async {
-                    calculationCell.periodStack.isHidden = false
-                    calculationCell.periodStack.alpha = 1
-               // }
+                calculationCell.periodStack.isHidden = false
+                calculationCell.periodStack.alpha = 1
             }
-            let unsendedCount = appData.defaults.value(forKey: "unsavedTransactions") as? [[String]] ?? []
+            let unsendedCount = (appData.defaults.value(forKey: "unsavedTransactions") as? [[String]] ?? []) + (appData.defaults.value(forKey: "unsavedCategories") as? [[String]] ?? [])
+            print("tableView unsendedCount:", unsendedCount)
             if unsendedCount.count > 0 {
-                //DispatchQueue.main.async {
                 calculationCell.unsesndedTransactionsLabel.superview?.superview?.isHidden = false
-                    calculationCell.unsesndedTransactionsLabel.text = "\(unsendedCount.count)"
-               // }
+                calculationCell.unsesndedTransactionsLabel.text = "\(unsendedCount.count)"
             } else {
-            //    DispatchQueue.main.async {
-                    calculationCell.unsesndedTransactionsLabel.superview?.superview?.isHidden = true
-             //   }
+                calculationCell.unsesndedTransactionsLabel.superview?.superview?.isHidden = true
             }
             
             if totalBalance < Double(Int.max), sumExpenses < Double(Int.max), sumIncomes < Double(Int.max), sumPeriodBalance < Double(Int.max) {
@@ -943,6 +952,8 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 
             }
             calculationCell.savedTransactionsLabel.text = "1"
+            calculationCell.unsesndedTransactionsLabel.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(unsavedPtransPressed(_:))))
+            calculationCell.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(savedTransPressed(_:))))
             
             return calculationCell
             
@@ -950,7 +961,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             let data = newTableData[indexPath.section - 1].transactions[indexPath.row]
             let transactionsCell = tableView.dequeueReusableCell(withIdentifier: K.mainCellIdent) as! mainVCcell
             transactionsCell.setupCell(data, i: indexPath.row, tableData: tableData, selectedCell: selectedCell, indexPath: indexPath)
-            //transactionsCell.contentView.backgroundColor = UIColor.white
             return transactionsCell
             
         default: return UITableViewCell()
@@ -1083,13 +1093,25 @@ extension ViewController: TransitionVCProtocol {
     func quiteTransactionVC() {
         print("mainvc:quit")
         DispatchQueue.main.async {
-            //     if self.refreshControl.isRefreshing {
-                
-                self.mainTableView.reloadData()
-                self.refreshControl.endRefreshing()
-                    // }
-            
+            self.mainTableView.reloadData()
+            self.refreshControl.endRefreshing()
         }
+    }
+    
+    
+}
+
+
+extension ViewController: UnsendedDataVCProtocol {
+    func deletePressed() {
+        DispatchQueue.main.async {
+            self.mainTableView.reloadData()
+        }
+    }
+    
+    func sendPressed() {
+        sendSavedData = true
+        self.filter()
     }
     
     

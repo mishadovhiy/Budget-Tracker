@@ -45,6 +45,7 @@ class CalendarVC: UIViewController {
         if delegate != nil {
             navigationController?.setNavigationBarHidden(false, animated: true)
             headerView.isHidden = true
+            title = "Calendar"
         }
     }
     

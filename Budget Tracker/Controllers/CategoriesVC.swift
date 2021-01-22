@@ -24,14 +24,20 @@ class CategoriesVC: UIViewController {
     
     var delegate: CategoriesVCProtocol?
     
+    lazy var message: MessageView = {
+        let message = MessageView(self)
+        return message
+    }()
+    
     func getDataFromLocal() {
         expenses = []
         incomes = []
-        for i in 0..<allCategoriesData.count {
-            if allCategoriesData[i].purpose == K.expense {
-                expenses.append(allCategoriesData[i].name)
+        let categories = Array(appData.getCategories())
+        for i in 0..<categories.count {
+            if categories[i].purpose == K.expense {
+                expenses.append(categories[i].name)
             } else {
-                incomes.append(allCategoriesData[i].name)
+                incomes.append(categories[i].name)
             }
         }
         
@@ -48,6 +54,8 @@ class CategoriesVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUI()
+        
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -70,7 +78,14 @@ class CategoriesVC: UIViewController {
         view.addGestureRecognizer(hiseCatsSwipe);
         
         if delegate != nil {
-            headerView.isHidden = true
+            title = "Categories"
+            DispatchQueue.main.async {
+                let frame = self.headerView.frame
+                let selfFrame = self.categoriesTableView.frame
+                self.headerView.isHidden = true
+                self.categoriesTableView.translatesAutoresizingMaskIntoConstraints = true
+                self.categoriesTableView.frame = CGRect(x: 0, y: frame.minY, width: selfFrame.width, height: selfFrame.height + frame.height)
+            }
         }
     }
     
@@ -89,19 +104,25 @@ class CategoriesVC: UIViewController {
     
     @objc func refresh(sender:AnyObject) {
         let load = LoadFromDB()
-        load.Categories(mainView: self) { (loadedData) in
-            print("loaded \(loadedData.count) Categories from DB")
-            var dataStruct: [CategoriesStruct] = []
-            for i in 0..<loadedData.count {
-                
-                let name = loadedData[i][1]
-                let purpose = loadedData[i][2]
-                dataStruct.append(CategoriesStruct(name: name, purpose: purpose))
-            }
-            appData.saveCategories(dataStruct)
-            self.getDataFromLocal()
-            DispatchQueue.main.async {
-                self.categoriesTableView.reloadData()
+        load.Categories{ (loadedData, error) in
+            if error == "" {
+                print("loaded \(loadedData.count) Categories from DB")
+                var dataStruct: [CategoriesStruct] = []
+                for i in 0..<loadedData.count {
+                    
+                    let name = loadedData[i][1]
+                    let purpose = loadedData[i][2]
+                    dataStruct.append(CategoriesStruct(name: name, purpose: purpose))
+                }
+                appData.saveCategories(dataStruct)
+                self.getDataFromLocal()
+                DispatchQueue.main.async {
+                    self.categoriesTableView.reloadData()
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.message.showMessage(text: error, type: .error)
+                }
             }
         }
         Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (timer) in
@@ -134,15 +155,28 @@ class CategoriesVC: UIViewController {
         }
     }
     
-    func sendToDBCategory() {
+    func sendToDBCategory(title: String, purpose: String) {
         
         let Nickname = appData.username
         if Nickname != "" {
-            let Title = catData.categoryTextField.text ?? ""
-            let Purpose = catData.allPurposes[catData.selectedPurpose]
-            let toDataString = "&Nickname=\(Nickname)" + "&Title=\(Title)" + "&Purpose=\(Purpose)"
+            let toDataString = "&Nickname=\(Nickname)" + "&Title=\(title)" + "&Purpose=\(purpose)"
             let save = SaveToDB()
-          //  save.Categories(toDataString: toDataString, mainView: self)
+            save.Categories(toDataString: toDataString) { (error) in
+                if error {
+                    var categories = Array(appData.getCategories(key: "unsavedCategories"))
+                    categories.append(CategoriesStruct(name: title, purpose: purpose))
+                    appData.saveCategories(categories, key: "unsavedCategories")
+                    DispatchQueue.main.async {
+                        self.message.showMessage(text: "Error saving\nData has been saved locally", type: .error, windowHeight: 80)
+                    }
+                } else {
+                    var categories = Array(appData.getCategories())
+                    categories.append(CategoriesStruct(name: title, purpose: purpose))
+                    appData.saveCategories(categories)
+                    self.getDataFromLocal()
+                    
+                }
+            }
             
         }
 
@@ -187,21 +221,9 @@ class CategoriesVC: UIViewController {
             if self.catData.categoryTextField.text != "" {
                 let name = self.catData.categoryTextField.text ?? ""
                 let purpose = self.catData.allPurposes[self.catData.selectedPurpose]
-                self.allCategoriesData.append(CategoriesStruct(name: name, purpose: purpose))
-                appData.saveCategories(self.allCategoriesData)
                 self.getDataFromLocal()
                 self.whenNoCategories()
-                
-                if appData.internetPresend != nil {
-                    if appData.internetPresend! == false {
-                        self.sendToDBCategory()
-                    }
-                }
-                
-                
-                DispatchQueue.main.async {
-                    self.categoriesTableView.reloadData()
-                }
+                self.sendToDBCategory(title: name, purpose: purpose)
             }
             
         }))

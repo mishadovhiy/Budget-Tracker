@@ -164,6 +164,7 @@ class LoginViewController: UIViewController {
         }
     }
     
+    //test acc creating
     func createAccoun(loadedData: [[String]]) {
         hideKeyboard()
         DispatchQueue.main.async {
@@ -176,7 +177,7 @@ class LoginViewController: UIViewController {
                     if self.userExists(name: name, loadedData: loadedData) == false  {
                         let save = SaveToDB()
                         let toDataString = "&Nickname=\(name)" + "&Email=\(email)" + "&Password=\(password)" + "&Registration_Date=\(regDate)"
-                        save.Users(toDataString: toDataString, mainView: self) { (error) in
+                        save.Users(toDataString: toDataString) { (error) in
                             if error {
                                 print("error")
                                 self.message.showMessage(text: "Error!", type: .error)

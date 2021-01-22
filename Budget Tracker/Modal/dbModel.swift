@@ -10,15 +10,7 @@ import UIKit
 
 struct LoadFromDB {
     
-    func showMessage(vc: UIViewController) {
-        let message = MessageView(vc)
-        DispatchQueue.main.async {
-            message.showMessage(text: K.Text.errorInternet, type: .error, windowHeight: 50)
-        }
-        
-    }
-    
-    func Transactions(mainView: UIViewController?, completion: @escaping ([[String]], String) -> ()) {
+    func Transactions(completion: @escaping ([[String]], String) -> ()) {
         
         var loadedData: [[String]] = []
         let urlPath = "https://www.dovhiy.com/apps/budget-tracker-db/transactions.php"
@@ -26,16 +18,15 @@ struct LoadFromDB {
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             
             if error != nil {
-                appData.internetPresend = false
                 completion([], "error")
                 return
             } else {
-                appData.internetPresend = true
                 var jsonResult = NSArray()
                 do{
                     jsonResult = try JSONSerialization.jsonObject(with: data!, options:JSONSerialization.ReadingOptions.allowFragments) as! NSArray
                 } catch let error as NSError {
-                    print(error, "parseJSON - wrong db")
+                    completion([], "error")
+                    return
                 }
                 print(data, "datadatadatadata")
                 print(jsonResult, "jsonResultjsonResultjsonResultjsonResult")
@@ -74,7 +65,7 @@ struct LoadFromDB {
         
     }
     
-    func Categories(mainView: UIViewController?, completion: @escaping ([[String]]) -> ()) {
+    func Categories(completion: @escaping ([[String]], String) -> ()) {
         
         var loadedData: [[String]] = []
         let urlPath = "https://www.dovhiy.com/apps/budget-tracker-db/categories.php"
@@ -82,16 +73,17 @@ struct LoadFromDB {
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             
             if error != nil {
-                appData.internetPresend = false
+                completion([], "error")
                 return
                 
             } else {
-                appData.internetPresend = true
                 var jsonResult = NSArray()
                 do{
                     jsonResult = try JSONSerialization.jsonObject(with: data!, options:JSONSerialization.ReadingOptions.allowFragments) as! NSArray
                 } catch let error as NSError {
                     print(error, "parseJSON - wrong db")
+                    completion([], "error")
+                    return
                 }
                 
                 var jsonElement = NSDictionary()
@@ -114,7 +106,7 @@ struct LoadFromDB {
                     
                 }
 
-                completion(loadedData)
+                completion(loadedData, "")
             
             }
             
@@ -187,42 +179,35 @@ struct SaveToDB {
         case categories
         case non
     }
-    
-    func showMessage(vc: UIViewController) {
-        let message = MessageView(vc)
-        DispatchQueue.main.async {
-             message.showMessage(text: K.Text.errorInternet, type: .error, windowHeight: 50)
-        }
-       
-    }
+
     
     func Transactions(transactionStruct: TransactionsStruct, mainView: UIViewController?,completion: @escaping (Bool) -> ()) {
         let toDataString = "&Nickname=\(appData.username)" + "&Category=\(transactionStruct.category)" + "&Date=\(transactionStruct.date)" + "&Value=\(transactionStruct.value)" + "&Comment=\(transactionStruct.comment)"
-        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-transaction.php", toDataString: toDataString, mainView: mainView, errorLoading: "Transactions", dataType: .categories, completion: { (error) in
+        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-transaction.php", toDataString: toDataString, errorLoading: "Transactions", dataType: .categories, completion: { (error) in
             completion(error)
         })
     }
     
-    func Categories(toDataString: String, mainView: UIViewController, completion: @escaping (Bool) -> ()) {
+    func Categories(toDataString: String, completion: @escaping (Bool) -> ()) {
         //в этой функции вместо toDataString принимать categoriesStruct
-        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-category.php", toDataString: toDataString, mainView: mainView, errorLoading: "Categories", dataType: .categories, completion: { (error) in
+        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-category.php", toDataString: toDataString, errorLoading: "Categories", dataType: .categories, completion: { (error) in
             completion(error)
         })
     }
     
-    func Users(toDataString: String, mainView: UIViewController, completion: @escaping (Bool) -> ()) {
-        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-user.php", toDataString: toDataString, mainView: mainView, errorLoading: "User Data", dataType: .non, completion: { (error) in
+    func Users(toDataString: String, completion: @escaping (Bool) -> ()) {
+        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-user.php", toDataString: toDataString, errorLoading: "User Data", dataType: .non, completion: { (error) in
             completion(error)
         })
     }
     
-    func NewPassword(toDataString: String, mainView: UIViewController, completion: @escaping (Bool) -> ()) {
-        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/user-password.php", toDataString: toDataString, mainView: mainView, errorLoading: "User Data", dataType: .non, completion: { (error) in
+    func NewPassword(toDataString: String, completion: @escaping (Bool) -> ()) {
+        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/user-password.php", toDataString: toDataString, errorLoading: "User Data", dataType: .non, completion: { (error) in
             completion(error)
         })
     }
 
-    private func save(dbFileURL: String, toDataString: String, mainView: UIViewController?, errorLoading: String, dataType: dataType, completion: @escaping (Bool) -> ()) {
+    private func save(dbFileURL: String, toDataString: String, errorLoading: String, dataType: dataType, completion: @escaping (Bool) -> ()) {
         
         let url = NSURL(string: dbFileURL)
         var request = URLRequest(url: url! as URL)

@@ -178,6 +178,8 @@ class AppData {
         }
     }
 
+    //"savedCategories" -- from prev acc
+    //"unsavedCategories" -- when no internet
     func saveCategories(_ data: [CategoriesStruct], key: String = "categoriesData") {
         var dict: [[String]] = []
         for i in 0..<data.count {
@@ -190,22 +192,11 @@ class AppData {
         print("categories saved to user defaults, count: \(dict.count), \(dict)")
         defaults.set(dict, forKey: key)
     }
-    var savedCategories: [CategoriesStruct] {
-        get{
-            let localData = defaults.value(forKey: "savedCategories") as? [[String]] ?? []
-            var results: [CategoriesStruct] = []
-            for i in 0..<localData.count {
-                let name = localData[i][1]
-                let purpose = localData[i][2]
-                results.append(CategoriesStruct(name: name, purpose: purpose))
-            }
-            return results
-        }
-    }
     
-    
-    func getCategories() -> [CategoriesStruct] {
-        let localData = defaults.value(forKey: "categoriesData") as? [[String]] ?? []
+    //"savedCategories" -- from prev acc
+    //"unsavedCategories" -- when no internet
+    func getCategories(key: String = "categoriesData") -> [CategoriesStruct] {
+        let localData = defaults.value(forKey: key) as? [[String]] ?? []
         var results: [CategoriesStruct] = []
         for i in 0..<localData.count {
             let name = localData[i][1]
