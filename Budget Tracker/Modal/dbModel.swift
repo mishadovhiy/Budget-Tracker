@@ -25,7 +25,7 @@ struct LoadFromDB {
                 do{
                     jsonResult = try JSONSerialization.jsonObject(with: data!, options:JSONSerialization.ReadingOptions.allowFragments) as! NSArray
                 } catch let error as NSError {
-                    completion([], "error")
+                    completion([], "Error loading data")
                     return
                 }
                 print(data, "datadatadatadata")
@@ -37,7 +37,6 @@ struct LoadFromDB {
                     
                     if appData.username != "" {
                         if appData.username == (jsonElement["Nickname"] as? String ?? "") {
-                           //20.08 - 9:43pm appData.defaults.setValue([], forKey: "transactionsData")
                             if let name = jsonElement["Nickname"] as? String,
                                let category = jsonElement["Category"] as? String,
                                let date = jsonElement["Date"] as? String,
@@ -48,21 +47,14 @@ struct LoadFromDB {
                             }
                         }
                     }
-                    
-                    
                 }
 
                 completion(loadedData, "")
-            
             }
-            
         }
-        
         DispatchQueue.main.async {
             task.resume()
         }
-
-        
     }
     
     func Categories(completion: @escaping ([[String]], String) -> ()) {
@@ -73,7 +65,7 @@ struct LoadFromDB {
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             
             if error != nil {
-                completion([], "error")
+                completion([], "Error loading categories")
                 return
                 
             } else {
@@ -82,7 +74,7 @@ struct LoadFromDB {
                     jsonResult = try JSONSerialization.jsonObject(with: data!, options:JSONSerialization.ReadingOptions.allowFragments) as! NSArray
                 } catch let error as NSError {
                     print(error, "parseJSON - wrong db")
-                    completion([], "error")
+                    completion([], "Error!")
                     return
                 }
                 
@@ -93,7 +85,6 @@ struct LoadFromDB {
                     
                     if appData.username != "" {
                         if appData.username == (jsonElement["Nickname"] as? String ?? "") {
-                         //20.08 - 9:43pm appData.defaults.setValue([], forKey: "categoriesData")
                             if let name = jsonElement["Nickname"] as? String,
                                let title = jsonElement["Title"] as? String,
                                let purpose = jsonElement["Purpose"] as? String
@@ -183,31 +174,30 @@ struct SaveToDB {
     
     func Transactions(transactionStruct: TransactionsStruct, mainView: UIViewController?,completion: @escaping (Bool) -> ()) {
         let toDataString = "&Nickname=\(appData.username)" + "&Category=\(transactionStruct.category)" + "&Date=\(transactionStruct.date)" + "&Value=\(transactionStruct.value)" + "&Comment=\(transactionStruct.comment)"
-        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-transaction.php", toDataString: toDataString, errorLoading: "Transactions", dataType: .categories, completion: { (error) in
+        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-transaction.php", toDataString: toDataString, errorLoading: "Transactions", dataType: .categories, error: { (error) in
             completion(error)
         })
     }
     
     func Categories(toDataString: String, completion: @escaping (Bool) -> ()) {
-        //в этой функции вместо toDataString принимать categoriesStruct
-        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-category.php", toDataString: toDataString, errorLoading: "Categories", dataType: .categories, completion: { (error) in
+        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-category.php", toDataString: toDataString, errorLoading: "Categories", dataType: .categories, error: { (error) in
             completion(error)
         })
     }
     
     func Users(toDataString: String, completion: @escaping (Bool) -> ()) {
-        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-user.php", toDataString: toDataString, errorLoading: "User Data", dataType: .non, completion: { (error) in
+        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-user.php", toDataString: toDataString, errorLoading: "User Data", dataType: .non, error: { (error) in
             completion(error)
         })
     }
     
     func NewPassword(toDataString: String, completion: @escaping (Bool) -> ()) {
-        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/user-password.php", toDataString: toDataString, errorLoading: "User Data", dataType: .non, completion: { (error) in
+        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/user-password.php", toDataString: toDataString, errorLoading: "User Data", dataType: .non, error: { (error) in
             completion(error)
         })
     }
 
-    private func save(dbFileURL: String, toDataString: String, errorLoading: String, dataType: dataType, completion: @escaping (Bool) -> ()) {
+    private func save(dbFileURL: String, toDataString: String, errorLoading: String, dataType: dataType, error: @escaping (Bool) -> ()) {
         
         let url = NSURL(string: dbFileURL)
         var request = URLRequest(url: url! as URL)
@@ -217,11 +207,11 @@ struct SaveToDB {
         dataToSend = dataToSend + toDataString
         let dataD = dataToSend.data(using: .utf8)
         do {
-            let uploadJob = URLSession.shared.uploadTask(with: request, from: dataD) { data, response, error in
+            let uploadJob = URLSession.shared.uploadTask(with: request, from: dataD) { data, response, errr in
                 
-                if error != nil {
+                if errr != nil {
                     print("save: internet error")
-                    completion(true)
+                    error(true)
                     return
                     
                 } else {
@@ -231,11 +221,11 @@ struct SaveToDB {
                         if returnedData == "1" {
                             appData.internetPresend = true
                             print("save: sended \(dataToSend)")
-                            completion(false)
+                            error(false)
                         } else {
                             appData.internetPresend = false
                             print("save: db error for (cats, etc), developer fault")
-                            completion(true)
+                            error(true)
                         }
                         
                         
@@ -260,25 +250,19 @@ struct SaveToDB {
 
 struct DeleteFromDB {
     
-    func showMessage(vc: UIViewController, error: Bool = true) {
-        let message = MessageView(vc)
-        DispatchQueue.main.async {
-            message.showMessage(text: K.Text.errorInternet, type: error == true ?  .error : .succsess, windowHeight: 50)
-        }
-        
+    func Transactions(toDataString: String, completion: @escaping (Bool) -> ()) {
+        delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-transaction.php", toDataString: toDataString, error: { (error) in
+               completion(error)
+           })
     }
     
-    func Transactions(toDataString: String, mainView: UIViewController?, showSucssess: Bool = false) {
-
-        delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-transaction.php", toDataString: toDataString, mainView: mainView, errorLoading: "Transactions", showSuscssess: showSucssess)
+    func Categories(toDataString: String, completion: @escaping (Bool) -> ()) {
+        delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-category.php", toDataString: toDataString, error: { (error) in
+            completion(error)
+        })
     }
     
-    func Categories(toDataString: String, mainView: UIViewController?, showSucssess: Bool = false) {
-
-        delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-category.php", toDataString: toDataString, mainView: mainView, errorLoading: "Categories", showSuscssess: showSucssess)
-    }
-    
-    private func delete(dbFileURL: String, toDataString: String, mainView: UIViewController?, errorLoading: String, showSuscssess: Bool) {
+    private func delete(dbFileURL: String, toDataString: String, error: @escaping (Bool) -> ()) {
         let url = NSURL(string: dbFileURL)
         var request = URLRequest(url: url! as URL)
         request.httpMethod = "POST"
@@ -289,16 +273,10 @@ struct DeleteFromDB {
                 
         let dataD = dataString.data(using: .utf8)
         do {
-            let uploadJob = URLSession.shared.uploadTask(with: request, from: dataD) { data, response, error in
+            let uploadJob = URLSession.shared.uploadTask(with: request, from: dataD) { data, response, errr in
                 
-                if error != nil {
-                    appData.internetPresend = false
-                    //or let
-                    let r = appData.unsendedData
-                    appData.unsendedData.append(["delete", dataString])
-                    if mainView != nil {
-                        self.showMessage(vc: mainView!)
-                    }
+                if errr != nil {
+                    error(true)
                     return
                     
                 } else {
@@ -306,15 +284,12 @@ struct DeleteFromDB {
                         let returnedData = NSString(data: unwrappedData, encoding: String.Encoding.utf8.rawValue)
                         
                         if returnedData == "1" {
-                            appData.internetPresend = true
-                            if showSuscssess {
-                                if mainView != nil {
-                                    self.showMessage(vc: mainView!, error: false)
-                                }
-                                
-                            }
+                            print("ok")
+                            error(false)
                         } else {
                             print("db error for (cats, etc), developer fault")
+                            error(true)
+                            return
                         }
                         
                     }

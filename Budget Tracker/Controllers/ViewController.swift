@@ -80,21 +80,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        //transaDelegate = self
-        print("username: \(appData.username)")
-        /*var res: [TransactionsStruct] = []
-        for i in 0..<20{
-            let new = TransactionsStruct(value: "\(i + 1)", category: "1", date: "22.01.2021", comment: "i")
-            res.append(new)
-        }
-        unsendedTransactions = res*/
-        
         updateUI()
-        /*DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-            self.sendUnsaved()
-        }*/
-        
-        print(appData.unsavedTransactions.count, "unsended")
         
     }
     
@@ -488,7 +474,7 @@ class ViewController: UIViewController {
                     print("error loading data")
                     self.filter()
                     DispatchQueue.main.async {
-                        self.message.showMessage(text: "Error", type: .error)
+                        self.message.showMessage(text: error, type: .error)
                     }
                     
                 }
@@ -516,9 +502,8 @@ class ViewController: UIViewController {
         }
 
     }
-    
+    //here
     func deleteFromDB(at: IndexPath) {
-        
         let Nickname = appData.username
         if Nickname != "" {
             let Category = newTableData[at.section].transactions[at.row].category
@@ -528,10 +513,31 @@ class ViewController: UIViewController {
             
             let toDataString = "&Nickname=\(Nickname)" + "&Category=\(Category)" + "&Date=\(Date)" + "&Value=\(Value)" + "&Comment=\(Comment)"
             let delete = DeleteFromDB()
-            delete.Transactions(toDataString: toDataString, mainView: self)
+            delete.Transactions(toDataString: toDataString, completion: { (error) in
+                if error {
+                    DispatchQueue.main.async {
+                        self.message.showMessage(text: "error deleting data, try again later", type: .error)
+                    }
+                } else {
+                    self.downloadFromDB()
+                }
+            })
             
         } else {
             print("noNickname")
+            //tableData.remove(at: at)
+            //newTableData[at.section].transactions.remove(at: at.row)
+            var data = newTableData
+            data[at.section].transactions.remove(at: at.row)
+            //appData.saveTransations(data)
+            var new: [TransactionsStruct] = []
+            for i in 0..<data.count {
+                for n in 0..<data[i].transactions.count {
+                    new.append(TransactionsStruct(value: data[i].transactions[n].value, category: data[i].transactions[n].category, date: data[i].date, comment: data[i].transactions[n].comment))
+                }
+            }
+            appData.saveTransations(new)
+            self.filter()
         }
     }
     
@@ -748,39 +754,29 @@ class ViewController: UIViewController {
             return 1996
         }
     }
-    func deleteRow(at: IndexPath) {
-        deleteFromDB(at: at)
-        //tableData.remove(at: at)
-        newTableData[at.section].transactions.remove(at: at.row)
-        DispatchQueue.main.async {
-            self.mainTableView.reloadData()
-        }
-        
-        
-        var new: [TransactionsStruct] = []
-        
-        for i in 0..<newTableData.count {
-            for n in 0..<newTableData[i].transactions.count {
-                new.append(TransactionsStruct(value: newTableData[i].transactions[n].value, category: newTableData[i].transactions[n].category, date: newTableData[i].date, comment: newTableData[i].transactions[n].comment))
-            }
-        }
-        
-        appData.saveTransations(new)
-        
-        calculateLabels()
-    }
 
     func editRow(at: IndexPath) {
         print("change edit")
         
-        editingIndexPath = at
-        DispatchQueue.main.async {
-            self.performSegue(withIdentifier: K.goToEditVCSeq, sender: self)
+        editingTransaction = newTableData[at.section].transactions[at.row]
+        let delete = DeleteFromDB()
+        if let trans = editingTransaction {
+            let toDataString = "&Nickname=\(appData.username)" + "&Category=\(trans.category)" + "&Date=\(trans.date)" + "&Value=\(trans.value)" + "&Comment=\(trans.comment)"
+            delete.Transactions(toDataString: toDataString) { (error) in
+                if error {
+                    DispatchQueue.main.async {
+                        self.message.showMessage(text: "Can't edit transaction, come back later", type: .error)
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self.performSegue(withIdentifier: K.goToEditVCSeq, sender: self)
+                    }
+                }
+            }
         }
         
-        deleteRow(at: at)
     }
-    var editingIndexPath: IndexPath?
+    var editingTransaction: TransactionsStruct?
     
     var prevSelectedPer = selectedPeroud
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -803,12 +799,11 @@ class ViewController: UIViewController {
             let nav = segue.destination as! UINavigationController
             let vc = nav.topViewController as! TransitionVC
             vc.delegate = self
-            if let i = editingIndexPath {
-                print("prepare:", i)
-                vc.editingDate = newTableData[i.section].date
-                vc.editingValue = Double(newTableData[i.section].transactions[i.row].value) ?? 0.0
-                vc.editingCategory = newTableData[i.section].transactions[i.row].category
-                vc.editingComment = newTableData[i.section].transactions[i.row].comment
+            if let transaction = editingTransaction {
+                vc.editingDate = transaction.date
+                vc.editingValue = Double(transaction.value) ?? 0.0
+                vc.editingCategory = transaction.category
+                vc.editingComment = transaction.comment
             }
         case "toUnsendedVC":
             let vc = segue.destination as! UnsendedDataVC
@@ -868,7 +863,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var whiteBackground: UIView!
     var  whiteBackgroundFrame = CGRect(x: 0, y: 0, width: 0, height: 0)
     var refreshData = false
-    //here
+
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         //move white space if != initframe
      //   if self.whiteBackground.frame != self.whiteBackgroundFrame {
@@ -1011,7 +1006,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 self.editRow(at: IndexPath(row: indexPath.row, section: indexPath.section - 1))
             }
             let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
-                self.deleteRow(at: IndexPath(row: indexPath.row, section: indexPath.section - 1))
+                self.deleteFromDB(at: IndexPath(row: indexPath.row, section: indexPath.section - 1))
             }
             editeAction.backgroundColor = K.Colors.yellow
             deleteAction.backgroundColor = K.Colors.negative
@@ -1107,18 +1102,23 @@ extension ViewController: TransitionVCProtocol {
                 appData.unsavedTransactions = allunsended
                 self.filter()
                 DispatchQueue.main.async {
-                    self.message.showMessage(text: "Error saving data", type: .error)
+                    self.message.showMessage(text: self.editingTransaction == nil ? "Data has been saved locally" : "Transaction will be updated when you'll be connected to internet", type: .error)
+                    self.editingTransaction = nil
                 }
                 print("error saving new data - save to unsended")
-                
             } else {
-                var trans = appData.transactions
-                trans.append(new)
-                appData.saveTransations(trans)
-                self.filter()
-                print("new dana has sended")
+                if self.editingTransaction != nil {
+                    self.downloadFromDB()
+                    self.editingTransaction = nil
+                } else {
+                    var trans = appData.transactions
+                    trans.append(new)
+                    appData.saveTransations(trans)
+                    self.filter()
+                    print("new dana has sended")
+                }
             }
-            self.editingIndexPath = nil
+            
         })
     }
     
@@ -1136,6 +1136,8 @@ extension ViewController: TransitionVCProtocol {
 
 extension ViewController: UnsendedDataVCProtocol {
     func deletePressed() {
+        appData.saveTransations([], key: "savedTransactions")
+        appData.saveCategories([], key: "savedCategories")
         DispatchQueue.main.async {
             self.mainTableView.reloadData()
         }

@@ -125,15 +125,19 @@ class LoginViewController: UIViewController {
                 if loadedData[i][DBusernameIndex] == nickname {
                     psswordFromDB = loadedData[i][DBpasswordIndex]
                     if password != psswordFromDB {
-                        print("wrong password")
+                        print("wrong password", psswordFromDB)
                         DispatchQueue.main.async {
                             self.message.showMessage(text: "wrong password", type: .staticError, windowHeight: 50)
                         }
                     } else {
                         appData.username = nickname
                         appData.password = password
-                        //save to unsaved indeed unsavedTransactions
-                        appData.saveTransations(appData.transactions, key: "savedTransactions")
+                        let wasTrans = appData.savedTransactions
+                        let trans = wasTrans + appData.transactions
+                        appData.saveTransations(trans, key: "savedTransactions")
+                        let wascats = appData.getCategories(key: "savedCategories")
+                        let cats = wascats + appData.getCategories()
+                        appData.saveCategories(cats, key: "savedCategories")
                         appData.fromLoginVCMessage = "Wellcome, \(appData.username)\n"
                         DispatchQueue.main.async {
                             self.performSegue(withIdentifier: "homeVC", sender: self)
@@ -184,10 +188,10 @@ class LoginViewController: UIViewController {
                             } else {
                                 appData.username = name
                                 appData.password = password
-                                let wasTransactions = appData.transactions
-                                appData.unsavedTransactions = wasTransactions
-                                appData.saveCategories(appData.getCategories(), key: "savedCategories")
-                                appData.saveCategories([])
+                                let wasTransactions = appData.transactions + appData.savedTransactions
+                                appData.saveTransations(wasTransactions, key: "savedTransactions")
+                                let wasCats = appData.getCategories() + appData.getCategories(key: "savedCategories")
+                                appData.saveCategories(wasCats, key: "savedCategories")
                                 appData.fromLoginVCMessage = "Wellcome, \(appData.username)\n\(wasTransactions.count > 0 ? "\ndata has been saved localy" : "")"
                                 print("to home")
                                 DispatchQueue.main.async {

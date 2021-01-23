@@ -191,7 +191,15 @@ class CategoriesVC: UIViewController {
         
         if appData.username != "" {
             let toDataString = "&Nickname=\(Nickname)" + "&Title=\(Title)" + "&Purpose=\(Purpose)"
-            delete.Categories(toDataString: toDataString, mainView: self)
+            delete.Categories(toDataString: toDataString, completion: { (error) in
+                if error {
+                    DispatchQueue.main.async {
+                        self.message.showMessage(text: "Error deleting data", type: .error)
+                    }
+                } else {
+                    self.refresh(sender: self.refreshControl)
+                }
+            })
         }
         
 

@@ -249,10 +249,13 @@ class TransitionVC: UIViewController {
         if valueLabel.text != "0" {
             
             let value = purposeSwitcher.selectedSegmentIndex == 0 ? "\((Double(valueLabel.text ?? "") ?? 0.0) * (-1))" : valueLabel.text ?? ""
-            let category = purposeSwitcher.selectedSegmentIndex == 0 ? expenseArr[appData.selectedExpense] : incomeArr[appData.selectedIncome]
-            let date = dateTextField.text ?? ""
-            let comment = commentTextField.text ?? ""
-            addNew(value: value, category: category, date: date, comment: comment)
+            //let category = purposeSwitcher.selectedSegmentIndex == 0 ? expenseArr[appData.selectedExpense] : incomeArr[appData.selectedIncome]
+            DispatchQueue.main.async {
+                let category = self.categoryTextField.text ?? ""
+                let date = self.dateTextField.text ?? ""
+                let comment = self.commentTextField.text ?? ""
+                self.addNew(value: value, category: category, date: date, comment: comment)
+            }
             
         } else {
             errorSaving()

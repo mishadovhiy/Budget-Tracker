@@ -49,7 +49,7 @@ class MessageView {
         }
     }
     
-    func showMessage(text: String, type: MessageType, windowHeight: CGFloat = 30) {
+    func showMessage(text: String, type: MessageType, windowHeight: CGFloat = 50) {
 
         hideMessage(duration: 0)
         DispatchQueue.main.async {

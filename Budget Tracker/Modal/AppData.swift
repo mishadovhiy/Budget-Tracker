@@ -80,18 +80,7 @@ class AppData {
             defaults.set(value, forKey: "unshowedError")
         }
     }
-    
-    var allUsers:[[String]] {
-        
-        get{
-            return defaults.value(forKey: "AllUsers") as? [[String]] ?? []
-        }
-        set(value) {
-            defaults.set(value, forKey: "AllUsers")
-        }
-        
-    }
-    
+
     var unsendedData:[[String]] {
         //0 - type (delete transaction)
         //1 - toDataString
@@ -107,6 +96,8 @@ class AppData {
     var unsavedCategoriesAppended = false
     var fromLoginVCMessage = ""
     
+    //savedTransactions
+    //unsavedTransactions
     func saveTransations(_ data: [TransactionsStruct], key: String = "transactionsData") {
         var dict: [[String]] = []
         for i in 0..<data.count {
