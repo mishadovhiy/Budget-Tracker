@@ -22,7 +22,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var filterView: UIView!
     @IBOutlet weak var filterTextLabel: UILabel!
-    
+    @IBOutlet weak var dataCountLabel: UILabel!
     @IBOutlet weak var calculationSView: UIStackView!
     @IBOutlet weak var mainTableView: UITableView!
     @IBOutlet weak var addTransitionButton: UIButton!
@@ -39,8 +39,8 @@ class ViewController: UIViewController {
         }
         set {
             _TableData = newValue
-            print("self.tableData.count:", self.tableData.count)
             DispatchQueue.main.async {
+                self.dataCountLabel.text = "Data count: \(self.tableData.count)"
                 self.filterTextLabel.text = "Filter: \(selectedPeroud)"
                 self.mainTableView.reloadData()
                 if self.refreshControl.isRefreshing {
@@ -49,10 +49,20 @@ class ViewController: UIViewController {
                 self.mainTableView.isScrollEnabled = self.tableData.count == 0 ? false : true
                 
                 if self.tableData.count == 0 {
+                    self.forseShowAddButton = true
+                    let supFrame = self.view.frame
+                    UIView.animate(withDuration: 0.6) {
+                        self.addTransitionButton.frame = CGRect(x: supFrame.width / 2 - (self.addTransFrame.width / 2 + self.addTransitionButton.contentEdgeInsets.right), y: supFrame.height - self.addTransFrame.height - self.view.safeAreaInsets.bottom , width: self.addTransFrame.width, height: self.addTransFrame.height)
+                    }
+                    self.addTransitionButton.isHidden = false
                     self.mainTableView.backgroundColor = K.Colors.background
                     self.noTableDataLabel.alpha = 0.5
                     self.noTableDataLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
                 } else {
+                    self.forseShowAddButton = false
+                    if self.addTransitionButton.frame != self.addTransFrame {
+                        self.addTransitionButton.frame = self.addTransFrame
+                    }
                     self.mainTableView.backgroundColor = .clear
                     self.noTableDataLabel.alpha = 0
                     self.noTableDataLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, self.view.frame.height, 0)
@@ -76,10 +86,12 @@ class ViewController: UIViewController {
     }()
 
     var forseSendUnsendedData = true
-    
+    var forseShowAddButton = false
+    var addTransFrame = CGRect.zero
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
         updateUI()
         
     }
@@ -95,6 +107,10 @@ class ViewController: UIViewController {
     
     var refreshSubview = UIView.init(frame: .zero)
     func updateUI() {
+        
+        addTransFrame = addTransitionButton.frame
+        addTransitionButton.translatesAutoresizingMaskIntoConstraints = true
+        self.filterView.translatesAutoresizingMaskIntoConstraints = true
         self.mainTableView.backgroundColor = K.Colors.background
         downloadFromDB()
         self.mainTableView.delegate = self
@@ -102,7 +118,7 @@ class ViewController: UIViewController {
         DispatchQueue.main.async {
             self.refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
             let superWidth = self.view.frame.width
-            self.refreshSubview.frame = CGRect(x: superWidth / 2 - 10, y: 0, width: 20, height: 20)
+            self.refreshSubview.frame = CGRect(x: superWidth / 2 - 10, y: 2, width: 20, height: 20)
             print(self.refreshSubview.frame, "ijhyghujijnhj")
             let image = UIImage(named: "plusIcon")
             let button = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
@@ -1071,22 +1087,26 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         if indexPath.section == 0 {
-            calculationSView.alpha = 1
-            filterView.alpha = 0
-            self.mainTableView.layer.masksToBounds = true
-            self.mainTableView.layer.cornerRadius = 15
-            self.mainTableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-            self.addTransitionButton.isHidden = false
+            DispatchQueue.main.async {
+                self.calculationSView.alpha = 1
+                self.filterView.alpha = 0
+                self.mainTableView.layer.masksToBounds = true
+                self.mainTableView.layer.cornerRadius = 15
+                self.mainTableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+                self.addTransitionButton.isHidden = false
+            }
         }
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         
         if indexPath.section == 0 {
-            filterView.alpha = 1
-            calculationSView.alpha = 0
-            self.mainTableView.layer.cornerRadius = 0
-            self.addTransitionButton.isHidden = true
+            DispatchQueue.main.async {
+                self.filterView.alpha = 1
+                self.calculationSView.alpha = 0
+                self.mainTableView.layer.cornerRadius = 0
+                self.addTransitionButton.isHidden = !self.forseShowAddButton ? true : false
+            }
         }
     }
 }

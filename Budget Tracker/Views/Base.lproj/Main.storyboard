@@ -19,6 +19,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hpF-9J-sJH">
+                                <rect key="frame" x="20" y="99" width="374" height="14.5"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
+                                <color key="textColor" name="balanceTitleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BBf-lk-CEi" userLabel="whitebackground">
                                 <rect key="frame" x="0.0" y="300" width="414" height="596"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -262,7 +268,7 @@
                                                                 </view>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Comment" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fJn-PP-aQ1">
                                                                     <rect key="frame" x="0.0" y="21.5" width="186" height="21"/>
-                                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                     <color key="textColor" name="balanceTitleColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
@@ -480,6 +486,7 @@
                             <constraint firstItem="EPl-ii-IZL" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="Nhh-7x-UKq"/>
                             <constraint firstItem="4SO-16-o5D" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="SfU-HI-V3l"/>
                             <constraint firstItem="69c-Jd-sTD" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="9" id="TXO-Bg-M5I"/>
+                            <constraint firstItem="hpF-9J-sJH" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="Unr-wi-5W0"/>
                             <constraint firstAttribute="bottom" secondItem="BBf-lk-CEi" secondAttribute="bottom" id="UvR-nF-oH0"/>
                             <constraint firstItem="4SO-16-o5D" firstAttribute="top" secondItem="EPl-ii-IZL" secondAttribute="bottom" constant="4" id="VdK-NJ-wdF"/>
                             <constraint firstItem="4SO-16-o5D" firstAttribute="top" secondItem="0oV-VO-FeH" secondAttribute="bottom" constant="5" id="WJH-Ce-B0n"/>
@@ -487,9 +494,11 @@
                             <constraint firstItem="BBf-lk-CEi" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="300" id="aSL-d7-jKu"/>
                             <constraint firstItem="69c-Jd-sTD" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="chy-qO-GBU"/>
                             <constraint firstItem="0oV-VO-FeH" firstAttribute="leading" secondItem="69c-Jd-sTD" secondAttribute="trailing" priority="750" id="oLy-ll-x8j"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="hpF-9J-sJH" secondAttribute="trailing" constant="20" id="oVb-oq-i7A"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="4SO-16-o5D" secondAttribute="trailing" id="v31-Zr-P7f"/>
                             <constraint firstItem="0oV-VO-FeH" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="wFq-J0-gXI"/>
                             <constraint firstItem="zDz-M6-AUL" firstAttribute="top" secondItem="EPl-ii-IZL" secondAttribute="bottom" id="yWR-yX-lj3"/>
+                            <constraint firstItem="hpF-9J-sJH" firstAttribute="top" secondItem="EPl-ii-IZL" secondAttribute="bottom" constant="10" id="z4B-Gd-6D8"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="BBf-lk-CEi" secondAttribute="trailing" id="zKv-eV-NbH"/>
                         </constraints>
                     </view>
@@ -497,6 +506,7 @@
                         <outlet property="addTransitionButton" destination="zDz-M6-AUL" id="0Lg-cQ-Pv3"/>
                         <outlet property="balanceLabel" destination="pxx-7s-ZpY" id="6XE-Rc-Lg8"/>
                         <outlet property="calculationSView" destination="69c-Jd-sTD" id="LFf-b3-HUW"/>
+                        <outlet property="dataCountLabel" destination="hpF-9J-sJH" id="npA-vZ-VEd"/>
                         <outlet property="expenseLabel" destination="Mjj-5f-iya" id="hzm-o0-ya8"/>
                         <outlet property="filterTextLabel" destination="WWk-Hp-IW7" id="Dk8-p8-L3r"/>
                         <outlet property="filterView" destination="EPl-ii-IZL" id="sGf-Ev-kCS"/>
@@ -528,7 +538,7 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="3" translatesAutoresizingMaskIntoConstraints="NO" id="Tgf-6a-Yag">
                                         <rect key="frame" x="60" y="0.0" width="294" height="60"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="23"/>
-                                        <color key="textColor" name="balanceTitleColor"/>
+                                        <color key="textColor" name="CategoryColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lez-zf-TS4">
@@ -576,15 +586,15 @@
                                 <inset key="separatorInset" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="categoriesVCTableViewCell" id="Ugt-jI-QpQ" customClass="categoriesVCcell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="414" height="38.5"/>
+                                        <rect key="frame" x="0.0" y="28" width="414" height="54.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Ugt-jI-QpQ" id="8cn-F5-cRV">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="38.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="54.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="3" translatesAutoresizingMaskIntoConstraints="NO" id="IhM-qn-Xr4">
-                                                    <rect key="frame" x="15" y="10" width="379" height="18.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <rect key="frame" x="20" y="15" width="374" height="24.5"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
                                                     <color key="textColor" name="CategoryColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -592,9 +602,9 @@
                                             <color key="backgroundColor" name="backgroundColor"/>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="IhM-qn-Xr4" secondAttribute="trailing" constant="20" id="FW8-I9-8Dc"/>
-                                                <constraint firstItem="IhM-qn-Xr4" firstAttribute="leading" secondItem="8cn-F5-cRV" secondAttribute="leading" constant="15" id="cPS-1p-rd8"/>
-                                                <constraint firstAttribute="bottom" secondItem="IhM-qn-Xr4" secondAttribute="bottom" constant="10" id="eEm-2a-muR"/>
-                                                <constraint firstItem="IhM-qn-Xr4" firstAttribute="top" secondItem="8cn-F5-cRV" secondAttribute="top" constant="10" id="gzM-7Z-At8"/>
+                                                <constraint firstItem="IhM-qn-Xr4" firstAttribute="leading" secondItem="8cn-F5-cRV" secondAttribute="leading" constant="20" id="cPS-1p-rd8"/>
+                                                <constraint firstAttribute="bottom" secondItem="IhM-qn-Xr4" secondAttribute="bottom" constant="15" id="eEm-2a-muR"/>
+                                                <constraint firstItem="IhM-qn-Xr4" firstAttribute="top" secondItem="8cn-F5-cRV" secondAttribute="top" constant="15" id="gzM-7Z-At8"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -1066,7 +1076,7 @@
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="3" translatesAutoresizingMaskIntoConstraints="NO" id="MbC-wy-mMs">
                                             <rect key="frame" x="20" y="350" width="374" height="25.5"/>
                                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="23"/>
-                                            <color key="textColor" name="balanceTitleColor"/>
+                                            <color key="textColor" name="CategoryColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Si-ee-0c7" customClass="CPTGraphHostingView">
@@ -1334,7 +1344,7 @@
                         <color key="tintColor" name="yellowColor"/>
                         <color key="barTintColor" name="backgroundColor"/>
                         <textAttributes key="titleTextAttributes">
-                            <color key="textColor" name="balanceTitleColor"/>
+                            <color key="textColor" name="backgroundColor"/>
                         </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -1359,8 +1369,8 @@
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mlh-aG-pdS">
                                         <rect key="frame" x="0.0" y="0.0" width="344" height="60"/>
-                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
-                                        <color key="textColor" name="balanceTitleColor"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="23"/>
+                                        <color key="textColor" name="CategoryColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ACI-g0-PRx">
@@ -1798,9 +1808,9 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Calendar" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rGq-Aj-Zje">
-                                        <rect key="frame" x="60" y="19.5" width="294" height="21.5"/>
-                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
-                                        <color key="textColor" name="balanceTitleColor"/>
+                                        <rect key="frame" x="60" y="16.5" width="294" height="27.5"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="23"/>
+                                        <color key="textColor" name="CategoryColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
