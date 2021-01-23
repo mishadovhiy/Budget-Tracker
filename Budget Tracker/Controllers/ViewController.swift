@@ -59,7 +59,7 @@ class ViewController: UIViewController {
                 }
                 
                 if self.forseSendUnsendedData {
-                    let alldata = appData.unsavedTransactions.count + appData.getCategories(key: "unsavedCategories").count
+                    let alldata = appData.unsavedTransactions.count + appData.getCategories(key: "unsavedCategories").count + appData.unsavedTransactions.count + appData.getCategories(key: "savedCategories").count + appData.savedTransactions.count
                     if alldata > 0 {
                         print("table data reloaded, unse count:", appData.unsavedTransactions.count)
                         self.sendUnsaved()
@@ -107,7 +107,6 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBOutlet weak var secondAddTransButton: UIButton!
     var refreshSubview = UIView.init(frame: .zero)
     func updateUI() {
         self.mainTableView.backgroundColor = K.Colors.background
@@ -117,17 +116,19 @@ class ViewController: UIViewController {
         DispatchQueue.main.async {
             self.refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
             let superWidth = self.view.frame.width
-            let buttonWidth = self.secondAddTransButton.frame
-            
-            self.refreshSubview.frame = CGRect(x: superWidth / 2 - (buttonWidth.width / 2), y: 0, width: buttonWidth.width, height: buttonWidth.height)
+            self.refreshSubview.frame = CGRect(x: superWidth / 2 - 10, y: 0, width: 20, height: 20)
             print(self.refreshSubview.frame, "ijhyghujijnhj")
-            self.refreshSubview.addSubview(self.secondAddTransButton)
+            let image = UIImage(named: "plusIcon")
+            let button = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+            button.setImage(image, for: .normal)
+            self.refreshSubview.addSubview(button)
             self.refreshSubview.backgroundColor = K.Colors.background
             self.refreshSubview.alpha = 0
             self.refreshControl.addSubview(self.refreshSubview)
             self.mainTableView.addSubview(self.refreshControl)
             self.noTableDataLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, self.view.frame.height, 0)
             self.noTableDataLabel.alpha = 0
+            
         }
         switchFromCoreData()
         if appData.defaults.value(forKey: "firstLaunch") as? Bool ?? true {
@@ -336,11 +337,53 @@ class ViewController: UIViewController {
                     }
                 }
             }
-            
-            
-            if sendSavedData == true {
-                
+
+            if categories.count == 0 {
+                if sendSavedData == true {
+                    var newCategories = appData.getCategories(key: "savedCategories")
+                    print("sendUnsaved unsaved cats", newCategories.count)
+                    if let categoryy = newCategories.first {
+                        let toDataStringg = "&Nickname=\(appData.username)" + "&Title=\(categoryy.name)" + "&Purpose=\(categoryy.purpose)"
+                        save.Categories(toDataString: toDataStringg) { (error) in
+                            if error {
+                                self.filter()
+                                self.forseSendUnsendedData = false
+                                print("Error saving category")
+                            } else {
+                                print("cat: unsended sended")
+                                var allCats = appData.getCategories()
+                                allCats.append(categoryy)
+                                appData.saveCategories(allCats)
+                                newCategories.removeFirst()
+                                appData.saveCategories(newCategories, key: "savedCategories")
+                                self.filter()
+                            }
+                        }
+                    }
+                    
+                    if newCategories.count == 0 {
+                        var trans = appData.savedTransactions
+                        print("saved trans count:", trans.count)
+                        if let tran = trans.first {
+                            save.Transactions(transactionStruct: tran, mainView: self) { (error) in
+                                if error {
+                                    self.filter()
+                                    self.forseSendUnsendedData = false
+                                    print("Error saving category")
+                                } else {
+                                    trans.removeFirst()
+                                    appData.saveTransations(trans, key: "savedTransactions")
+                                    var alldata = appData.transactions
+                                    alldata.append(tran)
+                                    appData.saveTransations(alldata)
+                                    self.filter()
+                                }
+                            }
+                        }
+                    }
+                }
             }
+            
         }
         
     }
@@ -829,9 +872,9 @@ class ViewController: UIViewController {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         //move white space if != initframe
      //   if self.whiteBackground.frame != self.whiteBackgroundFrame {
-            DispatchQueue.main.async {
+           /* DispatchQueue.main.async {
                 self.whiteBackground.frame = self.whiteBackgroundFrame
-            }
+            }*/
      //   }
         
     }
@@ -853,16 +896,16 @@ class ViewController: UIViewController {
         
         if !lastCellVisible {
             if scrollView.contentOffset.y < 0.0 {
-                let y = self.whiteBackgroundFrame.minY + (scrollView.contentOffset.y * (-1))
+                /*let y = self.whiteBackgroundFrame.minY + (scrollView.contentOffset.y * (-1))
                 print(y, "jvfghjkmbgujkmng")
                 self.whiteBackground.frame = CGRect(x: 0, y: y, width: self.whiteBackgroundFrame.width, height: self.whiteBackgroundFrame.height)
-                if scrollView.contentOffset.y <= addTransitionButton.frame.maxY * (-1) {
+                if scrollView.contentOffset.y <= calculationSView.frame.maxY * (-1) {
                     print("too far")
                     DispatchQueue.main.async {
                         self.refreshControl.endRefreshing()
                     }
                     
-                }
+                }*/
             } else {
                 if scrollView.contentSize.height - 200 <= scrollView.contentOffset.y {
                     scrollView.contentOffset.y = scrollView.contentSize.height - 200
@@ -891,6 +934,11 @@ class ViewController: UIViewController {
         }
     }
 
+    
+    @objc func addTransButtonPressed(_ sender: UIButton) {
+        print("addtrans")
+        self.performSegue(withIdentifier: "goToEditVC", sender: self)
+    }
 }
 
 //MARK: - extension
@@ -918,43 +966,10 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            let calculationCell = mainTableView.dequeueReusableCell(withIdentifier: K.calcCellIdent, for: indexPath) as! calcCell
-            calculationCell.balanceLabel.textColor = totalBalance < 0.0 ? K.Colors.negative : K.Colors.balanceV
-            if totalBalance == sumPeriodBalance {
-                calculationCell.periodStack.isHidden = true
-                calculationCell.periodStack.alpha = 0
-            } else {
-                calculationCell.periodStack.isHidden = false
-                calculationCell.periodStack.alpha = 1
-            }
-            let unsendedCount = (appData.defaults.value(forKey: "unsavedTransactions") as? [[String]] ?? []) + (appData.defaults.value(forKey: "unsavedCategories") as? [[String]] ?? [])
-            print("tableView unsendedCount:", unsendedCount)
-            if unsendedCount.count > 0 {
-                calculationCell.unsesndedTransactionsLabel.superview?.superview?.isHidden = false
-                calculationCell.unsesndedTransactionsLabel.text = "\(unsendedCount.count)"
-            } else {
-                calculationCell.unsesndedTransactionsLabel.superview?.superview?.isHidden = true
-            }
-            
-            if totalBalance < Double(Int.max), sumExpenses < Double(Int.max), sumIncomes < Double(Int.max), sumPeriodBalance < Double(Int.max) {
-                
-                calculationCell.balanceLabel.text = "\(Int(totalBalance))"
-                calculationCell.periodBalanceValueLabel.text = "\(Int(sumPeriodBalance))"
-                calculationCell.expensesLabel.text = "\(Int(sumExpenses * -1))"
-                calculationCell.incomeLabel.text = "\(Int(sumIncomes))"
-                
-            } else {
-                
-                calculationCell.balanceLabel.text = "\(totalBalance)"
-                calculationCell.periodBalanceValueLabel.text = "\(sumPeriodBalance)"
-                calculationCell.expensesLabel.text = "\(sumExpenses * -1)"
-                calculationCell.incomeLabel.text = "\(sumIncomes)"
-                
-            }
-            calculationCell.savedTransactionsLabel.text = "1"
+            let calculationCell = tableView.dequeueReusableCell(withIdentifier: K.calcCellIdent, for: indexPath) as! calcCell
+            calculationCell.setup(calculations: (totalBalance, sumExpenses, sumIncomes, sumPeriodBalance))
             calculationCell.unsesndedTransactionsLabel.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(unsavedPtransPressed(_:))))
-            calculationCell.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(savedTransPressed(_:))))
-            
+            calculationCell.savedTransactionsLabel.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(savedTransPressed(_:))))
             return calculationCell
             
         case 1..<(1 + newTableData.count):
@@ -1034,8 +1049,20 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             dateLabel.font = .systemFont(ofSize: 16, weight: .medium)
             dateLabel.textColor = K.Colors.category
             dateLabel.text = newTableData[section - 1].date
-            dateLabel.textAlignment = .center
+            dateLabel.textAlignment = .left
             main.addSubview(view)
+            if section == 1 {
+
+                let button = UIButton(frame: CGRect(x: view.frame.width - 60, y: 0, width: 60, height: 60))
+                button.addTarget(self, action: #selector(addTransButtonPressed(_:)), for: .touchDown)
+                button.setImage(UIImage(named: "plusIcon"), for: .normal)
+                button.contentVerticalAlignment = .top
+                button.contentHorizontalAlignment = .right
+                button.contentEdgeInsets = .init(top: 7, left: 0, bottom: 0, right: 7)
+                view.addSubview(button)
+                
+                
+            }
             view.addSubview(dateLabel)
             return main
             
@@ -1054,6 +1081,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             self.mainTableView.layer.masksToBounds = true
             self.mainTableView.layer.cornerRadius = 15
             self.mainTableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+            self.addTransitionButton.isHidden = false
         }
     }
     
@@ -1063,6 +1091,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             filterView.alpha = 1
             calculationSView.alpha = 0
             self.mainTableView.layer.cornerRadius = 0
+            self.addTransitionButton.isHidden = true
         }
     }
 }
@@ -1083,6 +1112,9 @@ extension ViewController: TransitionVCProtocol {
                 print("error saving new data - save to unsended")
                 
             } else {
+                var trans = appData.transactions
+                trans.append(new)
+                appData.saveTransations(trans)
                 self.filter()
                 print("new dana has sended")
             }

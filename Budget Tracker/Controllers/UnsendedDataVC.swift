@@ -60,12 +60,16 @@ class UnsendedDataVC: UIViewController {
     }
     
     @IBAction func sendPressed(_ sender: UIButton) {
-        delegate?.sendPressed()
+        self.dismiss(animated: true) {
+            self.delegate?.sendPressed()
+        }
     }
     
     @IBAction func deletePressed(_ sender: UIButton) {
-        
-        delegate?.deletePressed()
+
+        self.dismiss(animated: true) {
+            self.delegate?.deletePressed()
+        }
     }
     
 }
@@ -102,7 +106,7 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
             cell.categoryLabel.text = data.category
             cell.commentLabel.text = data.comment
             cell.dateLabel.text = data.date
-            cell.valueLabel.text = data.value
+            cell.valueLabel.text = String(format:"%.0f", Double(data.value) ?? 0.0)
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "unsendedCategoriesCell") as! unsendedCategoriesCell

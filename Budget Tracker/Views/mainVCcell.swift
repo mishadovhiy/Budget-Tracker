@@ -10,7 +10,8 @@ import UIKit
 
 class mainVCcell: UITableViewCell {
     
-   // @IBOutlet weak var bigDate: UILabel!
+    @IBOutlet weak var commentImage: UIImageView!
+    // @IBOutlet weak var bigDate: UILabel!
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var valueLabel: UILabel!
  //   @IBOutlet weak var dailyTotalLabel: UILabel!
@@ -27,14 +28,14 @@ class mainVCcell: UITableViewCell {
         commentLabel.isHidden = true
         
         let value = String(format:"%.0f", Double(data.value) ?? 0.0)
-        let category = data.comment == "" ? data.category : "\(data.category)  ✎"
         valueLabel.text = value
-        categoryLabel.text = category
+        categoryLabel.text = data.category
         commentLabel.text = data.comment
+        commentImage.alpha = data.comment == "" ? 0 : 1
         if selectedCell != nil {
             if selectedCell == indexPath && commentLabel.text != "" {
                 commentLabel.isHidden = false
-                categoryLabel.text = data.category
+                commentImage.alpha = 0
             }
         }
 
@@ -78,52 +79,38 @@ class calcCell: UITableViewCell {
     @IBOutlet weak var periodBalanceTitleLabel: UILabel!
     @IBOutlet weak var periodStack: UIStackView!
     @IBOutlet weak var periodBalanceValueLabel: UILabel!
-    
-    
     @IBOutlet weak var unsesndedTransactionsLabel: UILabel!
-    
     @IBOutlet weak var savedTransactionsLabel: UILabel!
     
-    
-    func setupCell(_ totalBalance: Double, sumExpenses: Double, sumPeriodBalance: Double, sumIncomes: Double) {
-        print("setupCell totalBalance", totalBalance)
-        if totalBalance < Double(Int.max), sumExpenses < Double(Int.max), sumIncomes < Double(Int.max), sumPeriodBalance < Double(Int.max) {
+
+    func setup(calculations: (Double, Double, Double, Double)) {
+        let unsendedCount = (appData.defaults.value(forKey: "unsavedTransactions") as? [[String]] ?? []) + (appData.defaults.value(forKey: "unsavedCategories") as? [[String]] ?? [])
+        let sendedCount = (appData.defaults.value(forKey: "savedTransactions") as? [[String]] ?? []) + (appData.defaults.value(forKey: "savedCategories") as? [[String]] ?? [])
+        savedTransactionsLabel.text = "\(sendedCount.count)"
+        unsesndedTransactionsLabel.text = "\(unsendedCount.count)"
+
+        //if totalBalance < Double(Int.max), sumExpenses < Double(Int.max), sumIncomes < Double(Int.max), sumPeriodBalance < Double(Int.max) {
+        if calculations.0 < Double(Int.max), calculations.1 < Double(Int.max), calculations.2 < Double(Int.max), calculations.3 < Double(Int.max) {
             
-            balanceLabel.text = "\(Int(totalBalance))"
-            periodBalanceValueLabel.text = "\(Int(sumPeriodBalance))"
-            expensesLabel.text = "\(Int(sumExpenses * -1))"
-            incomeLabel.text = "\(Int(sumIncomes))"
-            
+            balanceLabel.text = "\(Int(calculations.0))"
+            periodBalanceValueLabel.text = "\(Int(calculations.3))"
+            expensesLabel.text = "\(Int(calculations.1 * -1))"
+            incomeLabel.text = "\(Int(calculations.2))"
         } else {
-            
-            balanceLabel.text = "\(totalBalance)"
-            periodBalanceValueLabel.text = "\(sumPeriodBalance)"
-            expensesLabel.text = "\(sumExpenses * -1)"
-            incomeLabel.text = "\(sumIncomes)"
+            balanceLabel.text = "\(calculations.0)"
+            periodBalanceValueLabel.text = "\(calculations.3)"
+            expensesLabel.text = "\(calculations.1 * -1)"
+            incomeLabel.text = "\(calculations.2)"
             
         }
+
+        periodStack.isHidden = calculations.0 == calculations.3 ? true : false
+        balanceLabel.textColor = calculations.0 < 0.0 ? K.Colors.negative : K.Colors.balanceV
         
-        if totalBalance < 0.0 {
-            balanceLabel.textColor = K.Colors.negative
-            
-        } else {
-            balanceLabel.textColor = K.Colors.balanceV
-        }
-        print("balance: \(balanceLabel.text)")
-        print("periodBalance: \(periodBalanceValueLabel.text)")
         
-        if totalBalance == sumPeriodBalance {
-            DispatchQueue.main.async {
-                self.periodStack.isHidden = true
-                self.periodStack.alpha = 0
-            }
-            
-        } else {
-            DispatchQueue.main.async {
-                self.periodStack.isHidden = false
-                self.periodStack.alpha = 1
-            }
-        }
+        savedTransactionsLabel.superview?.superview?.superview?.superview?.isHidden = (sendedCount.count + unsendedCount.count) == 0 ? true : false
+        unsesndedTransactionsLabel.superview?.superview?.isHidden = unsendedCount.count > 0 ? false : true
+        savedTransactionsLabel.superview?.superview?.isHidden = sendedCount.count > 0  ? false : true
     }
 
 }

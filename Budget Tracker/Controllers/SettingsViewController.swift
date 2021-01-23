@@ -36,7 +36,7 @@ class SettingsViewController: UIViewController {
             if touch.view != contentView{
                 DispatchQueue.main.async {
                     UIView.animate(withDuration: 0.23) {
-                        self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 300, 0)
+                        self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -self.contentView.frame.maxY, 0)
                     } completion: { (_) in
                         self.dismiss(animated: true, completion: nil)
                     }
@@ -55,64 +55,25 @@ class SettingsViewController: UIViewController {
         contentView.layer.shadowOpacity = 1
         contentView.layer.shadowOffset = .zero
         contentView.layer.shadowRadius = 10
-        contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 300, 0)
+        
         
         //view.isUserInteractionEnabled = true
-
+        
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         DispatchQueue.main.async {
-            UIView.animate(withDuration: 0.3) {
+            self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -self.contentView.frame.maxY, 0)
+            UIView.animate(withDuration: 0.23) {
                 self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
             }
             self.tableView.reloadData()
         }
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        UIView.animate(withDuration: 0.2) {
-            self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 300, 0)
-        }
-    }
-    
-    
-    
-    var toLoginPressed = false
-    var ckeckInternetTimer: Timer? {
-        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (a) in
-            print("timer")
 
-            if appData.internetPresend == false {
-                print("timer: internetPresend == false")
-                if self.toLoginPressed {
-                    DispatchQueue.main.async {
-                        self.message.showMessage(text: "No internet", type: .error)
-                    }
-                    
-                    self.toLoginPressed = false
-                }
-                a.invalidate()
-            } else {
-                if appData.internetPresend == true {
-                    print("timer: internetPresend == true")
-                    if self.toLoginPressed {
-                        self.toLoginPressed = false
-                        DispatchQueue.main.async {
-                            self.performSegue(withIdentifier: self.tableData[0].segue, sender: self)
-                        }
-                    }
-                    a.invalidate()
-                }
-            }
-            
-        }
-        
-    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        ckeckInternetTimer?.invalidate()
         if segue.identifier == "toSingIn" {
             let vc = segue.destination as! LoginViewController
             vc.selectedScreen = .createAccount
@@ -122,7 +83,7 @@ class SettingsViewController: UIViewController {
     @IBAction func closePressed(_ sender: UIButton) {
         DispatchQueue.main.async {
             UIView.animate(withDuration: 0.23) {
-                self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 300, 0)
+                self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -self.contentView.frame.maxY, 0)
             } completion: { (_) in
                 self.dismiss(animated: true, completion: nil)
             }

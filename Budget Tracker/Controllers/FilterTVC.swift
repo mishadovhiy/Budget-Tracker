@@ -37,7 +37,6 @@ class FilterTVC: UIViewController {
                 DispatchQueue.main.async {
                     self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
                 }
-                //self.dismiss(animated: true, completion: nil)
             }
         }
     }
@@ -283,6 +282,8 @@ class FilterTVC: UIViewController {
         }
         
     }
+    
+    
     
     
 // MARK: - Table view data source

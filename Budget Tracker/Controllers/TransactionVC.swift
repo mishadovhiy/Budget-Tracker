@@ -220,24 +220,10 @@ class TransitionVC: UIViewController {
         UIImpactFeedbackGenerator().impactOccurred()
         print("addNew called")
         if appData.username != "" {
-            var allData = appData.transactions
-            let new = TransactionsStruct(value: value, category: category, date: date, comment: comment)
-            allData.insert(new, at: 0)
-            appData.newValue = [value, category, date, comment]
-            //print(new, "new")
-            appData.saveTransations(allData)
-
-           // self.delegate?.addNewTransaction(value: value, category: category, date: date, comment: comment)
             self.dismiss(animated: true) {
                 self.delegate?.addNewTransaction(value: value, category: category, date: date, comment: comment)
             }
         } else {
-            var allData = appData.transactions
-            allData.insert(TransactionsStruct(value: value, category: category, date: date, comment: comment), at: 0)
-            print(TransactionsStruct(value: value, category: category, date: date, comment: comment))
-            appData.saveTransations(allData)
-            appData.newValue = [value, category, date, comment]
-            
             self.dismiss(animated: true) {
                 self.delegate?.addNewTransaction(value: value, category: category, date: date, comment: comment)
             }
