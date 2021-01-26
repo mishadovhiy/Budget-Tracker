@@ -49,6 +49,10 @@ class CalendarVC: UIViewController {
         }
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         if delegate == nil {
             if ifCustom {

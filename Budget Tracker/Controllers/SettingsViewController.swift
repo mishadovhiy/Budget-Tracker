@@ -13,10 +13,9 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var tableView: UITableView!
 
-    let tableData = [
+    var tableData = [
         SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: "toSingIn"),
         SettingsSctruct(title: "Categories", description: "All Categories (\(appData.getCategories().count))", segue: "settingsToCategories"),
-        SettingsSctruct(title: "Filter", description: selectedPeroud, segue: "settingsToFilter")
     ]
     
     lazy var message: MessageView = {
@@ -72,6 +71,13 @@ class SettingsViewController: UIViewController {
         }
     }
 
+    @IBAction func homeVC(segue: UIStoryboardSegue) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toSingIn" {

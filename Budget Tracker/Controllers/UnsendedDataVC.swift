@@ -19,22 +19,15 @@ class UnsendedDataVC: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     var transactions: [TransactionsStruct] = []
     var categories: [CategoriesStruct] = []
-    var keyPrefix = "unsaved"
     var delegate:UnsendedDataVCProtocol?
     @IBOutlet var cornerButtons: [UIButton]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        print(keyPrefix, "keyyy")
         self.tableView.delegate = self
         self.tableView.dataSource = self
         getData()
-        if keyPrefix == "unsaved" {
-            DispatchQueue.main.async {
-                self.cornerButtons[0].isHidden = true
-            }
-        }
         
         for button in cornerButtons {
             button.layer.masksToBounds = true
@@ -42,14 +35,14 @@ class UnsendedDataVC: UIViewController {
         }
         
         DispatchQueue.main.async {
-            self.mainTitleLabel.text = self.keyPrefix.capitalized + " Data"
+            self.mainTitleLabel.text = "Unsended Data"
         }
     }
     
     func getData() {
         
-        categories = appData.getCategories(key: "\(keyPrefix)Categories")
-        transactions = keyPrefix == "unsaved" ? appData.unsavedTransactions : appData.savedTransactions
+        categories = appData.getCategories(key: "savedCategories")
+        transactions = appData.savedTransactions
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }

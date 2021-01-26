@@ -84,10 +84,7 @@ class calcCell: UITableViewCell {
     
 
     func setup(calculations: (Double, Double, Double, Double)) {
-        let unsendedCount = (appData.defaults.value(forKey: "unsavedTransactions") as? [[String]] ?? []) + (appData.defaults.value(forKey: "unsavedCategories") as? [[String]] ?? [])
-        let sendedCount = (appData.defaults.value(forKey: "savedTransactions") as? [[String]] ?? []) + (appData.defaults.value(forKey: "savedCategories") as? [[String]] ?? [])
-        savedTransactionsLabel.text = "\(sendedCount.count)"
-        unsesndedTransactionsLabel.text = "\(unsendedCount.count)"
+       // let unsendedCount = (appData.defaults.value(forKey: "unsavedTransactions") as? [[String]] ?? []) + (appData.defaults.value(forKey: "unsavedCategories") as? [[String]] ?? [])
 
         //if totalBalance < Double(Int.max), sumExpenses < Double(Int.max), sumIncomes < Double(Int.max), sumPeriodBalance < Double(Int.max) {
         if calculations.0 < Double(Int.max), calculations.1 < Double(Int.max), calculations.2 < Double(Int.max), calculations.3 < Double(Int.max) {
@@ -108,9 +105,7 @@ class calcCell: UITableViewCell {
         balanceLabel.textColor = calculations.0 < 0.0 ? K.Colors.negative : K.Colors.balanceV
         
         
-        savedTransactionsLabel.superview?.superview?.superview?.superview?.isHidden = (sendedCount.count + unsendedCount.count) == 0 ? true : false
-        unsesndedTransactionsLabel.superview?.superview?.isHidden = unsendedCount.count > 0 ? false : true
-        savedTransactionsLabel.superview?.superview?.isHidden = sendedCount.count > 0  ? false : true
+        
     }
 
 }

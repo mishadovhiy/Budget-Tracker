@@ -81,11 +81,11 @@ class AppData {
         }
     }
 
-    var unsendedData:[[String]] {
+    var unsendedData:[[String: String]] {
         //0 - type (delete transaction)
         //1 - toDataString
         get {
-            return defaults.value(forKey: "unsendedData") as? [[String]] ?? []
+            return defaults.value(forKey: "unsendedData") as? [[String: String]] ?? []
         }
         set(value){
             defaults.set(value, forKey: "unsendedData")

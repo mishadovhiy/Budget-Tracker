@@ -89,7 +89,7 @@ class TransitionVC: UIViewController {
     func updateUI() {
         
         appendPurposes()
-        delegates(fields: [categoryTextField, dateTextField, commentTextField], pickes: [appData.objects.expensesPicker, appData.objects.incomePicker])
+        delegates(fields: [categoryTextField, dateTextField, commentTextField])
         appData.objects.datePicker.datePickerMode = .date
         if #available(iOS 13.4, *) {
             appData.objects.datePicker.preferredDatePickerStyle = .wheels
@@ -99,7 +99,7 @@ class TransitionVC: UIViewController {
         dateTextField.isUserInteractionEnabled = false
         dateTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(datePressed)))
         
-        dateTextField.text = UserDefaults.standard.value(forKey: "lastSelectedDate") as? String ?? appData.stringDate(appData.objects.datePicker)
+        dateTextField.placeholder = UserDefaults.standard.value(forKey: "lastSelectedDate") as? String ?? appData.stringDate(appData.objects.datePicker)
         pressedValue = "0"
         valueLabel.text = pressedValue
         commentTextField.smartInsertDeleteType = UITextSmartInsertDeleteType.no
@@ -124,14 +124,10 @@ class TransitionVC: UIViewController {
     }
     
     
-    func delegates(fields: [UITextField], pickes: [UIPickerView]) {
+    func delegates(fields: [UITextField]) {
         
         for i in 0..<fields.count {
             fields[i].delegate = self
-        }
-        for i in 0..<pickes.count {
-            pickes[i].delegate = self
-            pickes[i].dataSource = self
         }
     }
     
@@ -218,7 +214,7 @@ class TransitionVC: UIViewController {
     func addNew(value: String, category: String, date: String, comment: String) {
 
         UIImpactFeedbackGenerator().impactOccurred()
-        print("addNew called")
+        print("addNew called", date)
         if appData.username != "" {
             self.dismiss(animated: true) {
                 self.delegate?.addNewTransaction(value: value, category: category, date: date, comment: comment)
@@ -252,9 +248,10 @@ class TransitionVC: UIViewController {
             //let category = purposeSwitcher.selectedSegmentIndex == 0 ? expenseArr[appData.selectedExpense] : incomeArr[appData.selectedIncome]
             DispatchQueue.main.async {
                 let category = self.categoryTextField.text ?? ""
-                let date = self.dateTextField.text ?? ""
+                let date = self.dateTextField.text ?? self.dateTextField.placeholder!
                 let comment = self.commentTextField.text ?? ""
-                self.addNew(value: value, category: category, date: date, comment: comment)
+                print(date, "datedatedatedatedatedate")
+                self.addNew(value: value, category: category, date: date == "" ? self.dateTextField.placeholder ?? appData.stringDate(appData.objects.datePicker) : date, comment: comment)
             }
             
         } else {
@@ -378,45 +375,12 @@ class TransitionVC: UIViewController {
             minusPlusLabel.alpha = 0
         }
     }
-    
+    var lastSelectedDate = ""
 }
 
 
 //MARK: - TableView
 
-extension TransitionVC: UIPickerViewDelegate, UIPickerViewDataSource {
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if pickerView == appData.objects.expensesPicker {
-            return expenseArr.count
-        } else {
-            return incomeArr.count
-        }
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        if pickerView == appData.objects.expensesPicker {
-            return expenseArr[row]
-        } else {
-            return incomeArr[row]
-        }
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if pickerView == appData.objects.expensesPicker {
-            categoryTextField.text = expenseArr[row]
-            appData.selectedExpense = row
-        } else {
-            categoryTextField.text = incomeArr[row]
-            appData.selectedIncome = row
-        }
-    }
-    
-}
 
 
 //MARK: - TextField

@@ -40,11 +40,12 @@ class CategoriesVC: UIViewController {
                 incomes.append(categories[i].name)
             }
         }
-        
+        whenNoCategories()
         print("expenses: \(expenses.count), incomes: \(incomes.count)")
         DispatchQueue.main.async {
             self.categoriesTableView.reloadData()
         }
+        
         
     }
     
@@ -63,6 +64,8 @@ class CategoriesVC: UIViewController {
             navigationController?.setNavigationBarHidden(false, animated: true)
         }
     }
+    
+    
     
     func updateUI() {
         
@@ -90,7 +93,15 @@ class CategoriesVC: UIViewController {
     }
     
     @objc func hideCats(_ gesture: UISwipeGestureRecognizer) {
-        self.dismiss(animated: true, completion: nil)
+       
+        if delegate == nil {
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "settingsVC", sender: self)
+            }
+        } else {
+            self.dismiss(animated: true, completion: nil)
+        }
+        
     }
     
     func addRefreshControll() {
@@ -118,26 +129,29 @@ class CategoriesVC: UIViewController {
                 self.getDataFromLocal()
                 DispatchQueue.main.async {
                     self.categoriesTableView.reloadData()
+                    self.refreshControl.endRefreshing()
                 }
             } else {
                 DispatchQueue.main.async {
                     self.message.showMessage(text: error, type: .error)
+                    self.refreshControl.endRefreshing()
                 }
             }
-        }
-        Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (timer) in
-            self.refreshControl.endRefreshing()
         }
     }
     
     func whenNoCategories() {
         
         if expenses.count == 0 && incomes.count == 0 {
-            titleLabel.text = "No categories"
-            titleLabel.textAlignment = .center
+            DispatchQueue.main.async {
+                self.titleLabel.text = "No categories"
+                self.titleLabel.textAlignment = .center
+            }
         } else {
-            titleLabel.text = "Categories"
-            titleLabel.textAlignment = .left
+            DispatchQueue.main.async {
+                self.titleLabel.text = "Categories"
+                self.titleLabel.textAlignment = .left
+            }
         }
     }
     
@@ -162,18 +176,12 @@ class CategoriesVC: UIViewController {
             let toDataString = "&Nickname=\(Nickname)" + "&Title=\(title)" + "&Purpose=\(purpose)"
             let save = SaveToDB()
             save.Categories(toDataString: toDataString) { (error) in
+                var categories = Array(appData.getCategories())
+                categories.append(CategoriesStruct(name: title, purpose: purpose))
+                appData.saveCategories(categories)
+                self.getDataFromLocal()
                 if error {
-                    var categories = Array(appData.getCategories(key: "unsavedCategories"))
-                    categories.append(CategoriesStruct(name: title, purpose: purpose))
-                    appData.saveCategories(categories, key: "unsavedCategories")
-                    DispatchQueue.main.async {
-                        self.message.showMessage(text: "Error saving\nData has been saved locally", type: .error, windowHeight: 80)
-                    }
-                } else {
-                    var categories = Array(appData.getCategories())
-                    categories.append(CategoriesStruct(name: title, purpose: purpose))
-                    appData.saveCategories(categories)
-                    self.getDataFromLocal()
+                    appData.unsendedData.append(["categorie": toDataString])
                     
                 }
             }
@@ -182,8 +190,8 @@ class CategoriesVC: UIViewController {
 
     }
     
+    //here
     func deteteCategory(at: IndexPath) {
-        
         let delete = DeleteFromDB()
         let Nickname = appData.username
         let Title = at.section == 0 ? expenses[at.row] : incomes[at.row]
@@ -193,30 +201,32 @@ class CategoriesVC: UIViewController {
             let toDataString = "&Nickname=\(Nickname)" + "&Title=\(Title)" + "&Purpose=\(Purpose)"
             delete.Categories(toDataString: toDataString, completion: { (error) in
                 if error {
-                    DispatchQueue.main.async {
-                        self.message.showMessage(text: "Error deleting data", type: .error)
-                    }
+                    print("Errordeletingcategory")
+                    appData.unsendedData.append(["deleteCategory": toDataString])
                 } else {
-                    self.refresh(sender: self.refreshControl)
+                    print("deletedcategory")
                 }
+                if at.section == 0 {
+                    self.expenses.remove(at: at.row)
+                } else {
+                    self.incomes.remove(at: at.row)
+                }
+                var result: [CategoriesStruct] = []
+                for i in 0..<self.incomes.count {
+                    result.append(CategoriesStruct(name: self.incomes[i], purpose: K.income))
+                }
+                for i in 0..<self.expenses.count {
+                    result.append(CategoriesStruct(name: self.expenses[i], purpose: K.expense))
+                }
+                self.allCategoriesData = result
+                appData.saveCategories(self.allCategoriesData)
+                self.getDataFromLocal()
+                
             })
         }
         
 
-        if at.section == 0 {
-            expenses.remove(at: at.row)
-        } else {
-            incomes.remove(at: at.row)
-        }
-        var result: [CategoriesStruct] = []
-        for i in 0..<incomes.count {
-            result.append(CategoriesStruct(name: incomes[i], purpose: K.income))
-        }
-        for i in 0..<expenses.count {
-            result.append(CategoriesStruct(name: expenses[i], purpose: K.expense))
-        }
-        allCategoriesData = result
-        appData.saveCategories(allCategoriesData)
+        
     }
     
     @IBAction func addCategoryPressed(_ sender: UIButton) {
@@ -239,7 +249,13 @@ class CategoriesVC: UIViewController {
     }
     
     @IBAction func closePressed(_ sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
+        if delegate == nil {
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "settingsVC", sender: self)
+            }
+        } else {
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -299,10 +315,7 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
         if editingStyle == UITableViewCell.EditingStyle.delete {
 
             deteteCategory(at: indexPath)
-            whenNoCategories()
-            DispatchQueue.main.async {
-                self.categoriesTableView.reloadData()
-            }
+
         }
     }
     

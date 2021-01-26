@@ -17,8 +17,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        let _ = appData.filter.getToday(appData.filter.filterObjects.currentDate)
-        
+        let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
+        let value = UserDefaults.standard.value(forKey: "lastLaunching") as? String ?? ""
+        if value != today {
+            UserDefaults.standard.setValue(today, forKey: "lastLaunching")
+            UserDefaults.standard.setValue(nil, forKey: "lastSelectedDate")
+        }
+        print(today, "didFinishLaunchingWithOptions")
         return true
     }
 

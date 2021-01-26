@@ -172,8 +172,8 @@ struct SaveToDB {
     }
 
     
-    func Transactions(transactionStruct: TransactionsStruct, mainView: UIViewController?,completion: @escaping (Bool) -> ()) {
-        let toDataString = "&Nickname=\(appData.username)" + "&Category=\(transactionStruct.category)" + "&Date=\(transactionStruct.date)" + "&Value=\(transactionStruct.value)" + "&Comment=\(transactionStruct.comment)"
+    func Transactions(toDataString: String, completion: @escaping (Bool) -> ()) {
+        //let toDataString = "&Nickname=\(appData.username)" + "&Category=\(transactionStruct.category)" + "&Date=\(transactionStruct.date)" + "&Value=\(transactionStruct.value)" + "&Comment=\(transactionStruct.comment)"
         save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-transaction.php", toDataString: toDataString, errorLoading: "Transactions", dataType: .categories, error: { (error) in
             completion(error)
         })
@@ -257,6 +257,7 @@ struct DeleteFromDB {
     }
     
     func Categories(toDataString: String, completion: @escaping (Bool) -> ()) {
+        print(toDataString, "toDataStringtoDataStringtoDataStringtoDataStringtoDataString")
         delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-category.php", toDataString: toDataString, error: { (error) in
             completion(error)
         })
@@ -282,10 +283,10 @@ struct DeleteFromDB {
                 } else {
                     if let unwrappedData = data {
                         let returnedData = NSString(data: unwrappedData, encoding: String.Encoding.utf8.rawValue)
-                        
                         if returnedData == "1" {
                             print("ok")
                             error(false)
+                            return
                         } else {
                             print("db error for (cats, etc), developer fault")
                             error(true)
