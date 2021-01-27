@@ -594,14 +594,14 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="3" translatesAutoresizingMaskIntoConstraints="NO" id="IhM-qn-Xr4">
-                                                    <rect key="frame" x="20" y="15" width="374" height="20"/>
+                                                    <rect key="frame" x="15" y="15" width="384" height="20"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="IhM-qn-Xr4" secondAttribute="trailing" constant="20" id="FW8-I9-8Dc"/>
-                                                <constraint firstItem="IhM-qn-Xr4" firstAttribute="leading" secondItem="8cn-F5-cRV" secondAttribute="leading" constant="20" id="cPS-1p-rd8"/>
+                                                <constraint firstAttribute="trailing" secondItem="IhM-qn-Xr4" secondAttribute="trailing" constant="15" id="FW8-I9-8Dc"/>
+                                                <constraint firstItem="IhM-qn-Xr4" firstAttribute="leading" secondItem="8cn-F5-cRV" secondAttribute="leading" constant="15" id="cPS-1p-rd8"/>
                                                 <constraint firstAttribute="bottom" secondItem="IhM-qn-Xr4" secondAttribute="bottom" constant="15" id="eEm-2a-muR"/>
                                                 <constraint firstItem="IhM-qn-Xr4" firstAttribute="top" secondItem="8cn-F5-cRV" secondAttribute="top" constant="15" id="gzM-7Z-At8"/>
                                             </constraints>
@@ -662,7 +662,7 @@
                                     <constraint firstAttribute="height" constant="60" id="QfJ-Sy-RuP"/>
                                     <constraint firstAttribute="width" constant="60" id="oeW-ij-yYp"/>
                                 </constraints>
-                                <state key="normal" image="cancel"/>
+                                <state key="normal" image="darkClose"/>
                                 <connections>
                                     <action selector="cancelPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="K1H-9z-eyO"/>
                                 </connections>
@@ -822,7 +822,7 @@
                                                 </subviews>
                                             </stackView>
                                         </subviews>
-                                        <color key="backgroundColor" name="balanceValueColor"/>
+                                        <color key="backgroundColor" name="darkSeparetor"/>
                                         <constraints>
                                             <constraint firstItem="Wsl-xB-XcD" firstAttribute="top" secondItem="zys-If-Z7A" secondAttribute="top" id="0Th-QP-dqg"/>
                                             <constraint firstAttribute="trailing" secondItem="Wsl-xB-XcD" secondAttribute="trailing" id="HdE-8d-iKN"/>
@@ -1554,7 +1554,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" insetsLayoutMarginsFromSafeArea="NO" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="-1" sectionHeaderHeight="-1" sectionFooterHeight="28" contentViewInsetsToSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3dz-Jd-k6P">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" insetsLayoutMarginsFromSafeArea="NO" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="47" sectionHeaderHeight="-1" sectionFooterHeight="28" contentViewInsetsToSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3dz-Jd-k6P">
                                 <rect key="frame" x="68" y="180" width="145" height="161"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="separetorColor"/>
@@ -1653,7 +1653,7 @@
                                     <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="l0e-RJ-jiN">
                                         <rect key="frame" x="60" y="8" width="274" height="34"/>
                                         <color key="backgroundColor" name="sectionBackgroundColor"/>
-                                        <color key="textColor" name="CategoryColor"/>
+                                        <color key="textColor" name="darkTableColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
@@ -2276,14 +2276,15 @@ Budget Tracker</string>
         <segue reference="f60-Rj-Rbr"/>
     </inferredMetricsTieBreakers>
     <resources>
-        <image name="cIcon" width="11" height="18"/>
-        <image name="cancel" width="16" height="16"/>
+        <image name="cIcon" width="12" height="19"/>
+        <image name="cancel" width="30" height="30"/>
         <image name="categoriesIcon" width="27" height="19"/>
         <image name="comment" width="15" height="9"/>
-        <image name="done" width="16" height="16"/>
-        <image name="minus" width="11" height="20"/>
+        <image name="darkClose" width="30" height="30"/>
+        <image name="done" width="30" height="30"/>
+        <image name="minus" width="12" height="19"/>
         <image name="plusIcon" width="40" height="40"/>
-        <image name="plusYellowIcon" width="22" height="22"/>
+        <image name="plusYellowIcon" width="30" height="30"/>
         <namedColor name="CategoryColor">
             <color red="0.86699998378753662" green="0.86699998378753662" blue="0.86699998378753662" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -2295,6 +2296,9 @@ Budget Tracker</string>
         </namedColor>
         <namedColor name="balanceValueColor">
             <color red="0.33700001239776611" green="0.33700001239776611" blue="0.33700001239776611" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="darkSeparetor">
+            <color red="0.13333333333333333" green="0.13725490196078433" blue="0.15294117647058825" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="darkTableColor">
             <color red="0.078000001609325409" green="0.086000002920627594" blue="0.10599999874830246" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

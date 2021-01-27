@@ -53,6 +53,7 @@ class FilterTVC: UIViewController {
         self.tableview.layer.masksToBounds = true
         self.tableview.layer.cornerRadius = 6
         tableview.cellLayoutMarginsFollowReadableWidth = true
+        self.tableview.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
 
         DispatchQueue.main.async {
             self.tableview.beginUpdates()
@@ -288,15 +289,18 @@ extension FilterTVC: UITableViewDelegate, UITableViewDataSource {
         if data == selectedPeroud {
             cell.layer.masksToBounds = true
             cell.layer.cornerRadius = 6
-            cell.backgroundColor = K.Colors.yellow
+            cell.titleLabel.textColor = K.Colors.category
+            cell.backgroundColor = UIColor(named: "darkTableColor") //K.Colors.yellow
         } else {
             cell.backgroundColor = K.Colors.separetor
+            cell.titleLabel.textColor = UIColor(named: "darkTableColor")
         }
         if ifCustom {
             if data == "Custom" {
                 cell.layer.masksToBounds = true
                 cell.layer.cornerRadius = 6
-                cell.backgroundColor = K.Colors.yellow
+                cell.backgroundColor = UIColor(named: "darkTableColor")
+                cell.titleLabel.textColor = K.Colors.category
             }
         }
         
@@ -331,7 +335,7 @@ extension FilterTVC: UITableViewDelegate, UITableViewDataSource {
         default:
             label.text = ""
         }
-        view.backgroundColor = K.Colors.separetor
+        view.backgroundColor = UIColor(red: 190/255, green: 185/255, blue: 185/255, alpha: 1) //UIColor(named: "darkTableColor") //K.Colors.separetor//UIColor(named: "darkTableColor")
         view.addSubview(label)
         return view
     }

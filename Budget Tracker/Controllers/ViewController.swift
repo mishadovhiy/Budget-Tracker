@@ -51,6 +51,7 @@ class ViewController: UIViewController {
                 self.mainTableView.isScrollEnabled = self.tableData.count == 0 ? false : true
                 
                 if self.tableData.count == 0 {
+                    self.mainTableView.separatorColor = K.Colors.separetor
                     self.forseShowAddButton = true
                     let supFrame = self.view.frame
                     self.addTransitionButton.backgroundColor = .clear
@@ -62,6 +63,7 @@ class ViewController: UIViewController {
                     self.noTableDataLabel.alpha = 0.5
                     self.noTableDataLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
                 } else {
+                    self.mainTableView.separatorColor = UIColor(named: "darkSeparetor")
                     self.addTransitionButton.backgroundColor = UIColor(named: "darkTableColor")
                     self.forseShowAddButton = false
                     if self.addTransitionButton.frame != self.addTransFrame {
@@ -93,15 +95,17 @@ class ViewController: UIViewController {
 
         
         updateUI()
-        addTransitionButton.layer.cornerRadius = 15
+        addTransitionButton.layer.cornerRadius = 25
         addTransitionButton.layer.maskedCorners = [.layerMaxXMinYCorner]
-       // appendMatches()
+        prepareFilterOptions()
     }
     
     var viewLoadedvar = false
     override func viewDidLayoutSubviews() {
         filterView.layer.masksToBounds = true
         filterView.layer.cornerRadius = 6
+        filterView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+
         if !viewLoadedvar {
             whiteBackgroundFrame = whiteBackground.frame
         }
@@ -566,7 +570,7 @@ class ViewController: UIViewController {
                             dataStruct.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
                         }
                         appData.saveTransations(dataStruct)
-                        self.appendMatches()
+                        self.prepareFilterOptions()
                         load.Categories{(loadedDataa, error) in
                             if error == "" {
                                 print("loaded \(loadedData.count) Categories from DB")
@@ -592,7 +596,7 @@ class ViewController: UIViewController {
                     } else {
                         print("error loading data1")
                         self.filter()
-                        self.appendMatches()
+                        self.prepareFilterOptions()
                         DispatchQueue.main.async {
                             self.message.showMessage(text: error, type: .error)
                         }
@@ -905,7 +909,7 @@ class ViewController: UIViewController {
     var prevSelectedPer = selectedPeroud
     
     var filteredData:[String: [String]] = [:]
-    func appendMatches() {
+    func prepareFilterOptions() {
         //filteredData
         let arr = Array(appData.transactions.sorted{ $0.dateFromString > $1.dateFromString })
         var months:[String] = []
@@ -955,9 +959,10 @@ class ViewController: UIViewController {
             vc?.years = filteredData["years"] ?? []
             DispatchQueue.main.async {
                 let filterFrame = self.filterView.frame
-                vc?.frame = CGRect(x: filterFrame.minX, y: filterFrame.minY + filterFrame.height + 5, width: (filterFrame.width + 50) / 2, height: filterFrame.width)
+                vc?.frame = CGRect(x: filterFrame.minX, y: filterFrame.minY + filterFrame.height, width: filterFrame.width /*(filterFrame.width + 50) / 2*/, height: filterFrame.width)
                 UIView.animate(withDuration: 0.2) {
                     self.filterView.backgroundColor = K.Colors.separetor
+                    self.filterTextLabel.textColor = K.Colors.balanceV
                 }
             }
             
@@ -1006,6 +1011,7 @@ class ViewController: UIViewController {
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.2) {
                     self.filterView.backgroundColor = .clear
+                    self.filterTextLabel.textColor = K.Colors.balanceT
                 }
             }
             if self.prevSelectedPer != selectedPeroud {
@@ -1252,7 +1258,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             let view = UIView(frame: CGRect(x: 0, y: 0, width: tableFrame.width, height: 50))
             view.backgroundColor = UIColor(named: "darkTableColor")
             view.layer.masksToBounds = true
-            view.layer.cornerRadius = section == 1 ? 15 : 0
+            view.layer.cornerRadius = section == 1 ? 25 : 0
             //self.mainTableView.layer.cornerRadius = 15
             view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
             let dateLabel = UILabel(frame: CGRect(x: 20, y: 0, width: tableFrame.width - 40, height: view.frame.height))
@@ -1299,7 +1305,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 self.calculationSView.alpha = 1
                 self.filterView.alpha = 0
                 self.mainTableView.layer.masksToBounds = true
-                self.mainTableView.layer.cornerRadius = 15
+                self.mainTableView.layer.cornerRadius = 25
                 self.mainTableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
                 self.addTransitionButton.isHidden = false
             }

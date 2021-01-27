@@ -45,7 +45,7 @@ class CalendarVC: UIViewController {
                 self.view.backgroundColor = UIColor(named: "darkTableColor")
                 self.textField.superview?.backgroundColor = UIColor(named: "darkTableColor")
                 self.collectionView.backgroundColor = UIColor(named: "darkTableColor")
-                
+                self.textField.textColor = K.Colors.background
             }
         }
     }

@@ -50,7 +50,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             let data = historyDataStruct[indexPath.row]
             
             if data.value > 0.0 {
-                cell.valueLabel.textColor = K.Colors.category
+                cell.valueLabel.textColor = UIColor(named: "darkTableColor")
             } else { cell.valueLabel.textColor = K.Colors.negative }
             cell.dateLabel.text = data.date
             if data.value < Double(Int.max) {

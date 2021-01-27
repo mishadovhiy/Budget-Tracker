@@ -217,7 +217,7 @@ extension StatisticVC: UITableViewDelegate, UITableViewDataSource {
         let data = allData[indexPath.row]
         
         if data.value > 0.0 {
-            cell.amountLabel.textColor = K.Colors.category
+            cell.amountLabel.textColor = UIColor(named: "darkTableColor")
         } else { cell.amountLabel.textColor = K.Colors.negative }
         if data.value < Double(Int.max) {
             cell.amountLabel.text = "\(Int(data.value))"

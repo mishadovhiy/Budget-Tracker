@@ -62,7 +62,7 @@ class CategoriesVC: UIViewController {
                 self.view.backgroundColor = UIColor(named: "darkTableColor")
                 self.headerView.backgroundColor = UIColor(named: "darkTableColor")
                 self.categoriesTableView.backgroundColor = UIColor(named: "darkTableColor")
-                
+                self.categoriesTableView.separatorColor = UIColor(named: "darkSeparetor")
             }
         }
     }
@@ -312,6 +312,22 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
         }
         return cell
     }
+    
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let mainFrame = self.view.frame
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: mainFrame.width, height: 25))
+        let lightBackground = UIColor(red: 194/255, green: 194/255, blue: 194/255, alpha: 1)
+        let darkBackground = UIColor(red: 13/255, green: 15/255, blue: 19/255, alpha: 1)
+        view.backgroundColor = self.view.backgroundColor == K.Colors.background ? lightBackground : darkBackground
+        let label = UILabel(frame: CGRect(x: 15, y: 5, width: mainFrame.width - 40, height: 20))
+        label.text = section == 0 ? K.expense : K.income
+        label.textColor = view.backgroundColor == lightBackground ? K.Colors.balanceT : K.Colors.balanceV
+        label.font = .systemFont(ofSize: 14, weight: .medium)
+        view.addSubview(label)
+        return view
+    }
+    
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCell.EditingStyle.delete {
