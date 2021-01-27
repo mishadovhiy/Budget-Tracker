@@ -30,6 +30,8 @@ class CalendarVC: UIViewController {
     var daysBetween = [""]
     var selectedFromDayInt = 0
     var selectedToDayInt = 0
+    var darkAppearence = false
+    
     
     var year = 1996
     var month = 11
@@ -38,6 +40,14 @@ class CalendarVC: UIViewController {
         super.viewDidLoad()
         
         updaiteUI()
+        if darkAppearence {
+            DispatchQueue.main.async {
+                self.view.backgroundColor = UIColor(named: "darkTableColor")
+                self.textField.superview?.backgroundColor = UIColor(named: "darkTableColor")
+                self.collectionView.backgroundColor = UIColor(named: "darkTableColor")
+                
+            }
+        }
     }
 
     
@@ -369,7 +379,7 @@ class CalendarVC: UIViewController {
             cell.dayLabel.textColor = UIColor.white
         }else {
             cell.backgroundCell.backgroundColor = UIColor.clear
-            cell.dayLabel.textColor = K.Colors.category
+            cell.dayLabel.textColor = darkAppearence ? K.Colors.category : UIColor(named: "darkTableColor")
         }
         
     }

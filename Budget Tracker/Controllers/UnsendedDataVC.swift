@@ -22,6 +22,12 @@ class UnsendedDataVC: UIViewController {
     var delegate:UnsendedDataVCProtocol?
     @IBOutlet var cornerButtons: [UIButton]!
     
+    var messageText = ""
+    lazy var message: MessageView = {
+        let message = MessageView(self)
+        return message
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -36,6 +42,12 @@ class UnsendedDataVC: UIViewController {
         
         DispatchQueue.main.async {
             self.mainTitleLabel.text = "Unsended Data"
+        }
+        
+        if messageText != "" {
+            DispatchQueue.main.async {
+                self.message.showMessage(text: self.messageText, type: .error)
+            }
         }
     }
     
@@ -110,6 +122,24 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
         default:
             return UITableViewCell()
         }
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
+            switch indexPath.section {
+            case 0: self.transactions.remove(at: indexPath.row)
+                appData.saveTransations(self.transactions, key: "savedTransactions")
+            case 1: self.categories.remove(at: indexPath.row)
+                appData.saveCategories(self.categories, key: "savedCategories")
+            default:
+                print("default")
+            }
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+        return UISwipeActionsConfiguration(actions: [deleteAction])
     }
     
     

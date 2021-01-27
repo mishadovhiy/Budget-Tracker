@@ -26,6 +26,8 @@ class StatisticVC: UIViewController, CALayerDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         deselectAllCells()
+        segmentControll.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white], for: .normal)
+        segmentControll.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "darkTableColor") ?? .black], for: .selected)
     }
     
     func deselectAllCells() {

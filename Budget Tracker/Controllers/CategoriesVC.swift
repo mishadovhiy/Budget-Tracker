@@ -21,8 +21,10 @@ class CategoriesVC: UIViewController {
     var refreshControl = UIRefreshControl()
     var allCategoriesData = Array(appData.getCategories())
     @IBOutlet weak var headerView: UIView!
-    
+    var hideTitle = false
+    var fromSettings = false
     var delegate: CategoriesVCProtocol?
+    var darkAppearence = false
     
     lazy var message: MessageView = {
         let message = MessageView(self)
@@ -55,8 +57,14 @@ class CategoriesVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUI()
-        
-
+        if darkAppearence {
+            DispatchQueue.main.async {
+                self.view.backgroundColor = UIColor(named: "darkTableColor")
+                self.headerView.backgroundColor = UIColor(named: "darkTableColor")
+                self.categoriesTableView.backgroundColor = UIColor(named: "darkTableColor")
+                
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -64,9 +72,15 @@ class CategoriesVC: UIViewController {
             navigationController?.setNavigationBarHidden(false, animated: true)
         }
     }
+    override func viewWillDisappear(_ animated: Bool) {
+        if fromSettings {
+            if wasEdited {
+                delegate?.categorySelected(category: "", purpose: 0)
+            }
+        }
+    }
     
-    
-    
+    var wasEdited = false
     func updateUI() {
         
         getDataFromLocal()
@@ -80,7 +94,7 @@ class CategoriesVC: UIViewController {
         hiseCatsSwipe.direction = .left
         view.addGestureRecognizer(hiseCatsSwipe);
         
-        if delegate != nil {
+        if hideTitle {
             title = "Categories"
             DispatchQueue.main.async {
                 let frame = self.headerView.frame
@@ -93,14 +107,8 @@ class CategoriesVC: UIViewController {
     }
     
     @objc func hideCats(_ gesture: UISwipeGestureRecognizer) {
-       
-        if delegate == nil {
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "settingsVC", sender: self)
-            }
-        } else {
-            self.dismiss(animated: true, completion: nil)
-        }
+        
+        self.dismiss(animated: true, completion: nil)
         
     }
     
@@ -171,6 +179,7 @@ class CategoriesVC: UIViewController {
     
     func sendToDBCategory(title: String, purpose: String) {
         
+        wasEdited = true
         let Nickname = appData.username
         if Nickname != "" {
             let toDataString = "&Nickname=\(Nickname)" + "&Title=\(title)" + "&Purpose=\(purpose)"
@@ -181,12 +190,12 @@ class CategoriesVC: UIViewController {
                 appData.saveCategories(categories)
                 self.getDataFromLocal()
                 if error {
-                    appData.unsendedData.append(["categorie": toDataString])
-                    
+                    appData.unsendedData.append(["category": toDataString])
                 }
             }
             
         }
+
 
     }
     
@@ -196,15 +205,13 @@ class CategoriesVC: UIViewController {
         let Nickname = appData.username
         let Title = at.section == 0 ? expenses[at.row] : incomes[at.row]
         let Purpose = at.section == 0 ? K.expense : K.income
-        
+        wasEdited = true
         if appData.username != "" {
             let toDataString = "&Nickname=\(Nickname)" + "&Title=\(Title)" + "&Purpose=\(Purpose)"
             delete.Categories(toDataString: toDataString, completion: { (error) in
                 if error {
                     print("Errordeletingcategory")
                     appData.unsendedData.append(["deleteCategory": toDataString])
-                } else {
-                    print("deletedcategory")
                 }
                 if at.section == 0 {
                     self.expenses.remove(at: at.row)
@@ -230,7 +237,6 @@ class CategoriesVC: UIViewController {
     }
     
     @IBAction func addCategoryPressed(_ sender: UIButton) {
-        
         let alert = UIAlertController(title: "Add Category", message: "", preferredStyle: .alert)
         alertTextFields(alert: alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
@@ -249,13 +255,7 @@ class CategoriesVC: UIViewController {
     }
     
     @IBAction func closePressed(_ sender: UIButton) {
-        if delegate == nil {
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "settingsVC", sender: self)
-            }
-        } else {
-            self.dismiss(animated: true, completion: nil)
-        }
+        self.dismiss(animated: true, completion: nil)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -291,24 +291,26 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent, for: indexPath) as! categoriesVCcell
+        
         switch indexPath.section {
-        case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent, for: indexPath) as! categoriesVCcell
-            cell.categoryNameLabel.text = expenses[indexPath.row]
-            return cell
-        case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent, for: indexPath) as! categoriesVCcell
-            cell.categoryNameLabel.text = incomes[indexPath.row]
-            return cell
+        case 0: cell.categoryNameLabel.text = expenses[indexPath.row]
+        case 1: cell.categoryNameLabel.text = incomes[indexPath.row]
         default:
-            let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent, for: indexPath) as! categoriesVCcell
             cell.categoryNameLabel.text = incomes[indexPath.row]
-            return cell
+            
         }
         
+        if darkAppearence {
+            cell.contentView.layer.backgroundColor = UIColor(named: "darkTableColor")?.cgColor
+        } else {
+            cell.contentView.layer.backgroundColor = K.Colors.background?.cgColor
+        }
         
-        
+        if darkAppearence {
+            cell.categoryNameLabel.textColor = K.Colors.background
+        }
+        return cell
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

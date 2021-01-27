@@ -104,6 +104,7 @@ class LoginViewController: UIViewController {
                     }
                 }
             } else {
+                print("error!!!")
                 DispatchQueue.main.async {
                     self.message.showMessage(text: "Error!", type: .error)
                 }
@@ -298,8 +299,12 @@ class LoginViewController: UIViewController {
         }
     }
     
+    var usernameHolder = ""
     override func viewWillDisappear(_ animated: Bool) {
         invalidateTimers()
+        DispatchQueue.main.async {
+            self.message.hideMessage(duration: 0)
+        }
     }
     
     func userExists(name: String, loadedData: [[String]]) -> Bool {
@@ -332,9 +337,9 @@ class LoginViewController: UIViewController {
         hideKeyboard()
     }
     
-    @IBAction func withoutAccount(_ sender: UIButton) {
+    @IBAction func closePressed(_ sender: UIButton) {
         DispatchQueue.main.async {
-            self.performSegue(withIdentifier: "homeVC", sender: self)
+            self.dismiss(animated: true, completion: nil)
         }
     }
     func hideKeyboard() {

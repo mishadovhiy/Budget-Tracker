@@ -28,14 +28,29 @@ class MessageView {
 
     func hideMessage(duration: TimeInterval = 0.2) {
         stopTimers()
-        
-        DispatchQueue.main.async {
-            self.closeButton?.alpha = 0
-            UIView.animate(withDuration: duration) {
-                self.subview?.frame = CGRect(x: 0, y: -80, width: 10, height: 30)
+        if duration == 0 {
+            DispatchQueue.main.async {
+                self.closeButton?.alpha = 0
+                let width = (self.mainView.view.bounds.width < 500 ? self.mainView.view.bounds.width : 500) - 40
+                self.subview?.frame = CGRect(x: self.mainView.view.frame.width / 2 - width / 2, y: -80, width: width, height: 30)
                 self.textLabel?.alpha = 0
                 self.textLabel?.textColor = K.Colors.background
                 self.subview?.backgroundColor = K.Colors.category
+                self.subview?.alpha = 0
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.closeButton?.alpha = 0
+                let width = (self.mainView.view.bounds.width < 500 ? self.mainView.view.bounds.width : 500) - 40
+                UIView.animate(withDuration: duration) {
+                    self.subview?.frame = CGRect(x: self.mainView.view.frame.width / 2 - width / 2, y: -80, width: width, height: 30)
+                    self.textLabel?.alpha = 0
+                    self.textLabel?.textColor = K.Colors.background
+                    self.subview?.backgroundColor = K.Colors.category
+                } completion: { (_) in
+                    self.subview?.alpha = 0
+                }
+
             }
         }
         
@@ -53,10 +68,13 @@ class MessageView {
 
         hideMessage(duration: 0)
         DispatchQueue.main.async {
+            self.subview?.alpha = 1
             self.textLabel?.text = text
-            self.subview?.frame = CGRect(x: 40, y: -80, width: self.mainView.view.bounds.width - 40, height: windowHeight)
+            let mainViewFrame = self.mainView.view.bounds
+            let width = (mainViewFrame.width < 500 ? mainViewFrame.width : 500) - 40
+            let x = mainViewFrame.width / 2 - width / 2
             UIView.animate(withDuration: 0.4) {
-                self.subview?.frame = CGRect(x: 20, y: self.mainView.view.safeAreaInsets.top + 5, width: self.mainView.view.bounds.width - 40, height: windowHeight)
+                self.subview?.frame = CGRect(x: x, y: self.mainView.view.safeAreaInsets.top + 5, width: width, height: windowHeight)//todo: TESTON IPAD
                 self.textLabel?.alpha = 1
             }
             UIView.animate(withDuration: 0.8) {
@@ -161,6 +179,8 @@ class MessageView {
             self.closeButton?.alpha = 0
             self.closeButton?.setImage(UIImage(named: "cancel"), for: .normal)
             self.closeButton?.addTarget(self, action: #selector(self.closeButtonPressed(_:)), for: .allEvents)
+            self.subview?.frame = .zero
+            self.subview?.alpha = 0
         }
         
         print("message init")
@@ -203,10 +223,7 @@ class MessageView {
             self.closeButton = UIButton()
             self.textLabel = UILabel()
             self.subview = UIView()
-            
         }
-        
-        
         initMessage()
     }
     

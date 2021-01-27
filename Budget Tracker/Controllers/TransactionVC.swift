@@ -58,6 +58,7 @@ class TransitionVC: UIViewController {
         
     }
     
+    
     override func viewWillDisappear(_ animated: Bool) {
         delegate?.quiteTransactionVC()
     }
@@ -73,6 +74,7 @@ class TransitionVC: UIViewController {
             print("toCalendar")
             let vc = segue.destination as! CalendarVC
             vc.delegate = self
+            vc.darkAppearence = true
             if let date = dateTextField.text {
                 vc.selectedFrom = date
             }
@@ -81,6 +83,8 @@ class TransitionVC: UIViewController {
             print("toCalendar")
             let vc = segue.destination as! CategoriesVC
             vc.delegate = self
+            vc.darkAppearence = true
+            vc.hideTitle = true
         default:
             print("segue default")
         }
@@ -95,18 +99,21 @@ class TransitionVC: UIViewController {
             appData.objects.datePicker.preferredDatePickerStyle = .wheels
         }
         dateTextField.inputView = UIView(frame: .zero)//appData.objects.datePicker
-        appData.objects.datePicker.addTarget(self, action: #selector(datePickerChangedValue(sender:)), for: .valueChanged)
         dateTextField.isUserInteractionEnabled = false
         dateTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(datePressed)))
-        
-        dateTextField.placeholder = UserDefaults.standard.value(forKey: "lastSelectedDate") as? String ?? appData.stringDate(appData.objects.datePicker)
+
         pressedValue = "0"
         valueLabel.text = pressedValue
         commentTextField.smartInsertDeleteType = UITextSmartInsertDeleteType.no
         commentTextField.addTarget(self, action: #selector(commentCount), for: .editingChanged)
         categoryTextField.isUserInteractionEnabled = false
         categoryTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(categoryPressed)))
-        
+
+        dateTextField.attributedPlaceholder = NSAttributedString(string: UserDefaults.standard.value(forKey: "lastSelectedDate") as? String ?? appData.stringDate(appData.objects.datePicker), attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
+        commentTextField.attributedPlaceholder = NSAttributedString(string: "Short comment", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
+        purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white], for: .normal)
+        purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "darkTableColor") ?? .black], for: .selected)
+    
     }
     
     @objc func datePressed(_ sender: UITapGestureRecognizer) {
@@ -234,11 +241,7 @@ class TransitionVC: UIViewController {
         minusPlusLabel.textColor = K.Colors.balanceV
     }
     
-    //delete
-    @objc func datePickerChangedValue(sender: UIDatePicker) {
-        
-        dateTextField.text = appData.stringDate(sender)
-    }
+
     
     @IBAction func donePressed(_ sender: UIButton) {
         
@@ -427,6 +430,7 @@ class CustomTextField: UITextField {
         return enableLongPressActions
     }
     
+    
 }
 
 extension TransitionVC: CalendarVCProtocol {
@@ -439,6 +443,7 @@ extension TransitionVC: CalendarVCProtocol {
 }
 
 extension TransitionVC: CategoriesVCProtocol {
+    
     func categorySelected(category: String, purpose: Int) {
         purposeSwitcher.selectedSegmentIndex = purpose
         purposeSwitched(purposeSwitcher)

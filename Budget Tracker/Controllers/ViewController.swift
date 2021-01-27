@@ -52,6 +52,7 @@ class ViewController: UIViewController {
                 if self.tableData.count == 0 {
                     self.forseShowAddButton = true
                     let supFrame = self.view.frame
+                    self.addTransitionButton.backgroundColor = .clear
                     UIView.animate(withDuration: 0.6) {
                         self.addTransitionButton.frame = CGRect(x: supFrame.width / 2 - (self.addTransFrame.width / 2 + self.addTransitionButton.contentEdgeInsets.right), y: supFrame.height - self.addTransFrame.height - self.view.safeAreaInsets.bottom , width: self.addTransFrame.width, height: self.addTransFrame.height)
                     }
@@ -60,6 +61,7 @@ class ViewController: UIViewController {
                     self.noTableDataLabel.alpha = 0.5
                     self.noTableDataLabel.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
                 } else {
+                    self.addTransitionButton.backgroundColor = UIColor(named: "darkTableColor")
                     self.forseShowAddButton = false
                     if self.addTransitionButton.frame != self.addTransFrame {
                         self.addTransitionButton.frame = self.addTransFrame
@@ -90,6 +92,8 @@ class ViewController: UIViewController {
 
         
         updateUI()
+        addTransitionButton.layer.cornerRadius = 15
+        addTransitionButton.layer.maskedCorners = [.layerMaxXMinYCorner]
         
     }
     
@@ -295,35 +299,14 @@ class ViewController: UIViewController {
     func sendUnsaved() {//here
         
         let dataCount = appData.unsendedData.count
-        if dataCount > 0 {
-            let save = SaveToDB()
-            if let first = appData.unsendedData.first {
-                if let transaction = first["transaction"] {
-                    print("SENDTRANS")
-                    save.Transactions(toDataString: transaction) { (error) in
-                        if error {
-                            self.forseSendUnsendedData = false
-                            self.sendingUnsendedData = false
-                            self.filter()
-                        } else {
-                            appData.unsendedData.removeFirst()
-                            DispatchQueue.main.async {
-                                self.mainTableView.reloadData()
-                                if self.refreshControl.isRefreshing {
-                                    self.refreshControl.endRefreshing()
-                                }
-                            }
-                            if !self.didloadCalled {
-                                self.didloadCalled = true
-                                self.filter()
-                            }
-                            self.sendUnsaved()
-                        }
-                    }
-                } else {
-                    if let category = first["category"] {
-                        print("SENDCATS")
-                        save.Categories(toDataString: category) { (error) in
+        if forseSendUnsendedData {
+            if dataCount > 0 {
+                let save = SaveToDB()
+                if let first = appData.unsendedData.first {
+                    print("SensUnsended:", first)
+                    if let transaction = first["transaction"] {
+                        print("SENDTRANS")
+                        save.Transactions(toDataString: transaction) { (error) in
                             if error {
                                 self.forseSendUnsendedData = false
                                 self.sendingUnsendedData = false
@@ -344,10 +327,9 @@ class ViewController: UIViewController {
                             }
                         }
                     } else {
-                        let delete = DeleteFromDB()
-                        if let deleteTransaction = first["deleteTransaction"] {
-                            delete.Transactions(toDataString: deleteTransaction) { (error) in
-                                print("deleteTransaction cateeeee", error)
+                        if let category = first["category"] {
+                            print("SENDCATS")
+                            save.Categories(toDataString: category) { (error) in
                                 if error {
                                     self.forseSendUnsendedData = false
                                     self.sendingUnsendedData = false
@@ -368,9 +350,10 @@ class ViewController: UIViewController {
                                 }
                             }
                         } else {
-                            if let deleteTransaction = first["deleteCategory"] {
-                                delete.Categories(toDataString: deleteTransaction) { (error) in
-                                    print("delete cateeeee", error)
+                            let delete = DeleteFromDB()
+                            if let deleteTransaction = first["deleteTransaction"] {
+                                delete.Transactions(toDataString: deleteTransaction) { (error) in
+                                    print("deleteTransaction cateeeee", error)
                                     if error {
                                         self.forseSendUnsendedData = false
                                         self.sendingUnsendedData = false
@@ -390,66 +373,91 @@ class ViewController: UIViewController {
                                         self.sendUnsaved()
                                     }
                                 }
+                            } else {
+                                if let deleteTransaction = first["deleteCategory"] {
+                                    delete.Categories(toDataString: deleteTransaction) { (error) in
+                                        print("delete cateeeee", error)
+                                        if error {
+                                            self.forseSendUnsendedData = false
+                                            self.sendingUnsendedData = false
+                                            self.filter()
+                                        } else {
+                                            appData.unsendedData.removeFirst()
+                                            DispatchQueue.main.async {
+                                                self.mainTableView.reloadData()
+                                                if self.refreshControl.isRefreshing {
+                                                    self.refreshControl.endRefreshing()
+                                                }
+                                            }
+                                            if !self.didloadCalled {
+                                                self.didloadCalled = true
+                                                self.filter()
+                                            }
+                                            self.sendUnsaved()
+                                        }
+                                    }
+                                }
                             }
+                            
+                            
                         }
-                        
                         
                     }
                     
                 }
-                
             }
-        }
-        if dataCount == 0 {
-            if sendSavedData == true {
-                let save = SaveToDB()
-                var newCategories = appData.getCategories(key: "savedCategories")
-                print("sendUnsaved unsaved cats", newCategories.count)
-                if let categoryy = newCategories.first {
-                    let toDataStringg = "&Nickname=\(appData.username)" + "&Title=\(categoryy.name)" + "&Purpose=\(categoryy.purpose)"
-                    save.Categories(toDataString: toDataStringg) { (error) in
-                        if error {
-                            self.filter()
-                            self.sendSavedData = false
-                            self.forseSendUnsendedData = false
-                            print("Error saving category")
-                        } else {
-                            print("cat: unsended sended")
-                            var allCats = appData.getCategories()
-                            allCats.append(categoryy)
-                            appData.saveCategories(allCats)
-                            newCategories.removeFirst()
-                            appData.saveCategories(newCategories, key: "savedCategories")
-                            self.filter()
-                        }
-                    }
-                }
-                
-                if newCategories.count == 0 {
-                    var trans = appData.savedTransactions
-                    print("saved trans count:", trans.count)
-                    if let tran = trans.first {
-                        let toDataString = "&Nickname=\(appData.username)" + "&Category=\(tran.category)" + "&Date=\(tran.date)" + "&Value=\(tran.value)" + "&Comment=\(tran.comment)"
-                        save.Transactions(toDataString: toDataString) { (error) in
+            if dataCount == 0 {
+                if sendSavedData == true {
+                    let save = SaveToDB()
+                    var newCategories = appData.getCategories(key: "savedCategories")
+                    print("sendUnsaved unsaved cats", newCategories.count)
+                    if let categoryy = newCategories.first {
+                        let toDataStringg = "&Nickname=\(appData.username)" + "&Title=\(categoryy.name)" + "&Purpose=\(categoryy.purpose)"
+                        save.Categories(toDataString: toDataStringg) { (error) in
                             if error {
                                 self.filter()
-                                self.forseSendUnsendedData = false
                                 self.sendSavedData = false
+                                self.forseSendUnsendedData = false
                                 print("Error saving category")
                             } else {
-                                trans.removeFirst()
-                                appData.saveTransations(trans, key: "savedTransactions")
-                                var alldata = appData.transactions
-                                alldata.append(tran)
-                                appData.saveTransations(alldata)
+                                print("cat: unsended sended")
+                                var allCats = appData.getCategories()
+                                allCats.append(categoryy)
+                                appData.saveCategories(allCats)
+                                newCategories.removeFirst()
+                                appData.saveCategories(newCategories, key: "savedCategories")
                                 self.filter()
                             }
                         }
                     }
+                    
+                    if newCategories.count == 0 {
+                        var trans = appData.savedTransactions
+                        print("saved trans count:", trans.count)
+                        if let tran = trans.first {
+                            let toDataString = "&Nickname=\(appData.username)" + "&Category=\(tran.category)" + "&Date=\(tran.date)" + "&Value=\(tran.value)" + "&Comment=\(tran.comment)"
+                            save.Transactions(toDataString: toDataString) { (error) in
+                                if error {
+                                    self.filter()
+                                    self.forseSendUnsendedData = false
+                                    self.sendSavedData = false
+                                    print("Error saving category")
+                                } else {
+                                    trans.removeFirst()
+                                    appData.saveTransations(trans, key: "savedTransactions")
+                                    var alldata = appData.transactions
+                                    alldata.append(tran)
+                                    appData.saveTransations(alldata)
+                                    self.filter()
+                                }
+                            }
+                        }
+                    }
                 }
+                
             }
-            
         }
+        
         
     }
     
@@ -528,63 +536,60 @@ class ViewController: UIViewController {
         if appData.username != "" {
 
             print("downloadFromDB: username: \(appData.username), not nill")
-            //sendUnsaved()
-            if self.forseSendUnsendedData {
-                if appData.unsendedData.count > 0 {
-                    self.sendingUnsendedData = true
-                    self.sendUnsaved()
-                } else {
-                    self.sendingUnsendedData = false
-                    DispatchQueue.main.async {
-                        self.filterTextLabel.text = "Downloading ..."
-                    }
-                    let load = LoadFromDB()
-                    load.Transactions{(loadedData, error) in
-                        if error == "" {
-                            print("loaded \(loadedData.count) transactions from DB")
-                            var dataStruct: [TransactionsStruct] = []
-                            for i in 0..<loadedData.count {
-                                
-                                let value = loadedData[i][3]
-                                let category = loadedData[i][1]
-                                let date = loadedData[i][2]
-                                let comment = loadedData[i][4]
-                                dataStruct.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
-                            }
-                            appData.saveTransations(dataStruct)
-                            load.Categories{(loadedDataa, error) in
-                                if error == "" {
-                                    print("loaded \(loadedData.count) Categories from DB")
-                                    var dataStructt: [CategoriesStruct] = []
-                                    for i in 0..<loadedDataa.count {
-                                        
-                                        let name = loadedDataa[i][1]
-                                        let purpose = loadedDataa[i][2]
-                                        dataStructt.append(CategoriesStruct(name: name, purpose: purpose))
-                                    }
-                                    UserDefaults.standard.setValue("\(Date())", forKey: "LastLoadDataDate")
-                                    appData.saveCategories(dataStructt)
-                                    self.filter()
+            if appData.unsendedData.count > 0 {
+                self.sendingUnsendedData = true
+                self.sendUnsaved()
+            } else {
+                self.sendingUnsendedData = false
+                DispatchQueue.main.async {
+                    self.filterTextLabel.text = "Downloading ..."
+                }
+                let load = LoadFromDB()
+                load.Transactions{(loadedData, error) in
+                    if error == "" {
+                        print("loaded \(loadedData.count) transactions from DB")
+                        var dataStruct: [TransactionsStruct] = []
+                        for i in 0..<loadedData.count {
+                            
+                            let value = loadedData[i][3]
+                            let category = loadedData[i][1]
+                            let date = loadedData[i][2]
+                            let comment = loadedData[i][4]
+                            dataStruct.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
+                        }
+                        appData.saveTransations(dataStruct)
+                        load.Categories{(loadedDataa, error) in
+                            if error == "" {
+                                print("loaded \(loadedData.count) Categories from DB")
+                                var dataStructt: [CategoriesStruct] = []
+                                for i in 0..<loadedDataa.count {
                                     
-                                } else {
-                                    self.filter()
-                                    DispatchQueue.main.async {
-                                        self.message.showMessage(text: error, type: .error)
-                                    }
+                                    let name = loadedDataa[i][1]
+                                    let purpose = loadedDataa[i][2]
+                                    dataStructt.append(CategoriesStruct(name: name, purpose: purpose))
+                                }
+                                UserDefaults.standard.setValue("\(Date())", forKey: "LastLoadDataDate")
+                                appData.saveCategories(dataStructt)
+                                self.filter()
+                                
+                            } else {
+                                self.filter()
+                                DispatchQueue.main.async {
+                                    self.message.showMessage(text: error, type: .error)
                                 }
                             }
-                        } else {
-                            print("error loading data")
-                            self.filter()
-                            DispatchQueue.main.async {
-                                self.message.showMessage(text: error, type: .error)
-                            }
-                            
                         }
-
+                    } else {
+                        print("error loading data1")
+                        self.filter()
+                        DispatchQueue.main.async {
+                            self.message.showMessage(text: error, type: .error)
+                        }
+                        
                     }
-                    
+
                 }
+                
             }
             
         } else {
@@ -607,6 +612,7 @@ class ViewController: UIViewController {
                 if error {
                     appData.unsendedData.append(["deleteTransaction": toDataString])
                 }
+                
                 var arr = Array(appData.transactions)
                 for i in 0..<arr.count{
                     if arr[i].category == Category && arr[i].date == Date && arr[i].value == Value && arr[i].comment == Comment{
@@ -915,21 +921,31 @@ class ViewController: UIViewController {
             let vc = segue.destination as! UnsendedDataVC
             vc.delegate = self
             
+        case "toSettings":
+            let vc = segue.destination as! SettingsViewController
+            vc.delegate = self
+            
         default: return
         }
  
     }
 
+    
+    //quite seques
     @IBAction func homeVC(segue: UIStoryboardSegue) {
         DispatchQueue.global(qos: .userInteractive).async {
+            print("HomeVC called")
             self.downloadFromDB()
             if appData.fromLoginVCMessage != "" {
+                print("appData.fromLoginVCMessage", appData.fromLoginVCMessage)
                 DispatchQueue.main.async {
                     self.message.showMessage(text: appData.fromLoginVCMessage, type: .succsess, windowHeight: 200)
                 }
             }
         }
     }
+    
+    
     //from filter
     @IBAction func unwindToFilter(segue: UIStoryboardSegue) {
         DispatchQueue.global(qos: .userInteractive).async {
@@ -944,6 +960,8 @@ class ViewController: UIViewController {
             }
         }
     }
+
+    
     @IBAction func settingsPressed(_ sender: UIButton) {
         DispatchQueue.main.async {
             self.performSegue(withIdentifier: "toSettings", sender: self)
@@ -1148,7 +1166,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if section > 0 {
-            return newTableData[section - 1].date
+            return "\(newTableData[section - 1].date)"
         } else {
             return nil
         }
@@ -1158,17 +1176,17 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         
         if section > 0 {
             let tableFrame = self.mainTableView.layer.frame
-            
             let main = UIView(frame: CGRect(x: 0, y: 0, width: tableFrame.width, height: 2))
             main.backgroundColor = section == 1 ? K.Colors.background : UIColor.clear
-            let view = UIView(frame: CGRect(x: 0, y: 0, width: tableFrame.width, height: 40))
-            view.backgroundColor = UIColor.white
+            let view = UIView(frame: CGRect(x: 0, y: 0, width: tableFrame.width, height: 50))
+            view.backgroundColor = UIColor(named: "darkTableColor")
             view.layer.masksToBounds = true
             view.layer.cornerRadius = section == 1 ? 15 : 0
-
+            //self.mainTableView.layer.cornerRadius = 15
+            view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
             let dateLabel = UILabel(frame: CGRect(x: 20, y: 0, width: tableFrame.width - 40, height: view.frame.height))
             dateLabel.font = .systemFont(ofSize: 16, weight: .medium)
-            dateLabel.textColor = K.Colors.category
+            dateLabel.textColor = UIColor.white
             dateLabel.text = newTableData[section - 1].date
             dateLabel.textAlignment = .left
             main.addSubview(view)
@@ -1191,6 +1209,15 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             return nil
         }
     }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section > 0 {
+            return 50
+        } else {
+            return 0
+        }
+    }
+    
     
     
     
@@ -1266,6 +1293,21 @@ extension ViewController: UnsendedDataVCProtocol {
     func sendPressed() {
         sendSavedData = true
         self.filter()
+    }
+    
+    
+}
+
+extension ViewController: SettingsViewControllerProtocol {
+    func closeSettings(sendSavedData: Bool) {
+        if sendSavedData {
+            self.sendSavedData = true
+            filter()
+        } else {
+            DispatchQueue.main.async {
+                self.mainTableView.reloadData()
+            }
+        }
     }
     
     

@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "addButton1.pdf",
+      "filename" : "addButton.svg",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "light"
         }
       ],
-      "filename" : "addButton1-1.pdf",
+      "filename" : "addButton-1.svg",
       "idiom" : "universal"
     },
     {
@@ -21,7 +21,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "addButton.pdf",
+      "filename" : "addButton-2.svg",
       "idiom" : "universal"
     }
   ],

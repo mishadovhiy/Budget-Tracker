@@ -27,7 +27,7 @@
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BBf-lk-CEi" userLabel="whitebackground">
                                 <rect key="frame" x="0.0" y="300" width="414" height="596"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" name="darkTableColor"/>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="4SO-16-o5D">
                                 <rect key="frame" x="0.0" y="93" width="414" height="803"/>
@@ -256,7 +256,7 @@
                                                                             </constraints>
                                                                         </imageView>
                                                                     </subviews>
-                                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                                    <color key="backgroundColor" name="darkTableColor"/>
                                                                     <constraints>
                                                                         <constraint firstItem="Cg2-pf-wBM" firstAttribute="top" secondItem="AJm-FA-Anu" secondAttribute="top" id="34P-if-ou9"/>
                                                                         <constraint firstItem="Cg2-pf-wBM" firstAttribute="leading" secondItem="KBi-xy-FRp" secondAttribute="trailing" constant="6" id="6ya-HC-Ju6"/>
@@ -293,7 +293,7 @@
                                                 <constraint firstItem="gRC-oS-8Jh" firstAttribute="leading" secondItem="rhd-hO-2oH" secondAttribute="leading" constant="20" id="qDm-sh-Tka"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <color key="backgroundColor" name="darkTableColor"/>
                                         <connections>
                                             <outlet property="categoryLabel" destination="KBi-xy-FRp" id="cOl-fy-4Ri"/>
                                             <outlet property="commentImage" destination="Cg2-pf-wBM" id="COj-5k-PyD"/>
@@ -355,12 +355,13 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="top" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zDz-M6-AUL" userLabel="AddTrancactionButton">
-                                <rect key="frame" x="354" y="89" width="60" height="60"/>
+                                <rect key="frame" x="354" y="93" width="60" height="50"/>
+                                <color key="backgroundColor" name="darkTableColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="IOu-Yp-R4K"/>
+                                    <constraint firstAttribute="height" constant="50" id="IOu-Yp-R4K"/>
                                     <constraint firstAttribute="width" constant="60" id="pfH-3r-0Ku"/>
                                 </constraints>
-                                <inset key="contentEdgeInsets" minX="0.0" minY="12" maxX="7" maxY="0.0"/>
+                                <inset key="contentEdgeInsets" minX="0.0" minY="6" maxX="7" maxY="0.0"/>
                                 <state key="normal" image="plusIcon"/>
                                 <connections>
                                     <segue destination="84E-gG-7XB" kind="show" identifier="goToEditVC" id="aJl-S5-eUb"/>
@@ -498,7 +499,7 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="hpF-9J-sJH" secondAttribute="trailing" constant="20" id="oVb-oq-i7A"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="4SO-16-o5D" secondAttribute="trailing" id="v31-Zr-P7f"/>
                             <constraint firstItem="0oV-VO-FeH" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="wFq-J0-gXI"/>
-                            <constraint firstItem="zDz-M6-AUL" firstAttribute="top" secondItem="EPl-ii-IZL" secondAttribute="bottom" id="yWR-yX-lj3"/>
+                            <constraint firstItem="zDz-M6-AUL" firstAttribute="top" secondItem="EPl-ii-IZL" secondAttribute="bottom" constant="4" id="yWR-yX-lj3"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="BBf-lk-CEi" secondAttribute="trailing" id="zKv-eV-NbH"/>
                         </constraints>
                     </view>
@@ -529,7 +530,7 @@
             <objects>
                 <viewController id="cP3-cv-3dE" customClass="CategoriesVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="m5f-dV-6zU">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nj9-Sj-hlp">
@@ -538,7 +539,7 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="3" translatesAutoresizingMaskIntoConstraints="NO" id="Tgf-6a-Yag">
                                         <rect key="frame" x="60" y="0.0" width="294" height="60"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="23"/>
-                                        <color key="textColor" name="CategoryColor"/>
+                                        <color key="textColor" name="darkTableColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lez-zf-TS4">
@@ -580,31 +581,29 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kTa-v1-Lr8">
-                                <rect key="frame" x="0.0" y="60" width="414" height="782"/>
+                                <rect key="frame" x="0.0" y="60" width="414" height="726"/>
                                 <color key="backgroundColor" name="backgroundColor"/>
                                 <color key="separatorColor" name="separetorColor"/>
                                 <inset key="separatorInset" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="categoriesVCTableViewCell" id="Ugt-jI-QpQ" customClass="categoriesVCcell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="414" height="61.5"/>
+                                        <rect key="frame" x="0.0" y="28" width="414" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Ugt-jI-QpQ" id="8cn-F5-cRV">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="61.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="3" translatesAutoresizingMaskIntoConstraints="NO" id="IhM-qn-Xr4">
-                                                    <rect key="frame" x="20" y="20" width="374" height="21.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" name="CategoryColor"/>
+                                                    <rect key="frame" x="20" y="15" width="374" height="20"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" name="backgroundColor"/>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="IhM-qn-Xr4" secondAttribute="trailing" constant="20" id="FW8-I9-8Dc"/>
                                                 <constraint firstItem="IhM-qn-Xr4" firstAttribute="leading" secondItem="8cn-F5-cRV" secondAttribute="leading" constant="20" id="cPS-1p-rd8"/>
-                                                <constraint firstAttribute="bottom" secondItem="IhM-qn-Xr4" secondAttribute="bottom" constant="20" id="eEm-2a-muR"/>
-                                                <constraint firstItem="IhM-qn-Xr4" firstAttribute="top" secondItem="8cn-F5-cRV" secondAttribute="top" constant="20" id="gzM-7Z-At8"/>
+                                                <constraint firstAttribute="bottom" secondItem="IhM-qn-Xr4" secondAttribute="bottom" constant="15" id="eEm-2a-muR"/>
+                                                <constraint firstItem="IhM-qn-Xr4" firstAttribute="top" secondItem="8cn-F5-cRV" secondAttribute="top" constant="15" id="gzM-7Z-At8"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -632,11 +631,9 @@
                         <outlet property="categoriesTableView" destination="kTa-v1-Lr8" id="TzW-xh-0om"/>
                         <outlet property="headerView" destination="nj9-Sj-hlp" id="qa3-Si-4qf"/>
                         <outlet property="titleLabel" destination="Tgf-6a-Yag" id="A5u-jF-92Q"/>
-                        <segue destination="tGw-Jg-V0n" kind="unwind" identifier="settingsVC" unwindAction="homeVCWithSegue:" id="7MZ-8g-TJ8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nXK-rk-enq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <exit id="tGw-Jg-V0n" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1719" y="-1438"/>
         </scene>
@@ -694,13 +691,13 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="200" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="3" translatesAutoresizingMaskIntoConstraints="NO" id="qzi-1W-Nei" userLabel="ValueLabel">
                                                 <rect key="frame" x="296" y="0.0" width="78" height="60"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="42"/>
-                                                <color key="textColor" name="balanceValueColor"/>
+                                                <color key="textColor" name="CategoryColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A3t-7s-5P5" userLabel="minusLabel">
                                                 <rect key="frame" x="278" y="0.0" width="16" height="60"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="36"/>
-                                                <color key="textColor" name="balanceValueColor"/>
+                                                <color key="textColor" name="CategoryColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XVk-PX-Zyj" userLabel="valueButton">
@@ -710,7 +707,7 @@
                                                 </connections>
                                             </button>
                                         </subviews>
-                                        <color key="backgroundColor" name="backgroundColor"/>
+                                        <color key="backgroundColor" name="darkTableColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="3pf-Vh-qxW"/>
                                             <constraint firstItem="XVk-PX-Zyj" firstAttribute="top" secondItem="17f-0J-k9a" secondAttribute="top" id="BWZ-MZ-ZK8"/>
@@ -726,13 +723,13 @@
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V1P-Cy-4Mn">
-                                        <rect key="frame" x="0.0" y="182" width="374" height="204"/>
+                                        <rect key="frame" x="0.0" y="202" width="374" height="184"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zys-If-Z7A">
-                                        <rect key="frame" x="0.0" y="60" width="374" height="122"/>
+                                        <rect key="frame" x="0.0" y="80" width="374" height="122"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="Wsl-xB-XcD">
                                                 <rect key="frame" x="0.0" y="0.0" width="374" height="122"/>
@@ -742,7 +739,7 @@
                                                         <subviews>
                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="category" textAlignment="right" minimumFontSize="6" translatesAutoresizingMaskIntoConstraints="NO" id="kTT-Sl-tfE" userLabel="category Text Field" customClass="CustomTextField" customModule="Budget_Tracker" customModuleProvider="target">
                                                                 <rect key="frame" x="67" y="0.0" width="307" height="40"/>
-                                                                <color key="textColor" name="balanceValueColor"/>
+                                                                <color key="textColor" name="backgroundColor"/>
                                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                             </textField>
@@ -753,7 +750,7 @@
                                                                 <nil key="highlightedColor"/>
                                                             </label>
                                                         </subviews>
-                                                        <color key="backgroundColor" name="backgroundColor"/>
+                                                        <color key="backgroundColor" name="darkTableColor"/>
                                                         <constraints>
                                                             <constraint firstItem="kTT-Sl-tfE" firstAttribute="top" secondItem="Pk9-BX-1S0" secondAttribute="top" id="Psi-sj-lO9"/>
                                                             <constraint firstAttribute="bottom" secondItem="kTT-Sl-tfE" secondAttribute="bottom" id="WdH-49-khs"/>
@@ -775,12 +772,12 @@
                                                             </label>
                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="11.23.2020" textAlignment="right" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="wMS-Hp-6gJ" userLabel="date Text Field" customClass="CustomTextField" customModule="Budget_Tracker" customModuleProvider="target">
                                                                 <rect key="frame" x="36.5" y="0.0" width="337.5" height="40"/>
-                                                                <color key="textColor" name="balanceValueColor"/>
+                                                                <color key="textColor" name="backgroundColor"/>
                                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                             </textField>
                                                         </subviews>
-                                                        <color key="backgroundColor" name="backgroundColor"/>
+                                                        <color key="backgroundColor" name="darkTableColor"/>
                                                         <constraints>
                                                             <constraint firstItem="jBw-Wl-arg" firstAttribute="leading" secondItem="3QO-Fg-zuX" secondAttribute="leading" id="Dam-gp-oeb"/>
                                                             <constraint firstAttribute="trailing" secondItem="wMS-Hp-6gJ" secondAttribute="trailing" id="GPW-To-fC2"/>
@@ -805,13 +802,13 @@
                                                             </label>
                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Short Comment" textAlignment="right" adjustsFontSizeToFit="NO" minimumFontSize="11" translatesAutoresizingMaskIntoConstraints="NO" id="JSf-II-z0v">
                                                                 <rect key="frame" x="20" y="0.0" width="354" height="40"/>
-                                                                <color key="backgroundColor" name="backgroundColor"/>
-                                                                <color key="textColor" name="balanceValueColor"/>
+                                                                <color key="backgroundColor" name="darkTableColor"/>
+                                                                <color key="textColor" name="backgroundColor"/>
                                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
-                                                                <textInputTraits key="textInputTraits"/>
+                                                                <textInputTraits key="textInputTraits" keyboardAppearance="alert"/>
                                                             </textField>
                                                         </subviews>
-                                                        <color key="backgroundColor" name="backgroundColor"/>
+                                                        <color key="backgroundColor" name="darkTableColor"/>
                                                         <constraints>
                                                             <constraint firstAttribute="bottom" secondItem="JSf-II-z0v" secondAttribute="bottom" id="VJe-qd-SSp"/>
                                                             <constraint firstItem="JSf-II-z0v" firstAttribute="leading" secondItem="caA-os-alH" secondAttribute="trailing" id="db6-Un-roy"/>
@@ -825,7 +822,7 @@
                                                 </subviews>
                                             </stackView>
                                         </subviews>
-                                        <color key="backgroundColor" name="separetorColor"/>
+                                        <color key="backgroundColor" name="balanceValueColor"/>
                                         <constraints>
                                             <constraint firstItem="Wsl-xB-XcD" firstAttribute="top" secondItem="zys-If-Z7A" secondAttribute="top" id="0Th-QP-dqg"/>
                                             <constraint firstAttribute="trailing" secondItem="Wsl-xB-XcD" secondAttribute="trailing" id="HdE-8d-iKN"/>
@@ -835,7 +832,7 @@
                                         </constraints>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" name="backgroundColor"/>
+                                <color key="backgroundColor" name="darkTableColor"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="17f-0J-k9a" secondAttribute="trailing" id="1fX-Er-GFF"/>
                                     <constraint firstItem="V1P-Cy-4Mn" firstAttribute="leading" secondItem="0o7-y6-JW8" secondAttribute="leading" id="DUc-7a-CTQ"/>
@@ -843,7 +840,7 @@
                                     <constraint firstItem="17f-0J-k9a" firstAttribute="leading" secondItem="0o7-y6-JW8" secondAttribute="leading" id="PlV-WF-apn"/>
                                     <constraint firstItem="17f-0J-k9a" firstAttribute="top" secondItem="0o7-y6-JW8" secondAttribute="top" id="SEA-5h-Nev"/>
                                     <constraint firstAttribute="trailing" secondItem="V1P-Cy-4Mn" secondAttribute="trailing" id="Wag-NK-lrq"/>
-                                    <constraint firstItem="zys-If-Z7A" firstAttribute="top" secondItem="17f-0J-k9a" secondAttribute="bottom" id="XCQ-dJ-gKa"/>
+                                    <constraint firstItem="zys-If-Z7A" firstAttribute="top" secondItem="17f-0J-k9a" secondAttribute="bottom" constant="20" id="XCQ-dJ-gKa"/>
                                     <constraint firstAttribute="bottom" secondItem="V1P-Cy-4Mn" secondAttribute="bottom" id="cVf-nk-eOU"/>
                                     <constraint firstItem="V1P-Cy-4Mn" firstAttribute="top" secondItem="zys-If-Z7A" secondAttribute="bottom" id="eYp-Ek-jrC"/>
                                     <constraint firstItem="zys-If-Z7A" firstAttribute="leading" secondItem="0o7-y6-JW8" secondAttribute="leading" id="yYr-uv-i3J"/>
@@ -862,7 +859,7 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="93.5" height="70"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                         <state key="normal" title="7">
-                                                            <color key="titleColor" name="balanceValueColor"/>
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
                                                         <connections>
                                                             <action selector="numberPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="0TM-0A-Gxp"/>
@@ -872,7 +869,7 @@
                                                         <rect key="frame" x="93.5" y="0.0" width="93.5" height="70"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                         <state key="normal" title="8">
-                                                            <color key="titleColor" name="balanceValueColor"/>
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
                                                         <connections>
                                                             <action selector="numberPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="7ko-iZ-Cf1"/>
@@ -882,7 +879,7 @@
                                                         <rect key="frame" x="187" y="0.0" width="93.5" height="70"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                         <state key="normal" title="9">
-                                                            <color key="titleColor" name="balanceValueColor"/>
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
                                                         <connections>
                                                             <action selector="numberPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="fLL-Gf-Am8"/>
@@ -907,7 +904,7 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="93.5" height="70"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                         <state key="normal" title="4">
-                                                            <color key="titleColor" name="balanceValueColor"/>
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
                                                         <connections>
                                                             <action selector="numberPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="QIL-de-Lza"/>
@@ -917,7 +914,7 @@
                                                         <rect key="frame" x="93.5" y="0.0" width="93.5" height="70"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                         <state key="normal" title="5">
-                                                            <color key="titleColor" name="balanceValueColor"/>
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
                                                         <connections>
                                                             <action selector="numberPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="9ol-tT-nrG"/>
@@ -927,7 +924,7 @@
                                                         <rect key="frame" x="187" y="0.0" width="93.5" height="70"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                         <state key="normal" title="6">
-                                                            <color key="titleColor" name="balanceValueColor"/>
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
                                                         <connections>
                                                             <action selector="numberPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="k34-vH-mPK"/>
@@ -951,7 +948,7 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="93.5" height="70"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                         <state key="normal" title="1">
-                                                            <color key="titleColor" name="balanceValueColor"/>
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
                                                         <connections>
                                                             <action selector="numberPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="c2x-aJ-0gI"/>
@@ -961,7 +958,7 @@
                                                         <rect key="frame" x="93.5" y="0.0" width="93.5" height="70"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                         <state key="normal" title="2">
-                                                            <color key="titleColor" name="balanceValueColor"/>
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
                                                         <connections>
                                                             <action selector="numberPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="bn8-vM-4hA"/>
@@ -971,7 +968,7 @@
                                                         <rect key="frame" x="187" y="0.0" width="93.5" height="70"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                         <state key="normal" title="3">
-                                                            <color key="titleColor" name="balanceValueColor"/>
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
                                                         <connections>
                                                             <action selector="numberPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="BUN-db-D8I"/>
@@ -989,7 +986,7 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="93.5" height="70"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                         <state key="normal" title="0">
-                                                            <color key="titleColor" name="balanceValueColor"/>
+                                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </state>
                                                         <connections>
                                                             <action selector="numberPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="4gA-Yf-DbM"/>
@@ -1009,7 +1006,7 @@
                                         </subviews>
                                     </stackView>
                                 </subviews>
-                                <color key="backgroundColor" name="backgroundColor"/>
+                                <color key="backgroundColor" name="darkTableColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="300" id="Asd-iW-KL7"/>
                                     <constraint firstItem="mNa-Ms-yFh" firstAttribute="leading" secondItem="3iV-TP-Myd" secondAttribute="leading" constant="20" id="DUL-oW-XYw"/>
@@ -1020,7 +1017,7 @@
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="MVK-VU-f07"/>
-                        <color key="backgroundColor" name="backgroundColor"/>
+                        <color key="backgroundColor" name="darkTableColor"/>
                         <constraints>
                             <constraint firstItem="ydl-Nt-YBv" firstAttribute="top" secondItem="MVK-VU-f07" secondAttribute="top" id="2zy-J9-pPj"/>
                             <constraint firstItem="3iV-TP-Myd" firstAttribute="top" secondItem="0o7-y6-JW8" secondAttribute="bottom" priority="750" constant="20" id="3d3-gJ-WjO"/>
@@ -1068,7 +1065,7 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Xz5-Md-Dy3">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="786"/>
-                                <color key="backgroundColor" name="backgroundColor"/>
+                                <color key="backgroundColor" name="darkTableColor"/>
                                 <color key="separatorColor" name="separetorColor"/>
                                 <inset key="separatorInset" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
                                 <view key="tableHeaderView" contentMode="scaleToFill" id="omx-wK-m7h">
@@ -1083,13 +1080,13 @@
                                         </label>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Si-ee-0c7" customClass="CPTGraphHostingView">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="350"/>
-                                            <color key="backgroundColor" name="backgroundColor"/>
+                                            <color key="backgroundColor" name="darkTableColor"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="350" id="4LS-NS-NKW"/>
                                             </constraints>
                                         </view>
                                     </subviews>
-                                    <color key="backgroundColor" name="backgroundColor"/>
+                                    <color key="backgroundColor" name="darkTableColor"/>
                                     <constraints>
                                         <constraint firstItem="MbC-wy-mMs" firstAttribute="leading" secondItem="omx-wK-m7h" secondAttribute="leading" constant="20" id="48k-Xm-0fn"/>
                                         <constraint firstItem="6Si-ee-0c7" firstAttribute="top" secondItem="omx-wK-m7h" secondAttribute="top" id="GZl-Df-y0d"/>
@@ -1154,7 +1151,7 @@
                                                 <constraint firstItem="gah-gJ-g2Z" firstAttribute="centerY" secondItem="DL1-ap-cmz" secondAttribute="centerY" id="spI-Ax-7N9"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" name="backgroundColor"/>
+                                        <color key="backgroundColor" name="darkTableColor"/>
                                         <connections>
                                             <outlet property="amountLabel" destination="X0N-Au-y7U" id="qhL-qq-J0O"/>
                                             <outlet property="categoryLabel" destination="jni-aG-9Wl" id="4hJ-36-yX8"/>
@@ -1166,7 +1163,7 @@
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="fKf-fZ-nVc"/>
-                        <color key="backgroundColor" name="backgroundColor"/>
+                        <color key="backgroundColor" name="darkTableColor"/>
                         <constraints>
                             <constraint firstItem="fKf-fZ-nVc" firstAttribute="trailing" secondItem="Xz5-Md-Dy3" secondAttribute="trailing" id="Nv1-LZ-0GA"/>
                             <constraint firstItem="Xz5-Md-Dy3" firstAttribute="leading" secondItem="fKf-fZ-nVc" secondAttribute="leading" id="OrN-dh-OZf"/>
@@ -1222,7 +1219,7 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nMe-Ik-tvJ">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="786"/>
-                                <color key="backgroundColor" name="backgroundColor"/>
+                                <color key="backgroundColor" name="darkTableColor"/>
                                 <color key="separatorColor" name="separetorColor"/>
                                 <inset key="separatorInset" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
                                 <prototypes>
@@ -1258,7 +1255,7 @@
                                                 <constraint firstItem="FFy-6P-OUX" firstAttribute="top" secondItem="hyT-bp-p20" secondAttribute="top" constant="10" id="v6W-Wt-gzA"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" name="backgroundColor"/>
+                                        <color key="backgroundColor" name="darkTableColor"/>
                                         <connections>
                                             <outlet property="dateLabel" destination="EUe-7T-W7T" id="PCe-rs-9jO"/>
                                             <outlet property="valueLabel" destination="GG8-1s-bZR" id="FYC-bm-ne8"/>
@@ -1307,7 +1304,7 @@
                                                 <constraint firstItem="bVs-pG-0Ah" firstAttribute="top" secondItem="dtA-Cv-4RE" secondAttribute="top" constant="10" id="jPK-RE-hcV"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" name="backgroundColor"/>
+                                        <color key="backgroundColor" name="darkTableColor"/>
                                         <connections>
                                             <outlet property="perioudLabel" destination="zzd-6R-P9l" id="VyV-t8-7ar"/>
                                             <outlet property="valueLabel" destination="dUo-hB-DtQ" id="8M0-Zl-WTp"/>
@@ -1317,7 +1314,7 @@
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="0eb-aN-41s"/>
-                        <color key="backgroundColor" name="backgroundColor"/>
+                        <color key="backgroundColor" name="darkTableColor"/>
                         <constraints>
                             <constraint firstItem="nMe-Ik-tvJ" firstAttribute="top" secondItem="0eb-aN-41s" secondAttribute="top" id="36t-8G-u0e"/>
                             <constraint firstItem="0eb-aN-41s" firstAttribute="trailing" secondItem="nMe-Ik-tvJ" secondAttribute="trailing" id="Wma-d6-tWJ"/>
@@ -1344,7 +1341,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" name="yellowColor"/>
-                        <color key="barTintColor" name="backgroundColor"/>
+                        <color key="barTintColor" name="darkTableColor"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" name="backgroundColor"/>
                         </textAttributes>
@@ -1372,7 +1369,7 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mlh-aG-pdS">
                                         <rect key="frame" x="0.0" y="0.0" width="344" height="60"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="23"/>
-                                        <color key="textColor" name="CategoryColor"/>
+                                        <color key="textColor" name="darkTableColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ACI-g0-PRx">
@@ -1419,7 +1416,7 @@
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PpO-Ua-iHE">
                                                                     <rect key="frame" x="0.0" y="21.5" width="197" height="21"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                                    <color key="textColor" name="CategoryColor"/>
+                                                                    <color key="textColor" name="darkTableColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9DU-3c-j5d">
@@ -1433,7 +1430,7 @@
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qbE-HZ-dqH">
                                                             <rect key="frame" x="197" y="0.0" width="197" height="57"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="22"/>
-                                                            <color key="textColor" name="CategoryColor"/>
+                                                            <color key="textColor" name="darkTableColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
@@ -1467,7 +1464,7 @@
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JmV-zE-T6B">
                                                             <rect key="frame" x="0.0" y="0.0" width="197" height="22"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                            <nil key="textColor"/>
+                                                            <color key="textColor" name="darkTableColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vkj-jp-qmZ">
@@ -1576,7 +1573,7 @@
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="HRa-sZ-rk4">
                                                     <rect key="frame" x="10" y="15" width="394" height="18.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                    <color key="textColor" name="CategoryColor"/>
+                                                    <color key="textColor" name="darkTableColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -1812,7 +1809,7 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Calendar" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rGq-Aj-Zje">
                                         <rect key="frame" x="60" y="16.5" width="294" height="27.5"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="23"/>
-                                        <color key="textColor" name="CategoryColor"/>
+                                        <color key="textColor" name="darkTableColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
@@ -1881,7 +1878,7 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Settings" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dQz-V3-pGv">
                                                 <rect key="frame" x="0.0" y="0.0" width="324" height="60"/>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="23"/>
-                                                <color key="textColor" name="CategoryColor"/>
+                                                <color key="textColor" name="darkTableColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jWJ-aL-ncv">
@@ -1916,7 +1913,7 @@
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fxf-5Y-gb5">
                                                                     <rect key="frame" x="0.0" y="0.0" width="174" height="21"/>
                                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
-                                                                    <color key="textColor" name="CategoryColor"/>
+                                                                    <color key="textColor" name="darkTableColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="7K5-4z-SPT">
@@ -1973,6 +1970,7 @@
                         <outlet property="tableView" destination="dvZ-So-gEm" id="xWQ-dZ-DFz"/>
                         <segue destination="cP3-cv-3dE" kind="show" identifier="settingsToCategories" id="FRv-Os-SHO"/>
                         <segue destination="0Eo-nu-zqD" kind="modal" identifier="toSingIn" modalPresentationStyle="fullScreen" id="nQl-g6-e4b"/>
+                        <segue destination="7v7-Wy-fas" kind="show" identifier="toSavedData" id="xmO-tl-nHE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="trL-Yj-zCd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1995,7 +1993,7 @@
                                         <string key="text">Wellcome to 
 Budget Tracker</string>
                                         <fontDescription key="fontDescription" type="system" pointSize="22"/>
-                                        <color key="textColor" name="CategoryColor"/>
+                                        <color key="textColor" name="darkTableColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Create an account to manage you data across all devices" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o5R-c4-L8e">
@@ -2091,7 +2089,7 @@ Budget Tracker</string>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Mj-XW-BxI">
-                                <rect key="frame" x="354" y="54" width="60" height="40"/>
+                                <rect key="frame" x="0.0" y="54" width="60" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="JWw-Li-7QA"/>
                                     <constraint firstAttribute="height" constant="40" id="Rst-DK-eue"/>
@@ -2099,7 +2097,7 @@ Budget Tracker</string>
                                 <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" image="cancel"/>
                                 <connections>
-                                    <action selector="withoutAccount:" destination="0Eo-nu-zqD" eventType="touchUpInside" id="eRo-zN-tid"/>
+                                    <action selector="closePressed:" destination="0Eo-nu-zqD" eventType="touchUpInside" id="eRo-zN-tid"/>
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="AtE-QO-VWI">
@@ -2108,34 +2106,34 @@ Budget Tracker</string>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Create an account" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="9fS-GY-DEx">
                                         <rect key="frame" x="0.0" y="0.0" width="280" height="38.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="32"/>
-                                        <color key="textColor" name="CategoryColor"/>
+                                        <color key="textColor" name="darkTableColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Choose a nickname" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="b2y-GT-giL">
                                         <rect key="frame" x="0.0" y="53.5" width="280" height="38.5"/>
                                         <color key="backgroundColor" name="loginColor"/>
-                                        <color key="textColor" name="CategoryColor"/>
+                                        <color key="textColor" name="darkTableColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="next"/>
                                     </textField>
                                     <textField opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter your email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wDy-cj-hbF">
                                         <rect key="frame" x="0.0" y="107" width="280" height="38.5"/>
                                         <color key="backgroundColor" name="loginColor"/>
-                                        <color key="textColor" name="CategoryColor"/>
+                                        <color key="textColor" name="darkTableColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next" textContentType="email"/>
                                     </textField>
                                     <textField opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="knY-zE-qZO">
                                         <rect key="frame" x="0.0" y="160.5" width="280" height="38.5"/>
                                         <color key="backgroundColor" name="loginColor"/>
-                                        <color key="textColor" name="CategoryColor"/>
+                                        <color key="textColor" name="darkTableColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="next" textContentType="password"/>
                                     </textField>
                                     <textField opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Confirm password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0ba-YT-Zzz">
                                         <rect key="frame" x="0.0" y="214" width="280" height="38.5"/>
                                         <color key="backgroundColor" name="loginColor"/>
-                                        <color key="textColor" name="CategoryColor"/>
+                                        <color key="textColor" name="darkTableColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="done" textContentType="password"/>
                                     </textField>
@@ -2161,20 +2159,20 @@ Budget Tracker</string>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Log in" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6K5-57-gim">
                                         <rect key="frame" x="0.0" y="0.0" width="280" height="38.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="32"/>
-                                        <color key="textColor" name="CategoryColor"/>
+                                        <color key="textColor" name="darkTableColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Nickname" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ts5-aX-D2m">
                                         <rect key="frame" x="0.0" y="53.5" width="280" height="38.5"/>
                                         <color key="backgroundColor" name="loginColor"/>
-                                        <color key="textColor" name="CategoryColor"/>
+                                        <color key="textColor" name="darkTableColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="next"/>
                                     </textField>
                                     <textField opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vmH-uz-wvx">
                                         <rect key="frame" x="0.0" y="107" width="280" height="38.5"/>
                                         <color key="backgroundColor" name="loginColor"/>
-                                        <color key="textColor" name="CategoryColor"/>
+                                        <color key="textColor" name="darkTableColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES" textContentType="password"/>
                                     </textField>
@@ -2220,6 +2218,7 @@ Budget Tracker</string>
                         <color key="backgroundColor" name="backgroundColor"/>
                         <constraints>
                             <constraint firstItem="AtE-QO-VWI" firstAttribute="centerY" secondItem="5D2-tn-xUE" secondAttribute="centerY" id="4qU-zp-zhk"/>
+                            <constraint firstItem="2Mj-XW-BxI" firstAttribute="leading" secondItem="HXt-Te-kHW" secondAttribute="leading" id="5Iq-jz-rbe"/>
                             <constraint firstItem="bti-UC-r4O" firstAttribute="centerY" secondItem="5D2-tn-xUE" secondAttribute="centerY" id="H4Q-Go-qp0"/>
                             <constraint firstItem="bti-UC-r4O" firstAttribute="centerX" secondItem="5D2-tn-xUE" secondAttribute="centerX" id="IeZ-Ed-kMm"/>
                             <constraint firstItem="AtE-QO-VWI" firstAttribute="centerX" secondItem="5D2-tn-xUE" secondAttribute="centerX" id="QH2-we-6qs"/>
@@ -2227,7 +2226,6 @@ Budget Tracker</string>
                             <constraint firstItem="AMq-j6-RyC" firstAttribute="leading" secondItem="HXt-Te-kHW" secondAttribute="leading" constant="10" id="UsO-YD-XYZ"/>
                             <constraint firstItem="HXt-Te-kHW" firstAttribute="trailing" secondItem="AMq-j6-RyC" secondAttribute="trailing" constant="10" id="ok1-u2-0EH"/>
                             <constraint firstItem="2Mj-XW-BxI" firstAttribute="top" secondItem="HXt-Te-kHW" secondAttribute="top" constant="10" id="wkG-aj-Up8"/>
-                            <constraint firstItem="HXt-Te-kHW" firstAttribute="trailing" secondItem="2Mj-XW-BxI" secondAttribute="trailing" id="xRG-Xz-sjj"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="5KN-P1-1qs"/>
@@ -2265,7 +2263,10 @@ Budget Tracker</string>
                         <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" name="yellowColor"/>
-                        <color key="barTintColor" name="backgroundColor"/>
+                        <color key="barTintColor" name="darkTableColor"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -2280,7 +2281,8 @@ Budget Tracker</string>
     <inferredMetricsTieBreakers>
         <segue reference="nQl-g6-e4b"/>
         <segue reference="rIb-KG-K0i"/>
-        <segue reference="FRv-Os-SHO"/>
+        <segue reference="IEc-ah-mh1"/>
+        <segue reference="f60-Rj-Rbr"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="cIcon" width="11" height="18"/>
@@ -2289,10 +2291,10 @@ Budget Tracker</string>
         <image name="comment" width="15" height="9"/>
         <image name="done" width="16" height="16"/>
         <image name="minus" width="11" height="20"/>
-        <image name="plusIcon" width="30" height="30"/>
+        <image name="plusIcon" width="40" height="40"/>
         <image name="plusYellowIcon" width="22" height="22"/>
         <namedColor name="CategoryColor">
-            <color red="0.078000001609325409" green="0.078000001609325409" blue="0.078000001609325409" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="backgroundColor">
             <color red="0.86699998378753662" green="0.86699998378753662" blue="0.86699998378753662" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2302,6 +2304,9 @@ Budget Tracker</string>
         </namedColor>
         <namedColor name="balanceValueColor">
             <color red="0.33700001239776611" green="0.33700001239776611" blue="0.33700001239776611" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="darkTableColor">
+            <color red="0.078431372549019607" green="0.086274509803921567" blue="0.10588235294117647" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="loginColor">
             <color red="0.81599998474121094" green="0.81599998474121094" blue="0.81599998474121094" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
