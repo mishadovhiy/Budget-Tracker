@@ -237,8 +237,8 @@ class TransitionVC: UIViewController {
     
     @objc func valueLabelColor() {
         
-        valueLabel.textColor = K.Colors.balanceV
-        minusPlusLabel.textColor = K.Colors.balanceV
+        valueLabel.textColor = K.Colors.category
+        minusPlusLabel.textColor = K.Colors.category
     }
     
 

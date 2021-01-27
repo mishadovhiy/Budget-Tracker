@@ -41,6 +41,7 @@ class ViewController: UIViewController {
             _TableData = newValue
             DispatchQueue.main.async {
                 //self.dataCountLabel.text = "Data count: \(self.tableData.count)\n\( appData.unsendedData.count > 0 ? (UserDefaults.standard.value(forKey: "LastLoadDataDate") as? String ?? "") : "" )"
+                self.tableActionActivityIndicator.removeFromSuperview()
                 self.dataCountLabel.text = "Data count: \(self.tableData.count)"
                 self.filterTextLabel.text = "Filter: \(selectedPeroud)"
                 self.mainTableView.reloadData()
@@ -94,7 +95,7 @@ class ViewController: UIViewController {
         updateUI()
         addTransitionButton.layer.cornerRadius = 15
         addTransitionButton.layer.maskedCorners = [.layerMaxXMinYCorner]
-        
+       // appendMatches()
     }
     
     var viewLoadedvar = false
@@ -140,6 +141,7 @@ class ViewController: UIViewController {
             }
             
         }
+
     }
     
     
@@ -177,7 +179,7 @@ class ViewController: UIViewController {
     
     var _Calculations = (0, 0, 0, 0)
     func calculate(filteredData: [TransactionsStruct]) -> (Int, Int, Int, Int) {
-        var result = (0, 0, 0, 0)
+        let result = (0, 0, 0, 0)
         let allTrans = Array(appData.transactions)
         for i in 0..<allTrans.count {
             if Double(allTrans[i].value) ?? 0.0 > 0 {
@@ -296,6 +298,7 @@ class ViewController: UIViewController {
     
     var didloadCalled = false
     var sendSavedData = false
+    var sendindSavedData = false
     func sendUnsaved() {//here
         
         let dataCount = appData.unsendedData.count
@@ -408,6 +411,7 @@ class ViewController: UIViewController {
             }
             if dataCount == 0 {
                 if sendSavedData == true {
+                    sendindSavedData = true
                     let save = SaveToDB()
                     var newCategories = appData.getCategories(key: "savedCategories")
                     print("sendUnsaved unsaved cats", newCategories.count)
@@ -418,6 +422,7 @@ class ViewController: UIViewController {
                                 self.filter()
                                 self.sendSavedData = false
                                 self.forseSendUnsendedData = false
+                                self.sendindSavedData = false
                                 print("Error saving category")
                             } else {
                                 print("cat: unsended sended")
@@ -438,6 +443,7 @@ class ViewController: UIViewController {
                             let toDataString = "&Nickname=\(appData.username)" + "&Category=\(tran.category)" + "&Date=\(tran.date)" + "&Value=\(tran.value)" + "&Comment=\(tran.comment)"
                             save.Transactions(toDataString: toDataString) { (error) in
                                 if error {
+                                    self.sendindSavedData = false
                                     self.filter()
                                     self.forseSendUnsendedData = false
                                     self.sendSavedData = false
@@ -453,6 +459,8 @@ class ViewController: UIViewController {
                             }
                         }
                     }
+                } else {
+                    self.sendindSavedData = false
                 }
                 
             }
@@ -558,6 +566,7 @@ class ViewController: UIViewController {
                             dataStruct.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
                         }
                         appData.saveTransations(dataStruct)
+                        self.appendMatches()
                         load.Categories{(loadedDataa, error) in
                             if error == "" {
                                 print("loaded \(loadedData.count) Categories from DB")
@@ -578,10 +587,12 @@ class ViewController: UIViewController {
                                     self.message.showMessage(text: error, type: .error)
                                 }
                             }
+                            
                         }
                     } else {
                         print("error loading data1")
                         self.filter()
+                        self.appendMatches()
                         DispatchQueue.main.async {
                             self.message.showMessage(text: error, type: .error)
                         }
@@ -877,6 +888,7 @@ class ViewController: UIViewController {
                         self.editingRow = i
                         appData.saveTransations(arr)
                         DispatchQueue.main.async {
+                            self.tableActionActivityIndicator.removeFromSuperview()
                             self.performSegue(withIdentifier: K.goToEditVCSeq, sender: self)
                         }
                         return
@@ -891,6 +903,46 @@ class ViewController: UIViewController {
     var editingTransaction: TransactionsStruct?
     
     var prevSelectedPer = selectedPeroud
+    
+    var filteredData:[String: [String]] = [:]
+    func appendMatches() {
+        //filteredData
+        let arr = Array(appData.transactions.sorted{ $0.dateFromString > $1.dateFromString })
+        var months:[String] = []
+        var years:[String] = []
+        for i in 0..<arr.count {
+            if !months.contains(removeDayFromString(arr[i].date)) {
+                months.append(removeDayFromString(arr[i].date))
+            }
+            
+            if !years.contains(removeDayMonthFromString(arr[i].date)) {
+                years.append(removeDayMonthFromString(arr[i].date))
+            }
+        }
+       /* DispatchQueue.main.async {
+            self.tableview.reloadData()
+        }*/
+        filteredData = [
+            "months":months,
+            "years":years
+        ]
+    }
+    
+    func removeDayFromString(_ s: String) -> String {
+        var m = s
+        for _ in 0..<3 {
+            m.removeFirst()
+        }
+        return m
+    }
+    
+    func removeDayMonthFromString(_ s: String) -> String {
+        var m = s
+        for _ in 0..<6 {
+            m.removeFirst()
+        }
+        return m
+    }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         print("prepare")
 
@@ -899,9 +951,11 @@ class ViewController: UIViewController {
             prevSelectedPer = selectedPeroud
             print("toFiterVC")
             let vc = segue.destination as? FilterTVC
-            vc?.frame = CGRect(x: filterView.frame.origin.x, y: filterView.frame.origin.y + filterView.frame.height + 5, width: (filterView.frame.width + 50) / 2, height: filterView.frame.width)
+            vc?.months = filteredData["months"] ?? []
+            vc?.years = filteredData["years"] ?? []
             DispatchQueue.main.async {
-                
+                let filterFrame = self.filterView.frame
+                vc?.frame = CGRect(x: filterFrame.minX, y: filterFrame.minY + filterFrame.height + 5, width: (filterFrame.width + 50) / 2, height: filterFrame.width)
                 UIView.animate(withDuration: 0.2) {
                     self.filterView.backgroundColor = K.Colors.separetor
                 }
@@ -1057,6 +1111,8 @@ class ViewController: UIViewController {
     var unsendedValue = 0
     
     var sendingUnsendedData = false
+    
+    let tableActionActivityIndicator = UIActivityIndicatorView.init(style: .gray)
 }
 
 //MARK: - extension
@@ -1095,11 +1151,23 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             if sendingUnsendedData {
                 ai.startAnimating()
                 let labelFrame = calculationCell.unsesndedTransactionsLabel.layer.frame
-                ai.frame = CGRect(x: labelFrame.minX + 10, y: 15, width: 10, height: 10)
+                ai.frame = CGRect(x: labelFrame.minX + 10, y: 12, width: 10, height: 10)
                 
                 calculationCell.unsesndedTransactionsLabel.superview?.addSubview(ai)
             } else {
                 ai.removeFromSuperview()
+            }
+            let aiSavedData = UIActivityIndicatorView.init(style: .gray)
+            if sendindSavedData {
+                print("sending saved data")
+                aiSavedData.startAnimating()
+                let savedLabelFrame = calculationCell.savedTransactionsLabel.layer.frame
+                aiSavedData.frame = CGRect(x: savedLabelFrame.minX - 7, y: 12, width: 10, height: 10)
+                calculationCell.savedTransactionsLabel.superview?.addSubview(aiSavedData)
+            print(aiSavedData.frame, "aiSavedData.frame")
+            } else {
+                aiSavedData.removeFromSuperview()
+                print("not sanding saved data")
             }
             
             calculationCell.savedTransactionsLabel.superview?.superview?.superview?.superview?.isHidden = (sendedCount.count + newUnsendedCount) == 0 ? true : false
@@ -1150,6 +1218,9 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 self.editRow(at: IndexPath(row: indexPath.row, section: indexPath.section - 1))
             }
             let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
+                self.tableActionActivityIndicator.startAnimating()
+                self.tableActionActivityIndicator.frame = CGRect(x: view.frame.width - 15, y: 0, width: 10, height: view.frame.height)
+                view.addSubview(self.tableActionActivityIndicator)
                 self.deleteFromDB(at: IndexPath(row: indexPath.row, section: indexPath.section - 1))
             }
             editeAction.backgroundColor = K.Colors.yellow

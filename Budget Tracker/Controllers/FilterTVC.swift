@@ -11,24 +11,25 @@ import CoreData
 var ifCustom = false
 
 class FilterTVC: UIViewController {
-    var months = [""]
-    var years = [""]
+    var months: [String] = []
+    var years: [String] = []
     var sectionsCount = 3
     var buttonTitle = ["All Time", "This Month", "Today", "Yesterday", "Custom"]
-    let data = appData.transactions.sorted{ $0.dateFromString > $1.dateFromString }
+    //let data = appData.transactions.sorted{ $0.dateFromString > $1.dateFromString }
     
     @IBOutlet weak var tableview: UITableView!
     
     var frame = CGRect.zero
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(frame, "filtervc")
         
         tableview.delegate = self
         tableview.dataSource = self
         tableview.translatesAutoresizingMaskIntoConstraints = true
-
-        self.tableview.frame = CGRect(x: self.frame.minX, y: self.frame.minY - 30, width: self.frame.width, height: self.frame.minX)
+        DispatchQueue.main.async {
+            self.tableview.frame = CGRect(x: self.frame.minX, y: self.frame.minY - 30, width: self.frame.width, height: self.frame.minX)
+        }
+       // appendMatches()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -48,10 +49,6 @@ class FilterTVC: UIViewController {
         }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        
-    }
-    
     func vcAppearence() {
         self.tableview.layer.masksToBounds = true
         self.tableview.layer.cornerRadius = 6
@@ -69,48 +66,8 @@ class FilterTVC: UIViewController {
         vcAppeared = true
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        getData()
-        if months.first == "" {
-            months.removeFirst()
-        }
-        if years.first == "" {
-            years.removeFirst()
-        }
-        
-    }
-    
-    func getData() {
-        appendMatches()
-    }
 
-    func appendMatches() {
-        for i in 0..<data.count {
-            if !months.contains(removeDayFromString(data[i].date)) {
-                months.append(removeDayFromString(data[i].date))
-            }
-            
-            if !years.contains(removeDayMonthFromString(data[i].date)) {
-                years.append(removeDayMonthFromString(data[i].date))
-            }
-        }
-    }
     
-    func removeDayFromString(_ s: String) -> String {
-        var m = s
-        for _ in 0..<3 {
-            m.removeFirst()
-        }
-        return m
-    }
-    
-    func removeDayMonthFromString(_ s: String) -> String {
-        var m = s
-        for _ in 0..<6 {
-            m.removeFirst()
-        }
-        return m
-    }
     
     @IBAction func closePressed(_ sender: UIButton) {
        // self.dismiss(animated: true, completion: nil)
@@ -312,26 +269,23 @@ extension FilterTVC: UITableViewDelegate, UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: K.filterCell, for: indexPath) as! FilterCell
         
+        var data = ""
         switch indexPath.section {
         case 0:
-            let data = buttonTitle[indexPath.row]
-            cell.titleLabel.text = data
-            
+            data = buttonTitle[indexPath.row]
         case 1:
             let month = appData.filter.getMonthFromString(s: "01.\(months[indexPath.row])")
             let year = appData.filter.getYearFromString(s: "01.\(months[indexPath.row])")
-            let data = "\(convertMonthFrom(int: month)), \(year)"
-            cell.titleLabel.text = data
+            data = "\(convertMonthFrom(int: month)), \(year)"
             
         case 2:
-            let data = years[indexPath.row]
-            cell.titleLabel.text = data
+            data = years[indexPath.row]
             
         default:
             return UITableViewCell()
         }
 
-        if cell.titleLabel.text == selectedPeroud {
+        if data == selectedPeroud {
             cell.layer.masksToBounds = true
             cell.layer.cornerRadius = 6
             cell.backgroundColor = K.Colors.yellow
@@ -339,12 +293,15 @@ extension FilterTVC: UITableViewDelegate, UITableViewDataSource {
             cell.backgroundColor = K.Colors.separetor
         }
         if ifCustom {
-            if cell.titleLabel.text == "Custom" {
+            if data == "Custom" {
                 cell.layer.masksToBounds = true
                 cell.layer.cornerRadius = 6
                 cell.backgroundColor = K.Colors.yellow
             }
         }
+        
+        cell.titleLabel.text = data
+        
     
         return cell
         
@@ -363,20 +320,19 @@ extension FilterTVC: UITableViewDelegate, UITableViewDataSource {
         
         let view = UIView()
         let label = UILabel()
-        label.frame = CGRect(x: 10, y: 0, width: UIScreen.main.bounds.width, height: 20)
+        label.frame = CGRect(x: 10, y: 0, width: self.frame.width, height: 20)
         label.font = label.font.withSize(10)
         label.textColor = K.Colors.balanceT
         
         switch section {
         case 0: label.text = ""
-        case 1: label.text = getTitleSectionFor(data: months, title: "Months")
-        case 2: label.text = getTitleSectionFor(data: years, title: "Years")
+        case 1: label.text = months.count > 0 ? "Months": ""//getTitleSectionFor(data: months, title: "Months")
+        case 2: label.text = years.count > 0 ? "Years": ""//getTitleSectionFor(data: years, title: "Years")
         default:
             label.text = ""
         }
-        
-        view.addSubview(label)
         view.backgroundColor = K.Colors.separetor
+        view.addSubview(label)
         return view
     }
     
