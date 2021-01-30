@@ -23,6 +23,9 @@ class MessageView {
     }
     @objc func closeButtonPressed(_ sender: Any) {
         hideMessage()
+        if textLabel?.text == "Create account to use app across all your devices" {
+            UserDefaults.standard.setValue(true, forKey: "firstLaunchSettings")
+        }
     }
 
     func hideMessage(duration: TimeInterval = 0.33) {
@@ -63,7 +66,7 @@ class MessageView {
         }
     }
     
-    func showMessage(text: String, type: MessageType, windowHeight: CGFloat = 50, static: Bool = false) {
+    func showMessage(text: String, type: MessageType, windowHeight: CGFloat = 50, autoHide: Bool = true, bottomAppearence: Bool = false) {
         let mainViewFrame = self.mainView.view.bounds
         let width = (mainViewFrame.width < 500 ? mainViewFrame.width : 500) - 30
 
@@ -92,31 +95,38 @@ class MessageView {
         
         switch type {
         case .error:
-            
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.4) {
                     self.textLabel?.textColor = .black
                     self.subview?.backgroundColor = UIColor(red: 224/255, green: 18/255, blue: 0/255, alpha: 0.90)
                 }
 
+                if autoHide {
+                    let timer = Timer.scheduledTimer(withTimeInterval: 7.0, repeats: false) { (action) in
+                        self.hideMessage()
+                    }
+                    self.timers.append(timer)
+                }
             }
-
-            let timer = Timer.scheduledTimer(withTimeInterval: 7.0, repeats: false) { (action) in
-                self.hideMessage()
-            }
-            timers.append(timer)
 
         case .succsess:
-            
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.4) {
                     self.textLabel?.textColor = .black
                     self.subview?.backgroundColor = UIColor(red: 194/255, green: 194/255, blue: 194/255, alpha: 0.9)//K.Colors.pink
                 }
-                let timer = Timer.scheduledTimer(withTimeInterval: 7.0, repeats: false) { (action) in
-                    self.hideMessage()
+                if autoHide {
+                    let timer = Timer.scheduledTimer(withTimeInterval: 7.0, repeats: false) { (action) in
+                        self.hideMessage()
+                    }
+                    self.timers.append(timer)
                 }
-                self.timers.append(timer)
+                if bottomAppearence {
+                    let superframe = self.mainView.view.frame
+                    UIView.animate(withDuration: 0.3) {
+                        self.subview?.frame = CGRect(x: x, y: superframe.height - self.mainView.view.safeAreaInsets.bottom - windowHeight - 5, width: width, height: windowHeight)
+                    }
+                }
             }
             
         case .internetError:
@@ -129,15 +139,17 @@ class MessageView {
                 }
                 let superframe = self.mainView.view.frame
                 UIView.animate(withDuration: 0.3) {
-                    self.subview?.frame = CGRect(x: x, y: superframe.height - self.mainView.view.safeAreaInsets.bottom - windowHeight, width: width, height: windowHeight)
-                    
+                    self.subview?.frame = CGRect(x: x, y: superframe.height - self.mainView.view.safeAreaInsets.bottom - windowHeight - 5, width: width, height: windowHeight)
+                }
+                
+                if autoHide {
+                    let timer = Timer.scheduledTimer(withTimeInterval: 7.0, repeats: false) { (action) in
+                        self.hideMessage()
+                    }
+                    self.timers.append(timer)
                 }
             }
 
-            let timer = Timer.scheduledTimer(withTimeInterval: 7.0, repeats: false) { (action) in
-                self.hideMessage()
-            }
-            timers.append(timer)
         }
         
         

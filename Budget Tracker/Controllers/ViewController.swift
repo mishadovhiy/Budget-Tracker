@@ -40,8 +40,6 @@ class ViewController: UIViewController {
         set {
             _TableData = newValue
             DispatchQueue.main.async {
-                //self.dataCountLabel.text = "Data count: \(self.tableData.count)\n\( appData.unsendedData.count > 0 ? (UserDefaults.standard.value(forKey: "LastLoadDataDate") as? String ?? "") : "" )"
-                
                 self.tableActionActivityIndicator.removeFromSuperview()
                 self.dataCountLabel.text = "Data count: \(self.tableData.count)"
                 self.filterTextLabel.text = "Filter: \(selectedPeroud)"
@@ -78,6 +76,7 @@ class ViewController: UIViewController {
                 if self.sendSavedData {
                     self.sendUnsaved()
                 }
+                
             }
         }
     }
@@ -98,23 +97,9 @@ class ViewController: UIViewController {
         updateUI()
         addTransitionButton.layer.cornerRadius = tableCorners
         prepareFilterOptions()
-
     }
     
-    var viewLoadedvar = false
-    override func viewDidLayoutSubviews() {
-        /*filterView.layer.masksToBounds = true
-        filterView.layer.cornerRadius = 6
-        filterView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]*/
-
-        if !viewLoadedvar {
-            whiteBackgroundFrame = whiteBackground.frame
-        }
-    }
-    
-    var refreshSubview = UIView.init(frame: .zero)
     func updateUI() {
-        
         addTransFrame = addTransitionButton.frame
         addTransitionButton.translatesAutoresizingMaskIntoConstraints = true
         self.filterView.translatesAutoresizingMaskIntoConstraints = true
@@ -129,6 +114,7 @@ class ViewController: UIViewController {
             self.filterHelperView.layer.shadowOffset = .zero
             self.filterHelperView.layer.shadowRadius = 10
             self.filterHelperView.layer.cornerRadius = 5
+            
             self.filterHelperView.backgroundColor = K.Colors.pink
             self.refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
             let superWidth = self.view.frame.width
@@ -148,14 +134,29 @@ class ViewController: UIViewController {
         }
         switchFromCoreData()
         if appData.defaults.value(forKey: "firstLaunch") as? Bool ?? true {
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "toFirstLoad", sender: self)
+            appData.createFirstData {
+                self.filter()
+                UserDefaults.standard.setValue(false, forKey: "firstLaunch")
+                DispatchQueue.main.async {
+                    self.message.showMessage(text: "Wellcome to Budget Tracker\nWe have created demo data for you", type: .succsess, windowHeight: 80)
+                }
             }
-            
         }
 
     }
     
+    var viewLoadedvar = false
+    override func viewDidLayoutSubviews() {
+        /*filterView.layer.masksToBounds = true
+        filterView.layer.cornerRadius = 6
+        filterView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]*/
+
+        if !viewLoadedvar {
+            whiteBackgroundFrame = whiteBackground.frame
+        }
+    }
+    
+    var refreshSubview = UIView.init(frame: .zero)
     
     struct tableStuct {
         let date: String
@@ -1012,6 +1013,7 @@ class ViewController: UIViewController {
                 print("appData.fromLoginVCMessage", appData.fromLoginVCMessage)
                 DispatchQueue.main.async {
                     self.message.showMessage(text: appData.fromLoginVCMessage, type: .succsess, windowHeight: 65)
+                    appData.fromLoginVCMessage = ""
                 }
             }
         }
@@ -1142,6 +1144,8 @@ class ViewController: UIViewController {
             self.performSegue(withIdentifier: K.statisticSeque, sender: self)
         }
     }
+    
+
 }
 
 //MARK: - extension
@@ -1205,8 +1209,31 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             calculationCell.setup(calculations: (totalBalance, sumExpenses, sumIncomes, sumPeriodBalance))
             calculationCell.incomeLabel.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(incomePressed(_:))))
             calculationCell.expensesLabel.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(expensesPressed(_:))))
-            //calculationCell.unsesndedTransactionsLabel.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(unsavedPtransPressed(_:))))
+            
             calculationCell.savedTransactionsLabel.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(savedTransPressed(_:))))
+            
+            
+            if UserDefaults.standard.value(forKey: "StatisticVCFirstLaunch") as? Bool ?? false == false {
+                Timer.scheduledTimer(withTimeInterval: 0.8, repeats: true) { (timer) in
+                    if calculationCell.expensesLabel.layer.shadowColor != UIColor.black.cgColor {
+                        print("StatisticVCFirstLaunch shadowcalled")
+                        calculationCell.expensesLabel.layer.shadowColor = UIColor.black.cgColor
+                        calculationCell.expensesLabel.layer.shadowOpacity = 0.4
+                        calculationCell.expensesLabel.layer.shadowOffset = .zero
+                    }
+                    UIView.animate(withDuration: 0.4) {
+                        calculationCell.expensesLabel.layer.shadowOpacity = calculationCell.expensesLabel.layer.shadowOpacity == 0.0 ? 0.4 : 0.0
+                    }
+
+                    if UserDefaults.standard.value(forKey: "StatisticVCFirstLaunch") as? Bool ?? false == true {
+                        calculationCell.expensesLabel.layer.shadowOpacity = 0.0
+                        timer.invalidate()
+                    }
+                    
+                }
+            }
+            
+            
             return calculationCell
             
         case 1..<(1 + newTableData.count):
@@ -1329,6 +1356,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 self.mainTableView.layer.cornerRadius = self.tableCorners
                 self.mainTableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
                 self.addTransitionButton.isHidden = false
+
             }
         }
     }
@@ -1341,6 +1369,8 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 self.calculationSView.alpha = 0
                 self.mainTableView.layer.cornerRadius = 0
                 self.addTransitionButton.isHidden = !self.forseShowAddButton ? true : false
+                
+                
             }
         }
     }

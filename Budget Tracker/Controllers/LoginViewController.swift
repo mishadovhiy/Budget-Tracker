@@ -97,7 +97,7 @@ class LoginViewController: UIViewController {
                         self.logIn(nickname: name, password: password, loadedData: loadedData)
                     } else {
                         DispatchQueue.main.async {
-                            self.message.showMessage(text: "All fields are required", type: .error)
+                            self.message.showMessage(text: "All fields are required", type: .error, autoHide: false)
                         }
                         self.obthervValues = true
                         self.showWrongFields()
@@ -106,7 +106,7 @@ class LoginViewController: UIViewController {
             } else {
                 print("error!!!")
                 DispatchQueue.main.async {
-                    self.message.showMessage(text: "Internet Error!", type: .error)
+                    self.message.showMessage(text: "Internet Error!", type: .error, autoHide: false)
                 }
             }
         }
@@ -128,18 +128,21 @@ class LoginViewController: UIViewController {
                     if password != psswordFromDB {
                         print("wrong password", psswordFromDB)
                         DispatchQueue.main.async {
-                            self.message.showMessage(text: "Wrong password", type: .error)
+                            self.message.showMessage(text: "Wrong password", type: .error, autoHide: false)
                         }
                     } else {
+                        let prevUserName = appData.username
                         appData.username = nickname
                         appData.password = password
-                        let wasTrans = appData.savedTransactions
-                        let trans = wasTrans + appData.transactions
-                        appData.saveTransations(trans, key: "savedTransactions")
-                        let wascats = appData.getCategories(key: "savedCategories")
-                        let cats = wascats + appData.getCategories()
-                        appData.saveCategories(cats, key: "savedCategories")
-                        appData.fromLoginVCMessage = trans.count > 0 ? "Wellcome, \(appData.username), \nYour Data has been saved localy" : "Wellcome, \(appData.username)"
+                        if prevUserName != nickname {
+                            let wasTrans = appData.savedTransactions
+                            let trans = wasTrans + appData.transactions
+                            appData.saveTransations(trans, key: "savedTransactions")
+                            let wascats = appData.getCategories(key: "savedCategories")
+                            let cats = wascats + appData.getCategories()
+                            appData.saveCategories(cats, key: "savedCategories")
+                            appData.fromLoginVCMessage = trans.count > 0 ? "Wellcome, \(appData.username), \nYour Data has been saved localy" : "Wellcome, \(appData.username)"
+                        }
                         DispatchQueue.main.async {
                             self.performSegue(withIdentifier: "homeVC", sender: self)
                         }
@@ -150,7 +153,7 @@ class LoginViewController: UIViewController {
             }
         } else {
             DispatchQueue.main.async {
-                self.message.showMessage(text: "User not found", type: .error)
+                self.message.showMessage(text: "User not found", type: .error, autoHide: false)
             }
         }
     }
@@ -163,7 +166,7 @@ class LoginViewController: UIViewController {
                 self.createAccoun(loadedData: loadedData)
             } else {
                 DispatchQueue.main.async {
-                    self.message.showMessage(text: "Internet Error!", type: .error)
+                    self.message.showMessage(text: "Internet Error!", type: .error, autoHide: false)
                 }
             }
         }
@@ -184,7 +187,7 @@ class LoginViewController: UIViewController {
                         save.Users(toDataString: toDataString) { (error) in
                             if error {
                                 print("error")
-                                self.message.showMessage(text: "Internet Error!", type: .error)
+                                self.message.showMessage(text: "Internet Error!", type: .error, autoHide: false)
                             } else {
                                 appData.username = name
                                 appData.password = password
@@ -201,18 +204,18 @@ class LoginViewController: UIViewController {
                         }
                         
                     } else {
-                        self.message.showMessage(text: "Username '\(name)' is already taken", type: .error, windowHeight: 65)
+                        self.message.showMessage(text: "Username '\(name)' is already taken", type: .error, windowHeight: 65, autoHide: false)
                         print("username '\(name)' is already taken")
                     }
                 
                 } else {
                     self.obthervValues = true
                     self.showWrongFields()
-                    self.message.showMessage(text: "All fields are required", type: .error)
+                    self.message.showMessage(text: "All fields are required", type: .error, autoHide: false)
                     print("all fields are required")
                 }
             } else {
-                self.message.showMessage(text: "Passwords not match", type: .error)
+                self.message.showMessage(text: "Passwords not match", type: .error, autoHide: false)
                 print("passwords not much")
             }
         }

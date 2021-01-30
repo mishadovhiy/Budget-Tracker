@@ -397,10 +397,10 @@ class AppData {
         
         
         
-        func getToday(_ sender: UIDatePicker) -> String {
+        func getToday(_ sender: UIDatePicker, dateformatter: String = "dd.MM.yyyy") -> String {
             
             let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "dd.MM.yyyy"
+            dateFormatter.dateFormat = dateformatter
             var date: Date? = nil
             DispatchQueue.main.async {
                 date = sender.date
@@ -487,6 +487,32 @@ class AppData {
         var selectedPurpose = 0
         
     }
+    
+    
+    func createFirstData(completion: @escaping () -> ()) {
+        
+        
+        let transactions = [
+            TransactionsStruct(value: "5000", category: "Freelance", date: "\(filter.getToday(filter.filterObjects.currentDate, dateformatter: "01.MM.yyyy"))", comment: ""),
+            TransactionsStruct(value: "10000", category: "Work", date: "\(filter.getToday(filter.filterObjects.currentDate, dateformatter: "01.01.yyyy"))", comment: ""),
+            TransactionsStruct(value: "-100", category: "Food", date: "\(filter.getToday(filter.filterObjects.currentDate, dateformatter: "01.MM.yyyy"))", comment: ""),
+            TransactionsStruct(value: "-400", category: "Food", date: "\(filter.getToday(filter.filterObjects.currentDate))", comment: ""),
+            TransactionsStruct(value: "-1000", category: "Bills", date: "\(filter.getToday(filter.filterObjects.currentDate))", comment: ""),
+        ]
+        let categories = [
+            CategoriesStruct(name: "Food", purpose: K.expense),
+            CategoriesStruct(name: "Taxi", purpose: K.expense),
+            CategoriesStruct(name: "Public Transport", purpose: K.expense),
+            CategoriesStruct(name: "Bills", purpose: K.expense),
+            CategoriesStruct(name: "Work", purpose: K.income),
+            CategoriesStruct(name: "Freelance", purpose: K.income)
+        ]
+        saveTransations(transactions)
+        saveCategories(categories)
+        completion()
+    }
+    
+
     
 }
 

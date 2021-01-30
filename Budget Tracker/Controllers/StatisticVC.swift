@@ -18,10 +18,21 @@ class StatisticVC: UIViewController, CALayerDelegate {
     @IBOutlet weak var segmentControll: UISegmentedControl!
     @IBOutlet weak var titleLabel: UILabel!
     var allData = [GraphDataStruct]()
+    lazy var message: MessageView = {
+        let message = MessageView(self)
+        return message
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUI()
+        
+        if appData.defaults.value(forKey: "StatisticVCFirstLaunch") as? Bool ?? false == false {
+            appData.defaults.setValue(true, forKey: "StatisticVCFirstLaunch")
+            DispatchQueue.main.async {
+                self.message.showMessage(text: "Statistic for your transactions will be displayed here", type: .succsess, windowHeight: 80)
+            }
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {

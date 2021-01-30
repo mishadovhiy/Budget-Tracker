@@ -34,9 +34,16 @@ class SettingsViewController: UIViewController {
 
         updateUI()
         
+        if UserDefaults.standard.value(forKey: "firstLaunchSettings") as? Bool ?? false == false {
+            if appData.username == "" {
+                DispatchQueue.main.async {
+                    self.message.showMessage(text: "Create account to use app across all your devices", type: .succsess, windowHeight: 80, autoHide: false, bottomAppearence: true)
+                }
+            } else {
+                UserDefaults.standard.setValue(true, forKey: "firstLaunchSettings")
+            }
+        }
     }
-    
-    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first {
@@ -60,6 +67,9 @@ class SettingsViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         if !toSegue {
             delegate?.closeSettings(sendSavedData: sendLocalDataPressed)
+        }
+        DispatchQueue.main.async {
+            self.message.hideMessage()
         }
     }
     
