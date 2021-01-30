@@ -1235,7 +1235,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             }
             let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
                 self.tableActionActivityIndicator.startAnimating()
-                self.tableActionActivityIndicator.frame = CGRect(x: view.frame.width - 15, y: 0, width: 10, height: view.frame.height)
+                self.tableActionActivityIndicator.frame = CGRect(x: view.frame.width / 2 - 5, y: 0, width: 10, height: view.frame.height)
                 view.addSubview(self.tableActionActivityIndicator)
                 self.deleteFromDB(at: IndexPath(row: indexPath.row, section: indexPath.section - 1))
             }
@@ -1349,9 +1349,6 @@ extension ViewController: TransitionVCProtocol {
             trans.append(new)
             appData.saveTransations(trans)
             self.filter()
-            
-            
-            
         }
     }
     
