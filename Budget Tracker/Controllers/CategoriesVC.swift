@@ -56,15 +56,25 @@ class CategoriesVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        updateUI()
-        if darkAppearence {
-            DispatchQueue.main.async {
+        if #available(iOS 13.0, *) {
+            if darkAppearence {
                 self.view.backgroundColor = UIColor(named: "darkTableColor")
                 self.headerView.backgroundColor = UIColor(named: "darkTableColor")
                 self.categoriesTableView.backgroundColor = UIColor(named: "darkTableColor")
                 self.categoriesTableView.separatorColor = UIColor(named: "darkSeparetor")
             }
+        } else {
+            DispatchQueue.main.async {
+                if self.darkAppearence {
+                    self.view.backgroundColor = UIColor(named: "darkTableColor")
+                    self.headerView.backgroundColor = UIColor(named: "darkTableColor")
+                    self.categoriesTableView.backgroundColor = UIColor(named: "darkTableColor")
+                    self.categoriesTableView.separatorColor = UIColor(named: "darkSeparetor")
+                }
+            }
         }
+        
+        updateUI()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -302,9 +312,9 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
         }
         
         if darkAppearence {
-            cell.contentView.layer.backgroundColor = UIColor(named: "darkTableColor")?.cgColor
+            cell.backgroundColor = UIColor(named: "darkTableColor")
         } else {
-            cell.contentView.layer.backgroundColor = K.Colors.background?.cgColor
+            cell.backgroundColor = K.Colors.background
         }
         
         if darkAppearence {

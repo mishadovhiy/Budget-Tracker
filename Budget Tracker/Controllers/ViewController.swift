@@ -22,6 +22,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var filterView: UIView!
     @IBOutlet weak var filterTextLabel: UILabel!
+    @IBOutlet weak var categoriesButton: UIButton!
     @IBOutlet weak var dataCountLabel: UILabel!
     @IBOutlet weak var calculationSView: UIStackView!
     @IBOutlet weak var mainTableView: UITableView!
@@ -55,7 +56,7 @@ class ViewController: UIViewController {
                     let supFrame = self.view.frame
                     self.addTransitionButton.backgroundColor = .clear
                     UIView.animate(withDuration: 0.6) {
-                        self.addTransitionButton.frame = CGRect(x: supFrame.width / 2 - (self.addTransFrame.width / 2 + self.addTransitionButton.contentEdgeInsets.right), y: supFrame.height - self.addTransFrame.height - self.view.safeAreaInsets.bottom , width: self.addTransFrame.width, height: self.addTransFrame.height)
+                        self.addTransitionButton.frame = CGRect(x: supFrame.width / 2 - (self.addTransFrame.width / 2 + self.addTransitionButton.contentEdgeInsets.right / 2), y: supFrame.height - self.addTransFrame.height - self.view.safeAreaInsets.bottom , width: self.addTransFrame.width, height: self.addTransFrame.height)
                     }
                     self.addTransitionButton.isHidden = false
                     self.mainTableView.backgroundColor = K.Colors.background
@@ -100,14 +101,18 @@ class ViewController: UIViewController {
     }
     
     func updateUI() {
-        addTransFrame = addTransitionButton.frame
         addTransitionButton.translatesAutoresizingMaskIntoConstraints = true
-        self.filterView.translatesAutoresizingMaskIntoConstraints = true
+        //self.filterView.translatesAutoresizingMaskIntoConstraints = true
+        
         self.mainTableView.backgroundColor = K.Colors.background
         downloadFromDB()
         self.mainTableView.delegate = self
         self.mainTableView.dataSource = self
         DispatchQueue.main.async {
+            let tableFrame = self.mainTableView.frame
+            let TransFrame = self.addTransitionButton.frame
+            self.addTransFrame = CGRect(x: tableFrame.width - TransFrame.width, y: tableFrame.minY, width: TransFrame.width, height: TransFrame.height)
+            print(self.addTransFrame, "self.addTransitionButton.frame", tableFrame.minY)
             self.view.addSubview(self.filterHelperView)
             self.filterHelperView.layer.shadowColor = UIColor.black.cgColor
             self.filterHelperView.layer.shadowOpacity = 0.3
@@ -1419,7 +1424,6 @@ extension ViewController: UnsendedDataVCProtocol {
         sendSavedData = true
         self.filter()
     }
-    
     
 }
 

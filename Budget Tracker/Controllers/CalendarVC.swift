@@ -38,16 +38,28 @@ class CalendarVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        updaiteUI()
-        if darkAppearence {
-            DispatchQueue.main.async {
+        let height = self.view.frame.height
+        self.startButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, height + self.startButton.layer.frame.height, 0)
+        self.endButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, height + self.endButton.layer.frame.height, 0)
+        if #available(iOS 13.0, *) {
+            if darkAppearence {
                 self.view.backgroundColor = UIColor(named: "darkTableColor")
                 self.textField.superview?.backgroundColor = UIColor(named: "darkTableColor")
                 self.collectionView.backgroundColor = UIColor(named: "darkTableColor")
                 self.textField.textColor = K.Colors.background
             }
+        } else {
+            DispatchQueue.main.async {
+                if self.darkAppearence {
+                    self.view.backgroundColor = UIColor(named: "darkTableColor")
+                    self.textField.superview?.backgroundColor = UIColor(named: "darkTableColor")
+                    self.collectionView.backgroundColor = UIColor(named: "darkTableColor")
+                    self.textField.textColor = K.Colors.background
+                }
+            }
         }
+        
+        updaiteUI()
     }
 
     
@@ -120,16 +132,16 @@ class CalendarVC: UIViewController {
         year = appData.filter.getYearFromString(s: selectedFrom == "" ? today : selectedFrom)
         month = appData.filter.getMonthFromString(s: selectedFrom == "" ? today : selectedFrom)
         getDays()
-        if selectedTo == "" && selectedFrom == "" {
-            toggleButton(b: startButton, hidden: true)
-            toggleButton(b: endButton, hidden: true)
+        /*if selectedTo == "" && selectedFrom == "" {
+            toggleButton(b: startButton, hidden: true, animation: false)
+            toggleButton(b: endButton, hidden: true, animation: false)
             doneButtonIsActive()
         }
         
         if selectedTo == "" {
-            toggleButton(b: endButton, hidden: true)
-            toggleButton(b: startButton, hidden: true)
-        }
+            toggleButton(b: endButton, hidden: true, animation: false)
+            toggleButton(b: startButton, hidden: true, animation: false)
+        }*/
     }
     
     func getDays() {
@@ -372,24 +384,30 @@ class CalendarVC: UIViewController {
         }
     }
     
+    
     func cellBackground(cell: CVCell) {
-        
-        if selectedTo == cell.cellTypeLabel.text || selectedFrom == cell.cellTypeLabel.text {
-            cell.backgroundCell.backgroundColor = K.Colors.yellow
-            cell.dayLabel.textColor = UIColor.white
-        }else {
-            cell.backgroundCell.backgroundColor = UIColor.clear
-            cell.dayLabel.textColor = darkAppearence ? K.Colors.category : UIColor(named: "darkTableColor")
+        DispatchQueue.main.async {
+            if self.selectedTo == cell.cellTypeLabel.text || self.selectedFrom == cell.cellTypeLabel.text {
+                cell.backgroundCell.backgroundColor = K.Colors.yellow
+                cell.dayLabel.textColor = UIColor.white
+            }else {
+                cell.backgroundCell.backgroundColor = self.darkAppearence ? UIColor(named: "darkTableColor") : K.Colors.background
+                cell.dayLabel.textColor = self.darkAppearence ? K.Colors.category : UIColor(named: "darkTableColor")
+            }
         }
+        
+        
         
     }
     
     func backgroundBetween(cell: CVCell) {
         
         for i in 0..<daysBetween.count {
-            if daysBetween[i] == cell.cellTypeLabel.text {
-                cell.backgroundCell.backgroundColor = K.Colors.separetor
-                cell.dayLabel.textColor = K.Colors.balanceT
+            DispatchQueue.main.async {
+                if self.daysBetween[i] == cell.cellTypeLabel.text {
+                    cell.backgroundCell.backgroundColor = K.Colors.separetor
+                    cell.dayLabel.textColor = K.Colors.balanceT
+                }
             }
         }
     }
@@ -483,16 +501,18 @@ class CalendarVC: UIViewController {
         
     }
     
-    func toggleButton(b: UIButton, hidden: Bool) {
+    func toggleButton(b: UIButton, hidden: Bool, animation: Bool = true) {
         
-        let deviceHeight = UIScreen.main.bounds.height
-        if hidden {
-            UIView.animate(withDuration: 0.3) {
-                b.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, deviceHeight + 100, 0)
-            }
-        } else {
-            UIView.animate(withDuration: 0.3) {
-                b.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+        DispatchQueue.main.async {
+            let deviceHeight = self.view.frame.height
+            if hidden {
+                UIView.animate(withDuration: animation ? 0.3 : 0.0) {
+                    b.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, deviceHeight + b.frame.height, 0)
+                }
+            } else {
+                UIView.animate(withDuration: animation ? 0.3 : 0.0) {
+                    b.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+                }
             }
         }
         

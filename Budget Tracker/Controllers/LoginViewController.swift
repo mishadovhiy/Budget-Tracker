@@ -465,16 +465,24 @@ extension LoginViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         switch textField {
         case nicknameLabelCreate:
-            emailLabel.becomeFirstResponder()
+            DispatchQueue.main.async {
+                self.emailLabel.becomeFirstResponder()
+            }
         case emailLabel:
-            passwordLabel.becomeFirstResponder()
+            DispatchQueue.main.async {
+                self.passwordLabel.becomeFirstResponder()
+            }
         case passwordLabel:
-            confirmPasswordLabel.becomeFirstResponder()
+            DispatchQueue.main.async {
+                self.confirmPasswordLabel.becomeFirstResponder()
+            }
         case confirmPasswordLabel:
-            createAccountPressed(createAccButton!)
+            self.createAccountPressed(createAccButton!)
             
         case nicknameLogLabel:
-            passwordLogLabel.becomeFirstResponder()
+            DispatchQueue.main.async {
+                self.passwordLogLabel.becomeFirstResponder()
+            }
         case passwordLogLabel:
             logInPressed(logInButton)
         default:
