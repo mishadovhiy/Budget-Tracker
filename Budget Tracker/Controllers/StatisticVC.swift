@@ -51,7 +51,6 @@ class StatisticVC: UIViewController, CALayerDelegate {
     }
     
     func getPercent(n: Double) -> Double {
-        
         if allData.count != 0 {
             let biggest = sum
             let results = ((100 * n) / biggest)
@@ -96,7 +95,6 @@ class StatisticVC: UIViewController, CALayerDelegate {
     }
     
     func ifNoData() {
-        
         if allData.count == 0 {
             titleLabel.textAlignment = .center
             titleLabel.text = "No " + (titleLabel.text ?? "Data")
@@ -181,8 +179,8 @@ class StatisticVC: UIViewController, CALayerDelegate {
         let maxColor = Double(0xFFFFFF - 0x222222);
         let ratio = maxColor / Double(maxCount);
         let intColor = lround(ratio * Double(number)) ;
-        let redComponent =      ((intColor & 0xFFAFAF) >> (2*8)) & 0xff;
-        let greenComponent =    ((intColor & 0xAFFFAF) >> (1*8)) & 0xff;
+        let redComponent =      ((intColor & 0xFFAFAF) >> (2*8)) & 0x22;
+        let greenComponent =    ((intColor & 0xAFFFAF) >> (1*8)) & 0x22;
         let blueComponent =     ((intColor & 0x9B9BFF) >> (0*8)) & 0xff;
         return (redComponent,greenComponent,blueComponent);
     }

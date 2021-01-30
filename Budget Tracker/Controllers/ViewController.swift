@@ -41,6 +41,7 @@ class ViewController: UIViewController {
             _TableData = newValue
             DispatchQueue.main.async {
                 //self.dataCountLabel.text = "Data count: \(self.tableData.count)\n\( appData.unsendedData.count > 0 ? (UserDefaults.standard.value(forKey: "LastLoadDataDate") as? String ?? "") : "" )"
+                
                 self.tableActionActivityIndicator.removeFromSuperview()
                 self.dataCountLabel.text = "Data count: \(self.tableData.count)"
                 self.filterTextLabel.text = "Filter: \(selectedPeroud)"
@@ -87,24 +88,24 @@ class ViewController: UIViewController {
         return message
     }()
 
+    let tableCorners: CGFloat = 10
     var forseSendUnsendedData = true
     var forseShowAddButton = false
     var addTransFrame = CGRect.zero
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
         updateUI()
-        addTransitionButton.layer.cornerRadius = 25
+        addTransitionButton.layer.cornerRadius = tableCorners
         addTransitionButton.layer.maskedCorners = [.layerMaxXMinYCorner]
         prepareFilterOptions()
     }
     
     var viewLoadedvar = false
     override func viewDidLayoutSubviews() {
-        filterView.layer.masksToBounds = true
+        /*filterView.layer.masksToBounds = true
         filterView.layer.cornerRadius = 6
-        filterView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        filterView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]*/
 
         if !viewLoadedvar {
             whiteBackgroundFrame = whiteBackground.frame
@@ -122,6 +123,13 @@ class ViewController: UIViewController {
         self.mainTableView.delegate = self
         self.mainTableView.dataSource = self
         DispatchQueue.main.async {
+            self.view.addSubview(self.filterHelperView)
+            self.filterHelperView.layer.shadowColor = UIColor.black.cgColor
+            self.filterHelperView.layer.shadowOpacity = 0.3
+            self.filterHelperView.layer.shadowOffset = .zero
+            self.filterHelperView.layer.shadowRadius = 10
+            self.filterHelperView.layer.cornerRadius = 5
+            self.filterHelperView.backgroundColor = K.Colors.pink
             self.refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
             let superWidth = self.view.frame.width
             self.refreshSubview.frame = CGRect(x: superWidth / 2 - 10, y: 2, width: 20, height: 20)
@@ -588,7 +596,7 @@ class ViewController: UIViewController {
                             } else {
                                 self.filter()
                                 DispatchQueue.main.async {
-                                    self.message.showMessage(text: error, type: .error)
+                                    self.message.showMessage(text: error, type: .internetError)
                                 }
                             }
                             
@@ -598,7 +606,7 @@ class ViewController: UIViewController {
                         self.filter()
                         self.prepareFilterOptions()
                         DispatchQueue.main.async {
-                            self.message.showMessage(text: error, type: .error)
+                            self.message.showMessage(text: error, type: .error)//internetError
                         }
                         
                     }
@@ -947,6 +955,8 @@ class ViewController: UIViewController {
         }
         return m
     }
+    
+    var filterHelperView = UIView(frame: .zero)
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         print("prepare")
 
@@ -959,10 +969,13 @@ class ViewController: UIViewController {
             vc?.years = filteredData["years"] ?? []
             DispatchQueue.main.async {
                 let filterFrame = self.filterView.frame
-                vc?.frame = CGRect(x: filterFrame.minX, y: filterFrame.minY + filterFrame.height, width: filterFrame.width /*(filterFrame.width + 50) / 2*/, height: filterFrame.width)
+                let vcFrame = CGRect(x: filterFrame.minX, y: filterFrame.minY, width: filterFrame.width /*(filterFrame.width + 50) / 2*/, height: filterFrame.width)
+                vc?.frame = vcFrame
+                self.filterHelperView.frame = CGRect(x: filterFrame.minX, y: filterFrame.minY, width: vcFrame.width, height: vcFrame.height)
+                self.filterHelperView.alpha = 0
+                
                 UIView.animate(withDuration: 0.2) {
-                    self.filterView.backgroundColor = K.Colors.separetor
-                    self.filterTextLabel.textColor = K.Colors.balanceV
+                    self.filterHelperView.alpha = 1
                 }
             }
             
@@ -1009,10 +1022,7 @@ class ViewController: UIViewController {
     @IBAction func unwindToFilter(segue: UIStoryboardSegue) {
         DispatchQueue.global(qos: .userInteractive).async {
             DispatchQueue.main.async {
-                UIView.animate(withDuration: 0.2) {
-                    self.filterView.backgroundColor = .clear
-                    self.filterTextLabel.textColor = K.Colors.balanceT
-                }
+                self.filterHelperView.alpha = 0
             }
             if self.prevSelectedPer != selectedPeroud {
                 self.filter()
@@ -1255,10 +1265,10 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             let tableFrame = self.mainTableView.layer.frame
             let main = UIView(frame: CGRect(x: 0, y: 0, width: tableFrame.width, height: 2))
             main.backgroundColor = section == 1 ? K.Colors.background : UIColor.clear
-            let view = UIView(frame: CGRect(x: 0, y: 0, width: tableFrame.width, height: 50))
+            let view = UIView(frame: CGRect(x: 0, y: 0, width: tableFrame.width, height: 52))
             view.backgroundColor = UIColor(named: "darkTableColor")
             view.layer.masksToBounds = true
-            view.layer.cornerRadius = section == 1 ? 25 : 0
+            view.layer.cornerRadius = section == 1 ? tableCorners : 0
             //self.mainTableView.layer.cornerRadius = 15
             view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
             let dateLabel = UILabel(frame: CGRect(x: 20, y: 0, width: tableFrame.width - 40, height: view.frame.height))
@@ -1268,7 +1278,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             dateLabel.textAlignment = .left
             main.addSubview(view)
             if section == 1 {
-
                 let button = UIButton(frame: CGRect(x: view.frame.width - 60, y: 0, width: 60, height: 60))
                 button.addTarget(self, action: #selector(addTransButtonPressed(_:)), for: .touchDown)
                 button.setImage(UIImage(named: "plusIcon"), for: .normal)
@@ -1276,8 +1285,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 button.contentHorizontalAlignment = .right
                 button.contentEdgeInsets = .init(top: 7, left: 0, bottom: 0, right: 7)
                 view.addSubview(button)
-                
-                
             }
             view.addSubview(dateLabel)
             return main
@@ -1305,7 +1312,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 self.calculationSView.alpha = 1
                 self.filterView.alpha = 0
                 self.mainTableView.layer.masksToBounds = true
-                self.mainTableView.layer.cornerRadius = 25
+                self.mainTableView.layer.cornerRadius = self.tableCorners
                 self.mainTableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
                 self.addTransitionButton.isHidden = false
             }

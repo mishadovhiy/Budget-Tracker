@@ -18,14 +18,14 @@ struct LoadFromDB {
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             
             if error != nil {
-                completion([], "error")
+                completion([], "Internet Error!")
                 return
             } else {
                 var jsonResult = NSArray()
                 do{
                     jsonResult = try JSONSerialization.jsonObject(with: data!, options:JSONSerialization.ReadingOptions.allowFragments) as! NSArray
                 } catch let error as NSError {
-                    completion([], "Error loading data")
+                    completion([], "Internet Error!")
                     return
                 }
                 print(data, "datadatadatadata")

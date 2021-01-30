@@ -52,7 +52,7 @@ class LoginViewController: UIViewController {
     
     func updateUI() {
         
-        message.initMessage()
+        //message.initMessage()
 
         selectedScreen = appData.username != "" ? .createAccount : .singIn
         toggleScreen(options: selectedScreen)
@@ -97,7 +97,7 @@ class LoginViewController: UIViewController {
                         self.logIn(nickname: name, password: password, loadedData: loadedData)
                     } else {
                         DispatchQueue.main.async {
-                            self.message.showMessage(text: "All fields are required", type: .staticError, windowHeight: 50)
+                            self.message.showMessage(text: "All fields are required", type: .error, windowHeight: 50)
                         }
                         self.obthervValues = true
                         self.showWrongFields()
@@ -128,7 +128,7 @@ class LoginViewController: UIViewController {
                     if password != psswordFromDB {
                         print("wrong password", psswordFromDB)
                         DispatchQueue.main.async {
-                            self.message.showMessage(text: "wrong password", type: .staticError, windowHeight: 50)
+                            self.message.showMessage(text: "wrong password", type: .error, windowHeight: 50)
                         }
                     } else {
                         appData.username = nickname
@@ -150,7 +150,7 @@ class LoginViewController: UIViewController {
             }
         } else {
             DispatchQueue.main.async {
-                self.message.showMessage(text: "user not found", type: .staticError, windowHeight: 50)
+                self.message.showMessage(text: "user not found", type: .error, windowHeight: 50)
             }
         }
     }
@@ -203,18 +203,18 @@ class LoginViewController: UIViewController {
                         }
                         
                     } else {
-                        self.message.showMessage(text: "username '\(name)' is already taken", type: .staticError, windowHeight: 50)
+                        self.message.showMessage(text: "username '\(name)' is already taken", type: .error, windowHeight: 50)
                         print("username '\(name)' is already taken")
                     }
                 
                 } else {
                     self.obthervValues = true
                     self.showWrongFields()
-                    self.message.showMessage(text: "all fields are required", type: .staticError, windowHeight: 50)
+                    self.message.showMessage(text: "all fields are required", type: .error, windowHeight: 50)
                     print("all fields are required")
                 }
             } else {
-                self.message.showMessage(text: "passwords not much", type: .staticError, windowHeight: 50)
+                self.message.showMessage(text: "passwords not much", type: .error, windowHeight: 50)
                 print("passwords not much")
             }
         }

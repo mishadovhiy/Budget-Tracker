@@ -142,6 +142,18 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
         return UISwipeActionsConfiguration(actions: [deleteAction])
     }
     
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let mainFrame = self.view.frame
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: mainFrame.width, height: 25))
+        let labels = UILabel(frame: CGRect(x: 10, y: 0, width: mainFrame.width - 20, height: 25))
+        labels.text = section == 0 ? "Transactions" : "Categories"
+        view.backgroundColor = UIColor(named: "darkTableColor")
+        view.addSubview(labels)
+        labels.font = .systemFont(ofSize: 14, weight: .medium)
+        labels.textColor = .white
+        return view
+    }
+    
     
 }
 

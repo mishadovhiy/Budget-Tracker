@@ -51,9 +51,9 @@ class FilterTVC: UIViewController {
     
     func vcAppearence() {
         self.tableview.layer.masksToBounds = true
-        self.tableview.layer.cornerRadius = 6
+        self.tableview.layer.cornerRadius = 5
         tableview.cellLayoutMarginsFollowReadableWidth = true
-        self.tableview.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        //self.tableview.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
 
         DispatchQueue.main.async {
             self.tableview.beginUpdates()
@@ -240,8 +240,7 @@ class FilterTVC: UIViewController {
         }
         
     }
-    
-    
+
     
     
 // MARK: - Table view data source
@@ -289,18 +288,18 @@ extension FilterTVC: UITableViewDelegate, UITableViewDataSource {
         if data == selectedPeroud {
             cell.layer.masksToBounds = true
             cell.layer.cornerRadius = 6
-            cell.titleLabel.textColor = K.Colors.category
-            cell.backgroundColor = UIColor(named: "darkTableColor") //K.Colors.yellow
+           // cell.titleLabel.textColor = K.Colors.category
+            cell.backgroundColor = K.Colors.yellow//UIColor(named: "darkTableColor") //K.Colors.yellow
         } else {
-            cell.backgroundColor = K.Colors.separetor
-            cell.titleLabel.textColor = UIColor(named: "darkTableColor")
+            cell.backgroundColor = .clear
+            //cell.titleLabel.textColor = K.Colors.yellow//UIColor(named: "darkTableColor")
         }
         if ifCustom {
             if data == "Custom" {
                 cell.layer.masksToBounds = true
                 cell.layer.cornerRadius = 6
-                cell.backgroundColor = UIColor(named: "darkTableColor")
-                cell.titleLabel.textColor = K.Colors.category
+                cell.backgroundColor = K.Colors.yellow//UIColor(named: "darkTableColor")
+               // cell.titleLabel.textColor = K.Colors.category
             }
         }
         
