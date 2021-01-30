@@ -83,7 +83,7 @@ class MessageView {
             UIView.animate(withDuration: 0.8) {
                 self.closeButton?.alpha = 1
             }
-            self.textLabel?.frame = CGRect(x: 10, y: 0, width: width - 5 - 30, height: windowHeight)
+            self.textLabel?.frame = CGRect(x: 12, y: 0, width: width - 6 - 30, height: windowHeight)
             self.closeButton?.frame = CGRect(x: (self.subview?.frame.width ?? 0) - 35, y: 0, width: 30, height: windowHeight)
             self.closeButton?.alpha = 1
         }
@@ -94,18 +94,11 @@ class MessageView {
         case .error:
             
             DispatchQueue.main.async {
-                self.closeButton?.alpha = 0
                 UIView.animate(withDuration: 0.4) {
                     self.textLabel?.textColor = .black
                     self.subview?.backgroundColor = UIColor(red: 224/255, green: 18/255, blue: 0/255, alpha: 0.90)
                 }
-                let superframe = self.mainView.view.frame
-                self.textLabel?.textAlignment = .center
-                self.textLabel?.frame = CGRect(x: 0, y: 0, width: 140, height: windowHeight)
-                UIView.animate(withDuration: 0.3) {
-                    self.subview?.frame = CGRect(x: x, y: self.mainView.view.frame.height - self.mainView.view.safeAreaInsets.bottom - windowHeight, width: width, height: windowHeight)
-                    
-                }
+
             }
 
             let timer = Timer.scheduledTimer(withTimeInterval: 7.0, repeats: false) { (action) in
@@ -118,8 +111,7 @@ class MessageView {
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.4) {
                     self.textLabel?.textColor = .black
-                    self.subview?.backgroundColor = UIColor(red: 194/255, green: 194/255, blue: 194/255, alpha: 0.9) //K.Colors.pink
-                    //  self.textLabel.backgroundColor = K.Colors.sectionBackground
+                    self.subview?.backgroundColor = UIColor(red: 194/255, green: 194/255, blue: 194/255, alpha: 0.9)//K.Colors.pink
                 }
                 let timer = Timer.scheduledTimer(withTimeInterval: 7.0, repeats: false) { (action) in
                     self.hideMessage()
@@ -128,6 +120,7 @@ class MessageView {
             }
             
         case .internetError:
+            
             DispatchQueue.main.async {
                 self.closeButton?.alpha = 0
                 UIView.animate(withDuration: 0.4) {
@@ -135,10 +128,8 @@ class MessageView {
                     self.subview?.backgroundColor = UIColor(red: 224/255, green: 18/255, blue: 0/255, alpha: 0.90)
                 }
                 let superframe = self.mainView.view.frame
-                self.textLabel?.textAlignment = .center
-                self.textLabel?.frame = CGRect(x: 0, y: 0, width: 140, height: windowHeight)
                 UIView.animate(withDuration: 0.3) {
-                    self.subview?.frame = CGRect(x: superframe.width - 160, y: self.mainView.view.frame.height - self.mainView.view.safeAreaInsets.bottom - windowHeight, width: width, height: windowHeight)
+                    self.subview?.frame = CGRect(x: x, y: superframe.height - self.mainView.view.safeAreaInsets.bottom - windowHeight, width: width, height: windowHeight)
                     
                 }
             }
@@ -147,7 +138,6 @@ class MessageView {
                 self.hideMessage()
             }
             timers.append(timer)
-
         }
         
         
@@ -166,11 +156,11 @@ class MessageView {
             self.textLabel?.alpha = 0
             self.subview?.layer.cornerRadius = 6
             self.subview?.layer.shadowColor = UIColor.black.cgColor
-            self.subview?.layer.shadowOpacity = 0.6
+            self.subview?.layer.shadowOpacity = 0.4
             self.subview?.layer.shadowOffset = .zero
             self.subview?.layer.shadowRadius = 6
             self.closeButton?.alpha = 0
-            self.closeButton?.setImage(UIImage(named: "cancel"), for: .normal)
+            self.closeButton?.setImage(UIImage(named: "closeNoBack"), for: .normal)
             self.closeButton?.addTarget(self, action: #selector(self.closeButtonPressed(_:)), for: .allEvents)
             self.subview?.frame = .zero
             self.subview?.alpha = 0

@@ -97,7 +97,7 @@ class LoginViewController: UIViewController {
                         self.logIn(nickname: name, password: password, loadedData: loadedData)
                     } else {
                         DispatchQueue.main.async {
-                            self.message.showMessage(text: "All fields are required", type: .error, windowHeight: 50)
+                            self.message.showMessage(text: "All fields are required", type: .error)
                         }
                         self.obthervValues = true
                         self.showWrongFields()
@@ -106,7 +106,7 @@ class LoginViewController: UIViewController {
             } else {
                 print("error!!!")
                 DispatchQueue.main.async {
-                    self.message.showMessage(text: "Error!", type: .error)
+                    self.message.showMessage(text: "Internet Error!", type: .error)
                 }
             }
         }
@@ -128,7 +128,7 @@ class LoginViewController: UIViewController {
                     if password != psswordFromDB {
                         print("wrong password", psswordFromDB)
                         DispatchQueue.main.async {
-                            self.message.showMessage(text: "wrong password", type: .error, windowHeight: 50)
+                            self.message.showMessage(text: "Wrong password", type: .error)
                         }
                     } else {
                         appData.username = nickname
@@ -139,7 +139,7 @@ class LoginViewController: UIViewController {
                         let wascats = appData.getCategories(key: "savedCategories")
                         let cats = wascats + appData.getCategories()
                         appData.saveCategories(cats, key: "savedCategories")
-                        appData.fromLoginVCMessage = "Wellcome, \(appData.username)\n"
+                        appData.fromLoginVCMessage = trans.count > 0 ? "Wellcome, \(appData.username), \nYour Data has been saved localy" : "Wellcome, \(appData.username)"
                         DispatchQueue.main.async {
                             self.performSegue(withIdentifier: "homeVC", sender: self)
                         }
@@ -150,7 +150,7 @@ class LoginViewController: UIViewController {
             }
         } else {
             DispatchQueue.main.async {
-                self.message.showMessage(text: "user not found", type: .error, windowHeight: 50)
+                self.message.showMessage(text: "User not found", type: .error)
             }
         }
     }
@@ -163,13 +163,12 @@ class LoginViewController: UIViewController {
                 self.createAccoun(loadedData: loadedData)
             } else {
                 DispatchQueue.main.async {
-                    self.message.showMessage(text: "Error!", type: .error)
+                    self.message.showMessage(text: "Internet Error!", type: .error)
                 }
             }
         }
     }
     
-    //test acc creating
     func createAccoun(loadedData: [[String]]) {
         hideKeyboard()
         DispatchQueue.main.async {
@@ -185,7 +184,7 @@ class LoginViewController: UIViewController {
                         save.Users(toDataString: toDataString) { (error) in
                             if error {
                                 print("error")
-                                self.message.showMessage(text: "Error!", type: .error)
+                                self.message.showMessage(text: "Internet Error!", type: .error)
                             } else {
                                 appData.username = name
                                 appData.password = password
@@ -193,8 +192,7 @@ class LoginViewController: UIViewController {
                                 appData.saveTransations(wasTransactions, key: "savedTransactions")
                                 let wasCats = appData.getCategories() + appData.getCategories(key: "savedCategories")
                                 appData.saveCategories(wasCats, key: "savedCategories")
-                                appData.fromLoginVCMessage = "Wellcome, \(appData.username)\n\(wasTransactions.count > 0 ? "\ndata has been saved localy" : "")"
-                                print("to home")
+                                appData.fromLoginVCMessage = wasTransactions.count > 0 ? "Wellcome, \(appData.username), \nYour Data has been saved localy" : "Wellcome, \(appData.username)"
                                 DispatchQueue.main.async {
                                     self.performSegue(withIdentifier: "homeVC", sender: self)
                                 }
@@ -203,24 +201,24 @@ class LoginViewController: UIViewController {
                         }
                         
                     } else {
-                        self.message.showMessage(text: "username '\(name)' is already taken", type: .error, windowHeight: 50)
+                        self.message.showMessage(text: "Username '\(name)' is already taken", type: .error, windowHeight: 65)
                         print("username '\(name)' is already taken")
                     }
                 
                 } else {
                     self.obthervValues = true
                     self.showWrongFields()
-                    self.message.showMessage(text: "all fields are required", type: .error, windowHeight: 50)
+                    self.message.showMessage(text: "All fields are required", type: .error)
                     print("all fields are required")
                 }
             } else {
-                self.message.showMessage(text: "passwords not much", type: .error, windowHeight: 50)
+                self.message.showMessage(text: "Passwords not match", type: .error)
                 print("passwords not much")
             }
         }
     }
 
-    func createDifference() {
+    /*  func createDifference() {
         let localData = Array(appData.transactions)
         print("createDifference: local \(localData.count)")
         print("createDifference: db \(DBTransactionsLazy.count)")
@@ -282,7 +280,7 @@ class LoginViewController: UIViewController {
         }
 
     }
-    
+    */
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         

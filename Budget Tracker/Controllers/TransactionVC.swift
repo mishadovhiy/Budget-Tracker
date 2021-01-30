@@ -108,11 +108,12 @@ class TransitionVC: UIViewController {
         commentTextField.addTarget(self, action: #selector(commentCount), for: .editingChanged)
         categoryTextField.isUserInteractionEnabled = false
         categoryTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(categoryPressed)))
-
-        dateTextField.attributedPlaceholder = NSAttributedString(string: UserDefaults.standard.value(forKey: "lastSelectedDate") as? String ?? appData.stringDate(appData.objects.datePicker), attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
-        commentTextField.attributedPlaceholder = NSAttributedString(string: "Short comment", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
-        purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white], for: .normal)
-        purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "darkTableColor") ?? .black], for: .selected)
+        DispatchQueue.main.async {
+            self.dateTextField.attributedPlaceholder = NSAttributedString(string: UserDefaults.standard.value(forKey: "lastSelectedDate") as? String ?? appData.stringDate(appData.objects.datePicker), attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
+            self.commentTextField.attributedPlaceholder = NSAttributedString(string: "Short comment", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
+            self.purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white], for: .normal)
+            self.purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "darkTableColor") ?? .black], for: .selected)
+        }
     
     }
     
@@ -247,14 +248,13 @@ class TransitionVC: UIViewController {
         
         if valueLabel.text != "0" {
             
-            let value = purposeSwitcher.selectedSegmentIndex == 0 ? "\((Double(valueLabel.text ?? "") ?? 0.0) * (-1))" : valueLabel.text ?? ""
-            //let category = purposeSwitcher.selectedSegmentIndex == 0 ? expenseArr[appData.selectedExpense] : incomeArr[appData.selectedIncome]
             DispatchQueue.main.async {
-                let category = self.categoryTextField.text ?? ""
+                let selectedSeg = self.purposeSwitcher.selectedSegmentIndex
+                let value = selectedSeg == 0 ? "\((Double(self.valueLabel.text ?? "") ?? 0.0) * (-1))" : self.valueLabel.text ?? ""
+                let category = self.categoryTextField.text ?? self.categoryTextField.placeholder!
                 let date = self.dateTextField.text ?? self.dateTextField.placeholder!
                 let comment = self.commentTextField.text ?? ""
-                print(date, "datedatedatedatedatedate")
-                self.addNew(value: value, category: category, date: date == "" ? self.dateTextField.placeholder ?? appData.stringDate(appData.objects.datePicker) : date, comment: comment)
+                self.addNew(value: value, category: category == "" ? self.categoryTextField.placeholder ?? (selectedSeg == 0 ? self.expenseArr[appData.selectedExpense] : self.incomeArr[appData.selectedIncome]) : category, date: date == "" ? self.dateTextField.placeholder ?? appData.stringDate(appData.objects.datePicker) : date, comment: comment)
             }
             
         } else {
@@ -305,31 +305,44 @@ class TransitionVC: UIViewController {
     
     @IBAction func purposeSwitched(_ sender: UISegmentedControl) {
         
+        var placeHolder = ""
         let index = sender.selectedSegmentIndex
         switch index {
-            
         case 0:
             minusPlusLabel.text = "-"
-            //categoryTextField.inputView = appData.objects.expensesPicker
-            categoryTextField.text = "\(expenseArr[appData.selectedExpense])"
+            categoryTextField.text = ""
+            if let cat = UserDefaults.standard.value(forKey: "lastSelectedCategory") as? String {
+                categoryTextField.placeholder = cat
+                let allCats = Array(expenseArr)
+                var found = false
+                for i in 0..<allCats.count {
+                    if allCats[i] == cat {
+                        found = true
+                    }
+                }
+                placeHolder = found == true ? cat : "\(expenseArr[appData.selectedExpense])"
+            } else {
+                placeHolder = "\(expenseArr[appData.selectedExpense])"
+            }
             showPadPressed(showValueButton)
             
         case 1:
             minusPlusLabel.text = "+"
-            //categoryTextField.inputView = appData.objects.incomePicker
-            categoryTextField.text = "\(incomeArr[appData.selectedIncome])"
+            categoryTextField.text = ""
+            placeHolder = "\(incomeArr[appData.selectedIncome])"
             showPadPressed(showValueButton)
             
         default:
-           // categoryTextField.inputView = appData.objects.expensesPicker
-            categoryTextField.placeholder = expenseArr[appData.selectedExpense]
+            placeHolder = expenseArr[appData.selectedExpense]
+        }
+        
+        DispatchQueue.main.async {
+            self.categoryTextField.attributedPlaceholder = NSAttributedString(string: placeHolder, attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
         }
     }
     
     @IBAction func showPadPressed(_ sender: UIButton) {
-        
         categoryTextField.endEditing(true)
-       // dateTextField.endEditing(true)
         commentTextField.endEditing(true)
         UIView.animate(withDuration: 0.2) {
             self.numbarPadView.alpha = 1
@@ -448,7 +461,9 @@ extension TransitionVC: CategoriesVCProtocol {
         purposeSwitcher.selectedSegmentIndex = purpose
         purposeSwitched(purposeSwitcher)
         categoryTextField.text = category
-        UserDefaults.standard.setValue(category, forKey: "lastSelectedCategory")
+        if purpose == 0 {
+            UserDefaults.standard.setValue(category, forKey: "lastSelectedCategory")
+        }
     }
     
     

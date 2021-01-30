@@ -88,7 +88,7 @@ class ViewController: UIViewController {
         return message
     }()
 
-    let tableCorners: CGFloat = 10
+    let tableCorners: CGFloat = 13
     var forseSendUnsendedData = true
     var forseShowAddButton = false
     var addTransFrame = CGRect.zero
@@ -97,8 +97,8 @@ class ViewController: UIViewController {
 
         updateUI()
         addTransitionButton.layer.cornerRadius = tableCorners
-        addTransitionButton.layer.maskedCorners = [.layerMaxXMinYCorner]
         prepareFilterOptions()
+
     }
     
     var viewLoadedvar = false
@@ -606,7 +606,7 @@ class ViewController: UIViewController {
                         self.filter()
                         self.prepareFilterOptions()
                         DispatchQueue.main.async {
-                            self.message.showMessage(text: error, type: .error)//internetError
+                            self.message.showMessage(text: error, type: .internetError)//internetError
                         }
                         
                     }
@@ -1011,7 +1011,7 @@ class ViewController: UIViewController {
             if appData.fromLoginVCMessage != "" {
                 print("appData.fromLoginVCMessage", appData.fromLoginVCMessage)
                 DispatchQueue.main.async {
-                    self.message.showMessage(text: appData.fromLoginVCMessage, type: .succsess, windowHeight: 200)
+                    self.message.showMessage(text: appData.fromLoginVCMessage, type: .succsess, windowHeight: 65)
                 }
             }
         }
@@ -1107,9 +1107,9 @@ class ViewController: UIViewController {
         }
     }
     @objc func unsavedPtransPressed(_ sender: UITapGestureRecognizer) {
-        if forseSendUnsendedData {
+        if !forseSendUnsendedData {
             DispatchQueue.main.async {
-                self.message.showMessage(text: "Data is sending now", type: .succsess)
+                self.message.showMessage(text: "Your data is sending", type: .succsess)
             }
         } else {
             DispatchQueue.main.async {
@@ -1129,6 +1129,19 @@ class ViewController: UIViewController {
     var sendingUnsendedData = false
     
     let tableActionActivityIndicator = UIActivityIndicatorView.init(style: .gray)
+    
+    @objc func incomePressed(_ sender: UITapGestureRecognizer) {
+        expenseLabelPressed = false
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: K.statisticSeque, sender: self)
+        }
+    }
+    @objc func expensesPressed(_ sender: UITapGestureRecognizer) {
+        expenseLabelPressed = true
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: K.statisticSeque, sender: self)
+        }
+    }
 }
 
 //MARK: - extension
@@ -1168,7 +1181,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 ai.startAnimating()
                 let labelFrame = calculationCell.unsesndedTransactionsLabel.layer.frame
                 ai.frame = CGRect(x: labelFrame.minX + 10, y: 12, width: 10, height: 10)
-                
                 calculationCell.unsesndedTransactionsLabel.superview?.addSubview(ai)
             } else {
                 ai.removeFromSuperview()
@@ -1191,6 +1203,8 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             calculationCell.savedTransactionsLabel.superview?.superview?.isHidden = sendedCount.count > 0  ? false : true
             
             calculationCell.setup(calculations: (totalBalance, sumExpenses, sumIncomes, sumPeriodBalance))
+            calculationCell.incomeLabel.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(incomePressed(_:))))
+            calculationCell.expensesLabel.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(expensesPressed(_:))))
             //calculationCell.unsesndedTransactionsLabel.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(unsavedPtransPressed(_:))))
             calculationCell.savedTransactionsLabel.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(savedTransPressed(_:))))
             return calculationCell
@@ -1210,7 +1224,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         
         switch indexPath.section {
         case 0:
-            performSegue(withIdentifier: K.statisticSeque, sender: self)
+            print("1")
         case 1..<(1 + newTableData.count):
             if selectedCell == indexPath {
                 selectedCell = nil

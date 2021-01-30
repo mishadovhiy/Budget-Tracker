@@ -94,6 +94,7 @@ class SettingsViewController: UIViewController {
     var toSegue = false
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         toSegue = true
+        let messageText = "Save or Delete data bellow"
         if segue.identifier == "toSingIn" {
             let vc = segue.destination as! LoginViewController
             vc.selectedScreen = .createAccount
@@ -101,7 +102,7 @@ class SettingsViewController: UIViewController {
             if segue.identifier == "toSavedData" {
                 let vc = segue.destination as! UnsendedDataVC
                 vc.delegate = self
-                vc.messageText = "Save or delete data bellow before Singing out"
+                vc.messageText = messageText
             }
         }
         
@@ -112,7 +113,7 @@ class SettingsViewController: UIViewController {
         case "toSavedData":
             let vc = segue.destination as! UnsendedDataVC
             vc.delegate = self
-            vc.messageText = "Save or delete data bellow before Singing out"
+            vc.messageText = messageText
         case "settingsToCategories":
             let vc = segue.destination as! CategoriesVC
             vc.delegate = self

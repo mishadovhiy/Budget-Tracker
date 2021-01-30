@@ -141,7 +141,7 @@ class CategoriesVC: UIViewController {
                 }
             } else {
                 DispatchQueue.main.async {
-                    self.message.showMessage(text: error, type: .error)
+                    self.message.showMessage(text: error, type: .internetError)
                     self.refreshControl.endRefreshing()
                 }
             }

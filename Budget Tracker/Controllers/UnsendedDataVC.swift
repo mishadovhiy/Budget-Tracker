@@ -46,7 +46,7 @@ class UnsendedDataVC: UIViewController {
         
         if messageText != "" {
             DispatchQueue.main.async {
-                self.message.showMessage(text: self.messageText, type: .error)
+                self.message.showMessage(text: self.messageText, type: .error, windowHeight: 65)
             }
         }
     }
@@ -71,10 +71,12 @@ class UnsendedDataVC: UIViewController {
     }
     
     @IBAction func deletePressed(_ sender: UIButton) {
-
         self.dismiss(animated: true) {
             self.delegate?.deletePressed()
         }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     }
     
 }
@@ -145,7 +147,7 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let mainFrame = self.view.frame
         let view = UIView(frame: CGRect(x: 0, y: 0, width: mainFrame.width, height: 25))
-        let labels = UILabel(frame: CGRect(x: 10, y: 0, width: mainFrame.width - 20, height: 25))
+        let labels = UILabel(frame: CGRect(x: mainTitleLabel.superview?.frame.minX ?? 0.0, y: 0, width: mainFrame.width - 20, height: 25))
         labels.text = section == 0 ? "Transactions" : "Categories"
         view.backgroundColor = UIColor(named: "darkTableColor")
         view.addSubview(labels)

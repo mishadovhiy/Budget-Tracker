@@ -11,30 +11,6 @@ import UIKit
 class FirstLaunchViewController: UIViewController {
 
     
-    //todo
-    //after data loaded
-    //check if user def != nil
-    //ask user
-    //seems like you have some saved data on your device would you like to replace it with data from database?
-    //replace my data
-    //upload my data on database
-    //see what do i have
-    
-    //on this screen they see toggle
-    //.on device
-    // - table data = userdef
-    //data from Database will stored on your device
-    //.on database
-    // - data = fromDB + userdef
-    //replace my data
-    //data from Database will stored on your device
-
-    
-    lazy var message: MessageView = {
-        let message = MessageView(self)
-        return message
-    }()
-    
     @IBOutlet var cornerButtons: [UIButton]!
     @IBOutlet weak var contentView: UIView!
     override func viewDidLoad() {
@@ -99,25 +75,17 @@ class FirstLaunchViewController: UIViewController {
     }
     
     @IBAction func CreateAccPressed(_ sender: UIButton) {
-        if appData.internetPresend != nil {
-            if (appData.internetPresend ?? false) {
-                DispatchQueue.main.async {
-                    self.performSegue(withIdentifier: "toSingIn", sender: self)
-                }
-            } else {
-                message.showMessage(text: "no intrnet", type: .error)
+        if (appData.internetPresend ?? false) {
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "toSingIn", sender: self)
             }
         }
     }
     
     @IBAction func singInPressed(_ sender: UIButton) {
-        if appData.internetPresend != nil {
-            if (appData.internetPresend ?? false) {
-                DispatchQueue.main.async {
-                    self.performSegue(withIdentifier: "toLogIn", sender: self)
-                }
-            } else {
-                message.showMessage(text: "no intrnet", type: .error)
+        if (appData.internetPresend ?? false) {
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "toLogIn", sender: self)
             }
         }
         
