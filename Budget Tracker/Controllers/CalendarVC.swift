@@ -132,6 +132,7 @@ class CalendarVC: UIViewController {
         year = appData.filter.getYearFromString(s: selectedFrom == "" ? today : selectedFrom)
         month = appData.filter.getMonthFromString(s: selectedFrom == "" ? today : selectedFrom)
         getDays()
+        doneButtonIsActive()
         /*if selectedTo == "" && selectedFrom == "" {
             toggleButton(b: startButton, hidden: true, animation: false)
             toggleButton(b: endButton, hidden: true, animation: false)

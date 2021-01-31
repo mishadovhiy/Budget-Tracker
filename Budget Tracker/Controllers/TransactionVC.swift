@@ -56,8 +56,8 @@ class TransitionVC: UIViewController {
         purposeSwitched(purposeSwitcher)
         getEditingdata()
         
+        
     }
-    
     
     override func viewWillDisappear(_ animated: Bool) {
         delegate?.quiteTransactionVC()
@@ -371,7 +371,7 @@ class TransitionVC: UIViewController {
     }
     
     @IBAction func erasePressed(_ sender: UIButton) {
-        
+
         if sender.tag == 1 {
             AudioServicesPlaySystemSound(1155)
             if pressedValue.count > 0 {
@@ -392,6 +392,8 @@ class TransitionVC: UIViewController {
         }
     }
     var lastSelectedDate = ""
+
+    
 }
 
 
