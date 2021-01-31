@@ -51,11 +51,8 @@ class LoginViewController: UIViewController {
     }
     
     func updateUI() {
-        
-        //message.initMessage()
-
         selectedScreen = appData.username != "" ? .createAccount : .singIn
-        toggleScreen(options: selectedScreen)
+        toggleScreen(options: selectedScreen, animation: 0.0)
         for i in 0..<textfields.count {
             DispatchQueue.main.async {
                 self.textfields[i].delegate = self
@@ -131,6 +128,13 @@ class LoginViewController: UIViewController {
                             self.message.showMessage(text: "Wrong password", type: .error, autoHide: false)
                         }
                     } else {
+                        if let keycheinPassword = KeychainService.loadPassword(service: "BudgetTrackerApp", account: nickname) {
+                            if keycheinPassword != password {
+                                KeychainService.updatePassword(service: "BudgetTrackerApp", account: nickname, data: password)
+                            }
+                        } else {
+                            KeychainService.savePassword(service: "BudgetTrackerApp", account: nickname, data: password)
+                        }
                         let prevUserName = appData.username
                         appData.username = nickname
                         appData.password = password
@@ -189,6 +193,7 @@ class LoginViewController: UIViewController {
                                 print("error")
                                 self.message.showMessage(text: "Internet Error!", type: .error, autoHide: false)
                             } else {
+                                KeychainService.savePassword(service: "BudgetTrackerApp", account: name, data: password)
                                 appData.username = name
                                 appData.password = password
                                 let wasTransactions = appData.transactions + appData.savedTransactions
@@ -199,7 +204,6 @@ class LoginViewController: UIViewController {
                                 DispatchQueue.main.async {
                                     self.performSegue(withIdentifier: "homeVC", sender: self)
                                 }
-                                
                             }
                         }
                         
@@ -325,6 +329,13 @@ class LoginViewController: UIViewController {
     //test if working
         for i in 0..<self.textfields.count {
             DispatchQueue.main.async {
+                if self.textfields[i] == self.emailLabel {
+                    if self.emailLabel.text != "" {
+                        UIView.animate(withDuration: 0.3) {
+                            self.textfields[i].backgroundColor = !(self.emailLabel.text ?? "").contains("@") ? K.Colors.negative : K.Colors.loginColor
+                        }
+                    }
+                }
                 UIView.animate(withDuration: 0.3) {
                     self.textfields[i].backgroundColor = self.textfields[i].text == "" ? K.Colors.negative : K.Colors.loginColor
                 }
@@ -423,6 +434,7 @@ class LoginViewController: UIViewController {
                     let selectedTextfieldd = textfields[index]
                     let dif = self.view.frame.height - CGFloat(keyboardHeight) - (selectedTextfieldd.superview?.frame.maxY ?? 0)
                     if dif < 20 {
+                        //here
                         DispatchQueue.main.async {
                             UIView.animate(withDuration: 0.3) {
                                 self.view.layer.frame = CGRect(x: 0, y: dif - 20, width: self.view.layer.frame.width, height: self.view.layer.frame.height)
@@ -465,26 +477,101 @@ extension LoginViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         switch textField {
         case nicknameLabelCreate:
-            DispatchQueue.main.async {
-                self.emailLabel.becomeFirstResponder()
+            if textField.text != "" {
+                DispatchQueue.main.async {
+                    self.emailLabel.becomeFirstResponder()
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.message.showMessage(text: "Create username", type: .error, autoHide: false)
+                    textField.endEditing(true)
+                }
             }
+            
         case emailLabel:
-            DispatchQueue.main.async {
-                self.passwordLabel.becomeFirstResponder()
+            if !(self.emailLabel.text ?? "").contains("@") || !(self.emailLabel.text ?? "").contains(".") {
+                DispatchQueue.main.async {
+                    self.message.showMessage(text: "Enter valid email address", type: .error, autoHide: false)
+                    textField.endEditing(true)
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.passwordLabel.becomeFirstResponder()
+                }
             }
         case passwordLabel:
-            DispatchQueue.main.async {
-                self.confirmPasswordLabel.becomeFirstResponder()
+            if textField.text != "" {
+                DispatchQueue.main.async {
+                    self.confirmPasswordLabel.becomeFirstResponder()
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.message.showMessage(text: "Create password", type: .error, autoHide: false)
+                    textField.endEditing(true)
+                }
             }
         case confirmPasswordLabel:
-            self.createAccountPressed(createAccButton!)
+            if let text = textField.text {
+                if text != "" {
+                    if text == passwordLabel.text {
+                        self.createAccountPressed(createAccButton!)
+                    } else {
+                        DispatchQueue.main.async {
+                            self.message.showMessage(text: "Passwords not match", type: .error, autoHide: false)
+                            textField.endEditing(true)
+                        }
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self.message.showMessage(text: "Repeat password", type: .error, autoHide: false)
+                        textField.endEditing(true)
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.message.showMessage(text: "Repeat password", type: .error, autoHide: false)
+                    textField.endEditing(true)
+                }
+            }
             
         case nicknameLogLabel:
-            DispatchQueue.main.async {
-                self.passwordLogLabel.becomeFirstResponder()
+            if let nick = textField.text {
+                if nick != "" {
+                    if let keychainPassword = KeychainService.loadPassword(service: "BudgetTrackerApp", account: nick) {
+                        DispatchQueue.main.async {
+                            self.passwordLogLabel.isSecureTextEntry = false
+                            self.passwordLogLabel.text = keychainPassword
+                            self.nicknameLogLabel.endEditing(true)
+                            self.message.showMessage(text: "Password loaded from Keychain", type: .succsess, windowHeight: 65)
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            self.passwordLogLabel.becomeFirstResponder()
+                        }
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self.message.showMessage(text: "Enter username", type: .error, autoHide: false)
+                        textField.endEditing(true)
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.message.showMessage(text: "Enter username", type: .error, autoHide: false)
+                    textField.endEditing(true)
+                }
             }
+            
+            
         case passwordLogLabel:
-            logInPressed(logInButton)
+            if textField.text != "" {
+                logInPressed(logInButton)
+            } else {
+                DispatchQueue.main.async {
+                    self.message.showMessage(text: "Enter password!", type: .error, autoHide: false)
+                    textField.endEditing(true)
+                }
+            }
         default:
             textField.endEditing(true)
         }

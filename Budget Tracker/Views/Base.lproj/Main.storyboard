@@ -355,8 +355,8 @@
                                     <constraint firstAttribute="trailing" secondItem="WWk-Hp-IW7" secondAttribute="trailing" id="yw5-no-iYW"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="trailing" contentVerticalAlignment="top" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zDz-M6-AUL" userLabel="AddTrancactionButton">
-                                <rect key="frame" x="368" y="93" width="60" height="50"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="top" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zDz-M6-AUL" userLabel="AddTrancactionButton">
+                                <rect key="frame" x="368" y="44" width="60" height="50"/>
                                 <color key="backgroundColor" name="darkTableColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="IOu-Yp-R4K"/>
@@ -479,6 +479,7 @@
                         <constraints>
                             <constraint firstItem="EPl-ii-IZL" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="5" id="0dN-Cy-NBs"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Aut-cX-vhd" secondAttribute="trailing" constant="50" id="3wV-OH-fwr"/>
+                            <constraint firstItem="zDz-M6-AUL" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="AD0-n6-cU5"/>
                             <constraint firstItem="Aut-cX-vhd" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="AVr-PA-I2G"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="EPl-ii-IZL" secondAttribute="trailing" priority="750" constant="60" id="GZf-v7-B2J"/>
                             <constraint firstAttribute="bottom" secondItem="4SO-16-o5D" secondAttribute="bottom" id="Ith-aG-VGB"/>
@@ -492,6 +493,7 @@
                             <constraint firstItem="4SO-16-o5D" firstAttribute="top" secondItem="EPl-ii-IZL" secondAttribute="bottom" constant="4" id="VdK-NJ-wdF"/>
                             <constraint firstItem="Aut-cX-vhd" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="200" id="YoF-1n-tJE"/>
                             <constraint firstItem="BBf-lk-CEi" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="300" id="aSL-d7-jKu"/>
+                            <constraint firstItem="zDz-M6-AUL" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="bXg-uw-dDh"/>
                             <constraint firstItem="69c-Jd-sTD" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="chy-qO-GBU"/>
                             <constraint firstItem="hpF-9J-sJH" firstAttribute="top" secondItem="EPl-ii-IZL" secondAttribute="bottom" constant="15" id="muZ-jp-Hlh"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="hpF-9J-sJH" secondAttribute="trailing" constant="20" id="oVb-oq-i7A"/>
@@ -1492,11 +1494,11 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="a4e-Fa-Fxv">
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="a4e-Fa-Fxv">
                                 <rect key="frame" x="10" y="788" width="408" height="40"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HhK-qw-Wp6">
-                                        <rect key="frame" x="0.0" y="0.0" width="298" height="40"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="199" height="40"/>
                                         <color key="backgroundColor" name="yellowColor"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                         <state key="normal" title="Save all">
@@ -1507,11 +1509,8 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Lb-ma-cUA">
-                                        <rect key="frame" x="308" y="0.0" width="100" height="40"/>
+                                        <rect key="frame" x="209" y="0.0" width="199" height="40"/>
                                         <color key="backgroundColor" name="negativeColor"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="100" id="Z6h-gT-uDN"/>
-                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                         <state key="normal" title="Delete all">
                                             <color key="titleColor" name="darkTableColor"/>
@@ -2176,7 +2175,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="IDN-MG-5hD"/>
-        <segue reference="xmO-tl-nHE"/>
+        <segue reference="IEc-ah-mh1"/>
         <segue reference="FRv-Os-SHO"/>
     </inferredMetricsTieBreakers>
     <resources>

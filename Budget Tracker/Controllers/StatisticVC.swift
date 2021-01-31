@@ -27,18 +27,20 @@ class StatisticVC: UIViewController, CALayerDelegate {
         super.viewDidLoad()
         updateUI()
         
-        if appData.defaults.value(forKey: "StatisticVCFirstLaunch") as? Bool ?? false == false {
-            appData.defaults.setValue(true, forKey: "StatisticVCFirstLaunch")
-            DispatchQueue.main.async {
-                self.message.showMessage(text: "Statistic for your transactions will be displayed here", type: .succsess, windowHeight: 80)
-            }
-        }
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         deselectAllCells()
         segmentControll.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white], for: .normal)
         segmentControll.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "darkTableColor") ?? .black], for: .selected)
+        
+        if appData.defaults.value(forKey: "StatisticVCFirstLaunch") as? Bool ?? false == false {
+            appData.defaults.setValue(true, forKey: "StatisticVCFirstLaunch")
+            DispatchQueue.main.async {
+                self.message.showMessage(text: "Statistic for your transactions will be displayed here", type: .succsess, windowHeight: 80)
+            }
+        }
     }
     
     func deselectAllCells() {

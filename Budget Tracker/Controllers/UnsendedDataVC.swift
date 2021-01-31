@@ -44,6 +44,10 @@ class UnsendedDataVC: UIViewController {
             self.mainTitleLabel.text = "Unsended Data"
         }
         
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
         if messageText != "" {
             DispatchQueue.main.async {
                 self.message.showMessage(text: self.messageText, type: .error, windowHeight: 65)

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		297BDB649113044757C2CEF2 /* Pods_Budget_Tracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F84A1AEB24B0EC857F848E0 /* Pods_Budget_Tracker.framework */; };
+		8B35DA6625C6F124008A8719 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B35DA6525C6F124008A8719 /* Keychain.swift */; };
 		8B8D556125BB218400D7C6A7 /* UnsendedDataVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D556025BB218400D7C6A7 /* UnsendedDataVC.swift */; };
 		8BD2E77C25B8622100D4DFBF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */; };
 		8D36724224D315BC00CE90A9 /* dbModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D36724124D315BC00CE90A9 /* dbModel.swift */; };
@@ -37,6 +38,7 @@
 		4495115F0F67B3D07EA6B233 /* Pods-Budget Tracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Budget Tracker.debug.xcconfig"; path = "Target Support Files/Pods-Budget Tracker/Pods-Budget Tracker.debug.xcconfig"; sourceTree = "<group>"; };
 		5F84A1AEB24B0EC857F848E0 /* Pods_Budget_Tracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Budget_Tracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60EB2258A12489890A827616 /* Pods-Budget Tracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Budget Tracker.release.xcconfig"; path = "Target Support Files/Pods-Budget Tracker/Pods-Budget Tracker.release.xcconfig"; sourceTree = "<group>"; };
+		8B35DA6525C6F124008A8719 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		8B8D556025BB218400D7C6A7 /* UnsendedDataVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsendedDataVC.swift; sourceTree = "<group>"; };
 		8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8D36724124D315BC00CE90A9 /* dbModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dbModel.swift; sourceTree = "<group>"; };
@@ -181,6 +183,7 @@
 				8DD89D8923F1472E00273904 /* MessageView.swift */,
 				8D5206662421695200772CD5 /* StatisticBrain.swift */,
 				8D36724124D315BC00CE90A9 /* dbModel.swift */,
+				8B35DA6525C6F124008A8719 /* Keychain.swift */,
 			);
 			path = Modal;
 			sourceTree = "<group>";
@@ -309,6 +312,7 @@
 				8DBA7E5423F0316F00D8214C /* ViewController.swift in Sources */,
 				8DBA7E5A23F0316F00D8214C /* Budget_Tracker.xcdatamodeld in Sources */,
 				8BD2E77C25B8622100D4DFBF /* LoginViewController.swift in Sources */,
+				8B35DA6625C6F124008A8719 /* Keychain.swift in Sources */,
 				8D8B6C3C245023D0007260A0 /* FilterTVC.swift in Sources */,
 				8DD89D9023F1496100273904 /* CategoriesVC.swift in Sources */,
 				8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */,
@@ -477,6 +481,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -501,6 +506,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "Dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
