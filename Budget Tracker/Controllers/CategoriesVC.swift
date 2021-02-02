@@ -130,6 +130,9 @@ class CategoriesVC: UIViewController {
         refreshControl.tintColor = UIColor.clear
         categoriesTableView.addSubview(refreshControl)
     }
+    @IBAction func addButtonPressedNavBar(_ sender: UIButton) {
+        addPressed()
+    }
     
     @objc func refresh(sender:AnyObject) {
         if appData.username != "" {
@@ -249,6 +252,10 @@ class CategoriesVC: UIViewController {
     }
     
     @IBAction func addCategoryPressed(_ sender: UIButton) {
+        addPressed()
+    }
+    
+    func addPressed() {
         let alert = UIAlertController(title: "Add Category", message: "", preferredStyle: .alert)
         alertTextFields(alert: alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
@@ -376,15 +383,12 @@ extension CategoriesVC: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        
         return catData.allPurposes.count
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        
         catData.purposeField.text = "\(catData.allPurposes[row])"
         catData.selectedPurpose = row
-    
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
@@ -392,7 +396,6 @@ extension CategoriesVC: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
-        
         let titleData = catData.allPurposes[row]
         let myTitle = NSAttributedString(string: "\(titleData)")
         return myTitle
