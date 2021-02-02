@@ -132,27 +132,29 @@ class CategoriesVC: UIViewController {
     }
     
     @objc func refresh(sender:AnyObject) {
-        let load = LoadFromDB()
-        load.Categories{ (loadedData, error) in
-            if error == "" {
-                print("loaded \(loadedData.count) Categories from DB")
-                var dataStruct: [CategoriesStruct] = []
-                for i in 0..<loadedData.count {
-                    
-                    let name = loadedData[i][1]
-                    let purpose = loadedData[i][2]
-                    dataStruct.append(CategoriesStruct(name: name, purpose: purpose))
-                }
-                appData.saveCategories(dataStruct)
-                self.getDataFromLocal()
-                DispatchQueue.main.async {
-                    self.categoriesTableView.reloadData()
-                    self.refreshControl.endRefreshing()
-                }
-            } else {
-                DispatchQueue.main.async {
-                    self.message.showMessage(text: error, type: .internetError)
-                    self.refreshControl.endRefreshing()
+        if appData.username != "" {
+            let load = LoadFromDB()
+            load.Categories{ (loadedData, error) in
+                if error == "" {
+                    print("loaded \(loadedData.count) Categories from DB")
+                    var dataStruct: [CategoriesStruct] = []
+                    for i in 0..<loadedData.count {
+                        
+                        let name = loadedData[i][1]
+                        let purpose = loadedData[i][2]
+                        dataStruct.append(CategoriesStruct(name: name, purpose: purpose))
+                    }
+                    appData.saveCategories(dataStruct)
+                    self.getDataFromLocal()
+                    DispatchQueue.main.async {
+                        self.categoriesTableView.reloadData()
+                        self.refreshControl.endRefreshing()
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self.message.showMessage(text: error, type: .internetError)
+                        self.refreshControl.endRefreshing()
+                    }
                 }
             }
         }
@@ -255,9 +257,16 @@ class CategoriesVC: UIViewController {
             if self.catData.categoryTextField.text != "" {
                 let name = self.catData.categoryTextField.text ?? ""
                 let purpose = self.catData.allPurposes[self.catData.selectedPurpose]
-                self.getDataFromLocal()
-                self.whenNoCategories()
-                self.sendToDBCategory(title: name, purpose: purpose)
+                if appData.username != "" {
+                    self.getDataFromLocal()
+                    self.whenNoCategories()
+                    self.sendToDBCategory(title: name, purpose: purpose)
+                } else {
+                    var categories = Array(appData.getCategories())
+                    categories.append(CategoriesStruct(name: name, purpose: purpose))
+                    appData.saveCategories(categories)
+                    self.getDataFromLocal()
+                }
             }
             
         }))

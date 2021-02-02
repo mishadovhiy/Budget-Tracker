@@ -585,14 +585,14 @@
                                 <inset key="separatorInset" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="categoriesVCTableViewCell" id="Ugt-jI-QpQ" customClass="categoriesVCcell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="428" height="50.666667938232422"/>
+                                        <rect key="frame" x="0.0" y="28" width="428" height="50.333332061767578"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Ugt-jI-QpQ" id="8cn-F5-cRV">
-                                            <rect key="frame" x="0.0" y="0.0" width="428" height="50.666667938232422"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="428" height="50.333332061767578"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="3" translatesAutoresizingMaskIntoConstraints="NO" id="IhM-qn-Xr4">
-                                                    <rect key="frame" x="15" y="15.000000000000002" width="398" height="20.666666666666671"/>
+                                                    <rect key="frame" x="15" y="14.999999999999998" width="398" height="20.333333333333329"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -2108,16 +2108,31 @@
                                     </button>
                                 </subviews>
                             </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uws-QE-80K">
+                                <rect key="frame" x="20" y="44" width="53" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="LNK-L7-nV2"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                <state key="normal" title="Log out">
+                                    <color key="titleColor" name="darkTableColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="logoutPressed:" destination="0Eo-nu-zqD" eventType="touchUpInside" id="jqo-gY-fRt"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="HXt-Te-kHW"/>
                         <color key="backgroundColor" name="backgroundColor"/>
                         <constraints>
+                            <constraint firstItem="uws-QE-80K" firstAttribute="top" secondItem="HXt-Te-kHW" secondAttribute="top" id="154-FE-RAW"/>
                             <constraint firstItem="AtE-QO-VWI" firstAttribute="centerY" secondItem="5D2-tn-xUE" secondAttribute="centerY" id="4qU-zp-zhk"/>
                             <constraint firstItem="bti-UC-r4O" firstAttribute="centerY" secondItem="5D2-tn-xUE" secondAttribute="centerY" id="H4Q-Go-qp0"/>
                             <constraint firstItem="bti-UC-r4O" firstAttribute="centerX" secondItem="5D2-tn-xUE" secondAttribute="centerX" id="IeZ-Ed-kMm"/>
                             <constraint firstItem="AtE-QO-VWI" firstAttribute="centerX" secondItem="5D2-tn-xUE" secondAttribute="centerX" id="QH2-we-6qs"/>
                             <constraint firstItem="HXt-Te-kHW" firstAttribute="bottom" secondItem="AMq-j6-RyC" secondAttribute="bottom" constant="10" id="Qzz-JB-tcI"/>
                             <constraint firstItem="AMq-j6-RyC" firstAttribute="leading" secondItem="HXt-Te-kHW" secondAttribute="leading" constant="10" id="UsO-YD-XYZ"/>
+                            <constraint firstItem="uws-QE-80K" firstAttribute="leading" secondItem="HXt-Te-kHW" secondAttribute="leading" constant="20" id="YWb-N1-9Sw"/>
                             <constraint firstItem="HXt-Te-kHW" firstAttribute="trailing" secondItem="AMq-j6-RyC" secondAttribute="trailing" constant="10" id="ok1-u2-0EH"/>
                             <constraint firstItem="HXt-Te-kHW" firstAttribute="trailing" secondItem="2Mj-XW-BxI" secondAttribute="trailing" id="wi4-VC-gYH"/>
                             <constraint firstItem="2Mj-XW-BxI" firstAttribute="top" secondItem="HXt-Te-kHW" secondAttribute="top" id="wkG-aj-Up8"/>
@@ -2134,6 +2149,7 @@
                         <outlet property="emailLabel" destination="wDy-cj-hbF" id="qmD-ui-EXF"/>
                         <outlet property="logIn" destination="bti-UC-r4O" id="tyx-u5-dRR"/>
                         <outlet property="logInButton" destination="jAi-aR-1SG" id="w0t-Hg-SGw"/>
+                        <outlet property="logoutButton" destination="uws-QE-80K" id="RH8-CX-Wj9"/>
                         <outlet property="nicknameLabelCreate" destination="b2y-GT-giL" id="K7S-EK-stz"/>
                         <outlet property="nicknameLogLabel" destination="ts5-aX-D2m" id="hVp-sl-oag"/>
                         <outlet property="passwordLabel" destination="knY-zE-qZO" id="wGW-R3-qU1"/>

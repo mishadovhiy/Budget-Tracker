@@ -594,7 +594,10 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
         cellBackground(cell: cell)
         backgroundBetween(cell: cell)
         if cell.cellTypeLabel.text == today {
-            cell.dayLabel.textColor = K.Colors.negative
+            print("found today")
+            DispatchQueue.main.async {
+                cell.dayLabel.textColor = K.Colors.negative
+            }
         }
         return cell
     }

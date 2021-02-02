@@ -1392,16 +1392,23 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
 extension ViewController: TransitionVCProtocol {
     func addNewTransaction(value: String, category: String, date: String, comment: String) {
         let new = TransactionsStruct(value: value, category: category, date: date, comment: comment)
-        let toDataString = "&Nickname=\(appData.username)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
-        let save = SaveToDB()
-        save.Transactions(toDataString: toDataString) { (error) in
-            if error {
-                let neew: String = "&Nickname=\(appData.username)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
-                appData.unsendedData.append(["transaction": neew])
+        if appData.username != "" {
+            let toDataString = "&Nickname=\(appData.username)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
+            let save = SaveToDB()
+            save.Transactions(toDataString: toDataString) { (error) in
+                if error {
+                    let neew: String = "&Nickname=\(appData.username)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
+                    appData.unsendedData.append(["transaction": neew])
+                }
+                if self.editingTransaction != nil {
+                    self.editingTransaction = nil
+                }
+                var trans = appData.transactions
+                trans.append(new)
+                appData.saveTransations(trans)
+                self.filter()
             }
-            if self.editingTransaction != nil {
-                self.editingTransaction = nil
-            }
+        } else {
             var trans = appData.transactions
             trans.append(new)
             appData.saveTransations(trans)

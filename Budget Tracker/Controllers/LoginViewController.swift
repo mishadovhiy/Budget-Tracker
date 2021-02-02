@@ -39,6 +39,7 @@ class LoginViewController: UIViewController {
         let message = MessageView(self)
         return message
     }()
+    @IBOutlet weak var logoutButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +48,23 @@ class LoginViewController: UIViewController {
         print("localTransactions:", appData.transactions.count)
         
         updateUI()
+        
+        if appData.username != "" {
+            //show logout button
+            logoutButton.alpha = 1
+        } else {
+            logoutButton.alpha = 0
+        }
 
+    }
+    @IBAction func logoutPressed(_ sender: UIButton) {
+        appData.username = ""
+        appData.password = ""
+        DispatchQueue.main.async {
+            self.nicknameLogLabel.text = ""
+            self.passwordLogLabel.text = ""
+            self.performSegue(withIdentifier: "homeVC", sender: self)
+        }
     }
     
     func updateUI() {

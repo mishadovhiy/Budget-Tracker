@@ -223,14 +223,8 @@ class TransitionVC: UIViewController {
 
         UIImpactFeedbackGenerator().impactOccurred()
         print("addNew called", date)
-        if appData.username != "" {
-            self.dismiss(animated: true) {
-                self.delegate?.addNewTransaction(value: value, category: category, date: date, comment: comment)
-            }
-        } else {
-            self.dismiss(animated: true) {
-                self.delegate?.addNewTransaction(value: value, category: category, date: date, comment: comment)
-            }
+        self.dismiss(animated: true) {
+            self.delegate?.addNewTransaction(value: value, category: category, date: date, comment: comment)
         }
         
 
