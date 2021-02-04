@@ -434,13 +434,6 @@ class ViewController: UIViewController {
                     let save = SaveToDB()
                     var newCategories = appData.getCategories(key: "savedCategories")
                     print("sendUnsaved unsaved cats", newCategories.count)
-                    if newCategories.count == 0 {
-                        sendSavedData = false
-                        sendindSavedData = false
-                        DispatchQueue.main.async {
-                            self.message.showMessage(text: "Your data has been sended successfully", type: .succsess, windowHeight: 65)
-                        }
-                    }
                     if let categoryy = newCategories.first {
                         let toDataStringg = "&Nickname=\(appData.username)" + "&Title=\(categoryy.name)" + "&Purpose=\(categoryy.purpose)"
                         save.Categories(toDataString: toDataStringg) { (error) in
@@ -482,6 +475,12 @@ class ViewController: UIViewController {
                                     appData.saveTransations(alldata)
                                     self.filter()
                                 }
+                            }
+                        } else {
+                            sendSavedData = false
+                            sendindSavedData = false
+                            DispatchQueue.main.async {
+                                self.message.showMessage(text: "Your data has been sended successfully", type: .succsess, windowHeight: 65)
                             }
                         }
                     }
