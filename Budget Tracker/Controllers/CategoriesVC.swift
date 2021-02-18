@@ -344,7 +344,7 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
         let mainFrame = self.view.frame
         let view = UIView(frame: CGRect(x: 0, y: 0, width: mainFrame.width, height: 25))
         let lightBackground = K.Colors.background //UIColor(red: 194/255, green: 194/255, blue: 194/255, alpha: 1)
-        let darkBackground = UIColor(red: 13/255, green: 15/255, blue: 19/255, alpha: 1)
+        let darkBackground = UIColor(red: 30/255, green: 30/255, blue: 30/255, alpha: 1)
         view.backgroundColor = self.view.backgroundColor == K.Colors.background ? lightBackground : darkBackground
         let label = UILabel(frame: CGRect(x: 15, y: 5, width: mainFrame.width - 40, height: 20))
         label.text = section == 0 ? K.expense : K.income

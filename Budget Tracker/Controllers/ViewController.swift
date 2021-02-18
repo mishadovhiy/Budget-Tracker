@@ -88,7 +88,7 @@ class ViewController: UIViewController {
         return message
     }()
 
-    let tableCorners: CGFloat = 13
+    let tableCorners: CGFloat = 22
     var forseSendUnsendedData = true
     var forseShowAddButton = false
     var addTransFrame = CGRect.zero
