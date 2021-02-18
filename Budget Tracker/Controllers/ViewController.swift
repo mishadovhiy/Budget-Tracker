@@ -40,9 +40,12 @@ class ViewController: UIViewController {
         }
         set {
             _TableData = newValue
+            let lastDownloadDate = UserDefaults.standard.value(forKey: "LastLoadDataDate") as? Date ?? Date()
+            let component = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: lastDownloadDate)
+            let lastLaunxText = "Updated: \(component.year ?? 0).\(self.makeTwo(n: component.month ?? 0)).\(self.makeTwo(n: component.day ?? 0)), \(self.makeTwo(n: component.hour ?? 0)):\(self.makeTwo(n: component.minute ?? 0)):\(self.makeTwo(n: component.second ?? 0))"
             DispatchQueue.main.async {
                 self.tableActionActivityIndicator.removeFromSuperview()
-                self.dataCountLabel.text = "Data count: \(self.tableData.count)"
+                self.dataCountLabel.text = "Transactions: \(self.tableData.count)\(appData.username != "" ? "\n\(lastLaunxText)" : "")"
                 self.filterTextLabel.text = "Filter: \(selectedPeroud)"
                 self.mainTableView.reloadData()
                 if self.refreshControl.isRefreshing {
@@ -124,7 +127,7 @@ class ViewController: UIViewController {
             self.filterHelperView.backgroundColor = K.Colors.pink
             self.refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
             let superWidth = self.view.frame.width
-            self.refreshSubview.frame = CGRect(x: superWidth / 2 - 10, y: 2, width: 20, height: 20)
+            self.refreshSubview.frame = CGRect(x: superWidth / 2 - 10, y: 5, width: 20, height: 20)
             print(self.refreshSubview.frame, "ijhyghujijnhj")
             let image = UIImage(named: "plusIcon")
             let button = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
@@ -480,7 +483,7 @@ class ViewController: UIViewController {
                             sendSavedData = false
                             sendindSavedData = false
                             DispatchQueue.main.async {
-                                self.message.showMessage(text: "Your data has been sended successfully", type: .succsess, windowHeight: 65)
+                                self.message.showMessage(text: "Data has been sended successfully", type: .succsess, windowHeight: 65)
                             }
                         }
                     }
@@ -602,7 +605,7 @@ class ViewController: UIViewController {
                                     let purpose = loadedDataa[i][2]
                                     dataStructt.append(CategoriesStruct(name: name, purpose: purpose))
                                 }
-                                UserDefaults.standard.setValue("\(Date())", forKey: "LastLoadDataDate")
+                                UserDefaults.standard.setValue(Date(), forKey: "LastLoadDataDate")
                                 appData.saveCategories(dataStructt)
                                 self.filter()
                                 

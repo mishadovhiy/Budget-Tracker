@@ -96,6 +96,10 @@ class AppData {
     var unsavedCategoriesAppended = false
     var fromLoginVCMessage = ""
     
+    func makeTwo(int: Int) -> String {
+        return int <= 9 ? "0\(int)" : "\(int)"
+    }
+    
     //savedTransactions
     //unsavedTransactions
     func saveTransations(_ data: [TransactionsStruct], key: String = "transactionsData") {
