@@ -45,7 +45,7 @@ class ViewController: UIViewController {
             let lastLaunxText = "Updated: \(component.year ?? 0).\(self.makeTwo(n: component.month ?? 0)).\(self.makeTwo(n: component.day ?? 0)), \(self.makeTwo(n: component.hour ?? 0)):\(self.makeTwo(n: component.minute ?? 0)):\(self.makeTwo(n: component.second ?? 0))"
             DispatchQueue.main.async {
                 self.calculationSView.alpha = 0
-                UIView.animate(withDuration: 0.6) {
+                UIView.animate(withDuration: 0.8) {
                     self.calculationSView.alpha = 1
                 }
                 self.tableActionActivityIndicator.removeFromSuperview()
@@ -1018,7 +1018,9 @@ class ViewController: UIViewController {
         case "toSettings":
             let vc = segue.destination as! SettingsViewController
             vc.delegate = self
-            
+          //  UIView.animate(withDuration: 0.4) {
+               // self.calculationSView.alpha = 0
+          //m  }
         default: return
         }
  
@@ -1148,7 +1150,6 @@ class ViewController: UIViewController {
     }
     
     var unsendedValue = 0
-    
     var sendingUnsendedData = false
     
     let tableActionActivityIndicator = UIActivityIndicatorView.init(style: .gray)
@@ -1166,7 +1167,8 @@ class ViewController: UIViewController {
         }
     }
     
-
+    
+    var animateCellWillAppear = true
 }
 
 //MARK: - extension
@@ -1274,14 +1276,16 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         case 0:
             print("1")
         case 1..<(1 + newTableData.count):
-            if selectedCell == indexPath {
-                selectedCell = nil
-            } else {
-                previusSelected = selectedCell
-                selectedCell = indexPath
-            }
-            DispatchQueue.main.async {
-                self.mainTableView.reloadRows(at: [indexPath, self.previusSelected ?? indexPath], with: .automatic)
+            if newTableData[indexPath.section-1].transactions[indexPath.row].comment != "" {
+                if selectedCell == indexPath {
+                    selectedCell = nil
+                } else {
+                    previusSelected = selectedCell
+                    selectedCell = indexPath
+                }
+                DispatchQueue.main.async {
+                    self.mainTableView.reloadRows(at: [indexPath, self.previusSelected ?? indexPath], with: .middle)
+                }
             }
         default:
             print("1")
@@ -1368,14 +1372,17 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        
+        ///
         if indexPath.section == 0 {
             DispatchQueue.main.async {
+                if self.newTableData.count > 0 {
+                    self.mainTableView.backgroundColor = UIColor(named: "darkTableColor") ?? .black
+                }
                 self.mainTableView.layer.masksToBounds = true
                 self.mainTableView.layer.cornerRadius = self.tableCorners
                 self.mainTableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
                 self.addTransitionButton.isHidden = false
-                UIView.animate(withDuration: 0.2) {
+                UIView.animate(withDuration: self.animateCellWillAppear ? 0.2 : 0) {
                     let superframe = self.filterView.superview?.frame ?? .zero
                     let selfFrame = self.filterView.frame
                     self.filterView.frame = CGRect(x: selfFrame.minX, y: -superframe.height, width: selfFrame.width, height: selfFrame.height)
@@ -1389,9 +1396,12 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         
         if indexPath.section == 0 {
             DispatchQueue.main.async {
+                if self.newTableData.count > 0 {
+                    self.mainTableView.backgroundColor = .clear
+                }
                 self.mainTableView.layer.cornerRadius = 0
                 self.addTransitionButton.isHidden = !self.forseShowAddButton ? true : false
-                UIView.animate(withDuration: 0.3) {
+                UIView.animate(withDuration: self.animateCellWillAppear ? 0.3 : 0) {
                     let superframe = self.calculationSView.superview?.frame ?? .zero
                     let selfFrame = self.calculationSView.frame
                     self.calculationSView.frame = CGRect(x: selfFrame.minX, y: -superframe.height, width: selfFrame.width, height: selfFrame.height)
@@ -1405,12 +1415,11 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
 extension ViewController: TransitionVCProtocol {
     func addNewTransaction(value: String, category: String, date: String, comment: String) {
         let new = TransactionsStruct(value: value, category: category, date: date, comment: comment)
-        DispatchQueue.main.async {
-            self.calculationSView.alpha = 0
-            UIView.animate(withDuration: 0.6) {
-                self.calculationSView.alpha = 1
-            }
+        self.animateCellWillAppear = false
+        Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (_) in
+            self.animateCellWillAppear = true
         }
+
         if value != "" && category != "" && date != "" {
             if appData.username != "" {
                 let toDataString = "&Nickname=\(appData.username)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
@@ -1465,11 +1474,9 @@ extension ViewController: UnsendedDataVCProtocol {
 
 extension ViewController: SettingsViewControllerProtocol {
     func closeSettings(sendSavedData: Bool) {
-        DispatchQueue.main.async {
-            self.calculationSView.alpha = 0
-            UIView.animate(withDuration: 0.6) {
-                self.calculationSView.alpha = 1
-            }
+        self.animateCellWillAppear = false
+        Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (_) in
+            self.animateCellWillAppear = true
         }
         if sendSavedData {
             self.sendSavedData = true
