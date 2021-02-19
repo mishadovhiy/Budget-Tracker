@@ -82,11 +82,6 @@ class SettingsViewController: UIViewController {
         contentView.layer.shadowOpacity = 1
         contentView.layer.shadowOffset = .zero
         contentView.layer.shadowRadius = 10
-        
-        
-        //view.isUserInteractionEnabled = true
-        
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {

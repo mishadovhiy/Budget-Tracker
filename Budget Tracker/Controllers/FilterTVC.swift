@@ -51,9 +51,8 @@ class FilterTVC: UIViewController {
     
     func vcAppearence() {
         self.tableview.layer.masksToBounds = true
-        self.tableview.layer.cornerRadius = 5
+        self.tableview.layer.cornerRadius = 9
         tableview.cellLayoutMarginsFollowReadableWidth = true
-        //self.tableview.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
 
         DispatchQueue.main.async {
             self.tableview.beginUpdates()
@@ -71,7 +70,6 @@ class FilterTVC: UIViewController {
     
     
     @IBAction func closePressed(_ sender: UIButton) {
-       // self.dismiss(animated: true, completion: nil)
         DispatchQueue.main.async {
             self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
         }

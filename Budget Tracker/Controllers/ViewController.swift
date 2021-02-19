@@ -44,6 +44,10 @@ class ViewController: UIViewController {
             let component = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: lastDownloadDate)
             let lastLaunxText = "Updated: \(component.year ?? 0).\(self.makeTwo(n: component.month ?? 0)).\(self.makeTwo(n: component.day ?? 0)), \(self.makeTwo(n: component.hour ?? 0)):\(self.makeTwo(n: component.minute ?? 0)):\(self.makeTwo(n: component.second ?? 0))"
             DispatchQueue.main.async {
+                self.calculationSView.alpha = 0
+                UIView.animate(withDuration: 0.6) {
+                    self.calculationSView.alpha = 1
+                }
                 self.tableActionActivityIndicator.removeFromSuperview()
                 self.dataCountLabel.text = "Transactions: \(self.tableData.count)\(appData.username != "" ? "\n\(lastLaunxText)" : "")"
                 self.filterTextLabel.text = "Filter: \(selectedPeroud)"
@@ -105,8 +109,6 @@ class ViewController: UIViewController {
     
     func updateUI() {
         addTransitionButton.translatesAutoresizingMaskIntoConstraints = true
-        //self.filterView.translatesAutoresizingMaskIntoConstraints = true
-        
         self.mainTableView.backgroundColor = K.Colors.background
         downloadFromDB()
         self.mainTableView.delegate = self
@@ -122,9 +124,19 @@ class ViewController: UIViewController {
             self.filterHelperView.layer.shadowOpacity = 0.3
             self.filterHelperView.layer.shadowOffset = .zero
             self.filterHelperView.layer.shadowRadius = 10
-            self.filterHelperView.layer.cornerRadius = 5
-            
+            self.filterHelperView.layer.cornerRadius = 9
             self.filterHelperView.backgroundColor = K.Colors.pink
+            self.filterView.superview?.layer.masksToBounds = true
+            self.filterView.superview?.translatesAutoresizingMaskIntoConstraints = true
+            self.filterView.translatesAutoresizingMaskIntoConstraints = true
+            self.calculationSView.translatesAutoresizingMaskIntoConstraints = true
+            self.filterAndCalcFrameHolder.0 = self.filterView.frame
+            self.filterAndCalcFrameHolder.1 = self.calculationSView.frame
+            
+            let superframe = self.calculationSView.superview?.frame ?? .zero
+            let calcFrame = self.calculationSView.frame
+            self.calculationSView.frame = CGRect(x: -superframe.height, y: calcFrame.minY, width: calcFrame.width, height: calcFrame.height)
+            
             self.refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
             let superWidth = self.view.frame.width
             self.refreshSubview.frame = CGRect(x: superWidth / 2 - 10, y: 5, width: 20, height: 20)
@@ -154,12 +166,9 @@ class ViewController: UIViewController {
 
     }
     
+    var filterAndCalcFrameHolder = (CGRect.zero, CGRect.zero)
     var viewLoadedvar = false
     override func viewDidLayoutSubviews() {
-        /*filterView.layer.masksToBounds = true
-        filterView.layer.cornerRadius = 6
-        filterView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]*/
-
         if !viewLoadedvar {
             whiteBackgroundFrame = whiteBackground.frame
         }
@@ -934,7 +943,6 @@ class ViewController: UIViewController {
     
     var filteredData:[String: [String]] = [:]
     func prepareFilterOptions() {
-        //filteredData
         let arr = Array(appData.transactions.sorted{ $0.dateFromString > $1.dateFromString })
         var months:[String] = []
         var years:[String] = []
@@ -947,9 +955,6 @@ class ViewController: UIViewController {
                 years.append(removeDayMonthFromString(arr[i].date))
             }
         }
-       /* DispatchQueue.main.async {
-            self.tableview.reloadData()
-        }*/
         filteredData = [
             "months":months,
             "years":years
@@ -985,9 +990,10 @@ class ViewController: UIViewController {
             vc?.years = filteredData["years"] ?? []
             DispatchQueue.main.async {
                 let filterFrame = self.filterView.frame
-                let vcFrame = CGRect(x: filterFrame.minX, y: filterFrame.minY, width: filterFrame.width /*(filterFrame.width + 50) / 2*/, height: filterFrame.width)
+                let superFilter = self.filterView.superview?.frame ?? .zero
+                let vcFrame = CGRect(x: filterFrame.minX + superFilter.minX, y: filterFrame.minY + superFilter.minY, width: filterFrame.width, height: filterFrame.width)
                 vc?.frame = vcFrame
-                self.filterHelperView.frame = CGRect(x: filterFrame.minX, y: filterFrame.minY, width: vcFrame.width, height: vcFrame.height)
+                self.filterHelperView.frame = CGRect(x: filterFrame.minX + superFilter.minX, y: filterFrame.minY + superFilter.minY, width: vcFrame.width, height: vcFrame.height)
                 self.filterHelperView.alpha = 0
                 
                 UIView.animate(withDuration: 0.2) {
@@ -1035,7 +1041,7 @@ class ViewController: UIViewController {
     }
     
     
-    //from filter
+    //from filter //quitFilterTVC
     @IBAction func unwindToFilter(segue: UIStoryboardSegue) {
         DispatchQueue.global(qos: .userInteractive).async {
             DispatchQueue.main.async {
@@ -1365,13 +1371,16 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         
         if indexPath.section == 0 {
             DispatchQueue.main.async {
-                self.calculationSView.alpha = 1
-                self.filterView.alpha = 0
                 self.mainTableView.layer.masksToBounds = true
                 self.mainTableView.layer.cornerRadius = self.tableCorners
                 self.mainTableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
                 self.addTransitionButton.isHidden = false
-
+                UIView.animate(withDuration: 0.2) {
+                    let superframe = self.filterView.superview?.frame ?? .zero
+                    let selfFrame = self.filterView.frame
+                    self.filterView.frame = CGRect(x: selfFrame.minX, y: -superframe.height, width: selfFrame.width, height: selfFrame.height)
+                    self.calculationSView.frame = self.filterAndCalcFrameHolder.1
+                }
             }
         }
     }
@@ -1380,12 +1389,14 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         
         if indexPath.section == 0 {
             DispatchQueue.main.async {
-                self.filterView.alpha = 1
-                self.calculationSView.alpha = 0
                 self.mainTableView.layer.cornerRadius = 0
                 self.addTransitionButton.isHidden = !self.forseShowAddButton ? true : false
-                
-                
+                UIView.animate(withDuration: 0.3) {
+                    let superframe = self.calculationSView.superview?.frame ?? .zero
+                    let selfFrame = self.calculationSView.frame
+                    self.calculationSView.frame = CGRect(x: selfFrame.minX, y: -superframe.height, width: selfFrame.width, height: selfFrame.height)
+                    self.filterView.frame = self.filterAndCalcFrameHolder.0
+                }
             }
         }
     }
@@ -1394,27 +1405,35 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
 extension ViewController: TransitionVCProtocol {
     func addNewTransaction(value: String, category: String, date: String, comment: String) {
         let new = TransactionsStruct(value: value, category: category, date: date, comment: comment)
-        if appData.username != "" {
-            let toDataString = "&Nickname=\(appData.username)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
-            let save = SaveToDB()
-            save.Transactions(toDataString: toDataString) { (error) in
-                if error {
-                    let neew: String = "&Nickname=\(appData.username)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
-                    appData.unsendedData.append(["transaction": neew])
+        DispatchQueue.main.async {
+            self.calculationSView.alpha = 0
+            UIView.animate(withDuration: 0.6) {
+                self.calculationSView.alpha = 1
+            }
+        }
+        if value != "" && category != "" && date != "" {
+            if appData.username != "" {
+                let toDataString = "&Nickname=\(appData.username)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
+                let save = SaveToDB()
+                save.Transactions(toDataString: toDataString) { (error) in
+                    if error {
+                        let neew: String = "&Nickname=\(appData.username)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
+                        appData.unsendedData.append(["transaction": neew])
+                    }
+                    if self.editingTransaction != nil {
+                        self.editingTransaction = nil
+                    }
+                    var trans = appData.transactions
+                    trans.append(new)
+                    appData.saveTransations(trans)
+                    self.filter()
                 }
-                if self.editingTransaction != nil {
-                    self.editingTransaction = nil
-                }
+            } else {
                 var trans = appData.transactions
                 trans.append(new)
                 appData.saveTransations(trans)
                 self.filter()
             }
-        } else {
-            var trans = appData.transactions
-            trans.append(new)
-            appData.saveTransations(trans)
-            self.filter()
         }
     }
     
@@ -1446,6 +1465,12 @@ extension ViewController: UnsendedDataVCProtocol {
 
 extension ViewController: SettingsViewControllerProtocol {
     func closeSettings(sendSavedData: Bool) {
+        DispatchQueue.main.async {
+            self.calculationSView.alpha = 0
+            UIView.animate(withDuration: 0.6) {
+                self.calculationSView.alpha = 1
+            }
+        }
         if sendSavedData {
             self.sendSavedData = true
             filter()

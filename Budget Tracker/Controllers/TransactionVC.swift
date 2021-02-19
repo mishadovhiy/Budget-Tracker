@@ -61,6 +61,9 @@ class TransitionVC: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         delegate?.quiteTransactionVC()
+        if !donePressed {
+            self.delegate?.addNewTransaction(value: "", category: "", date: "", comment: "")
+        }
     }
 
     
@@ -133,7 +136,6 @@ class TransitionVC: UIViewController {
     
     
     func delegates(fields: [UITextField]) {
-        
         for i in 0..<fields.count {
             fields[i].delegate = self
         }
@@ -160,7 +162,6 @@ class TransitionVC: UIViewController {
     }
     
     func getEditingdata() {
-        
         if editingDate != "" {
             if editingValue > 0.0 {
                 editingValueAmount(segment: 1, multiply: 1)
@@ -171,17 +172,21 @@ class TransitionVC: UIViewController {
                 self.isModalInPresentation = true
             }
             minusPlusLabel.alpha = 1
-            categoryTextField.text = editingCategory
-            dateTextField.text = editingDate
-            commentTextField.text = editingComment
+            DispatchQueue.main.async {
+                self.categoryTextField.text = self.editingCategory
+                self.dateTextField.text = self.editingDate
+                self.commentTextField.text = self.editingComment
+            }
             editingCategoryHolder = editingCategory
             editingDateHolder = editingDate
             editingValueHolder = editingValue
             editingCommentHolder = editingComment
-            if (commentTextField.text?.count ?? 0) > 0 {
-                commentCountLabel.text = "\(30 - (commentTextField.text?.count ?? 0))"
-                UIView.animate(withDuration: 0.2) {
-                    self.commentCountLabel.alpha = 1
+            DispatchQueue.main.async {
+                if (self.commentTextField.text?.count ?? 0) > 0 {
+                    self.commentCountLabel.text = "\(30 - (self.commentTextField.text?.count ?? 0))"
+                    UIView.animate(withDuration: 0.2) {
+                        self.commentCountLabel.alpha = 1
+                    }
                 }
             }
         } else {
@@ -196,7 +201,9 @@ class TransitionVC: UIViewController {
         
         self.purposeSwitcher.selectedSegmentIndex = segment
         self.purposeSwitched(self.purposeSwitcher)
-        valueLabel.text = "\(Int(editingValue) * multiply)"
+        DispatchQueue.main.async {
+            self.valueLabel.text = "\(Int(self.editingValue) * multiply)"
+        }
         pressedValue = "\(Int(editingValue) * multiply)"
     }
     
@@ -219,19 +226,18 @@ class TransitionVC: UIViewController {
         }
     }
     
+    
+    var donePressed = false
     func addNew(value: String, category: String, date: String, comment: String) {
-
+        donePressed = true
         UIImpactFeedbackGenerator().impactOccurred()
         print("addNew called", date)
         self.dismiss(animated: true) {
             self.delegate?.addNewTransaction(value: value, category: category, date: date, comment: comment)
         }
-        
-
     }
     
     @objc func valueLabelColor() {
-        
         valueLabel.textColor = K.Colors.category
         minusPlusLabel.textColor = K.Colors.category
     }
@@ -239,25 +245,21 @@ class TransitionVC: UIViewController {
 
     
     @IBAction func donePressed(_ sender: UIButton) {
-        
-        if valueLabel.text != "0" {
-            
-            DispatchQueue.main.async {
+        DispatchQueue.main.async {
+            if self.valueLabel.text != "0" {
                 let selectedSeg = self.purposeSwitcher.selectedSegmentIndex
                 let value = selectedSeg == 0 ? "\((Double(self.valueLabel.text ?? "") ?? 0.0) * (-1))" : self.valueLabel.text ?? ""
                 let category = self.categoryTextField.text ?? self.categoryTextField.placeholder!
                 let date = self.dateTextField.text ?? self.dateTextField.placeholder!
                 let comment = self.commentTextField.text ?? ""
                 self.addNew(value: value, category: category == "" ? self.categoryTextField.placeholder ?? (selectedSeg == 0 ? self.expenseArr[appData.selectedExpense] : self.incomeArr[appData.selectedIncome]) : category, date: date == "" ? self.dateTextField.placeholder ?? appData.stringDate(appData.objects.datePicker) : date, comment: comment)
+            } else {
+                self.errorSaving()
             }
-            
-        } else {
-            errorSaving()
         }
     }
     
     func errorSaving() {
-        
         var wasHidden = false
         let bounds = valueLabel.bounds
         if minusPlusLabel.alpha == 0 {
@@ -284,9 +286,7 @@ class TransitionVC: UIViewController {
     }
     
     @IBAction func cancelPressed(_ sender: UIButton) {
-        
         if editingDate != "" {
-
             let value = "\(editingValueHolder)"
             let category = editingCategoryHolder
             let date = editingDateHolder
@@ -298,7 +298,6 @@ class TransitionVC: UIViewController {
     }
     
     @IBAction func purposeSwitched(_ sender: UISegmentedControl) {
-        
         var placeHolder = ""
         let index = sender.selectedSegmentIndex
         switch index {
