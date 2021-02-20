@@ -16,7 +16,7 @@ protocol CategoriesVCProtocol {
 class CategoriesVC: UIViewController {
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var categoriesTableView: UITableView!
+    @IBOutlet weak var tableView: UITableView!
     var catData = appData.categoryVC
     var refreshControl = UIRefreshControl()
     var allCategoriesData = Array(appData.getCategories())
@@ -25,6 +25,16 @@ class CategoriesVC: UIViewController {
     var fromSettings = false
     var delegate: CategoriesVCProtocol?
     var darkAppearence = false
+    
+    var transactions: [TransactionsStruct] {
+        get {
+            if fromSettings {
+                return appData.transactions
+            } else {
+                return []
+            }
+        }
+    }
     
     lazy var message: MessageView = {
         let message = MessageView(self)
@@ -45,7 +55,7 @@ class CategoriesVC: UIViewController {
         whenNoCategories()
         print("expenses: \(expenses.count), incomes: \(incomes.count)")
         DispatchQueue.main.async {
-            self.categoriesTableView.reloadData()
+            self.tableView.reloadData()
         }
         
         
@@ -60,16 +70,16 @@ class CategoriesVC: UIViewController {
             if darkAppearence {
                 self.view.backgroundColor = UIColor(named: "darkTableColor")
                 self.headerView.backgroundColor = UIColor(named: "darkTableColor")
-                self.categoriesTableView.backgroundColor = UIColor(named: "darkTableColor")
-                self.categoriesTableView.separatorColor = UIColor(named: "darkSeparetor")
+                self.tableView.backgroundColor = UIColor(named: "darkTableColor")
+                self.tableView.separatorColor = UIColor(named: "darkSeparetor")
             }
         } else {
             DispatchQueue.main.async {
                 if self.darkAppearence {
                     self.view.backgroundColor = UIColor(named: "darkTableColor")
                     self.headerView.backgroundColor = UIColor(named: "darkTableColor")
-                    self.categoriesTableView.backgroundColor = UIColor(named: "darkTableColor")
-                    self.categoriesTableView.separatorColor = UIColor(named: "darkSeparetor")
+                    self.tableView.backgroundColor = UIColor(named: "darkTableColor")
+                    self.tableView.separatorColor = UIColor(named: "darkSeparetor")
                 }
             }
         }
@@ -78,8 +88,10 @@ class CategoriesVC: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if delegate != nil {
-            navigationController?.setNavigationBarHidden(false, animated: true)
+        navigationController?.setNavigationBarHidden(fromSettings ? true : false, animated: true)
+        for i in 0..<tableView.visibleCells.count {
+            let indexPath = IndexPath(row: i, section: 0)
+            tableView.deselectRow(at: indexPath, animated: true)
         }
     }
     override func viewWillDisappear(_ animated: Bool) {
@@ -96,8 +108,8 @@ class CategoriesVC: UIViewController {
         getDataFromLocal()
         catData.purposPicker.delegate = self
         catData.purposPicker.dataSource = self
-        categoriesTableView.delegate = self
-        categoriesTableView.dataSource = self
+        tableView.delegate = self
+        tableView.dataSource = self
         addRefreshControll()
         whenNoCategories()
         let hiseCatsSwipe: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(hideCats(_:)))
@@ -108,10 +120,10 @@ class CategoriesVC: UIViewController {
             title = "Categories"
             DispatchQueue.main.async {
                 let frame = self.headerView.frame
-                let selfFrame = self.categoriesTableView.frame
+                let selfFrame = self.tableView.frame
                 self.headerView.isHidden = true
-                self.categoriesTableView.translatesAutoresizingMaskIntoConstraints = true
-                self.categoriesTableView.frame = CGRect(x: 0, y: frame.minY, width: selfFrame.width, height: selfFrame.height + frame.height)
+                self.tableView.translatesAutoresizingMaskIntoConstraints = true
+                self.tableView.frame = CGRect(x: 0, y: frame.minY, width: selfFrame.width, height: selfFrame.height + frame.height)
             }
         }
     }
@@ -125,10 +137,7 @@ class CategoriesVC: UIViewController {
     func addRefreshControll() {
         
         refreshControl.addTarget(self, action: #selector(refresh(sender:)), for: UIControl.Event.valueChanged)
-        refreshControl.attributedTitle = NSAttributedString(string: "+")
-        refreshControl.backgroundColor = UIColor.clear
-        refreshControl.tintColor = UIColor.clear
-        categoriesTableView.addSubview(refreshControl)
+        tableView.addSubview(refreshControl)
     }
     @IBAction func addButtonPressedNavBar(_ sender: UIButton) {
         addPressed()
@@ -150,7 +159,7 @@ class CategoriesVC: UIViewController {
                     appData.saveCategories(dataStruct)
                     self.getDataFromLocal()
                     DispatchQueue.main.async {
-                        self.categoriesTableView.reloadData()
+                        self.tableView.reloadData()
                         self.refreshControl.endRefreshing()
                     }
                 } else {
@@ -164,7 +173,6 @@ class CategoriesVC: UIViewController {
     }
     
     func whenNoCategories() {
-        
         if expenses.count == 0 && incomes.count == 0 {
             DispatchQueue.main.async {
                 self.titleLabel.text = "No categories"
@@ -179,7 +187,6 @@ class CategoriesVC: UIViewController {
     }
     
     func alertTextFields(alert: UIAlertController) {
-        
         alert.addTextField { (category) in
             category.placeholder = "Category name"
             self.catData.categoryTextField = category
@@ -193,7 +200,6 @@ class CategoriesVC: UIViewController {
     }
     
     func sendToDBCategory(title: String, purpose: String) {
-        
         wasEdited = true
         let Nickname = appData.username
         if Nickname != "" {
@@ -208,10 +214,7 @@ class CategoriesVC: UIViewController {
                     appData.unsendedData.append(["category": toDataString])
                 }
             }
-            
         }
-
-
     }
     
     //here
@@ -288,6 +291,31 @@ class CategoriesVC: UIViewController {
         
     }
     
+    var historyDataStruct: [TransactionsStruct] = []
+    var selectedCategoryName = ""
+    func toHistory(category: String) {
+        historyDataStruct = []
+        for i in 0..<transactions.count {
+            if transactions[i].category == category {
+                historyDataStruct.append(transactions[i])
+            }
+        }
+        
+        selectedCategoryName = category
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: "toHistory", sender: self)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toHistory" {
+            let vc = segue.destination as! HistoryVC
+            vc.historyDataStruct = historyDataStruct
+            vc.selectedCategoryName = selectedCategoryName
+            vc.fromCategories = true
+        }
+    }
+    
 }
 
 
@@ -320,8 +348,39 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent, for: indexPath) as! categoriesVCcell
         
         switch indexPath.section {
-        case 0: cell.categoryNameLabel.text = expenses[indexPath.row]
-        case 1: cell.categoryNameLabel.text = incomes[indexPath.row]
+        case 0:
+            cell.categoryNameLabel.text = expenses[indexPath.row]
+            var amount = 0
+            for i in 0..<transactions.count {
+                if transactions[i].category == expenses[indexPath.row] {
+                    print("i", indexPath.row, expenses[indexPath.row])
+                    amount += 1
+                }
+            }
+            if fromSettings {
+                cell.qntLabel.text = "\(amount)"
+            } else {
+                cell.qntLabel.text = ""
+                cell.accessoryType = .none
+            }
+            
+            
+        case 1:
+            cell.categoryNameLabel.text = incomes[indexPath.row]
+            var amount = 0
+            for transaction in transactions {
+                if transaction.category == incomes[indexPath.row] {
+                    print("i", indexPath.row, incomes[indexPath.row])
+                    amount += 1
+                }
+            }
+            if fromSettings {
+                cell.qntLabel.text = "\(amount)"
+            } else {
+                cell.qntLabel.text = ""
+                cell.accessoryType = .none
+            }
+            
         default:
             cell.categoryNameLabel.text = incomes[indexPath.row]
             
@@ -364,9 +423,18 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if delegate != nil {
+        if !fromSettings {
             delegate?.categorySelected(category: indexPath.section == 0 ? expenses[indexPath.row] : incomes[indexPath.row], purpose: indexPath.section)
             navigationController?.popToRootViewController(animated: true)
+        } else {
+            if indexPath.section == 0 {
+                toHistory(category: expenses[indexPath.row])
+            } else {
+                if indexPath.section == 1 {
+                    toHistory(category: incomes[indexPath.row])
+                }
+            }
+            
         }
     }
     

@@ -8,8 +8,7 @@
 
 import UIKit
 import CorePlot
-var historyDataStruct = [HistoryDataStruct]()
-var selectedCategoryName = ""
+
 var sum = 0.0
 
 class StatisticVC: UIViewController, CALayerDelegate {
@@ -23,11 +22,12 @@ class StatisticVC: UIViewController, CALayerDelegate {
         return message
     }()
     
+    var dataFromMain: [TransactionsStruct] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUI()
-        
-        
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -91,7 +91,9 @@ class StatisticVC: UIViewController, CALayerDelegate {
                     allData.append(GraphDataStruct(category: key, value: value))
                 }
             }
-            titleLabel.text = "Expenses for \(selectedPeroud)"
+            DispatchQueue.main.async {
+                self.titleLabel.text = "Expenses for \(selectedPeroud)"
+            }
             ifNoData()
             return allData.sorted(by: { $1.value > $0.value})
         } else {
@@ -100,7 +102,9 @@ class StatisticVC: UIViewController, CALayerDelegate {
                     allData.append(GraphDataStruct(category: key, value: value))
                 }
             }
-            titleLabel.text = "Incomes for \(selectedPeroud)"
+            DispatchQueue.main.async {
+                self.titleLabel.text = "Incomes for \(selectedPeroud)"
+            }
             ifNoData()
             return allData.sorted(by: { $0.value > $1.value})
         }
@@ -109,10 +113,14 @@ class StatisticVC: UIViewController, CALayerDelegate {
     
     func ifNoData() {
         if allData.count == 0 {
-            titleLabel.textAlignment = .center
-            titleLabel.text = "No " + (titleLabel.text ?? "Data")
+            DispatchQueue.main.async {
+                self.titleLabel.textAlignment = .center
+                self.titleLabel.text = "No " + (self.titleLabel.text ?? "Data")
+            }
         } else {
-            titleLabel.textAlignment = .left
+            DispatchQueue.main.async {
+                self.titleLabel.textAlignment = .left
+            }
         }
     }
     
@@ -131,16 +139,30 @@ class StatisticVC: UIViewController, CALayerDelegate {
         self.dismiss(animated: true, completion: nil)
     }
     
-    func getHistoryScruct(indexPathRow: Int) {
-        
-        for i in 0..<allSelectedTransactionsData.count {
-            if allData[indexPathRow].category == allSelectedTransactionsData[i].category {
-                let data = allSelectedTransactionsData[i]
-                historyDataStruct.append(HistoryDataStruct(value: Double(data.value) ?? 0.0, date: data.date))
+    var historyDataStruct: [TransactionsStruct] = []
+    var selectedCategoryName = ""
+    func toHistoryVC(indexPathRow: Int) {
+        historyDataStruct = []
+        for i in 0..<dataFromMain.count {
+            if allData[indexPathRow].category == dataFromMain[i].category {
+                historyDataStruct.append(dataFromMain[i])
             }
         }
+        print(historyDataStruct.count, "historyDataStructhistoryDataStructhistoryDataStructhistoryDataStruct")
         selectedCategoryName = allData[indexPathRow].category
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: "toHistorySeque", sender: self)
+        }
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toHistorySeque" {
+            let vc = segue.destination as! HistoryVC
+            vc.historyDataStruct = historyDataStruct
+            vc.selectedCategoryName = selectedCategoryName
+        }
+    }
+    
     
     func initPlot() {
         hostView.allowPinchScaling = false
@@ -244,12 +266,8 @@ extension StatisticVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        historyDataStruct = [HistoryDataStruct]()
         DispatchQueue.init(label: "sort", qos: .userInteractive).async {
-            self.getHistoryScruct(indexPathRow: indexPath.row)
-            DispatchQueue.main.sync {
-                self.performSegue(withIdentifier: K.historySeque, sender: self)
-            }
+            self.toHistoryVC(indexPathRow: indexPath.row)
         }
     }
 
@@ -306,7 +324,3 @@ struct GraphDataStruct {
     var value: Double
 }
 
-struct HistoryDataStruct {
-    var value: Double
-    var date: String
-}

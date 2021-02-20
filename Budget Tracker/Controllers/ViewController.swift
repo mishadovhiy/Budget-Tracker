@@ -569,7 +569,7 @@ class ViewController: UIViewController {
     }
     
     var unsavedTransactionsCount = 0
-    var previusSelected: IndexPath? = nil
+   // var previusSelected: IndexPath? = nil
     var selectedCell: IndexPath? = nil
 
     
@@ -605,6 +605,7 @@ class ViewController: UIViewController {
                         appData.saveTransations(dataStruct)
                         self.prepareFilterOptions()
                         load.Categories{(loadedDataa, error) in
+                            print(loadedDataa)
                             if error == "" {
                                 print("loaded \(loadedData.count) Categories from DB")
                                 var dataStructt: [CategoriesStruct] = []
@@ -980,7 +981,7 @@ class ViewController: UIViewController {
     var filterHelperView = UIView(frame: .zero)
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         print("prepare")
-
+        selectedCell = nil
         switch segue.identifier {
         case "toFiterVC":
             prevSelectedPer = selectedPeroud
@@ -1021,6 +1022,11 @@ class ViewController: UIViewController {
           //  UIView.animate(withDuration: 0.4) {
                // self.calculationSView.alpha = 0
           //m  }
+        
+        case K.statisticSeque:
+            let nav = segue.destination as! UINavigationController
+            let vc = nav.topViewController as! StatisticVC
+            vc.dataFromMain = tableData
         default: return
         }
  
@@ -1277,14 +1283,14 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             print("1")
         case 1..<(1 + newTableData.count):
             if newTableData[indexPath.section-1].transactions[indexPath.row].comment != "" {
+                let previusSelected = selectedCell
                 if selectedCell == indexPath {
                     selectedCell = nil
                 } else {
-                    previusSelected = selectedCell
                     selectedCell = indexPath
                 }
                 DispatchQueue.main.async {
-                    self.mainTableView.reloadRows(at: [indexPath, self.previusSelected ?? indexPath], with: .middle)
+                    self.mainTableView.reloadRows(at: previusSelected != nil ? [indexPath, previusSelected ?? indexPath] : [indexPath], with: .middle)
                 }
             }
         default:

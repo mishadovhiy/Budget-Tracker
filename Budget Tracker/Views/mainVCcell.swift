@@ -114,6 +114,7 @@ class calcCell: UITableViewCell {
 class categoriesVCcell: UITableViewCell {
     
     @IBOutlet weak var categoryNameLabel: UILabel!
+    @IBOutlet weak var qntLabel: UILabel!
     
 }
 

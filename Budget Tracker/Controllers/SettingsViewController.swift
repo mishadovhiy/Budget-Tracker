@@ -120,7 +120,8 @@ class SettingsViewController: UIViewController {
             vc.delegate = self
             vc.messageText = messageText
         case "settingsToCategories":
-            let vc = segue.destination as! CategoriesVC
+            let nav = segue.destination as! UINavigationController
+            let vc = nav.topViewController as! CategoriesVC
             vc.delegate = self
             vc.fromSettings = true
         default:

@@ -28,8 +28,6 @@ struct LoadFromDB {
                     completion([], "Internet Error!")
                     return
                 }
-                print(data, "datadatadatadata")
-                print(jsonResult, "jsonResultjsonResultjsonResultjsonResult")
                 var jsonElement = NSDictionary()
                 
                 for i in 0..<jsonResult.count {
@@ -87,9 +85,10 @@ struct LoadFromDB {
                         if appData.username == (jsonElement["Nickname"] as? String ?? "") {
                             if let name = jsonElement["Nickname"] as? String,
                                let title = jsonElement["Title"] as? String,
-                               let purpose = jsonElement["Purpose"] as? String
+                               let purpose = jsonElement["Purpose"] as? String,
+                               let isExpecting = jsonElement["ExpectingPayment"] as? String
                             {
-                                loadedData.append([name, title, purpose])
+                                loadedData.append([name, title, purpose, isExpecting])
                             }
                             
                         }
