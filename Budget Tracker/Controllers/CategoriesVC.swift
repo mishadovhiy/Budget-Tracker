@@ -129,13 +129,12 @@ class CategoriesVC: UIViewController {
     }
     
     @objc func hideCats(_ gesture: UISwipeGestureRecognizer) {
-        
-        self.dismiss(animated: true, completion: nil)
-        
+        DispatchQueue.main.async {
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     
     func addRefreshControll() {
-        
         refreshControl.addTarget(self, action: #selector(refresh(sender:)), for: UIControl.Event.valueChanged)
         tableView.addSubview(refreshControl)
     }
