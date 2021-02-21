@@ -15,7 +15,6 @@ class FilterTVC: UIViewController {
     var years: [String] = []
     var sectionsCount = 3
     var buttonTitle = ["All Time", "This Month", "Today", "Yesterday", "Custom"]
-    //let data = appData.transactions.sorted{ $0.dateFromString > $1.dateFromString }
     
     @IBOutlet weak var tableview: UITableView!
     
@@ -40,6 +39,10 @@ class FilterTVC: UIViewController {
     
     var vcAppeared = false
     override func viewWillLayoutSubviews() {
+        
+    }
+    
+    override func viewDidLayoutSubviews() {
         if !vcAppeared {
             vcAppearence()
         }
@@ -47,7 +50,6 @@ class FilterTVC: UIViewController {
     
     func vcAppearence() {
         vcAppeared = true
-        print(frame, "knjbvgyhujiklmnbhvghbjnkmlmknjbhjik")
         DispatchQueue.main.async {
             self.tableview.beginUpdates()
             self.tableview.cellLayoutMarginsFollowReadableWidth = true
@@ -56,11 +58,18 @@ class FilterTVC: UIViewController {
             self.tableview.layer.cornerRadius = 9
             self.tableview.alpha = 1
             self.tableview.layer.frame = CGRect(x: self.frame.minX, y: 0, width: self.frame.width, height: self.frame.height)
+            
             UIView.animate(withDuration: 0.2) {
                 self.tableview.layer.frame = self.frame
             } completion: { (_) in
+                self.tableview.cellLayoutMarginsFollowReadableWidth = true
                 self.tableview.endUpdates()
                 self.tableview.reloadData()
+                for i in 0..<self.tableview.visibleCells.count {
+                    self.tableview.visibleCells[i].translatesAutoresizingMaskIntoConstraints = true
+                    let cellFrame = self.tableview.visibleCells[i].frame
+                    self.tableview.visibleCells[i].frame = CGRect(x: cellFrame.minX, y: cellFrame.minY, width: self.frame.width, height: cellFrame.height)
+                }
             }
         }
         
@@ -263,10 +272,18 @@ extension FilterTVC: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        
+        cell.translatesAutoresizingMaskIntoConstraints = true
+        let cellFrame = cell.frame
+        cell.frame = CGRect(x: cellFrame.minX, y: cellFrame.minY, width: tableView.frame.width, height: cellFrame.height)
+        print(cellFrame, cell.frame)
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: K.filterCell, for: indexPath) as! FilterCell
-        
+
         var data = ""
         switch indexPath.section {
         case 0:

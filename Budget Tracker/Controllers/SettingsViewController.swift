@@ -100,21 +100,11 @@ class SettingsViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         toSegue = true
         let messageText = "Save or Delete data bellow"
-        if segue.identifier == "toSingIn" {
-            let vc = segue.destination as! LoginViewController
-            vc.selectedScreen = .createAccount
-        } else {
-            if segue.identifier == "toSavedData" {
-                let vc = segue.destination as! UnsendedDataVC
-                vc.delegate = self
-                vc.messageText = messageText
-            }
-        }
         
         switch segue.identifier {
         case "toSingIn":
             let vc = segue.destination as! LoginViewController
-            vc.selectedScreen = .createAccount
+            vc.selectedScreen = .singIn
         case "toSavedData":
             let vc = segue.destination as! UnsendedDataVC
             vc.delegate = self

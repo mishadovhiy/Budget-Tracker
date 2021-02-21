@@ -338,6 +338,9 @@ class ViewController: UIViewController {
             DispatchQueue.main.async {
                 self.filterTextLabel.text = newValue
             }
+            for i in 0..<self.timers.count {
+                self.timers[i].invalidate()
+            }
             if newValue != "Filter: \(selectedPeroud)" {
                 let timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { (timer) in
                     if self._filterText == "Filter: \(selectedPeroud)" {
@@ -367,10 +370,6 @@ class ViewController: UIViewController {
                     }
                 }
                 timers.append(timer)
-            } else {
-                for i in 0..<self.timers.count {
-                    self.timers[i].invalidate()
-                }
             }
         }
     }
