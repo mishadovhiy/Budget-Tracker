@@ -613,7 +613,7 @@ class ViewController: UIViewController {
                                     
                                     let name = loadedDataa[i][1]
                                     let purpose = loadedDataa[i][2]
-                                    dataStructt.append(CategoriesStruct(name: name, purpose: purpose))
+                                    dataStructt.append(CategoriesStruct(name: name, purpose: purpose, count: 0))
                                 }
                                 UserDefaults.standard.setValue(Date(), forKey: "LastLoadDataDate")
                                 appData.saveCategories(dataStructt)
@@ -716,7 +716,6 @@ class ViewController: UIViewController {
                     let comment = appData.transactionsCoreData[i].comment ?? ""
                     
                     alldata.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
-                    
                 }
                 appData.saveTransations(alldata)
                 print(appData.transactions, "transactions setted to defaults")
@@ -740,12 +739,10 @@ class ViewController: UIViewController {
             
             if appData.categoriesCoreData.count != 0 {
                 var allData = appData.getCategories()
-                
                 for i in 0..<appData.categoriesCoreData.count {
                     let name = appData.categoriesCoreData[i].name ?? ""
                     let purpose = appData.categoriesCoreData[i].purpose ?? ""
-                    
-                    allData.append(CategoriesStruct(name: name, purpose: purpose))
+                    allData.append(CategoriesStruct(name: name, purpose: purpose, count: 0))
                 }
                 appData.saveCategories(allData)
                 print(appData.getCategories(), "categories setted to defaults")
@@ -838,19 +835,12 @@ class ViewController: UIViewController {
                 i.text = "\(Int(self.sumIncomes))"
                 e.text = "\(Int(self.sumExpenses) * -1)"
             }
-            
-            
         } else {
-            
             DispatchQueue.main.async {
                 i.text = "\(self.sumIncomes)"
                 e.text = "\(self.sumExpenses * -1)"
             }
-            
         }
-        
-        
-        
         print("recalculating labels")
     }
     

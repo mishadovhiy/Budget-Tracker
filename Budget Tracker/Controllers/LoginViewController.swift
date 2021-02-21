@@ -672,7 +672,7 @@ var DBCategories:[CategoriesStruct] {
         let dick = appData.defaults.value(forKey: "DBCategories") as? [[String]] ?? []
         var data: [CategoriesStruct] = []
         for i in 0..<dick.count {
-            data.append(CategoriesStruct(name: dick[i][1], purpose: dick[i][2]))
+            data.append(CategoriesStruct(name: dick[i][1], purpose: dick[i][2], count: 0))
         }
         print("DBCategories: returned \(data.count)")
         return data

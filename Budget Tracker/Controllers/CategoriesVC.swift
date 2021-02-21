@@ -47,13 +47,16 @@ class CategoriesVC: UIViewController {
         let categories = Array(appData.getCategories())
         for i in 0..<categories.count {
             if categories[i].purpose == K.expense {
-                expenses.append(categories[i].name)
+                expenses.append((categories[i].name, categories[i].count))
             } else {
-                incomes.append(categories[i].name)
+                incomes.append((categories[i].name, categories[i].count))
             }
         }
         whenNoCategories()
         print("expenses: \(expenses.count), incomes: \(incomes.count)")
+        expenses = expenses.sorted { $0.1 > $1.1 }
+        incomes = incomes.sorted { $0.1 > $1.1 }
+        
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
@@ -61,8 +64,8 @@ class CategoriesVC: UIViewController {
         
     }
     
-    var expenses: [String] = []
-    var incomes: [String] = []
+    var expenses: [(String, Int)] = []
+    var incomes: [(String, Int)] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -91,7 +94,9 @@ class CategoriesVC: UIViewController {
         navigationController?.setNavigationBarHidden(fromSettings ? true : false, animated: true)
         for i in 0..<tableView.visibleCells.count {
             let indexPath = IndexPath(row: i, section: 0)
-            tableView.deselectRow(at: indexPath, animated: true)
+            DispatchQueue.main.async {
+                self.tableView.deselectRow(at: indexPath, animated: true)
+            }
         }
     }
     override func viewWillDisappear(_ animated: Bool) {
@@ -153,7 +158,7 @@ class CategoriesVC: UIViewController {
                         
                         let name = loadedData[i][1]
                         let purpose = loadedData[i][2]
-                        dataStruct.append(CategoriesStruct(name: name, purpose: purpose))
+                        dataStruct.append(CategoriesStruct(name: name, purpose: purpose, count: 0))
                     }
                     appData.saveCategories(dataStruct)
                     self.getDataFromLocal()
@@ -206,7 +211,7 @@ class CategoriesVC: UIViewController {
             let save = SaveToDB()
             save.Categories(toDataString: toDataString) { (error) in
                 var categories = Array(appData.getCategories())
-                categories.append(CategoriesStruct(name: title, purpose: purpose))
+                categories.append(CategoriesStruct(name: title, purpose: purpose, count: 0))
                 appData.saveCategories(categories)
                 self.getDataFromLocal()
                 if error {
@@ -237,10 +242,10 @@ class CategoriesVC: UIViewController {
                 }
                 var result: [CategoriesStruct] = []
                 for i in 0..<self.incomes.count {
-                    result.append(CategoriesStruct(name: self.incomes[i], purpose: K.income))
+                    result.append(CategoriesStruct(name: self.incomes[i].0, purpose: K.income, count: 0))
                 }
                 for i in 0..<self.expenses.count {
-                    result.append(CategoriesStruct(name: self.expenses[i], purpose: K.expense))
+                    result.append(CategoriesStruct(name: self.expenses[i].0, purpose: K.expense, count: 0))
                 }
                 self.allCategoriesData = result
                 appData.saveCategories(self.allCategoriesData)
@@ -272,7 +277,7 @@ class CategoriesVC: UIViewController {
                     self.sendToDBCategory(title: name, purpose: purpose)
                 } else {
                     var categories = Array(appData.getCategories())
-                    categories.append(CategoriesStruct(name: name, purpose: purpose))
+                    categories.append(CategoriesStruct(name: name, purpose: purpose, count: 0))
                     appData.saveCategories(categories)
                     self.getDataFromLocal()
                 }
@@ -348,41 +353,14 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
         
         switch indexPath.section {
         case 0:
-            cell.categoryNameLabel.text = expenses[indexPath.row]
-            var amount = 0
-            for i in 0..<transactions.count {
-                if transactions[i].category == expenses[indexPath.row] {
-                    print("i", indexPath.row, expenses[indexPath.row])
-                    amount += 1
-                }
-            }
-            if fromSettings {
-                cell.qntLabel.text = "\(amount)"
-            } else {
-                cell.qntLabel.text = ""
-                cell.accessoryType = .none
-            }
-            
-            
+            cell.categoryNameLabel.text = expenses[indexPath.row].0
+            cell.qntLabel.text = "\(expenses[indexPath.row].1)"
         case 1:
-            cell.categoryNameLabel.text = incomes[indexPath.row]
-            var amount = 0
-            for transaction in transactions {
-                if transaction.category == incomes[indexPath.row] {
-                    print("i", indexPath.row, incomes[indexPath.row])
-                    amount += 1
-                }
-            }
-            if fromSettings {
-                cell.qntLabel.text = "\(amount)"
-            } else {
-                cell.qntLabel.text = ""
-                cell.accessoryType = .none
-            }
+            cell.categoryNameLabel.text = incomes[indexPath.row].0
+            cell.qntLabel.text = "\(incomes[indexPath.row].1)"
             
         default:
-            cell.categoryNameLabel.text = incomes[indexPath.row]
-            
+            cell.categoryNameLabel.text = incomes[indexPath.row].0
         }
         
         if darkAppearence {
@@ -393,6 +371,8 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
         
         if darkAppearence {
             cell.categoryNameLabel.textColor = K.Colors.background
+            cell.qntLabel.text = ""
+            cell.accessoryType = .none
         }
         return cell
     }
@@ -415,22 +395,20 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCell.EditingStyle.delete {
-
             deteteCategory(at: indexPath)
-
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if !fromSettings {
-            delegate?.categorySelected(category: indexPath.section == 0 ? expenses[indexPath.row] : incomes[indexPath.row], purpose: indexPath.section)
+            delegate?.categorySelected(category: indexPath.section == 0 ? expenses[indexPath.row].0 : incomes[indexPath.row].0, purpose: indexPath.section)
             navigationController?.popToRootViewController(animated: true)
         } else {
             if indexPath.section == 0 {
-                toHistory(category: expenses[indexPath.row])
+                toHistory(category: expenses[indexPath.row].0)
             } else {
                 if indexPath.section == 1 {
-                    toHistory(category: incomes[indexPath.row])
+                    toHistory(category: incomes[indexPath.row].0)
                 }
             }
             

@@ -48,7 +48,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if historyDataStruct.count > 2 {
+        if historyDataStruct.count > 1 {
             return 2
         } else { return 1 }
     }

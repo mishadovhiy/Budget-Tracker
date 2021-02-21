@@ -193,30 +193,20 @@ class AppData {
     func getCategories(key: String = "categoriesData") -> [CategoriesStruct] {
         let localData = defaults.value(forKey: key) as? [[String]] ?? []
         var results: [CategoriesStruct] = []
+        let trans = Array(transactions)
+        
         for i in 0..<localData.count {
             let name = localData[i][1]
             let purpose = localData[i][2]
-            results.append(CategoriesStruct(name: name, purpose: purpose))
+            var count = 0
+            for i in 0..<trans.count {
+                if trans[i].category == name {
+                    count += 1
+                }
+            }
+            results.append(CategoriesStruct(name: name, purpose: purpose, count: count))
         }
         return results
-    }
-    
-    func createFirstData(_ tableview: UITableView) {
-        let transactions = [
-            TransactionsStruct(value: "5000", category: "Freelance", date: "\(filter.getToday(appData.filter.filterObjects.currentDate))", comment: ""),
-            TransactionsStruct(value: "-350", category: "Food", date: "\(filter.getToday(appData.filter.filterObjects.currentDate))", comment: "")
-        ]
-        let categories = [
-            CategoriesStruct(name: "Food", purpose: K.expense),
-            CategoriesStruct(name: "Work", purpose: K.income)
-        ]
-        saveTransations(transactions)
-        saveCategories(categories)
-        
-        DispatchQueue.main.async {
-            tableview.reloadData()
-        }
-        
     }
     
     var selectedExpense = 0
@@ -495,7 +485,6 @@ class AppData {
     
     func createFirstData(completion: @escaping () -> ()) {
         
-        
         let transactions = [
             TransactionsStruct(value: "5000", category: "Freelance", date: "\(filter.getToday(filter.filterObjects.currentDate, dateformatter: "01.MM.yyyy"))", comment: ""),
             TransactionsStruct(value: "10000", category: "Work", date: "\(filter.getToday(filter.filterObjects.currentDate, dateformatter: "01.01.yyyy"))", comment: ""),
@@ -504,12 +493,12 @@ class AppData {
             TransactionsStruct(value: "-1000", category: "Bills", date: "\(filter.getToday(filter.filterObjects.currentDate))", comment: ""),
         ]
         let categories = [
-            CategoriesStruct(name: "Food", purpose: K.expense),
-            CategoriesStruct(name: "Taxi", purpose: K.expense),
-            CategoriesStruct(name: "Public Transport", purpose: K.expense),
-            CategoriesStruct(name: "Bills", purpose: K.expense),
-            CategoriesStruct(name: "Work", purpose: K.income),
-            CategoriesStruct(name: "Freelance", purpose: K.income)
+            CategoriesStruct(name: "Food", purpose: K.expense, count: 1),
+            CategoriesStruct(name: "Taxi", purpose: K.expense, count: 1),
+            CategoriesStruct(name: "Public Transport", purpose: K.expense, count: 1),
+            CategoriesStruct(name: "Bills", purpose: K.expense, count: 1),
+            CategoriesStruct(name: "Work", purpose: K.income, count: 1),
+            CategoriesStruct(name: "Freelance", purpose: K.income, count: 1)
         ]
         saveTransations(transactions)
         saveCategories(categories)
@@ -553,5 +542,6 @@ struct TransactionsStruct {
 struct CategoriesStruct {
     let name: String
     let purpose: String
+    let count: Int
 }
 
