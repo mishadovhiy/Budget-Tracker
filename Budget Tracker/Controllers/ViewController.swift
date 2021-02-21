@@ -193,7 +193,7 @@ class ViewController: UIViewController {
     }
     
     func filter() {
-        
+        self.animateCellWillAppear = true
         DispatchQueue.main.async {
             self.filterTextLabel.text = "Filtering ..."
         }
@@ -334,8 +334,14 @@ class ViewController: UIViewController {
         let dataCount = appData.unsendedData.count
         if forseSendUnsendedData {
             if dataCount > 0 {
+                self.animateCellWillAppear = false
                 let save = SaveToDB()
                 if let first = appData.unsendedData.first {
+                    DispatchQueue.main.async {
+                        if self.filterTextLabel.text != "Sending ..." {
+                            self.filterTextLabel.text = "Sending ..."
+                        }
+                    }
                     print("SensUnsended:", first)
                     if let transaction = first["transaction"] {
                         print("SENDTRANS")
@@ -453,6 +459,7 @@ class ViewController: UIViewController {
             }
             if dataCount == 0 {
                 if sendSavedData == true {
+                    self.animateCellWillAppear = false
                     sendindSavedData = true
                     let save = SaveToDB()
                     var newCategories = appData.getCategories(key: "savedCategories")
@@ -663,8 +670,9 @@ class ViewController: UIViewController {
         }
 
     }
-    //here
+
     func deleteFromDB(at: IndexPath) {
+        selectedCell = nil
         let Nickname = appData.username
         if Nickname != "" {
             let Category = newTableData[at.section].transactions[at.row].category
@@ -915,9 +923,9 @@ class ViewController: UIViewController {
     }
 
     var editingRow: Int?
-    func editRow(at: IndexPath) {//here
+    func editRow(at: IndexPath) {
         print("change edit")
-        
+        selectedCell = nil
         editingTransaction = newTableData[at.section].transactions[at.row]
         let delete = DeleteFromDB()
         if let trans = editingTransaction {
