@@ -193,14 +193,17 @@ class AppData {
     func getCategories(key: String = "categoriesData") -> [CategoriesStruct] {
         let localData = defaults.value(forKey: key) as? [[String]] ?? []
         var results: [CategoriesStruct] = []
-        let trans = Array(transactions)
+       // let trans = Array(transactions)
+        ///
+        let trans = UserDefaults.standard.value(forKey: "transactionsData") as? [[String]] ?? []
+        
         
         for i in 0..<localData.count {
             let name = localData[i][1]
             let purpose = localData[i][2]
             var count = 0
             for i in 0..<trans.count {
-                if trans[i].category == name {
+                if trans[i][2] == name {
                     count += 1
                 }
             }

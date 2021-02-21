@@ -32,7 +32,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var incomeLabel: UILabel!
     @IBOutlet weak var expenseLabel: UILabel!
     var refreshControl = UIRefreshControl()
-    var tableData = appData.transactions.sorted{ $0.dateFromString < $1.dateFromString }
+    var tableData:[TransactionsStruct] = []//appData.transactions.sorted{ $0.dateFromString < $1.dateFromString }
     var _TableData: [tableStuct] = []
     var newTableData: [tableStuct] {
         get {
@@ -330,8 +330,7 @@ class ViewController: UIViewController {
     var didloadCalled = false
     var sendSavedData = false
     var sendindSavedData = false
-    func sendUnsaved() {//here
-        
+    func sendUnsaved() {
         let dataCount = appData.unsendedData.count
         if forseSendUnsendedData {
             if dataCount > 0 {
@@ -345,6 +344,9 @@ class ViewController: UIViewController {
                                 self.forseSendUnsendedData = false
                                 self.sendingUnsendedData = false
                                 self.filter()
+                                DispatchQueue.main.async {
+                                    self.message.showMessage(text: "Internet Error!", type: .internetError)
+                                }
                             } else {
                                 appData.unsendedData.removeFirst()
                                 DispatchQueue.main.async {
@@ -357,7 +359,7 @@ class ViewController: UIViewController {
                                     self.didloadCalled = true
                                     self.filter()
                                 }
-                                self.sendUnsaved()
+                                self.downloadFromDB()
                             }
                         }
                     } else {
@@ -368,6 +370,9 @@ class ViewController: UIViewController {
                                     self.forseSendUnsendedData = false
                                     self.sendingUnsendedData = false
                                     self.filter()
+                                    DispatchQueue.main.async {
+                                        self.message.showMessage(text: "Internet Error!", type: .internetError)
+                                    }
                                 } else {
                                     appData.unsendedData.removeFirst()
                                     DispatchQueue.main.async {
@@ -380,7 +385,7 @@ class ViewController: UIViewController {
                                         self.didloadCalled = true
                                         self.filter()
                                     }
-                                    self.sendUnsaved()
+                                    self.downloadFromDB()
                                 }
                             }
                         } else {
@@ -392,6 +397,9 @@ class ViewController: UIViewController {
                                         self.forseSendUnsendedData = false
                                         self.sendingUnsendedData = false
                                         self.filter()
+                                        DispatchQueue.main.async {
+                                            self.message.showMessage(text: "Internet Error!", type: .internetError)
+                                        }
                                     } else {
                                         appData.unsendedData.removeFirst()
                                         DispatchQueue.main.async {
@@ -404,7 +412,7 @@ class ViewController: UIViewController {
                                             self.didloadCalled = true
                                             self.filter()
                                         }
-                                        self.sendUnsaved()
+                                        self.downloadFromDB()
                                     }
                                 }
                             } else {
@@ -415,6 +423,9 @@ class ViewController: UIViewController {
                                             self.forseSendUnsendedData = false
                                             self.sendingUnsendedData = false
                                             self.filter()
+                                            DispatchQueue.main.async {
+                                                self.message.showMessage(text: "Internet Error!", type: .internetError)
+                                            }
                                         } else {
                                             appData.unsendedData.removeFirst()
                                             DispatchQueue.main.async {
@@ -427,7 +438,7 @@ class ViewController: UIViewController {
                                                 self.didloadCalled = true
                                                 self.filter()
                                             }
-                                            self.sendUnsaved()
+                                            self.downloadFromDB()
                                         }
                                     }
                                 }
@@ -454,6 +465,9 @@ class ViewController: UIViewController {
                                 self.sendSavedData = false
                                 self.forseSendUnsendedData = false
                                 self.sendindSavedData = false
+                                DispatchQueue.main.async {
+                                    self.message.showMessage(text: "Internet Error!", type: .internetError)
+                                }
                                 print("Error saving category")
                             } else {
                                 print("cat: unsended sended")
@@ -478,6 +492,9 @@ class ViewController: UIViewController {
                                     self.filter()
                                     self.forseSendUnsendedData = false
                                     self.sendSavedData = false
+                                    DispatchQueue.main.async {
+                                        self.message.showMessage(text: "Internet Error!", type: .internetError)
+                                    }
                                     print("Error saving category")
                                 } else {
                                     trans.removeFirst()

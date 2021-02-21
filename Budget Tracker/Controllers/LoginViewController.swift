@@ -666,9 +666,7 @@ var DBTransactions:[TransactionsStruct] {
     }
 }
 var DBCategories:[CategoriesStruct] {
-// creating and using only in login - local vc
     get {
-        
         let dick = appData.defaults.value(forKey: "DBCategories") as? [[String]] ?? []
         var data: [CategoriesStruct] = []
         for i in 0..<dick.count {

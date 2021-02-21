@@ -225,7 +225,7 @@ class CategoriesVC: UIViewController {
     func deteteCategory(at: IndexPath) {
         let delete = DeleteFromDB()
         let Nickname = appData.username
-        let Title = at.section == 0 ? expenses[at.row] : incomes[at.row]
+        let Title = at.section == 0 ? expenses[at.row].0 : incomes[at.row].0
         let Purpose = at.section == 0 ? K.expense : K.income
         wasEdited = true
         if appData.username != "" {

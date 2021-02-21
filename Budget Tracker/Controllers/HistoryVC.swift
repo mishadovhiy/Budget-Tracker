@@ -17,17 +17,17 @@ class HistoryVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        historyDataStruct = historyDataStruct.sorted{ $0.dateFromString < $1.dateFromString }
         tableView.delegate = self
         tableView.dataSource = self
         title = selectedCategoryName.capitalized
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
 
-    
-    
     func totalSum(label: UILabel) {
         var sum = 0.0
         for i in 0..<historyDataStruct.count {
