@@ -68,7 +68,7 @@ class LoginViewController: UIViewController {
     }
     
     func updateUI() {
-        toggleScreen(options: .singIn, animation: 0.0)
+        toggleScreen(options: .createAccount, animation: 0.0)
         for i in 0..<textfields.count {
             DispatchQueue.main.async {
                 self.textfields[i].delegate = self
@@ -78,7 +78,7 @@ class LoginViewController: UIViewController {
             }
             
             textfields[i].setRightPaddingPoints(5)
-            textfields[i].setLeftPaddingPoints(    5)
+            textfields[i].setLeftPaddingPoints(5)
         }
         
         let hideKeyboardGestureSwipe = UISwipeGestureRecognizer(target: self, action: #selector(hideKeyboardSwipped))
@@ -463,7 +463,7 @@ class LoginViewController: UIViewController {
         case 0: toggleScreen(options: .singIn)
         case 1: toggleScreen(options: .createAccount)
         default:
-            toggleScreen(options: .createAccount)
+            toggleScreen(options: .singIn)
         }
     }
     
