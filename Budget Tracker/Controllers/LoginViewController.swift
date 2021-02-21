@@ -98,9 +98,20 @@ class LoginViewController: UIViewController {
         
     }
     
+    let ai = UIActivityIndicatorView.init(style: .gray)
+    
+    
+    func showActivityIndicator(at button: UIButton) {
+        DispatchQueue.main.async {
+            self.ai.frame = CGRect(x: 10, y: 10, width: 10, height: 10)
+            button.addSubview(self.ai)
+            self.ai.startAnimating()
+        }
+    }
     
     let load = LoadFromDB()
     @IBAction func logInPressed(_ sender: UIButton) {
+        showActivityIndicator(at: sender)
         hideKeyboard()
         load.Users { (loadedData, Error) in
             if !Error {
@@ -111,6 +122,7 @@ class LoginViewController: UIViewController {
                         self.logIn(nickname: name, password: password, loadedData: loadedData)
                     } else {
                         DispatchQueue.main.async {
+                            self.ai.removeFromSuperview()
                             self.message.showMessage(text: "All fields are required", type: .error, autoHide: false)
                         }
                         self.obthervValues = true
@@ -120,6 +132,7 @@ class LoginViewController: UIViewController {
             } else {
                 print("error!!!")
                 DispatchQueue.main.async {
+                    self.ai.removeFromSuperview()
                     self.message.showMessage(text: "Internet Error!", type: .error, autoHide: false)
                 }
             }
@@ -142,6 +155,7 @@ class LoginViewController: UIViewController {
                     if password != psswordFromDB {
                         print("wrong password", psswordFromDB)
                         DispatchQueue.main.async {
+                            self.ai.removeFromSuperview()
                             self.message.showMessage(text: "Wrong password", type: .error, autoHide: false)
                         }
                     } else {
@@ -167,13 +181,13 @@ class LoginViewController: UIViewController {
                         DispatchQueue.main.async {
                             self.performSegue(withIdentifier: "homeVC", sender: self)
                         }
-                        print("to home")
                     }
                     return
                 }
             }
         } else {
             DispatchQueue.main.async {
+                self.ai.removeFromSuperview()
                 self.message.showMessage(text: "User not found", type: .error, autoHide: false)
             }
         }
@@ -181,12 +195,14 @@ class LoginViewController: UIViewController {
 
     
     @IBAction func createAccountPressed(_ sender: Any) {
+        showActivityIndicator(at: sender as! UIButton)
         hideKeyboard()
         load.Users { (loadedData, Error) in
             if !Error {
                 self.createAccoun(loadedData: loadedData)
             } else {
                 DispatchQueue.main.async {
+                    self.ai.removeFromSuperview()
                     self.message.showMessage(text: "Internet Error!", type: .error, autoHide: false)
                 }
             }
@@ -203,39 +219,50 @@ class LoginViewController: UIViewController {
             if password == self.confirmPasswordLabel.text ?? "" {
                 if name != "" && email != "" && password != "" {
                     if self.userExists(name: name, loadedData: loadedData) == false  {
-                        let save = SaveToDB()
-                        let toDataString = "&Nickname=\(name)" + "&Email=\(email)" + "&Password=\(password)" + "&Registration_Date=\(regDate)"
-                        save.Users(toDataString: toDataString) { (error) in
-                            if error {
-                                print("error")
-                                self.message.showMessage(text: "Internet Error!", type: .error, autoHide: false)
-                            } else {
-                                KeychainService.savePassword(service: "BudgetTrackerApp", account: name, data: password)
-                                appData.username = name
-                                appData.password = password
-                                let wasTransactions = appData.transactions + appData.savedTransactions
-                                appData.saveTransations(wasTransactions, key: "savedTransactions")
-                                let wasCats = appData.getCategories() + appData.getCategories(key: "savedCategories")
-                                appData.saveCategories(wasCats, key: "savedCategories")
-                                appData.fromLoginVCMessage = wasTransactions.count > 0 ? "Wellcome, \(appData.username), \nYour Data has been saved localy" : "Wellcome, \(appData.username)"
-                                DispatchQueue.main.async {
-                                    self.performSegue(withIdentifier: "homeVC", sender: self)
+                        
+                        if !email.contains("@") || !email.contains(".") {
+                            self.ai.removeFromSuperview()
+                            self.obthervValues = true
+                            self.showWrongFields()
+                            self.message.showMessage(text: "Enter valid email address", type: .error, autoHide: false)
+                        } else {
+                            let save = SaveToDB()
+                            let toDataString = "&Nickname=\(name)" + "&Email=\(email)" + "&Password=\(password)" + "&Registration_Date=\(regDate)"
+                            save.Users(toDataString: toDataString) { (error) in
+                                if error {
+                                    print("error")
+                                    self.ai.removeFromSuperview()
+                                    self.message.showMessage(text: "Internet Error!", type: .error, autoHide: false)
+                                } else {
+                                    KeychainService.savePassword(service: "BudgetTrackerApp", account: name, data: password)
+                                    appData.username = name
+                                    appData.password = password
+                                    let wasTransactions = appData.transactions + appData.savedTransactions
+                                    appData.saveTransations(wasTransactions, key: "savedTransactions")
+                                    let wasCats = appData.getCategories() + appData.getCategories(key: "savedCategories")
+                                    appData.saveCategories(wasCats, key: "savedCategories")
+                                    appData.fromLoginVCMessage = wasTransactions.count > 0 ? "Wellcome, \(appData.username), \nYour Data has been saved localy" : "Wellcome, \(appData.username)"
+                                    DispatchQueue.main.async {
+                                        self.performSegue(withIdentifier: "homeVC", sender: self)
+                                    }
                                 }
                             }
                         }
-                        
                     } else {
+                        self.ai.removeFromSuperview()
                         self.message.showMessage(text: "Username '\(name)' is already taken", type: .error, windowHeight: 65, autoHide: false)
                         print("username '\(name)' is already taken")
                     }
                 
                 } else {
+                    self.ai.removeFromSuperview()
                     self.obthervValues = true
                     self.showWrongFields()
                     self.message.showMessage(text: "All fields are required", type: .error, autoHide: false)
                     print("all fields are required")
                 }
             } else {
+                self.ai.removeFromSuperview()
                 self.message.showMessage(text: "Passwords not match", type: .error, autoHide: false)
                 print("passwords not much")
             }

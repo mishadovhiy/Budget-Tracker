@@ -26,16 +26,6 @@ class CategoriesVC: UIViewController {
     var delegate: CategoriesVCProtocol?
     var darkAppearence = false
     
-    var transactions: [TransactionsStruct] {
-        get {
-            if fromSettings {
-                return appData.transactions
-            } else {
-                return []
-            }
-        }
-    }
-    
     lazy var message: MessageView = {
         let message = MessageView(self)
         return message
@@ -299,9 +289,11 @@ class CategoriesVC: UIViewController {
     var selectedCategoryName = ""
     func toHistory(category: String) {
         historyDataStruct = []
-        for i in 0..<transactions.count {
-            if transactions[i].category == category {
-                historyDataStruct.append(transactions[i])
+        let trans =  UserDefaults.standard.value(forKey: "transactionsData") as? [[String]] ?? []
+        
+        for i in 0..<trans.count {
+            if trans[i][2] == category {
+                historyDataStruct.append(TransactionsStruct(value: trans[i][1], category: trans[i][2], date: trans[i][3], comment: trans[i][4]))
             }
         }
         

@@ -22,14 +22,10 @@ class FilterTVC: UIViewController {
     var frame = CGRect.zero
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         tableview.delegate = self
         tableview.dataSource = self
-        tableview.translatesAutoresizingMaskIntoConstraints = true
-        DispatchQueue.main.async {
-            self.tableview.frame = CGRect(x: self.frame.minX, y: self.frame.minY - 30, width: self.frame.width, height: self.frame.minX)
-        }
-       // appendMatches()
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -50,20 +46,24 @@ class FilterTVC: UIViewController {
     }
     
     func vcAppearence() {
-        self.tableview.layer.masksToBounds = true
-        self.tableview.layer.cornerRadius = 9
-        tableview.cellLayoutMarginsFollowReadableWidth = true
-
+        vcAppeared = true
+        print(frame, "knjbvgyhujiklmnbhvghbjnkmlmknjbhjik")
         DispatchQueue.main.async {
             self.tableview.beginUpdates()
+            self.tableview.cellLayoutMarginsFollowReadableWidth = true
+            self.tableview.translatesAutoresizingMaskIntoConstraints = true
+            self.tableview.layer.masksToBounds = true
+            self.tableview.layer.cornerRadius = 9
+            self.tableview.alpha = 1
+            self.tableview.layer.frame = CGRect(x: self.frame.minX, y: 0, width: self.frame.width, height: self.frame.height)
             UIView.animate(withDuration: 0.2) {
                 self.tableview.layer.frame = self.frame
-            } completion: { (a) in
-                
+            } completion: { (_) in
+                self.tableview.endUpdates()
+                self.tableview.reloadData()
             }
-            self.tableview.endUpdates()
         }
-        vcAppeared = true
+        
     }
     
 

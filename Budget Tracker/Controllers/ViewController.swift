@@ -17,7 +17,6 @@ var expenseLabelPressed = true
 var selectedPeroud = ""
 var refreshDataComlition: Bool?
 
-
 class ViewController: UIViewController {
     
     @IBOutlet weak var filterView: UIView!
@@ -44,13 +43,13 @@ class ViewController: UIViewController {
             let component = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: lastDownloadDate)
             let lastLaunxText = "Updated: \(component.year ?? 0).\(self.makeTwo(n: component.month ?? 0)).\(self.makeTwo(n: component.day ?? 0)), \(self.makeTwo(n: component.hour ?? 0)):\(self.makeTwo(n: component.minute ?? 0)):\(self.makeTwo(n: component.second ?? 0))"
             DispatchQueue.main.async {
+                self.filterText = "Filter: \(selectedPeroud)"
                 self.calculationSView.alpha = 0
                 UIView.animate(withDuration: 0.8) {
                     self.calculationSView.alpha = 1
                 }
                 self.tableActionActivityIndicator.removeFromSuperview()
                 self.dataCountLabel.text = "Transactions: \(self.tableData.count)\(appData.username != "" ? "\n\(lastLaunxText)" : "")"
-                self.filterTextLabel.text = "Filter: \(selectedPeroud)"
                 self.mainTableView.reloadData()
                 if self.refreshControl.isRefreshing {
                     self.refreshControl.endRefreshing()
@@ -114,6 +113,7 @@ class ViewController: UIViewController {
         self.mainTableView.delegate = self
         self.mainTableView.dataSource = self
         DispatchQueue.main.async {
+            self.addTransitionButton.alpha = 1
             let tableFrame = self.mainTableView.frame
             let TransFrame = self.addTransitionButton.frame
             
@@ -195,7 +195,7 @@ class ViewController: UIViewController {
     func filter() {
         self.animateCellWillAppear = true
         DispatchQueue.main.async {
-            self.filterTextLabel.text = "Filtering ..."
+            self.filterText = "Filtering"
         }
         print("filter called")
         print("filter for: ", appData.filter.from, appData.filter.to)
@@ -317,7 +317,6 @@ class ViewController: UIViewController {
                 }
             }
             self.tableData = arr.sorted{ $0.dateFromString < $1.dateFromString }
-            
             allSelectedTransactionsData = self.tableData
             print(allSelectedTransactionsData, "allSelectedTransactionsDataallSelectedTransactionsData")
             print("end performFiltering FROM: \(from), TO: \(to), SHOW ALL: \(all)")
@@ -326,6 +325,57 @@ class ViewController: UIViewController {
         }
         
     }
+    
+    
+    var _filterText: String = "Filter"
+    var filterText: String{
+        get {
+            return _filterText
+        }
+        set {
+            _filterText = newValue
+            var dots = ""
+            DispatchQueue.main.async {
+                self.filterTextLabel.text = newValue
+            }
+            if newValue != "Filter: \(selectedPeroud)" {
+                let timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { (timer) in
+                    if self._filterText == "Filter: \(selectedPeroud)" {
+                        timer.invalidate()
+                        DispatchQueue.main.async {
+                            self.filterTextLabel.text = "Filter: \(selectedPeroud)"
+                        }
+                        for i in 0..<self.timers.count {
+                            self.timers[i].invalidate()
+                        }
+                        return
+                    }
+                    switch dots {
+                    case "":
+                        dots = "."
+                    case ".":
+                        dots = ".."
+                    case "..":
+                        dots = "..."
+                    case "...":
+                        dots = ""
+                    default:
+                        dots = ""
+                    }
+                    DispatchQueue.main.async {
+                        self.filterTextLabel.text = self._filterText + dots
+                    }
+                }
+                timers.append(timer)
+            } else {
+                for i in 0..<self.timers.count {
+                    self.timers[i].invalidate()
+                }
+            }
+        }
+    }
+    var timers: [Timer] = []
+    
     
     var didloadCalled = false
     var sendSavedData = false
@@ -337,9 +387,9 @@ class ViewController: UIViewController {
                 self.animateCellWillAppear = false
                 let save = SaveToDB()
                 if let first = appData.unsendedData.first {
-                    DispatchQueue.main.async {
-                        if self.filterTextLabel.text != "Sending ..." {
-                            self.filterTextLabel.text = "Sending ..."
+                    if self._filterText != "Sending" {
+                        DispatchQueue.main.async {
+                            self.filterText = "Sending"
                         }
                     }
                     print("SensUnsended:", first)
@@ -459,6 +509,12 @@ class ViewController: UIViewController {
             }
             if dataCount == 0 {
                 if sendSavedData == true {
+                    if self._filterText != "Sending" {
+                        DispatchQueue.main.async {
+                            self.filterText = "Sending"
+                        }
+                    }
+                    
                     self.animateCellWillAppear = false
                     sendindSavedData = true
                     let save = SaveToDB()
@@ -483,7 +539,10 @@ class ViewController: UIViewController {
                                 appData.saveCategories(allCats)
                                 newCategories.removeFirst()
                                 appData.saveCategories(newCategories, key: "savedCategories")
-                                self.filter()
+                                self.sendUnsaved()
+                                DispatchQueue.main.async {
+                                    self.mainTableView.reloadData()
+                                }
                             }
                         }
                     }
@@ -509,12 +568,16 @@ class ViewController: UIViewController {
                                     var alldata = appData.transactions
                                     alldata.append(tran)
                                     appData.saveTransations(alldata)
-                                    self.filter()
+                                    self.sendUnsaved()
+                                    DispatchQueue.main.async {
+                                        self.mainTableView.reloadData()
+                                    }
                                 }
                             }
                         } else {
                             sendSavedData = false
                             sendindSavedData = false
+                            self.filter()
                             DispatchQueue.main.async {
                                 self.message.showMessage(text: "Data has been sended successfully", type: .succsess, windowHeight: 65)
                             }
@@ -610,8 +673,9 @@ class ViewController: UIViewController {
                 self.sendUnsaved()
             } else {
                 self.sendingUnsendedData = false
+
                 DispatchQueue.main.async {
-                    self.filterTextLabel.text = "Downloading ..."
+                    self.filterText = "Downloading"
                 }
                 let load = LoadFromDB()
                 load.Transactions{(loadedData, error) in
@@ -1011,9 +1075,10 @@ class ViewController: UIViewController {
                 vc?.frame = vcFrame
                 self.filterHelperView.frame = CGRect(x: filterFrame.minX + superFilter.minX, y: filterFrame.minY + superFilter.minY, width: vcFrame.width, height: vcFrame.height)
                 self.filterHelperView.alpha = 0
-                
-                UIView.animate(withDuration: 0.2) {
-                    self.filterHelperView.alpha = 1
+                Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { (_) in
+                    UIView.animate(withDuration: 0.6) {
+                        self.filterHelperView.alpha = 1
+                    }
                 }
             }
             
@@ -1064,11 +1129,15 @@ class ViewController: UIViewController {
     }
     
     
-    //from filter //quitFilterTVC
+    //from filter //quitFilterTVC // K.quitFilterTVC
     @IBAction func unwindToFilter(segue: UIStoryboardSegue) {
+        print("FROM FILTER")
         DispatchQueue.global(qos: .userInteractive).async {
             DispatchQueue.main.async {
                 self.filterHelperView.alpha = 0
+                UIView.animate(withDuration: 0.3) {
+                    self.filterTextLabel.alpha = 1
+                }
             }
             if self.prevSelectedPer != selectedPeroud {
                 self.filter()
@@ -1188,6 +1257,25 @@ class ViewController: UIViewController {
         }
     }
     
+    @IBAction func filterPressed(_ sender: UIButton) {
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 0.3) {
+                self.filterTextLabel.alpha = 0.2
+            }
+        }
+        if self._filterText == "Filter: \(selectedPeroud)" {
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "toFiterVC", sender: self)
+            }
+        } else {
+            DispatchQueue.main.async {
+                UIImpactFeedbackGenerator().impactOccurred()
+                UIView.animate(withDuration: 0.23) {
+                    self.filterTextLabel.alpha = 1
+                }
+            }
+        }
+    }
     
     var animateCellWillAppear = true
 }
@@ -1223,28 +1311,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             calculationCell.savedTransactionsLabel.text = "\(sendedCount.count)"
             let newUnsendedCount = appData.unsendedData.count
             calculationCell.unsesndedTransactionsLabel.text = "\(newUnsendedCount)"
-
-            let ai = UIActivityIndicatorView.init(style: .gray)
-            if sendingUnsendedData {
-                ai.startAnimating()
-                let labelFrame = calculationCell.unsesndedTransactionsLabel.layer.frame
-                ai.frame = CGRect(x: labelFrame.minX + 10, y: 12, width: 10, height: 10)
-                calculationCell.unsesndedTransactionsLabel.superview?.addSubview(ai)
-            } else {
-                ai.removeFromSuperview()
-            }
-            let aiSavedData = UIActivityIndicatorView.init(style: .gray)
-            if sendindSavedData {
-                print("sending saved data")
-                aiSavedData.startAnimating()
-                let savedLabelFrame = calculationCell.savedTransactionsLabel.layer.frame
-                aiSavedData.frame = CGRect(x: savedLabelFrame.minX - 7, y: 12, width: 10, height: 10)
-                calculationCell.savedTransactionsLabel.superview?.addSubview(aiSavedData)
-            print(aiSavedData.frame, "aiSavedData.frame")
-            } else {
-                aiSavedData.removeFromSuperview()
-                print("not sanding saved data")
-            }
             
             calculationCell.savedTransactionsLabel.superview?.superview?.superview?.superview?.isHidden = (sendedCount.count + newUnsendedCount) == 0 ? true : false
             calculationCell.unsesndedTransactionsLabel.superview?.superview?.isHidden = newUnsendedCount > 0 ? false : true
@@ -1393,7 +1459,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        ///
         if indexPath.section == 0 {
             DispatchQueue.main.async {
                 if self.newTableData.count > 0 {
