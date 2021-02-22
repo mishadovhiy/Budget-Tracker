@@ -83,7 +83,6 @@ class ViewController: UIViewController {
                 if self.sendSavedData {
                     self.sendUnsaved()
                 }
-                
             }
         }
     }
@@ -200,7 +199,9 @@ class ViewController: UIViewController {
         print("filter called")
         print("filter for: ", appData.filter.from, appData.filter.to)
         selectedPeroud = selectedPeroud != "" ? selectedPeroud : "This Month"
-        allDaysBetween()
+        if !appData.filter.showAll {
+            allDaysBetween()
+        }
         let allFilteredData = performFiltering(from: appData.filter.from, to: appData.filter.to, all: appData.filter.showAll).sorted{ $0.dateFromString < $1.dateFromString }
         print("filterrrr: all filtered: ", allFilteredData)
         calculateLabels()
@@ -285,7 +286,7 @@ class ViewController: UIViewController {
         
         print("performFiltering called")
         if all == true {
-            tableData = appData.transactions.sorted{ $0.dateFromString < $1.dateFromString }
+            tableData = appData.transactions
 
             print("showing for all time")
             allSelectedTransactionsData = tableData
@@ -301,26 +302,24 @@ class ViewController: UIViewController {
             var arr = tableData
             arr.removeAll()
             var matches = 0
-
             let days = Array(daysBetween)
-            let transactions = Array(appData.transactions)
-            
+            let transactions = UserDefaults.standard.value(forKey: "transactionsData") as? [[String]] ?? []
             for number in 0..<days.count {
                 for i in 0..<transactions.count {
                     if days.count > number {
-                        if days[number] == transactions[i].date {
+                        if days[number] == transactions[i][3] {
                             matches += 1
                             print("\(matches) performFiltering: arr.appended at \(i)")
-                            arr.append(transactions[i])
+                            arr.append(TransactionsStruct(value: transactions[i][1], category: transactions[i][2], date: transactions[i][3], comment: transactions[i][4]))
                         }
                     }
                 }
             }
-            self.tableData = arr.sorted{ $0.dateFromString < $1.dateFromString }
+            self.tableData = arr//.sorted{ $0.dateFromString < $1.dateFromString }
             allSelectedTransactionsData = self.tableData
             print(allSelectedTransactionsData, "allSelectedTransactionsDataallSelectedTransactionsData")
             print("end performFiltering FROM: \(from), TO: \(to), SHOW ALL: \(all)")
-            return arr.sorted{ $0.dateFromString < $1.dateFromString }
+            return arr
             
         }
         
@@ -576,9 +575,9 @@ class ViewController: UIViewController {
                         } else {
                             sendSavedData = false
                             sendindSavedData = false
-                            self.filter()
+                            self.downloadFromDB()
                             DispatchQueue.main.async {
-                                self.message.showMessage(text: "Data has been sended successfully", type: .succsess, windowHeight: 65)
+                                self.message.showMessage(text: "Data has been sended successfully", type: .succsess, windowHeight: 65, bottomAppearence: true)
                             }
                         }
                     }

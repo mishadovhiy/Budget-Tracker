@@ -220,6 +220,7 @@ class CategoriesVC: UIViewController {
         wasEdited = true
         if appData.username != "" {
             let toDataString = "&Nickname=\(Nickname)" + "&Title=\(Title)" + "&Purpose=\(Purpose)"
+            print("deleting:", toDataString)
             delete.Categories(toDataString: toDataString, completion: { (error) in
                 if error {
                     print("Errordeletingcategory")
@@ -257,22 +258,25 @@ class CategoriesVC: UIViewController {
         alertTextFields(alert: alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
         alert.addAction(UIAlertAction(title: "Done", style: .default, handler: { (action) in
-            
-            if self.catData.categoryTextField.text != "" {
-                let name = self.catData.categoryTextField.text ?? ""
-                let purpose = self.catData.allPurposes[self.catData.selectedPurpose]
-                if appData.username != "" {
-                    self.getDataFromLocal()
-                    self.whenNoCategories()
-                    self.sendToDBCategory(title: name, purpose: purpose)
-                } else {
-                    var categories = Array(appData.getCategories())
-                    categories.append(CategoriesStruct(name: name, purpose: purpose, count: 0))
-                    appData.saveCategories(categories)
-                    self.getDataFromLocal()
+
+            DispatchQueue.main.async {
+                if let name = self.catData.categoryTextField.text {
+                    if name != "" {
+                        let purpose = self.catData.allPurposes[self.catData.selectedPurpose]
+                        if appData.username != "" {
+                            self.getDataFromLocal()
+                            self.whenNoCategories()
+                            self.sendToDBCategory(title: name, purpose: purpose)
+                        } else {
+                            var categories = Array(appData.getCategories())
+                            categories.append(CategoriesStruct(name: name, purpose: purpose, count: 0))
+                            appData.saveCategories(categories)
+                            self.getDataFromLocal()
+                        }
+                    }
                 }
             }
-            
+
         }))
         present(alert, animated: true, completion: nil)
     }
