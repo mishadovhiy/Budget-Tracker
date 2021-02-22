@@ -22,7 +22,6 @@
 		8DBA7E5223F0316F00D8214C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5123F0316F00D8214C /* SceneDelegate.swift */; };
 		8DBA7E5423F0316F00D8214C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5323F0316F00D8214C /* ViewController.swift */; };
 		8DBA7E5723F0316F00D8214C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5523F0316F00D8214C /* Main.storyboard */; };
-		8DBA7E5A23F0316F00D8214C /* Budget_Tracker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5823F0316F00D8214C /* Budget_Tracker.xcdatamodeld */; };
 		8DBA7E5C23F0317100D8214C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5B23F0317100D8214C /* Assets.xcassets */; };
 		8DBA7E5F23F0317100D8214C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5D23F0317100D8214C /* LaunchScreen.storyboard */; };
 		8DD89D8323F1468E00273904 /* mainVCcell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8223F1468E00273904 /* mainVCcell.swift */; };
@@ -53,7 +52,6 @@
 		8DBA7E5123F0316F00D8214C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		8DBA7E5323F0316F00D8214C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		8DBA7E5623F0316F00D8214C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		8DBA7E5923F0316F00D8214C /* Budget_Tracker.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Budget_Tracker.xcdatamodel; sourceTree = "<group>"; };
 		8DBA7E5B23F0317100D8214C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8DBA7E5E23F0317100D8214C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8DBA7E6023F0317100D8214C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -125,7 +123,6 @@
 				8DD89D8823F1471900273904 /* Modal */,
 				8DBA7E6823F031F900D8214C /* Controllers */,
 				8DBA7E6723F031F200D8214C /* Views */,
-				8DBA7E6923F0320700D8214C /* Data Model */,
 				8DBA7E6623F031E600D8214C /* Supporting Files */,
 				8DBA7E6023F0317100D8214C /* Info.plist */,
 			);
@@ -166,14 +163,6 @@
 				8B8D556025BB218400D7C6A7 /* UnsendedDataVC.swift */,
 			);
 			path = Controllers;
-			sourceTree = "<group>";
-		};
-		8DBA7E6923F0320700D8214C /* Data Model */ = {
-			isa = PBXGroup;
-			children = (
-				8DBA7E5823F0316F00D8214C /* Budget_Tracker.xcdatamodeld */,
-			);
-			path = "Data Model";
 			sourceTree = "<group>";
 		};
 		8DD89D8823F1471900273904 /* Modal */ = {
@@ -310,7 +299,6 @@
 				8DD89D8E23F1495300273904 /* TransactionVC.swift in Sources */,
 				8D8B6C3E245023EC007260A0 /* CalendarVC.swift in Sources */,
 				8DBA7E5423F0316F00D8214C /* ViewController.swift in Sources */,
-				8DBA7E5A23F0316F00D8214C /* Budget_Tracker.xcdatamodeld in Sources */,
 				8BD2E77C25B8622100D4DFBF /* LoginViewController.swift in Sources */,
 				8B35DA6625C6F124008A8719 /* Keychain.swift in Sources */,
 				8D8B6C3C245023D0007260A0 /* FilterTVC.swift in Sources */,
@@ -534,19 +522,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		8DBA7E5823F0316F00D8214C /* Budget_Tracker.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				8DBA7E5923F0316F00D8214C /* Budget_Tracker.xcdatamodel */,
-			);
-			currentVersion = 8DBA7E5923F0316F00D8214C /* Budget_Tracker.xcdatamodel */;
-			path = Budget_Tracker.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 8DBA7E4423F0316F00D8214C /* Project object */;
 }

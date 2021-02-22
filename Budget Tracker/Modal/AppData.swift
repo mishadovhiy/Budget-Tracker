@@ -10,28 +10,11 @@ import UIKit
 import CoreData
 
 class AppData {
-    
-    var transactionsCoreData = [Transactions]()
-    var categoriesCoreData = [Categories]()
-    
-    func context() -> NSManagedObjectContext {
-        
-        if #available(iOS 13.0, *) {
-            let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
-            return context
-        } else {
-            return (UIApplication.shared.delegate as! AppDelegate).persistentContainer2.viewContext
-        }
-        
-    }
-    
+
     let defaults = UserDefaults.standard
     
     var unshowedErrors = ""
-    var newValue = [""]
-    
-    var internetPresend: Bool?
-    
+
     var username: String {
         get{
             return defaults.value(forKey: "username") as? String ?? ""
@@ -41,26 +24,7 @@ class AppData {
             defaults.set(value, forKey: "username")
         }
     }
-    var canShowInternetError: Bool {
-        get{
-            let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
-            let last = defaults.value(forKey: "lastTimeShowedInternetError") as? String ?? "true"
-            
-            if last == "true" {
-                return true
-            } else {
-                if today == last {
-                    return false
-                } else {
-                    return true
-                }
-            }
-            
-        }
-        set(value){
-            defaults.set(value, forKey: "lastTimeShowedInternetError")
-        }
-    }
+
     var password: String {
         get{
             return defaults.value(forKey: "password") as? String ?? ""
@@ -91,9 +55,7 @@ class AppData {
             defaults.set(value, forKey: "unsendedData")
         }
     }
-    
-    var unsavedTransactionsAppended = false
-    var unsavedCategoriesAppended = false
+
     var fromLoginVCMessage = ""
     
     func makeTwo(int: Int) -> String {
@@ -147,31 +109,7 @@ class AppData {
         }
     }
     
-    var unsavedTransactions: [TransactionsStruct] {
-        get{
-            var results: [TransactionsStruct] = []
-            let localData = defaults.value(forKey: "unsavedTransactions") as? [[String]] ?? []
-            
-            for i in 0..<localData.count {
-                let value = localData[i][1]
-                let category = localData[i][2]
-                let date = localData[i][3]
-                let comment = localData[i][4]
-                results.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
-            }
-            
-            return results
-        }
-        set(value) {
-            
-            var results: [[String]] = []
-            for i in 0..<value.count {
-                results.append([username, value[i].value, value[i].category, value[i].date, value[i].comment])
-            }
-            
-            defaults.set(results, forKey: "unsavedTransactions")
-        }
-    }
+
 
     //"savedCategories" -- from prev acc
     //"unsavedCategories" -- when no internet
@@ -254,16 +192,6 @@ class AppData {
             }
         }*/
 
-        func showNoDataLabel(_ label: UILabel, tableData: [TransactionsStruct]) {
-            
-            if tableData.count == 0 {
-                UIView.animate(withDuration: 0.2) {
-                    label.alpha = 0.5 }
-            } else {
-                UIView.animate(withDuration: 0.2) {
-                    label.alpha = 0
-                }}
-        }
         
     }
     
@@ -496,12 +424,12 @@ class AppData {
             TransactionsStruct(value: "-1000", category: "Bills", date: "\(filter.getToday(filter.filterObjects.currentDate))", comment: ""),
         ]
         let categories = [
-            CategoriesStruct(name: "Food", purpose: K.expense, count: 1),
-            CategoriesStruct(name: "Taxi", purpose: K.expense, count: 1),
-            CategoriesStruct(name: "Public Transport", purpose: K.expense, count: 1),
-            CategoriesStruct(name: "Bills", purpose: K.expense, count: 1),
-            CategoriesStruct(name: "Work", purpose: K.income, count: 1),
-            CategoriesStruct(name: "Freelance", purpose: K.income, count: 1)
+            CategoriesStruct(name: "Food", purpose: K.expense, count: 0),
+            CategoriesStruct(name: "Taxi", purpose: K.expense, count: 0),
+            CategoriesStruct(name: "Public Transport", purpose: K.expense, count: 0),
+            CategoriesStruct(name: "Bills", purpose: K.expense, count: 0),
+            CategoriesStruct(name: "Work", purpose: K.income, count: 0),
+            CategoriesStruct(name: "Freelance", purpose: K.income, count: 0)
         ]
         saveTransations(transactions)
         saveCategories(categories)

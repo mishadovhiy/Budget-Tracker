@@ -44,6 +44,7 @@ class ViewController: UIViewController {
             let component = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: lastDownloadDate)
             let lastLaunxText = "Updated: \(component.year ?? 0).\(self.makeTwo(n: component.month ?? 0)).\(self.makeTwo(n: component.day ?? 0)), \(self.makeTwo(n: component.hour ?? 0)):\(self.makeTwo(n: component.minute ?? 0)):\(self.makeTwo(n: component.second ?? 0))"
             dataTaskCount = nil
+            selectedCell = nil
             DispatchQueue.main.async {
                 self.filterText = "Filter: \(selectedPeroud)"
                 self.calculationSView.alpha = 0
@@ -103,8 +104,8 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         updateUI()
-        addTransitionButton.layer.cornerRadius = tableCorners
-        prepareFilterOptions()
+        
+
     }
     
     func updateUI() {
@@ -114,6 +115,7 @@ class ViewController: UIViewController {
         self.mainTableView.delegate = self
         self.mainTableView.dataSource = self
         DispatchQueue.main.async {
+            self.addTransitionButton.layer.cornerRadius = self.tableCorners
             self.addTransitionButton.alpha = 1
             let tableFrame = self.mainTableView.frame
             let TransFrame = self.addTransitionButton.frame
@@ -154,7 +156,7 @@ class ViewController: UIViewController {
             self.noTableDataLabel.alpha = 0
             
         }
-        switchFromCoreData()
+
         if appData.defaults.value(forKey: "firstLaunch") as? Bool ?? true {
             appData.createFirstData {
                 self.filter()
@@ -747,6 +749,7 @@ class ViewController: UIViewController {
             
         } else {
             filter()
+            prepareFilterOptions()
         }
 
     }
@@ -800,72 +803,8 @@ class ViewController: UIViewController {
     
     
     
-    
-//MARK: - Core Data
-    
-    func switchFromCoreData() {
-        
-        let dataCount = appData.defaults.value(forKey: "transactionsCoreDataCount") as? Int ?? 1
-        print(dataCount, "core data: dataCount")
-        if dataCount != 0 {
-            DispatchQueue.main.async {
-                self.loadItemsCoreData()
-            }
-            if appData.transactionsCoreData.count != 0 {
-                var alldata = appData.transactions
-                
-                for i in 0..<appData.transactionsCoreData.count  {
-                    let value = "\(appData.transactionsCoreData[i].value)"
-                    let category = appData.transactionsCoreData[i].category ?? ""
-                    let date = appData.transactionsCoreData[i].date ?? ""
-                    let comment = appData.transactionsCoreData[i].comment ?? ""
-                    
-                    alldata.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
-                }
-                appData.saveTransations(alldata)
-                print(appData.transactions, "transactions setted to defaults")
-                
-                DispatchQueue.main.async {
-                    self.mainTableView.reloadData()
-                }
-                
-                for i in 0..<appData.transactionsCoreData.count {
-                    appData.context().delete(appData.transactionsCoreData[i])
-                    do { try appData.context().save()
-                    } catch { print("\n\nERROR ENCODING CONTEXT\n\n", error) }
-                }
 
-                appData.defaults.set(appData.transactionsCoreData.count, forKey: "transactionsCoreDataCount")
-                print("after deleting core data, left: \(appData.transactionsCoreData.count)")
-            } else {
-                print("Transactions: core data count = \(appData.transactionsCoreData.count)")
-                appData.defaults.set(appData.transactionsCoreData.count, forKey: "transactionsCoreDataCount")
-            }
-            
-            if appData.categoriesCoreData.count != 0 {
-                var allData = appData.getCategories()
-                for i in 0..<appData.categoriesCoreData.count {
-                    let name = appData.categoriesCoreData[i].name ?? ""
-                    let purpose = appData.categoriesCoreData[i].purpose ?? ""
-                    allData.append(CategoriesStruct(name: name, purpose: purpose, count: 0))
-                }
-                appData.saveCategories(allData)
-                print(appData.getCategories(), "categories setted to defaults")
-            } else {
-                print("Categories: core data count = \(appData.categoriesCoreData.count)")
-            }
-        }
-        
-        
-    }
-    func loadItemsCoreData(_ request: NSFetchRequest<Transactions> = Transactions.fetchRequest(), predicate: NSPredicate? = nil) {
-        print("Loading core data")
-        do { appData.transactionsCoreData = try appData.context().fetch(request)
-        } catch { print("\n\nERROR FETCHING DATA FROM CONTEXTE\n\n", error)}
-        let catRequest: NSFetchRequest<Categories> = Categories.fetchRequest()
-        do { appData.categoriesCoreData = try appData.context().fetch(catRequest)
-        } catch { print("\n\nERROR FETCHING DATA FROM CONTEXTE\n\n", error)}
-    }
+
     override func viewWillAppear(_ animated: Bool) {
         print("today is", appData.filter.getToday(appData.filter.filterObjects.currentDate))
     }

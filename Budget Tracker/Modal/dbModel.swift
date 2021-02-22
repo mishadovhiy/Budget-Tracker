@@ -120,7 +120,6 @@ struct LoadFromDB {
                 return
                 
             } else {
-                appData.internetPresend = true
                 var jsonResult = NSArray()
                 do{
                     jsonResult = try JSONSerialization.jsonObject(with: data!, options:JSONSerialization.ReadingOptions.allowFragments) as! NSArray
@@ -218,12 +217,10 @@ struct SaveToDB {
                         let returnedData = NSString(data: unwrappedData, encoding: String.Encoding.utf8.rawValue)
                         
                         if returnedData == "1" {
-                            appData.internetPresend = true
                             print("save: sended \(dataToSend)")
                             error(false)
                         } else {
-                            appData.internetPresend = false
-                            print("save: db error for (cats, etc), developer fault")
+                            print("save: db error for (cats, etc)")
                             error(true)
                         }
                         
@@ -287,7 +284,7 @@ struct DeleteFromDB {
                             error(false)
                             return
                         } else {
-                            print("db error for (cats, etc), developer fault")
+                            print("db error for (cats, etc)")
                             error(true)
                             return
                         }
