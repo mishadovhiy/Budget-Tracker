@@ -21,6 +21,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var filterView: UIView!
     @IBOutlet weak var filterTextLabel: UILabel!
+    @IBOutlet weak var dataTaskCountLabel: UILabel!
     @IBOutlet weak var categoriesButton: UIButton!
     @IBOutlet weak var dataCountLabel: UILabel!
     @IBOutlet weak var calculationSView: UIStackView!
@@ -31,7 +32,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var incomeLabel: UILabel!
     @IBOutlet weak var expenseLabel: UILabel!
     var refreshControl = UIRefreshControl()
-    var tableData:[TransactionsStruct] = []//appData.transactions.sorted{ $0.dateFromString < $1.dateFromString }
+    var tableData:[TransactionsStruct] = []
     var _TableData: [tableStuct] = []
     var newTableData: [tableStuct] {
         get {
@@ -42,6 +43,7 @@ class ViewController: UIViewController {
             let lastDownloadDate = UserDefaults.standard.value(forKey: "LastLoadDataDate") as? Date ?? Date()
             let component = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: lastDownloadDate)
             let lastLaunxText = "Updated: \(component.year ?? 0).\(self.makeTwo(n: component.month ?? 0)).\(self.makeTwo(n: component.day ?? 0)), \(self.makeTwo(n: component.hour ?? 0)):\(self.makeTwo(n: component.minute ?? 0)):\(self.makeTwo(n: component.second ?? 0))"
+            dataTaskCount = nil
             DispatchQueue.main.async {
                 self.filterText = "Filter: \(selectedPeroud)"
                 self.calculationSView.alpha = 0
@@ -93,13 +95,13 @@ class ViewController: UIViewController {
         return message
     }()
 
-    let tableCorners: CGFloat = 22
+    let tableCorners: CGFloat = 18
     var forseSendUnsendedData = true
     var forseShowAddButton = false
     var addTransFrame = CGRect.zero
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         updateUI()
         addTransitionButton.layer.cornerRadius = tableCorners
         prepareFilterOptions()
@@ -192,7 +194,8 @@ class ViewController: UIViewController {
     }
     
     func filter() {
-        self.animateCellWillAppear = true
+        dataTaskCount = (0,0)
+        animateCellWillAppear = true
         DispatchQueue.main.async {
             self.filterText = "Filtering"
         }
@@ -221,13 +224,39 @@ class ViewController: UIViewController {
         return result
     }
     
+    //lazy var dataTaskCount = (0, 0)
+    var dataTaskCount: (Int, Int)? {
+        get { return nil }
+        set {
+            if let new = newValue {
+                let statusText = new.0 > 0 ? "\(new.0)/\(new.1)" : ""
+                DispatchQueue.main.async {
+                    self.dataTaskCountLabel.text = statusText
+                }
+            } else {
+                DispatchQueue.main.async {
+                    UIView.animate(withDuration: 0.6) {
+                        self.dataTaskCountLabel.alpha = 0
+                    } completion: { (_) in
+                        self.dataTaskCountLabel.text = ""
+                        self.dataTaskCountLabel.alpha = 1
+                    }
+                }
+            }
+        }
+    }
     func createTableData(filteredData: [TransactionsStruct]) -> [tableStuct] {
         var result: [tableStuct] = []
         var currentDate = ""
+        let otherSections = 1
+        //dataTaskCount?.1 = filteredData.count
         for i in 0..<filteredData.count {
+            DispatchQueue.main.async {
+                self.dataTaskCount = (i+1, filteredData.count)
+            }
             currentDate = filteredData[i].date
             if i > 0 {
-                if filteredData[i-1].date != currentDate {
+                if filteredData[i-otherSections].date != currentDate {
                     let new = tableStuct(date: currentDate, transactions: createTransactionsFor(date: filteredData[i].date, filteredData: filteredData))
                     result.insert(new, at: 0)
                 }
@@ -281,22 +310,16 @@ class ViewController: UIViewController {
         
         
     }
-    
+
     func performFiltering(from: String, to: String, all: Bool) -> [TransactionsStruct] {
         
         print("performFiltering called")
         if all == true {
             tableData = appData.transactions
-
-            print("showing for all time")
             allSelectedTransactionsData = tableData
-
-            print(allSelectedTransactionsData, "allSelectedTransactionsDataallSelectedTransactionsData")
-            print("end performFiltering FROM: \(from), TO: \(to), SHOW ALL: \(all)")
             return allSelectedTransactionsData
 
         } else {
-            
             print("performFiltering: appending transactions data")
             print("daysBetween count: \(daysBetween.count), appData.transactions: \(appData.transactions.count)")
             var arr = tableData
@@ -309,16 +332,13 @@ class ViewController: UIViewController {
                     if days.count > number {
                         if days[number] == transactions[i][3] {
                             matches += 1
-                            print("\(matches) performFiltering: arr.appended at \(i)")
                             arr.append(TransactionsStruct(value: transactions[i][1], category: transactions[i][2], date: transactions[i][3], comment: transactions[i][4]))
                         }
                     }
                 }
             }
-            self.tableData = arr//.sorted{ $0.dateFromString < $1.dateFromString }
-            allSelectedTransactionsData = self.tableData
-            print(allSelectedTransactionsData, "allSelectedTransactionsDataallSelectedTransactionsData")
-            print("end performFiltering FROM: \(from), TO: \(to), SHOW ALL: \(all)")
+            self.tableData = arr
+            allSelectedTransactionsData = arr
             return arr
             
         }
@@ -364,8 +384,10 @@ class ViewController: UIViewController {
                     default:
                         dots = ""
                     }
+                    
+                    //let statusText = self.dataTaskCount.0 > 0 ? "\(self.dataTaskCount.0)/\(self.dataTaskCount.1)" : ""
                     DispatchQueue.main.async {
-                        self.filterTextLabel.text = self._filterText + dots
+                        self.filterTextLabel.text = self._filterText + dots //(statusText == "" ? dots : " (\(statusText))")
                     }
                 }
                 timers.append(timer)
@@ -664,14 +686,12 @@ class ViewController: UIViewController {
     
     func downloadFromDB() {
         if appData.username != "" {
-
             print("downloadFromDB: username: \(appData.username), not nill")
             if appData.unsendedData.count > 0 {
                 self.sendingUnsendedData = true
                 self.sendUnsaved()
             } else {
                 self.sendingUnsendedData = false
-
                 DispatchQueue.main.async {
                     self.filterText = "Downloading"
                 }
@@ -681,7 +701,6 @@ class ViewController: UIViewController {
                         print("loaded \(loadedData.count) transactions from DB")
                         var dataStruct: [TransactionsStruct] = []
                         for i in 0..<loadedData.count {
-                            
                             let value = loadedData[i][3]
                             let category = loadedData[i][1]
                             let date = loadedData[i][2]
@@ -696,7 +715,6 @@ class ViewController: UIViewController {
                                 print("loaded \(loadedData.count) Categories from DB")
                                 var dataStructt: [CategoriesStruct] = []
                                 for i in 0..<loadedDataa.count {
-                                    
                                     let name = loadedDataa[i][1]
                                     let purpose = loadedDataa[i][2]
                                     dataStructt.append(CategoriesStruct(name: name, purpose: purpose, count: 0))
@@ -1019,7 +1037,14 @@ class ViewController: UIViewController {
     
     var prevSelectedPer = selectedPeroud
     
-    var filteredData:[String: [String]] = [:]
+    var filteredData:[String: [String]] {
+        get {
+            return UserDefaults.standard.value(forKey: "filterOptions") as? [String: [String]] ?? [:]
+        }
+        set {
+            UserDefaults.standard.setValue(newValue, forKey: "filterOptions")
+        }
+    }
     func prepareFilterOptions() {
         let arr = Array(appData.transactions.sorted{ $0.dateFromString > $1.dateFromString })
         var months:[String] = []
@@ -1061,13 +1086,14 @@ class ViewController: UIViewController {
         selectedCell = nil
         switch segue.identifier {
         case "toFiterVC":
+            self.mainTableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
             prevSelectedPer = selectedPeroud
             print("toFiterVC")
             let vc = segue.destination as? FilterTVC
             vc?.months = filteredData["months"] ?? []
             vc?.years = filteredData["years"] ?? []
             DispatchQueue.main.async {
-                let filterFrame = self.filterView.frame
+                let filterFrame = self.filterView.frame//self.filterAndCalcFrameHolder.0
                 let superFilter = self.filterView.superview?.frame ?? .zero
                 let vcFrame = CGRect(x: filterFrame.minX + superFilter.minX, y: filterFrame.minY + superFilter.minY, width: filterFrame.width, height: filterFrame.width)
                 vc?.frame = vcFrame
@@ -1190,6 +1216,14 @@ class ViewController: UIViewController {
         }
         
         let lastCellVisible = self.newTableData.count > 8 ? true : false
+        if scrollView.contentOffset.y > 5.0 {
+            DispatchQueue.main.async {
+                if self.refreshControl.isRefreshing {
+                    self.refreshControl.endRefreshing()
+                }
+            }
+        }
+        
         
         if !lastCellVisible {
             if scrollView.contentOffset.y < 0.0 {

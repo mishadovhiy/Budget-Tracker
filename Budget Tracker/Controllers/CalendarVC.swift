@@ -591,8 +591,26 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
         let yearCell = makeTwo(n: year)
         
         cell.cellTypeLabel.text = "\(dayCell).\(monthCell).\(yearCell)"
-        cellBackground(cell: cell)
-        backgroundBetween(cell: cell)
+        //cellBackground(cell: cell)
+        DispatchQueue.main.async { // commented - test iphone 5s (were without background on iphone 5s)
+            if self.selectedTo == cell.cellTypeLabel.text || self.selectedFrom == cell.cellTypeLabel.text {
+                cell.backgroundCell.backgroundColor = K.Colors.yellow
+                cell.dayLabel.textColor = UIColor.white
+            }else {
+                cell.backgroundCell.backgroundColor = self.darkAppearence ? UIColor(named: "darkTableColor") : K.Colors.background
+                cell.dayLabel.textColor = self.darkAppearence ? K.Colors.category : UIColor(named: "darkTableColor")
+            }
+        }
+       // backgroundBetween(cell: cell) //fatal error index aout of range, iphone xr, caledar from filter
+        
+        DispatchQueue.main.async { //slow
+            for i in 0..<self.daysBetween.count {
+                if self.daysBetween[i] == cell.cellTypeLabel.text { //5s - fatal error index aout of range
+                    cell.backgroundCell.backgroundColor = K.Colors.separetor
+                    cell.dayLabel.textColor = K.Colors.balanceT
+                }
+            }
+        }
         if cell.cellTypeLabel.text == today {
             print("found today")
             DispatchQueue.main.async {

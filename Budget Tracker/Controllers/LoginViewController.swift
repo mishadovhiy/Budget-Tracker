@@ -70,12 +70,10 @@ class LoginViewController: UIViewController {
     func updateUI() {
         toggleScreen(options: .createAccount, animation: 0.0)
         for i in 0..<textfields.count {
-            DispatchQueue.main.async {
-                self.textfields[i].delegate = self
-                self.textfields[i].addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
-                self.textfields[i].layer.masksToBounds = true
-                self.textfields[i].layer.cornerRadius = 6
-            }
+            self.textfields[i].delegate = self
+            self.textfields[i].addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
+            self.textfields[i].layer.masksToBounds = true
+            self.textfields[i].layer.cornerRadius = 6
             
             textfields[i].setRightPaddingPoints(5)
             textfields[i].setLeftPaddingPoints(5)
@@ -102,7 +100,7 @@ class LoginViewController: UIViewController {
     
     func showActivityIndicator(at button: UIButton) {
         DispatchQueue.main.async {
-            self.ai.frame = CGRect(x: 10, y: 10, width: 10, height: 10)
+            self.ai.frame = CGRect(x: 5, y: 5, width: 15, height: 15)
             button.addSubview(self.ai)
             self.ai.startAnimating()
         }

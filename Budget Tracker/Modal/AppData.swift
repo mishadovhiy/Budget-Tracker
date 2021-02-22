@@ -119,7 +119,7 @@ class AppData {
 
     var transactions: [TransactionsStruct] {
         get{
-            let localData = defaults.value(forKey: "transactionsData") as? [[String]] ?? []
+            let localData = Array(defaults.value(forKey: "transactionsData") as? [[String]] ?? [])
             var results: [TransactionsStruct] = []
             for i in 0..<localData.count {
                 let value = localData[i][1]
