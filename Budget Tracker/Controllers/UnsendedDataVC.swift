@@ -9,8 +9,7 @@
 import UIKit
 
 protocol UnsendedDataVCProtocol {
-    func deletePressed()
-    func sendPressed()
+    func quiteUnsendedData(deletePressed: Bool, sendPressed: Bool)
 }
 
 class UnsendedDataVC: UIViewController {
@@ -85,16 +84,24 @@ class UnsendedDataVC: UIViewController {
     @IBAction func closePressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
-    
+    var sendPres = false
     @IBAction func sendPressed(_ sender: UIButton) {
+        sendPres = true
         self.dismiss(animated: true) {
-            self.delegate?.sendPressed()
+            self.delegate?.quiteUnsendedData(deletePressed: false, sendPressed: true)
+        }
+    }
+    var deletePress = false
+    @IBAction func deletePressed(_ sender: UIButton) {
+        deletePress = true
+        self.dismiss(animated: true) {
+            self.delegate?.quiteUnsendedData(deletePressed: true, sendPressed: false)
         }
     }
     
-    @IBAction func deletePressed(_ sender: UIButton) {
-        self.dismiss(animated: true) {
-            self.delegate?.deletePressed()
+    override func viewWillDisappear(_ animated: Bool) {
+        if !sendPres && !deletePress {
+            self.delegate?.quiteUnsendedData(deletePressed: false, sendPressed: false)
         }
     }
     
@@ -283,24 +290,25 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        var removeSelectedAt: Int?
-        for i in 0..<selectedIndexses.count {
-            if selectedIndexses[i] == indexPath {
-                removeSelectedAt = i
+        if editingMode {
+            var removeSelectedAt: Int?
+            for i in 0..<selectedIndexses.count {
+                if selectedIndexses[i] == indexPath {
+                    removeSelectedAt = i
+                }
+            }
+            if let newSelection = removeSelectedAt {
+                selectedIndexses.remove(at: newSelection)
+                
+            } else {
+                selectedIndexses.append(IndexPath(row: indexPath.row, section: indexPath.section))
+            }
+            print(selectedIndexses)
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+                self.deleteSelectedButton.setTitle("Delete (\(self.selectedIndexses.count))", for: .normal)
             }
         }
-        if let newSelection = removeSelectedAt {
-            selectedIndexses.remove(at: newSelection)
-            
-        } else {
-            selectedIndexses.append(IndexPath(row: indexPath.row, section: indexPath.section))
-        }
-        print(selectedIndexses)
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-            self.deleteSelectedButton.setTitle("Delete (\(self.selectedIndexses.count))", for: .normal)
-        }
-
     }
 
 }

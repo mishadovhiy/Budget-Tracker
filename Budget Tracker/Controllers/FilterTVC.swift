@@ -176,8 +176,8 @@ class FilterTVC: UIViewController {
     func convertMonthFrom(int: Int) -> String {
         
         let monthes = [
-            1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June",
-            7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December"
+            1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "June",
+            7: "July", 8: "Aug", 9: "Sept", 10: "Oct", 11: "Nov", 12: "Dec"
         ]
         return monthes[int] ?? "Jan"
     }
@@ -237,9 +237,9 @@ class FilterTVC: UIViewController {
         let yearTo = appData.filter.getYearFromString(s: appData.filter.to)
         ifCustom = true
         if yearTo == year {
-            selectedPeroud = "\(convertMonthFrom(int: month)), \(day) → \(convertMonthFrom(int: monthTo)), \(dayTo) of \(yearTo)"
+            selectedPeroud = "\(convertMonthFrom(int: month)) \(day) → \(convertMonthFrom(int: monthTo)) \(dayTo), \(yearTo)"
         } else {
-            selectedPeroud = "\(convertMonthFrom(int: month)), \(day) of \(year) → \(convertMonthFrom(int: monthTo)), \(dayTo) of \(yearTo)"
+            selectedPeroud = "\(convertMonthFrom(int: month)) \(day), \(year) → \(convertMonthFrom(int: monthTo)) \(dayTo), \(yearTo)"
         }
         
         DispatchQueue.main.async {

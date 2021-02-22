@@ -184,23 +184,28 @@ class SettingsVCCell: UITableViewCell {
 }
 
 extension SettingsViewController: UnsendedDataVCProtocol {
-    func deletePressed() {
-        appData.saveTransations([], key: "savedTransactions")
-        appData.saveCategories([], key: "savedCategories")
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-            self.performSegue(withIdentifier: "toSingIn", sender: self)
+    func quiteUnsendedData(deletePressed: Bool, sendPressed: Bool) {
+        if !deletePressed && !sendPressed {
+            delegate?.closeSettings(sendSavedData: false)
+        } else {
+            if deletePressed {
+                appData.saveTransations([], key: "savedTransactions")
+                appData.saveCategories([], key: "savedCategories")
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                    self.performSegue(withIdentifier: "toSingIn", sender: self)
+                }
+            } else {
+                if sendPressed {
+                    toSegue = false
+                    sendLocalDataPressed = true
+                    DispatchQueue.main.async {
+                        self.dismiss(animated: true, completion: nil)
+                    }
+                }
+            }
         }
     }
-    
-    func sendPressed() {
-        toSegue = false
-        sendLocalDataPressed = true
-        DispatchQueue.main.async {
-            self.dismiss(animated: true, completion: nil)
-        }
-    }
-    
     
 }
 

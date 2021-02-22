@@ -15,7 +15,6 @@ var sumAllCategories: [String: Double] = [:]
 var allSelectedTransactionsData: [TransactionsStruct] = []
 var expenseLabelPressed = true
 var selectedPeroud = ""
-var refreshDataComlition: Bool?
 
 class ViewController: UIViewController {
     
@@ -104,8 +103,6 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         updateUI()
-        
-
     }
     
     func updateUI() {
@@ -178,7 +175,6 @@ class ViewController: UIViewController {
     }
     
     var refreshSubview = UIView.init(frame: .zero)
-    
     struct tableStuct {
         let date: String
         var transactions: [TransactionsStruct]
@@ -226,7 +222,6 @@ class ViewController: UIViewController {
         return result
     }
     
-    //lazy var dataTaskCount = (0, 0)
     var dataTaskCount: (Int, Int)? {
         get { return nil }
         set {
@@ -386,10 +381,9 @@ class ViewController: UIViewController {
                     default:
                         dots = ""
                     }
-                    
-                    //let statusText = self.dataTaskCount.0 > 0 ? "\(self.dataTaskCount.0)/\(self.dataTaskCount.1)" : ""
+
                     DispatchQueue.main.async {
-                        self.filterTextLabel.text = self._filterText + dots //(statusText == "" ? dots : " (\(statusText))")
+                        self.filterTextLabel.text = self._filterText + dots
                     }
                 }
                 timers.append(timer)
@@ -399,9 +393,8 @@ class ViewController: UIViewController {
     var timers: [Timer] = []
     
     
-    var didloadCalled = false
+   // var didloadCalled = false
     var sendSavedData = false
-    var sendindSavedData = false
     func sendUnsaved() {
         let dataCount = appData.unsendedData.count
         if forseSendUnsendedData {
@@ -420,7 +413,6 @@ class ViewController: UIViewController {
                         save.Transactions(toDataString: transaction) { (error) in
                             if error {
                                 self.forseSendUnsendedData = false
-                                self.sendingUnsendedData = false
                                 self.filter()
                                 DispatchQueue.main.async {
                                     self.message.showMessage(text: "Internet Error!", type: .internetError)
@@ -433,10 +425,10 @@ class ViewController: UIViewController {
                                         self.refreshControl.endRefreshing()
                                     }
                                 }
-                                if !self.didloadCalled {
+                                /*if !self.didloadCalled {
                                     self.didloadCalled = true
                                     self.filter()
-                                }
+                                }*/
                                 self.downloadFromDB()
                             }
                         }
@@ -446,7 +438,6 @@ class ViewController: UIViewController {
                             save.Categories(toDataString: category) { (error) in
                                 if error {
                                     self.forseSendUnsendedData = false
-                                    self.sendingUnsendedData = false
                                     self.filter()
                                     DispatchQueue.main.async {
                                         self.message.showMessage(text: "Internet Error!", type: .internetError)
@@ -459,10 +450,10 @@ class ViewController: UIViewController {
                                             self.refreshControl.endRefreshing()
                                         }
                                     }
-                                    if !self.didloadCalled {
+                                    /*if !self.didloadCalled {
                                         self.didloadCalled = true
                                         self.filter()
-                                    }
+                                    }*/
                                     self.downloadFromDB()
                                 }
                             }
@@ -473,7 +464,6 @@ class ViewController: UIViewController {
                                     print("deleteTransaction cateeeee", error)
                                     if error {
                                         self.forseSendUnsendedData = false
-                                        self.sendingUnsendedData = false
                                         self.filter()
                                         DispatchQueue.main.async {
                                             self.message.showMessage(text: "Internet Error!", type: .internetError)
@@ -486,10 +476,10 @@ class ViewController: UIViewController {
                                                 self.refreshControl.endRefreshing()
                                             }
                                         }
-                                        if !self.didloadCalled {
+                                        /*if !self.didloadCalled {
                                             self.didloadCalled = true
                                             self.filter()
-                                        }
+                                        }*/
                                         self.downloadFromDB()
                                     }
                                 }
@@ -499,7 +489,6 @@ class ViewController: UIViewController {
                                         print("delete cateeeee", error)
                                         if error {
                                             self.forseSendUnsendedData = false
-                                            self.sendingUnsendedData = false
                                             self.filter()
                                             DispatchQueue.main.async {
                                                 self.message.showMessage(text: "Internet Error!", type: .internetError)
@@ -512,10 +501,10 @@ class ViewController: UIViewController {
                                                     self.refreshControl.endRefreshing()
                                                 }
                                             }
-                                            if !self.didloadCalled {
+                                            /*if !self.didloadCalled {
                                                 self.didloadCalled = true
                                                 self.filter()
-                                            }
+                                            }*/
                                             self.downloadFromDB()
                                         }
                                     }
@@ -538,7 +527,6 @@ class ViewController: UIViewController {
                     }
                     
                     self.animateCellWillAppear = false
-                    sendindSavedData = true
                     let save = SaveToDB()
                     var newCategories = appData.getCategories(key: "savedCategories")
                     print("sendUnsaved unsaved cats", newCategories.count)
@@ -549,7 +537,6 @@ class ViewController: UIViewController {
                                 self.filter()
                                 self.sendSavedData = false
                                 self.forseSendUnsendedData = false
-                                self.sendindSavedData = false
                                 DispatchQueue.main.async {
                                     self.message.showMessage(text: "Internet Error!", type: .internetError)
                                 }
@@ -576,7 +563,6 @@ class ViewController: UIViewController {
                             let toDataString = "&Nickname=\(appData.username)" + "&Category=\(tran.category)" + "&Date=\(tran.date)" + "&Value=\(tran.value)" + "&Comment=\(tran.comment)"
                             save.Transactions(toDataString: toDataString) { (error) in
                                 if error {
-                                    self.sendindSavedData = false
                                     self.filter()
                                     self.forseSendUnsendedData = false
                                     self.sendSavedData = false
@@ -598,15 +584,12 @@ class ViewController: UIViewController {
                             }
                         } else {
                             sendSavedData = false
-                            sendindSavedData = false
                             self.downloadFromDB()
                             DispatchQueue.main.async {
                                 self.message.showMessage(text: "Data has been sended successfully", type: .succsess, windowHeight: 65, bottomAppearence: true)
                             }
                         }
                     }
-                } else {
-                    self.sendindSavedData = false
                 }
                 
             }
@@ -617,7 +600,6 @@ class ViewController: UIViewController {
     
     
     var allData: [[TransactionsStruct]] = []
-    
     
     func calculateDifference(amount: Int) {
         allData = []
@@ -690,10 +672,8 @@ class ViewController: UIViewController {
         if appData.username != "" {
             print("downloadFromDB: username: \(appData.username), not nill")
             if appData.unsendedData.count > 0 {
-                self.sendingUnsendedData = true
                 self.sendUnsaved()
             } else {
-                self.sendingUnsendedData = false
                 DispatchQueue.main.async {
                     self.filterText = "Downloading"
                 }
@@ -714,7 +694,7 @@ class ViewController: UIViewController {
                         load.Categories{(loadedDataa, error) in
                             print(loadedDataa)
                             if error == "" {
-                                print("loaded \(loadedData.count) Categories from DB")
+                                print("loaded \(loadedDataa.count) Categories from DB")
                                 var dataStructt: [CategoriesStruct] = []
                                 for i in 0..<loadedDataa.count {
                                     let name = loadedDataa[i][1]
@@ -738,7 +718,7 @@ class ViewController: UIViewController {
                         self.filter()
                         self.prepareFilterOptions()
                         DispatchQueue.main.async {
-                            self.message.showMessage(text: error, type: .internetError)//internetError
+                            self.message.showMessage(text: error, type: .internetError)
                         }
                         
                     }
@@ -776,7 +756,6 @@ class ViewController: UIViewController {
                         arr.remove(at: i)
                         appData.saveTransations(arr)
                         self.filter()
-                        print("FOUND")
                         return
                     }
                 }
@@ -961,7 +940,7 @@ class ViewController: UIViewController {
                         appData.saveTransations(arr)
                         DispatchQueue.main.async {
                             self.tableActionActivityIndicator.removeFromSuperview()
-                            self.performSegue(withIdentifier: K.goToEditVCSeq, sender: self)
+                            self.performSegue(withIdentifier: "goToEditVC", sender: self)
                         }
                         return
                     }
@@ -1045,7 +1024,7 @@ class ViewController: UIViewController {
                 }
             }
             
-        case K.goToEditVCSeq:
+        case "goToEditVC":
             let nav = segue.destination as! UINavigationController
             let vc = nav.topViewController as! TransitionVC
             vc.delegate = self
@@ -1062,11 +1041,8 @@ class ViewController: UIViewController {
         case "toSettings":
             let vc = segue.destination as! SettingsViewController
             vc.delegate = self
-          //  UIView.animate(withDuration: 0.4) {
-               // self.calculationSView.alpha = 0
-          //m  }
         
-        case K.statisticSeque:
+        case "toStatisticVC":
             let nav = segue.destination as! UINavigationController
             let vc = nav.topViewController as! StatisticVC
             vc.dataFromMain = tableData
@@ -1188,30 +1164,21 @@ class ViewController: UIViewController {
     }
     
     @objc func savedTransPressed(_ sender: UITapGestureRecognizer) {
-        DispatchQueue.main.async {
-            self.performSegue(withIdentifier: "toUnsendedVC", sender: self)
-        }
-    }
-    @objc func unsavedPtransPressed(_ sender: UITapGestureRecognizer) {
-        if !forseSendUnsendedData {
-            DispatchQueue.main.async {
-                self.message.showMessage(text: "Your data is sending", type: .succsess)
-            }
-        } else {
+        if !sendSavedData {
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: "toUnsendedVC", sender: self)
             }
         }
     }
 
+
     
     @objc func addTransButtonPressed(_ sender: UIButton) {
         print("addtrans")
-        self.performSegue(withIdentifier: "goToEditVC", sender: self)
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: "goToEditVC", sender: self)
+        }
     }
-    
-    var unsendedValue = 0
-    var sendingUnsendedData = false
     
     let tableActionActivityIndicator = UIActivityIndicatorView.init(style: .gray)
     
@@ -1261,8 +1228,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         case 0: return 1
         case 1..<(1 + newTableData.count):
             let n = newTableData[section - 1].transactions.count
-            print(newTableData.count, "newTableData.count")
-            print(n, "numberOfRowsInSection")
             return n
         default: return 0
         }
@@ -1516,15 +1481,25 @@ extension ViewController: TransitionVCProtocol {
 
 
 extension ViewController: UnsendedDataVCProtocol {
-    func deletePressed() {
-        appData.saveTransations([], key: "savedTransactions")
-        appData.saveCategories([], key: "savedCategories")
-        self.filter()
-    }
-    
-    func sendPressed() {
-        sendSavedData = true
-        self.filter()
+    func quiteUnsendedData(deletePressed: Bool, sendPressed: Bool) {
+        if !deletePressed && !sendPressed {
+            DispatchQueue.main.async {
+                self.mainTableView.reloadData()
+            }
+        } else {
+            if deletePressed {
+                appData.saveTransations([], key: "savedTransactions")
+                appData.saveCategories([], key: "savedCategories")
+                DispatchQueue.main.async {
+                    self.mainTableView.reloadData()
+                }
+            } else {
+                if sendPressed {
+                    sendSavedData = true
+                    self.filter()
+                }
+            }
+        }
     }
     
 }
