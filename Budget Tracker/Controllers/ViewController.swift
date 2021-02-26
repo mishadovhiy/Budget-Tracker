@@ -1171,7 +1171,6 @@ class ViewController: UIViewController {
         if !sendSavedData {
             
             DispatchQueue.main.async {
-    //            self.mainTableView.reloadData()
                 self.performSegue(withIdentifier: "toUnsendedVC", sender: self)
             }
         }
@@ -1249,7 +1248,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             let calculationCell = tableView.dequeueReusableCell(withIdentifier: K.calcCellIdent, for: indexPath) as! calcCell
             
             let sendedCount = (appData.defaults.value(forKey: "savedTransactions") as? [[String]] ?? []) + (appData.defaults.value(forKey: "savedCategories") as? [[String]] ?? [])
-            let ai = UIActivityIndicatorView(frame: CGRect(x: -15, y: 5, width: 15, height: 15))
 
             calculationCell.savedTransactionsLabel.text = "\(sendedCount.count)"
             let newUnsendedCount = appData.unsendedData.count
