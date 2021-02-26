@@ -76,7 +76,7 @@ class AppData {
             dict.append([nickname, value, category, date, comment])
         }
         print("transactions saved to user defaults, count: \(dict.count)")
-        defaults.set(dict, forKey: key)
+        UserDefaults.standard.set(dict, forKey: key)
     }
 
     var transactions: [TransactionsStruct] {

@@ -266,69 +266,8 @@ class LoginViewController: UIViewController {
         }
     }
 
-    /*  func createDifference() {
-        let localData = Array(appData.transactions)
-        print("createDifference: local \(localData.count)")
-        print("createDifference: db \(DBTransactionsLazy.count)")
-        difference = []
-
-        var diff = Array(difference)
-        for i in 0..<localData.count {
-            if !contains(localData[i]) {
-                diff.append(localData[i])
-                print("difference appended \(i)")
-            }
-        }
-        
-        print("createDifference: \(difference.count)")
-        print("difference: \(difference)")
-        print("localData: \(localData.count)")
-        print("DBTransactions: \(DBTransactions.count)")
-        appData.saveTransations(DBTransactions, key: "savedTransactions")
-        
-        if diff.count > 0 {
-            print("would you like to store your local data in database or delete it?")
-            difference = diff
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "toLocalData", sender: self)
-            }
-
-        } else {
-            appData.saveTransations(DBTransactions, key: "savedTransactions")
-            DBTransactions = []
-            DBCategories = []
-            print("go to main")
-            appData.fromLoginVCMessage = "Wellcome, \(appData.username)\n"
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "homeVC", sender: self)
-            }
-        }
-        
-    }
-    lazy var DBTransactionsLazy = DBTransactions
-    func contains(_ value: TransactionsStruct) -> Bool {
-        var found: Bool?
-        let dbData = Array(DBTransactions)
-        
-        for i in 0..<dbData.count {
-            if value.comment == dbData[i].comment &&
-                value.category == dbData[i].category &&
-                value.date == dbData[i].date &&
-                value.value == dbData[i].value {
-                
-                found = true
-                return true
-            }
-        }
-        
-        if found == nil {
-            return false
-        } else {
-            return found!
-        }
-
-    }
-    */
+      
+    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         

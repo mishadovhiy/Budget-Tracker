@@ -1036,6 +1036,9 @@ class ViewController: UIViewController {
             }
         case "toUnsendedVC":
             let vc = segue.destination as! UnsendedDataVC
+            DispatchQueue.main.async {
+                self.mainTableView.reloadData()
+            }
             vc.delegate = self
             
         case "toSettings":
@@ -1163,9 +1166,12 @@ class ViewController: UIViewController {
         }
     }
     
+
     @objc func savedTransPressed(_ sender: UITapGestureRecognizer) {
         if !sendSavedData {
+            
             DispatchQueue.main.async {
+    //            self.mainTableView.reloadData()
                 self.performSegue(withIdentifier: "toUnsendedVC", sender: self)
             }
         }
@@ -1243,10 +1249,12 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             let calculationCell = tableView.dequeueReusableCell(withIdentifier: K.calcCellIdent, for: indexPath) as! calcCell
             
             let sendedCount = (appData.defaults.value(forKey: "savedTransactions") as? [[String]] ?? []) + (appData.defaults.value(forKey: "savedCategories") as? [[String]] ?? [])
-            
+            let ai = UIActivityIndicatorView(frame: CGRect(x: -15, y: 5, width: 15, height: 15))
+
             calculationCell.savedTransactionsLabel.text = "\(sendedCount.count)"
             let newUnsendedCount = appData.unsendedData.count
             calculationCell.unsesndedTransactionsLabel.text = "\(newUnsendedCount)"
+            
             
             calculationCell.savedTransactionsLabel.superview?.superview?.superview?.superview?.isHidden = (sendedCount.count + newUnsendedCount) == 0 ? true : false
             calculationCell.unsesndedTransactionsLabel.superview?.superview?.isHidden = newUnsendedCount > 0 ? false : true
@@ -1257,6 +1265,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             calculationCell.expensesLabel.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(expensesPressed(_:))))
             
             calculationCell.savedTransactionsLabel.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(savedTransPressed(_:))))
+            
             
             
             if UserDefaults.standard.value(forKey: "StatisticVCFirstLaunch") as? Bool ?? false == false {
