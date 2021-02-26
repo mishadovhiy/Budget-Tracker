@@ -48,16 +48,7 @@ class SettingsViewController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first {
             if touch.view != contentView{
-                DispatchQueue.main.async {
-                    UIView.animate(withDuration: 0.23) {
-                        self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -self.contentView.frame.maxY, 0)
-                    } completion: { (_) in
-                        self.toSegue = false
-                        DispatchQueue.main.async {
-                            self.dismiss(animated: true, completion: nil)
-                        }
-                    }
-                }
+                closeWithAnimation()
             }
         }
     }
@@ -91,11 +82,14 @@ class SettingsViewController: UIViewController {
                 self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
             }
             self.tableView.reloadData()
+            if self.closeOnAppear {
+                self.closeOnAppear = false
+                self.closeWithAnimation(vcanimation: false)
+            }
         }
     }
     
-    
-
+    var closeOnAppear = false
     var toSegue = false
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         toSegue = true
@@ -105,6 +99,7 @@ class SettingsViewController: UIViewController {
         case "toSingIn":
             let vc = segue.destination as! LoginViewController
             vc.selectedScreen = .singIn
+            closeOnAppear = true
         case "toSavedData":
             let vc = segue.destination as! UnsendedDataVC
             vc.delegate = self
@@ -120,14 +115,25 @@ class SettingsViewController: UIViewController {
     }
 
     @IBAction func closePressed(_ sender: UIButton) {
+        closeWithAnimation()
+    }
+    
+    func closeWithAnimation(vcanimation: Bool = true) {
         DispatchQueue.main.async {
+            if !vcanimation {
+                self.toSegue = false
+                self.dismiss(animated: true, completion: nil)
+            }
             UIView.animate(withDuration: 0.23) {
                 self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -self.contentView.frame.maxY, 0)
             } completion: { (_) in
-                self.toSegue = false
-                DispatchQueue.main.async {
-                    self.dismiss(animated: true, completion: nil)
+                if vcanimation {
+                    self.toSegue = false
+                    DispatchQueue.main.async {
+                        self.dismiss(animated: vcanimation, completion: nil)
+                    }
                 }
+                
             }
         }
     }
@@ -189,6 +195,7 @@ extension SettingsViewController: UnsendedDataVCProtocol {
             delegate?.closeSettings(sendSavedData: false)
         } else {
             if deletePressed {
+                print("seletePressed")
                 appData.saveTransations([], key: "savedTransactions")
                 appData.saveCategories([], key: "savedCategories")
                 DispatchQueue.main.async {
@@ -211,13 +218,16 @@ extension SettingsViewController: UnsendedDataVCProtocol {
 
 extension SettingsViewController: CategoriesVCProtocol {
     func categorySelected(category: String, purpose: Int) {
-        print("called")
-        tableData = [
-            SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: (appData.savedTransactions.count + appData.getCategories(key: "savedCategories").count) > 0 ? "toSavedData" : "toSingIn"),
-            SettingsSctruct(title: "Categories", description: "All Categories (\(appData.getCategories().count))", segue: "settingsToCategories"),
-        ]
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
+        if category == "" {
+            closeWithAnimation(vcanimation: false)
+        } else {
+            tableData = [
+                SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: (appData.savedTransactions.count + appData.getCategories(key: "savedCategories").count) > 0 ? "toSavedData" : "toSingIn"),
+                SettingsSctruct(title: "Categories", description: "All Categories (\(appData.getCategories().count))", segue: "settingsToCategories"),
+            ]
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
     }
 }

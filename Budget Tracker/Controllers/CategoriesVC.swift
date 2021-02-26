@@ -91,8 +91,10 @@ class CategoriesVC: UIViewController {
     }
     override func viewWillDisappear(_ animated: Bool) {
         if fromSettings {
-            if wasEdited {
+            if !wasEdited {
                 delegate?.categorySelected(category: "", purpose: 0)
+            } else {
+                delegate?.categorySelected(category: "edited", purpose: 0)
             }
         }
     }

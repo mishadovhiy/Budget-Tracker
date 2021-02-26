@@ -30,8 +30,8 @@ class UnsendedDataVC: UIViewController {
             _tablTrans = newValue
             print("table data new value setted")
             DispatchQueue.main.async {
-                UIView.animate(withDuration: 0.4) {
-                    self.saveAllButton.alpha = self.selectedCount == 0 ? 1 : 0
+                UIView.animate(withDuration: 0.23) {
+                    self.saveAllButton.alpha = self.selectedCount == 0 ? 1 : 0.2
                 } completion: { (_) in
                     
                 }
@@ -42,7 +42,10 @@ class UnsendedDataVC: UIViewController {
                 self.deleteSelectedButton.setTitle("Delete (\(self.selectedCount))", for: .normal)
                 self.tableView.reloadData()
                 if newValue.count == 0 && self.categoruesTableData.count == 0 {
-                    self.dismiss(animated: true, completion: nil)
+                    self.deletePress = true
+                    self.dismiss(animated: true) {
+                        self.delegate?.quiteUnsendedData(deletePressed: true, sendPressed: false)
+                    }
                 }
             }
         }
@@ -160,9 +163,12 @@ class UnsendedDataVC: UIViewController {
     }
     var sendPres = false
     @IBAction func sendPressed(_ sender: UIButton) {
-        sendPres = true
-        self.dismiss(animated: true) {
-            self.delegate?.quiteUnsendedData(deletePressed: false, sendPressed: true)
+        print(self.selectedCount, "self.selectedCountself.selectedCountself.selectedCountself.selectedCount")
+        if self.selectedCount == 0 {
+            sendPres = true
+            self.dismiss(animated: true) {
+                self.delegate?.quiteUnsendedData(deletePressed: false, sendPressed: true)
+            }
         }
     }
     var deletePress = false
