@@ -325,6 +325,12 @@ class UnsendedDataVC: UIViewController {
                         selectedCount += 1
                         holder[i].selected = true
                     }
+                    let catHolder = categoruesTableData
+                    for i in 0..<catHolder.count {
+                        if catHolder[i].selected {
+                            selectedCount += 1
+                        }
+                    }
                     self.tableDataTransactions = holder
                 } else {
                     if section == 2 {
@@ -333,8 +339,14 @@ class UnsendedDataVC: UIViewController {
                         for i in 0..<catHolder.count {
                             selectedCount += 1
                             catHolder[i].selected = true
-                            self.tableDataTransactions = holder
                         }
+                        for i in 0..<holder.count {
+                            if holder[i].selected {
+                                selectedCount += 1
+                            }
+                        }
+                        self.categoruesTableData = catHolder
+                        self.tableDataTransactions = holder
                     }
                 }
             }
