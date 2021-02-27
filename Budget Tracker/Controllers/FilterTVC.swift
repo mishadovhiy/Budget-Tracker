@@ -326,11 +326,14 @@ extension FilterTVC: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+
         
-        if section == 0 {
+        switch section {
+        case 0: return 0
+        case 1: return months.count == 0 ? 0 : 20
+        case 2: return years.count == 0 ? 0 : 20
+        default:
             return 0
-        } else {
-            return 20
         }
     }
     

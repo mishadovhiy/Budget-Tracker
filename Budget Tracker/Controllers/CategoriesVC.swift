@@ -76,7 +76,7 @@ class CategoriesVC: UIViewController {
                 if !wasEdited {
                     delegate?.categorySelected(category: "", purpose: 0)
                 } else {
-                    delegate?.categorySelected(category: "RELOAD", purpose: 0)
+                    delegate?.categorySelected(category: "", purpose: 0)
                 }
             }
         }

@@ -111,13 +111,6 @@ class UnsendedDataVC: UIViewController {
                 self.message.showMessage(text: self.messageText, type: .error, windowHeight: 65, bottomAppearence: true)
                 self.messageText = ""
             }
-        } else {
-            if UserDefaults.standard.value(forKey: "firstLaunchUnsendedDataVC") as? Bool ?? true {
-                UserDefaults.standard.setValue(false, forKey: "firstLaunchUnsendedDataVC")
-                DispatchQueue.main.async {
-                    self.message.showMessage(text: "Long press anywhere to turn on editing mode", type: .succsess, windowHeight: 65)
-                }
-            }
         }
         if didapp {
             self.getData()

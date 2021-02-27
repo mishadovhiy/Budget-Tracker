@@ -34,15 +34,7 @@ class SettingsViewController: UIViewController {
 
         updateUI()
         
-        if UserDefaults.standard.value(forKey: "firstLaunchSettings") as? Bool ?? false == false {
-            if appData.username == "" {
-                DispatchQueue.main.async {
-                    self.message.showMessage(text: "Create account to use app across all your devices", type: .succsess, windowHeight: 80, autoHide: false, bottomAppearence: true)
-                }
-            } else {
-                UserDefaults.standard.setValue(true, forKey: "firstLaunchSettings")
-            }
-        }
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -82,14 +74,23 @@ class SettingsViewController: UIViewController {
                 self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
             }
             self.tableView.reloadData()
-            if self.closeOnAppear {
-                self.closeOnAppear = false
-                self.closeWithAnimation(vcanimation: false)
+            
+            
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if UserDefaults.standard.value(forKey: "firstLaunchSettings") as? Bool ?? false == false {
+            if appData.username == "" {
+                DispatchQueue.main.async {
+                    self.message.showMessage(text: "Create account to use app across all your devices", type: .succsess, windowHeight: 80, autoHide: false, bottomAppearence: true)
+                }
+            } else {
+                UserDefaults.standard.setValue(true, forKey: "firstLaunchSettings")
             }
         }
     }
     
-    var closeOnAppear = false
     var toSegue = false
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         toSegue = true
@@ -99,7 +100,6 @@ class SettingsViewController: UIViewController {
         case "toSingIn":
             let vc = segue.destination as! LoginViewController
             vc.selectedScreen = .singIn
-            closeOnAppear = true
         case "toSavedData":
             let vc = segue.destination as! UnsendedDataVC
             vc.delegate = self
@@ -120,14 +120,15 @@ class SettingsViewController: UIViewController {
     
     func closeWithAnimation(vcanimation: Bool = true) {
         DispatchQueue.main.async {
-            if !vcanimation {
-                self.message.hideMessage()
-                UIView.animate(withDuration: 0.15) {
-                    self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -self.contentView.frame.maxY, 0)
-                } completion: { (_) in
-                    self.toSegue = false
-                    self.dismiss(animated: false, completion: nil)
-                }
+            self.message.hideMessage()
+            UIView.animate(withDuration: 0.17) {
+                self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -self.contentView.frame.maxY, 0)
+            } completion: { (_) in
+                self.toSegue = false
+                self.dismiss(animated: false, completion: nil)
+            }
+           /* if !vcanimation {
+                
                 
             } else {
                 UIView.animate(withDuration: 0.23) {
@@ -136,7 +137,7 @@ class SettingsViewController: UIViewController {
                     self.toSegue = false
                     self.dismiss(animated: vcanimation, completion: nil)
                 }
-            }
+            }*/
         }
     }
     
@@ -221,8 +222,14 @@ extension SettingsViewController: UnsendedDataVCProtocol {
 extension SettingsViewController: CategoriesVCProtocol {
     func categorySelected(category: String, purpose: Int) {
         if category == "" {
-            closeWithAnimation(vcanimation: false)
-            //self.dismiss(animated: true, completion: nil)
+            //closeWithAnimation(vcanimation: false)
+            tableData = [
+                SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: (appData.savedTransactions.count + appData.getCategories(key: "savedCategories").count) > 0 ? "toSavedData" : "toSingIn"),
+                SettingsSctruct(title: "Categories", description: "All Categories (\(appData.getCategories().count))", segue: "settingsToCategories"),
+            ]
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         } else {
             tableData = [
                 SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: (appData.savedTransactions.count + appData.getCategories(key: "savedCategories").count) > 0 ? "toSavedData" : "toSingIn"),

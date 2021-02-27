@@ -43,8 +43,10 @@ class ViewController: UIViewController {
             if appData.username != "" {
                 let lastDownloadDate = UserDefaults.standard.value(forKey: "LastLoadDataDate") as? Date ?? Date()
                 let component = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: lastDownloadDate)
-                let lastLaunxText = "Updated: \(component.year ?? 0).\(self.makeTwo(n: component.month ?? 0)).\(self.makeTwo(n: component.day ?? 0)), \(self.makeTwo(n: component.hour ?? 0)):\(self.makeTwo(n: component.minute ?? 0)):\(self.makeTwo(n: component.second ?? 0))"
-                datacountText = "Transactions: \(self.tableData.count)\("\n\(lastLaunxText)")"
+                
+                let date = "\(appData.returnMonth(component.month ?? 0)) \(self.makeTwo(n: component.day ?? 0)), \(component.year ?? 0)"
+                let lastLaunxText = "Updated: \(date) at: \(self.makeTwo(n: component.hour ?? 0)):\(self.makeTwo(n: component.minute ?? 0)):\(self.makeTwo(n: component.second ?? 0))"
+                datacountText = "Data count: \(self.tableData.count)\("\n\(lastLaunxText)")"
             }
             dataTaskCount = nil
             selectedCell = nil
@@ -92,6 +94,13 @@ class ViewController: UIViewController {
                         self.sendUnsaved()
                     }
                 }
+                if self.openFiler {
+                    self.openFiler = false
+                    Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (_) in
+                        self.performSegue(withIdentifier: "toFiterVC", sender: self)
+                    }
+                }
+                
             }
         }
     }
@@ -164,6 +173,7 @@ class ViewController: UIViewController {
 
         if appData.defaults.value(forKey: "firstLaunch") as? Bool ?? true {
             appData.createFirstData {
+                self.prepareFilterOptions()
                 self.filter()
                 UserDefaults.standard.setValue(false, forKey: "firstLaunch")
                 DispatchQueue.main.async {
@@ -349,24 +359,18 @@ class ViewController: UIViewController {
             appData.filter.to = appData.filter.to == "" ? lastDay : appData.filter.to
             appData.filter.from = appData.filter.from == "" ? firstDay : appData.filter.from
             let to = appData.filter.to
-            print("allDaysBetween: to - \(to)")
-            print("allDaysBetween: from -", appData.filter.from)
             let monthT = appData.filter.getMonthFromString(s: to)
             let yearT = appData.filter.getYearFromString(s: to)
             let dayTo = appData.filter.getLastDayOf(month: monthT, year: yearT)
             selectedToDayInt = dayTo
-            print(selectedToDayInt, "selectedToDayInt")
             selectedFromDayInt = appData.filter.getDayFromString(s: appData.filter.from)
-            print(selectedFromDayInt, "selectedFromDayInt")
             
             let monthDifference = getMonthFrom(string: appData.filter.to) - getMonthFrom(string: appData.filter.from)
-            print(monthDifference, "monthDifference")
             var amount = selectedToDayInt + (31 - selectedFromDayInt) + (monthDifference * 31)
             print(amount)
             if amount < 0 {
                 amount *= -1
             }
-            print("amount \(amount)")
             calculateDifference(amount: amount)
 
         } else {
@@ -690,11 +694,12 @@ class ViewController: UIViewController {
                     }
                 }
                 let new: String = "\(makeTwo(n: dayA)).\(makeTwo(n: monthA)).\(makeTwo(n: yearA))"
+                daysBetween.append(new) // was bellow break: last day in month wasnt displeying
                 if new == appData.filter.to {
                 print("breake new == appData.filter.to; new: \(new), appData.filter.to: \(appData.filter.to)")
                     break
                 }
-                daysBetween.append(new)
+                
             }
             print("daysBetween", daysBetween)
         } else {
@@ -1088,6 +1093,9 @@ class ViewController: UIViewController {
     @IBAction func homeVC(segue: UIStoryboardSegue) {
         DispatchQueue.global(qos: .userInteractive).async {
             print("HomeVC called")
+            DispatchQueue.main.async {
+                self.dataCountLabel.text = ""
+            }
             self.downloadFromDB()
             if appData.fromLoginVCMessage != "" {
                 print("appData.fromLoginVCMessage", appData.fromLoginVCMessage)
@@ -1238,6 +1246,7 @@ class ViewController: UIViewController {
         }
     }
     
+    var openFiler = false
     @IBAction func filterPressed(_ sender: UIButton) {
         DispatchQueue.main.async {
             UIView.animate(withDuration: 0.3) {
@@ -1250,6 +1259,7 @@ class ViewController: UIViewController {
             }
         } else {
             DispatchQueue.main.async {
+                self.openFiler = true
                 UIImpactFeedbackGenerator().impactOccurred()
                 UIView.animate(withDuration: 0.23) {
                     self.filterTextLabel.alpha = 1

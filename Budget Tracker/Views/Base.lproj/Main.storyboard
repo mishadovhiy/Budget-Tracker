@@ -358,7 +358,7 @@
                                             <constraint firstAttribute="trailing" secondItem="WWk-Hp-IW7" secondAttribute="trailing" id="yw5-no-iYW"/>
                                         </constraints>
                                     </view>
-                                    <stackView opaque="NO" alpha="0.0" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="69c-Jd-sTD" userLabel="Calculation Stack View">
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="69c-Jd-sTD" userLabel="Calculation Stack View">
                                         <rect key="frame" x="10" y="5" width="230" height="30"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ikx-B6-qBB" userLabel="expensesView">
@@ -401,7 +401,7 @@
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BcP-0X-zec" userLabel="incomeView">
-                                                <rect key="frame" x="76.666666666666657" y="0.0" width="76.666666666666657" height="30"/>
+                                                <rect key="frame" x="91" y="0.0" width="76.666666666666686" height="30"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="ghU-Hm-GBG">
                                                         <rect key="frame" x="0.0" y="0.0" width="76.666666666666671" height="30"/>
@@ -441,16 +441,16 @@
                                                 </constraints>
                                             </view>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="l4D-FW-Tfh">
-                                                <rect key="frame" x="153.33333333333334" y="0.0" width="76.666666666666657" height="30"/>
+                                                <rect key="frame" x="182" y="0.0" width="48" height="30"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Balance" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="3" translatesAutoresizingMaskIntoConstraints="NO" id="ieF-m1-ryE" userLabel="BalanceLabel">
-                                                        <rect key="frame" x="0.0" y="0.0" width="76.666666666666671" height="15"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="48" height="15"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                         <color key="textColor" name="balanceTitleColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="..." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="3" translatesAutoresizingMaskIntoConstraints="NO" id="pxx-7s-ZpY" userLabel="ValueLabel">
-                                                        <rect key="frame" x="0.0" y="15" width="76.666666666666671" height="15"/>
+                                                        <rect key="frame" x="0.0" y="15" width="48" height="15"/>
                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                                         <color key="textColor" name="balanceValueColor"/>
                                                         <nil key="highlightedColor"/>
@@ -2408,7 +2408,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="IDN-MG-5hD"/>
-        <segue reference="xmO-tl-nHE"/>
+        <segue reference="IEc-ah-mh1"/>
         <segue reference="Ega-tn-GzY"/>
         <segue reference="Ydx-2v-7Hg"/>
     </inferredMetricsTieBreakers>
