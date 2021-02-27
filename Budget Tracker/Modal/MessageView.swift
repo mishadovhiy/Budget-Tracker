@@ -107,6 +107,13 @@ class MessageView {
                     }
                     self.timers.append(timer)
                 }
+                
+                if bottomAppearence {
+                    let superframe = self.mainView.view.frame
+                    UIView.animate(withDuration: 0.3) {
+                        self.subview?.frame = CGRect(x: x, y: superframe.height - self.mainView.view.safeAreaInsets.bottom - windowHeight - 5, width: width, height: windowHeight)
+                    }
+                }
             }
 
         case .succsess:
@@ -160,11 +167,12 @@ class MessageView {
 
         DispatchQueue.main.async {
             self.mainView.view.addSubview(self.subview ?? UIView())
+            self.subview?.isUserInteractionEnabled = true
             self.subview?.addSubview(self.closeButton ?? UIButton())
             self.subview?.addSubview(self.textLabel ?? UILabel())
             self.textLabel?.textAlignment = .left
             self.textLabel?.numberOfLines = 0
-            self.textLabel?.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
+            self.textLabel?.font = UIFont.systemFont(ofSize: self.mainView.view.frame.width < 370 ? 14 : 17, weight: .semibold)
             self.textLabel?.alpha = 0
             self.subview?.layer.cornerRadius = 6
             self.subview?.layer.shadowColor = UIColor.black.cgColor
@@ -179,7 +187,7 @@ class MessageView {
             let swipe = UISwipeGestureRecognizer(target: self, action: #selector(self.closeSwipped(_:)))
             swipe.direction = .up
             self.subview?.addGestureRecognizer(swipe)
-
+            
         }
         
         print("message init")

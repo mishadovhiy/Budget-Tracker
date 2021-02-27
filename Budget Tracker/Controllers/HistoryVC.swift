@@ -37,6 +37,8 @@ class HistoryVC: UIViewController {
             label.text = "\(Int(sum))"
         } else { label.text = "\(sum)" }
     }
+    
+    
 
 }
 

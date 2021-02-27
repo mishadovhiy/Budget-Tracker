@@ -30,15 +30,7 @@ class UnsendedDataVC: UIViewController {
             _tablTrans = newValue
             print("table data new value setted")
             DispatchQueue.main.async {
-                UIView.animate(withDuration: 0.23) {
-                    self.saveAllButton.alpha = self.selectedCount == 0 ? 1 : 0.2
-                } completion: { (_) in
-                    
-                }
-
-                if self.activity.isAnimating {
-                    self.activity.stopAnimating()
-                }
+                
                 self.deleteSelectedButton.setTitle("Delete (\(self.selectedCount))", for: .normal)
                 self.tableView.reloadData()
                 if newValue.count == 0 && self.categoruesTableData.count == 0 {
@@ -47,6 +39,13 @@ class UnsendedDataVC: UIViewController {
                         self.delegate?.quiteUnsendedData(deletePressed: true, sendPressed: false)
                     }
                 }
+                UIView.animate(withDuration: 0.23) {
+                    self.saveAllButton.alpha = self.selectedCount == 0 ? 1 : 0.2
+                } completion: { (_) in
+                    
+                }
+
+                
             }
         }
     }
@@ -89,8 +88,9 @@ class UnsendedDataVC: UIViewController {
         }
         didapp = true
         DispatchQueue.main.async {
-            let titleFrame = self.mainTitleLabel.superview?.frame ?? .zero
-            self.activity.frame = CGRect(x: titleFrame.maxX, y: titleFrame.minY + (self.mainTitleLabel.superview?.superview?.frame.minY ?? 0) + 6, width: 15, height: 15)
+            let titleFrame = self.mainTitleLabel.frame
+            //self.activity.frame = CGRect(x: titleFrame.maxX, y: titleFrame.minY + (self.mainTitleLabel.superview?.superview?.frame.minY ?? 0) + 6, width: 15, height: 15)
+            self.activity.frame = CGRect(x: titleFrame.maxX + 17, y: 8 + (self.mainTitleLabel.superview?.frame.minY ?? 0) + (self.mainTitleLabel.superview?.superview?.frame.minY ?? 0), width: 15, height: 15)
             self.view.addSubview(self.activity)
             self.activity.style = .gray
             self.activity.startAnimating()
@@ -108,7 +108,8 @@ class UnsendedDataVC: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         if messageText != "" {
             DispatchQueue.main.async {
-                self.message.showMessage(text: self.messageText, type: .error, windowHeight: 65)
+                self.message.showMessage(text: self.messageText, type: .error, windowHeight: 65, bottomAppearence: true)
+                self.messageText = ""
             }
         } else {
             if UserDefaults.standard.value(forKey: "firstLaunchUnsendedDataVC") as? Bool ?? true {
@@ -150,6 +151,9 @@ class UnsendedDataVC: UIViewController {
         categoruesTableData = catHolder
         tableDataTransactions = holder
         DispatchQueue.main.async {
+            if self.activity.isAnimating {
+                self.activity.stopAnimating()
+            }
             UIView.animate(withDuration: 0.4) {
                 self.deleteSelectedButton.superview?.alpha = 1
                 self.deleteAllButton.alpha = 1
@@ -238,9 +242,6 @@ class UnsendedDataVC: UIViewController {
 
     @IBAction func deleteSelectedPressed(_ sender: UIButton) {
         if selectedCount != 0 {
-            DispatchQueue.main.async {
-                self.activity.startAnimating()
-            }
             var result: [TransactionsStruct] = []
             result.removeAll()
             var newTable: [UnsendedTransactions] = []
@@ -284,25 +285,28 @@ class UnsendedDataVC: UIViewController {
         defaultsTransactions = appData.transactions
         selectedCount = 0
         foundInAListCount = 0
-        DispatchQueue.main.async {
-            self.activity.startAnimating()
-        }
         var all = Array(self.tableDataTransactions)
         for i in 0..<all.count {
-
-            if contains(TransactionsStruct(value: all[i].value, category: all[i].category, date: all[i].date, comment: all[i].comment)) {
+            if all[i].selected {
                 self.selectedCount += 1
-                all[i].selected = true
+            } else {
+                if contains(TransactionsStruct(value: all[i].value, category: all[i].category, date: all[i].date, comment: all[i].comment)) {
+                    self.selectedCount += 1
+                    all[i].selected = true
+                }
             }
+            
         }
-        
         
         var allCats = Array(self.categoruesTableData)
         for i in 0..<allCats.count {
-            
-            if contains(CategoriesStruct(name: allCats[i].name, purpose: allCats[i].purpose, count: 0)) {
+            if allCats[i].selected {
                 self.selectedCount += 1
-                allCats[i].selected = true
+            } else {
+                if contains(CategoriesStruct(name: allCats[i].name, purpose: allCats[i].purpose, count: 0)) {
+                    self.selectedCount += 1
+                    allCats[i].selected = true
+                }
             }
         }
         categoruesTableData = allCats

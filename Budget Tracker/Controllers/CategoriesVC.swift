@@ -31,28 +31,7 @@ class CategoriesVC: UIViewController {
         return message
     }()
     
-    func getDataFromLocal() {
-        expenses = []
-        incomes = []
-        let categories = Array(appData.getCategories())
-        for i in 0..<categories.count {
-            if categories[i].purpose == K.expense {
-                expenses.append((categories[i].name, categories[i].count))
-            } else {
-                incomes.append((categories[i].name, categories[i].count))
-            }
-        }
-        whenNoCategories()
-        print("expenses: \(expenses.count), incomes: \(incomes.count)")
-        expenses = expenses.sorted { $0.1 > $1.1 }
-        incomes = incomes.sorted { $0.1 > $1.1 }
-        
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
-        
-        
-    }
+    
     
     var expenses: [(String, Int)] = []
     var incomes: [(String, Int)] = []
@@ -81,6 +60,7 @@ class CategoriesVC: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        toHistory = false
         navigationController?.setNavigationBarHidden(fromSettings ? true : false, animated: true)
         for i in 0..<tableView.visibleCells.count {
             let indexPath = IndexPath(row: i, section: 0)
@@ -89,12 +69,15 @@ class CategoriesVC: UIViewController {
             }
         }
     }
-    override func viewWillDisappear(_ animated: Bool) {
-        if fromSettings {
-            if !wasEdited {
-                delegate?.categorySelected(category: "", purpose: 0)
-            } else {
-                delegate?.categorySelected(category: "edited", purpose: 0)
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        if !toHistory {
+            if fromSettings {
+                if !wasEdited {
+                    delegate?.categorySelected(category: "", purpose: 0)
+                } else {
+                    delegate?.categorySelected(category: "RELOAD", purpose: 0)
+                }
             }
         }
     }
@@ -107,7 +90,9 @@ class CategoriesVC: UIViewController {
         catData.purposPicker.dataSource = self
         tableView.delegate = self
         tableView.dataSource = self
-        addRefreshControll()
+        if appData.username != "" {
+            addRefreshControll()
+        }
         whenNoCategories()
         let hiseCatsSwipe: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(hideCats(_:)))
         hiseCatsSwipe.direction = .left
@@ -124,6 +109,32 @@ class CategoriesVC: UIViewController {
             }
         }
     }
+    
+    
+    func getDataFromLocal() {
+        expenses = []
+        incomes = []
+        let categories = Array(appData.getCategories())
+        for i in 0..<categories.count {
+            if categories[i].purpose == K.expense {
+                expenses.append((categories[i].name, categories[i].count))
+            } else {
+                incomes.append((categories[i].name, categories[i].count))
+            }
+        }
+        whenNoCategories()
+        print("expenses: \(expenses.count), incomes: \(incomes.count)")
+        expenses = expenses.sorted { $0.1 > $1.1 }
+        incomes = incomes.sorted { $0.1 > $1.1 }
+        
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+        
+        
+    }
+    
+    
     
     @objc func hideCats(_ gesture: UISwipeGestureRecognizer) {
         DispatchQueue.main.async {
@@ -228,24 +239,23 @@ class CategoriesVC: UIViewController {
                     print("Errordeletingcategory")
                     appData.unsendedData.append(["deleteCategory": toDataString])
                 }
-                if at.section == 0 {
-                    self.expenses.remove(at: at.row)
-                } else {
-                    self.incomes.remove(at: at.row)
-                }
-                var result: [CategoriesStruct] = []
-                for i in 0..<self.incomes.count {
-                    result.append(CategoriesStruct(name: self.incomes[i].0, purpose: K.income, count: 0))
-                }
-                for i in 0..<self.expenses.count {
-                    result.append(CategoriesStruct(name: self.expenses[i].0, purpose: K.expense, count: 0))
-                }
-                self.allCategoriesData = result
-                appData.saveCategories(self.allCategoriesData)
-                self.getDataFromLocal()
-                
             })
         }
+        if at.section == 0 {
+            self.expenses.remove(at: at.row)
+        } else {
+            self.incomes.remove(at: at.row)
+        }
+        var result: [CategoriesStruct] = []
+        for i in 0..<self.incomes.count {
+            result.append(CategoriesStruct(name: self.incomes[i].0, purpose: K.income, count: 0))
+        }
+        for i in 0..<self.expenses.count {
+            result.append(CategoriesStruct(name: self.expenses[i].0, purpose: K.expense, count: 0))
+        }
+        self.allCategoriesData = result
+        appData.saveCategories(self.allCategoriesData)
+        self.getDataFromLocal()
         
 
         
@@ -309,8 +319,11 @@ class CategoriesVC: UIViewController {
         }
     }
     
+    var toHistory = false
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         if segue.identifier == "toHistory" {
+            toHistory = true
             let vc = segue.destination as! HistoryVC
             vc.historyDataStruct = historyDataStruct
             vc.selectedCategoryName = selectedCategoryName

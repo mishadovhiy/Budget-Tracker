@@ -93,7 +93,7 @@ class SettingsViewController: UIViewController {
     var toSegue = false
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         toSegue = true
-        let messageText = "Save or Delete data bellow"
+        let messageText = "Save or delete data bellow"
         
         switch segue.identifier {
         case "toSingIn":
@@ -121,19 +121,21 @@ class SettingsViewController: UIViewController {
     func closeWithAnimation(vcanimation: Bool = true) {
         DispatchQueue.main.async {
             if !vcanimation {
-                self.toSegue = false
-                self.dismiss(animated: true, completion: nil)
-            }
-            UIView.animate(withDuration: 0.23) {
-                self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -self.contentView.frame.maxY, 0)
-            } completion: { (_) in
-                if vcanimation {
+                self.message.hideMessage()
+                UIView.animate(withDuration: 0.15) {
+                    self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -self.contentView.frame.maxY, 0)
+                } completion: { (_) in
                     self.toSegue = false
-                    DispatchQueue.main.async {
-                        self.dismiss(animated: vcanimation, completion: nil)
-                    }
+                    self.dismiss(animated: false, completion: nil)
                 }
                 
+            } else {
+                UIView.animate(withDuration: 0.23) {
+                    self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -self.contentView.frame.maxY, 0)
+                } completion: { (_) in
+                    self.toSegue = false
+                    self.dismiss(animated: vcanimation, completion: nil)
+                }
             }
         }
     }
@@ -220,6 +222,7 @@ extension SettingsViewController: CategoriesVCProtocol {
     func categorySelected(category: String, purpose: Int) {
         if category == "" {
             closeWithAnimation(vcanimation: false)
+            //self.dismiss(animated: true, completion: nil)
         } else {
             tableData = [
                 SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: (appData.savedTransactions.count + appData.getCategories(key: "savedCategories").count) > 0 ? "toSavedData" : "toSingIn"),

@@ -171,7 +171,6 @@ struct SaveToDB {
 
     
     func Transactions(toDataString: String, completion: @escaping (Bool) -> ()) {
-        //let toDataString = "&Nickname=\(appData.username)" + "&Category=\(transactionStruct.category)" + "&Date=\(transactionStruct.date)" + "&Value=\(transactionStruct.value)" + "&Comment=\(transactionStruct.comment)"
         save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-transaction.php", toDataString: toDataString, errorLoading: "Transactions", dataType: .categories, error: { (error) in
             completion(error)
         })
