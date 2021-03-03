@@ -94,6 +94,24 @@ class ViewController: UIViewController {
                         self.sendUnsaved()
                     }
                 }
+                
+                if let new = self.newTransaction {
+                    self.mainTableView.backgroundColor = UIColor(named: "darkTableColor")
+                    self.newTransaction = nil
+                    for i in 0..<newValue.count {
+                        if new.date == newValue[i].date {
+                            for t in 0..<newValue[i].transactions.count {
+                                if new.category == newValue[i].transactions[t].category && new.comment == newValue[i].transactions[t].comment && new.value == newValue[i].transactions[t].value
+                                {
+                                    let cell = IndexPath(row: t, section: i+1)
+                                    self.highliteCell = cell
+                                    self.mainTableView.scrollToRow(at: cell, at: .middle, animated: true)
+                                }
+                            }
+                        }
+                    }
+                }
+                
                 if self.openFiler {
                     self.openFiler = false
                     Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (_) in
@@ -101,10 +119,14 @@ class ViewController: UIViewController {
                     }
                 }
                 
+                
+                
             }
         }
     }
     
+    var newTransaction: TransactionsStruct?
+    var highliteCell: IndexPath?
     var tableDHolder: [tableStuct] = []
     lazy var message: MessageView = {
         let message = MessageView(self)
@@ -1469,7 +1491,32 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
     
+    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        
+        if indexPath == highliteCell {
+            highliteCell = nil
+            DispatchQueue.main.async {
+                let initSize = cell.frame.size
+                cell.layer.cornerRadius = 10
+                cell.contentView.alpha = 0
+                UIView.animate(withDuration: 0.23) {
+                    cell.backgroundColor = K.Colors.yellow
+                    cell.frame.size = CGSize(width: 10, height: 2)
+                } completion: { (_) in
+                    UIView.animate(withDuration: 0.46) {
+                        cell.contentView.alpha = 1
+                        cell.frame.size = initSize
+                        cell.backgroundColor = UIColor(named: "darkTableColor")
+                    } completion: { (_) in
+                        cell.layer.cornerRadius = 0
+                        UIView.animate(withDuration: 0.3) {
+                            self.mainTableView.backgroundColor = .clear
+                        }
+                    }
+                }
+            }
+        }
         
         if indexPath.section == 0 {
             DispatchQueue.main.async {
@@ -1492,6 +1539,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
 extension ViewController: TransitionVCProtocol {
     func addNewTransaction(value: String, category: String, date: String, comment: String) {
         let new = TransactionsStruct(value: value, category: category, date: date, comment: comment)
+        self.newTransaction = new
         editingTransaction = nil
         self.animateCellWillAppear = false
         Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (_) in

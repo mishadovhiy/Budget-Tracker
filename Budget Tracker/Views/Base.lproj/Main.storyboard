@@ -256,7 +256,6 @@
                                                                             </constraints>
                                                                         </imageView>
                                                                     </subviews>
-                                                                    <color key="backgroundColor" name="darkTableColor"/>
                                                                     <constraints>
                                                                         <constraint firstItem="Cg2-pf-wBM" firstAttribute="top" secondItem="AJm-FA-Anu" secondAttribute="top" id="34P-if-ou9"/>
                                                                         <constraint firstItem="Cg2-pf-wBM" firstAttribute="leading" secondItem="KBi-xy-FRp" secondAttribute="trailing" constant="6" id="6ya-HC-Ju6"/>
@@ -545,7 +544,7 @@
             </objects>
             <point key="canvasLocation" x="-297.19626168224295" y="114.68682505399569"/>
         </scene>
-        <!--  -->
+        <!--    -->
         <scene sceneID="sAf-l1-oTj">
             <objects>
                 <viewController id="cP3-cv-3dE" customClass="CategoriesVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
@@ -660,7 +659,7 @@
                             <constraint firstItem="nj9-Sj-hlp" firstAttribute="leading" secondItem="SQF-Ky-vUp" secondAttribute="leading" id="uYT-5D-ww3"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="  " id="OPF-2E-z7N">
+                    <navigationItem key="navigationItem" title="    " largeTitleDisplayMode="never" id="OPF-2E-z7N">
                         <barButtonItem key="backBarButtonItem" title="  " id="BXl-Ti-KoO"/>
                         <barButtonItem key="rightBarButtonItem" title="Item" style="plain" id="ttK-ht-mYe">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="kWC-HI-PEI">
@@ -685,7 +684,7 @@
             </objects>
             <point key="canvasLocation" x="2486" y="-1438"/>
         </scene>
-        <!--TransitionVC-->
+        <!--    -->
         <scene sceneID="VOY-fg-Vsf">
             <objects>
                 <viewController id="o1K-SN-bUx" customClass="TransitionVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
@@ -1082,7 +1081,9 @@
                             <constraint firstItem="3iV-TP-Myd" firstAttribute="leading" secondItem="MVK-VU-f07" secondAttribute="leading" id="pzc-xn-O38"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="kr8-Sj-SJr"/>
+                    <navigationItem key="navigationItem" title="    " id="kr8-Sj-SJr">
+                        <barButtonItem key="backBarButtonItem" title="   " id="uAZ-XE-G0m"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="categoryTextField" destination="kTT-Sl-tfE" id="JSs-X6-9Pz"/>
                         <outlet property="commentCountLabel" destination="caA-os-alH" id="Wvb-44-y3d"/>
@@ -1370,7 +1371,7 @@
                             <constraint firstAttribute="bottom" secondItem="nMe-Ik-tvJ" secondAttribute="bottom" id="v6O-LS-83v"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="t0m-OR-deg"/>
+                    <navigationItem key="navigationItem" largeTitleDisplayMode="always" id="t0m-OR-deg"/>
                     <connections>
                         <outlet property="tableView" destination="nMe-Ik-tvJ" id="eyR-PM-OhQ"/>
                     </connections>
@@ -1384,11 +1385,11 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="C7B-yY-yq9" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" id="KV8-7M-kNo"/>
+                    <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="KV8-7M-kNo"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="F3j-aD-U8y">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="56"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" name="yellowColor"/>
+                        <color key="tintColor" name="darkTableColor"/>
                         <color key="barTintColor" name="backgroundColor"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" name="darkTableColor"/>
@@ -1816,7 +1817,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ur5-R3-sfZ">
-                                <rect key="frame" x="10" y="114" width="370" height="50"/>
+                                <rect key="frame" x="10" y="70" width="370" height="50"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0U3-LJ-bys">
                                         <rect key="frame" x="0.0" y="0.0" width="60" height="50"/>
@@ -1868,7 +1869,7 @@
                                 </constraints>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rmd-nB-JWC">
-                                <rect key="frame" x="35" y="214" width="320" height="521"/>
+                                <rect key="frame" x="35" y="170" width="320" height="489"/>
                                 <color key="backgroundColor" name="backgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="320" id="cus-cS-kD5"/>
@@ -1935,7 +1936,7 @@
                                 </cells>
                             </collectionView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="XFt-LS-Qbp">
-                                <rect key="frame" x="20" y="755" width="350" height="35"/>
+                                <rect key="frame" x="20" y="679" width="350" height="35"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j8N-A3-4Wm">
                                         <rect key="frame" x="0.0" y="0.0" width="100" height="35"/>
@@ -1971,7 +1972,7 @@
                                 </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="278-rW-rj0" userLabel="headetView">
-                                <rect key="frame" x="0.0" y="44" width="390" height="60"/>
+                                <rect key="frame" x="0.0" y="0.0" width="390" height="60"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OgK-5z-ssL">
                                         <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
@@ -1994,7 +1995,7 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Calendar" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rGq-Aj-Zje">
-                                        <rect key="frame" x="60" y="16.333333333333336" width="270" height="27.666666666666664"/>
+                                        <rect key="frame" x="60" y="16.333333333333329" width="270" height="27.666666666666671"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="23"/>
                                         <color key="textColor" name="darkTableColor"/>
                                         <nil key="highlightedColor"/>
@@ -2362,11 +2363,11 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="84E-gG-7XB" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" id="3cL-kn-iw3"/>
+                    <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="3cL-kn-iw3"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="DoX-Gq-L35">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="56"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" name="yellowColor"/>
+                        <color key="tintColor" name="CategoryColor"/>
                         <color key="barTintColor" name="darkTableColor"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2386,11 +2387,11 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Zmu-n8-tog" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" id="x66-pA-6dg"/>
+                    <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="x66-pA-6dg"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="AHq-K3-tmJ">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="56"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" name="yellowColor"/>
+                        <color key="tintColor" name="darkTableColor"/>
                         <color key="barTintColor" name="backgroundColor"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" name="darkTableColor"/>
@@ -2407,7 +2408,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="IDN-MG-5hD"/>
+        <segue reference="rIb-KG-K0i"/>
         <segue reference="IEc-ah-mh1"/>
         <segue reference="Ega-tn-GzY"/>
         <segue reference="Ydx-2v-7Hg"/>
