@@ -589,13 +589,13 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
         let dayCell = makeTwo(n: days[indexPath.row])
         let monthCell = makeTwo(n: month)
         let yearCell = makeTwo(n: year)
-        
+        cell.dayLabel.alpha = 1
         cell.cellTypeLabel.text = "\(dayCell).\(monthCell).\(yearCell)"
         //cellBackground(cell: cell)
         DispatchQueue.main.async { // commented - test iphone 5s (were without background on iphone 5s)
             if self.selectedTo == cell.cellTypeLabel.text || self.selectedFrom == cell.cellTypeLabel.text {
                 cell.backgroundCell.backgroundColor = K.Colors.yellow
-                cell.dayLabel.textColor = UIColor.white
+                //cell.dayLabel.textColor = UIColor.white
             }else {
                 cell.backgroundCell.backgroundColor = self.darkAppearence ? UIColor(named: "darkTableColor") : K.Colors.background
                 cell.dayLabel.textColor = self.darkAppearence ? K.Colors.category : UIColor(named: "darkTableColor")
@@ -607,7 +607,8 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
             for i in 0..<self.daysBetween.count {
                 if self.daysBetween[i] == cell.cellTypeLabel.text { //5s - fatal error index aout of range
                     cell.backgroundCell.backgroundColor = K.Colors.separetor
-                    cell.dayLabel.textColor = K.Colors.balanceT
+                   // cell.dayLabel.textColor = K.Colors.balanceT
+                    cell.dayLabel.alpha = 0.2
                 }
             }
         }

@@ -1500,9 +1500,9 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 let initSize = cell.frame.size
                 cell.layer.cornerRadius = 10
                 cell.contentView.alpha = 0
+                cell.frame.size = CGSize(width: 10, height: 2)
                 UIView.animate(withDuration: 0.23) {
                     cell.backgroundColor = K.Colors.yellow
-                    cell.frame.size = CGSize(width: 10, height: 2)
                 } completion: { (_) in
                     UIView.animate(withDuration: 0.46) {
                         cell.contentView.alpha = 1

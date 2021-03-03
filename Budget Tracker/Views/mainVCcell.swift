@@ -181,6 +181,6 @@ class CVCell: UICollectionViewCell {
     
     func setupCell() {
         backgroundCell.layer.masksToBounds = true
-        backgroundCell.layer.cornerRadius = backgroundCell.bounds.width / 2
+        backgroundCell.layer.cornerRadius = 3//backgroundCell.bounds.width / 2
     }
 }
