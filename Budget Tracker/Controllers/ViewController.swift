@@ -1497,22 +1497,19 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         if indexPath == highliteCell {
             highliteCell = nil
             DispatchQueue.main.async {
-                let initSize = cell.frame.size
-                cell.layer.cornerRadius = 10
+                let initSize = cell.frame
+                cell.layer.cornerRadius = 6
                 cell.contentView.alpha = 0
-                cell.frame.size = CGSize(width: 10, height: 2)
-                UIView.animate(withDuration: 0.23) {
-                    cell.backgroundColor = K.Colors.yellow
+                cell.frame = CGRect(x: initSize.minX + 10, y: initSize.minY + 5, width: initSize.width - 20, height: initSize.height - 10)
+                cell.backgroundColor = K.Colors.yellow
+                UIView.animate(withDuration: 0.46) {
+                    cell.frame = initSize
+                    cell.backgroundColor = UIColor(named: "darkTableColor")
                 } completion: { (_) in
-                    UIView.animate(withDuration: 0.46) {
+                    cell.layer.cornerRadius = 0
+                    UIView.animate(withDuration: 0.15) {
                         cell.contentView.alpha = 1
-                        cell.frame.size = initSize
-                        cell.backgroundColor = UIColor(named: "darkTableColor")
-                    } completion: { (_) in
-                        cell.layer.cornerRadius = 0
-                        UIView.animate(withDuration: 0.3) {
-                            self.mainTableView.backgroundColor = .clear
-                        }
+                        self.mainTableView.backgroundColor = .clear
                     }
                 }
             }
