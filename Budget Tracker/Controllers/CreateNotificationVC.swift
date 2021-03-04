@@ -16,7 +16,7 @@ class CreateNotificationVC: UIViewController, UNUserNotificationCenterDelegate {
         super.viewDidLoad()
         center.removeAllPendingNotificationRequests()
         center.delegate = self
-        UIApplication.shared.applicationIconBadgeNumber = 1
+        //UIApplication.shared.applicationIconBadgeNumber = 0
             center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
                 if granted {
                     print("Yay!")

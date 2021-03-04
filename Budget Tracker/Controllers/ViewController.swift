@@ -141,7 +141,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         updateUI()
-
+        UIApplication.shared.applicationIconBadgeNumber = 0
     }
     
     func updateUI() {

@@ -237,7 +237,7 @@ class FilterTVC: UIViewController {
         let yearTo = appData.filter.getYearFromString(s: appData.filter.to)
         ifCustom = true
         if yearTo == year {
-            selectedPeroud = "\(convertMonthFrom(int: month)) \(day) → \(convertMonthFrom(int: monthTo)) \(dayTo), \(yearTo)"
+            selectedPeroud = month != monthTo || day != dayTo ? "\(convertMonthFrom(int: month)) \(day) → \(convertMonthFrom(int: monthTo)) \(dayTo), \(yearTo)" : "\(convertMonthFrom(int: month)) \(day), \(year)"
         } else {
             selectedPeroud = "\(convertMonthFrom(int: month)) \(day), \(year) → \(convertMonthFrom(int: monthTo)) \(dayTo), \(yearTo)"
         }

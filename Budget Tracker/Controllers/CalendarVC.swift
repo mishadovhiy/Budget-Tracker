@@ -36,7 +36,7 @@ class CalendarVC: UIViewController {
     var selectedFromDayInt = 0
     var selectedToDayInt = 0
     var darkAppearence = false
-    
+    var reminders = false // reminder screen type
     
     var year = 1996
     var month = 11
@@ -50,7 +50,6 @@ class CalendarVC: UIViewController {
         textField.layer.cornerRadius = 5
 
         if darkAppearence {
-            
             weekDaySeparetorView.backgroundColor = UIColor(named: "darkSeparetor")
             for i in 0..<weekDayLabels.count{
                 weekDayLabels[i].backgroundColor = UIColor(named: "darkTableColor")
@@ -95,22 +94,38 @@ class CalendarVC: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         if delegate == nil {
             if ifCustom {
-                selectedFrom = appData.filter.from
-                selectedTo = appData.filter.to
-                selectedFromDayInt = appData.filter.getDayFromString(s: selectedFrom)
-                selectedToDayInt = appData.filter.getDayFromString(s: selectedTo)
-                ifToSmaller()
-                
-                year = getYearFrom(string: selectedFrom)
-                month = getMonthFrom(string: selectedFrom)
-                getDays()
-                getBetweens()
-                doneIsActive = true
-                doneButtonIsActive()
-                ifEndInvisible()
-                DispatchQueue.main.async {
-                    self.collectionView.reloadData()
+                if appData.filter.from != appData.filter.to {
+                    selectedFrom = appData.filter.from
+                    selectedTo = appData.filter.to
+                    print(selectedTo, "selectedToselectedToselectedTo")
+                    selectedFromDayInt = appData.filter.getDayFromString(s: selectedFrom)
+                    selectedToDayInt = appData.filter.getDayFromString(s: selectedTo)
+                    ifToSmaller()
+                    
+                    year = getYearFrom(string: selectedFrom)
+                    month = getMonthFrom(string: selectedFrom)
+                    getDays()
+                    getBetweens()
+                    doneIsActive = true
+                    doneButtonIsActive()
+                    ifEndInvisible()
+                    DispatchQueue.main.async {
+                        self.collectionView.reloadData()
+                    }
+                } else {
+                    selectedFrom = appData.filter.from
+                    year = getYearFrom(string: selectedFrom)
+                    month = getMonthFrom(string: selectedFrom)
+                    getDays()
+                    doneIsActive = true
+                    doneButtonIsActive()
+                    ifEndInvisible()
+                    DispatchQueue.main.async {
+                        self.collectionView.reloadData()
+                    }
                 }
+                
+                
             }
         }
         
@@ -302,13 +317,26 @@ class CalendarVC: UIViewController {
     
     func removeSelected(cell: CVCell) {
         
-        if selectedTo == cell.cellTypeLabel.text {
-            selectedTo = ""
-            selectedToDayInt = 0
-        }
-        if selectedFrom == cell.cellTypeLabel.text {
-            selectedFrom = ""
-            selectedFromDayInt = 0
+        DispatchQueue.main.async {
+            if self.selectedTo == cell.cellTypeLabel.text {
+                self.selectedTo = ""
+                self.selectedToDayInt = 0
+            }
+            if self.selectedFrom == cell.cellTypeLabel.text {
+                if self.selectedTo != "" {
+                    self.selectedFrom = self.selectedTo
+                    self.selectedFromDayInt = self.selectedToDayInt
+                    self.selectedTo = ""
+                    self.selectedToDayInt = 0
+                } else {
+                    self.selectedFrom = ""
+                    self.selectedFromDayInt = 0
+                }
+                /*self.selectedTo = ""
+                self.selectedToDayInt = 0
+                self.selectedFrom = ""
+                self.selectedFromDayInt = 0*/
+            }
         }
     }
     
@@ -341,11 +369,21 @@ class CalendarVC: UIViewController {
             return 1996
         }
     }
+    func dateFrom(sting: String) -> Date? {
+        print("dateFrom", sting)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.mm.yyyy"
+        let date = dateFormatter.date(from: sting)
+        return date
+    }
     
     func getBetweens() {
-        
+
         daysBetween.removeAll()
         if selectedFrom != "" && selectedTo != "" {
+            print("daysBetween from:", selectedFrom)
+            print("daysBetween to:", selectedTo)
+            
             if getYearFrom(string: selectedTo) == getYearFrom(string: selectedFrom) && (getMonthFrom(string: selectedTo) == getMonthFrom(string: selectedFrom)) {
                 
                 let dayFrom = appData.filter.getDayFromString(s: selectedFrom)
@@ -360,6 +398,7 @@ class CalendarVC: UIViewController {
                     daysBetween.append("\(dayCell).\(monthCell).\(yearCell)")
                     start += 1
                 }
+                
             } else {
                 allDaysBetween()
             }
@@ -550,7 +589,7 @@ class CalendarVC: UIViewController {
     
     var doneIsActive = false
     func doneButtonIsActive() {
-        if selectedTo == "" || selectedFrom == "" {
+        if selectedFrom == "" {
             doneIsActive = false
             UIView.animate(withDuration: 0.3) {
                 self.doneButton.alpha = 0.2
@@ -588,9 +627,10 @@ class CalendarVC: UIViewController {
     }
     
     @IBAction func donePressed(_ sender: UIButton) {
+
         if doneIsActive {
-            appData.filter.from = selectedFrom
-            appData.filter.to = selectedTo
+            appData.filter.from = selectedFrom == "" ? selectedTo : selectedFrom
+            appData.filter.to = selectedTo == "" ? selectedFrom : selectedTo
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: K.calendarClosed, sender: self)
             }
@@ -614,13 +654,13 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
         cell.setupCell()
         cell.dayLabel.text = days[indexPath.row] != 0 ? "\(days[indexPath.row])" : ""
         
-        
         let dayCell = makeTwo(n: days[indexPath.row])
         let monthCell = makeTwo(n: month)
         let yearCell = makeTwo(n: year)
         cell.dayLabel.alpha = 1
         cell.cellTypeLabel.text = "\(dayCell).\(monthCell).\(yearCell)"
         //cellBackground(cell: cell)
+
         DispatchQueue.main.async { // commented - test iphone 5s (were without background on iphone 5s)
             if self.selectedTo == cell.cellTypeLabel.text || self.selectedFrom == cell.cellTypeLabel.text {
                 cell.backgroundCell.backgroundColor = K.Colors.yellow
@@ -642,7 +682,6 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
             }
         }
         if cell.cellTypeLabel.text == today {
-            print("found today")
             DispatchQueue.main.async {
                 cell.dayLabel.textColor = K.Colors.negative
             }
@@ -658,8 +697,6 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
         let yearCell = makeTwo(n: year)
         
         if delegate == nil {
-            
-            
             if cell.cellTypeLabel.text == selectedFrom || cell.cellTypeLabel.text == selectedTo {
                 removeSelected(cell: cell)
             } else {
@@ -671,12 +708,29 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
                     selectedToDayInt = indexPath.row + 1
                 }
                 ifToSmaller()
-                
             }
             doneButtonIsActive()
+            
             DispatchQueue.init(label: "reloadCollection").async {
                 self.ifToSmaller()
-                self.getBetweens()
+                if self.selectedFrom != "" && self.selectedTo != "" {
+                    let dateFromm = self.dateFrom(sting: self.selectedFrom) ?? Date()
+                    let dateTo = self.dateFrom(sting: self.selectedTo) ?? Date()
+                    if dateFromm > dateTo {
+                        let toHolder = (self.selectedTo, self.selectedToDayInt)
+                        self.selectedTo = self.selectedFrom
+                        self.selectedToDayInt = self.selectedFromDayInt
+                        self.selectedFrom = toHolder.0
+                        self.selectedFromDayInt = toHolder.1
+                        self.getBetweens()
+                    } else {
+                        self.getBetweens()
+                    }
+                } else {
+                    self.getBetweens()
+                }
+                
+                
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
                 }
