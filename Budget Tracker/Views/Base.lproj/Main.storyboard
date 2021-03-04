@@ -549,7 +549,7 @@
             <objects>
                 <viewController id="cP3-cv-3dE" customClass="CategoriesVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="m5f-dV-6zU">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="734"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nj9-Sj-hlp">
@@ -689,7 +689,7 @@
             <objects>
                 <viewController id="o1K-SN-bUx" customClass="TransitionVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="405-H3-8an">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="734"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c9d-cL-RPP" userLabel="doneButton">
@@ -1109,7 +1109,7 @@
             <objects>
                 <viewController id="U5Q-a5-Vkx" customClass="StatisticVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="T0c-ZB-hQq">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="734"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Xz5-Md-Dy3">
@@ -1263,7 +1263,7 @@
             <objects>
                 <viewController id="Zmr-vi-AsB" customClass="HistoryVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4Hr-9J-3zH">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="734"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nMe-Ik-tvJ">
@@ -1813,7 +1813,7 @@
             <objects>
                 <viewController id="5n4-P6-pnR" customClass="CalendarVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="67i-SE-sWB">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="734"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ur5-R3-sfZ">
@@ -2016,6 +2016,73 @@
                                     <constraint firstAttribute="trailing" secondItem="TGK-Ax-n0d" secondAttribute="trailing" id="kSy-i7-h9n"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mUw-Or-FG0">
+                                <rect key="frame" x="35" y="141.66666666666666" width="320" height="13.333333333333343"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="wQi-bJ-DxV">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="13.333333333333334"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Mon" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6PD-Ln-iux">
+                                                <rect key="frame" x="0.0" y="0.0" width="45" height="13.333333333333334"/>
+                                                <color key="backgroundColor" name="backgroundColor"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                <color key="textColor" name="balanceTitleColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tue" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3wZ-MX-Xx8">
+                                                <rect key="frame" x="46" y="0.0" width="44.666666666666657" height="13.333333333333334"/>
+                                                <color key="backgroundColor" name="backgroundColor"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                <color key="textColor" name="balanceTitleColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wed" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5GX-qU-H5o">
+                                                <rect key="frame" x="91.666666666666671" y="0.0" width="45.000000000000014" height="13.333333333333334"/>
+                                                <color key="backgroundColor" name="backgroundColor"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                <color key="textColor" name="balanceTitleColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Thu" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t0B-hc-H7u">
+                                                <rect key="frame" x="137.66666666666666" y="0.0" width="44.666666666666657" height="13.333333333333334"/>
+                                                <color key="backgroundColor" name="backgroundColor"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                <color key="textColor" name="balanceTitleColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fri" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I2z-U6-EDp">
+                                                <rect key="frame" x="183.33333333333334" y="0.0" width="45" height="13.333333333333334"/>
+                                                <color key="backgroundColor" name="backgroundColor"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                <color key="textColor" name="balanceTitleColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sat" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vgm-Hu-adG">
+                                                <rect key="frame" x="229.33333333333331" y="0.0" width="44.666666666666686" height="13.333333333333334"/>
+                                                <color key="backgroundColor" name="backgroundColor"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                <color key="textColor" name="pinkColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sun" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BrR-tF-WZX">
+                                                <rect key="frame" x="275" y="0.0" width="45" height="13.333333333333334"/>
+                                                <color key="backgroundColor" name="backgroundColor"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                <color key="textColor" name="pinkColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" name="separetorColor"/>
+                                <constraints>
+                                    <constraint firstItem="wQi-bJ-DxV" firstAttribute="leading" secondItem="mUw-Or-FG0" secondAttribute="leading" id="1KF-vx-L1j"/>
+                                    <constraint firstAttribute="width" constant="320" id="TvA-f6-ZjU"/>
+                                    <constraint firstAttribute="trailing" secondItem="wQi-bJ-DxV" secondAttribute="trailing" id="Xlk-rN-To3"/>
+                                    <constraint firstItem="wQi-bJ-DxV" firstAttribute="top" secondItem="mUw-Or-FG0" secondAttribute="top" id="Zit-v1-Cqg"/>
+                                    <constraint firstAttribute="bottom" secondItem="wQi-bJ-DxV" secondAttribute="bottom" id="tze-v0-t8R"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="TIg-78-k94"/>
                         <color key="backgroundColor" name="backgroundColor"/>
@@ -2024,6 +2091,7 @@
                             <constraint firstItem="TIg-78-k94" firstAttribute="trailing" secondItem="Ur5-R3-sfZ" secondAttribute="trailing" constant="10" id="BB1-vN-VpO"/>
                             <constraint firstItem="Ur5-R3-sfZ" firstAttribute="top" secondItem="TIg-78-k94" secondAttribute="top" constant="70" id="CmC-v6-Qxf"/>
                             <constraint firstItem="TIg-78-k94" firstAttribute="trailing" secondItem="XFt-LS-Qbp" secondAttribute="trailing" constant="20" id="FOQ-Wl-T9R"/>
+                            <constraint firstItem="rmd-nB-JWC" firstAttribute="top" secondItem="mUw-Or-FG0" secondAttribute="bottom" constant="15" id="T2p-WJ-JM8"/>
                             <constraint firstAttribute="trailing" secondItem="278-rW-rj0" secondAttribute="trailing" id="V0z-Lr-59m"/>
                             <constraint firstItem="Ur5-R3-sfZ" firstAttribute="leading" secondItem="TIg-78-k94" secondAttribute="leading" constant="10" id="gO3-BI-DpY"/>
                             <constraint firstItem="rmd-nB-JWC" firstAttribute="top" secondItem="Ur5-R3-sfZ" secondAttribute="bottom" constant="50" id="ozG-hY-uwU"/>
@@ -2032,6 +2100,7 @@
                             <constraint firstItem="TIg-78-k94" firstAttribute="bottom" secondItem="XFt-LS-Qbp" secondAttribute="bottom" constant="20" id="v20-05-gCl"/>
                             <constraint firstItem="278-rW-rj0" firstAttribute="leading" secondItem="67i-SE-sWB" secondAttribute="leading" id="xFR-F1-7VB"/>
                             <constraint firstItem="278-rW-rj0" firstAttribute="top" secondItem="TIg-78-k94" secondAttribute="top" id="y7s-gZ-flP"/>
+                            <constraint firstItem="mUw-Or-FG0" firstAttribute="centerX" secondItem="67i-SE-sWB" secondAttribute="centerX" id="yC1-Gp-i6F"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Evc-oG-Jzh"/>
@@ -2043,13 +2112,21 @@
                         <outlet property="headerView" destination="278-rW-rj0" id="efW-tR-tsd"/>
                         <outlet property="startButton" destination="j8N-A3-4Wm" id="LEV-jn-y2P"/>
                         <outlet property="textField" destination="l0e-RJ-jiN" id="f9b-8Q-cYz"/>
+                        <outlet property="weekDaySeparetorView" destination="mUw-Or-FG0" id="VX9-QP-UJq"/>
+                        <outletCollection property="weekDayLabels" destination="6PD-Ln-iux" collectionClass="NSMutableArray" id="A2T-S1-5Gc"/>
+                        <outletCollection property="weekDayLabels" destination="3wZ-MX-Xx8" collectionClass="NSMutableArray" id="821-K3-91b"/>
+                        <outletCollection property="weekDayLabels" destination="5GX-qU-H5o" collectionClass="NSMutableArray" id="c13-f9-o2L"/>
+                        <outletCollection property="weekDayLabels" destination="t0B-hc-H7u" collectionClass="NSMutableArray" id="zSZ-9S-SIQ"/>
+                        <outletCollection property="weekDayLabels" destination="I2z-U6-EDp" collectionClass="NSMutableArray" id="nYk-jA-ku9"/>
+                        <outletCollection property="weekDayLabels" destination="vgm-Hu-adG" collectionClass="NSMutableArray" id="npf-N6-cvL"/>
+                        <outletCollection property="weekDayLabels" destination="BrR-tF-WZX" collectionClass="NSMutableArray" id="Vci-Sg-S2N"/>
                         <segue destination="ijS-vb-bvW" kind="unwind" identifier="CalendarClosed" unwindAction="unwindCalendarClosedWithSegue:" id="T5I-Ba-x6T"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sYa-fP-eUY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="ijS-vb-bvW" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1720" y="1219"/>
+            <point key="canvasLocation" x="1720" y="1217.7725118483411"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="MEX-N7-5md">
@@ -2413,7 +2490,7 @@
         <segue reference="rIb-KG-K0i"/>
         <segue reference="IEc-ah-mh1"/>
         <segue reference="Ega-tn-GzY"/>
-        <segue reference="Ydx-2v-7Hg"/>
+        <segue reference="N0q-Op-l1q"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="cIcon" width="12" height="19"/>

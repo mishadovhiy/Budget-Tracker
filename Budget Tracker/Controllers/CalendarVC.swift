@@ -22,6 +22,9 @@ class CalendarVC: UIViewController {
     @IBOutlet weak var buttonsStack: UIStackView!
     @IBOutlet weak var doneButton: UIButton!
     
+    @IBOutlet var weekDayLabels: [UILabel]!
+    @IBOutlet weak var weekDaySeparetorView: UIView!
+    
     var delegate: CalendarVCProtocol?
     
     var selectedFrom = ""
@@ -41,6 +44,14 @@ class CalendarVC: UIViewController {
         let height = self.view.frame.height
         self.startButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, height + self.startButton.layer.frame.height, 0)
         self.endButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, height + self.endButton.layer.frame.height, 0)
+        if darkAppearence {
+            weekDaySeparetorView.backgroundColor = UIColor(named: "darkSeparetor")
+            for i in 0..<weekDayLabels.count{
+                weekDayLabels[i].backgroundColor = UIColor(named: "darkTableColor")
+                weekDayLabels[i].textColor = i > 4 ? K.Colors.balanceV : K.Colors.balanceT
+            }
+        }
+        
         if #available(iOS 13.0, *) {
             if darkAppearence {
                 self.view.backgroundColor = UIColor(named: "darkTableColor")
@@ -154,6 +165,18 @@ class CalendarVC: UIViewController {
         let range = calendar.range(of: .day, in: .month, for: date)!
         let numDays = range.count
         days.removeAll()
+
+        let formatter  = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let strDate = "\(year)-\(makeTwo(n: month))-02"
+        let datee = formatter.date(from: strDate)
+        let calendarr = Calendar(identifier: .gregorian)
+        let weekNumber = calendarr.component(.weekday, from: datee ?? Date())-3
+        
+        let weekRes = weekNumber < 0 ? 7 + weekNumber : weekNumber
+        for _ in 0..<weekRes{
+            days.append(0)
+        }
         for i in 0..<numDays {
             days.append(i+1)
         }
@@ -583,7 +606,7 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
             .dequeueReusableCell(withReuseIdentifier: K.collectionCell, for: indexPath) as! CVCell
         
         cell.setupCell()
-        cell.dayLabel.text = "\(days[indexPath.row])"
+        cell.dayLabel.text = days[indexPath.row] != 0 ? "\(days[indexPath.row])" : ""
         
         
         let dayCell = makeTwo(n: days[indexPath.row])
@@ -660,8 +683,6 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
             }
             
         }
-        
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
