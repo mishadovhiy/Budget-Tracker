@@ -2440,6 +2440,39 @@
             </objects>
             <point key="canvasLocation" x="1720" y="-2141"/>
         </scene>
+        <!--Create NotificationVC-->
+        <scene sceneID="KfH-cQ-Cn5">
+            <objects>
+                <viewController id="oT3-nS-7od" customClass="CreateNotificationVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Fer-qA-eoK">
+                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hsu-Tb-EC3">
+                                <rect key="frame" x="20" y="64" width="350" height="50"/>
+                                <color key="backgroundColor" systemColor="systemYellowColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="uyv-AT-myV"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="sendNotificationPressed:" destination="oT3-nS-7od" eventType="touchUpInside" id="wNW-zd-utV"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="y3c-Um-SBO"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="y3c-Um-SBO" firstAttribute="trailing" secondItem="Hsu-Tb-EC3" secondAttribute="trailing" constant="20" id="2XK-IP-k02"/>
+                            <constraint firstItem="Hsu-Tb-EC3" firstAttribute="leading" secondItem="y3c-Um-SBO" secondAttribute="leading" constant="20" id="E0Z-IC-EMo"/>
+                            <constraint firstItem="Hsu-Tb-EC3" firstAttribute="top" secondItem="y3c-Um-SBO" secondAttribute="top" constant="20" id="xa2-ke-aYK"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dGy-0P-KRv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-319" y="-711"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="Jwx-Ci-wHe">
             <objects>
@@ -2544,6 +2577,9 @@
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemYellowColor">
+            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
