@@ -1500,18 +1500,24 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 let initSize = cell.frame
                 cell.layer.cornerRadius = 6
                 cell.contentView.alpha = 0
-                cell.frame = CGRect(x: initSize.minX + 10, y: initSize.minY + 5, width: initSize.width - 20, height: initSize.height - 10)
-                cell.backgroundColor = K.Colors.yellow
-                UIView.animate(withDuration: 0.46) {
-                    cell.frame = initSize
-                    cell.backgroundColor = UIColor(named: "darkTableColor")
+                UIView.animate(withDuration: 0.23) {
+                    cell.frame = CGRect(x: initSize.minX + 10, y: initSize.minY + 5, width: initSize.width - 20, height: initSize.height - 10)
+                    cell.backgroundColor = K.Colors.yellow
                 } completion: { (_) in
-                    cell.layer.cornerRadius = 0
-                    UIView.animate(withDuration: 0.15) {
-                        cell.contentView.alpha = 1
-                        self.mainTableView.backgroundColor = .clear
+                    UIView.animate(withDuration: 0.36) {
+                        cell.frame = initSize
+                        cell.backgroundColor = UIColor(named: "darkTableColor")
+                    } completion: { (_) in
+                        cell.layer.cornerRadius = 0
+                        UIView.animate(withDuration: 0.1) {
+                            cell.contentView.alpha = 1
+                            self.mainTableView.backgroundColor = .clear
+                        }
                     }
                 }
+
+                
+                
             }
         }
         
