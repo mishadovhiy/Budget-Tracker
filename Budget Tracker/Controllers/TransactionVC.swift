@@ -72,6 +72,7 @@ class TransitionVC: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         switch segue.identifier {
         case "toCalendar":
             print("toCalendar")
@@ -302,27 +303,39 @@ class TransitionVC: UIViewController {
         let index = sender.selectedSegmentIndex
         switch index {
         case 0:
-            minusPlusLabel.text = "-"
-            categoryTextField.text = ""
-            if let cat = UserDefaults.standard.value(forKey: "lastSelectedCategory") as? String {
-                categoryTextField.placeholder = cat
-                let allCats = Array(expenseArr)
-                var found = false
-                for i in 0..<allCats.count {
-                    if allCats[i] == cat {
-                        found = true
-                    }
+            DispatchQueue.main.async {
+                self.minusPlusLabel.text = "-"
+            }
+            if !fromDebts {
+                DispatchQueue.main.async {
+                    self.categoryTextField.text = ""
                 }
-                placeHolder = found == true ? cat : "\(expenseArr[appData.selectedExpense])"
-            } else {
-                placeHolder = "\(expenseArr[appData.selectedExpense])"
+                if let cat = UserDefaults.standard.value(forKey: "lastSelectedCategory") as? String {
+                    categoryTextField.placeholder = cat
+                    let allCats = Array(expenseArr)
+                    var found = false
+                    for i in 0..<allCats.count {
+                        if allCats[i] == cat {
+                            found = true
+                        }
+                    }
+                    placeHolder = found == true ? cat : "\(expenseArr[appData.selectedExpense])"
+                } else {
+                    placeHolder = "\(expenseArr[appData.selectedExpense])"
+                }
             }
             showPadPressed(showValueButton)
             
         case 1:
-            minusPlusLabel.text = "+"
-            categoryTextField.text = ""
-            placeHolder = "\(incomeArr[appData.selectedIncome])"
+            DispatchQueue.main.async {
+                self.minusPlusLabel.text = "+"
+            }
+            if !fromDebts {
+                DispatchQueue.main.async {
+                    self.categoryTextField.text = ""
+                }
+                placeHolder = "\(incomeArr[appData.selectedIncome])"
+            }
             showPadPressed(showValueButton)
             
         default:
@@ -386,6 +399,7 @@ class TransitionVC: UIViewController {
     }
     var lastSelectedDate = ""
 
+    var fromDebts = false
     
 }
 
@@ -452,12 +466,18 @@ extension TransitionVC: CalendarVCProtocol {
 
 extension TransitionVC: CategoriesVCProtocol {
     
-    func categorySelected(category: String, purpose: Int) {
-        purposeSwitcher.selectedSegmentIndex = purpose
-        purposeSwitched(purposeSwitcher)
-        categoryTextField.text = category
-        if purpose == 0 {
-            UserDefaults.standard.setValue(category, forKey: "lastSelectedCategory")
+    func categorySelected(category: String, purpose: Int, fromDebts: Bool) {
+        print("categorySelectedtransactionsvc", category)
+        self.fromDebts = fromDebts
+        if !fromDebts {
+            purposeSwitcher.selectedSegmentIndex = purpose
+            purposeSwitched(purposeSwitcher)
+            if purpose == 0 {
+                UserDefaults.standard.setValue(category, forKey: "lastSelectedCategory")
+            }
+        }
+        DispatchQueue.main.async {
+            self.categoryTextField.text = category
         }
     }
     

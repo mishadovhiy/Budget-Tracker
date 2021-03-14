@@ -94,12 +94,14 @@ class ViewController: UIViewController {
                         self.sendUnsaved()
                     }
                 }
-                
+                print(self.newTransaction, "self.newTransactionself.newTransactionself.newTransaction")
                 if let new = self.newTransaction {
                     self.mainTableView.backgroundColor = UIColor(named: "darkTableColor")
                     self.newTransaction = nil
                     for i in 0..<newValue.count {
-                        if new.date == newValue[i].date {
+                        let date = "\(self.makeTwo(n: newValue[i].date.day ?? 0)).\(self.makeTwo(n: newValue[i].date.month ?? 0)).\(newValue[i].date.year ?? 0)"
+                        print("date:", date )
+                        if new.date == "\(date)" {
                             for t in 0..<newValue[i].transactions.count {
                                 if new.category == newValue[i].transactions[t].category && new.comment == newValue[i].transactions[t].comment && new.value == newValue[i].transactions[t].value
                                 {
@@ -133,13 +135,13 @@ class ViewController: UIViewController {
         return message
     }()
 
-    let tableCorners: CGFloat = 18
+    let tableCorners: CGFloat = 15
     var forseSendUnsendedData = true
     var forseShowAddButton = false
     var addTransFrame = CGRect.zero
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        appData.unsendedData = []
         updateUI()
         UIApplication.shared.applicationIconBadgeNumber = 0
     }
@@ -234,12 +236,13 @@ class ViewController: UIViewController {
                         load.Categories{(loadedDataa, error) in
                             print(loadedDataa)
                             if error == "" {
-                                print("loaded \(loadedDataa.count) Categories from DB")
+                                print("loaded \(loadedDataa) Categories from DB")
                                 var dataStructt: [CategoriesStruct] = []
                                 for i in 0..<loadedDataa.count {
                                     let name = loadedDataa[i][1]
                                     let purpose = loadedDataa[i][2]
-                                    dataStructt.append(CategoriesStruct(name: name, purpose: purpose, count: 0))
+                                    let isDebt = loadedDataa[i][3] == "0" ? false : true
+                                    dataStructt.append(CategoriesStruct(name: name, purpose: purpose, count: 0, debt: isDebt))
                                 }
                                 UserDefaults.standard.setValue(Date(), forKey: "LastLoadDataDate")
                                 appData.saveCategories(dataStructt)
@@ -251,7 +254,6 @@ class ViewController: UIViewController {
                                     self.message.showMessage(text: error, type: .internetError)
                                 }
                             }
-                            
                         }
                     } else {
                         print("error loading data1")
@@ -287,7 +289,7 @@ class ViewController: UIViewController {
     
     var refreshSubview = UIView.init(frame: .zero)
     struct tableStuct {
-        let date: String
+        let date: DateComponents
         var transactions: [TransactionsStruct]
     }
     func createTransactionsFor(date: String, filteredData: [TransactionsStruct]) -> [TransactionsStruct] {
@@ -349,6 +351,15 @@ class ViewController: UIViewController {
             }
         }
     }
+    
+    func stringToDateComponent(s: String) -> DateComponents {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        let date = dateFormatter.date(from: s)
+        return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date ?? Date())
+        
+    }
+    
     func createTableData(filteredData: [TransactionsStruct]) -> [tableStuct] {
         var result: [tableStuct] = []
         var currentDate = ""
@@ -361,11 +372,12 @@ class ViewController: UIViewController {
             currentDate = filteredData[i].date
             if i > 0 {
                 if filteredData[i-otherSections].date != currentDate {
-                    let new = tableStuct(date: currentDate, transactions: createTransactionsFor(date: filteredData[i].date, filteredData: filteredData))
+                    let new = tableStuct(date: stringToDateComponent(s: currentDate), transactions: createTransactionsFor(date: filteredData[i].date, filteredData: filteredData))
                     result.insert(new, at: 0)
                 }
             } else {
-                let new = tableStuct(date: currentDate, transactions: createTransactionsFor(date: filteredData[i].date, filteredData: filteredData))
+                
+                let new = tableStuct(date: stringToDateComponent(s: currentDate), transactions: createTransactionsFor(date: filteredData[i].date, filteredData: filteredData))
                 result.insert(new, at: 0)
             }
         }
@@ -810,7 +822,8 @@ class ViewController: UIViewController {
             var new: [TransactionsStruct] = []
             for i in 0..<data.count {
                 for n in 0..<data[i].transactions.count {
-                    new.append(TransactionsStruct(value: data[i].transactions[n].value, category: data[i].transactions[n].category, date: data[i].date, comment: data[i].transactions[n].comment))
+                    let date = "(\(self.makeTwo(n: data[i].date.day ?? 0)).\(self.makeTwo(n: data[i].date.month ?? 0)).\(data[i].date.year ?? 0))"
+                    new.append(TransactionsStruct(value: data[i].transactions[n].value, category: data[i].transactions[n].category, date: date, comment: data[i].transactions[n].comment))
                 }
             }
             appData.saveTransations(new)
@@ -1290,6 +1303,14 @@ class ViewController: UIViewController {
         }
     }
     
+    func returnMonth(_ month: Int) -> String {
+        let monthes = [
+            1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "Jun",
+            7: "Jul", 8: "Aug", 9: "Sep", 10: "Oct", 11: "Nov", 12: "Dec"
+        ]
+        return monthes[month] ?? "Jan"
+    }
+    
     var animateCellWillAppear = true
 }
 
@@ -1432,16 +1453,11 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             let main = UIView(frame: CGRect(x: 0, y: 0, width: tableFrame.width, height: 2))
             main.backgroundColor = section == 1 ? K.Colors.background : UIColor.clear
             let view = UIView(frame: CGRect(x: 0, y: 0, width: tableFrame.width, height: 52))
-            view.backgroundColor = UIColor(named: "darkTableColor")
+            view.backgroundColor = UIColor(named: "darkTableColor")//UIColor(red: 80/255, green: 80/255, blue: 80/255, alpha: 1)
             view.layer.masksToBounds = true
             view.layer.cornerRadius = section == 1 ? tableCorners : 0
             //self.mainTableView.layer.cornerRadius = 15
             view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-            let dateLabel = UILabel(frame: CGRect(x: 20, y: 0, width: tableFrame.width - 40, height: view.frame.height))
-            dateLabel.font = .systemFont(ofSize: 16, weight: .medium)
-            dateLabel.textColor = UIColor.white
-            dateLabel.text = newTableData[section - 1].date
-            dateLabel.textAlignment = .left
             main.addSubview(view)
             if section == 1 {
                 let button = UIButton(frame: CGRect(x: view.frame.width - 60, y: 0, width: 60, height: 60))
@@ -1452,7 +1468,31 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 button.contentEdgeInsets = .init(top: 7, left: 0, bottom: 0, right: 7)
                 view.addSubview(button)
             }
-            view.addSubview(dateLabel)
+            
+            let stackHelper = UIView(frame: CGRect(x: 15, y: 10, width: 200, height: view.frame.height - 5))
+            let amountStack = UIStackView()
+            amountStack.spacing = 2
+            amountStack.alignment = .fill//.firstBaseline
+            amountStack.distribution = .equalSpacing
+            amountStack.axis = .horizontal
+            stackHelper.addSubview(amountStack)
+            amountStack.translatesAutoresizingMaskIntoConstraints = false
+            let dateLabel = UILabel()//UILabel(frame: CGRect(x: 10, y: 0, width: tableFrame.width - 40, height: view.frame.height))
+            dateLabel.font = .systemFont(ofSize: 28, weight: .bold)
+            dateLabel.textColor = UIColor(red: 241/255, green: 129/255, blue: 58/255, alpha: 1)
+            dateLabel.text = "\(makeTwo(n: newTableData[section - 1].date.day ?? 0))"
+            let monthLabel = UILabel()
+            monthLabel.font = .systemFont(ofSize: 10, weight: .regular)
+            monthLabel.textColor = K.Colors.balanceT
+            monthLabel.text = "\(returnMonth(newTableData[section - 1].date.month ?? 0)),\n\(newTableData[section - 1].date.year ?? 0)"
+            monthLabel.numberOfLines = 0
+            let amountStackLabels: [UILabel] = [dateLabel, monthLabel]
+            for label in amountStackLabels {
+                label.translatesAutoresizingMaskIntoConstraints = false
+                label.adjustsFontSizeToFitWidth = true
+                amountStack.addArrangedSubview(label)
+            }
+            view.addSubview(stackHelper)
             return main
             
         } else {
@@ -1498,19 +1538,16 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             highliteCell = nil
             DispatchQueue.main.async {
                 let initSize = cell.frame
-                cell.layer.cornerRadius = 6
-                cell.contentView.alpha = 0
+                
+
                 UIView.animate(withDuration: 0.23) {
-                    cell.frame = CGRect(x: initSize.minX + 10, y: initSize.minY + 5, width: initSize.width - 20, height: initSize.height - 10)
-                    cell.backgroundColor = K.Colors.yellow
+                    //cell.frame = CGRect(x: initSize.minX + 10, y: initSize.minY + 5, width: initSize.width - 20, height: initSize.height - 10)
+                    cell.backgroundColor = UIColor(red: 225/255, green: 114/255, blue: 44/255, alpha: 1)
                 } completion: { (_) in
                     UIView.animate(withDuration: 0.36) {
-                        cell.frame = initSize
                         cell.backgroundColor = UIColor(named: "darkTableColor")
                     } completion: { (_) in
-                        cell.layer.cornerRadius = 0
                         UIView.animate(withDuration: 0.1) {
-                            cell.contentView.alpha = 1
                             self.mainTableView.backgroundColor = .clear
                         }
                     }
@@ -1560,13 +1597,13 @@ extension ViewController: TransitionVCProtocol {
                     }
                     
                     var trans = appData.transactions
-                    trans.append(new)
+                    trans.insert(new, at: 0)
                     appData.saveTransations(trans)
                     self.filter()
                 }
             } else {
                 var trans = appData.transactions
-                trans.append(new)
+                trans.insert(new, at: 0)
                 appData.saveTransations(trans)
                 self.filter()
             }

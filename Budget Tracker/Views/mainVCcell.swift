@@ -20,15 +20,15 @@ class mainVCcell: UITableViewCell {
     
     func setupCell(_ data: TransactionsStruct, i: Int, tableData: [TransactionsStruct], selectedCell: IndexPath?, indexPath: IndexPath) {
         if (Double(data.value) ?? 0.0) > 0 {
-            valueLabel.textColor = K.Colors.category
+            valueLabel.textColor = K.Colors.yellow
 
         } else {
-            valueLabel.textColor = K.Colors.negative
+            valueLabel.textColor = K.Colors.category
         }
         commentLabel.isHidden = true
         
         let value = String(format:"%.0f", Double(data.value) ?? 0.0)
-        valueLabel.text = value
+        valueLabel.text = Double(data.value) ?? 0.0 > 0.0 ? "+\(value)" : value
         categoryLabel.text = data.category
         commentLabel.text = data.comment
         commentImage.alpha = data.comment == "" ? 0 : 1

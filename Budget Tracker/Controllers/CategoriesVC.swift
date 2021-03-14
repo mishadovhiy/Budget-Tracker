@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 protocol CategoriesVCProtocol {
-    func categorySelected(category: String, purpose: Int)
+    func categorySelected(category: String, purpose: Int, fromDebts: Bool)
 }
 
 class CategoriesVC: UIViewController {
@@ -32,9 +32,9 @@ class CategoriesVC: UIViewController {
     }()
     
     
-    
-    var expenses: [(String, Int)] = []
-    var incomes: [(String, Int)] = []
+    //(categories[i].name, categories[i].count, categories[i].debt)
+    var expenses: [(String, Int, Bool)] = []
+    var incomes: [(String, Int, Bool)] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,9 +74,9 @@ class CategoriesVC: UIViewController {
         if !toHistory {
             if fromSettings {
                 if !wasEdited {
-                    delegate?.categorySelected(category: "", purpose: 0)
+                    delegate?.categorySelected(category: "", purpose: 0, fromDebts: false)
                 } else {
-                    delegate?.categorySelected(category: "", purpose: 0)
+                    delegate?.categorySelected(category: "", purpose: 0, fromDebts: false)
                 }
             }
         }
@@ -84,7 +84,7 @@ class CategoriesVC: UIViewController {
     
     var wasEdited = false
     func updateUI() {
-        
+    
         getDataFromLocal()
         catData.purposPicker.delegate = self
         catData.purposPicker.dataSource = self
@@ -110,20 +110,25 @@ class CategoriesVC: UIViewController {
         }
     }
     
-    
+    var debts: [CategoriesStruct] = []
     func getDataFromLocal() {
         expenses = []
         incomes = []
+        debts = []
         let categories = Array(appData.getCategories())
         for i in 0..<categories.count {
-            if categories[i].purpose == K.expense {
-                expenses.append((categories[i].name, categories[i].count))
+            if !categories[i].debt {
+                if categories[i].purpose == K.expense {
+                    expenses.append((categories[i].name, categories[i].count, categories[i].debt))
+                } else {
+                    incomes.append((categories[i].name, categories[i].count, categories[i].debt))
+                }
             } else {
-                incomes.append((categories[i].name, categories[i].count))
+                debts.append(CategoriesStruct(name: categories[i].name, purpose: categories[i].purpose, count: categories[i].count, debt: categories[i].debt))
             }
         }
         whenNoCategories()
-        print("expenses: \(expenses.count), incomes: \(incomes.count)")
+        print("expenses: \(expenses.count), incomes: \(incomes.count)", "debts: \(debts)")
         expenses = expenses.sorted { $0.1 > $1.1 }
         incomes = incomes.sorted { $0.1 > $1.1 }
         
@@ -161,7 +166,8 @@ class CategoriesVC: UIViewController {
                         
                         let name = loadedData[i][1]
                         let purpose = loadedData[i][2]
-                        dataStruct.append(CategoriesStruct(name: name, purpose: purpose, count: 0))
+                        let isDebt = loadedData[i][3] == "0" ? false : true
+                        dataStruct.append(CategoriesStruct(name: name, purpose: purpose, count: 0, debt: isDebt))
                     }
                     appData.saveCategories(dataStruct)
                     self.getDataFromLocal()
@@ -210,11 +216,11 @@ class CategoriesVC: UIViewController {
         wasEdited = true
         let Nickname = appData.username
         if Nickname != "" {
-            let toDataString = "&Nickname=\(Nickname)" + "&Title=\(title)" + "&Purpose=\(purpose)"
+            let toDataString = "&Nickname=\(Nickname)" + "&Title=\(title)" + "&Purpose=\(purpose)" + "&ExpectingPayment=1"
             let save = SaveToDB()
             save.Categories(toDataString: toDataString) { (error) in
                 var categories = Array(appData.getCategories())
-                categories.append(CategoriesStruct(name: title, purpose: purpose, count: 0))
+                categories.append(CategoriesStruct(name: title, purpose: purpose, count: 0, debt: true))
                 appData.saveCategories(categories)
                 self.getDataFromLocal()
                 if error {
@@ -228,11 +234,11 @@ class CategoriesVC: UIViewController {
     func deteteCategory(at: IndexPath) {
         let delete = DeleteFromDB()
         let Nickname = appData.username
-        let Title = at.section == 0 ? expenses[at.row].0 : incomes[at.row].0
-        let Purpose = at.section == 0 ? K.expense : K.income
+        let Title = at.section == 1 ? expenses[at.row].0 : incomes[at.row].0
+        let Purpose = at.section == 1 ? K.expense : K.income
         wasEdited = true
         if appData.username != "" {
-            let toDataString = "&Nickname=\(Nickname)" + "&Title=\(Title)" + "&Purpose=\(Purpose)"
+            let toDataString = "&Nickname=\(Nickname)" + "&Title=\(Title)" + "&Purpose=\(Purpose)" + "&ExpectingPayment=0"
             print("deleting:", toDataString)
             delete.Categories(toDataString: toDataString, completion: { (error) in
                 if error {
@@ -241,30 +247,32 @@ class CategoriesVC: UIViewController {
                 }
             })
         }
-        if at.section == 0 {
+        if at.section == 1 {
             self.expenses.remove(at: at.row)
         } else {
-            self.incomes.remove(at: at.row)
+            if at.section == 2 {
+                self.incomes.remove(at: at.row)
+            }
+            
         }
         var result: [CategoriesStruct] = []
         for i in 0..<self.incomes.count {
-            result.append(CategoriesStruct(name: self.incomes[i].0, purpose: K.income, count: 0))
+            result.append(CategoriesStruct(name: self.incomes[i].0, purpose: K.income, count: 0, debt: self.incomes[i].2))
         }
         for i in 0..<self.expenses.count {
-            result.append(CategoriesStruct(name: self.expenses[i].0, purpose: K.expense, count: 0))
+            result.append(CategoriesStruct(name: self.expenses[i].0, purpose: K.expense, count: 0, debt: self.expenses[i].2))
         }
-        self.allCategoriesData = result
+        
+        self.allCategoriesData = result + debts
         appData.saveCategories(self.allCategoriesData)
         self.getDataFromLocal()
-        
-
         
     }
     
     @IBAction func addCategoryPressed(_ sender: UIButton) {
         addPressed()
     }
-    
+    //here
     func addPressed() {
         let alert = UIAlertController(title: "Add Category", message: "", preferredStyle: .alert)
         alertTextFields(alert: alert)
@@ -281,7 +289,7 @@ class CategoriesVC: UIViewController {
                             self.sendToDBCategory(title: name, purpose: purpose)
                         } else {
                             var categories = Array(appData.getCategories())
-                            categories.append(CategoriesStruct(name: name, purpose: purpose, count: 0))
+                            categories.append(CategoriesStruct(name: name, purpose: purpose, count: 0, debt: true))
                             appData.saveCategories(categories)
                             self.getDataFromLocal()
                         }
@@ -318,7 +326,7 @@ class CategoriesVC: UIViewController {
             self.performSegue(withIdentifier: "toHistory", sender: self)
         }
     }
-    
+
     var toHistory = false
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
@@ -328,8 +336,19 @@ class CategoriesVC: UIViewController {
             vc.historyDataStruct = historyDataStruct
             vc.selectedCategoryName = selectedCategoryName
             vc.fromCategories = true
+        } else {
+            if segue.identifier == "toDebtsVC" {
+                let vc = segue.destination as! DebtsVC
+                vc.debts = debts
+                if !fromSettings {
+                    vc.delegate = self
+                }
+            }
         }
     }
+    
+    
+    let darkSectionBackground = UIColor(red: 30/255, green: 30/255, blue: 30/255, alpha: 1)
     
 }
 
@@ -338,13 +357,14 @@ class CategoriesVC: UIViewController {
 
 extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0: return expenses.count
-        case 1: return incomes.count
+        case 0: return 1
+        case 1: return expenses.count
+        case 2: return incomes.count
         default:
             return expenses.count
         }
@@ -352,8 +372,9 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
-        case 0: return K.expense
-        case 1: return K.income
+        case 0: return nil
+        case 1: return K.expense
+        case 2: return K.income
         default:
             return K.income
         }
@@ -362,11 +383,20 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent, for: indexPath) as! categoriesVCcell
         
+        if darkAppearence {
+            cell.backgroundColor = UIColor(named: "darkTableColor")
+        } else {
+            cell.backgroundColor = K.Colors.background
+        }
+        
         switch indexPath.section {
         case 0:
+            cell.categoryNameLabel.text = "Debts"
+            cell.qntLabel.text = "\(debts.count)"
+        case 1:
             cell.categoryNameLabel.text = expenses[indexPath.row].0
             cell.qntLabel.text = "\(expenses[indexPath.row].1)"
-        case 1:
+        case 2:
             cell.categoryNameLabel.text = incomes[indexPath.row].0
             cell.qntLabel.text = "\(incomes[indexPath.row].1)"
             
@@ -374,58 +404,74 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
             cell.categoryNameLabel.text = incomes[indexPath.row].0
         }
         
-        if darkAppearence {
-            cell.backgroundColor = UIColor(named: "darkTableColor")
-        } else {
-            cell.backgroundColor = K.Colors.background
-        }
+        
         
         if darkAppearence {
             cell.categoryNameLabel.textColor = K.Colors.background
             cell.qntLabel.text = ""
-            cell.accessoryType = .none
+            cell.accessoryType = indexPath.section == 0 ? .disclosureIndicator : .none
         }
         return cell
     }
     
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let mainFrame = self.view.frame
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: mainFrame.width, height: 25))
         let lightBackground = K.Colors.background //UIColor(red: 194/255, green: 194/255, blue: 194/255, alpha: 1)
-        let darkBackground = UIColor(red: 30/255, green: 30/255, blue: 30/255, alpha: 1)
-        view.backgroundColor = self.view.backgroundColor == K.Colors.background ? lightBackground : darkBackground
-        let label = UILabel(frame: CGRect(x: 15, y: 5, width: mainFrame.width - 40, height: 20))
-        label.text = section == 0 ? K.expense : K.income
-        label.textColor = view.backgroundColor == lightBackground ? K.Colors.balanceT : K.Colors.balanceV
-        label.font = .systemFont(ofSize: 14, weight: .medium)
-        view.addSubview(label)
-        return view
+        view.backgroundColor = self.view.backgroundColor == K.Colors.background ? lightBackground : darkSectionBackground
+        if section != 0 {
+            let mainFrame = self.view.frame
+            let view = UIView(frame: CGRect(x: 0, y: 0, width: mainFrame.width, height: 25))
+            view.backgroundColor = self.view.backgroundColor == K.Colors.background ? lightBackground : darkSectionBackground
+            let label = UILabel(frame: CGRect(x: 15, y: 5, width: mainFrame.width - 40, height: 20))
+            label.text = section == 1 ? K.expense : K.income
+            label.textColor = view.backgroundColor == lightBackground ? K.Colors.balanceT : K.Colors.balanceV
+            label.font = .systemFont(ofSize: 14, weight: .medium)
+            view.addSubview(label)
+            return view
+        } else {
+            let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 25))
+            view.backgroundColor = .clear
+            return nil
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return section == 0 ? 0 : 25
     }
     
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == UITableViewCell.EditingStyle.delete {
-            deteteCategory(at: indexPath)
+        if indexPath.section != 0 {
+            if editingStyle == UITableViewCell.EditingStyle.delete {
+                deteteCategory(at: indexPath)
+            }
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if !fromSettings {
-            delegate?.categorySelected(category: indexPath.section == 0 ? expenses[indexPath.row].0 : incomes[indexPath.row].0, purpose: indexPath.section)
-            navigationController?.popToRootViewController(animated: true)
+        if indexPath.section == 0 {
+            historyDataStruct = []
+            selectedCategoryName = ""
+            
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "toDebtsVC", sender: self)
+            }
         } else {
-            if indexPath.section == 0 {
-                toHistory(category: expenses[indexPath.row].0)
+            if !fromSettings {
+                delegate?.categorySelected(category: indexPath.section == 1 ? expenses[indexPath.row].0 : incomes[indexPath.row].0, purpose: indexPath.section - 1, fromDebts: false)
+                navigationController?.popToRootViewController(animated: true)
             } else {
-                if indexPath.section == 1 {
+                switch indexPath.section {
+                case 1:
+                    toHistory(category: expenses[indexPath.row].0)
+                case 2:
                     toHistory(category: incomes[indexPath.row].0)
+                default:
+                    self.dismiss(animated: true)
                 }
             }
-            
         }
     }
-    
     
 }
 
@@ -456,5 +502,15 @@ extension CategoriesVC: UIPickerViewDelegate, UIPickerViewDataSource {
         let myTitle = NSAttributedString(string: "\(titleData)")
         return myTitle
     }
+    
+}
+
+
+extension CategoriesVC: DebtsVCProtocol {
+    func catDebtSelected(name: String) {
+        delegate?.categorySelected(category: name, purpose: 1, fromDebts: true)
+        navigationController?.popToRootViewController(animated: true)
+    }
+    
     
 }

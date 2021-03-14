@@ -220,7 +220,7 @@ extension SettingsViewController: UnsendedDataVCProtocol {
 }
 
 extension SettingsViewController: CategoriesVCProtocol {
-    func categorySelected(category: String, purpose: Int) {
+    func categorySelected(category: String, purpose: Int, fromDebts: Bool) {
         if category == "" {
             //closeWithAnimation(vcanimation: false)
             tableData = [

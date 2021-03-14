@@ -65,6 +65,7 @@ class UnsendedDataVC: UIViewController {
     struct UnsendedCategories {
         let name: String
         let purpose: String
+        let isDebt: Bool
         var selected: Bool
     }
     
@@ -137,7 +138,7 @@ class UnsendedDataVC: UIViewController {
         defaultsCategories = appData.getCategories()
         for category in categories {
             foundInAListCount = contains(category) ? foundInAListCount + 1 : foundInAListCount
-            let new = UnsendedCategories(name: category.name, purpose: category.purpose, selected: false)
+            let new = UnsendedCategories(name: category.name, purpose: category.purpose, isDebt: category.debt, selected: false)
             catHolder.append(new)
             
         }
@@ -258,7 +259,7 @@ class UnsendedDataVC: UIViewController {
             defaultsCatsResult.removeAll()
             for cat in categoruesTableData {
                 if !cat.selected {
-                    let new = CategoriesStruct(name: cat.name, purpose: cat.purpose, count: 0)
+                    let new = CategoriesStruct(name: cat.name, purpose: cat.purpose, count: 0, debt: false)
                     foundInAListCount = contains(new) ? foundInAListCount + 1 : foundInAListCount
                     newCategories.append(cat)
                     defaultsCatsResult.append(new)
@@ -296,7 +297,7 @@ class UnsendedDataVC: UIViewController {
             if allCats[i].selected {
                 self.selectedCount += 1
             } else {
-                if contains(CategoriesStruct(name: allCats[i].name, purpose: allCats[i].purpose, count: 0)) {
+                if contains(CategoriesStruct(name: allCats[i].name, purpose: allCats[i].purpose, count: 0, debt: false)) {
                     self.selectedCount += 1
                     allCats[i].selected = true
                 }
@@ -403,7 +404,7 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "unsendedCategoriesCell") as! unsendedCategoriesCell
             let data = categoruesTableData[indexPath.row]
             cell.nameLabel.text = data.name
-            cell.perposeLabel.text = data.purpose
+            cell.perposeLabel.text = data.isDebt ? "ирмпсавенпгротирмпса" : data.purpose
             cell.trashImage.image = data.selected ? redTrash : lightTrash
             return cell
         default:

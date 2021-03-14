@@ -14,6 +14,8 @@ class AppData {
     let defaults = UserDefaults.standard
     
     var unshowedErrors = ""
+    
+    var deptsData: [CategoriesStruct] = []
 
     var username: String {
         get{
@@ -119,10 +121,10 @@ class AppData {
             let nickname = username
             let name = data[i].name
             let purpose = data[i].purpose
-            
-            dict.append([nickname, name, purpose])
+            let isDebt = "\(data[i].debt)"
+            dict.append([nickname, name, purpose, isDebt])
         }
-        print("categories saved to user defaults, count: \(dict.count), \(dict)")
+        print("categories saved to user defaults, count: \(dict.count), \(dict), key:", key)
         defaults.set(dict, forKey: key)
     }
     
@@ -134,18 +136,19 @@ class AppData {
        // let trans = Array(transactions)
         ///
         let trans = UserDefaults.standard.value(forKey: "transactionsData") as? [[String]] ?? []
-        
-        
         for i in 0..<localData.count {
             let name = localData[i][1]
             let purpose = localData[i][2]
+            let isDebt = key == "categoriesData" ? (localData[i][3] == "false" ? false : true) : false
             var count = 0
-            for i in 0..<trans.count {
-                if trans[i][2] == name {
-                    count += 1
+            if !isDebt {
+                for i in 0..<trans.count {
+                    if trans[i][2] == name {
+                        count += 1
+                    }
                 }
             }
-            results.append(CategoriesStruct(name: name, purpose: purpose, count: count))
+            results.append(CategoriesStruct(name: name, purpose: purpose, count: count, debt: isDebt))
         }
         return results
     }
@@ -424,12 +427,12 @@ class AppData {
             TransactionsStruct(value: "-1000", category: "Bills", date: "\(filter.getToday(filter.filterObjects.currentDate))", comment: ""),
         ]
         let categories = [
-            CategoriesStruct(name: "Food", purpose: K.expense, count: 0),
-            CategoriesStruct(name: "Taxi", purpose: K.expense, count: 0),
-            CategoriesStruct(name: "Public Transport", purpose: K.expense, count: 0),
-            CategoriesStruct(name: "Bills", purpose: K.expense, count: 0),
-            CategoriesStruct(name: "Work", purpose: K.income, count: 0),
-            CategoriesStruct(name: "Freelance", purpose: K.income, count: 0)
+            CategoriesStruct(name: "Food", purpose: K.expense, count: 0, debt: false),
+            CategoriesStruct(name: "Taxi", purpose: K.expense, count: 0, debt: false),
+            CategoriesStruct(name: "Public Transport", purpose: K.expense, count: 0, debt: false),
+            CategoriesStruct(name: "Bills", purpose: K.expense, count: 0, debt: false),
+            CategoriesStruct(name: "Work", purpose: K.income, count: 0, debt: false),
+            CategoriesStruct(name: "Freelance", purpose: K.income, count: 0, debt: false)
         ]
         saveTransations(transactions)
         saveCategories(categories)
@@ -482,5 +485,8 @@ struct CategoriesStruct {
     let name: String
     let purpose: String
     let count: Int
+    let debt: Bool
 }
+
+
 

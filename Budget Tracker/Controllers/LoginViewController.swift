@@ -597,7 +597,7 @@ extension UITextField {
 
 var difference: [TransactionsStruct] = []
 
-var DBTransactions:[TransactionsStruct] {
+/*var DBTransactions:[TransactionsStruct] {
 // creating and using only in login - local vc
     get {
         let dick = appData.defaults.value(forKey: "DBTransactions") as? [[String]] ?? []
@@ -627,13 +627,13 @@ var DBTransactions:[TransactionsStruct] {
         print("DBTransactions: saved \(dick.count)")
         appData.defaults.set(dick, forKey: "DBTransactions")
     }
-}
-var DBCategories:[CategoriesStruct] {
+}*/
+/*var DBCategories:[CategoriesStruct] {
     get {
         let dick = appData.defaults.value(forKey: "DBCategories") as? [[String]] ?? []
         var data: [CategoriesStruct] = []
         for i in 0..<dick.count {
-            data.append(CategoriesStruct(name: dick[i][1], purpose: dick[i][2], count: 0))
+            data.append(CategoriesStruct(name: dick[i][1], purpose: dick[i][2], count: 0, debt: dick[i][3]))
         }
         print("DBCategories: returned \(data.count)")
         return data
@@ -651,4 +651,4 @@ var DBCategories:[CategoriesStruct] {
         print("DBCategories: saved \(dataStruct)")
         appData.defaults.set(dick, forKey: "DBCategories")
     }
-}
+}*/
