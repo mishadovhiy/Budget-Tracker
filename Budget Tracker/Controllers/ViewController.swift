@@ -209,6 +209,7 @@ class ViewController: UIViewController {
     }
     
     func downloadFromDB() {
+        lastSelectedDate = nil
         if appData.username != "" {
             print("downloadFromDB: username: \(appData.username), not nill")
             if appData.unsendedData.count > 0 {
@@ -1124,6 +1125,10 @@ class ViewController: UIViewController {
     }
 
     
+    override func viewDidAppear(_ animated: Bool) {
+        print("appeare main vc")
+    }
+    
     //quite seques
     @IBAction func homeVC(segue: UIStoryboardSegue) {
         DispatchQueue.global(qos: .userInteractive).async {
@@ -1585,7 +1590,7 @@ extension ViewController: TransitionVCProtocol {
         Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (_) in
             self.animateCellWillAppear = true
         }
-        
+        //here
         if value != "" && category != "" && date != "" {
             if appData.username != "" {
                 let toDataString = "&Nickname=\(appData.username)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
@@ -1599,6 +1604,9 @@ extension ViewController: TransitionVCProtocol {
                     var trans = appData.transactions
                     trans.insert(new, at: 0)
                     appData.saveTransations(trans)
+                    if !error {
+                        self.sendUnsaved()
+                    }
                     self.filter()
                 }
             } else {

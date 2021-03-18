@@ -10,6 +10,8 @@ import UIKit
 import CoreData
 import AVFoundation
 
+var lastSelectedDate:String?
+
 protocol TransitionVCProtocol {
     func addNewTransaction(value: String, category: String, date: String, comment: String)
     func quiteTransactionVC()
@@ -113,7 +115,7 @@ class TransitionVC: UIViewController {
         categoryTextField.isUserInteractionEnabled = false
         categoryTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(categoryPressed)))
         DispatchQueue.main.async {
-            self.dateTextField.attributedPlaceholder = NSAttributedString(string: UserDefaults.standard.value(forKey: "lastSelectedDate") as? String ?? appData.stringDate(appData.objects.datePicker), attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
+            self.dateTextField.attributedPlaceholder = NSAttributedString(string: lastSelectedDate ?? appData.stringDate(appData.objects.datePicker), attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
             self.commentTextField.attributedPlaceholder = NSAttributedString(string: "Short comment", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
             self.purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white], for: .normal)
             self.purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "darkTableColor") ?? .black], for: .selected)
@@ -232,7 +234,7 @@ class TransitionVC: UIViewController {
     func addNew(value: String, category: String, date: String, comment: String) {
         donePressed = true
         UIImpactFeedbackGenerator().impactOccurred()
-        print("addNew called", date)
+        print("addNew called", value)
         self.dismiss(animated: true) {
             self.delegate?.addNewTransaction(value: value, category: category, date: date, comment: comment)
         }
@@ -382,22 +384,28 @@ class TransitionVC: UIViewController {
             AudioServicesPlaySystemSound(1155)
             if pressedValue.count > 0 {
                 pressedValue.removeLast()
-                valueLabel.text = pressedValue
+                DispatchQueue.main.async {
+                    self.valueLabel.text = self.pressedValue
+                }
             }
             if pressedValue.count == 0 {
                 pressedValue.removeAll()
-                valueLabel.text? = "0"
+                DispatchQueue.main.async {
+                    self.valueLabel.text? = "0"
+                }
                 minusPlusLabel.alpha = 0
             }
         }
         if sender.tag == 2 {
             AudioServicesPlaySystemSound(1156)
             pressedValue.removeAll()
-            valueLabel.text? = "0"
+            DispatchQueue.main.async {
+                self.valueLabel.text = "0"
+            }
             minusPlusLabel.alpha = 0
         }
     }
-    var lastSelectedDate = ""
+    
 
     var fromDebts = false
     
@@ -457,8 +465,10 @@ class CustomTextField: UITextField {
 
 extension TransitionVC: CalendarVCProtocol {
     func dateSelected(date: String) {
-        dateTextField.text = date
-        UserDefaults.standard.setValue(date, forKey: "lastSelectedDate")
+        DispatchQueue.main.async {
+            self.dateTextField.text = date
+        }
+        lastSelectedDate = date
     }
     
     
@@ -466,7 +476,7 @@ extension TransitionVC: CalendarVCProtocol {
 
 extension TransitionVC: CategoriesVCProtocol {
     
-    func categorySelected(category: String, purpose: Int, fromDebts: Bool) {
+    func categorySelected(category: String, purpose: Int, fromDebts: Bool, amount: Int) {
         print("categorySelectedtransactionsvc", category)
         self.fromDebts = fromDebts
         if !fromDebts {
@@ -474,6 +484,24 @@ extension TransitionVC: CategoriesVCProtocol {
             purposeSwitched(purposeSwitcher)
             if purpose == 0 {
                 UserDefaults.standard.setValue(category, forKey: "lastSelectedCategory")
+            }
+        } else {
+            
+            
+            DispatchQueue.main.async {
+                if self.pressedValue == "" || self.pressedValue == "0" {
+                }
+                self.valueLabel.text = "\(amount < 0 ? amount * (-1) : amount)"
+                self.minusPlusLabel.alpha = 1
+                self.purposeSwitcher.selectedSegmentIndex = amount * (-1) < 0 ? 0 : 1
+                self.purposeSwitched(self.purposeSwitcher)
+                
+                let selectedSeg = self.purposeSwitcher.selectedSegmentIndex
+                let value = selectedSeg == 0 ? "\(Double(self.valueLabel.text ?? "") ?? 0.0)" : self.valueLabel.text ?? ""
+                print(amount, "resultresultresultresult")
+                print(selectedSeg)
+                print(value, "selectedSegselectedSegselectedSeg")
+                
             }
         }
         DispatchQueue.main.async {

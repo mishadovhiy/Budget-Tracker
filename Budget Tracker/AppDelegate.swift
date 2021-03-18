@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let value = UserDefaults.standard.value(forKey: "lastLaunching") as? String ?? ""
         if value != today {
             UserDefaults.standard.setValue(today, forKey: "lastLaunching")
-            UserDefaults.standard.setValue(nil, forKey: "lastSelectedDate")
+            lastSelectedDate = nil
         }
         print(today, "didFinishLaunchingWithOptions")
         return true

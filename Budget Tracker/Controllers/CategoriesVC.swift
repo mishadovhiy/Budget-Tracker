@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 protocol CategoriesVCProtocol {
-    func categorySelected(category: String, purpose: Int, fromDebts: Bool)
+    func categorySelected(category: String, purpose: Int, fromDebts: Bool, amount: Int)
 }
 
 class CategoriesVC: UIViewController {
@@ -62,11 +62,16 @@ class CategoriesVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         toHistory = false
         navigationController?.setNavigationBarHidden(fromSettings ? true : false, animated: true)
-        for i in 0..<tableView.visibleCells.count {
-            let indexPath = IndexPath(row: i, section: 0)
-            DispatchQueue.main.async {
-                self.tableView.deselectRow(at: indexPath, animated: true)
-            }
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
         }
     }
     
@@ -74,9 +79,9 @@ class CategoriesVC: UIViewController {
         if !toHistory {
             if fromSettings {
                 if !wasEdited {
-                    delegate?.categorySelected(category: "", purpose: 0, fromDebts: false)
+                    delegate?.categorySelected(category: "", purpose: 0, fromDebts: false, amount: 0)
                 } else {
-                    delegate?.categorySelected(category: "", purpose: 0, fromDebts: false)
+                    delegate?.categorySelected(category: "", purpose: 0, fromDebts: false, amount: 0)
                 }
             }
         }
@@ -216,11 +221,11 @@ class CategoriesVC: UIViewController {
         wasEdited = true
         let Nickname = appData.username
         if Nickname != "" {
-            let toDataString = "&Nickname=\(Nickname)" + "&Title=\(title)" + "&Purpose=\(purpose)" + "&ExpectingPayment=1"
+            let toDataString = "&Nickname=\(Nickname)" + "&Title=\(title)" + "&Purpose=\(purpose)" + "&ExpectingPayment=0"
             let save = SaveToDB()
             save.Categories(toDataString: toDataString) { (error) in
                 var categories = Array(appData.getCategories())
-                categories.append(CategoriesStruct(name: title, purpose: purpose, count: 0, debt: true))
+                categories.append(CategoriesStruct(name: title, purpose: purpose, count: 0, debt: false))
                 appData.saveCategories(categories)
                 self.getDataFromLocal()
                 if error {
@@ -284,12 +289,11 @@ class CategoriesVC: UIViewController {
                     if name != "" {
                         let purpose = self.catData.allPurposes[self.catData.selectedPurpose]
                         if appData.username != "" {
-                            self.getDataFromLocal()
                             self.whenNoCategories()
                             self.sendToDBCategory(title: name, purpose: purpose)
                         } else {
                             var categories = Array(appData.getCategories())
-                            categories.append(CategoriesStruct(name: name, purpose: purpose, count: 0, debt: true))
+                            categories.append(CategoriesStruct(name: name, purpose: purpose, count: 0, debt: false))
                             appData.saveCategories(categories)
                             self.getDataFromLocal()
                         }
@@ -342,6 +346,7 @@ class CategoriesVC: UIViewController {
                 vc.debts = debts
                 if !fromSettings {
                     vc.delegate = self
+                    vc.darkAppearence = self.darkAppearence
                 }
             }
         }
@@ -458,7 +463,7 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
             }
         } else {
             if !fromSettings {
-                delegate?.categorySelected(category: indexPath.section == 1 ? expenses[indexPath.row].0 : incomes[indexPath.row].0, purpose: indexPath.section - 1, fromDebts: false)
+                delegate?.categorySelected(category: indexPath.section == 1 ? expenses[indexPath.row].0 : incomes[indexPath.row].0, purpose: indexPath.section - 1, fromDebts: false, amount: 0)
                 navigationController?.popToRootViewController(animated: true)
             } else {
                 switch indexPath.section {
@@ -507,8 +512,8 @@ extension CategoriesVC: UIPickerViewDelegate, UIPickerViewDataSource {
 
 
 extension CategoriesVC: DebtsVCProtocol {
-    func catDebtSelected(name: String) {
-        delegate?.categorySelected(category: name, purpose: 1, fromDebts: true)
+    func catDebtSelected(name: String, amount: Int) {
+        delegate?.categorySelected(category: name, purpose: 1, fromDebts: true, amount: amount)
         navigationController?.popToRootViewController(animated: true)
     }
     
