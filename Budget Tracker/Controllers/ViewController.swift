@@ -1647,15 +1647,17 @@ extension ViewController: TransitionVCProtocol {
                 appData.saveTransations(trans)
                 self.filter()
             }
+        } else {
+            print("reloaddd")
+            DispatchQueue.main.async {
+                self.mainTableView.reloadData()
+                self.refreshControl.endRefreshing()
+            }
         }
     }
     
-    func quiteTransactionVC() {
-        print("mainvc:quit")
-        DispatchQueue.main.async {
-            self.mainTableView.reloadData()
-            self.refreshControl.endRefreshing()
-        }
+    func quiteTransactionVC(){
+        print("quite trans")
     }
     
     

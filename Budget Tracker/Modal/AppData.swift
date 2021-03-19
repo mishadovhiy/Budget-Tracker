@@ -495,7 +495,7 @@ class NavigationController : UINavigationController {
         print("navTouches")
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
+   /* override func viewWillDisappear(_ animated: Bool) {
         
-    }
+    }*/
 }

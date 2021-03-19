@@ -62,12 +62,14 @@ class TransitionVC: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        delegate?.quiteTransactionVC()
+        super.viewWillDisappear(true)
+        print(donePressed, "donePressed")
         if !donePressed {
             self.delegate?.addNewTransaction(value: "", category: "", date: "", comment: "")
         }
     }
 
+    
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(true, animated: true)
