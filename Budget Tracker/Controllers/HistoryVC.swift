@@ -10,6 +10,7 @@ import UIKit
 var transactionAdded = false
 
 class HistoryVC: UIViewController, TransitionVCProtocol {
+    
     func addNewTransaction(value: String, category: String, date: String, comment: String) {
         let new = TransactionsStruct(value: value, category: category, date: date, comment: comment)
         print(new, "newnewnewnew")
@@ -28,13 +29,9 @@ class HistoryVC: UIViewController, TransitionVCProtocol {
                     var trans = appData.transactions
                     trans.append(new)
                     appData.saveTransations(trans)
-                    var result: [TransactionsStruct] = []
-                    for i in 0..<trans.count {
-                        if trans[i].category == self.selectedCategoryName {
-                            result.append(trans[i])
-                        }
-                    }
-                    self.historyDataStruct = result.sorted{ $0.dateFromString < $1.dateFromString }
+                    
+                    self.historyDataStruct.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
+                    self.historyDataStruct = self.historyDataStruct.sorted{ $0.dateFromString < $1.dateFromString }
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                     }
@@ -43,13 +40,9 @@ class HistoryVC: UIViewController, TransitionVCProtocol {
                 var trans = appData.transactions
                 trans.append(new)
                 appData.saveTransations(trans)
-                var result: [TransactionsStruct] = []
-                for i in 0..<trans.count {
-                    if trans[i].category == selectedCategoryName {
-                        result.append(trans[i])
-                    }
-                }
-                historyDataStruct = result.sorted{ $0.dateFromString < $1.dateFromString }
+                
+                self.historyDataStruct.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
+                self.historyDataStruct = self.historyDataStruct.sorted{ $0.dateFromString < $1.dateFromString }
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
@@ -68,18 +61,28 @@ class HistoryVC: UIViewController, TransitionVCProtocol {
     var historyDataStruct: [TransactionsStruct] = []
     var selectedCategoryName = ""
     var fromCategories = false
+    var allowEditing = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if !allowEditing {
+            DispatchQueue.main.async {
+                self.addTransButton.alpha = 0
+            }
+        } else {
+            addTransButton.layer.shadowColor = UIColor.black.cgColor
+            addTransButton.layer.shadowOpacity = 0.1
+            addTransButton.layer.shadowOffset = .zero
+            addTransButton.layer.shadowRadius = 10
+        }
         transactionAdded = false
         historyDataStruct = historyDataStruct.sorted{ $0.dateFromString < $1.dateFromString }
         tableView.delegate = self
         tableView.dataSource = self
         title = selectedCategoryName.capitalized
 
-        /*if !fromCategories {
-            addTransButton.alpha = 0
-        }*/
+
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -91,9 +94,10 @@ class HistoryVC: UIViewController, TransitionVCProtocol {
         for i in 0..<historyDataStruct.count {
             sum += Double(historyDataStruct[i].value) ?? 1.0
         }
-        if sum < Double(Int.max) {
-            label.text = "\(Int(sum))"
-        } else { label.text = "\(sum)" }
+
+        DispatchQueue.main.async {
+            label.text = sum < Double(Int.max) ? "\(Int(sum))" : "\(sum)"
+        }
     }
     
     @IBAction func toTransPressed(_ sender: UIButton) {
@@ -104,6 +108,7 @@ class HistoryVC: UIViewController, TransitionVCProtocol {
         }
     }
 
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toTransVC" {
             let nav = segue.destination as! NavigationController
@@ -120,7 +125,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return historyDataStruct.count
-        } else { return 1 }
+        } else { return 2 }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -152,6 +157,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             } else {
                 cell.perioudLabel.text = selectedPeroud
             }
+            cell.contentView.alpha = indexPath.row == 0 ? 1 : 0
             return cell
         }
     }
@@ -215,7 +221,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                 
             }
             deleteAction.backgroundColor = K.Colors.negative
-            return UISwipeActionsConfiguration(actions: [deleteAction])
+            return UISwipeActionsConfiguration(actions: allowEditing ? [deleteAction] : [])
         } else {
             return nil
         } 

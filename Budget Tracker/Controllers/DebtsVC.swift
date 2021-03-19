@@ -11,6 +11,7 @@ import UIKit
 class DebtsVC: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet weak var titleView: UIView!
     var delegate: DebtsVCProtocol?
     var debts: [CategoriesStruct] = []
     var emptyValuesTableData: [DebtsTableStruct] = []
@@ -27,32 +28,60 @@ class DebtsVC: UIViewController {
             }
         }
     }
-    
+    var hideTitle = false
     var darkAppearence = false
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.delegate = self
-        tableView.dataSource = self
-
-        getDataFromLocal()
+       /* if hideTitle {
+            title = "Categories"
+            DispatchQueue.main.async {
+                let frame = self.headerView.frame
+                let selfFrame = self.tableView.frame
+                self.headerView.isHidden = true
+                self.tableView.translatesAutoresizingMaskIntoConstraints = true
+                self.tableView.frame = CGRect(x: 0, y: frame.minY, width: selfFrame.width, height: selfFrame.height + frame.height)
+            }
+        }*/
+        if darkAppearence {
+            DispatchQueue.main.async {
+                let frame = self.titleView.frame
+                let selfFrame = self.tableView.frame
+                self.tableView.translatesAutoresizingMaskIntoConstraints = true
+                self.tableView.frame = CGRect(x: 0, y: frame.minY, width: selfFrame.width, height: selfFrame.height + frame.height)
+            }
+        }
         if #available(iOS 13.0, *) {
             if darkAppearence {
                 self.view.backgroundColor = UIColor(named: "darkTableColor")
                 self.tableView.separatorColor = UIColor(named: "darkSeparetor")
+                self.titleView.alpha = 0
+                
             }
         } else {
             DispatchQueue.main.async {
                 if self.darkAppearence {
                     self.view.backgroundColor = UIColor(named: "darkTableColor")
                     self.tableView.separatorColor = UIColor(named: "darkSeparetor")
+                    self.titleView.alpha = 0
                 }
             }
         }
+        tableView.delegate = self
+        tableView.dataSource = self
+
+        getDataFromLocal()
+        
     }
     
-    
     func getDataFromLocal() {
+        debts = []
+        let categories = Array(appData.getCategories())
+        for i in 0..<categories.count {
+            if categories[i].debt {
+                debts.append(CategoriesStruct(name: categories[i].name, purpose: categories[i].purpose, count: categories[i].count, debt: categories[i].debt))
+            } 
+        }
         let transactions = Array(appData.transactions)
         var result:[DebtsTableStruct] = []
         emptyValuesTableData.removeAll()
@@ -86,6 +115,11 @@ class DebtsVC: UIViewController {
         tableData = result.sorted { $0.amount < $1.amount }
     }
     
+    @IBAction func closePressed(_ sender: UIButton) {
+        DispatchQueue.main.async {
+            self.dismiss(animated: true)
+        }
+    }
     
     
     @IBAction func addPressed(_ sender: UIButton) {
@@ -176,8 +210,7 @@ class DebtsVC: UIViewController {
     
     
     override func viewWillAppear(_ animated: Bool) {
-        navigationController?.setNavigationBarHidden(false, animated: true)
-        
+        navigationController?.setNavigationBarHidden(darkAppearence ? false : true, animated: true)
         
     }
     var viewLoadedd = false
@@ -190,6 +223,7 @@ class DebtsVC: UIViewController {
                 self.tableView.reloadData()
             }
         }
+        
         
     }
     

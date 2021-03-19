@@ -7,6 +7,7 @@
 //
 
 import UIKit
+var categoriesDebtsCount = (0,0)
 
 protocol SettingsViewControllerProtocol {
     func closeSettings(sendSavedData:Bool, needFiltering: Bool)
@@ -19,10 +20,13 @@ class SettingsViewController: UIViewController {
 
     var delegate: SettingsViewControllerProtocol?
     
-    var tableData = [
-        SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: (appData.savedTransactions.count + appData.getCategories(key: "savedCategories").count) > 0 ? "toSavedData" : "toSingIn"),
-        SettingsSctruct(title: "Categories", description: "All Categories (\(appData.getCategories().count))", segue: "settingsToCategories"),
+    var tableData: [SettingsSctruct] = [
+        SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: "toSavedData"),
+        SettingsSctruct(title: "Categories", description: "All Categories (\(categoriesDebtsCount.0))", segue: "settingsToCategories"),
+        SettingsSctruct(title: "Debts", description: "All Data (\(categoriesDebtsCount.1))", segue: "toDebts")
     ]
+    
+    
     
     lazy var message: MessageView = {
         let message = MessageView(self)
@@ -37,7 +41,48 @@ class SettingsViewController: UIViewController {
         
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        if UserDefaults.standard.value(forKey: "firstLaunchSettings") as? Bool ?? false == false {
+            if appData.username == "" {
+                DispatchQueue.main.async {
+                    self.message.showMessage(text: "Create account to use app across all your devices", type: .succsess, windowHeight: 80, autoHide: false, bottomAppearence: true)
+                }
+            } else {
+                UserDefaults.standard.setValue(true, forKey: "firstLaunchSettings")
+            }
+        }
+        
+        getdata()
+    }
+    
 
+    
+    func getdata() {
+        categoriesDebtsCount = (0,0)
+        let allCategories = Array(appData.getCategories())
+        var debts:[CategoriesStruct] = []
+        var categpries:[CategoriesStruct] = []
+        for i in 0..<allCategories.count {
+            if allCategories[i].debt {
+                debts.append(allCategories[i])
+            } else {
+                categpries.append(allCategories[i])
+            }
+        }
+        categoriesDebtsCount = (categpries.count, debts.count)
+        let unsavedCat = (UserDefaults.standard.value(forKey: "savedCategories") as? [[String]] ?? []).count
+        let unsavedTrans = (UserDefaults.standard.value(forKey: "savedTransactions") as? [[String]] ?? []).count
+        let data = [
+            SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: (unsavedCat + unsavedTrans) > 0 ? "toSavedData" : "toSingIn"),
+            SettingsSctruct(title: "Categories", description: "All Categories (\(categoriesDebtsCount.0))", segue: "settingsToCategories"),
+            SettingsSctruct(title: "Debts", description: "All Data (\(categoriesDebtsCount.1))", segue: "toDebts")
+        ]
+        tableData = data
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+    }
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         print("setting touches")
         if let touch = touches.first {
@@ -80,18 +125,7 @@ class SettingsViewController: UIViewController {
             self.tableView.reloadData()
         }
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        if UserDefaults.standard.value(forKey: "firstLaunchSettings") as? Bool ?? false == false {
-            if appData.username == "" {
-                DispatchQueue.main.async {
-                    self.message.showMessage(text: "Create account to use app across all your devices", type: .succsess, windowHeight: 80, autoHide: false, bottomAppearence: true)
-                }
-            } else {
-                UserDefaults.standard.setValue(true, forKey: "firstLaunchSettings")
-            }
-        }
-    }
+
     
     var toSegue = false
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -226,23 +260,6 @@ extension SettingsViewController: UnsendedDataVCProtocol {
 
 extension SettingsViewController: CategoriesVCProtocol {
     func categorySelected(category: String, purpose: Int, fromDebts: Bool, amount: Int) {
-        if category == "" {
-            //closeWithAnimation(vcanimation: false)
-            tableData = [
-                SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: (appData.savedTransactions.count + appData.getCategories(key: "savedCategories").count) > 0 ? "toSavedData" : "toSingIn"),
-                SettingsSctruct(title: "Categories", description: "All Categories (\(appData.getCategories().count))", segue: "settingsToCategories"),
-            ]
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-        } else {
-            tableData = [
-                SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: (appData.savedTransactions.count + appData.getCategories(key: "savedCategories").count) > 0 ? "toSavedData" : "toSingIn"),
-                SettingsSctruct(title: "Categories", description: "All Categories (\(appData.getCategories().count))", segue: "settingsToCategories"),
-            ]
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-        }
+        getdata()
     }
 }

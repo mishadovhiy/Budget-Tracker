@@ -72,9 +72,7 @@ class CategoriesVC: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         print("didApp")
         getDataFromLocal()
-        /*DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }*/
+
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -342,8 +340,9 @@ class CategoriesVC: UIViewController {
             vc.historyDataStruct = historyDataStruct
             vc.selectedCategoryName = selectedCategoryName
             vc.fromCategories = true
+            vc.allowEditing = false
         } else {
-            if segue.identifier == "toDebtsVC" {
+            if segue.identifier == "toDebts" {
                 let vc = segue.destination as! DebtsVC
                 vc.debts = debts
                 if !fromSettings {
@@ -369,7 +368,7 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0: return 1
+        case 0: return darkAppearence ? 1 : 0
         case 1: return expenses.count
         case 2: return incomes.count
         default:
@@ -475,7 +474,7 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
             selectedCategoryName = ""
             
             DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "toDebtsVC", sender: self)
+                self.performSegue(withIdentifier: "toDebts", sender: self)
             }
         } else {
             if !fromSettings {

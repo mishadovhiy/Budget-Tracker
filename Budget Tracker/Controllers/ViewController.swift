@@ -119,6 +119,12 @@ class ViewController: UIViewController {
                     Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (_) in
                         self.performSegue(withIdentifier: "toFiterVC", sender: self)
                     }
+                } else {
+                    if let _ = filterAndGoToStatistic {
+                        Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (_) in
+                            self.performSegue(withIdentifier: "toStatisticVC", sender: self)
+                        }
+                    }
                 }
                 
                 
@@ -1283,13 +1289,13 @@ class ViewController: UIViewController {
     @objc func incomePressed(_ sender: UITapGestureRecognizer) {
         expenseLabelPressed = false
         DispatchQueue.main.async {
-            self.performSegue(withIdentifier: K.statisticSeque, sender: self)
+            self.performSegue(withIdentifier: "toStatisticVC", sender: self)
         }
     }
     @objc func expensesPressed(_ sender: UITapGestureRecognizer) {
         expenseLabelPressed = true
         DispatchQueue.main.async {
-            self.performSegue(withIdentifier: K.statisticSeque, sender: self)
+            self.performSegue(withIdentifier: "toStatisticVC", sender: self)
         }
     }
     
@@ -1615,7 +1621,7 @@ extension ViewController: TransitionVCProtocol {
         Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (_) in
             self.animateCellWillAppear = true
         }
-        //here
+
         if value != "" && category != "" && date != "" {
             if appData.username != "" {
                 let toDataString = "&Nickname=\(appData.username)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"

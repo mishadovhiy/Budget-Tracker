@@ -9,8 +9,7 @@
 import UIKit
 import CorePlot
 
-
-
+var filterAndGoToStatistic: IndexPath?
 class StatisticVC: UIViewController, CALayerDelegate {
     @IBOutlet weak var hostView: CPTGraphHostingView!
     @IBOutlet weak var tableView: UITableView!
@@ -33,6 +32,7 @@ class StatisticVC: UIViewController, CALayerDelegate {
     override func viewDidAppear(_ animated: Bool) {
         deselectAllCells()
         if transactionAdded {
+            filterAndGoToStatistic = selectedIndexPathToHighlite
             //self.dismiss(animated: true, completion: nil)
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: "homeVC", sender: self)
@@ -45,6 +45,12 @@ class StatisticVC: UIViewController, CALayerDelegate {
             appData.defaults.setValue(true, forKey: "StatisticVCFirstLaunch")
             DispatchQueue.main.async {
                 self.message.showMessage(text: "Statistic for your transactions will be displayed here", type: .succsess, windowHeight: 80)
+            }
+        }
+        
+        if let goIndex = filterAndGoToStatistic {
+            DispatchQueue.main.async {
+                self.tableView.scrollToRow(at: goIndex, at: .middle, animated: true)
             }
         }
     }
@@ -151,7 +157,9 @@ class StatisticVC: UIViewController, CALayerDelegate {
     
     var historyDataStruct: [TransactionsStruct] = []
     var selectedCategoryName = ""
+    var selectedIndexPathToHighlite: IndexPath?
     func toHistoryVC(indexPathRow: Int) {
+        selectedIndexPathToHighlite = IndexPath(row: indexPathRow, section: 0)
         historyDataStruct = []
         for i in 0..<dataFromMain.count {
             if allData[indexPathRow].category == dataFromMain[i].category {
@@ -280,7 +288,29 @@ extension StatisticVC: UITableViewDelegate, UITableViewDataSource {
             self.toHistoryVC(indexPathRow: indexPath.row)
         }
     }
+    
+    //let goIndex = filterAndGoToStatistic
 
+
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let cellColor = cell.backgroundColor
+        if let goIndex = filterAndGoToStatistic {
+            filterAndGoToStatistic = nil
+            if indexPath == goIndex {
+                DispatchQueue.main.async {
+                    UIView.animate(withDuration: 0.23) {
+                        cell.backgroundColor = UIColor(red: 225/255, green: 114/255, blue: 44/255, alpha: 1)
+                    } completion: { (_) in
+                        UIView.animate(withDuration: 0.36) {
+                            cell.backgroundColor = cellColor
+                        } completion: { (_) in
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 
