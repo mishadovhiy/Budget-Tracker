@@ -490,3 +490,12 @@ struct CategoriesStruct {
 
 
 
+class NavigationController : UINavigationController {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print("navTouches")
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        
+    }
+}

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol SettingsViewControllerProtocol {
-    func closeSettings(sendSavedData:Bool)
+    func closeSettings(sendSavedData:Bool, needFiltering: Bool)
 }
 
 class SettingsViewController: UIViewController {
@@ -31,13 +31,15 @@ class SettingsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         updateUI()
         
         
     }
     
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print("setting touches")
         if let touch = touches.first {
             if touch.view != contentView{
                 closeWithAnimation()
@@ -49,7 +51,9 @@ class SettingsViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         if !toSegue {
-            delegate?.closeSettings(sendSavedData: sendLocalDataPressed)
+            print("transactionAddedtransactionAddedtransactionAdded", transactionAdded)
+            delegate?.closeSettings(sendSavedData: sendLocalDataPressed, needFiltering: transactionAdded)
+            transactionAdded = false
         }
         DispatchQueue.main.async {
             self.message.hideMessage()
@@ -74,8 +78,6 @@ class SettingsViewController: UIViewController {
                 self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
             }
             self.tableView.reloadData()
-            
-            
         }
     }
     
@@ -93,6 +95,7 @@ class SettingsViewController: UIViewController {
     
     var toSegue = false
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+
         toSegue = true
         let messageText = "Save or delete data bellow"
         
@@ -105,13 +108,15 @@ class SettingsViewController: UIViewController {
             vc.delegate = self
             vc.messageText = messageText
         case "settingsToCategories":
-            let nav = segue.destination as! UINavigationController
+            let nav = segue.destination as! NavigationController
             let vc = nav.topViewController as! CategoriesVC
             vc.delegate = self
             vc.fromSettings = true
         default:
             print("default")
         }
+        
+
     }
 
     @IBAction func closePressed(_ sender: UIButton) {
@@ -195,7 +200,7 @@ class SettingsVCCell: UITableViewCell {
 extension SettingsViewController: UnsendedDataVCProtocol {
     func quiteUnsendedData(deletePressed: Bool, sendPressed: Bool) {
         if !deletePressed && !sendPressed {
-            delegate?.closeSettings(sendSavedData: false)
+            delegate?.closeSettings(sendSavedData: false, needFiltering: false)
         } else {
             if deletePressed {
                 print("seletePressed")

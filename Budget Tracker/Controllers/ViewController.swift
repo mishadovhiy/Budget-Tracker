@@ -141,7 +141,7 @@ class ViewController: UIViewController {
     var addTransFrame = CGRect.zero
     override func viewDidLoad() {
         super.viewDidLoad()
-        appData.unsendedData = []
+
         updateUI()
         UIApplication.shared.applicationIconBadgeNumber = 0
     }
@@ -291,17 +291,21 @@ class ViewController: UIViewController {
     var refreshSubview = UIView.init(frame: .zero)
     struct tableStuct {
         let date: DateComponents
+        let amount: Int
         var transactions: [TransactionsStruct]
     }
-    func createTransactionsFor(date: String, filteredData: [TransactionsStruct]) -> [TransactionsStruct] {
+    func createTransactionsFor(date: String, filteredData: [TransactionsStruct]) -> ([TransactionsStruct], Int) {
         var result: [TransactionsStruct] = []
+        var amount = 0.0
         let arr = Array(filteredData.sorted{ $0.dateFromString < $1.dateFromString })
         for i in 0..<arr.count {
             if date == arr[i].date {
+                amount = amount + (Double(arr[i].value) ?? 0.0)
                 result.append(arr[i])
             }
         }
-        return result
+
+        return (result, Int(amount))
     }
     
     func filter() {
@@ -373,12 +377,13 @@ class ViewController: UIViewController {
             currentDate = filteredData[i].date
             if i > 0 {
                 if filteredData[i-otherSections].date != currentDate {
-                    let new = tableStuct(date: stringToDateComponent(s: currentDate), transactions: createTransactionsFor(date: filteredData[i].date, filteredData: filteredData))
+                    let cteatedTransaction = createTransactionsFor(date: filteredData[i].date, filteredData: filteredData)
+                    let new = tableStuct(date: stringToDateComponent(s: currentDate), amount: cteatedTransaction.1, transactions: cteatedTransaction.0.sorted { Double($0.value) ?? 0.0 < Double($1.value) ?? 0.0 })
                     result.insert(new, at: 0)
                 }
             } else {
-                
-                let new = tableStuct(date: stringToDateComponent(s: currentDate), transactions: createTransactionsFor(date: filteredData[i].date, filteredData: filteredData))
+                let cteatedTransaction = createTransactionsFor(date: filteredData[i].date, filteredData: filteredData)
+                let new = tableStuct(date: stringToDateComponent(s: currentDate), amount: cteatedTransaction.1, transactions: cteatedTransaction.0.sorted { Double($0.value) ?? 0.0 < Double($1.value) ?? 0.0 })
                 result.insert(new, at: 0)
             }
         }
@@ -511,6 +516,7 @@ class ViewController: UIViewController {
     var sendSavedData = false
     func sendUnsaved() {
         let dataCount = appData.unsendedData.count
+        print(dataCount, "dataCountdataCountdataCountdataCountdataCountdataCount")
         if forseSendUnsendedData {
             if dataCount > 0 {
                 self.animateCellWillAppear = false
@@ -1133,6 +1139,7 @@ class ViewController: UIViewController {
     @IBAction func homeVC(segue: UIStoryboardSegue) {
         DispatchQueue.global(qos: .userInteractive).async {
             print("HomeVC called")
+            transactionAdded = false
             DispatchQueue.main.async {
                 self.dataCountLabel.text = ""
             }
@@ -1497,6 +1504,24 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 label.adjustsFontSizeToFitWidth = true
                 amountStack.addArrangedSubview(label)
             }
+            let amountview = UIView()
+            let amountLabel = UILabel()
+            amountLabel.font = .systemFont(ofSize: 10, weight: .semibold)
+            amountLabel.textColor = UIColor(named: "darkTableColor") ?? .black//K.Colors.balanceV//UIColor(named: "darkTableColor") ?? .black
+            amountLabel.backgroundColor = K.Colors.balanceV
+            amountLabel.layer.masksToBounds = true
+            amountLabel.layer.cornerRadius = 2
+            amountLabel.text = " \(newTableData[section - 1].amount > 0 ? "+" : "")\(newTableData[section - 1].amount) "
+
+            amountview.addSubview(amountLabel)
+            amountLabel.translatesAutoresizingMaskIntoConstraints = false
+            let constraints: [NSLayoutConstraint] = [
+                amountLabel.leftAnchor.constraint(equalTo: amountview.leftAnchor, constant: 0),
+                amountLabel.rightAnchor.constraint(equalTo: amountview.rightAnchor, constant: 0),
+                amountLabel.centerYAnchor.constraint(equalTo: amountview.centerYAnchor, constant: 0),
+            ]
+            NSLayoutConstraint.activate(constraints)
+            amountStack.addArrangedSubview(amountview)
             view.addSubview(stackHelper)
             return main
             
@@ -1602,16 +1627,17 @@ extension ViewController: TransitionVCProtocol {
                     }
                     
                     var trans = appData.transactions
-                    trans.insert(new, at: 0)
+                    trans.append(new)
                     appData.saveTransations(trans)
                     if !error {
+                        self.forseSendUnsendedData = true
                         self.sendUnsaved()
                     }
                     self.filter()
                 }
             } else {
                 var trans = appData.transactions
-                trans.insert(new, at: 0)
+                trans.append(new)
                 appData.saveTransations(trans)
                 self.filter()
             }
@@ -1658,7 +1684,7 @@ extension ViewController: UnsendedDataVCProtocol {
 }
 
 extension ViewController: SettingsViewControllerProtocol {
-    func closeSettings(sendSavedData: Bool) {
+    func closeSettings(sendSavedData: Bool, needFiltering: Bool) {
         self.animateCellWillAppear = false
         Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (_) in
             self.animateCellWillAppear = true
@@ -1670,9 +1696,15 @@ extension ViewController: SettingsViewControllerProtocol {
                 self.sendUnsaved()
             }
         } else {
-            DispatchQueue.main.async {
-                self.mainTableView.reloadData()
+            if needFiltering {
+                print("ViewController needFiltering")
+                self.filter()
+            } else {
+                DispatchQueue.main.async {
+                    self.mainTableView.reloadData()
+                }
             }
+            
         }
     }
     

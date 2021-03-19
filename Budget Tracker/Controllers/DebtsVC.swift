@@ -31,9 +31,10 @@ class DebtsVC: UIViewController {
     var darkAppearence = false
     override func viewDidLoad() {
         super.viewDidLoad()
+
         tableView.delegate = self
         tableView.dataSource = self
-        
+
         getDataFromLocal()
         if #available(iOS 13.0, *) {
             if darkAppearence {
@@ -71,7 +72,7 @@ class DebtsVC: UIViewController {
                 emptyValuesTableData.append(new)
             } else {
 
-                if amount > 0 {
+                if amount >= 0 {
                     plusValues.append(new)
                 } else {
                     result.append(new)
@@ -169,7 +170,7 @@ class DebtsVC: UIViewController {
         }
     }
     override func viewWillDisappear(_ animated: Bool) {
-        
+        print("will disap")
     }
     
     
@@ -177,15 +178,23 @@ class DebtsVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: true)
         
+        
     }
+    var viewLoadedd = false
     override func viewDidAppear(_ animated: Bool) {
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
+        if viewLoadedd {
+            getDataFromLocal()
+        } else {
+            viewLoadedd = true
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
+        print("mainTouches")
     }
 }
 
@@ -209,7 +218,7 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "debtCell", for: indexPath) as! debtCell
         //let data = indexPath.section == 0 ? tableData[indexPath.row] : emptyValuesTableData[indexPath.row]
-        var data = tableData[indexPath.row]
+        var data: DebtsTableStruct?
         switch indexPath.section {
         case 0: data = tableData[indexPath.row]
         case 1: data = plusValues[indexPath.row]
@@ -217,16 +226,77 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
         default:
             data = tableData[indexPath.row]
         }
-        cell.categoryLabel.text = data.name
-        cell.amountLabel.text = indexPath.section == 2 ? "No records" : "\(data.amount)"
+        if let dat = data {
+            cell.categoryLabel.text = dat.name
+            cell.amountLabel.text = indexPath.section == 2 ? "No records" : "\(dat.amount)"
+        }
         cell.categoryLabel.textColor = darkAppearence ? K.Colors.category : .black
-        cell.amountLabel.textColor = darkAppearence ? K.Colors.category : .black
+        cell.amountLabel.textColor = (data?.amount ?? 0) >= 0 ? (darkAppearence ? K.Colors.category : K.Colors.balanceV) : K.Colors.negative
+        cell.amountLabel.alpha = indexPath.section == 2 ? 0.4 : 1
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
+            
+            let mainFrame = view.frame
+            let ai = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: mainFrame.width, height: mainFrame.height))
+            ai.style = .gray
+            view.addSubview(ai)
+            ai.startAnimating()
+            let pressedValue = indexPath.section == 0 ? self.tableData[indexPath.row].name : (indexPath.section == 1 ? self.plusValues[indexPath.row].name : self.emptyValuesTableData[indexPath.row].name)
+            for i in 0..<self.debts.count {
+                if self.debts[i].name == pressedValue {
+                    self.debts.remove(at: i)
+                    break
+                }
+            }
+            let categories = Array(appData.getCategories())
+            var result:[CategoriesStruct] = []
+            for i in 0..<categories.count {
+                if pressedValue == categories[i].name && categories[i].debt == true {
+                    print("pressedValue == categories[i].name && categories[i].debt == true")
+                } else {
+                    result.append(categories[i])
+                }
+            }
+            appData.saveCategories(result)
+            if appData.username != "" {
+                let delete = DeleteFromDB()
+                let tods = "&Nickname=\(appData.username)" + "&Title=\(pressedValue)" + "&Purpose=\(K.expense)" + "&ExpectingPayment=1"
+                delete.Categories(toDataString: tods) { (error) in
+                    if error {
+                        appData.unsendedData.append(["deleteCategory": tods])
+                    }
+                    self.getDataFromLocal()
+                }
+            } else {
+                self.getDataFromLocal()
+            }
+            
+        }
+        deleteAction.backgroundColor = K.Colors.negative
+        switch indexPath.section {
+        case 0:
+            return UISwipeActionsConfiguration(actions: [])
+        case 1:
+            if plusValues[indexPath.row].amount == 0 {
+                return UISwipeActionsConfiguration(actions: [deleteAction])
+            } else {
+                return UISwipeActionsConfiguration(actions: [])
+            }
+        case 2:
+            return UISwipeActionsConfiguration(actions: [deleteAction])
+        default:
+            return UISwipeActionsConfiguration(actions: [])
+        }
+        
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
        // let data = indexPath.section == 0 ? tableData[indexPath.row] : emptyValuesTableData[indexPath.row]
-        var data = tableData[indexPath.row]
+        var data: DebtsTableStruct?
         switch indexPath.section {
         case 0: data = tableData[indexPath.row]
         case 1: data = plusValues[indexPath.row]
@@ -234,20 +304,19 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
         default:
             data = tableData[indexPath.row]
         }
-        if delegate != nil {
-            DispatchQueue.main.async {
-                self.delegate?.catDebtSelected(name: data.name, amount: data.amount)
-                
-            }
-        } else {
-            //go to historyVC and past data
-            print(data.name, "bvghjjnbh")
-            selectedCellData = data
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "toHistory", sender: self)
+        if let dat = data {
+            if delegate != nil {
+                DispatchQueue.main.async {
+                    self.delegate?.catDebtSelected(name: dat.name, amount: dat.amount)
+                    
+                }
+            } else {
+                selectedCellData = dat
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "toHistory", sender: self)
+                }
             }
         }
-        
     }
     
 }
@@ -261,3 +330,5 @@ class debtCell: UITableViewCell {
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var amountLabel: UILabel!
 }
+
+

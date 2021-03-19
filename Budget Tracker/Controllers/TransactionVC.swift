@@ -109,12 +109,12 @@ class TransitionVC: UIViewController {
         dateTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(datePressed)))
 
         pressedValue = "0"
-        valueLabel.text = pressedValue
         commentTextField.smartInsertDeleteType = UITextSmartInsertDeleteType.no
         commentTextField.addTarget(self, action: #selector(commentCount), for: .editingChanged)
         categoryTextField.isUserInteractionEnabled = false
         categoryTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(categoryPressed)))
         DispatchQueue.main.async {
+            self.valueLabel.text = self.pressedValue
             self.dateTextField.attributedPlaceholder = NSAttributedString(string: lastSelectedDate ?? appData.stringDate(appData.objects.datePicker), attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
             self.commentTextField.attributedPlaceholder = NSAttributedString(string: "Short comment", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
             self.purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white], for: .normal)
@@ -165,6 +165,11 @@ class TransitionVC: UIViewController {
     }
     
     func getEditingdata() {
+        if editingCategory != "" {
+            DispatchQueue.main.async {
+                self.categoryTextField.text = self.editingCategory
+            }
+        }
         if editingDate != "" {
             if editingValue > 0.0 {
                 editingValueAmount(segment: 1, multiply: 1)

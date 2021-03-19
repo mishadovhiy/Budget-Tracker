@@ -9,7 +9,7 @@
 import UIKit
 import CorePlot
 
-var sum = 0.0
+
 
 class StatisticVC: UIViewController, CALayerDelegate {
     @IBOutlet weak var hostView: CPTGraphHostingView!
@@ -23,7 +23,7 @@ class StatisticVC: UIViewController, CALayerDelegate {
     }()
     
     var dataFromMain: [TransactionsStruct] = []
-    
+    var sum = 0.0
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUI()
@@ -32,6 +32,12 @@ class StatisticVC: UIViewController, CALayerDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         deselectAllCells()
+        if transactionAdded {
+            //self.dismiss(animated: true, completion: nil)
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "homeVC", sender: self)
+            }
+        }
         segmentControll.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white], for: .normal)
         segmentControll.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "darkTableColor") ?? .black], for: .selected)
         
@@ -48,6 +54,7 @@ class StatisticVC: UIViewController, CALayerDelegate {
             let indexPath = IndexPath(row: i, section: 0)
             tableView.deselectRow(at: indexPath, animated: true)
         }
+        
     }
     
     func hideandShowGrapg() {
@@ -81,6 +88,9 @@ class StatisticVC: UIViewController, CALayerDelegate {
         allData = createTableData()
         getMaxSum()
         initPlot()
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
     
     func createTableData() -> [GraphDataStruct] {

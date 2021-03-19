@@ -70,9 +70,11 @@ class CategoriesVC: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        DispatchQueue.main.async {
+        print("didApp")
+        getDataFromLocal()
+        /*DispatchQueue.main.async {
             self.tableView.reloadData()
-        }
+        }*/
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -445,11 +447,25 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+   /* func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        print(indexPath.section, "indexPath.section")
         if indexPath.section != 0 {
             if editingStyle == UITableViewCell.EditingStyle.delete {
                 deteteCategory(at: indexPath)
             }
+        }
+    }*/
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+
+        if indexPath.section != 0 {
+            let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
+                //self.tableActionActivityIndicator.startAnimating()
+                self.deteteCategory(at: indexPath)
+            }
+            deleteAction.backgroundColor = K.Colors.negative
+            return UISwipeActionsConfiguration(actions: [deleteAction])
+        } else {
+            return nil//UISwipeActionsConfiguration(actions: [])
         }
     }
     
