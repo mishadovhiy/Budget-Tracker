@@ -22,8 +22,8 @@ class SettingsViewController: UIViewController {
     
     var tableData: [SettingsSctruct] = [
         SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: "toSavedData"),
-        SettingsSctruct(title: "Categories", description: "All Categories (\(categoriesDebtsCount.0))", segue: "settingsToCategories"),
-        SettingsSctruct(title: "Debts", description: "All Data (\(categoriesDebtsCount.1))", segue: "toDebts")
+        SettingsSctruct(title: "Categories", description: "\(categoriesDebtsCount.0)", segue: "settingsToCategories"),
+        SettingsSctruct(title: "Debts", description: "\(categoriesDebtsCount.1)", segue: "toDebts")
     ]
     
     
@@ -74,8 +74,8 @@ class SettingsViewController: UIViewController {
         let unsavedTrans = (UserDefaults.standard.value(forKey: "savedTransactions") as? [[String]] ?? []).count
         let data = [
             SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: (unsavedCat + unsavedTrans) > 0 ? "toSavedData" : "toSingIn"),
-            SettingsSctruct(title: "Categories", description: "All Categories (\(categoriesDebtsCount.0))", segue: "settingsToCategories"),
-            SettingsSctruct(title: "Debts", description: "All Data (\(categoriesDebtsCount.1))", segue: "toDebts")
+            SettingsSctruct(title: "Categories", description: "\(categoriesDebtsCount.0)", segue: "settingsToCategories"),
+            SettingsSctruct(title: "Debts", description: "\(categoriesDebtsCount.1)", segue: "toDebts")
         ]
         tableData = data
         DispatchQueue.main.async {
@@ -117,12 +117,24 @@ class SettingsViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        let wasBack = self.view.backgroundColor
         DispatchQueue.main.async {
+            self.view.backgroundColor = .clear
             self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -self.contentView.frame.maxY, 0)
-            UIView.animate(withDuration: 0.23) {
-                self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+
+            UIView.animate(withDuration: 0.27) {
+                self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 5, 0)
+                self.view.backgroundColor = wasBack
+            } completion: { (_) in
+                UIView.animate(withDuration: 0.15) {
+                    self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+                } completion: { (_) in
+                    self.tableView.reloadData()
+                }
+
+                
             }
-            self.tableView.reloadData()
+
         }
     }
 
@@ -146,6 +158,12 @@ class SettingsViewController: UIViewController {
             let vc = nav.topViewController as! CategoriesVC
             vc.delegate = self
             vc.fromSettings = true
+        case "toDebts":
+            print("")
+            let nav = segue.destination as! NavigationController
+            let vc = nav.topViewController as! DebtsVC
+            vc.delegate = self
+            vc.fromSettings = true
         default:
             print("default")
         }
@@ -160,8 +178,11 @@ class SettingsViewController: UIViewController {
     func closeWithAnimation(vcanimation: Bool = true) {
         DispatchQueue.main.async {
             self.message.hideMessage()
-            UIView.animate(withDuration: 0.17) {
+            
+            
+            UIView.animate(withDuration: 0.25) {
                 self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -self.contentView.frame.maxY, 0)
+                self.view.backgroundColor = .clear
             } completion: { (_) in
                 self.toSegue = false
                 self.dismiss(animated: false, completion: nil)
@@ -260,6 +281,12 @@ extension SettingsViewController: UnsendedDataVCProtocol {
 
 extension SettingsViewController: CategoriesVCProtocol {
     func categorySelected(category: String, purpose: Int, fromDebts: Bool, amount: Int) {
+        getdata()
+    }
+}
+
+extension SettingsViewController: DebtsVCProtocol {
+    func catDebtSelected(name: String, amount: Int) {
         getdata()
     }
 }

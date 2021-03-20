@@ -8,52 +8,9 @@
 
 import UIKit
 var transactionAdded = false
-
-class HistoryVC: UIViewController, TransitionVCProtocol {
+var filterAfterScroll = false
+class HistoryVC: UIViewController {
     
-    func addNewTransaction(value: String, category: String, date: String, comment: String) {
-        let new = TransactionsStruct(value: value, category: category, date: date, comment: comment)
-        print(new, "newnewnewnew")
-        
-        if value != "" && category != "" && date != "" {
-            transactionAdded = true
-            if appData.username != "" {
-                let toDataString = "&Nickname=\(appData.username)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
-                let save = SaveToDB()
-                save.Transactions(toDataString: toDataString) { (error) in
-                    if error {
-                        let neew: String = "&Nickname=\(appData.username)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
-                        appData.unsendedData.append(["transaction": neew])
-                    }
-                    
-                    var trans = appData.transactions
-                    trans.append(new)
-                    appData.saveTransations(trans)
-                    
-                    self.historyDataStruct.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
-                    self.historyDataStruct = self.historyDataStruct.sorted{ $0.dateFromString < $1.dateFromString }
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    }
-                }
-            } else {
-                var trans = appData.transactions
-                trans.append(new)
-                appData.saveTransations(trans)
-                
-                self.historyDataStruct.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
-                self.historyDataStruct = self.historyDataStruct.sorted{ $0.dateFromString < $1.dateFromString }
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-                
-            }
-        }
-    }
-    
-    func quiteTransactionVC() {
-        
-    }
     @IBOutlet weak var addTransButton: UIButton!
     
     @IBOutlet weak var tableView: UITableView!
@@ -84,7 +41,23 @@ class HistoryVC: UIViewController, TransitionVCProtocol {
 
         
     }
+
+    var fromStatistic = false
+    override func viewDidDisappear(_ animated: Bool) {
+
+        if fromStatistic {
+            if !statisticApearing {
+                if transactionAdded {
+                    filterAfterScroll = true
+                }
+                
+            }
+        }
+    }
     
+    override func viewDidAppear(_ animated: Bool) {
+        statisticApearing = false
+    }
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
@@ -227,4 +200,50 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
         } 
     }
     
+}
+
+extension HistoryVC: TransitionVCProtocol {
+    func addNewTransaction(value: String, category: String, date: String, comment: String) {
+        let new = TransactionsStruct(value: value, category: category, date: date, comment: comment)
+        print(new, "newnewnewnew")
+        
+        if value != "" && category != "" && date != "" {
+            transactionAdded = true
+            if appData.username != "" {
+                let toDataString = "&Nickname=\(appData.username)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
+                let save = SaveToDB()
+                save.Transactions(toDataString: toDataString) { (error) in
+                    if error {
+                        let neew: String = "&Nickname=\(appData.username)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
+                        appData.unsendedData.append(["transaction": neew])
+                    }
+                    
+                    var trans = appData.transactions
+                    trans.append(new)
+                    appData.saveTransations(trans)
+                    
+                    self.historyDataStruct.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
+                    self.historyDataStruct = self.historyDataStruct.sorted{ $0.dateFromString < $1.dateFromString }
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
+                }
+            } else {
+                var trans = appData.transactions
+                trans.append(new)
+                appData.saveTransations(trans)
+                
+                self.historyDataStruct.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
+                self.historyDataStruct = self.historyDataStruct.sorted{ $0.dateFromString < $1.dateFromString }
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+                
+            }
+        }
+    }
+    
+    func quiteTransactionVC() {
+        
+    }
 }

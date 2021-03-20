@@ -30,6 +30,7 @@ class DebtsVC: UIViewController {
     }
     var hideTitle = false
     var darkAppearence = false
+    var fromSettings = false
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -205,6 +206,9 @@ class DebtsVC: UIViewController {
     }
     override func viewWillDisappear(_ animated: Bool) {
         print("will disap")
+        if fromSettings {
+            delegate?.catDebtSelected(name: "", amount: 0)
+        }
     }
     
     
@@ -339,10 +343,9 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
             data = tableData[indexPath.row]
         }
         if let dat = data {
-            if delegate != nil {
+            if !fromSettings {
                 DispatchQueue.main.async {
                     self.delegate?.catDebtSelected(name: dat.name, amount: dat.amount)
-                    
                 }
             } else {
                 selectedCellData = dat

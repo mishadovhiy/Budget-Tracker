@@ -113,7 +113,7 @@ class ViewController: UIViewController {
                         }
                     }
                 }
-                
+
                 if self.openFiler {
                     self.openFiler = false
                     Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (_) in
@@ -1210,6 +1210,8 @@ class ViewController: UIViewController {
      //   }
         
     }
+    
+
 
     var lastWhiteBackheight = 0
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -1569,7 +1571,11 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        
+        if filterAfterScroll {
+            filterAfterScroll = false
+            transactionAdded = false
+            self.filter()
+        }
         if indexPath == highliteCell {
             highliteCell = nil
             DispatchQueue.main.async {

@@ -19,7 +19,6 @@ class CategoriesVC: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     var catData = appData.categoryVC
     var refreshControl = UIRefreshControl()
-    var allCategoriesData = Array(appData.getCategories())
     @IBOutlet weak var headerView: UIView!
     var hideTitle = false
     var fromSettings = false
@@ -71,8 +70,11 @@ class CategoriesVC: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         print("didApp")
-        getDataFromLocal()
-
+        //getDataFromLocal()
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+        
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -237,6 +239,7 @@ class CategoriesVC: UIViewController {
     
     //here
     func deteteCategory(at: IndexPath) {
+
         let delete = DeleteFromDB()
         let Nickname = appData.username
         let Title = at.section == 1 ? expenses[at.row].0 : incomes[at.row].0
@@ -267,9 +270,9 @@ class CategoriesVC: UIViewController {
         for i in 0..<self.expenses.count {
             result.append(CategoriesStruct(name: self.expenses[i].0, purpose: K.expense, count: 0, debt: self.expenses[i].2))
         }
-        
-        self.allCategoriesData = result + debts
-        appData.saveCategories(self.allCategoriesData)
+        var d: [CategoriesStruct] = []
+        d = result + debts
+        appData.saveCategories(d)
         self.getDataFromLocal()
         
     }

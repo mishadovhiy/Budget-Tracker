@@ -9,6 +9,7 @@
 import UIKit
 import CorePlot
 
+var statisticApearing = false
 var filterAndGoToStatistic: IndexPath?
 class StatisticVC: UIViewController, CALayerDelegate {
     @IBOutlet weak var hostView: CPTGraphHostingView!
@@ -151,6 +152,10 @@ class StatisticVC: UIViewController, CALayerDelegate {
         hideandShowGrapg()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        statisticApearing = true
+    }
+    
     @IBAction func clodePressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
@@ -176,6 +181,7 @@ class StatisticVC: UIViewController, CALayerDelegate {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toHistorySeque" {
             let vc = segue.destination as! HistoryVC
+            vc.fromStatistic = true
             vc.historyDataStruct = historyDataStruct
             vc.selectedCategoryName = selectedCategoryName
         }
@@ -294,18 +300,14 @@ extension StatisticVC: UITableViewDelegate, UITableViewDataSource {
 
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let cellColor = cell.backgroundColor
         if let goIndex = filterAndGoToStatistic {
-            filterAndGoToStatistic = nil
             if indexPath == goIndex {
+                
                 DispatchQueue.main.async {
-                    UIView.animate(withDuration: 0.23) {
-                        cell.backgroundColor = UIColor(red: 225/255, green: 114/255, blue: 44/255, alpha: 1)
-                    } completion: { (_) in
-                        UIView.animate(withDuration: 0.36) {
-                            cell.backgroundColor = cellColor
-                        } completion: { (_) in
-                        }
+                    tableView.selectRow(at: indexPath, animated: true, scrollPosition: .middle)
+                    Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (_) in
+                        tableView.deselectRow(at: indexPath, animated: true)
+                        filterAndGoToStatistic = nil
                     }
                 }
             }
