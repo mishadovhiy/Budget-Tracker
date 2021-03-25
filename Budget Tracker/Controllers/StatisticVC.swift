@@ -9,7 +9,6 @@
 import UIKit
 import CorePlot
 
-var statisticApearing = false
 var filterAndGoToStatistic: IndexPath?
 class StatisticVC: UIViewController, CALayerDelegate {
     @IBOutlet weak var hostView: CPTGraphHostingView!
@@ -50,9 +49,14 @@ class StatisticVC: UIViewController, CALayerDelegate {
         }
         
         if let goIndex = filterAndGoToStatistic {
-            DispatchQueue.main.async {
-                self.tableView.scrollToRow(at: goIndex, at: .middle, animated: true)
+            if allData.count > goIndex.row {
+                DispatchQueue.main.async {
+                    self.tableView.scrollToRow(at: goIndex, at: .middle, animated: true)
+                }
+            } else {
+                filterAndGoToStatistic = nil
             }
+            
         }
     }
     
@@ -99,12 +103,14 @@ class StatisticVC: UIViewController, CALayerDelegate {
             self.tableView.reloadData()
         }
     }
-    
+    var maxValue = 0.0
     func createTableData() -> [GraphDataStruct] {
+        maxValue = 0.0
         allData = []
         if segmentControll.selectedSegmentIndex == 0 {
             for (key, value) in sumAllCategories {
                 if (sumAllCategories[key] ?? 0.0) < 0.0 {
+                    maxValue = value < maxValue ? value : maxValue
                     allData.append(GraphDataStruct(category: key, value: value))
                 }
             }
@@ -116,6 +122,7 @@ class StatisticVC: UIViewController, CALayerDelegate {
         } else {
             for (key, value) in sumAllCategories {
                 if (sumAllCategories[key] ?? 0.0) > 0.0 {
+                    maxValue = value > maxValue ? value : maxValue
                     allData.append(GraphDataStruct(category: key, value: value))
                 }
             }
@@ -150,10 +157,6 @@ class StatisticVC: UIViewController, CALayerDelegate {
             self.tableView.reloadData()
         }
         hideandShowGrapg()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        statisticApearing = true
     }
     
     @IBAction func clodePressed(_ sender: UIButton) {
@@ -244,12 +247,12 @@ class StatisticVC: UIViewController, CALayerDelegate {
         return (redComponent,greenComponent,blueComponent);
     }
     
-    func setupColorView(_ view: UIView, indexPath: Int) {
+    func setupColorView(indexPath: Int) -> UIColor {
         var n = indexPath
         if indexPath == 0 { n = 100 }
         let colorComponents = colorComponentsFrom(number: Int(String(n)) ?? 0, maxCount: Int(allData[0].value))
-        view.backgroundColor = UIColor(displayP3Red: CGFloat(colorComponents.0)/255, green: CGFloat(colorComponents.1)/255, blue: CGFloat(colorComponents.2)/255, alpha: 0.7)
-        view.layer.cornerRadius = 3
+        let result = UIColor(displayP3Red: CGFloat(colorComponents.0)/255, green: CGFloat(colorComponents.1)/255, blue: CGFloat(colorComponents.2)/255, alpha: 0.7)
+        return result
     }
     
     var selectedIndexPath = 0
@@ -269,7 +272,6 @@ extension StatisticVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: K.statisticCellIdent, for: indexPath) as! StatisticCell
         let data = allData[indexPath.row]
         
@@ -283,8 +285,12 @@ extension StatisticVC: UITableViewDelegate, UITableViewDataSource {
         }
         cell.categoryLabel.text = "\(data.category.capitalized)"
         cell.percentLabel.text = "\(String(format: "%.2f", getPercent(n: data.value)))%"
-        
-        setupColorView(cell.colorView, indexPath: indexPath.row)
+        let r = (100 * data.value / maxValue) / 100
+        cell.progressBar.progress = Float(r)
+        let color = setupColorView(indexPath: indexPath.row)
+       // cell.colorView.layer.cornerRadius = 3
+       // cell.colorView.backgroundColor = color
+        cell.progressBar.tintColor = color
         return cell
         
     }

@@ -8,7 +8,6 @@
 
 import UIKit
 var transactionAdded = false
-var filterAfterScroll = false
 class HistoryVC: UIViewController {
     
     @IBOutlet weak var addTransButton: UIButton!
@@ -41,26 +40,31 @@ class HistoryVC: UIViewController {
 
         
     }
-
+    var newItem: IndexPath?
     var fromStatistic = false
     override func viewDidDisappear(_ animated: Bool) {
-
-        if fromStatistic {
-            if !statisticApearing {
+        print(fromStatistic, "fromStatisticfromStatisticfromStatistic")
+        if !toAddVC {
+            if fromStatistic {
                 if transactionAdded {
-                    filterAfterScroll = true
+                    DispatchQueue.main.async {
+                        self.performSegue(withIdentifier: "homeVC", sender: self)
+                    }
                 }
-                
             }
         }
     }
+
     
-    override func viewDidAppear(_ animated: Bool) {
-        statisticApearing = false
+    override func viewWillDisappear(_ animated: Bool) {
+        
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
+    
+
 
     func totalSum(label: UILabel) {
         var sum = 0.0
@@ -84,6 +88,7 @@ class HistoryVC: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toTransVC" {
+            toAddVC = true
             let nav = segue.destination as! NavigationController
             let vc = nav.topViewController as! TransitionVC
             vc.delegate = self
@@ -92,6 +97,7 @@ class HistoryVC: UIViewController {
         }
     }
 
+    var toAddVC = false
 }
 
 extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
@@ -200,10 +206,28 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
         } 
     }
     
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if let i = newItem {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+           // DispatchQueue.main.async {
+                self.tableView.beginUpdates()
+                self.tableView.selectRow(at: i, animated: true, scrollPosition: .middle)
+                Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (_) in
+                    self.tableView.deselectRow(at: i, animated: true)
+                    self.newItem = nil
+                    self.tableView.endUpdates()
+                }
+            }
+        }
+    }
+    
+    
+    
 }
 
 extension HistoryVC: TransitionVCProtocol {
     func addNewTransaction(value: String, category: String, date: String, comment: String) {
+        toAddVC = false
         let new = TransactionsStruct(value: value, category: category, date: date, comment: comment)
         print(new, "newnewnewnew")
         
@@ -224,8 +248,23 @@ extension HistoryVC: TransitionVCProtocol {
                     
                     self.historyDataStruct.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
                     self.historyDataStruct = self.historyDataStruct.sorted{ $0.dateFromString < $1.dateFromString }
+                    
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
+                    }
+                    var indexPath: IndexPath?
+                    for i in 0..<self.historyDataStruct.count {
+                        if self.historyDataStruct[i].category == new.category && self.historyDataStruct[i].comment == new.comment && self.historyDataStruct[i].date == new.date && self.historyDataStruct[i].value == new.value {
+                            indexPath = IndexPath(row: i, section: 0)
+                            break
+                        }
+                    }
+                    if let i = indexPath {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                            self.newItem = i
+                            self.tableView.scrollToRow(at: i, at: .middle, animated: true)
+                           // self.tableView.selectRow(at: i, animated: true, scrollPosition: .middle)
+                        }
                     }
                 }
             } else {

@@ -49,13 +49,7 @@ class CalendarVC: UIViewController {
         textField.layer.masksToBounds = true
         textField.layer.cornerRadius = 5
 
-        if darkAppearence {
-            weekDaySeparetorView.backgroundColor = UIColor(named: "darkSeparetor")
-            for i in 0..<weekDayLabels.count{
-                weekDayLabels[i].backgroundColor = UIColor(named: "darkTableColor")
-                weekDayLabels[i].textColor = i > 4 ? K.Colors.balanceV : K.Colors.balanceT
-            }
-        }
+
         
         if #available(iOS 13.0, *) {
             if darkAppearence {
@@ -63,6 +57,12 @@ class CalendarVC: UIViewController {
                 self.textField.superview?.backgroundColor = UIColor(named: "darkTableColor")
                 self.collectionView.backgroundColor = UIColor(named: "darkTableColor")
                 self.textField.textColor = K.Colors.background
+                
+                weekDaySeparetorView.backgroundColor = UIColor(named: "darkSeparetor")
+                for i in 0..<weekDayLabels.count{
+                    weekDayLabels[i].backgroundColor = UIColor(named: "darkTableColor")
+                    weekDayLabels[i].textColor = i > 4 ? K.Colors.balanceV : K.Colors.balanceT
+                }
             }
         } else {
             DispatchQueue.main.async {
@@ -71,6 +71,12 @@ class CalendarVC: UIViewController {
                     self.textField.superview?.backgroundColor = UIColor(named: "darkTableColor")
                     self.collectionView.backgroundColor = UIColor(named: "darkTableColor")
                     self.textField.textColor = K.Colors.background
+                    
+                    self.weekDaySeparetorView.backgroundColor = UIColor(named: "darkSeparetor")
+                    for i in 0..<self.weekDayLabels.count{
+                        self.weekDayLabels[i].backgroundColor = UIColor(named: "darkTableColor")
+                        self.weekDayLabels[i].textColor = i > 4 ? K.Colors.balanceV : K.Colors.balanceT
+                    }
                 }
             }
         }
@@ -638,6 +644,8 @@ class CalendarVC: UIViewController {
         }
     }
     
+    var upToFour = (0,0)
+    
 }
 
 
@@ -650,6 +658,18 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView
             .dequeueReusableCell(withReuseIdentifier: K.collectionCell, for: indexPath) as! CVCell
+        if indexPath.row == 0 {
+            upToFour = (0,0)
+        }
+        if upToFour.0 == 5 && upToFour.1 == 0 {
+            upToFour = (0, 1)
+        }
+        if upToFour.0 == 2 && upToFour.1 == 1 {
+            upToFour = (0,0)
+        }
+        print(upToFour, "upToFourupToFour")
+        
+        
         
         cell.setupCell()
         cell.dayLabel.text = days[indexPath.row] != 0 ? "\(days[indexPath.row])" : ""
@@ -659,24 +679,20 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
         let yearCell = makeTwo(n: year)
         cell.dayLabel.alpha = 1
         cell.cellTypeLabel.text = "\(dayCell).\(monthCell).\(yearCell)"
-        //cellBackground(cell: cell)
 
-        DispatchQueue.main.async { // commented - test iphone 5s (were without background on iphone 5s)
+        DispatchQueue.main.async {
             if self.selectedTo == cell.cellTypeLabel.text || self.selectedFrom == cell.cellTypeLabel.text {
                 cell.backgroundCell.backgroundColor = K.Colors.yellow
-                //cell.dayLabel.textColor = UIColor.white
             }else {
                 cell.backgroundCell.backgroundColor = self.darkAppearence ? UIColor(named: "darkTableColor") : K.Colors.background
                 cell.dayLabel.textColor = self.darkAppearence ? K.Colors.category : UIColor(named: "darkTableColor")
             }
         }
-       // backgroundBetween(cell: cell) //fatal error index aout of range, iphone xr, caledar from filter
         
-        DispatchQueue.main.async { //slow
+        DispatchQueue.main.async {
             for i in 0..<self.daysBetween.count {
-                if self.daysBetween[i] == cell.cellTypeLabel.text { //5s - fatal error index aout of range
+                if self.daysBetween[i] == cell.cellTypeLabel.text {
                     cell.backgroundCell.backgroundColor = K.Colors.separetor
-                   // cell.dayLabel.textColor = K.Colors.balanceT
                     cell.dayLabel.alpha = 0.2
                 }
             }
@@ -686,6 +702,8 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
                 cell.dayLabel.textColor = K.Colors.negative
             }
         }
+        cell.dayLabel.alpha = upToFour.1 == 1 ? 0.3 : 1
+        upToFour = (upToFour.0 + 1, upToFour.1)
         return cell
     }
     

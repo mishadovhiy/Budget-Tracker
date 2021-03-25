@@ -139,7 +139,7 @@ class AppData {
         for i in 0..<localData.count {
             let name = localData[i][1]
             let purpose = localData[i][2]
-            let isDebt = key == "categoriesData" ? (localData[i][3] == "false" ? false : true) : false
+            let isDebt = localData[i][3] == "false" ? false : true//key == "categoriesData" ? (localData[i][3] == "false" ? false : true) : false
             var count = 0
             if !isDebt {
                 for i in 0..<trans.count {

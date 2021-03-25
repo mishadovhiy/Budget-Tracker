@@ -81,6 +81,7 @@ class calcCell: UITableViewCell {
     @IBOutlet weak var periodBalanceValueLabel: UILabel!
     @IBOutlet weak var unsesndedTransactionsLabel: UILabel!
     @IBOutlet weak var savedTransactionsLabel: UILabel!
+    @IBOutlet weak var prevAcountDataLabel: UILabel!
     
 
     func setup(calculations: (Double, Double, Double, Double)) {
@@ -148,6 +149,7 @@ class StatisticCell: UITableViewCell {
     @IBOutlet weak var percentLabel: UILabel!
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var amountLabel: UILabel!
+    @IBOutlet weak var progressBar: UIProgressView!
 }
 
 

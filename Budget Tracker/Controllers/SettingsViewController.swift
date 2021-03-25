@@ -123,18 +123,16 @@ class SettingsViewController: UIViewController {
             self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -self.contentView.frame.maxY, 0)
 
             UIView.animate(withDuration: 0.27) {
-                self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 5, 0)
+                self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
                 self.view.backgroundColor = wasBack
             } completion: { (_) in
-                UIView.animate(withDuration: 0.15) {
+                /*UIView.animate(withDuration: 0.15) {
                     self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
                 } completion: { (_) in
                     self.tableView.reloadData()
-                }
-
-                
+                }*/
+                self.tableView.reloadData()
             }
-
         }
     }
 

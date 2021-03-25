@@ -43,8 +43,8 @@ class ViewController: UIViewController {
             if appData.username != "" {
                 let lastDownloadDate = UserDefaults.standard.value(forKey: "LastLoadDataDate") as? Date ?? Date()
                 let component = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: lastDownloadDate)
-                
                 let date = "\(appData.returnMonth(component.month ?? 0)) \(self.makeTwo(n: component.day ?? 0)), \(component.year ?? 0)"
+                //let undendeddCount = self.undendedCount == 0 ? "" : "Data pending to resend: \(self.undendedCount)"
                 let lastLaunxText = "Updated: \(date) at: \(self.makeTwo(n: component.hour ?? 0)):\(self.makeTwo(n: component.minute ?? 0)):\(self.makeTwo(n: component.second ?? 0))"
                 datacountText = "Data count: \(self.tableData.count)\("\n\(lastLaunxText)")"
             }
@@ -147,9 +147,9 @@ class ViewController: UIViewController {
     var addTransFrame = CGRect.zero
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         updateUI()
-        UIApplication.shared.applicationIconBadgeNumber = 0
+        //UIApplication.shared.applicationIconBadgeNumber = 0
     }
     
     func updateUI() {
@@ -160,6 +160,7 @@ class ViewController: UIViewController {
         self.mainTableView.dataSource = self
         DispatchQueue.main.async {
             self.addTransitionButton.layer.cornerRadius = self.tableCorners
+            self.addTransitionButton.isHidden = true
             self.addTransitionButton.alpha = 1
             let tableFrame = self.mainTableView.frame
             let TransFrame = self.addTransitionButton.frame
@@ -217,8 +218,10 @@ class ViewController: UIViewController {
     func downloadFromDB() {
         lastSelectedDate = nil
         if appData.username != "" {
+            let unsend = appData.unsendedData
+            undendedCount = unsend.count
             print("downloadFromDB: username: \(appData.username), not nill")
-            if appData.unsendedData.count > 0 {
+            if unsend.count > 0 {
                 if appData.username != "" {
                     self.sendUnsaved()
                 }
@@ -285,7 +288,7 @@ class ViewController: UIViewController {
         }
 
     }
-    
+    var undendedCount = 0
     var filterAndCalcFrameHolder = (CGRect.zero, CGRect.zero)
     var viewLoadedvar = false
     override func viewDidLayoutSubviews() {
@@ -551,7 +554,7 @@ class ViewController: UIViewController {
                                         self.refreshControl.endRefreshing()
                                     }
                                 }
-                                self.downloadFromDB()
+                                self.sendUnsaved()
                             }
                         }
                     } else {
@@ -573,7 +576,7 @@ class ViewController: UIViewController {
                                         }
                                     }
 
-                                    self.downloadFromDB()
+                                    self.sendUnsaved()
                                 }
                             }
                         } else {
@@ -599,7 +602,7 @@ class ViewController: UIViewController {
                                             self.didloadCalled = true
                                             self.filter()
                                         }*/
-                                        self.downloadFromDB()
+                                        self.sendUnsaved()
                                     }
                                 }
                             } else {
@@ -614,6 +617,7 @@ class ViewController: UIViewController {
                                             }
                                         } else {
                                             appData.unsendedData.removeFirst()
+
                                             DispatchQueue.main.async {
                                                 self.mainTableView.reloadData()
                                                 if self.refreshControl.isRefreshing {
@@ -624,7 +628,7 @@ class ViewController: UIViewController {
                                                 self.didloadCalled = true
                                                 self.filter()
                                             }*/
-                                            self.downloadFromDB()
+                                            self.sendUnsaved()
                                         }
                                     }
                                 }
@@ -638,6 +642,7 @@ class ViewController: UIViewController {
                 }
             }
             if dataCount == 0 {
+                //filter()
                 if sendSavedData == true {
                     if self._filterText != "Sending" {
                         DispatchQueue.main.async {
@@ -650,7 +655,7 @@ class ViewController: UIViewController {
                     var newCategories = appData.getCategories(key: "savedCategories")
                     print("sendUnsaved unsaved cats", newCategories.count)
                     if let categoryy = newCategories.first {
-                        let toDataStringg = "&Nickname=\(appData.username)" + "&Title=\(categoryy.name)" + "&Purpose=\(categoryy.purpose)"
+                        let toDataStringg = "&Nickname=\(appData.username)" + "&Title=\(categoryy.name)" + "&Purpose=\(categoryy.purpose)" + "&ExpectingPayment=\(categoryy.debt ? "1" : "0")"
                         save.Categories(toDataString: toDataStringg) { (error) in
                             if error {
                                 self.filter()
@@ -667,10 +672,10 @@ class ViewController: UIViewController {
                                 appData.saveCategories(allCats)
                                 newCategories.removeFirst()
                                 appData.saveCategories(newCategories, key: "savedCategories")
-                                self.sendUnsaved()
                                 DispatchQueue.main.async {
                                     self.mainTableView.reloadData()
                                 }
+                                self.sendUnsaved()
                             }
                         }
                     }
@@ -695,10 +700,10 @@ class ViewController: UIViewController {
                                     var alldata = appData.transactions
                                     alldata.append(tran)
                                     appData.saveTransations(alldata)
-                                    self.sendUnsaved()
                                     DispatchQueue.main.async {
                                         self.mainTableView.reloadData()
                                     }
+                                    self.sendUnsaved()
                                 }
                             }
                         } else {
@@ -710,6 +715,8 @@ class ViewController: UIViewController {
                             }
                         }
                     }
+                } else {
+                    self.filter()
                 }
                 
             }
@@ -1360,6 +1367,8 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             
             let sendedCount = (appData.defaults.value(forKey: "savedTransactions") as? [[String]] ?? []) + (appData.defaults.value(forKey: "savedCategories") as? [[String]] ?? [])
 
+            //prevUserName
+            calculationCell.prevAcountDataLabel.text = "Data from \(UserDefaults.standard.value(forKey: "prevUserName") as? String ?? "previous account"):"
             calculationCell.savedTransactionsLabel.text = "\(sendedCount.count)"
             let newUnsendedCount = appData.unsendedData.count
             calculationCell.unsesndedTransactionsLabel.text = "\(newUnsendedCount)"
@@ -1571,11 +1580,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if filterAfterScroll {
-            filterAfterScroll = false
-            transactionAdded = false
-            self.filter()
-        }
         if indexPath == highliteCell {
             highliteCell = nil
             DispatchQueue.main.async {

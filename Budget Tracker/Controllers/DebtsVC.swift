@@ -81,6 +81,7 @@ class DebtsVC: UIViewController {
         for i in 0..<categories.count {
             if categories[i].debt {
                 debts.append(CategoriesStruct(name: categories[i].name, purpose: categories[i].purpose, count: categories[i].count, debt: categories[i].debt))
+                
             } 
         }
         let transactions = Array(appData.transactions)

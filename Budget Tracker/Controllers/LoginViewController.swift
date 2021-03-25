@@ -46,15 +46,9 @@ class LoginViewController: UIViewController {
         
         print("username: \(appData.username)")
         print("localTransactions:", appData.transactions.count)
-        
         updateUI()
-        
-        if appData.username != "" {
-            //show logout button
-            logoutButton.alpha = 1
-        } else {
-            logoutButton.alpha = 0
-        }
+
+        logoutButton.alpha = appData.username != "" ? 1 : 0
 
     }
     @IBAction func logoutPressed(_ sender: UIButton) {
@@ -164,15 +158,22 @@ class LoginViewController: UIViewController {
                             KeychainService.savePassword(service: "BudgetTrackerApp", account: nickname, data: password)
                         }
                         let prevUserName = appData.username
+                        
                         appData.username = nickname
                         appData.password = password
                         if prevUserName != nickname {
+                            UserDefaults.standard.setValue(prevUserName, forKey: "prevUserName")
                             let wasTrans = appData.savedTransactions
                             let trans = wasTrans + appData.transactions
                             appData.saveTransations(trans, key: "savedTransactions")
                             let wascats = appData.getCategories(key: "savedCategories")
                             let cats = wascats + appData.getCategories()
-                            appData.saveCategories(cats, key: "savedCategories")
+                            var catResult: [CategoriesStruct] = []
+                            for i in 0..<cats.count {
+                                catResult.append(CategoriesStruct(name: cats[i].name, purpose: cats[i].purpose, count: cats[i].count, debt: cats[i].debt))
+
+                            }
+                            appData.saveCategories(catResult, key: "savedCategories")
                             appData.fromLoginVCMessage = trans.count > 0 ? "Wellcome, \(appData.username), \nYour Data has been saved localy" : "Wellcome, \(appData.username)"
                         }
                         DispatchQueue.main.async {
@@ -231,13 +232,19 @@ class LoginViewController: UIViewController {
                                     self.ai.removeFromSuperview()
                                     self.message.showMessage(text: "Internet Error!", type: .error, autoHide: false)
                                 } else {
+                                    UserDefaults.standard.setValue(appData.username, forKey: "prevUserName")
                                     KeychainService.savePassword(service: "BudgetTrackerApp", account: name, data: password)
                                     appData.username = name
                                     appData.password = password
                                     let wasTransactions = appData.transactions + appData.savedTransactions
                                     appData.saveTransations(wasTransactions, key: "savedTransactions")
                                     let wasCats = appData.getCategories() + appData.getCategories(key: "savedCategories")
-                                    appData.saveCategories(wasCats, key: "savedCategories")
+                                    var catResult: [CategoriesStruct] = []
+                                    for i in 0..<wasCats.count {
+                                        catResult.append(CategoriesStruct(name: wasCats[i].name, purpose: wasCats[i].purpose, count: wasCats[i].count, debt: wasCats[i].debt))
+
+                                    }
+                                    appData.saveCategories(catResult, key: "savedCategories")
                                     appData.fromLoginVCMessage = wasTransactions.count > 0 ? "Wellcome, \(appData.username), \nYour Data has been saved localy" : "Wellcome, \(appData.username)"
                                     DispatchQueue.main.async {
                                         self.performSegue(withIdentifier: "homeVC", sender: self)
@@ -595,7 +602,7 @@ extension UITextField {
     }
 }
 
-var difference: [TransactionsStruct] = []
+//var difference: [TransactionsStruct] = []
 
 /*var DBTransactions:[TransactionsStruct] {
 // creating and using only in login - local vc

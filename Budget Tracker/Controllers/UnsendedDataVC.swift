@@ -30,7 +30,9 @@ class UnsendedDataVC: UIViewController {
             _tablTrans = newValue
             print("table data new value setted")
             DispatchQueue.main.async {
-                
+                let prevUsername = UserDefaults.standard.value(forKey: "prevUserName") as? String ?? ""
+                self.mainTitleLabel.text = "Data from \(prevUsername != "" ? prevUsername : "previous account")"
+                //self.mainTitleLabel.font = .systemFont(ofSize: prevUsername.count > 2 ? 15 : 23, weight: .semibold)
                 self.deleteSelectedButton.setTitle("Delete (\(self.selectedCount))", for: .normal)
                 self.tableView.reloadData()
                 if newValue.count == 0 && self.categoruesTableData.count == 0 {
@@ -116,6 +118,7 @@ class UnsendedDataVC: UIViewController {
         if didapp {
             self.getData()
         }
+        
         
     }
     
@@ -259,7 +262,7 @@ class UnsendedDataVC: UIViewController {
             defaultsCatsResult.removeAll()
             for cat in categoruesTableData {
                 if !cat.selected {
-                    let new = CategoriesStruct(name: cat.name, purpose: cat.purpose, count: 0, debt: false)
+                    let new = CategoriesStruct(name: cat.name, purpose: cat.purpose, count: 0, debt: cat.isDebt)
                     foundInAListCount = contains(new) ? foundInAListCount + 1 : foundInAListCount
                     newCategories.append(cat)
                     defaultsCatsResult.append(new)
@@ -297,7 +300,7 @@ class UnsendedDataVC: UIViewController {
             if allCats[i].selected {
                 self.selectedCount += 1
             } else {
-                if contains(CategoriesStruct(name: allCats[i].name, purpose: allCats[i].purpose, count: 0, debt: false)) {
+                if contains(CategoriesStruct(name: allCats[i].name, purpose: allCats[i].purpose, count: 0, debt: allCats[i].isDebt)) {
                     self.selectedCount += 1
                     allCats[i].selected = true
                 }
@@ -404,7 +407,7 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "unsendedCategoriesCell") as! unsendedCategoriesCell
             let data = categoruesTableData[indexPath.row]
             cell.nameLabel.text = data.name
-            cell.perposeLabel.text = data.isDebt ? "ирмпсавенпгротирмпса" : data.purpose
+            cell.perposeLabel.text = data.isDebt ? "Debts" : data.purpose
             cell.trashImage.image = data.selected ? redTrash : lightTrash
             return cell
         default:
