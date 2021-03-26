@@ -141,7 +141,7 @@ class ViewController: UIViewController {
         return message
     }()
 
-    let tableCorners: CGFloat = 15
+    let tableCorners: CGFloat = 14
     var forseSendUnsendedData = true
     var forseShowAddButton = false
     var addTransFrame = CGRect.zero
@@ -1580,6 +1580,10 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if transactionAdded {
+            transactionAdded = false
+            filter()
+        }
         if indexPath == highliteCell {
             highliteCell = nil
             DispatchQueue.main.async {

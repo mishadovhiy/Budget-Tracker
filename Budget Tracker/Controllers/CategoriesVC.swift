@@ -321,12 +321,15 @@ class CategoriesVC: UIViewController {
     func toHistory(category: String) {
         historyDataStruct = []
         let trans =  UserDefaults.standard.value(forKey: "transactionsData") as? [[String]] ?? []
-        
+        var totValue = 0.0
         for i in 0..<trans.count {
             if trans[i][2] == category {
+                
+                totValue = (Double(trans[i][1]) ?? 0.0) + totValue
                 historyDataStruct.append(TransactionsStruct(value: trans[i][1], category: trans[i][2], date: trans[i][3], comment: trans[i][4]))
             }
         }
+
         
         selectedCategoryName = category
         DispatchQueue.main.async {
@@ -344,6 +347,7 @@ class CategoriesVC: UIViewController {
             vc.selectedCategoryName = selectedCategoryName
             vc.fromCategories = true
             vc.allowEditing = false
+            
         } else {
             if segue.identifier == "toDebts" {
                 let vc = segue.destination as! DebtsVC
@@ -355,7 +359,6 @@ class CategoriesVC: UIViewController {
             }
         }
     }
-    
     
     let darkSectionBackground = UIColor(red: 30/255, green: 30/255, blue: 30/255, alpha: 1)
     

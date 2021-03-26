@@ -163,6 +163,7 @@ class StatisticVC: UIViewController, CALayerDelegate {
         self.dismiss(animated: true, completion: nil)
     }
     
+    var fromDebts: Bool = false
     var historyDataStruct: [TransactionsStruct] = []
     var selectedCategoryName = ""
     var selectedIndexPathToHighlite: IndexPath?
@@ -174,6 +175,15 @@ class StatisticVC: UIViewController, CALayerDelegate {
                 historyDataStruct.append(dataFromMain[i])
             }
         }
+        fromDebts = false
+        var allCats = Array(appData.getCategories())
+        for i in 0..<allCats.count {
+            if allCats[i].name == allData[indexPathRow].category {
+                fromDebts = allCats[i].debt
+                break
+            }
+        }
+
         print(historyDataStruct.count, "historyDataStructhistoryDataStructhistoryDataStructhistoryDataStruct")
         selectedCategoryName = allData[indexPathRow].category
         DispatchQueue.main.async {
@@ -187,6 +197,8 @@ class StatisticVC: UIViewController, CALayerDelegate {
             vc.fromStatistic = true
             vc.historyDataStruct = historyDataStruct
             vc.selectedCategoryName = selectedCategoryName
+            vc.selectedPurposeH = segmentControll.selectedSegmentIndex
+            vc.fromCategories = fromDebts
         }
     }
     

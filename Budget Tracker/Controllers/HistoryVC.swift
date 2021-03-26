@@ -21,6 +21,7 @@ class HistoryVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(selectedPurposeH, "selectedPurposeselectedPurposeH didlo")
         if !allowEditing {
             DispatchQueue.main.async {
                 self.addTransButton.alpha = 0
@@ -42,24 +43,7 @@ class HistoryVC: UIViewController {
     }
     var newItem: IndexPath?
     var fromStatistic = false
-    override func viewDidDisappear(_ animated: Bool) {
-        print(fromStatistic, "fromStatisticfromStatisticfromStatistic")
-        if !toAddVC {
-            if fromStatistic {
-                if transactionAdded {
-                    DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: "homeVC", sender: self)
-                    }
-                }
-            }
-        }
-    }
 
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
@@ -85,15 +69,17 @@ class HistoryVC: UIViewController {
         }
     }
 
-    
+    var selectedPurposeH: Int?
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        print(selectedPurposeH, "historyVC selectedPurposeH")
         if segue.identifier == "toTransVC" {
             toAddVC = true
             let nav = segue.destination as! NavigationController
             let vc = nav.topViewController as! TransitionVC
             vc.delegate = self
-            vc.fromDebts = true
+            vc.fromDebts = fromCategories ? true : false
             vc.editingCategory = self.selectedCategoryName
+            vc.selectedPurpose = selectedPurposeH
         }
     }
 
@@ -221,7 +207,11 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        DispatchQueue.main.async {
+            self.tableView.deselectRow(at: indexPath, animated: true)
+        }
+    }
     
 }
 

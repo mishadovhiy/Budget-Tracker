@@ -30,7 +30,7 @@ class TransitionVC: UIViewController {
     var pressedValue = "0"
     var expenseArr = [""]
     var incomeArr = [""]
-    
+    var selectedPurpose: Int?
     var delegate:TransitionVCProtocol?;
     
     var editingDateHolder = ""
@@ -168,9 +168,13 @@ class TransitionVC: UIViewController {
     
     func getEditingdata() {
         if editingCategory != "" {
+            print(selectedPurpose, "selectedPurpose")
+            purposeSwitcher.selectedSegmentIndex = selectedPurpose != nil ? selectedPurpose! : 0
+            purposeSwitched(purposeSwitcher)
             DispatchQueue.main.async {
                 self.categoryTextField.text = self.editingCategory
             }
+            
         }
         if editingDate != "" {
             if editingValue > 0.0 {
