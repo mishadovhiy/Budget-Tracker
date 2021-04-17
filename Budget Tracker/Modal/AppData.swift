@@ -17,6 +17,15 @@ class AppData {
     
     var deptsData: [CategoriesStruct] = []
 
+    var proVersion: Bool {
+        get{
+            return defaults.value(forKey: "proVersion") as? Bool ?? false
+        }
+        set(value){
+            defaults.set(value, forKey: "proVersion")
+        }
+    }
+    
     var username: String {
         get{
             return defaults.value(forKey: "username") as? String ?? ""

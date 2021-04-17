@@ -39,6 +39,9 @@ class LoginViewController: UIViewController {
         let message = MessageView(self)
         return message
     }()
+    
+    var messagesFromOtherScreen = ""
+    
     @IBOutlet weak var logoutButton: UIButton!
     
     override func viewDidLoad() {
@@ -87,6 +90,14 @@ class LoginViewController: UIViewController {
         self.logIn.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, self.view.frame.height * (-2), 0)
         
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        if messagesFromOtherScreen != "" {
+            DispatchQueue.main.async {
+                self.message.showMessage(text: self.messagesFromOtherScreen, type: .succsess, windowHeight: 65)
+            }
+        }
     }
     
     let ai = UIActivityIndicatorView.init(style: .gray)

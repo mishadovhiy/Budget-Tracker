@@ -17,17 +17,12 @@ class SettingsViewController: UIViewController {
 
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var tableView: UITableView!
-
     var delegate: SettingsViewControllerProtocol?
-    
     var tableData: [SettingsSctruct] = [
-        SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: "toSavedData"),
+        SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: ((UserDefaults.standard.value(forKey: "savedCategories") as? [[String]] ?? []).count + (UserDefaults.standard.value(forKey: "savedTransactions") as? [[String]] ?? []).count) > 0 ? "toSavedData" : "toSingIn"),
         SettingsSctruct(title: "Categories", description: "\(categoriesDebtsCount.0)", segue: "settingsToCategories"),
-        SettingsSctruct(title: "Debts", description: "\(categoriesDebtsCount.1)", segue: "toDebts")
+        SettingsSctruct(title: "Debts", description: "\(categoriesDebtsCount.1)", segue: appData.proVersion ? "toDebts" : "toProVC")
     ]
-    
-    
-    
     lazy var message: MessageView = {
         let message = MessageView(self)
         return message
@@ -37,15 +32,14 @@ class SettingsViewController: UIViewController {
         super.viewDidLoad()
         
         updateUI()
-        
-        
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
         if UserDefaults.standard.value(forKey: "firstLaunchSettings") as? Bool ?? false == false {
             if appData.username == "" {
                 DispatchQueue.main.async {
-                    self.message.showMessage(text: "Create account to use app across all your devices", type: .succsess, windowHeight: 80, autoHide: false, bottomAppearence: true)
+                    self.message.showMessage(text: "Create account to use app across all your devices", type: .succsess, windowHeight: 80, autoHide: false, bottomAppearence: false)
                 }
             } else {
                 UserDefaults.standard.setValue(true, forKey: "firstLaunchSettings")
@@ -53,7 +47,16 @@ class SettingsViewController: UIViewController {
         }
         
         getdata()
+        
+      /*  UIView.animate(withDuration: 0.14) {
+            self.view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2)
+        } completion: { (_) in
+            
+        }*/
+
     }
+    
+    
     
 
     
@@ -75,8 +78,9 @@ class SettingsViewController: UIViewController {
         let data = [
             SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: (unsavedCat + unsavedTrans) > 0 ? "toSavedData" : "toSingIn"),
             SettingsSctruct(title: "Categories", description: "\(categoriesDebtsCount.0)", segue: "settingsToCategories"),
-            SettingsSctruct(title: "Debts", description: "\(categoriesDebtsCount.1)", segue: "toDebts")
+            SettingsSctruct(title: "Debts", description: "\(categoriesDebtsCount.1)", segue: appData.proVersion ? "toDebts" : "toProVC")
         ]
+        
         tableData = data
         DispatchQueue.main.async {
             self.tableView.reloadData()
@@ -88,6 +92,19 @@ class SettingsViewController: UIViewController {
         if let touch = touches.first {
             if touch.view != contentView{
                 closeWithAnimation()
+            }
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        print(tableView.contentOffset, "settingsVC contentOffset")
+        if tableView.contentOffset.y < -20.0 {
+            self.getdata()
+            if appData.proVersion {
+                self.tableData.append(SettingsSctruct(title: "Pro Features", description: "Purchased", segue: "toProVC"))
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             }
         }
     }
@@ -117,7 +134,7 @@ class SettingsViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        let wasBack = self.view.backgroundColor
+       /* let wasBack = self.view.backgroundColor
         DispatchQueue.main.async {
             self.view.backgroundColor = .clear
             self.contentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -self.contentView.frame.maxY, 0)
@@ -133,7 +150,7 @@ class SettingsViewController: UIViewController {
                 }*/
                 self.tableView.reloadData()
             }
-        }
+        }*/
     }
 
     
@@ -175,6 +192,10 @@ class SettingsViewController: UIViewController {
     
     func closeWithAnimation(vcanimation: Bool = true) {
         DispatchQueue.main.async {
+            self.dismiss(animated: true, completion: nil)
+        }
+        
+      /*animate in top  DispatchQueue.main.async {
             self.message.hideMessage()
             
             
@@ -196,7 +217,7 @@ class SettingsViewController: UIViewController {
                     self.dismiss(animated: vcanimation, completion: nil)
                 }
             }*/
-        }
+        }*/
     }
     
 }
@@ -211,9 +232,13 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SettingsVCCell", for: indexPath) as! SettingsVCCell
-        
+        cell.proView.alpha = 0
         cell.titleLbel.text = tableData[indexPath.row].title
         cell.descriptionLabel.text = tableData[indexPath.row].description
+        cell.proView.layer.cornerRadius = 4
+        if indexPath.row == 2 {
+            cell.proView.alpha = appData.proVersion ? 0 : 1
+        }
         return cell
     }
     
@@ -248,6 +273,7 @@ class SettingsVCCell: UITableViewCell {
     
     @IBOutlet weak var titleLbel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var proView: UIView!
 }
 
 extension SettingsViewController: UnsendedDataVCProtocol {

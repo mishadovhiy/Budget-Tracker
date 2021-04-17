@@ -208,7 +208,7 @@ class ViewController: UIViewController {
                 self.filter()
                 UserDefaults.standard.setValue(false, forKey: "firstLaunch")
                 DispatchQueue.main.async {
-                    self.message.showMessage(text: "Wellcome to Budget Tracker\nWe have created demo data for you", type: .succsess, windowHeight: 80, bottomAppearence: self.view.frame.width < 500 ? true : false)
+                    self.message.showMessage(text: "Wellcome to Budget Tracker\nGet started by looking through demo data", type: .succsess, windowHeight: 80, bottomAppearence: self.view.frame.width < 500 ? true : false)
                 }
             }
         }
@@ -711,7 +711,7 @@ class ViewController: UIViewController {
                             forseSendUnsendedData = false
                             self.downloadFromDB()
                             DispatchQueue.main.async {
-                                self.message.showMessage(text: "Data has been sended successfully", type: .succsess, windowHeight: 65, bottomAppearence: true)
+                                self.message.showMessage(text: "Done!", type: .succsess, windowHeight: 40, bottomAppearence: true)
                             }
                         }
                     }

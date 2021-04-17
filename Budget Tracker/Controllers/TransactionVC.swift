@@ -76,10 +76,9 @@ class TransitionVC: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
+        print(segue.identifier, "transactionVC")
         switch segue.identifier {
         case "toCalendar":
-            print("toCalendar")
             let vc = segue.destination as! CalendarVC
             vc.delegate = self
             vc.darkAppearence = true
@@ -88,7 +87,6 @@ class TransitionVC: UIViewController {
             }
             
         case "toCategories":
-            print("toCalendar")
             let vc = segue.destination as! CategoriesVC
             vc.delegate = self
             vc.darkAppearence = true

@@ -237,13 +237,12 @@ class CategoriesVC: UIViewController {
         }
     }
     
-    //here
     func deteteCategory(at: IndexPath) {
 
         let delete = DeleteFromDB()
         let Nickname = appData.username
-        let Title = at.section == 1 ? expenses[at.row].0 : incomes[at.row].0
-        let Purpose = at.section == 1 ? K.expense : K.income
+        let Title = at.section == 0 ? expenses[at.row].0 : incomes[at.row].0
+        let Purpose = at.section == 0 ? K.expense : K.income
         wasEdited = true
         if appData.username != "" {
             let toDataString = "&Nickname=\(Nickname)" + "&Title=\(Title)" + "&Purpose=\(Purpose)" + "&ExpectingPayment=0"
@@ -255,10 +254,10 @@ class CategoriesVC: UIViewController {
                 }
             })
         }
-        if at.section == 1 {
+        if at.section == 0 {
             self.expenses.remove(at: at.row)
         } else {
-            if at.section == 2 {
+            if at.section == 1 {
                 self.incomes.remove(at: at.row)
             }
             
@@ -332,9 +331,16 @@ class CategoriesVC: UIViewController {
 
         
         selectedCategoryName = category
-        DispatchQueue.main.async {
-            self.performSegue(withIdentifier: "toHistory", sender: self)
+        if historyDataStruct.count > 0 {
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "toHistory", sender: self)
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
+        
     }
 
     var toHistory = false
@@ -374,9 +380,9 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0: return darkAppearence ? 1 : 0
-        case 1: return expenses.count
-        case 2: return incomes.count
+        case 0: return expenses.count
+        case 1: return incomes.count
+        case 2: return darkAppearence ? 1 : 0
         default:
             return expenses.count
         }
@@ -384,9 +390,9 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
-        case 0: return nil
-        case 1: return K.expense
-        case 2: return K.income
+        case 0: return K.expense
+        case 1: return K.income
+        case 2: return nil
         default:
             return K.income
         }
@@ -403,15 +409,14 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
         
         switch indexPath.section {
         case 0:
-            cell.categoryNameLabel.text = "Debts"
-            cell.qntLabel.text = "\(debts.count)"
-        case 1:
             cell.categoryNameLabel.text = expenses[indexPath.row].0
             cell.qntLabel.text = "\(expenses[indexPath.row].1)"
-        case 2:
+        case 1:
             cell.categoryNameLabel.text = incomes[indexPath.row].0
             cell.qntLabel.text = "\(incomes[indexPath.row].1)"
-            
+        case 2:
+            cell.categoryNameLabel.text = "Debts"
+            cell.qntLabel.text = "\(debts.count)"
         default:
             cell.categoryNameLabel.text = incomes[indexPath.row].0
         }
@@ -421,8 +426,9 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
         if darkAppearence {
             cell.categoryNameLabel.textColor = K.Colors.background
             cell.qntLabel.text = ""
-            cell.accessoryType = indexPath.section == 0 ? .disclosureIndicator : .none
+            cell.accessoryType = indexPath.section == 2 ? .disclosureIndicator : .none
         }
+
         return cell
     }
     
@@ -430,26 +436,24 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let lightBackground = K.Colors.background //UIColor(red: 194/255, green: 194/255, blue: 194/255, alpha: 1)
         view.backgroundColor = self.view.backgroundColor == K.Colors.background ? lightBackground : darkSectionBackground
-        if section != 0 {
-            let mainFrame = self.view.frame
-            let view = UIView(frame: CGRect(x: 0, y: 0, width: mainFrame.width, height: 25))
-            view.backgroundColor = self.view.backgroundColor == K.Colors.background ? lightBackground : darkSectionBackground
-            let label = UILabel(frame: CGRect(x: 15, y: 5, width: mainFrame.width - 40, height: 20))
-            label.text = section == 1 ? K.expense : K.income
-            label.textColor = view.backgroundColor == lightBackground ? K.Colors.balanceT : K.Colors.balanceV
-            label.font = .systemFont(ofSize: 14, weight: .medium)
-            view.addSubview(label)
-            return view
-        } else {
-            let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 25))
-            view.backgroundColor = .clear
-            return nil
+        let mainFrame = self.view.frame
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: mainFrame.width, height: 25))
+        view.backgroundColor = self.view.backgroundColor == K.Colors.background ? lightBackground : darkSectionBackground
+        let label = UILabel(frame: CGRect(x: 15, y: 5, width: mainFrame.width - 40, height: 20))
+        label.text = section == 0 ? K.expense : K.income
+        label.textColor = view.backgroundColor == lightBackground ? K.Colors.balanceT : K.Colors.balanceV
+        label.font = .systemFont(ofSize: 14, weight: .medium)
+        view.addSubview(label)
+        switch section {
+        case 0: label.text = K.expense
+        case 1: label.text = K.income
+        default:
+            label.text = ""
         }
+        return view
+        
     }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return section == 0 ? 0 : 25
-    }
+
     
     
    /* func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -462,7 +466,7 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     }*/
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
 
-        if indexPath.section != 0 {
+        if indexPath.section != 2 {
             let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
                 //self.tableActionActivityIndicator.startAnimating()
                 self.deteteCategory(at: indexPath)
@@ -475,7 +479,7 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 0 {
+        if indexPath.section == 2 {
             historyDataStruct = []
             selectedCategoryName = ""
             
@@ -484,13 +488,13 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
             }
         } else {
             if !fromSettings {
-                delegate?.categorySelected(category: indexPath.section == 1 ? expenses[indexPath.row].0 : incomes[indexPath.row].0, purpose: indexPath.section - 1, fromDebts: false, amount: 0)
+                delegate?.categorySelected(category: indexPath.section == 0 ? expenses[indexPath.row].0 : incomes[indexPath.row].0, purpose: indexPath.section, fromDebts: false, amount: 0)
                 navigationController?.popToRootViewController(animated: true)
             } else {
                 switch indexPath.section {
-                case 1:
+                case 0:
                     toHistory(category: expenses[indexPath.row].0)
-                case 2:
+                case 1:
                     toHistory(category: incomes[indexPath.row].0)
                 default:
                     self.dismiss(animated: true)
