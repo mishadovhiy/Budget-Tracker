@@ -58,6 +58,7 @@ class LoadingIndicator {
     }
     
     func showSmallIndicator() {
+        swipeToHide = false
         let superFrame = self.superView.window?.frame ?? self.superView.frame
         self.loadingMainView.frame = CGRect(x: 0, y: 0, width: superFrame.width, height: superFrame.height)
         let loadingViewPosition = CGPoint(x: (superFrame.width / 2) - ((loadingViewSize.0 / 2) / 2), y: (superFrame.height / 2) - (loadingViewSize.0 / 2))
@@ -125,9 +126,41 @@ class LoadingIndicator {
         }
     }
     
+    @objc private func tappedToHide(_ sender: UITapGestureRecognizer) {
+        if swipeToHide {
+            if let function = funccc as? (Bool) -> () {
+                fastHideIndicator(completion: function)
+            }
+        }
+    }
+    @objc private func swippedToHide(_ sender: UISwipeGestureRecognizer){
+        if swipeToHide {
+            if let function = funccc as? (Bool) -> () {
+                fastHideIndicator(completion: function)
+            }
+        }
+    }
+    
+ 
     func completeWithDone(title: String, error:Bool = false, description: String? = nil, completion: @escaping (Bool) -> ()) {
         let superFrame = self.superView.window?.frame ?? self.superView.frame
        // let descriptionLabel = UILabel(frame: CGRect(x: 5, y: (loadingViewSize.1 / 2) + 10, width: self.loadingViewSize.0 - 10, height: loadingViewSize.1))
+        swipeToHide = true
+        self.funccc = completion
+        //loadingMainView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tappedToHide(_:))))
+        let downSwipe = UISwipeGestureRecognizer(target: self, action: #selector(swippedToHide(_:)))
+        downSwipe.direction = .down
+        let topSwipe = UISwipeGestureRecognizer(target: self, action: #selector(swippedToHide(_:)))
+        topSwipe.direction = .up
+        let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(swippedToHide(_:)))
+        rightSwipe.direction = .right
+        let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(swippedToHide(_:)))
+        leftSwipe.direction = .left
+        loadingMainView.addGestureRecognizer(downSwipe)
+        loadingMainView.addGestureRecognizer(topSwipe)
+        loadingMainView.addGestureRecognizer(rightSwipe)
+        loadingMainView.addGestureRecognizer(leftSwipe)
+        
         self.textLabel.text = title
         self.textLabel.textAlignment = .left
         let descriptionNotNill = description != nil ? true : false
@@ -135,7 +168,7 @@ class LoadingIndicator {
         let doneView = UIView(frame: CGRect(x: 0, y: 200, width: self.loadingViewSize.0, height: 50))
         loadingView.layer.masksToBounds = true
         let doneLabel = UILabel(frame: CGRect(x: 10, y: descriptionNotNill ? 45 : 5, width: self.loadingViewSize.0 - 20, height: 35))
-        doneLabel.textAlignment = .center
+        
         doneLabel.font = .systemFont(ofSize: 15, weight: .semibold)
         doneLabel.text = "OK"
         doneLabel.textColor = UIColor(named: "darkTableColor")
@@ -165,11 +198,11 @@ class LoadingIndicator {
                 self.loadingView.frame = CGRect(x: loadingViewPosition.x, y: loadingViewPosition.y, width: self.loadingViewSize.0, height: self.loadingViewSize.1 / 2 + (descriptionNotNill ? 30 : (-10)))
                 self.textLabel.frame = CGRect(x: 10, y: 0, width: self.loadingViewSize.0 - 10, height: self.loadingViewSize.1 / 4)
                 doneView.frame = CGRect(x: 0, y: 40, width: self.loadingViewSize.0, height: 100)
+                doneLabel.textAlignment = .center
                 
             } completion: { (_) in
                 self.ai.stopAnimating()
                 self.ai.removeFromSuperview()
-                self.funccc = completion
                 UIView.animate(withDuration: 0.4) {
                     if error {
                         

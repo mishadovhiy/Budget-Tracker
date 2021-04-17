@@ -25,6 +25,14 @@ class AppData {
             defaults.set(value, forKey: "proVersion")
         }
     }
+    var purchasedOnThisDevice: Bool {
+        get{
+            return defaults.value(forKey: "purchasedOnThisDevice") as? Bool ?? false
+        }
+        set(value){
+            defaults.set(value, forKey: "purchasedOnThisDevice")
+        }
+    }
     
     var username: String {
         get{

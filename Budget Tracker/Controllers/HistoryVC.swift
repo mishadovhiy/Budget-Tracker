@@ -41,7 +41,7 @@ class HistoryVC: UIViewController {
 
         
     }
-    var newItem: IndexPath?
+
     var fromStatistic = false
 
     override func viewWillAppear(_ animated: Bool) {
@@ -192,7 +192,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
         } 
     }
     
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+   /* func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let i = newItem {
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
            // DispatchQueue.main.async {
@@ -205,7 +205,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                 }
             }
         }
-    }
+    }*/
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         DispatchQueue.main.async {
@@ -250,10 +250,11 @@ extension HistoryVC: TransitionVCProtocol {
                         }
                     }
                     if let i = indexPath {
+                        DispatchQueue.main.async {
+                            self.tableView.selectRow(at: i, animated: true, scrollPosition: .middle)
+                        }
                         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                            self.newItem = i
-                            self.tableView.scrollToRow(at: i, at: .middle, animated: true)
-                           // self.tableView.selectRow(at: i, animated: true, scrollPosition: .middle)
+                            self.tableView.deselectRow(at: i, animated: true)
                         }
                     }
                 }

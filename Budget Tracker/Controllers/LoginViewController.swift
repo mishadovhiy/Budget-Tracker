@@ -34,6 +34,7 @@ class LoginViewController: UIViewController {
         case singIn
     }
     var selectedScreen: screenType = .createAccount
+    var fromPro = false
     
     lazy var message: MessageView = {
         let message = MessageView(self)
@@ -61,6 +62,7 @@ class LoginViewController: UIViewController {
             self.nicknameLogLabel.text = ""
             self.passwordLogLabel.text = ""
             self.performSegue(withIdentifier: "homeVC", sender: self)
+            
         }
     }
     
@@ -91,14 +93,7 @@ class LoginViewController: UIViewController {
         
         
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        if messagesFromOtherScreen != "" {
-            DispatchQueue.main.async {
-                self.message.showMessage(text: self.messagesFromOtherScreen, type: .succsess, windowHeight: 65)
-            }
-        }
-    }
+
     
     let ai = UIActivityIndicatorView.init(style: .gray)
     
@@ -187,9 +182,16 @@ class LoginViewController: UIViewController {
                             appData.saveCategories(catResult, key: "savedCategories")
                             appData.fromLoginVCMessage = trans.count > 0 ? "Wellcome, \(appData.username), \nYour Data has been saved localy" : "Wellcome, \(appData.username)"
                         }
-                        DispatchQueue.main.async {
-                            self.performSegue(withIdentifier: "homeVC", sender: self)
+                        if fromPro {
+                            DispatchQueue.main.async {
+                                self.dismiss(animated: true, completion: nil)
+                            }
+                        } else {
+                            DispatchQueue.main.async {
+                                self.performSegue(withIdentifier: "homeVC", sender: self)
+                            }
                         }
+                        
                     }
                     return
                 }
@@ -257,8 +259,14 @@ class LoginViewController: UIViewController {
                                     }
                                     appData.saveCategories(catResult, key: "savedCategories")
                                     appData.fromLoginVCMessage = wasTransactions.count > 0 ? "Wellcome, \(appData.username), \nYour Data has been saved localy" : "Wellcome, \(appData.username)"
-                                    DispatchQueue.main.async {
-                                        self.performSegue(withIdentifier: "homeVC", sender: self)
+                                    if self.fromPro {
+                                        DispatchQueue.main.async {
+                                            self.dismiss(animated: true, completion: nil)
+                                        }
+                                    } else {
+                                        DispatchQueue.main.async {
+                                            self.performSegue(withIdentifier: "homeVC", sender: self)
+                                        }
                                     }
                                 }
                             }
@@ -408,8 +416,17 @@ class LoginViewController: UIViewController {
             textfields[i].backgroundColor = K.Colors.loginColor
         }
         obthervValues = false
-        message.hideMessage()
+        
         hideKeyboard()
+        if messagesFromOtherScreen != "" {
+            let message = messagesFromOtherScreen
+            messagesFromOtherScreen = ""
+            DispatchQueue.main.async {
+                self.message.showMessage(text: message, type: .succsess, windowHeight: 65)
+            }
+        } else {
+            message.hideMessage()
+        }
         
     }
 

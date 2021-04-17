@@ -126,10 +126,11 @@ class BuyProVC: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "" {
+        if segue.identifier == "toSingIn" {
             //messagesFromOtherScreen
             if let vc = segue.destination as? LoginViewController {
                 vc.messagesFromOtherScreen = "Log in or create an account before purchasing"
+                vc.fromPro = true
             }
             
         }
@@ -233,6 +234,7 @@ extension BuyProVC: SKPaymentTransactionObserver {
                 SKPaymentQueue.default().finishTransaction(transaction)
                 SKPaymentQueue.default().remove(self)
                 appData.proVersion = true
+                appData.purchasedOnThisDevice = true
                 //appData.fromLoginVCMessage = transaction.transactionState == .restored ? "Pro features successfully restored" : "Pro features available now across all your devices!"
                 if transaction.transactionState == .purchased {
                     appData.fromLoginVCMessage = "Thank you for purchasing Pro version"
