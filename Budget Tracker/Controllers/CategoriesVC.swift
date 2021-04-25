@@ -32,8 +32,8 @@ class CategoriesVC: UIViewController {
     
     
     //(categories[i].name, categories[i].count, categories[i].debt)
-    var expenses: [(String, Int, Bool)] = []
-    var incomes: [(String, Int, Bool)] = []
+    var expenses: [(String, Int)] = []
+    var incomes: [(String, Int)] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -117,25 +117,21 @@ class CategoriesVC: UIViewController {
         }
     }
     
-    var debts: [CategoriesStruct] = []
+
     func getDataFromLocal() {
         expenses = []
         incomes = []
-        debts = []
+ //       debts = []
         let categories = Array(appData.getCategories())
         for i in 0..<categories.count {
-            if !categories[i].debt {
-                if categories[i].purpose == K.expense {
-                    expenses.append((categories[i].name, categories[i].count, categories[i].debt))
-                } else {
-                    incomes.append((categories[i].name, categories[i].count, categories[i].debt))
-                }
+            if categories[i].purpose == K.expense {
+                expenses.append((categories[i].name, categories[i].count))
             } else {
-                debts.append(CategoriesStruct(name: categories[i].name, purpose: categories[i].purpose, count: categories[i].count, debt: categories[i].debt))
+                incomes.append((categories[i].name, categories[i].count))
             }
         }
         whenNoCategories()
-        print("expenses: \(expenses.count), incomes: \(incomes.count)", "debts: \(debts)")
+        //print("expenses: \(expenses.count), incomes: \(incomes.count)", "debts: \(debts)")
         expenses = expenses.sorted { $0.1 > $1.1 }
         incomes = incomes.sorted { $0.1 > $1.1 }
         
@@ -174,7 +170,7 @@ class CategoriesVC: UIViewController {
                         let name = loadedData[i][1]
                         let purpose = loadedData[i][2]
                         let isDebt = loadedData[i][3] == "0" ? false : true
-                        dataStruct.append(CategoriesStruct(name: name, purpose: purpose, count: 0, debt: isDebt))
+                        dataStruct.append(CategoriesStruct(name: name, purpose: purpose, count: 0))
                     }
                     appData.saveCategories(dataStruct)
                     self.getDataFromLocal()
@@ -227,7 +223,7 @@ class CategoriesVC: UIViewController {
             let save = SaveToDB()
             save.Categories(toDataString: toDataString) { (error) in
                 var categories = Array(appData.getCategories())
-                categories.append(CategoriesStruct(name: title, purpose: purpose, count: 0, debt: false))
+                categories.append(CategoriesStruct(name: title, purpose: purpose, count: 0))
                 appData.saveCategories(categories)
                 self.getDataFromLocal()
                 if error {
@@ -264,13 +260,13 @@ class CategoriesVC: UIViewController {
         }
         var result: [CategoriesStruct] = []
         for i in 0..<self.incomes.count {
-            result.append(CategoriesStruct(name: self.incomes[i].0, purpose: K.income, count: 0, debt: self.incomes[i].2))
+            result.append(CategoriesStruct(name: self.incomes[i].0, purpose: K.income, count: 0))
         }
         for i in 0..<self.expenses.count {
-            result.append(CategoriesStruct(name: self.expenses[i].0, purpose: K.expense, count: 0, debt: self.expenses[i].2))
+            result.append(CategoriesStruct(name: self.expenses[i].0, purpose: K.expense, count: 0))
         }
         var d: [CategoriesStruct] = []
-        d = result + debts
+    //    d = result + debts
         appData.saveCategories(d)
         self.getDataFromLocal()
         
@@ -295,7 +291,7 @@ class CategoriesVC: UIViewController {
                             self.sendToDBCategory(title: name, purpose: purpose)
                         } else {
                             var categories = Array(appData.getCategories())
-                            categories.append(CategoriesStruct(name: name, purpose: purpose, count: 0, debt: false))
+                            categories.append(CategoriesStruct(name: name, purpose: purpose, count: 0))
                             appData.saveCategories(categories)
                             self.getDataFromLocal()
                         }
@@ -357,7 +353,7 @@ class CategoriesVC: UIViewController {
         } else {
             if segue.identifier == "toDebts" {
                 let vc = segue.destination as! DebtsVC
-                vc.debts = debts
+      //          vc.debts = debts
                 if !fromSettings {
                     vc.delegate = self
                     vc.darkAppearence = self.darkAppearence
@@ -416,7 +412,7 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
             cell.qntLabel.text = "\(incomes[indexPath.row].1)"
         case 2:
             cell.categoryNameLabel.text = "Debts"
-            cell.qntLabel.text = "\(debts.count)"
+            cell.qntLabel.text = "\((UserDefaults.standard.value(forKey: "allDebts") as? [[String]] ?? []).count)"
         default:
             cell.categoryNameLabel.text = incomes[indexPath.row].0
         }

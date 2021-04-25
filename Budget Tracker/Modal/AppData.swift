@@ -97,6 +97,58 @@ class AppData {
         print("transactions saved to user defaults, count: \(dict.count)")
         UserDefaults.standard.set(dict, forKey: key)
     }
+    
+    var debts: [DebtsStruct] {
+        get {
+            let localData = Array(defaults.value(forKey: "allDebts") as? [[String]] ?? [])
+            var results: [DebtsStruct] = []
+            for i in 0..<localData.count {
+                let name = localData[i][1]
+                let amountToPay = localData[i][2]
+                let dueDate = localData[i][3]
+                results.append(DebtsStruct(name: name, amountToPay: amountToPay, dueDate: dueDate))
+            }
+            return results
+        }
+        set {
+            var dict: [[String]] = []
+            for i in 0..<newValue.count {
+                let nickname = username
+                let name = newValue[i].name
+                let amountToPay = newValue[i].amountToPay
+                let dueDate = "\(newValue[i].dueDate)"
+                dict.append([nickname, name, amountToPay, dueDate])
+            }
+            print("debts saved to user defaults, count: \(dict.count), \(dict)")
+            defaults.set(dict, forKey: "allDebts")
+        }
+    }
+    //"savedDebts" -- from prev acc
+    //"unsavedDebts" -- when no internet
+    func saveDebts(_ data: [DebtsStruct], key: String = "allDebts") {
+        var dict: [[String]] = []
+        for i in 0..<data.count {
+            let nickname = username
+            let name = data[i].name
+            let amountToPay = data[i].amountToPay
+            let dueDate = "\(data[i].dueDate)"
+            dict.append([nickname, name, amountToPay, dueDate])
+        }
+        print("debts saved to user defaults, count: \(dict.count), \(dict), key:", key)
+        defaults.set(dict, forKey: key)
+    }
+    func getDebts(key: String = "allDebts") -> [DebtsStruct] {
+        let localData = Array(defaults.value(forKey: key) as? [[String]] ?? [])
+        var results: [DebtsStruct] = []
+        for i in 0..<localData.count {
+            let name = localData[i][1]
+            let amountToPay = localData[i][2]
+            let dueDate = localData[i][3]
+            results.append(DebtsStruct(name: name, amountToPay: amountToPay, dueDate: dueDate))
+        }
+        return results
+    }
+    
 
     var transactions: [TransactionsStruct] {
         get{
@@ -138,8 +190,7 @@ class AppData {
             let nickname = username
             let name = data[i].name
             let purpose = data[i].purpose
-            let isDebt = "\(data[i].debt)"
-            dict.append([nickname, name, purpose, isDebt])
+            dict.append([nickname, name, purpose])
         }
         print("categories saved to user defaults, count: \(dict.count), \(dict), key:", key)
         defaults.set(dict, forKey: key)
@@ -151,21 +202,17 @@ class AppData {
         let localData = defaults.value(forKey: key) as? [[String]] ?? []
         var results: [CategoriesStruct] = []
        // let trans = Array(transactions)
-        ///
         let trans = UserDefaults.standard.value(forKey: "transactionsData") as? [[String]] ?? []
         for i in 0..<localData.count {
             let name = localData[i][1]
             let purpose = localData[i][2]
-            let isDebt = localData[i][3] == "false" ? false : true//key == "categoriesData" ? (localData[i][3] == "false" ? false : true) : false
             var count = 0
-            if !isDebt {
-                for i in 0..<trans.count {
-                    if trans[i][2] == name {
-                        count += 1
-                    }
+            for t in 0..<trans.count {
+                if trans[t][2] == name {
+                    count += 1
                 }
             }
-            results.append(CategoriesStruct(name: name, purpose: purpose, count: count, debt: isDebt))
+            results.append(CategoriesStruct(name: name, purpose: purpose, count: count))
         }
         return results
     }
@@ -444,12 +491,12 @@ class AppData {
             TransactionsStruct(value: "-1000", category: "Bills", date: "\(filter.getToday(filter.filterObjects.currentDate))", comment: ""),
         ]
         let categories = [
-            CategoriesStruct(name: "Food", purpose: K.expense, count: 0, debt: false),
-            CategoriesStruct(name: "Taxi", purpose: K.expense, count: 0, debt: false),
-            CategoriesStruct(name: "Public Transport", purpose: K.expense, count: 0, debt: false),
-            CategoriesStruct(name: "Bills", purpose: K.expense, count: 0, debt: false),
-            CategoriesStruct(name: "Work", purpose: K.income, count: 0, debt: false),
-            CategoriesStruct(name: "Freelance", purpose: K.income, count: 0, debt: false)
+            CategoriesStruct(name: "Food", purpose: K.expense, count: 0),
+            CategoriesStruct(name: "Taxi", purpose: K.expense, count: 0),
+            CategoriesStruct(name: "Public Transport", purpose: K.expense, count: 0),
+            CategoriesStruct(name: "Bills", purpose: K.expense, count: 0),
+            CategoriesStruct(name: "Work", purpose: K.income, count: 0),
+            CategoriesStruct(name: "Freelance", purpose: K.income, count: 0)
         ]
         saveTransations(transactions)
         saveCategories(categories)
@@ -502,7 +549,12 @@ struct CategoriesStruct {
     let name: String
     let purpose: String
     let count: Int
-    let debt: Bool
+}
+
+struct DebtsStruct {
+    let name: String
+    let amountToPay: String
+    let dueDate: String
 }
 
 

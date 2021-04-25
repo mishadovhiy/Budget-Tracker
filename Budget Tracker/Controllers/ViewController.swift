@@ -216,6 +216,7 @@ class ViewController: UIViewController {
     }
     
     func downloadFromDB() {
+        print("downloadFromDBdownloadFromDB")
         lastSelectedDate = nil
         if appData.username != "" {
             let unsend = appData.unsendedData
@@ -230,36 +231,57 @@ class ViewController: UIViewController {
                     self.filterText = "Downloading"
                 }
                 let load = LoadFromDB()
-                load.Transactions{(loadedData, error) in
+                load.Transactions{(loadedTransactions, error) in
                     if error == "" {
-                        print("loaded \(loadedData.count) transactions from DB")
-                        var dataStruct: [TransactionsStruct] = []
-                        for i in 0..<loadedData.count {
-                            let value = loadedData[i][3]
-                            let category = loadedData[i][1]
-                            let date = loadedData[i][2]
-                            let comment = loadedData[i][4]
-                            dataStruct.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
+                        print("loaded \(loadedTransactions.count) transactions from DB")
+                        var transactionsResult: [TransactionsStruct] = []
+                        for i in 0..<loadedTransactions.count {
+                            let value = loadedTransactions[i][3]
+                            let category = loadedTransactions[i][1]
+                            let date = loadedTransactions[i][2]
+                            let comment = loadedTransactions[i][4]
+                            transactionsResult.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
                         }
-                        appData.saveTransations(dataStruct)
+                        appData.saveTransations(transactionsResult)
                         self.prepareFilterOptions()
-                        load.Categories{(loadedDataa, error) in
-                            print(loadedDataa)
+                        load.Categories{(loadedCategories, error) in
                             if error == "" {
-                                print("loaded \(loadedDataa) Categories from DB")
-                                var dataStructt: [CategoriesStruct] = []
-                                for i in 0..<loadedDataa.count {
-                                    let name = loadedDataa[i][1]
-                                    let purpose = loadedDataa[i][2]
-                                    let isDebt = loadedDataa[i][3] == "0" ? false : true
-                                    dataStructt.append(CategoriesStruct(name: name, purpose: purpose, count: 0, debt: isDebt))
+                                print("loaded \(loadedCategories) Categories from DB")
+                                var categoriesResult: [CategoriesStruct] = []
+                                for i in 0..<loadedCategories.count {
+                                    let name = loadedCategories[i][1]
+                                    let purpose = loadedCategories[i][2]
+                                    categoriesResult.append(CategoriesStruct(name: name, purpose: purpose, count: 0))
                                 }
-                                UserDefaults.standard.setValue(Date(), forKey: "LastLoadDataDate")
-                                appData.saveCategories(dataStructt)
-                                self.filter()
+                                appData.saveCategories(categoriesResult)
+                                
+                                
+                                load.Debts { (loadedDebts, debtsError) in
+                                    if debtsError == "" {
+                                        
+                                        print("loaded \(loadedDebts) Debts from DB")
+                                        var debtsResult: [DebtsStruct] = []
+                                        for i in 0..<loadedDebts.count {
+                                            let name = loadedDebts[i][1]
+                                            let amountToPay = loadedDebts[i][2]
+                                            let dueDate = loadedDebts[i][3]
+                                            debtsResult.append(DebtsStruct(name: name, amountToPay: amountToPay, dueDate: dueDate))
+                                        }
+                                        appData.saveDebts(debtsResult)
+                                        UserDefaults.standard.setValue(Date(), forKey: "LastLoadDataDate")
+                                        self.filter()
+                                    } else {
+                                        self.filter()
+                                        self.prepareFilterOptions()
+                                        DispatchQueue.main.async {
+                                            self.message.showMessage(text: error, type: .internetError)
+                                        }
+                                    }
+                                }
                                 
                             } else {
                                 self.filter()
+                                self.prepareFilterOptions()
                                 DispatchQueue.main.async {
                                     self.message.showMessage(text: error, type: .internetError)
                                 }
@@ -624,13 +646,55 @@ class ViewController: UIViewController {
                                                     self.refreshControl.endRefreshing()
                                                 }
                                             }
-                                            /*if !self.didloadCalled {
-                                                self.didloadCalled = true
-                                                self.filter()
-                                            }*/
                                             self.sendUnsaved()
                                         }
                                     }
+                                } else {
+                                    //save debt
+                                    if let saveDebt = first["debt"] {
+                                        save.Debts(toDataString: saveDebt) { (error) in
+                                            if error {
+                                                self.forseSendUnsendedData = false
+                                                self.filter()
+                                                DispatchQueue.main.async {
+                                                    self.message.showMessage(text: "Internet Error!", type: .internetError)
+                                                }
+                                            } else {
+                                                appData.unsendedData.removeFirst()
+
+                                                DispatchQueue.main.async {
+                                                    self.mainTableView.reloadData()
+                                                    if self.refreshControl.isRefreshing {
+                                                        self.refreshControl.endRefreshing()
+                                                    }
+                                                }
+                                                self.sendUnsaved()
+                                            }
+                                        }
+                                    } else {
+                                        //delete
+                                        if let deleteDebt = first["deleteDebt"] {
+                                            delete.Debts(toDataString: deleteDebt) { (error) in
+                                                if error {
+                                                    self.forseSendUnsendedData = false
+                                                    self.filter()
+                                                    DispatchQueue.main.async {
+                                                        self.message.showMessage(text: "Internet Error!", type: .internetError)
+                                                    }
+                                                } else {
+                                                    appData.unsendedData.removeFirst()
+                                                    DispatchQueue.main.async {
+                                                        self.mainTableView.reloadData()
+                                                        if self.refreshControl.isRefreshing {
+                                                            self.refreshControl.endRefreshing()
+                                                        }
+                                                    }
+                                                    self.sendUnsaved()
+                                                }
+                                            }
+                                        }
+                                    }
+                                    
                                 }
                             }
                             
@@ -642,7 +706,6 @@ class ViewController: UIViewController {
                 }
             }
             if dataCount == 0 {
-                //filter()
                 if sendSavedData == true {
                     if self._filterText != "Sending" {
                         DispatchQueue.main.async {
@@ -655,7 +718,7 @@ class ViewController: UIViewController {
                     var newCategories = appData.getCategories(key: "savedCategories")
                     print("sendUnsaved unsaved cats", newCategories.count)
                     if let categoryy = newCategories.first {
-                        let toDataStringg = "&Nickname=\(appData.username)" + "&Title=\(categoryy.name)" + "&Purpose=\(categoryy.purpose)" + "&ExpectingPayment=\(categoryy.debt ? "1" : "0")"
+                        let toDataStringg = "&Nickname=\(appData.username)" + "&Title=\(categoryy.name)" + "&Purpose=\(categoryy.purpose)"
                         save.Categories(toDataString: toDataStringg) { (error) in
                             if error {
                                 self.filter()
@@ -712,6 +775,34 @@ class ViewController: UIViewController {
                             self.downloadFromDB()
                             DispatchQueue.main.async {
                                 self.message.showMessage(text: "Done!", type: .succsess, windowHeight: 40, bottomAppearence: true)
+                            }
+                        }
+                        
+                        if trans.count == 0 {
+                            //test
+                            var debts = appData.getDebts(key: "savedDebts")
+                            if let debt = debts.first {
+                                let todString = ""
+                                save.Debts(toDataString: todString) { (error) in
+                                    if error {
+                                        self.filter()
+                                        self.forseSendUnsendedData = false
+                                        self.sendSavedData = false
+                                        DispatchQueue.main.async {
+                                            self.message.showMessage(text: "Internet Error!", type: .internetError)
+                                        }
+                                    } else {
+                                        debts.removeFirst()
+                                        appData.saveDebts(debts, key: "savedDebts")
+                                        var resultDebts = appData.getDebts()
+                                        resultDebts.append(DebtsStruct(name: debt.name, amountToPay: debt.amountToPay, dueDate: debt.dueDate))
+                                        appData.saveDebts(resultDebts)
+                                        DispatchQueue.main.async {
+                                            self.mainTableView.reloadData()
+                                        }
+                                        self.sendUnsaved()
+                                    }
+                                }
                             }
                         }
                     }
@@ -1365,10 +1456,11 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         case 0:
             let calculationCell = tableView.dequeueReusableCell(withIdentifier: K.calcCellIdent, for: indexPath) as! calcCell
             
-            let sendedCount = (appData.defaults.value(forKey: "savedTransactions") as? [[String]] ?? []) + (appData.defaults.value(forKey: "savedCategories") as? [[String]] ?? [])
+            let sendedCount = (UserDefaults.standard.value(forKey: "savedTransactions") as? [[String]] ?? []) + (UserDefaults.standard.value(forKey: "savedCategories") as? [[String]] ?? []) + (UserDefaults.standard.value(forKey: "savedDebts") as? [[String]] ?? [])
 
             //prevUserName
-            calculationCell.prevAcountDataLabel.text = "Data from \(UserDefaults.standard.value(forKey: "prevUserName") as? String ?? "previous account"):"
+            let prevName = UserDefaults.standard.value(forKey: "prevUserName") as? String ?? "previous account"
+            calculationCell.prevAcountDataLabel.text = "Data from \(prevName == "" ? "previous account" : prevName):"
             calculationCell.savedTransactionsLabel.text = "\(sendedCount.count)"
             let newUnsendedCount = appData.unsendedData.count
             calculationCell.unsesndedTransactionsLabel.text = "\(newUnsendedCount)"

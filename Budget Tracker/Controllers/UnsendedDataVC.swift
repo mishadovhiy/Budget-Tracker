@@ -22,6 +22,7 @@ class UnsendedDataVC: UIViewController {
     @IBOutlet weak var saveAllButton: UIButton!
     var _tablTrans: [UnsendedTransactions] = []
     var categoruesTableData: [UnsendedCategories] = []
+    var debtsTableData: [UnsendedDebts] = []
     var tableDataTransactions: [UnsendedTransactions] {
         get{
             return _tablTrans
@@ -44,10 +45,8 @@ class UnsendedDataVC: UIViewController {
                 UIView.animate(withDuration: 0.23) {
                     self.saveAllButton.alpha = self.selectedCount == 0 ? 1 : 0.2
                 } completion: { (_) in
-                    
                 }
 
-                
             }
         }
     }
@@ -55,6 +54,7 @@ class UnsendedDataVC: UIViewController {
     @IBOutlet weak var deleteAllButton: UIButton!
     var transactions: [TransactionsStruct] = []
     var categories: [CategoriesStruct] = []
+    var debts: [DebtsStruct] = []
     var delegate:UnsendedDataVCProtocol?
     
     struct UnsendedTransactions {
@@ -67,7 +67,12 @@ class UnsendedDataVC: UIViewController {
     struct UnsendedCategories {
         let name: String
         let purpose: String
-        let isDebt: Bool
+        var selected: Bool
+    }
+    struct UnsendedDebts {
+        let name: String
+        let amountToPay: String
+        let dueDate: String
         var selected: Bool
     }
     
@@ -127,6 +132,7 @@ class UnsendedDataVC: UIViewController {
         didapp = false
         categories = appData.getCategories(key: "savedCategories")
         transactions = appData.savedTransactions.sorted{ $0.dateFromString < $1.dateFromString }
+        debts = appData.getDebts(key: "savedDebts")
         foundInAListCount = 0
         selectedCount = 0
         
@@ -141,12 +147,22 @@ class UnsendedDataVC: UIViewController {
         defaultsCategories = appData.getCategories()
         for category in categories {
             foundInAListCount = contains(category) ? foundInAListCount + 1 : foundInAListCount
-            let new = UnsendedCategories(name: category.name, purpose: category.purpose, isDebt: category.debt, selected: false)
+            let new = UnsendedCategories(name: category.name, purpose: category.purpose, selected: false)
             catHolder.append(new)
             
         }
+        
+        var debtsHolder: [UnsendedDebts] = []
+        defaultsDebts = appData.getDebts()
+        for debt in debts {
+            foundInAListCount = contains(debt) ? foundInAListCount + 1 : foundInAListCount
+            let new = UnsendedDebts(name: debt.name, amountToPay: debt.amountToPay, dueDate: debt.dueDate, selected: false)
+            debtsHolder.append(new)
+        }
+        
         categoruesTableData = catHolder
         tableDataTransactions = holder
+        debtsTableData = debtsHolder
         DispatchQueue.main.async {
             if self.activity.isAnimating {
                 self.activity.stopAnimating()
@@ -223,6 +239,26 @@ class UnsendedDataVC: UIViewController {
         }
     }
     
+    var defaultsDebts: [DebtsStruct] = []
+    func contains(_ value: DebtsStruct) -> Bool {
+        var found: Bool?
+        let dbData = Array(defaultsDebts)
+        
+        for i in 0..<dbData.count {
+            if value.name == dbData[i].name &&
+                value.amountToPay == dbData[i].amountToPay && value.dueDate == dbData[i].dueDate
+            {
+                found = true
+                return true
+            }
+        }
+        if found == nil {
+            return false
+        } else {
+            return found!
+        }
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         if !sendPres && !deletePress {
             self.delegate?.quiteUnsendedData(deletePressed: false, sendPressed: false)
@@ -262,16 +298,32 @@ class UnsendedDataVC: UIViewController {
             defaultsCatsResult.removeAll()
             for cat in categoruesTableData {
                 if !cat.selected {
-                    let new = CategoriesStruct(name: cat.name, purpose: cat.purpose, count: 0, debt: cat.isDebt)
+                    let new = CategoriesStruct(name: cat.name, purpose: cat.purpose, count: 0)
                     foundInAListCount = contains(new) ? foundInAListCount + 1 : foundInAListCount
                     newCategories.append(cat)
                     defaultsCatsResult.append(new)
                     
                 }
             }
+            var newDebts: [UnsendedDebts] = []
+            var defDebtsResult: [DebtsStruct] = []
+            newDebts.removeAll()
+            defDebtsResult.removeAll()
+            for debt in debtsTableData {
+                if !debt.selected {
+                    let new = DebtsStruct(name: debt.name, amountToPay: debt.amountToPay, dueDate: debt.dueDate)
+                    foundInAListCount = contains(new) ? foundInAListCount + 1 : foundInAListCount
+                    newDebts.append(debt)
+                    defDebtsResult.append(new)
+                }
+            }
+            
+            defaultsDebts = appData.getDebts()
             defaultsCategories = appData.getCategories()
             appData.saveCategories(defaultsCatsResult, key: "savedCategories")
+            appData.saveDebts(defDebtsResult, key: "savedDebts")
             categoruesTableData = newCategories
+            debtsTableData = newDebts
             tableDataTransactions = newTable
         }
     }
@@ -300,12 +352,26 @@ class UnsendedDataVC: UIViewController {
             if allCats[i].selected {
                 self.selectedCount += 1
             } else {
-                if contains(CategoriesStruct(name: allCats[i].name, purpose: allCats[i].purpose, count: 0, debt: allCats[i].isDebt)) {
+                if contains(CategoriesStruct(name: allCats[i].name, purpose: allCats[i].purpose, count: 0)) {
                     self.selectedCount += 1
                     allCats[i].selected = true
                 }
             }
         }
+        
+        var allDebts = Array(self.debtsTableData)
+        for i in 0..<allDebts.count {
+            if allDebts[i].selected {
+                self.selectedCount += 1
+            } else {
+                if contains(DebtsStruct(name: allDebts[i].name, amountToPay: allDebts[i].amountToPay, dueDate: allDebts[i].dueDate)) {
+                    self.selectedCount += 1
+                    allDebts[i].selected = true
+                }
+            }
+        }
+        
+        debtsTableData = allDebts
         categoruesTableData = allCats
         tableDataTransactions = all
         
@@ -319,37 +385,55 @@ class UnsendedDataVC: UIViewController {
         
         if let name = sender.name {
             if let section = Int(name) {
-                var holder = tableDataTransactions
+             //   var holder = tableDataTransactions
                 selectedCount = 0
-                if section == 1 {
+                var holder = tableDataTransactions
+                for i in 0..<tableDataTransactions.count {
+                    if tableDataTransactions[i].selected {
+                        selectedCount += 1
+                    }
+                }
+                for i in 0..<categoruesTableData.count {
+                    if categoruesTableData[i].selected {
+                        selectedCount += 1
+                    }
+                }
+                for i in 0..<debtsTableData.count {
+                    if debtsTableData[i].selected {
+                        selectedCount += 1
+                    }
+                }
+                
+                switch section {
+                case 1:
                     for i in 0..<holder.count {
                         selectedCount += 1
                         holder[i].selected = true
                     }
-                    let catHolder = categoruesTableData
-                    for i in 0..<catHolder.count {
-                        if catHolder[i].selected {
-                            selectedCount += 1
-                        }
-                    }
                     self.tableDataTransactions = holder
-                } else {
-                    if section == 2 {
-                        print("categories")
-                        var catHolder = categoruesTableData
-                        for i in 0..<catHolder.count {
-                            selectedCount += 1
-                            catHolder[i].selected = true
-                        }
-                        for i in 0..<holder.count {
-                            if holder[i].selected {
-                                selectedCount += 1
-                            }
-                        }
-                        self.categoruesTableData = catHolder
-                        self.tableDataTransactions = holder
+                case 2:
+                    var catHolder = categoruesTableData
+                    for i in 0..<catHolder.count {
+                        selectedCount += 1
+                        catHolder[i].selected = true
                     }
+                    
+                    self.categoruesTableData = catHolder
+                    self.tableDataTransactions = holder
+                case 3:
+                    var debtsHolder = debtsTableData
+                    for i in 0..<debtsHolder.count {
+                        selectedCount += 1
+                        debtsHolder[i].selected = true
+                    }
+                    self.debtsTableData = debtsHolder
+                    self.tableDataTransactions = holder
+                default:
+                    print("defaultSelected")
                 }
+                
+
+                
             }
         }
     }
@@ -359,6 +443,7 @@ class UnsendedDataVC: UIViewController {
     let redTrash = UIImage(named: "redTrash") ?? UIImage()
     let redPlusImage = UIImage(named: "ovalPlus") ?? UIImage()
     
+    var debtsCellLabelsFrame: (CGRect, CGRect) = (.zero, .zero)
 }
 
 
@@ -368,19 +453,21 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
         case 0: return foundInAListCount > 0 ? 1 : 0
         case 1: return tableDataTransactions.count
         case 2: return categoruesTableData.count
+        case 3: return debtsTableData.count
         default:
             return 0
         }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return 4
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 1: return "Transactions"
         case 2: return "Categories"
+        case 3: return "Debts"
         default:
             return ""
         }
@@ -407,8 +494,21 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "unsendedCategoriesCell") as! unsendedCategoriesCell
             let data = categoruesTableData[indexPath.row]
             cell.nameLabel.text = data.name
-            cell.perposeLabel.text = data.isDebt ? "Debts" : data.purpose
+            cell.perposeLabel.text = data.purpose
             cell.trashImage.image = data.selected ? redTrash : lightTrash
+            return cell
+        case 3:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "unsendedDebtsCell") as! unsendedDebtsCell
+            let data = debtsTableData[indexPath.row]
+            cell.nameLabel.text = data.name
+            cell.dueDateLabel.text = data.dueDate == "" ? "-" : data.dueDate
+            cell.amountLabel.text = data.amountToPay == "" ? "-" : data.amountToPay
+            cell.treshImage.image = data.selected ? redTrash : lightTrash
+            if debtsCellLabelsFrame == (.zero, .zero) {
+                self.debtsCellLabelsFrame = ((cell.dueDateLabel.superview?.frame ?? .zero), (cell.dueDateLabel.frame))
+            }
+            
+            print(debtsCellLabelsFrame, "debtsCellLabelsFramedebtsCellLabelsFramedebtsCellLabelsFrame")
             return cell
         default:
             return UITableViewCell()
@@ -420,6 +520,7 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
         case 0: return 0
         case 1: return tableDataTransactions.count == 0 ? 0 : 25
         case 2: return categoruesTableData.count == 0 ? 0 : 25
+        case 3: return debtsTableData.count == 0 ? 0 : 25
         default: return 0
         }
     }
@@ -437,7 +538,29 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
             stackview.distribution = .equalSpacing
             stackview.axis = .horizontal
             heplerView.addSubview(stackview)
-            let title = section == 1 ? "Transactions" : "Categories"
+            var title = ""
+            switch section {
+            case 1:
+                title = "Transactions"
+            case 2:
+                title = "Categories"
+            case 3:
+                title = "Debts"
+                let amountX = debtsCellLabelsFrame.0.minX + 20
+                let amountLabel = UILabel(frame: CGRect(x: amountX, y: 0, width: 100, height: 25))
+                amountLabel.text = "Amount"
+                amountLabel.textColor = UIColor(named: "CategoryColor") ?? .red
+                amountLabel.font = .systemFont(ofSize: 14, weight: .medium)
+                view.addSubview(amountLabel)
+                //let dueDateLabel = UILabel(frame: debtsCellLabelsFrame.1)
+                let dueDateLabel = UILabel(frame: CGRect(x: amountX + debtsCellLabelsFrame.1.minX + 7, y: 0, width: 100, height: 25))
+                dueDateLabel.text = "Due Date"
+                dueDateLabel.textColor = UIColor(named: "CategoryColor") ?? .red
+                dueDateLabel.font = .systemFont(ofSize: 14, weight: .medium)
+                view.addSubview(dueDateLabel)
+            default:
+                title = ""
+            }
             labels.text = title
             view.backgroundColor = UIColor(named: "darkTableColor")
             labels.font = .systemFont(ofSize: 14, weight: .medium)
@@ -454,6 +577,9 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
             stackview.addArrangedSubview(plusIcon)
             labels.adjustsFontSizeToFitWidth = true
             stackview.translatesAutoresizingMaskIntoConstraints = false
+            
+            //if 3 add stack view
+            
             return view
         } else {
             return nil
@@ -462,14 +588,18 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section != 0 {
-            
-            if indexPath.section == 1 {
+
+            switch indexPath.section {
+            case 1:
                 tableDataTransactions[indexPath.row].selected = tableDataTransactions[indexPath.row].selected ? false : true
-            } else {
-                if indexPath.section == 2 {
-                    categoruesTableData[indexPath.row].selected = categoruesTableData[indexPath.row].selected ? false : true
-                }
+            case 2:
+                categoruesTableData[indexPath.row].selected = categoruesTableData[indexPath.row].selected ? false : true
+            case 3:
+                debtsTableData[indexPath.row].selected = debtsTableData[indexPath.row].selected ? false : true
+            default:
+                print("default")
             }
+            let trans = tableDataTransactions
             selectedCount = 0
             for cat in categoruesTableData {
                 if cat.selected {
@@ -481,8 +611,14 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
                     selectedCount += 1
                 }
             }
+            for debt in debtsTableData {
+                if debt.selected {
+                    selectedCount += 1
+                }
+            }
+            tableDataTransactions = trans
             DispatchQueue.main.async {
-                self.tableView.reloadData()
+               // self.tableView.reloadData()
                 self.deleteSelectedButton.setTitle("Delete (\(self.selectedCount))", for: .normal)
             }
             
@@ -501,6 +637,10 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
                 case 2:
                     self.categories.remove(at: indexPath.row)
                     appData.saveCategories(self.categories, key: "savedCategories")
+                    self.getData()
+                case 3:
+                    self.debts.remove(at: indexPath.row)
+                    appData.saveDebts(self.debts, key: "savedDebts")
                     self.getData()
                 default:
                     print("default")
@@ -534,4 +674,12 @@ class unsendedCategoriesCell: UITableViewCell {
 class repeatedDataCell: UITableViewCell {
     @IBOutlet weak var selectButton: UIButton!
     
+}
+
+class unsendedDebtsCell: UITableViewCell {
+    
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var amountLabel: UILabel!
+    @IBOutlet weak var dueDateLabel: UILabel!
+    @IBOutlet weak var treshImage: UIImageView!
 }

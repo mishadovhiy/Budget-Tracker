@@ -13,23 +13,11 @@ struct LoadFromDB {
     func Transactions(completion: @escaping ([[String]], String) -> ()) {
         
         var loadedData: [[String]] = []
-        let urlPath = "https://www.dovhiy.com/apps/budget-tracker-db/transactions.php"
-        let url: URL = URL(string: urlPath)!
-        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            
-            if error != nil {
+        load(urlPath: "https://www.dovhiy.com/apps/budget-tracker-db/transactions.php") { (jsonResult, error) in
+            if error != "" {
                 completion([], "Internet Error!")
-                return
             } else {
-                var jsonResult = NSArray()
-                do{
-                    jsonResult = try JSONSerialization.jsonObject(with: data!, options:JSONSerialization.ReadingOptions.allowFragments) as! NSArray
-                } catch let error as NSError {
-                    completion([], "Internet Error!")
-                    return
-                }
                 var jsonElement = NSDictionary()
-                
                 for i in 0..<jsonResult.count {
                     jsonElement = jsonResult[i] as! NSDictionary
                     
@@ -45,9 +33,59 @@ struct LoadFromDB {
                             }
                         }
                     }
+                    
+                }
+                completion(loadedData, "")
+            }
+        }
+    }
+    func Debts(completion: @escaping ([[String]], String) -> ()) {
+        
+        var loadedData: [[String]] = []
+        load(urlPath: "https://www.dovhiy.com/apps/budget-tracker-db/debts.php") { (jsonResult, error) in
+            if error != "" {
+                completion([], "Internet Error!")
+            } else {
+                var jsonElement = NSDictionary()
+                for i in 0..<jsonResult.count {
+                    jsonElement = jsonResult[i] as! NSDictionary
+                    
+                    if appData.username != "" {
+                        if appData.username == (jsonElement["Nickname"] as? String ?? "") {
+                            if let username = jsonElement["Nickname"] as? String,
+                               let name = jsonElement["name"] as? String,
+                               let amountToPay = jsonElement["amountToPay"] as? String,
+                               let dueDate = jsonElement["dueDate"] as? String
+                            {
+                                loadedData.append([username, name, amountToPay, dueDate])
+                            }
+                        }
+                    }
+                    
+                }
+                completion(loadedData, "")
+            }
+        }
+    }
+    
+    private func load(urlPath: String, completion: @escaping (NSArray, String) -> ()) {
+
+        let url: URL = URL(string: urlPath)!
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            
+            if error != nil {
+                completion([], "Internet Error!")
+                return
+            } else {
+                var jsonResult = NSArray()
+                do{
+                    jsonResult = try JSONSerialization.jsonObject(with: data!, options:JSONSerialization.ReadingOptions.allowFragments) as! NSArray
+                } catch let error as NSError {
+                    completion([], "Internet Error!")
+                    return
                 }
 
-                completion(loadedData, "")
+                completion(jsonResult, "")
             }
         }
         DispatchQueue.main.async {
@@ -171,30 +209,37 @@ struct SaveToDB {
 
     
     func Transactions(toDataString: String, completion: @escaping (Bool) -> ()) {
-        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-transaction.php", toDataString: toDataString, errorLoading: "Transactions", dataType: .categories, error: { (error) in
+        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-transaction.php", toDataString: toDataString, error: { (error) in
             completion(error)
         })
     }
     
     func Categories(toDataString: String, completion: @escaping (Bool) -> ()) {
-        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-category.php", toDataString: toDataString, errorLoading: "Categories", dataType: .categories, error: { (error) in
+        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-category.php", toDataString: toDataString, error: { (error) in
             completion(error)
         })
     }
     
+    func Debts(toDataString: String, completion: @escaping (Bool) -> ()) {
+        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-debts.php", toDataString: toDataString, error: { (error) in
+            completion(error)
+        })
+    }
+    
+    
     func Users(toDataString: String, completion: @escaping (Bool) -> ()) {
-        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-user.php", toDataString: toDataString, errorLoading: "User Data", dataType: .non, error: { (error) in
+        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-user.php", toDataString: toDataString, error: { (error) in
             completion(error)
         })
     }
     
     func NewPassword(toDataString: String, completion: @escaping (Bool) -> ()) {
-        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/user-password.php", toDataString: toDataString, errorLoading: "User Data", dataType: .non, error: { (error) in
+        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/user-password.php", toDataString: toDataString, error: { (error) in
             completion(error)
         })
     }
 
-    private func save(dbFileURL: String, toDataString: String, errorLoading: String, dataType: dataType, error: @escaping (Bool) -> ()) {
+    private func save(dbFileURL: String, toDataString: String, error: @escaping (Bool) -> ()) {
         
         let url = NSURL(string: dbFileURL)
         var request = URLRequest(url: url! as URL)
@@ -257,6 +302,14 @@ struct DeleteFromDB {
             completion(error)
         })
     }
+
+    func Debts(toDataString: String, completion: @escaping (Bool) -> ()) {
+        print(toDataString, "toDataStringtoDataStringtoDataStringtoDataStringtoDataString")
+        delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-debt.php", toDataString: toDataString, error: { (error) in
+            completion(error)
+        })
+    }
+    
     
     private func delete(dbFileURL: String, toDataString: String, error: @escaping (Bool) -> ()) {
         let url = NSURL(string: dbFileURL)

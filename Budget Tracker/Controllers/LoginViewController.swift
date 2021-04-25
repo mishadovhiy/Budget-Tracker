@@ -176,9 +176,11 @@ class LoginViewController: UIViewController {
                             let cats = wascats + appData.getCategories()
                             var catResult: [CategoriesStruct] = []
                             for i in 0..<cats.count {
-                                catResult.append(CategoriesStruct(name: cats[i].name, purpose: cats[i].purpose, count: cats[i].count, debt: cats[i].debt))
+                                catResult.append(CategoriesStruct(name: cats[i].name, purpose: cats[i].purpose, count: cats[i].count))
 
                             }
+                            let wasDebts = appData.getDebts() + appData.getDebts(key: "savedDebts")
+                            appData.saveDebts(wasDebts, key: "savedDebts")
                             appData.saveCategories(catResult, key: "savedCategories")
                             appData.fromLoginVCMessage = trans.count > 0 ? "Wellcome, \(appData.username), \nYour Data has been saved localy" : "Wellcome, \(appData.username)"
                         }
@@ -254,10 +256,12 @@ class LoginViewController: UIViewController {
                                     let wasCats = appData.getCategories() + appData.getCategories(key: "savedCategories")
                                     var catResult: [CategoriesStruct] = []
                                     for i in 0..<wasCats.count {
-                                        catResult.append(CategoriesStruct(name: wasCats[i].name, purpose: wasCats[i].purpose, count: wasCats[i].count, debt: wasCats[i].debt))
+                                        catResult.append(CategoriesStruct(name: wasCats[i].name, purpose: wasCats[i].purpose, count: wasCats[i].count))
 
                                     }
                                     appData.saveCategories(catResult, key: "savedCategories")
+                                    let wasDebts = appData.getDebts() + appData.getDebts(key: "savedDebts")
+                                    appData.saveDebts(wasDebts, key: "savedDebts")
                                     appData.fromLoginVCMessage = wasTransactions.count > 0 ? "Wellcome, \(appData.username), \nYour Data has been saved localy" : "Wellcome, \(appData.username)"
                                     if self.fromPro {
                                         DispatchQueue.main.async {

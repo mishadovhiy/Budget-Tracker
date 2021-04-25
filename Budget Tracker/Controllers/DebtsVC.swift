@@ -13,7 +13,7 @@ class DebtsVC: UIViewController {
     
     @IBOutlet weak var titleView: UIView!
     var delegate: DebtsVCProtocol?
-    var debts: [CategoriesStruct] = []
+    var debts: [DebtsStruct] = []
     var emptyValuesTableData: [DebtsTableStruct] = []
     var plusValues: [DebtsTableStruct] = []
     var _tableData: [DebtsTableStruct] = []
@@ -76,14 +76,14 @@ class DebtsVC: UIViewController {
     }
     
     func getDataFromLocal() {
-        debts = []
-        let categories = Array(appData.getCategories())
+        debts = Array(appData.getDebts())
+      /*  let categories = Array(appData.getDebts())
         for i in 0..<categories.count {
             if categories[i].debt {
                 debts.append(CategoriesStruct(name: categories[i].name, purpose: categories[i].purpose, count: categories[i].count, debt: categories[i].debt))
                 
             } 
-        }
+        }*/
         let transactions = Array(appData.transactions)
         var result:[DebtsTableStruct] = []
         emptyValuesTableData.removeAll()
@@ -98,7 +98,7 @@ class DebtsVC: UIViewController {
                     print(resultTransactions, "appended c1/c2: \(category.name)/\(transaction.category)")
                 }
             }
-            let new = DebtsTableStruct(name: category.name, amount: Int(amount), transactions: transactions)
+            let new = DebtsTableStruct(name: category.name, amount: Int(amount), transactions: transactions, amountToPay: category.amountToPay, dueDate: category.dueDate)
             if resultTransactions.count == 0 {
                 emptyValuesTableData.append(new)
             } else {
@@ -125,7 +125,7 @@ class DebtsVC: UIViewController {
     
     
     @IBAction func addPressed(_ sender: UIButton) {
-        let alert = UIAlertController(title: "Add Category", message: "", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Add Debt", message: "", preferredStyle: .alert)
         alertTextFields(alert: alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
         alert.addAction(UIAlertAction(title: "Done", style: .default, handler: { (action) in
@@ -134,14 +134,13 @@ class DebtsVC: UIViewController {
                 if let name = self.alertTextField.text {
                     if name != "" {
 
-                        self.debts.append(CategoriesStruct(name: name, purpose: K.expense, count: 0, debt: true))
+                   //     self.debts.append(CategoriesStruct(name: name, purpose: K.expense, count: 0))
                         if appData.username != "" {
-                            self.sendToDBCategory(title: name, purpose: K.expense)
+                            self.sendToDBDebt(title: name, purpose: K.expense)
                         } else {
-                            var categories = Array(appData.getCategories())
-                            categories.append(CategoriesStruct(name: name, purpose: K.expense, count: 0, debt: true))
-                            appData.saveCategories(categories)
-                            //debts append
+                            var allDebts = Array(appData.getDebts())
+                            allDebts.append(DebtsStruct(name: name, amountToPay: "", dueDate: ""))
+                            appData.saveDebts(allDebts)
                             self.getDataFromLocal()
                         }
                     }
@@ -160,19 +159,19 @@ class DebtsVC: UIViewController {
         }
     }
 
-    func sendToDBCategory(title: String, purpose: String) {
+    func sendToDBDebt(title: String, purpose: String) {
         let Nickname = appData.username
         if Nickname != "" {
-            let toDataString = "&Nickname=\(Nickname)" + "&Title=\(title)" + "&Purpose=\(purpose)" + "&ExpectingPayment=1"
+            let toDataString = "&Nickname=\(Nickname)" + "&name=\(title)" + "&amountToPay=\("")" + "&dueDate=\("")"
             let save = SaveToDB()
-            save.Categories(toDataString: toDataString) { (error) in
-                var categories = Array(appData.getCategories())
-                categories.append(CategoriesStruct(name: title, purpose: purpose, count: 0, debt: true))
-                appData.saveCategories(categories)
-                self.getDataFromLocal()
-                if error {
-                    appData.unsendedData.append(["category": toDataString])
+            save.Debts(toDataString: toDataString) { (error) in
+                if error {//add in mainVC test
+                    appData.unsendedData.append(["debt": toDataString])
                 }
+                var allDebts = Array(appData.getDebts())
+                allDebts.append(DebtsStruct(name: title, amountToPay: "", dueDate: ""))
+                appData.saveDebts(allDebts)
+                self.getDataFromLocal()
             }
         }
     }
@@ -181,6 +180,9 @@ class DebtsVC: UIViewController {
         let name: String
         let amount: Int
         let transactions: [TransactionsStruct]
+        let amountToPay: String
+        let dueDate: String
+        
     }
     
     var selectedCellData:DebtsTableStruct?
@@ -277,6 +279,7 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
 
+        
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
             
             let mainFrame = view.frame
@@ -284,39 +287,56 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
             ai.style = .gray
             view.addSubview(ai)
             ai.startAnimating()
-            let pressedValue = indexPath.section == 0 ? self.tableData[indexPath.row].name : (indexPath.section == 1 ? self.plusValues[indexPath.row].name : self.emptyValuesTableData[indexPath.row].name)
-            for i in 0..<self.debts.count {
-                if self.debts[i].name == pressedValue {
-                    self.debts.remove(at: i)
+            
+            var title = ""
+            var amountToPay = ""
+            var dueDate = ""
+            switch indexPath.section {
+            case 0:
+                title = self.tableData[indexPath.row].name
+                amountToPay = self.tableData[indexPath.row].amountToPay
+                dueDate = self.tableData[indexPath.row].dueDate
+            case 1:
+                title = self.plusValues[indexPath.row].name
+                amountToPay = self.plusValues[indexPath.row].amountToPay
+                dueDate = self.plusValues[indexPath.row].dueDate
+            case 2:
+                title = self.emptyValuesTableData[indexPath.row].name
+                amountToPay = self.emptyValuesTableData[indexPath.row].amountToPay
+                dueDate = self.emptyValuesTableData[indexPath.row].dueDate
+            default:
+                print("def")
+            }
+            
+            
+            
+            
+            var allDebts = Array(appData.debts)
+            for i in 0..<allDebts.count {
+                if allDebts[i].amountToPay == amountToPay && allDebts[i].dueDate == dueDate && allDebts[i].name == title {
+                    allDebts.remove(at: i)
                     break
                 }
             }
-            let categories = Array(appData.getCategories())
-            var result:[CategoriesStruct] = []
-            for i in 0..<categories.count {
-                if pressedValue == categories[i].name && categories[i].debt == true {
-                    print("pressedValue == categories[i].name && categories[i].debt == true")
-                } else {
-                    result.append(categories[i])
-                }
-            }
-            appData.saveCategories(result)
+            appData.saveDebts(allDebts)
+            
             if appData.username != "" {
                 let delete = DeleteFromDB()
-                let tods = "&Nickname=\(appData.username)" + "&Title=\(pressedValue)" + "&Purpose=\(K.expense)" + "&ExpectingPayment=1"
-                delete.Categories(toDataString: tods) { (error) in
+                let tods = "&Nickname=\(appData.username)" + "&name=\(title)" + "&amountToPay=\(amountToPay)" + "&dueDate=\(dueDate)"
+                print(tods, "todstodstods")
+                delete.Debts(toDataString: tods) { (error) in
                     if error {
-                        appData.unsendedData.append(["deleteCategory": tods])
+                        appData.unsendedData.append(["deleteDebt": tods])
                     }
-                    self.getDataFromLocal()
                 }
-            } else {
-                self.getDataFromLocal()
             }
+            self.getDataFromLocal()
+            
             
         }
         deleteAction.backgroundColor = K.Colors.negative
-        switch indexPath.section {
+        return UISwipeActionsConfiguration(actions: [deleteAction])
+        /*switch indexPath.section {
         case 0:
             return UISwipeActionsConfiguration(actions: [])
         case 1:
@@ -329,7 +349,7 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
             return UISwipeActionsConfiguration(actions: [deleteAction])
         default:
             return UISwipeActionsConfiguration(actions: [])
-        }
+        }*/
         
     }
     

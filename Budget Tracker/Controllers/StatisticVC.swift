@@ -176,10 +176,11 @@ class StatisticVC: UIViewController, CALayerDelegate {
             }
         }
         fromDebts = false
-        var allCats = Array(appData.getCategories())
-        for i in 0..<allCats.count {
-            if allCats[i].name == allData[indexPathRow].category {
-                fromDebts = allCats[i].debt
+        
+        let allDebts = Array(appData.getDebts())
+        for i in 0..<allDebts.count {
+            if allData[indexPathRow].category == allDebts[i].name {
+                fromDebts = true
                 break
             }
         }

@@ -62,8 +62,8 @@ class SettingsViewController: UIViewController {
     
     func getdata() {
         categoriesDebtsCount = (0,0)
-        let allCategories = Array(appData.getCategories())
-        var debts:[CategoriesStruct] = []
+        let allCategories = UserDefaults.standard.value(forKey: "categoriesData") as? [[String]] ?? []//Array(appData.getCategories())
+        /*      var debts:[CategoriesStruct] = []
         var categpries:[CategoriesStruct] = []
         for i in 0..<allCategories.count {
             if allCategories[i].debt {
@@ -71,8 +71,9 @@ class SettingsViewController: UIViewController {
             } else {
                 categpries.append(allCategories[i])
             }
-        }
-        categoriesDebtsCount = (categpries.count, debts.count)
+        }*/
+        let allDebts = UserDefaults.standard.value(forKey: "allDebts") as? [[String]] ?? [] //Array(appData.getDebts())
+        categoriesDebtsCount = (allCategories.count, allDebts.count)//debts.count)
         let unsavedCat = (UserDefaults.standard.value(forKey: "savedCategories") as? [[String]] ?? []).count
         let unsavedTrans = (UserDefaults.standard.value(forKey: "savedTransactions") as? [[String]] ?? []).count
         let data = [
