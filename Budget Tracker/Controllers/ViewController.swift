@@ -769,20 +769,13 @@ class ViewController: UIViewController {
                                     self.sendUnsaved()
                                 }
                             }
-                        } else {
-                            sendSavedData = false
-                            forseSendUnsendedData = false
-                            self.downloadFromDB()
-                            DispatchQueue.main.async {
-                                self.message.showMessage(text: "Done!", type: .succsess, windowHeight: 40, bottomAppearence: true)
-                            }
                         }
                         
                         if trans.count == 0 {
                             //test
                             var debts = appData.getDebts(key: "savedDebts")
                             if let debt = debts.first {
-                                let todString = ""
+                                let todString = "&Nickname=\(appData.username)" + "&name=\(debt.name)" + "&amountToPay=\(debt.amountToPay)" + "&dueDate=\(debt.dueDate)"
                                 save.Debts(toDataString: todString) { (error) in
                                     if error {
                                         self.filter()
@@ -802,6 +795,13 @@ class ViewController: UIViewController {
                                         }
                                         self.sendUnsaved()
                                     }
+                                }
+                            } else {
+                                self.sendSavedData = false
+                                self.forseSendUnsendedData = false
+                                self.downloadFromDB()
+                                DispatchQueue.main.async {
+                                    self.message.showMessage(text: "Done!", type: .succsess, windowHeight: 40, bottomAppearence: true)
                                 }
                             }
                         }

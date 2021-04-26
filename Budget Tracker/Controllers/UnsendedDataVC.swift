@@ -36,7 +36,7 @@ class UnsendedDataVC: UIViewController {
                 //self.mainTitleLabel.font = .systemFont(ofSize: prevUsername.count > 2 ? 15 : 23, weight: .semibold)
                 self.deleteSelectedButton.setTitle("Delete (\(self.selectedCount))", for: .normal)
                 self.tableView.reloadData()
-                if newValue.count == 0 && self.categoruesTableData.count == 0 {
+                if newValue.count == 0 && self.categoruesTableData.count == 0 && self.debtsTableData.count == 0 {
                     self.deletePress = true
                     self.dismiss(animated: true) {
                         self.delegate?.quiteUnsendedData(deletePressed: true, sendPressed: false)
@@ -528,9 +528,10 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section != 0 {
             let mainFrame = self.view.frame
-            let view = UIView(frame: CGRect(x: 0, y: 0, width: mainFrame.width, height: 25))
+            let height:CGFloat = 25
+            let view = UIView(frame: CGRect(x: 0, y: 0, width: mainFrame.width, height: height))
             let labels = UILabel()
-            let heplerView = UIView(frame: CGRect(x: (mainTitleLabel.superview?.superview?.frame.minX ?? 0.0), y: 4, width: (mainFrame.width - 20) / 2, height: 25))
+            let heplerView = UIView(frame: CGRect(x: (mainTitleLabel.superview?.superview?.frame.minX ?? 0.0), y: 4, width: (mainFrame.width - 20) / 2, height: height))
             view.addSubview(heplerView)
             let stackview = UIStackView()
             stackview.spacing = 5
@@ -546,18 +547,31 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
                 title = "Categories"
             case 3:
                 title = "Debts"
-                let amountX = debtsCellLabelsFrame.0.minX + 20
-                let amountLabel = UILabel(frame: CGRect(x: amountX, y: 0, width: 100, height: 25))
+               // let secondheplerView = UIView(frame: CGRect(x: tableView.frame.width / 2 - 42, y: 0, width: tableView.frame.width / 2 - 42, height: height))
+                //secondheplerView.backgroundColor = .green
+               // view.addSubview(secondheplerView)
+                let secondStack = UIStackView(frame: CGRect(x: tableView.frame.width / 2 - 22, y: 0, width: tableView.frame.width / 2 - 37, height: height))
+                //secondStack.translatesAutoresizingMaskIntoConstraints = false
+                secondStack.alignment = .fill
+                secondStack.distribution = .fillEqually
+                secondStack.axis = .horizontal
+               // let amountX = debtsCellLabelsFrame.0.minX + 20
+                let amountLabel = UILabel()//UILabel(frame: CGRect(x: amountX, y: 0, width: 100, height: 25))
                 amountLabel.text = "Amount"
                 amountLabel.textColor = UIColor(named: "CategoryColor") ?? .red
                 amountLabel.font = .systemFont(ofSize: 14, weight: .medium)
-                view.addSubview(amountLabel)
+                amountLabel.translatesAutoresizingMaskIntoConstraints = false
+                secondStack.addArrangedSubview(amountLabel)
+              //  view.addSubview(amountLabel)
                 //let dueDateLabel = UILabel(frame: debtsCellLabelsFrame.1)
-                let dueDateLabel = UILabel(frame: CGRect(x: amountX + debtsCellLabelsFrame.1.minX + 7, y: 0, width: 100, height: 25))
+                let dueDateLabel = UILabel()//UILabel(frame: CGRect(x: amountX + debtsCellLabelsFrame.1.minX + 7, y: 0, width: 100, height: 25))
                 dueDateLabel.text = "Due Date"
                 dueDateLabel.textColor = UIColor(named: "CategoryColor") ?? .red
                 dueDateLabel.font = .systemFont(ofSize: 14, weight: .medium)
-                view.addSubview(dueDateLabel)
+                dueDateLabel.translatesAutoresizingMaskIntoConstraints = false
+                secondStack.addArrangedSubview(dueDateLabel)
+                view.addSubview(secondStack)
+            //    secondheplerView.addSubview(secondStack)
             default:
                 title = ""
             }
@@ -683,3 +697,4 @@ class unsendedDebtsCell: UITableViewCell {
     @IBOutlet weak var dueDateLabel: UILabel!
     @IBOutlet weak var treshImage: UIImageView!
 }
+
