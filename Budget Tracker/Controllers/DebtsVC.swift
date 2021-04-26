@@ -84,7 +84,7 @@ class DebtsVC: UIViewController {
                 
             } 
         }*/
-        let transactions = Array(appData.transactions)
+        let transactions = Array(appData.getTransactions)
         var result:[DebtsTableStruct] = []
         emptyValuesTableData.removeAll()
         plusValues.removeAll()
@@ -194,7 +194,7 @@ class DebtsVC: UIViewController {
             if let data = selectedCellData {
                 print("prepare data.transactions", data.transactions)
                 var result:[TransactionsStruct] = []
-                let allTrans = Array(appData.transactions)
+                let allTrans = Array(appData.getTransactions)
                 for i in 0..<allTrans.count{
                     if allTrans[i].category == data.name {
                         result.append(allTrans[i])

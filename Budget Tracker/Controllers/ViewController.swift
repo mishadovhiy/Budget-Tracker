@@ -358,7 +358,7 @@ class ViewController: UIViewController {
     var _Calculations = (0, 0, 0, 0)
     func calculate(filteredData: [TransactionsStruct]) -> (Int, Int, Int, Int) {
         let result = (0, 0, 0, 0)
-        let allTrans = Array(appData.transactions)
+        let allTrans = Array(appData.getTransactions)
         for i in 0..<allTrans.count {
             if Double(allTrans[i].value) ?? 0.0 > 0 {
             }
@@ -462,13 +462,13 @@ class ViewController: UIViewController {
         
         print("performFiltering called")
         if all == true {
-            tableData = appData.transactions
+            tableData = appData.getTransactions
             allSelectedTransactionsData = tableData
             return allSelectedTransactionsData
 
         } else {
             print("performFiltering: appending transactions data")
-            print("daysBetween count: \(daysBetween.count), appData.transactions: \(appData.transactions.count)")
+            print("daysBetween count: \(daysBetween.count), appData.transactions: \(appData.getTransactions.count)")
             var arr = tableData
             arr.removeAll()
             var matches = 0
@@ -715,7 +715,7 @@ class ViewController: UIViewController {
                     
                     self.animateCellWillAppear = false
                     let save = SaveToDB()
-                    var newCategories = appData.getCategories(key: "savedCategories")
+                    var newCategories = appData.getCategories(key: K.Keys.localCategories)
                     print("sendUnsaved unsaved cats", newCategories.count)
                     if let categoryy = newCategories.first {
                         let toDataStringg = "&Nickname=\(appData.username)" + "&Title=\(categoryy.name)" + "&Purpose=\(categoryy.purpose)"
@@ -734,7 +734,7 @@ class ViewController: UIViewController {
                                 allCats.append(categoryy)
                                 appData.saveCategories(allCats)
                                 newCategories.removeFirst()
-                                appData.saveCategories(newCategories, key: "savedCategories")
+                                appData.saveCategories(newCategories, key: K.Keys.localCategories)
                                 DispatchQueue.main.async {
                                     self.mainTableView.reloadData()
                                 }
@@ -744,7 +744,7 @@ class ViewController: UIViewController {
                     }
                     
                     if newCategories.count == 0 {
-                        var trans = appData.savedTransactions
+                        var trans = appData.getLocalTransactions
                         print("saved trans count:", trans.count)
                         if let tran = trans.first {
                             let toDataString = "&Nickname=\(appData.username)" + "&Category=\(tran.category)" + "&Date=\(tran.date)" + "&Value=\(tran.value)" + "&Comment=\(tran.comment)"
@@ -759,8 +759,8 @@ class ViewController: UIViewController {
                                     print("Error saving category")
                                 } else {
                                     trans.removeFirst()
-                                    appData.saveTransations(trans, key: "savedTransactions")
-                                    var alldata = appData.transactions
+                                    appData.saveTransations(trans, key: K.Keys.localTrancations)
+                                    var alldata = appData.getTransactions
                                     alldata.append(tran)
                                     appData.saveTransations(alldata)
                                     DispatchQueue.main.async {
@@ -772,8 +772,7 @@ class ViewController: UIViewController {
                         }
                         
                         if trans.count == 0 {
-                            //test
-                            var debts = appData.getDebts(key: "savedDebts")
+                            var debts = appData.getDebts(key: K.Keys.localDebts)
                             if let debt = debts.first {
                                 let todString = "&Nickname=\(appData.username)" + "&name=\(debt.name)" + "&amountToPay=\(debt.amountToPay)" + "&dueDate=\(debt.dueDate)"
                                 save.Debts(toDataString: todString) { (error) in
@@ -786,7 +785,7 @@ class ViewController: UIViewController {
                                         }
                                     } else {
                                         debts.removeFirst()
-                                        appData.saveDebts(debts, key: "savedDebts")
+                                        appData.saveDebts(debts, key: K.Keys.localDebts)
                                         var resultDebts = appData.getDebts()
                                         resultDebts.append(DebtsStruct(name: debt.name, amountToPay: debt.amountToPay, dueDate: debt.dueDate))
                                         appData.saveDebts(resultDebts)
@@ -911,7 +910,7 @@ class ViewController: UIViewController {
                     appData.unsendedData.append(["deleteTransaction": toDataString])
                 }
                 
-                var arr = Array(appData.transactions)
+                var arr = Array(appData.getTransactions)
                 for i in 0..<arr.count{
                     if arr[i].category == Category && arr[i].date == Date && arr[i].value == Value && arr[i].comment == Comment{
                         arr.remove(at: i)
@@ -961,7 +960,7 @@ class ViewController: UIViewController {
     
     func calculateLabels() {
         let tableTrans = Array(tableData)
-        let allTrans = Array(appData.transactions)
+        let allTrans = Array(appData.getTransactions)
         recalculation(i: self.incomeLabel, e: self.expenseLabel, periudData: tableTrans)
         var totalExpenses = 0.0
         var totalIncomes = 0.0
@@ -1095,7 +1094,7 @@ class ViewController: UIViewController {
                     if error {
                         appData.unsendedData.append(["deleteTransaction":toDataString])
                     }
-                    var arr = Array(appData.transactions)
+                    var arr = Array(appData.getTransactions)
                     for i in 0..<arr.count{
                         if arr[i].category == trans.category && arr[i].date == trans.date && arr[i].value == trans.value && arr[i].comment == trans.comment{
                             arr.remove(at: i)
@@ -1112,7 +1111,7 @@ class ViewController: UIViewController {
             }
         } else {
             if let trans = editingTransaction {
-                var arr = Array(appData.transactions)
+                var arr = Array(appData.getTransactions)
                 for i in 0..<arr.count{
                     if arr[i].category == trans.category && arr[i].date == trans.date && arr[i].value == trans.value && arr[i].comment == trans.comment{
                         arr.remove(at: i)
@@ -1144,7 +1143,7 @@ class ViewController: UIViewController {
         }
     }
     func prepareFilterOptions() {
-        let arr = Array(appData.transactions.sorted{ $0.dateFromString > $1.dateFromString })
+        let arr = Array(appData.getTransactions.sorted{ $0.dateFromString > $1.dateFromString })
         var months:[String] = []
         var years:[String] = []
         for i in 0..<arr.count {
@@ -1456,7 +1455,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         case 0:
             let calculationCell = tableView.dequeueReusableCell(withIdentifier: K.calcCellIdent, for: indexPath) as! calcCell
             
-            let sendedCount = (UserDefaults.standard.value(forKey: "savedTransactions") as? [[String]] ?? []) + (UserDefaults.standard.value(forKey: "savedCategories") as? [[String]] ?? []) + (UserDefaults.standard.value(forKey: "savedDebts") as? [[String]] ?? [])
+            let sendedCount = (UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String]] ?? []) + (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String]] ?? []) + (UserDefaults.standard.value(forKey: K.Keys.localDebts) as? [[String]] ?? [])
 
             //prevUserName
             let prevName = UserDefaults.standard.value(forKey: "prevUserName") as? String ?? "previous account"
@@ -1739,7 +1738,7 @@ extension ViewController: TransitionVCProtocol {
                         appData.unsendedData.append(["transaction": neew])
                     }
                     
-                    var trans = appData.transactions
+                    var trans = appData.getTransactions
                     trans.append(new)
                     appData.saveTransations(trans)
                     if !error {
@@ -1749,7 +1748,7 @@ extension ViewController: TransitionVCProtocol {
                     self.filter()
                 }
             } else {
-                var trans = appData.transactions
+                var trans = appData.getTransactions
                 trans.append(new)
                 appData.saveTransations(trans)
                 self.filter()
@@ -1779,8 +1778,8 @@ extension ViewController: UnsendedDataVCProtocol {
             }
         } else {
             if deletePressed {
-                appData.saveTransations([], key: "savedTransactions")
-                appData.saveCategories([], key: "savedCategories")
+                appData.saveTransations([], key: K.Keys.localTrancations)
+                appData.saveCategories([], key: K.Keys.localCategories)
                 DispatchQueue.main.async {
                     self.mainTableView.reloadData()
                 }

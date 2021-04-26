@@ -19,7 +19,7 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     var delegate: SettingsViewControllerProtocol?
     var tableData: [SettingsSctruct] = [
-        SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: ((UserDefaults.standard.value(forKey: "savedCategories") as? [[String]] ?? []).count + (UserDefaults.standard.value(forKey: "savedTransactions") as? [[String]] ?? []).count) > 0 ? "toSavedData" : "toSingIn"),
+        SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: ((UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String]] ?? []).count + (UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String]] ?? []).count) > 0 ? "toSavedData" : "toSingIn"),
         SettingsSctruct(title: "Categories", description: "\(categoriesDebtsCount.0)", segue: "settingsToCategories"),
         SettingsSctruct(title: "Debts", description: "\(categoriesDebtsCount.1)", segue: appData.proVersion ? "toDebts" : "toProVC")
     ]
@@ -74,8 +74,8 @@ class SettingsViewController: UIViewController {
         }*/
         let allDebts = UserDefaults.standard.value(forKey: "allDebts") as? [[String]] ?? [] //Array(appData.getDebts())
         categoriesDebtsCount = (allCategories.count, allDebts.count)//debts.count)
-        let unsavedCat = (UserDefaults.standard.value(forKey: "savedCategories") as? [[String]] ?? []).count
-        let unsavedTrans = (UserDefaults.standard.value(forKey: "savedTransactions") as? [[String]] ?? []).count
+        let unsavedCat = (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String]] ?? []).count
+        let unsavedTrans = (UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String]] ?? []).count
         let data = [
             SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: (unsavedCat + unsavedTrans) > 0 ? "toSavedData" : "toSingIn"),
             SettingsSctruct(title: "Categories", description: "\(categoriesDebtsCount.0)", segue: "settingsToCategories"),
@@ -284,8 +284,8 @@ extension SettingsViewController: UnsendedDataVCProtocol {
         } else {
             if deletePressed {
                 print("seletePressed")
-                appData.saveTransations([], key: "savedTransactions")
-                appData.saveCategories([], key: "savedCategories")
+                appData.saveTransations([], key: K.Keys.localTrancations)
+                appData.saveCategories([], key: K.Keys.localCategories)
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                     self.performSegue(withIdentifier: "toSingIn", sender: self)

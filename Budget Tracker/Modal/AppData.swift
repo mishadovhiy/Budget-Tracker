@@ -82,7 +82,7 @@ class AppData {
     }
     
     //savedTransactions
-    //unsavedTransactions
+    //unsavedTransactions 
     func saveTransations(_ data: [TransactionsStruct], key: String = "transactionsData") {
         var dict: [[String]] = []
         for i in 0..<data.count {
@@ -150,7 +150,7 @@ class AppData {
     }
     
 
-    var transactions: [TransactionsStruct] {
+    var getTransactions: [TransactionsStruct] {
         get{
             let localData = Array(defaults.value(forKey: "transactionsData") as? [[String]] ?? [])
             var results: [TransactionsStruct] = []
@@ -165,9 +165,9 @@ class AppData {
         }
     }
     
-    var savedTransactions: [TransactionsStruct] {
+    var getLocalTransactions: [TransactionsStruct] {
         get{
-            let localData = defaults.value(forKey: "savedTransactions") as? [[String]] ?? []
+            let localData = defaults.value(forKey: K.Keys.localTrancations) as? [[String]] ?? []
             var results: [TransactionsStruct] = []
             for i in 0..<localData.count {
                 let value = localData[i][1]
@@ -308,7 +308,7 @@ class AppData {
             
             var totalExpenses = 0.0
             var totalIncomes = 0.0
-            let transactions = appData.transactions
+            let transactions = appData.getTransactions
             
             for i in 0..<transactions.count {
 

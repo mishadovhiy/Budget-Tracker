@@ -130,14 +130,14 @@ class UnsendedDataVC: UIViewController {
     var foundInAListCount = 0
     func getData() {
         didapp = false
-        categories = appData.getCategories(key: "savedCategories")
-        transactions = appData.savedTransactions.sorted{ $0.dateFromString < $1.dateFromString }
-        debts = appData.getDebts(key: "savedDebts")
+        categories = appData.getCategories(key: K.Keys.localCategories)
+        transactions = appData.getLocalTransactions.sorted{ $0.dateFromString < $1.dateFromString }
+        debts = appData.getDebts(key: K.Keys.localDebts)
         foundInAListCount = 0
         selectedCount = 0
         
         var holder:[UnsendedTransactions] = []
-        defaultsTransactions = appData.transactions
+        defaultsTransactions = appData.getTransactions
         for transaction in transactions {
             foundInAListCount = contains(transaction) ? foundInAListCount + 1 : foundInAListCount
             let new = UnsendedTransactions(value: transaction.value, category: transaction.category, date: transaction.date, comment: transaction.comment, selected: false)
@@ -281,7 +281,7 @@ class UnsendedDataVC: UIViewController {
             newTable.removeAll()
             foundInAListCount = 0
             selectedCount = 0
-            defaultsTransactions = appData.transactions
+            defaultsTransactions = appData.getTransactions
             for trans in tableDataTransactions {
                 if !trans.selected {
                     let new = TransactionsStruct(value: trans.value, category: trans.category, date: trans.date, comment: trans.comment)
@@ -290,7 +290,7 @@ class UnsendedDataVC: UIViewController {
                     newTable.append(trans)
                 }
             }
-            appData.saveTransations(result, key: "savedTransactions")
+            appData.saveTransations(result, key: K.Keys.localTrancations)
             
             var newCategories: [UnsendedCategories] = []
             var defaultsCatsResult: [CategoriesStruct] = []
@@ -320,8 +320,8 @@ class UnsendedDataVC: UIViewController {
             
             defaultsDebts = appData.getDebts()
             defaultsCategories = appData.getCategories()
-            appData.saveCategories(defaultsCatsResult, key: "savedCategories")
-            appData.saveDebts(defDebtsResult, key: "savedDebts")
+            appData.saveCategories(defaultsCatsResult, key: K.Keys.localCategories)
+            appData.saveDebts(defDebtsResult, key: K.Keys.localDebts)
             categoruesTableData = newCategories
             debtsTableData = newDebts
             tableDataTransactions = newTable
@@ -331,7 +331,7 @@ class UnsendedDataVC: UIViewController {
     
 
     @objc func selectRepeatedPressed(_ sender: UIButton){
-        defaultsTransactions = appData.transactions
+        defaultsTransactions = appData.getTransactions
         selectedCount = 0
         foundInAListCount = 0
         var all = Array(self.tableDataTransactions)
@@ -646,15 +646,15 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
                 switch indexPath.section {
                 case 1:
                     self.transactions.remove(at: indexPath.row)
-                    appData.saveTransations(self.transactions, key: "savedTransactions")
+                    appData.saveTransations(self.transactions, key: K.Keys.localTrancations)
                     self.getData()
                 case 2:
                     self.categories.remove(at: indexPath.row)
-                    appData.saveCategories(self.categories, key: "savedCategories")
+                    appData.saveCategories(self.categories, key: K.Keys.localCategories)
                     self.getData()
                 case 3:
                     self.debts.remove(at: indexPath.row)
-                    appData.saveDebts(self.debts, key: "savedDebts")
+                    appData.saveDebts(self.debts, key: K.Keys.localDebts)
                     self.getData()
                 default:
                     print("default")

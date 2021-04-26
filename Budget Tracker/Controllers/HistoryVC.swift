@@ -138,7 +138,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                 view.addSubview(ai)
                 ai.startAnimating()
                 
-                let transactions = Array(appData.transactions)
+                let transactions = Array(appData.getTransactions)
                 var result: [TransactionsStruct] = []
                 var newTableData: [TransactionsStruct] = []
                 var found = false
@@ -232,7 +232,7 @@ extension HistoryVC: TransitionVCProtocol {
                         appData.unsendedData.append(["transaction": neew])
                     }
                     
-                    var trans = appData.transactions
+                    var trans = appData.getTransactions
                     trans.append(new)
                     appData.saveTransations(trans)
                     
@@ -259,7 +259,7 @@ extension HistoryVC: TransitionVCProtocol {
                     }
                 }
             } else {
-                var trans = appData.transactions
+                var trans = appData.getTransactions
                 trans.append(new)
                 appData.saveTransations(trans)
                 

@@ -49,7 +49,7 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         
         print("username: \(appData.username)")
-        print("localTransactions:", appData.transactions.count)
+        print("localTransactions:", appData.getTransactions.count)
         updateUI()
 
         logoutButton.alpha = appData.username != "" ? 1 : 0
@@ -169,19 +169,19 @@ class LoginViewController: UIViewController {
                         appData.password = password
                         if prevUserName != nickname {
                             UserDefaults.standard.setValue(prevUserName, forKey: "prevUserName")
-                            let wasTrans = appData.savedTransactions
-                            let trans = wasTrans + appData.transactions
-                            appData.saveTransations(trans, key: "savedTransactions")
-                            let wascats = appData.getCategories(key: "savedCategories")
+                            let wasTrans = appData.getLocalTransactions
+                            let trans = wasTrans + appData.getTransactions
+                            appData.saveTransations(trans, key: K.Keys.localTrancations)
+                            let wascats = appData.getCategories(key: K.Keys.localCategories)
                             let cats = wascats + appData.getCategories()
                             var catResult: [CategoriesStruct] = []
                             for i in 0..<cats.count {
                                 catResult.append(CategoriesStruct(name: cats[i].name, purpose: cats[i].purpose, count: cats[i].count))
 
                             }
-                            let wasDebts = appData.getDebts() + appData.getDebts(key: "savedDebts")
-                            appData.saveDebts(wasDebts, key: "savedDebts")
-                            appData.saveCategories(catResult, key: "savedCategories")
+                            let wasDebts = appData.getDebts() + appData.getDebts(key: K.Keys.localDebts)
+                            appData.saveDebts(wasDebts, key: K.Keys.localDebts)
+                            appData.saveCategories(catResult, key: K.Keys.localCategories)
                             appData.fromLoginVCMessage = trans.count > 0 ? "Wellcome, \(appData.username), \nYour Data has been saved localy" : "Wellcome, \(appData.username)"
                         }
                         if fromPro {
@@ -251,17 +251,17 @@ class LoginViewController: UIViewController {
                                     KeychainService.savePassword(service: "BudgetTrackerApp", account: name, data: password)
                                     appData.username = name
                                     appData.password = password
-                                    let wasTransactions = appData.transactions + appData.savedTransactions
-                                    appData.saveTransations(wasTransactions, key: "savedTransactions")
-                                    let wasCats = appData.getCategories() + appData.getCategories(key: "savedCategories")
+                                    let wasTransactions = appData.getTransactions + appData.getLocalTransactions
+                                    appData.saveTransations(wasTransactions, key: K.Keys.localTrancations)
+                                    let wasCats = appData.getCategories() + appData.getCategories(key: K.Keys.localCategories)
                                     var catResult: [CategoriesStruct] = []
                                     for i in 0..<wasCats.count {
                                         catResult.append(CategoriesStruct(name: wasCats[i].name, purpose: wasCats[i].purpose, count: wasCats[i].count))
 
                                     }
-                                    appData.saveCategories(catResult, key: "savedCategories")
-                                    let wasDebts = appData.getDebts() + appData.getDebts(key: "savedDebts")
-                                    appData.saveDebts(wasDebts, key: "savedDebts")
+                                    appData.saveCategories(catResult, key: K.Keys.localCategories)
+                                    let wasDebts = appData.getDebts() + appData.getDebts(key: K.Keys.localDebts)
+                                    appData.saveDebts(wasDebts, key: K.Keys.localDebts)
                                     appData.fromLoginVCMessage = wasTransactions.count > 0 ? "Wellcome, \(appData.username), \nYour Data has been saved localy" : "Wellcome, \(appData.username)"
                                     if self.fromPro {
                                         DispatchQueue.main.async {

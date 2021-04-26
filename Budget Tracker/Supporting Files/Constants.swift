@@ -41,7 +41,17 @@ struct K {
         static let unknCat = "Uncategorized Category"
         
         static let errorInternet = "Bad internet, you still can use app in offline mode"
+        
+        
+        
     }
+    
+    struct Keys {
+        static let localTrancations = "savedTransactions"
+        static let localCategories = "savedCategories"
+        static let localDebts = "savedDebts"
+    }
+    
     struct Colors {
         static let background = UIColor(named: "backgroundColor")
         static let balanceT = UIColor(named: "balanceTitleColor")
