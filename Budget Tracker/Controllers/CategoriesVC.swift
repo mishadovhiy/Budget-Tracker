@@ -265,9 +265,7 @@ class CategoriesVC: UIViewController {
         for i in 0..<self.expenses.count {
             result.append(CategoriesStruct(name: self.expenses[i].0, purpose: K.expense, count: 0))
         }
-        var d: [CategoriesStruct] = []
-    //    d = result + debts
-        appData.saveCategories(d)
+        appData.saveCategories(result)
         self.getDataFromLocal()
         
     }
