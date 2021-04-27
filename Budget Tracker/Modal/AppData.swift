@@ -33,6 +33,22 @@ class AppData {
             defaults.set(value, forKey: "purchasedOnThisDevice")
         }
     }
+    var trialDate: String {
+        get{
+            return defaults.value(forKey: "trialDate") as? String ?? ""
+        }
+        set(value){
+            defaults.set(value, forKey: "trialDate")
+        }
+    }
+    var proTrial: Bool {
+        get{
+            return defaults.value(forKey: "proTrial") as? Bool ?? false
+        }
+        set(value){
+            defaults.set(value, forKey: "proTrial")
+        }
+    }
     
     var username: String {
         get{

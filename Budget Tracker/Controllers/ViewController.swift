@@ -135,8 +135,43 @@ class ViewController: UIViewController {
                         }
                     }
                 }
+                if appData.proTrial {
+                    self.checkTrialDate()
+                }
             }
         }
+    }
+    
+    func checkTrialDate() {
+        let wasStr = appData.trialDate
+        let todayStr = appData.filter.getToday(appData.filter.filterObjects.currentDate)
+        let dates = (dateFrom(sting: wasStr), dateFrom(sting: todayStr))
+        print(dates, "bvghujkmnjbhguijk")
+        let dif = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: dates.0 ?? Date(), to: dates.1 ?? Date())
+        print(dif, "bvghujkmnjbhguijk")
+        if dif.year == 0 && dif.month == 0 {
+            if dif.day ?? 0 <= 7 {
+                appData.proTrial = true
+            } else {
+                appData.proTrial = false
+                DispatchQueue.main.async {
+                    self.message.showMessage(text: "Pro trial is over", type: .succsess, bottomAppearence: true)
+                }
+            }
+        } else {
+            appData.proTrial = false
+            DispatchQueue.main.async {
+                self.message.showMessage(text: "Pro trial is over", type: .succsess, bottomAppearence: true)
+            }
+        }
+    }
+    
+    func dateFrom(sting: String) -> Date? {
+        print("dateFrom", sting)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        let date = dateFormatter.date(from: sting)
+        return date
     }
     
     var justLoaded = true
@@ -224,6 +259,7 @@ class ViewController: UIViewController {
     
     func downloadFromDB() {
         print("downloadFromDBdownloadFromDB")
+        justLoaded = false
         lastSelectedDate = nil
         if appData.username != "" {
             let unsend = appData.unsendedData
@@ -373,6 +409,11 @@ class ViewController: UIViewController {
                 for i in 0..<loadedData.count {
                     if loadedData[i][0] == nick {
                         appData.proVersion = loadedData[i][3] == "1" ? true : false
+                        if appData.trialDate == "" {//test
+                            appData.trialDate = loadedData[i][5]
+                            self.checkTrialDate()
+                        }
+                        break
                     }
                 }
             }

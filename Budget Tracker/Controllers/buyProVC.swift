@@ -11,6 +11,7 @@ import StoreKit
 
 class BuyProVC: UIViewController {
     
+    @IBOutlet weak var tryFree: UIButton!
     @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var pageControll: UIPageControl!
@@ -36,6 +37,9 @@ class BuyProVC: UIViewController {
     
     override func viewDidLoad() {
         DispatchQueue.main.async {
+            if appData.proVersion || appData.proTrial || appData.trialDate != "" {
+                self.tryFree.alpha = 0
+            }
             self.purchasedIndicatorView.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
             self.purchasedIndicatorView.layer.cornerRadius = 4
         }
@@ -129,12 +133,104 @@ class BuyProVC: UIViewController {
         if segue.identifier == "toSingIn" {
             //messagesFromOtherScreen
             if let vc = segue.destination as? LoginViewController {
-                vc.messagesFromOtherScreen = "Log in or create an account before purchasing"
+                vc.messagesFromOtherScreen = "Sign in to use pro version across all your devices"
                 vc.fromPro = true
             }
             
         }
     }
+    
+    @IBAction func tryFreePressed(_ sender: UIButton) {
+        if !appData.proVersion {
+            if appData.username != "" {
+                DispatchQueue.main.async {
+                    self.ai = LoadingIndicator(superView: self.view)
+                    self.ai.showIndicator()
+                }
+                let load = LoadFromDB()
+                load.Users { (loadedData, error) in
+                    if error {
+                        DispatchQueue.main.async {
+                            self.ai.completeWithDone(title: "Internet Error") { (_) in
+                            }
+                        }
+                    } else {
+                        let nik = appData.username
+                        for i in 0..<loadedData.count {
+                            if loadedData[i][0] == nik {
+                                if loadedData[i][5] != "" {
+                                    DispatchQueue.main.async {
+                                        self.ai.fastHideIndicator { (_) in
+                                            self.message.showMessage(text: "You have already tried trial version", type: .error, windowHeight: 65)
+                                        }
+                                    }
+                                    return
+                                } else {
+                                    self.userData = (loadedData[i][1], loadedData[i][2], loadedData[i][3], loadedData[i][5])
+                                    self.performTrial()
+                                    break
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    let alert = UIAlertController(title: "Would you like to sign in?", message: "Sign in to try trial across all your devices", preferredStyle: .alert);
+                    
+                    alert.addAction(UIAlertAction.init(title: "Try without an account", style: .default, handler: { (action: UIAlertAction!) in
+                        
+                        appData.proTrial = true
+                        appData.trialDate = appData.filter.getToday(appData.filter.filterObjects.currentDate)
+                        self.ai.completeWithDone(title: "Trial started!", description: "Pro features available across all your devices") { (_) in
+                            Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { (_) in
+                                self.performSegue(withIdentifier: "homeVC", sender: self)
+                            }
+                        }
+                    }));
+                    alert.addAction(UIAlertAction(title: "Sign in", style: .default, handler: { (action) in
+                        DispatchQueue.main.async {
+                            self.performSegue(withIdentifier: "toSingIn", sender: self)
+                        }
+                    }))
+                    self.present(alert, animated: true, completion: nil);
+                }
+            }
+        }
+    }
+    
+    
+    func performTrial() {
+        let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
+        let save = SaveToDB()
+        let toDataStringMian = "&Nickname=\(appData.username)" + "&Email=\(self.userData.0)" + "&Password=\(self.userData.1)" + "&Registration_Date=\(self.userData.2)"
+        
+        let dataStringSave = toDataStringMian + "&ProVersion=0" + "&trialDate=\(today)"
+        print(dataStringSave)
+        save.Users(toDataString: dataStringSave ) { (error) in
+            if error {
+                appData.unsendedData.append(["saveUser": dataStringSave])
+            }
+            let delete = DeleteFromDB()
+            let dataStringDelete = toDataStringMian + "&ProVersion=0" + "&trialDate="
+            print(dataStringDelete)
+            delete.User(toDataString: dataStringDelete) { (errorr) in
+                if errorr {
+                    appData.unsendedData.append(["deleteUser": dataStringDelete])
+                }
+                DispatchQueue.main.async {
+                    appData.proTrial = true
+                    appData.trialDate = today
+                    self.ai.completeWithDone(title: "Success!", description: "Pro features available across all your devices") { (_) in
+                        Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { (_) in
+                            self.performSegue(withIdentifier: "homeVC", sender: self)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     
     lazy var message: MessageView = {
         let message = MessageView(self)
@@ -189,7 +285,7 @@ class BuyProVC: UIViewController {
             }
         } else {
             DispatchQueue.main.async {
-                self.message.showMessage(text: "You have already purchased Pro version", type: .succsess, windowHeight: 65)
+                self.message.showMessage(text: "You have already purchased pro version", type: .succsess, windowHeight: 65)
             }
         }
         

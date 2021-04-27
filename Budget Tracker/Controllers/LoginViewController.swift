@@ -451,7 +451,7 @@ class LoginViewController: UIViewController {
             let message = messagesFromOtherScreen
             messagesFromOtherScreen = ""
             DispatchQueue.main.async {
-                self.message.showMessage(text: message, type: .succsess, windowHeight: 65)
+                self.message.showMessage(text: message, type: .succsess, windowHeight: 80)
             }
         } else {
             message.hideMessage()
