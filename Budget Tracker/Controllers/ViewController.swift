@@ -127,12 +127,19 @@ class ViewController: UIViewController {
                     }
                 }
                 
-                
-                
+                if !appData.purchasedOnThisDevice {
+                    if self.justLoaded {
+                        self.justLoaded = false
+                        if !appData.proVersion {
+                            self.checkPurchase()
+                        }
+                    }
+                }
             }
         }
     }
     
+    var justLoaded = true
     var newTransaction: TransactionsStruct?
     var highliteCell: IndexPath?
     var tableDHolder: [tableStuct] = []
@@ -353,6 +360,24 @@ class ViewController: UIViewController {
         calculateLabels()
         newTableData = createTableData(filteredData: allFilteredData)
 
+    }
+    
+    func checkPurchase() {
+        let nick = appData.username
+        let load = LoadFromDB()
+        load.Users { (loadedData, error) in
+            print(loadedData, "checkPurchase")
+            if error {
+                
+            } else {
+                for i in 0..<loadedData.count {
+                    if loadedData[i][0] == nick {
+                        appData.proVersion = loadedData[i][3] == "1" ? true : false
+                    }
+                }
+            }
+            
+        }
     }
     
     var _Calculations = (0, 0, 0, 0)
@@ -650,7 +675,6 @@ class ViewController: UIViewController {
                                         }
                                     }
                                 } else {
-                                    //save debt
                                     if let saveDebt = first["debt"] {
                                         save.Debts(toDataString: saveDebt) { (error) in
                                             if error {
@@ -672,7 +696,6 @@ class ViewController: UIViewController {
                                             }
                                         }
                                     } else {
-                                        //delete
                                         if let deleteDebt = first["deleteDebt"] {
                                             delete.Debts(toDataString: deleteDebt) { (error) in
                                                 if error {
@@ -690,6 +713,48 @@ class ViewController: UIViewController {
                                                         }
                                                     }
                                                     self.sendUnsaved()
+                                                }
+                                            }
+                                        } else {
+                                            if let saveUser = first["saveUser"] {
+                                                save.Users(toDataString: saveUser) { (error) in
+                                                    if error {
+                                                        self.forseSendUnsendedData = false
+                                                        self.filter()
+                                                        DispatchQueue.main.async {
+                                                            self.message.showMessage(text: "Internet Error!", type: .internetError)
+                                                        }
+                                                    } else {
+                                                        appData.unsendedData.removeFirst()
+                                                        DispatchQueue.main.async {
+                                                            self.mainTableView.reloadData()
+                                                            if self.refreshControl.isRefreshing {
+                                                                self.refreshControl.endRefreshing()
+                                                            }
+                                                        }
+                                                        self.sendUnsaved()
+                                                    }
+                                                }
+                                            } else {
+                                                if let deleteUser = first["deleteUser"] {
+                                                    delete.User(toDataString: deleteUser) { (error) in
+                                                        if error {
+                                                            self.forseSendUnsendedData = false
+                                                            self.filter()
+                                                            DispatchQueue.main.async {
+                                                                self.message.showMessage(text: "Internet Error!", type: .internetError)
+                                                            }
+                                                        } else {
+                                                            appData.unsendedData.removeFirst()
+                                                            DispatchQueue.main.async {
+                                                                self.mainTableView.reloadData()
+                                                                if self.refreshControl.isRefreshing {
+                                                                    self.refreshControl.endRefreshing()
+                                                                }
+                                                            }
+                                                            self.sendUnsaved()
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }

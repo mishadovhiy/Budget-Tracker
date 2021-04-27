@@ -106,8 +106,23 @@ class LoginViewController: UIViewController {
         }
     }
     
+    var actionButtonsEnabled : Bool {
+        set {
+            DispatchQueue.main.async {
+                self.logInButton.isEnabled = newValue
+                self.logInButton.isUserInteractionEnabled = newValue
+                self.createAccButton.isEnabled = newValue
+                self.createAccButton.isUserInteractionEnabled = newValue
+            }
+        }
+        get {
+            return false
+        }
+    }
+    
     let load = LoadFromDB()
     @IBAction func logInPressed(_ sender: UIButton) {
+        actionButtonsEnabled = false
         showActivityIndicator(at: sender)
         hideKeyboard()
         load.Users { (loadedData, Error) in
@@ -118,6 +133,7 @@ class LoginViewController: UIViewController {
                     if name != "" && password != "" {
                         self.logIn(nickname: name, password: password, loadedData: loadedData)
                     } else {
+                        self.actionButtonsEnabled = true
                         DispatchQueue.main.async {
                             self.ai.removeFromSuperview()
                             self.message.showMessage(text: "All fields are required", type: .error, autoHide: false)
@@ -128,6 +144,7 @@ class LoginViewController: UIViewController {
                 }
             } else {
                 print("error!!!")
+                self.actionButtonsEnabled = true
                 DispatchQueue.main.async {
                     self.ai.removeFromSuperview()
                     self.message.showMessage(text: "Internet Error!", type: .error, autoHide: false)
@@ -151,6 +168,7 @@ class LoginViewController: UIViewController {
                     psswordFromDB = loadedData[i][DBpasswordIndex]
                     if password != psswordFromDB {
                         print("wrong password", psswordFromDB)
+                        self.actionButtonsEnabled = true
                         DispatchQueue.main.async {
                             self.ai.removeFromSuperview()
                             self.message.showMessage(text: "Wrong password", type: .error, autoHide: false)
@@ -164,7 +182,7 @@ class LoginViewController: UIViewController {
                             KeychainService.savePassword(service: "BudgetTrackerApp", account: nickname, data: password)
                         }
                         let prevUserName = appData.username
-                        
+                        self.actionButtonsEnabled = true
                         appData.username = nickname
                         appData.password = password
                         if prevUserName != nickname {
@@ -199,6 +217,7 @@ class LoginViewController: UIViewController {
                 }
             }
         } else {
+            self.actionButtonsEnabled = true
             DispatchQueue.main.async {
                 self.ai.removeFromSuperview()
                 self.message.showMessage(text: "User not found", type: .error, autoHide: false)
@@ -208,12 +227,14 @@ class LoginViewController: UIViewController {
 
     
     @IBAction func createAccountPressed(_ sender: Any) {
+        self.actionButtonsEnabled = true
         showActivityIndicator(at: sender as! UIButton)
         hideKeyboard()
         load.Users { (loadedData, Error) in
             if !Error {
                 self.createAccoun(loadedData: loadedData)
             } else {
+                self.actionButtonsEnabled = true
                 DispatchQueue.main.async {
                     self.ai.removeFromSuperview()
                     self.message.showMessage(text: "Internet Error!", type: .error, autoHide: false)
@@ -232,8 +253,9 @@ class LoginViewController: UIViewController {
             if password == self.confirmPasswordLabel.text ?? "" {
                 if name != "" && email != "" && password != "" {
                     if self.userExists(name: name, loadedData: loadedData) == false  {
-                        
+                        self.actionButtonsEnabled = true
                         if !email.contains("@") || !email.contains(".") {
+                            
                             self.ai.removeFromSuperview()
                             self.obthervValues = true
                             self.showWrongFields()
@@ -276,12 +298,14 @@ class LoginViewController: UIViewController {
                             }
                         }
                     } else {
+                        self.actionButtonsEnabled = true
                         self.ai.removeFromSuperview()
                         self.message.showMessage(text: "Username '\(name)' is already taken", type: .error, windowHeight: 65, autoHide: false)
                         print("username '\(name)' is already taken")
                     }
                 
                 } else {
+                    self.actionButtonsEnabled = true
                     self.ai.removeFromSuperview()
                     self.obthervValues = true
                     self.showWrongFields()
@@ -289,6 +313,7 @@ class LoginViewController: UIViewController {
                     print("all fields are required")
                 }
             } else {
+                self.actionButtonsEnabled = true
                 self.ai.removeFromSuperview()
                 self.message.showMessage(text: "Passwords not match", type: .error, autoHide: false)
                 print("passwords not much")

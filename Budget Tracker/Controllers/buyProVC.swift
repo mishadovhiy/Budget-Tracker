@@ -136,29 +136,63 @@ class BuyProVC: UIViewController {
         }
     }
     
+    lazy var message: MessageView = {
+        let message = MessageView(self)
+        return message
+    }()
+    
+    var userData = ("","","","")
     @IBAction func buyPressed(_ sender: UIButton) {
-        if appData.username == "" {
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "toSingIn", sender: self)
+
+        let nick = appData.username
+        if !appData.proVersion {
+            if appData.username == "" {
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "toSingIn", sender: self)
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.ai = LoadingIndicator(superView: self.view)
+                    self.ai.showIndicator()
+                }
+                let load = LoadFromDB()
+                load.Users { (loadedData, error) in
+                    if !error {
+                        for i in 0..<loadedData.count {
+                            if loadedData[i][0] == nick {
+                                self.userData = (loadedData[i][1], loadedData[i][2], loadedData[i][3], loadedData[i][5])
+                                break
+                            }
+                        }
+                        print("buyPressed")
+                        guard let myProduct = self.proVProduct else {
+                            return
+                        }
+                        if SKPaymentQueue.canMakePayments() {
+                            print("can make true")
+                            let payment = SKPayment(product: myProduct)
+                            SKPaymentQueue.default().add(self)
+                            SKPaymentQueue.default().add(payment)
+                        } else {
+                            print("go to restrictions")
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            self.ai.completeWithDone(title: "Internet Error") { (_) in
+                            }
+                        }
+                    }
+                    
+                }
+                
+                
             }
         } else {
             DispatchQueue.main.async {
-                self.ai = LoadingIndicator(superView: self.view)
-                self.ai.showIndicator()
-            }
-            print("buyPressed")
-            guard let myProduct = proVProduct else {
-                return
-            }
-            if SKPaymentQueue.canMakePayments() {
-                print("can make true")
-                let payment = SKPayment(product: myProduct)
-                SKPaymentQueue.default().add(self)
-                SKPaymentQueue.default().add(payment)
-            } else {
-                print("go to restrictions")
+                self.message.showMessage(text: "You have already purchased Pro version", type: .succsess, windowHeight: 65)
             }
         }
+        
         
     }
     
@@ -235,18 +269,37 @@ extension BuyProVC: SKPaymentTransactionObserver {
                 SKPaymentQueue.default().remove(self)
                 appData.proVersion = true
                 appData.purchasedOnThisDevice = true
-                //appData.fromLoginVCMessage = transaction.transactionState == .restored ? "Pro features successfully restored" : "Pro features available now across all your devices!"
-                if transaction.transactionState == .purchased {
-                    appData.fromLoginVCMessage = "Thank you for purchasing Pro version"
-                }
-                DispatchQueue.main.async {
-                    self.showPurchasedIndicator()
-                    self.ai.completeWithDone(title: "Success!", description: "Pro features available across all your devices") { (_) in
-                        Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { (_) in
-                            self.performSegue(withIdentifier: "homeVC", sender: self)
+
+                DispatchQueue.init(label: "DB").async {
+                    let save = SaveToDB()
+                    let toDataStringMian = "&Nickname=\(appData.username)" + "&Email=\(self.userData.0)" + "&Password=\(self.userData.1)" + "&Registration_Date=\(self.userData.2)"
+                    
+                    let dataStringSave = toDataStringMian + "&ProVersion=1" + "&trialDate=\(self.userData.3)"
+                    print(dataStringSave)
+                    save.Users(toDataString: dataStringSave ) { (error) in
+                        if error {
+                            appData.unsendedData.append(["saveUser": dataStringSave])
+                        }
+                        let delete = DeleteFromDB()
+                        let dataStringDelete = toDataStringMian + "&ProVersion=0" + "&trialDate=\(self.userData.3)"
+                        print(dataStringDelete)
+                        delete.User(toDataString: dataStringDelete) { (errorr) in
+                            if errorr {
+                                appData.unsendedData.append(["deleteUser": dataStringDelete])
+                            }
+                            DispatchQueue.main.async {
+                                self.showPurchasedIndicator()
+                                self.ai.completeWithDone(title: "Success!", description: "Pro features available across all your devices") { (_) in
+                                    Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { (_) in
+                                        self.performSegue(withIdentifier: "homeVC", sender: self)
+                                    }
+                                }
+                            }
                         }
                     }
+                    
                 }
+                
                 break
             case .failed, .deferred:
                 print("paymentQueue pur ERROR")

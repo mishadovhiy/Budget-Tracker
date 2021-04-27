@@ -175,9 +175,11 @@ struct LoadFromDB {
                     if let name = jsonElement["Nickname"] as? String,
                        let email = jsonElement["Email"] as? String,
                        let password = jsonElement["Password"] as? String,
-                       let registrationDate = jsonElement["Registration_Date"] as? String
+                       let registrationDate = jsonElement["Registration_Date"] as? String,
+                       let pro = jsonElement["ProVersion"] as? String, //(0,1)
+                       let trialDate = jsonElement["trialDate"] as? String
                     {
-                        loadedData.append([name, email, password, registrationDate])
+                        loadedData.append([name, email, password, registrationDate, pro, trialDate])
                     }
                     
                 }
@@ -288,10 +290,18 @@ struct SaveToDB {
 
 
 
+
+
 struct DeleteFromDB {
     
     func Transactions(toDataString: String, completion: @escaping (Bool) -> ()) {
         delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-transaction.php", toDataString: toDataString, error: { (error) in
+               completion(error)
+           })
+    }
+    
+    func User(toDataString: String, completion: @escaping (Bool) -> ()) {
+        delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-user.php", toDataString: toDataString, error: { (error) in
                completion(error)
            })
     }
@@ -336,7 +346,7 @@ struct DeleteFromDB {
                             error(false)
                             return
                         } else {
-                            print("db error for (cats, etc)")
+                            print("delete: db error for (cats, etc)")
                             error(true)
                             return
                         }
