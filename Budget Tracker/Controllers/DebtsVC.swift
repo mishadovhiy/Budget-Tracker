@@ -31,9 +31,15 @@ class DebtsVC: UIViewController {
     var hideTitle = false
     var darkAppearence = false
     var fromSettings = false
+    override func viewDidDisappear(_ animated: Bool) {
+        DispatchQueue.main.async {
+            self.helperNavView.removeFromSuperview()
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        helperNavView.backgroundColor = K.Colors.background
        /* if hideTitle {
             title = "Categories"
             DispatchQueue.main.async {
@@ -125,6 +131,7 @@ class DebtsVC: UIViewController {
     
     
     @IBAction func addPressed(_ sender: UIButton) {
+        transactionAdded = true
         let alert = UIAlertController(title: "Add Debt", message: "", preferredStyle: .alert)
         alertTextFields(alert: alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
@@ -207,9 +214,15 @@ class DebtsVC: UIViewController {
             
         }
     }
+    let helperNavView = UIView()
     override func viewWillDisappear(_ animated: Bool) {
         print("will disap")
         if fromSettings {
+            DispatchQueue.main.async {
+                let window = UIApplication.shared.keyWindow ?? UIWindow()
+                self.helperNavView.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: safeArTopHeight)
+                window.addSubview(self.helperNavView)
+            }
             delegate?.catDebtSelected(name: "", amount: 0)
         }
     }
@@ -217,7 +230,8 @@ class DebtsVC: UIViewController {
     
     
     override func viewWillAppear(_ animated: Bool) {
-        navigationController?.setNavigationBarHidden(darkAppearence ? false : true, animated: true)
+        //navigationController?.setNavigationBarHidden(darkAppearence ? false : true, animated: true)
+        navigationController?.setNavigationBarHidden(false, animated: true)
         
     }
     var viewLoadedd = false
@@ -281,7 +295,7 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
 
         
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
-            
+            transactionAdded = true
             let mainFrame = view.frame
             let ai = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: mainFrame.width, height: mainFrame.height))
             ai.style = .gray

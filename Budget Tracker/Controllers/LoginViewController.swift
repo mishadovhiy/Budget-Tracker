@@ -47,7 +47,7 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        helperNavView.backgroundColor = K.Colors.background
         print("username: \(appData.username)")
         print("localTransactions:", appData.getTransactions.count)
         updateUI()
@@ -56,6 +56,7 @@ class LoginViewController: UIViewController {
 
     }
     @IBAction func logoutPressed(_ sender: UIButton) {
+        transactionAdded = true
         appData.username = ""
         appData.password = ""
         DispatchQueue.main.async {
@@ -97,13 +98,21 @@ class LoginViewController: UIViewController {
     
     let ai = UIActivityIndicatorView.init(style: .gray)
     
-    
+    override func viewDidDisappear(_ animated: Bool) {
+        DispatchQueue.main.async {
+            self.helperNavView.removeFromSuperview()
+        }
+    }
     func showActivityIndicator(at button: UIButton) {
         DispatchQueue.main.async {
             self.ai.frame = CGRect(x: 5, y: 5, width: 15, height: 15)
             button.addSubview(self.ai)
             self.ai.startAnimating()
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
     var actionButtonsEnabled : Bool {
@@ -122,6 +131,7 @@ class LoginViewController: UIViewController {
     
     let load = LoadFromDB()
     @IBAction func logInPressed(_ sender: UIButton) {
+        transactionAdded = true
         actionButtonsEnabled = false
         showActivityIndicator(at: sender)
         hideKeyboard()
@@ -227,6 +237,7 @@ class LoginViewController: UIViewController {
 
     
     @IBAction func createAccountPressed(_ sender: Any) {
+        transactionAdded = true
         self.actionButtonsEnabled = true
         showActivityIndicator(at: sender as! UIButton)
         hideKeyboard()
@@ -339,14 +350,20 @@ class LoginViewController: UIViewController {
         }
     }
     
+    var fromSettings = false
     var usernameHolder = ""
     override func viewWillDisappear(_ animated: Bool) {
         invalidateTimers()
-        DispatchQueue.main.async {
-            self.message.hideMessage(duration: 0)
+        if fromSettings {
+            DispatchQueue.main.async {
+                let window = UIApplication.shared.keyWindow ?? UIWindow()
+                self.helperNavView.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: safeArTopHeight)
+                window.addSubview(self.helperNavView)
+                self.message.hideMessage(duration: 0)
+            }
         }
     }
-    
+    let helperNavView = UIView()
     func userExists(name: String, loadedData: [[String]]) -> Bool {
         var userExists = false
         //load users
@@ -479,9 +496,19 @@ class LoginViewController: UIViewController {
                     let dif = self.view.frame.height - CGFloat(keyboardHeight) - (selectedTextfieldd.superview?.frame.maxY ?? 0)
                     if dif < 20 {
                         //here
+                        
                         DispatchQueue.main.async {
                             UIView.animate(withDuration: 0.3) {
-                                self.view.layer.frame = CGRect(x: 0, y: dif - 20, width: self.view.layer.frame.width, height: self.view.layer.frame.height)
+                                //self.view.layer.frame = CGRect(x: 0, y: dif - 20, width: self.view.layer.frame.width, height: self.view.layer.frame.height)
+                                //self.view.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, dif - 20, 0)
+                                if self.selectedScreen == .createAccount {
+                                    self.logIn.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, dif - 20, 0)
+                                } else {
+                                    if self.selectedScreen == .singIn {
+                                        self.createAcount.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, dif - 20, 0)
+                                    }
+                                }
+                               // self.view.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, dif - 20, 0)
                             }
                         }
                     }
@@ -491,13 +518,21 @@ class LoginViewController: UIViewController {
     }
        
     @objc func keyboardWillHide(_ notification: Notification) {
-        if self.view.layer.frame.minY != 0 {
+    //    if self.view.layer.frame.minY != 0 {
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.3) {
-                    self.view.layer.frame = CGRect(x: 0, y: 0, width: self.view.layer.frame.width, height: self.view.layer.frame.height)
+                    //self.view.layer.frame = CGRect(x: 0, y: 0 + (self.navigationController?.navigationBar.frame.height ?? 0), width: self.view.layer.frame.width, height: self.view.layer.frame.height + (self.navigationController?.navigationBar.frame.height ?? 0))
+
+                    if self.selectedScreen == .createAccount {
+                        self.logIn.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+                    } else {
+                        if self.selectedScreen == .singIn {
+                            self.createAcount.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+                        }
+                    }
                 }
             }
-        }
+    //    }
     }
        
     @objc func textfieldValueChanged(_ textField: UITextField) {
@@ -528,7 +563,7 @@ extension LoginViewController: UITextFieldDelegate {
             } else {
                 DispatchQueue.main.async {
                     self.message.showMessage(text: "Create username", type: .error, autoHide: false)
-                    textField.endEditing(true)
+                 //   textField.endEditing(true)
                 }
             }
             
@@ -536,7 +571,7 @@ extension LoginViewController: UITextFieldDelegate {
             if !(self.emailLabel.text ?? "").contains("@") || !(self.emailLabel.text ?? "").contains(".") {
                 DispatchQueue.main.async {
                     self.message.showMessage(text: "Enter valid email address", type: .error, autoHide: false)
-                    textField.endEditing(true)
+                   // textField.endEditing(true)
                 }
             } else {
                 DispatchQueue.main.async {
@@ -551,7 +586,7 @@ extension LoginViewController: UITextFieldDelegate {
             } else {
                 DispatchQueue.main.async {
                     self.message.showMessage(text: "Create password", type: .error, autoHide: false)
-                    textField.endEditing(true)
+                  //  textField.endEditing(true)
                 }
             }
         case confirmPasswordLabel:
@@ -562,19 +597,19 @@ extension LoginViewController: UITextFieldDelegate {
                     } else {
                         DispatchQueue.main.async {
                             self.message.showMessage(text: "Passwords not match", type: .error, autoHide: false)
-                            textField.endEditing(true)
+                           // textField.endEditing(true)
                         }
                     }
                 } else {
                     DispatchQueue.main.async {
                         self.message.showMessage(text: "Repeat password", type: .error, autoHide: false)
-                        textField.endEditing(true)
+                      //  textField.endEditing(true)
                     }
                 }
             } else {
                 DispatchQueue.main.async {
                     self.message.showMessage(text: "Repeat password", type: .error, autoHide: false)
-                    textField.endEditing(true)
+                   // textField.endEditing(true)
                 }
             }
             
@@ -596,13 +631,13 @@ extension LoginViewController: UITextFieldDelegate {
                 } else {
                     DispatchQueue.main.async {
                         self.message.showMessage(text: "Enter username", type: .error, autoHide: false)
-                        textField.endEditing(true)
+                      //  textField.endEditing(true)
                     }
                 }
             } else {
                 DispatchQueue.main.async {
                     self.message.showMessage(text: "Enter username", type: .error, autoHide: false)
-                    textField.endEditing(true)
+                        //     textField.endEditing(true)
                 }
             }
             
@@ -613,7 +648,7 @@ extension LoginViewController: UITextFieldDelegate {
             } else {
                 DispatchQueue.main.async {
                     self.message.showMessage(text: "Enter password!", type: .error, autoHide: false)
-                    textField.endEditing(true)
+                    //textField.endEditing(true)
                 }
             }
         default:

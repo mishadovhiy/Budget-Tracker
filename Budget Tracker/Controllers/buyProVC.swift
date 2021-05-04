@@ -64,14 +64,13 @@ class BuyProVC: UIViewController {
             self.buyProutton.layer.cornerRadius = 10
             
         }
-        
-        
+
         
 
-            /* if #available(iOS 13.0, *) {
+        if #available(iOS 13.0, *) {
         } else {
-            closeButton.alpha = 1
-        }*/
+            self.closeButton.alpha = navigationController == nil ? 1 : 0
+        }
         
     }
     
@@ -105,10 +104,32 @@ class BuyProVC: UIViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+    
+    var fromSettings = false
     override func viewDidAppear(_ animated: Bool) {
         //did lo - transform - small
         showPurchasedIndicator()
         getProducts()
+    }
+    
+    let helperNavView = UIView()
+    override func viewWillDisappear(_ animated: Bool) {
+        if fromSettings {
+            DispatchQueue.main.async {
+                let window = UIApplication.shared.keyWindow ?? UIWindow()
+                self.helperNavView.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: safeArTopHeight)
+                window.addSubview(self.helperNavView)
+            }
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        DispatchQueue.main.async {
+            self.helperNavView.removeFromSuperview()
+        }
     }
     
     @IBAction func pageChanged(_ sender: UIPageControl) {

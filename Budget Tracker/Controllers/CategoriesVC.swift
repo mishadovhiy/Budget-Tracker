@@ -37,6 +37,7 @@ class CategoriesVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        helperNavView.backgroundColor = K.Colors.background
         if #available(iOS 13.0, *) {
             if darkAppearence {
                 self.view.backgroundColor = UIColor(named: "darkTableColor")
@@ -60,12 +61,20 @@ class CategoriesVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         toHistory = false
-        navigationController?.setNavigationBarHidden(fromSettings ? true : false, animated: true)
+        //navigationController?.setNavigationBarHidden(fromSettings ? true : false, animated: true)
+        navigationController?.setNavigationBarHidden(false, animated: true)
         
     }
-    
+    let helperNavView = UIView()
     override func viewWillDisappear(_ animated: Bool) {
 
+        if fromSettings {
+            DispatchQueue.main.async {
+                let window = UIApplication.shared.keyWindow ?? UIWindow()
+                self.helperNavView.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: safeArTopHeight)
+                window.addSubview(self.helperNavView)
+            }
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -77,7 +86,15 @@ class CategoriesVC: UIViewController {
         
     }
     
+    
+    
     override func viewDidDisappear(_ animated: Bool) {
+        if !toHistory {
+            DispatchQueue.main.async {
+                self.helperNavView.removeFromSuperview()
+            }
+        }
+
         if !toHistory {
             if fromSettings {
                 if !wasEdited {
@@ -217,6 +234,7 @@ class CategoriesVC: UIViewController {
     
     func sendToDBCategory(title: String, purpose: String) {
         wasEdited = true
+        transactionAdded = true
         let Nickname = appData.username
         if Nickname != "" {
             let toDataString = "&Nickname=\(Nickname)" + "&Title=\(title)" + "&Purpose=\(purpose)" + "&ExpectingPayment=0"
@@ -235,6 +253,7 @@ class CategoriesVC: UIViewController {
     
     func deteteCategory(at: IndexPath) {
 
+        transactionAdded = true
         let delete = DeleteFromDB()
         let Nickname = appData.username
         let Title = at.section == 0 ? expenses[at.row].0 : incomes[at.row].0

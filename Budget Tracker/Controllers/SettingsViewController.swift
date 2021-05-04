@@ -8,7 +8,7 @@
 
 import UIKit
 var categoriesDebtsCount = (0,0)
-
+var safeArTopHeight: CGFloat = 0.0
 protocol SettingsViewControllerProtocol {
     func closeSettings(sendSavedData:Bool, needFiltering: Bool)
 }
@@ -19,9 +19,9 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     var delegate: SettingsViewControllerProtocol?
     var tableData: [SettingsSctruct] = [
-        SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: ((UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String]] ?? []).count + (UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String]] ?? []).count) > 0 ? "toSavedData" : "toSingIn"),
+        SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: ((UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String]] ?? []).count + (UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String]] ?? []).count + (UserDefaults.standard.value(forKey: K.Keys.localDebts) as? [[String]] ?? []).count) > 0 ? "toSavedData" : "toSingIn"),
         SettingsSctruct(title: "Categories", description: "\(categoriesDebtsCount.0)", segue: "settingsToCategories"),
-        SettingsSctruct(title: "Debts", description: "\(categoriesDebtsCount.1)", segue: appData.proVersion ? "toDebts" : "toProVC")
+        SettingsSctruct(title: "Debts", description: "\(categoriesDebtsCount.1)", segue: (appData.proVersion || appData.proTrial) ? "toDebts" : "toProVC")
     ]
     lazy var message: MessageView = {
         let message = MessageView(self)
@@ -30,12 +30,15 @@ class SettingsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        helperNavView.backgroundColor = K.Colors.background
         updateUI()
 
     }
     
+    
     override func viewDidAppear(_ animated: Bool) {
+        
+        toSegue = false
         if UserDefaults.standard.value(forKey: "firstLaunchSettings") as? Bool ?? false == false {
             if appData.username == "" {
                 DispatchQueue.main.async {
@@ -48,7 +51,7 @@ class SettingsViewController: UIViewController {
         
         getdata()
         
-      /*  UIView.animate(withDuration: 0.14) {
+        /*UIView.animate(withDuration: 0.14) {
             self.view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2)
         } completion: { (_) in
             
@@ -76,13 +79,17 @@ class SettingsViewController: UIViewController {
         categoriesDebtsCount = (allCategories.count, allDebts.count)//debts.count)
         let unsavedCat = (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String]] ?? []).count
         let unsavedTrans = (UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String]] ?? []).count
+        let unsavedDebts = (UserDefaults.standard.value(forKey: K.Keys.localDebts) as? [[String]] ?? []).count
         let data = [
-            SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: (unsavedCat + unsavedTrans) > 0 ? "toSavedData" : "toSingIn"),
+            SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: (unsavedCat + unsavedTrans + unsavedDebts) > 0 ? "toSavedData" : "toSingIn"),
             SettingsSctruct(title: "Categories", description: "\(categoriesDebtsCount.0)", segue: "settingsToCategories"),
-            SettingsSctruct(title: "Debts", description: "\(categoriesDebtsCount.1)", segue: appData.proVersion ? "toDebts" : "toProVC")
+            SettingsSctruct(title: "Debts", description: "\(categoriesDebtsCount.1)", segue: (appData.proVersion || appData.proTrial) ? "toDebts" : "toProVC")
         ]
-        
         tableData = data
+        if appData.proTrial {
+            let trial = 7 - (UserDefaults.standard.value(forKey: "trialToExpireDays") as? Int ?? 0)
+            tableData.append(SettingsSctruct(title: "Trial expires in \(trial) day\(trial == 1 ? "" : "s")", description: "", segue: "toProVC", textInCenter: true))
+        }
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
@@ -99,24 +106,54 @@ class SettingsViewController: UIViewController {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         print(tableView.contentOffset, "settingsVC contentOffset")
-        if tableView.contentOffset.y < -20.0 {
-            self.getdata()
-            if appData.proVersion {
-                self.tableData.append(SettingsSctruct(title: "Pro Features", description: "Purchased", segue: "toProVC"))
+        if appData.proVersion {
+            if tableView.contentOffset.y < -40.0 {
+                self.getdata()
+                self.tableData.append(SettingsSctruct(title: "Pro Version", description: "Purchased", segue: "toProVC"))
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
             }
         }
+        
     }
 
     var sendLocalDataPressed = false
     
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        DispatchQueue.main.async {
+            //self.helperNavView.removeFromSuperview()
+            let window = UIApplication.shared.keyWindow ?? UIWindow()
+            UIView.animate(withDuration: 0.3) {
+                self.helperNavView.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: 0)
+            } completion: { (_) in
+                self.helperNavView.removeFromSuperview()
+            }
+
+        }
+    }
+    
+    let helperNavView = UIView()
     override func viewWillDisappear(_ animated: Bool) {
+        //navigationController?.setNavigationBarHidden(false, animated: true)
+        DispatchQueue.main.async {
+            safeArTopHeight = self.view.safeAreaInsets.top
+            let window = UIApplication.shared.keyWindow ?? UIWindow()
+            self.helperNavView.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: safeArTopHeight)//self.navigationController?.navigationBar.frame.height ?? 1)
+            window.addSubview(self.helperNavView)
+            /*UIView.animate(withDuration: 0.3) {
+                self.helperNavView.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: height)
+            }*/
+        }
         if !toSegue {
+            //fatalError()
             print("transactionAddedtransactionAddedtransactionAdded", transactionAdded)
-            delegate?.closeSettings(sendSavedData: sendLocalDataPressed, needFiltering: transactionAdded)
+            let needFiltering = transactionAdded
+            delegate?.closeSettings(sendSavedData: sendLocalDataPressed, needFiltering: needFiltering)
             transactionAdded = false
+        } else {
+            
         }
         DispatchQueue.main.async {
             self.message.hideMessage()
@@ -126,15 +163,21 @@ class SettingsViewController: UIViewController {
     func updateUI() {
         tableView.delegate = self
         tableView.dataSource = self
-        contentView.layer.masksToBounds = true
-        contentView.layer.cornerRadius = 9
-        contentView.layer.shadowColor = UIColor.black.cgColor
-        contentView.layer.shadowOpacity = 1
-        contentView.layer.shadowOffset = .zero
-        contentView.layer.shadowRadius = 10
+       // contentView.layer.masksToBounds = true
+        DispatchQueue.main.async {
+           // self.view.backgroundColor = .red
+            self.contentView.layer.cornerRadius = 9
+            self.contentView.layer.shadowColor = UIColor.black.cgColor
+            self.contentView.layer.shadowOpacity = 1
+            self.contentView.layer.shadowOffset = .zero
+            self.contentView.layer.shadowRadius = 10
+        }
     }
+
+    
     
     override func viewWillAppear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(true, animated: true)
        /* let wasBack = self.view.backgroundColor
         DispatchQueue.main.async {
             self.view.backgroundColor = .clear
@@ -158,27 +201,32 @@ class SettingsViewController: UIViewController {
     var toSegue = false
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
+        //navigationController?.setNavigationBarHidden(false, animated: true)
         toSegue = true
-        let messageText = "Save or delete data bellow"
+        let messageText = "Check data from previous account before logging out"
         
         switch segue.identifier {
+        case "toProVC":
+            let vc = segue.destination as! BuyProVC
+            vc.fromSettings = true
         case "toSingIn":
             let vc = segue.destination as! LoginViewController
             vc.selectedScreen = .singIn
+            vc.fromSettings = true
         case "toSavedData":
             let vc = segue.destination as! UnsendedDataVC
             vc.delegate = self
             vc.messageText = messageText
         case "settingsToCategories":
-            let nav = segue.destination as! NavigationController
-            let vc = nav.topViewController as! CategoriesVC
-            vc.delegate = self
+            let vc = segue.destination as! CategoriesVC
+          //  let vc = nav.topViewController as! CategoriesVC
+          //  vc.delegate = self
             vc.fromSettings = true
         case "toDebts":
             print("")
-            let nav = segue.destination as! NavigationController
-            let vc = nav.topViewController as! DebtsVC
-            vc.delegate = self
+            let vc = segue.destination as! DebtsVC
+          //  let vc = nav.topViewController as! DebtsVC
+      //      vc.delegate = self
             vc.fromSettings = true
         default:
             print("default")
@@ -221,6 +269,8 @@ class SettingsViewController: UIViewController {
         }*/
     }
     
+    
+    
 }
 
 
@@ -238,16 +288,24 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
         cell.descriptionLabel.text = tableData[indexPath.row].description
         cell.proView.layer.cornerRadius = 4
         if indexPath.row == 2 {
-            cell.proView.alpha = appData.proVersion ? 0 : 1
+            cell.proView.alpha = (appData.proVersion || appData.proTrial) ? 0 : 1
         }
+
+        cell.accessoryType = tableData[indexPath.row].textInCenter ? .none : .disclosureIndicator
+        cell.titleLbel.textAlignment = tableData[indexPath.row].textInCenter ? .center : .left
+        cell.titleLbel.textColor = tableData[indexPath.row].textInCenter ? K.Colors.balanceT : UIColor(named: "darkTableColor")
+        //med 17
+        cell.titleLbel.font = .systemFont(ofSize: tableData[indexPath.row].textInCenter ? 13 : 17, weight: .medium)
         return cell
     }
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        DispatchQueue.main.async {
-            self.performSegue(withIdentifier: self.tableData[indexPath.row].segue, sender: self)
+        if self.tableData[indexPath.row].segue != "" {
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: self.tableData[indexPath.row].segue, sender: self)
+            }
         }
         DispatchQueue.main.async {
             tableView.deselectRow(at: indexPath, animated: true)
@@ -265,6 +323,7 @@ struct SettingsSctruct {
     let title: String
     let description: String
     let segue: String
+    var textInCenter: Bool = false
 }
 
 
@@ -304,7 +363,7 @@ extension SettingsViewController: UnsendedDataVCProtocol {
     
 }
 
-extension SettingsViewController: CategoriesVCProtocol {
+/*extension SettingsViewController: CategoriesVCProtocol {
     func categorySelected(category: String, purpose: Int, fromDebts: Bool, amount: Int) {
         getdata()
     }
@@ -314,4 +373,5 @@ extension SettingsViewController: DebtsVCProtocol {
     func catDebtSelected(name: String, amount: Int) {
         getdata()
     }
-}
+}*/
+

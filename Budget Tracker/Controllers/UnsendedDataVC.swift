@@ -84,6 +84,7 @@ class UnsendedDataVC: UIViewController {
     
     var didapp = false
     let activity = UIActivityIndicatorView(frame: .zero)
+    let proView = UIView()
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -95,6 +96,9 @@ class UnsendedDataVC: UIViewController {
             button.layer.cornerRadius = 4
         }
         didapp = true
+        
+        
+        
         DispatchQueue.main.async {
             let titleFrame = self.mainTitleLabel.frame
             //self.activity.frame = CGRect(x: titleFrame.maxX, y: titleFrame.minY + (self.mainTitleLabel.superview?.superview?.frame.minY ?? 0) + 6, width: 15, height: 15)
@@ -104,10 +108,75 @@ class UnsendedDataVC: UIViewController {
             self.activity.startAnimating()
             self.deleteSelectedButton.superview?.alpha = 0
             self.deleteAllButton.alpha = 0
+            //appData.proVersion = false
+            self.togglePurchaseButton()
         }
         
         
     }
+    
+    func togglePurchaseButton(hideWithAnimation: Bool = false) {
+        let selfBtn = self.saveAllButton.layer.frame
+        let proLabel = UILabel(frame: CGRect(x: selfBtn.width - 40, y: -5, width: 30, height: 18))
+        
+        if !appData.proTrial || !appData.proVersion {
+            self.proView.removeFromSuperview()
+            self.proView.backgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.25)
+            self.proView.frame = selfBtn
+            proLabel.backgroundColor = K.Colors.yellow
+            proLabel.layer.masksToBounds = true
+            proLabel.layer.cornerRadius = 4
+            self.proView.layer.cornerRadius = self.saveAllButton.layer.cornerRadius
+            proLabel.textAlignment = .center
+            proLabel.text = "Pro"
+            proLabel.font = .systemFont(ofSize: 11, weight: .medium)
+            self.proView.addSubview(proLabel)
+            self.saveAllButton.superview?.addSubview(self.proView)
+            self.proView.isUserInteractionEnabled = true
+            self.proView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.goToPro(_:))))
+        } else {
+            if hideWithAnimation {
+                UIView.animate(withDuration: 0.25) {
+                    proLabel.frame = CGRect(x: selfBtn.width - 40, y: 200, width: 25, height: 15)
+                } completion: { (_) in
+                    UIView.animate(withDuration: 0.2) {
+                        self.proView.backgroundColor = .clear
+                    } completion: { (_) in
+                        self.proView.removeFromSuperview()
+                    }
+
+                }
+
+            } else {
+                self.proView.removeFromSuperview()
+            }
+        }
+    }
+    
+    var wasOnPro = false
+    @objc func goToPro(_ sender: UITapGestureRecognizer) {
+        if !appData.proTrial || !appData.proVersion {
+            wasOnPro = true
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "goToPro", sender: self)
+            }
+        } else {
+            togglePurchaseButton(hideWithAnimation: true)
+        }
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case "goToPro":
+            let vc = segue.destination as! BuyProVC
+            vc.selectedProduct = 1
+        default:
+            print("default")
+        }
+    }
+    
+    
     @objc func refresh(sender:AnyObject) {
         print("refreshing")
     }
@@ -181,12 +250,19 @@ class UnsendedDataVC: UIViewController {
     var sendPres = false
     @IBAction func sendPressed(_ sender: UIButton) {
         print(self.selectedCount, "self.selectedCountself.selectedCountself.selectedCountself.selectedCount")
-        if self.selectedCount == 0 {
-            sendPres = true
-            self.dismiss(animated: true) {
-                self.delegate?.quiteUnsendedData(deletePressed: false, sendPressed: true)
+        if !appData.proTrial || !appData.proVersion {
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "goToPro", sender: self)
+            }
+        } else {
+            if self.selectedCount == 0 {
+                sendPres = true
+                self.dismiss(animated: true) {
+                    self.delegate?.quiteUnsendedData(deletePressed: false, sendPressed: true)
+                }
             }
         }
+        
     }
     var deletePress = false
     @IBAction func deletePressed(_ sender: UIButton) {
@@ -666,6 +742,14 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
             return UISwipeActionsConfiguration(actions: selectedCount == 0 ? [deleteAction] : [])
         } else {
             return nil
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if wasOnPro {
+            //fatalError()
+            wasOnPro = false
+            togglePurchaseButton(hideWithAnimation: true)
         }
     }
 

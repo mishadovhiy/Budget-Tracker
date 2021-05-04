@@ -127,52 +127,22 @@ class ViewController: UIViewController {
                     }
                 }
                 
-                if !appData.purchasedOnThisDevice {
-                    if self.justLoaded {
+              //  if !appData.purchasedOnThisDevice {
+ /*                   if self.justLoaded {
                         self.justLoaded = false
                         if !appData.proVersion {
                             self.checkPurchase()
                         }
-                    }
-                }
-                if appData.proTrial {
-                    self.checkTrialDate()
-                }
+                    }*/
+              //  }
+               /* if appData.proTrial {
+                    self.checkProTrial()
+                }*/
             }
         }
     }
     
-    func checkTrialDate() {
-        let wasStr = appData.trialDate
-        let todayStr = appData.filter.getToday(appData.filter.filterObjects.currentDate)
-        let dates = (dateFrom(sting: wasStr), dateFrom(sting: todayStr))
-        print(dates, "bvghujkmnjbhguijk")
-        let dif = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: dates.0 ?? Date(), to: dates.1 ?? Date())
-        print(dif, "bvghujkmnjbhguijk")
-        if dif.year == 0 && dif.month == 0 {
-            if dif.day ?? 0 <= 7 {
-                appData.proTrial = true
-            } else {
-                appData.proTrial = false
-                DispatchQueue.main.async {
-                    self.message.showMessage(text: "Pro trial is over", type: .succsess, bottomAppearence: true)
-                }
-            }
-        } else {
-            appData.proTrial = false
-            DispatchQueue.main.async {
-                self.message.showMessage(text: "Pro trial is over", type: .succsess, bottomAppearence: true)
-            }
-        }
-    }
     
-    func dateFrom(sting: String) -> Date? {
-        print("dateFrom", sting)
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy"
-        let date = dateFormatter.date(from: sting)
-        return date
-    }
     
     var justLoaded = true
     var newTransaction: TransactionsStruct?
@@ -286,7 +256,7 @@ class ViewController: UIViewController {
                             transactionsResult.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
                         }
                         appData.saveTransations(transactionsResult)
-                        self.prepareFilterOptions()
+                        
                         load.Categories{(loadedCategories, error) in
                             if error == "" {
                                 print("loaded \(loadedCategories) Categories from DB")
@@ -297,8 +267,6 @@ class ViewController: UIViewController {
                                     categoriesResult.append(CategoriesStruct(name: name, purpose: purpose, count: 0))
                                 }
                                 appData.saveCategories(categoriesResult)
-                                
-                                
                                 load.Debts { (loadedDebts, debtsError) in
                                     if debtsError == "" {
                                         
@@ -312,8 +280,12 @@ class ViewController: UIViewController {
                                         }
                                         appData.saveDebts(debtsResult)
                                         UserDefaults.standard.setValue(Date(), forKey: "LastLoadDataDate")
+                                        self.checkPurchase()
+                                        self.prepareFilterOptions()
                                         self.filter()
+                                        
                                     } else {
+                                        
                                         self.filter()
                                         self.prepareFilterOptions()
                                         DispatchQueue.main.async {
@@ -409,9 +381,18 @@ class ViewController: UIViewController {
                 for i in 0..<loadedData.count {
                     if loadedData[i][0] == nick {
                         appData.proVersion = loadedData[i][3] == "1" ? true : false
-                        if appData.trialDate == "" {//test
-                            appData.trialDate = loadedData[i][5]
-                            self.checkTrialDate()
+                        
+                        if loadedData[i][5] != "" {//test
+                            if UserDefaults.standard.value(forKey: "checkTrialDate") as? Bool ?? true {
+                                appData.trialDate = loadedData[i][5]
+                                self.checkProTrial()
+                            }
+                        }
+                        
+                        if loadedData[i][2] != appData.password {
+                            DispatchQueue.main.async {
+                                self.performSegue(withIdentifier: "toLogin", sender: self)
+                            }
                         }
                         break
                     }
@@ -419,6 +400,42 @@ class ViewController: UIViewController {
             }
             
         }
+    }
+    func checkProTrial() {
+        //debts did lo if trial - check pro trial
+        let wasStr = appData.trialDate
+        let todayStr = appData.filter.getToday(appData.filter.filterObjects.currentDate)
+        let dates = (dateFrom(sting: wasStr), dateFrom(sting: todayStr))
+        print(dates, "bvghujkmnjbhguijk")
+        let dif = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: dates.0 ?? Date(), to: dates.1 ?? Date())
+        print(dif, "bvghujkmnjbhguijk")
+        if dif.year == 0 && dif.month == 0 {
+            if dif.day ?? 0 <= 7 {
+                appData.proTrial = true
+                print(dif.day ?? 0, "dif.day ?? 0dif.day ?? 0")
+                UserDefaults.standard.setValue(dif.day ?? 0, forKey: "trialToExpireDays")
+            } else {
+                appData.proTrial = false
+                UserDefaults.standard.setValue(false, forKey: "checkTrialDate")
+                DispatchQueue.main.async {
+                    self.message.showMessage(text: "Pro trial is over", type: .succsess, bottomAppearence: true)
+                }
+            }
+        } else {
+            appData.proTrial = false
+            UserDefaults.standard.setValue(false, forKey: "checkTrialDate")
+            DispatchQueue.main.async {
+                self.message.showMessage(text: "Pro trial is over", type: .succsess, bottomAppearence: true)
+            }
+        }
+    }
+    
+    func dateFrom(sting: String) -> Date? {
+        print("dateFrom", sting)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        let date = dateFormatter.date(from: sting)
+        return date
     }
     
     var _Calculations = (0, 0, 0, 0)
@@ -1327,7 +1344,8 @@ class ViewController: UIViewController {
             vc.delegate = self
             
         case "toSettings":
-            let vc = segue.destination as! SettingsViewController
+            let nav = segue.destination as! UINavigationController
+            let vc = nav.topViewController as! SettingsViewController//segue.destination as! SettingsViewController
             vc.delegate = self
         
         case "toStatisticVC":
@@ -1535,6 +1553,7 @@ class ViewController: UIViewController {
     }
     
     var animateCellWillAppear = true
+    var calcViewHeight:CGFloat = 0
 }
 
 //MARK: - extension
@@ -1776,8 +1795,24 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     
+   /* func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 0 && indexPath.row == 0 {
+            return 10// равно calc view
+        } else {
+            return tableView.cellForRow(at: indexPath)?.layer.frame.height ?? 0
+        }
+    }*/
+    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
 
+        /*if indexPath.section == 0 && indexPath.row == 0 {
+            //calcViewHeight = cell.frame.height
+          //  cell.frame = CGRect(x: 0, y: 0, width: 10, height: 30)
+            cell.backgroundColor = .red
+            cell.layer.frame = CGRect(x: 0, y: 0, width: 10, height: 30)
+            print(calcViewHeight, "cgfgujlmnbvfghjm")
+        }*/
+        
         if transactionAdded {
             transactionAdded = false
             filter()
@@ -1918,7 +1953,7 @@ extension ViewController: SettingsViewControllerProtocol {
         } else {
             if needFiltering {
                 print("ViewController needFiltering")
-                self.filter()
+                self.downloadFromDB()
             } else {
                 DispatchQueue.main.async {
                     self.mainTableView.reloadData()
