@@ -182,10 +182,10 @@ class ViewController: UIViewController {
         //UIApplication.shared.applicationIconBadgeNumber = 0
        // mainTableView.isUserInteractionEnabled = false
 
-        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap(_:))))
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(bigCalcTaps(_:))))
     }
     var canTouchHandleTap = true
-    @objc func handleTap(_ sender:UITapGestureRecognizer) {
+    @objc func bigCalcTaps(_ sender:UITapGestureRecognizer) {
         if canTouchHandleTap {
             let topSafeAr = self.view.safeAreaInsets.top
             let bigCalcFrame = bigCalcView.frame
@@ -200,6 +200,10 @@ class ViewController: UIViewController {
             let expensesY = bigCalcFrame.minY + expensesLabel.minY
             let expensesPosition = CGRect(x: bigCalcFrame.minX, y: expensesY, width: expensesLabel.width, height: expensesLabel.height)
             let expensesPressed = expensesPosition.contains(touchPoint)
+            //incomes pressed
+            let incomeLabel = self.incomeLabels.first?.superview?.frame ?? .zero
+            let incomePosition = CGRect(x: incomeLabel.minX, y: expensesPosition.minY, width: expensesPosition.width, height: expensesPosition.height)
+            let incomePressed = incomePosition.contains(touchPoint)
             //test
            /* let redBox = UIView(frame: expensesPosition)
             redBox.backgroundColor = .red
@@ -212,12 +216,13 @@ class ViewController: UIViewController {
                     }
                 }
             }
-            if expensesPressed {
+            if expensesPressed || incomePressed {
                 expenseLabelPressed = expensesPressed
                 DispatchQueue.main.async {
                     self.performSegue(withIdentifier: "toStatisticVC", sender: self)
                 }
             }
+            
             
         }
         
@@ -310,9 +315,9 @@ class ViewController: UIViewController {
             self.dataFromTitleLabel.text = "Data from \(prevName == "" ? "previous account" : prevName):"
             self.dataFromValueLabel.text = "\(localCount)"
             
-          //  self.unsendedDataLabel.superview?.superview?.isHidden = unsendedCount == 0 ? true : false
+            self.unsendedDataLabel.superview?.superview?.isHidden = unsendedCount == 0 ? true : false
             self.enableLocalDataPress = localCount == 0 ? false : true
-        //    self.dataFromValueLabel.superview?.superview?.isHidden = localCount == 0 ? true : false
+            self.dataFromValueLabel.superview?.superview?.isHidden = localCount == 0 ? true : false
             self.mainTableView.reloadData()
         }
     }
