@@ -109,8 +109,9 @@ class UnsendedDataVC: UIViewController {
             self.deleteSelectedButton.superview?.alpha = 0
             self.deleteAllButton.alpha = 0
             //appData.proVersion = false
-            self.togglePurchaseButton()
+            
         }
+        self.togglePurchaseButton()
         
         
     }
@@ -118,8 +119,9 @@ class UnsendedDataVC: UIViewController {
     func togglePurchaseButton(hideWithAnimation: Bool = false) {
         let selfBtn = self.saveAllButton.layer.frame
         let proLabel = UILabel(frame: CGRect(x: selfBtn.width - 40, y: -5, width: 30, height: 18))
-        
-        if !appData.proTrial || !appData.proVersion {
+
+        if !appData.proTrial && !appData.proVersion {
+           // fatalError()
             self.proView.removeFromSuperview()
             self.proView.backgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.25)
             self.proView.frame = selfBtn
@@ -155,14 +157,11 @@ class UnsendedDataVC: UIViewController {
     
     var wasOnPro = false
     @objc func goToPro(_ sender: UITapGestureRecognizer) {
-        if !appData.proTrial || !appData.proVersion {
-            wasOnPro = true
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "goToPro", sender: self)
-            }
-        } else {
-            togglePurchaseButton(hideWithAnimation: true)
+        wasOnPro = true
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: "goToPro", sender: self)
         }
+        togglePurchaseButton(hideWithAnimation: true)
         
     }
     
@@ -250,7 +249,7 @@ class UnsendedDataVC: UIViewController {
     var sendPres = false
     @IBAction func sendPressed(_ sender: UIButton) {
         print(self.selectedCount, "self.selectedCountself.selectedCountself.selectedCountself.selectedCount")
-        if !appData.proTrial || !appData.proVersion {
+        if !appData.proTrial && !appData.proVersion {
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: "goToPro", sender: self)
             }

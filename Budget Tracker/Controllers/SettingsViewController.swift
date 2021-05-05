@@ -30,7 +30,6 @@ class SettingsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        helperNavView.backgroundColor = K.Colors.background
         updateUI()
 
     }
@@ -51,9 +50,11 @@ class SettingsViewController: UIViewController {
         
         getdata()
         
-        /*UIView.animate(withDuration: 0.14) {
-            self.view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2)
-        } completion: { (_) in
+       /* DispatchQueue.main.async {
+            //self.view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2)
+           // let window = UIApplication.shared.keyWindow ?? UIWindow()
+           // window.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2)
+           // window.alpha = 0.2
             
         }*/
 
@@ -98,7 +99,7 @@ class SettingsViewController: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         print("setting touches")
         if let touch = touches.first {
-            if touch.view != contentView{
+            if touch.view != contentView {
                 closeWithAnimation()
             }
         }
@@ -124,20 +125,14 @@ class SettingsViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         DispatchQueue.main.async {
             //self.helperNavView.removeFromSuperview()
-            let window = UIApplication.shared.keyWindow ?? UIWindow()
-            UIView.animate(withDuration: 0.3) {
-                self.helperNavView.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: 0)
-            } completion: { (_) in
-                self.helperNavView.removeFromSuperview()
-            }
+
 
         }
     }
-    
-    let helperNavView = UIView()
+
     override func viewWillDisappear(_ animated: Bool) {
         //navigationController?.setNavigationBarHidden(false, animated: true)
-        DispatchQueue.main.async {
+       /* DispatchQueue.main.async {
             safeArTopHeight = self.view.safeAreaInsets.top
             let window = UIApplication.shared.keyWindow ?? UIWindow()
             self.helperNavView.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: safeArTopHeight)//self.navigationController?.navigationBar.frame.height ?? 1)
@@ -145,7 +140,8 @@ class SettingsViewController: UIViewController {
             /*UIView.animate(withDuration: 0.3) {
                 self.helperNavView.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: height)
             }*/
-        }
+ 
+        }*/
         if !toSegue {
             //fatalError()
             print("transactionAddedtransactionAddedtransactionAdded", transactionAdded)

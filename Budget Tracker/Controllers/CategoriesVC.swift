@@ -37,7 +37,7 @@ class CategoriesVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        helperNavView.backgroundColor = K.Colors.background
+
         if #available(iOS 13.0, *) {
             if darkAppearence {
                 self.view.backgroundColor = UIColor(named: "darkTableColor")
@@ -65,15 +65,10 @@ class CategoriesVC: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: true)
         
     }
-    let helperNavView = UIView()
+
     override func viewWillDisappear(_ animated: Bool) {
 
         if fromSettings {
-            DispatchQueue.main.async {
-                let window = UIApplication.shared.keyWindow ?? UIWindow()
-                self.helperNavView.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: safeArTopHeight)
-                window.addSubview(self.helperNavView)
-            }
         }
     }
     
@@ -90,9 +85,7 @@ class CategoriesVC: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         if !toHistory {
-            DispatchQueue.main.async {
-                self.helperNavView.removeFromSuperview()
-            }
+
         }
 
         if !toHistory {

@@ -67,10 +67,7 @@ class BuyProVC: UIViewController {
 
         
 
-        if #available(iOS 13.0, *) {
-        } else {
-            self.closeButton.alpha = navigationController == nil ? 1 : 0
-        }
+        self.closeButton.alpha = navigationController == nil ? 1 : 0
         
     }
     
@@ -115,21 +112,15 @@ class BuyProVC: UIViewController {
         getProducts()
     }
     
-    let helperNavView = UIView()
+
     override func viewWillDisappear(_ animated: Bool) {
         if fromSettings {
-            DispatchQueue.main.async {
-                let window = UIApplication.shared.keyWindow ?? UIWindow()
-                self.helperNavView.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: safeArTopHeight)
-                window.addSubview(self.helperNavView)
-            }
+
         }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        DispatchQueue.main.async {
-            self.helperNavView.removeFromSuperview()
-        }
+
     }
     
     @IBAction func pageChanged(_ sender: UIPageControl) {

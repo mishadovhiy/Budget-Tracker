@@ -32,14 +32,12 @@ class DebtsVC: UIViewController {
     var darkAppearence = false
     var fromSettings = false
     override func viewDidDisappear(_ animated: Bool) {
-        DispatchQueue.main.async {
-            self.helperNavView.removeFromSuperview()
-        }
+
     }
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        helperNavView.backgroundColor = K.Colors.background
+
        /* if hideTitle {
             title = "Categories"
             DispatchQueue.main.async {
@@ -214,15 +212,11 @@ class DebtsVC: UIViewController {
             
         }
     }
-    let helperNavView = UIView()
+
     override func viewWillDisappear(_ animated: Bool) {
         print("will disap")
         if fromSettings {
-            DispatchQueue.main.async {
-                let window = UIApplication.shared.keyWindow ?? UIWindow()
-                self.helperNavView.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: safeArTopHeight)
-                window.addSubview(self.helperNavView)
-            }
+
             delegate?.catDebtSelected(name: "", amount: 0)
         }
     }
