@@ -217,12 +217,14 @@ class SettingsViewController: UIViewController {
             let vc = segue.destination as! CategoriesVC
           //  let vc = nav.topViewController as! CategoriesVC
           //  vc.delegate = self
+            vc.safeAreaButton = self.view.safeAreaInsets.bottom
             vc.fromSettings = true
         case "toDebts":
             print("")
             let vc = segue.destination as! DebtsVC
           //  let vc = nav.topViewController as! DebtsVC
       //      vc.delegate = self
+            vc.safeAreaButton = self.view.safeAreaInsets.bottom
             vc.fromSettings = true
         default:
             print("default")

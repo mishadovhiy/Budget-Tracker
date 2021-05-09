@@ -18,6 +18,7 @@ class HistoryVC: UIViewController {
     var selectedCategoryName = ""
     var fromCategories = false
     var allowEditing = true
+    var debt: DebtsStruct?
     
     override func viewDidLoad() {
         super.viewDidLoad()

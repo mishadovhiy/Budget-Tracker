@@ -18,6 +18,7 @@ var selectedPeroud = ""
 
 class ViewController: UIViewController {
     
+    @IBOutlet weak var addTransactionWhenEmptyButton: UIButton!
     @IBOutlet weak var noDataView: UIView!
     @IBOutlet weak var noDataLabel: UILabel!
     @IBOutlet weak var unsendedDataLabel: UILabel!
@@ -83,9 +84,9 @@ class ViewController: UIViewController {
                 self.mainTableView.isScrollEnabled = self.tableData.count == 0 ? false : true
                 
                 if self.tableData.count == 0 {
-                    self.toggleNoData(show: true, text: (UserDefaults.standard.value(forKey: "transactionsData") as? [[String]])?.count ?? 0 == 0 ? "No Transactions" : "No Transactions for selected period")
+                    self.toggleNoData(show: true, text: (UserDefaults.standard.value(forKey: "transactionsData") as? [[String]])?.count ?? 0 == 0 ? "Add your first transaction" : "No transactions\nfor selected period")
                 } else {
-                    self.toggleNoData(show: false)
+                    self.toggleNoData(show: false, addButtonHidden: true)
                 }
                 
                 if self.sendSavedData {
@@ -136,6 +137,12 @@ class ViewController: UIViewController {
                         }
                     }*/
               //  }
+                
+               /* if self.justLoaded {
+                    self.justLoaded = false
+                    self.checkPurchase()
+                }*/
+                
                /* if appData.proTrial {
                     self.checkProTrial()
                 }*/
@@ -143,7 +150,8 @@ class ViewController: UIViewController {
         }
     }
     
-    func toggleNoData(show: Bool, text: String = "No Transactions", fromTop: Bool = false, appeareAnimation: Bool = true) {
+    func toggleNoData(show: Bool, text: String = "No Transactions", fromTop: Bool = false, appeareAnimation: Bool = true, addButtonHidden: Bool = false) {
+        self.addTransactionWhenEmptyButton.isHidden = addButtonHidden
         if show {
             let y = fromTop ? self.mainTableView.frame.minY : self.bigCalcView.frame.maxY
             self.noDataView.isHidden = false
@@ -235,8 +243,12 @@ class ViewController: UIViewController {
         downloadFromDB()
         self.mainTableView.delegate = self
         self.mainTableView.dataSource = self
-        toggleNoData(show: true, text: "Loading", fromTop: true, appeareAnimation: false)
+        toggleNoData(show: true, text: "Loading", fromTop: true, appeareAnimation: false, addButtonHidden: true)
         DispatchQueue.main.async {
+           // for button in self.lightCornerButtons {
+            self.addTransactionWhenEmptyButton.layer.cornerRadius = 5
+            self.addTransactionWhenEmptyButton.layer.masksToBounds = true
+          //  }
            // self.darkBackgroundUnderTable
             //self.noDataView.frame = CGRect(x: 0, y: self.view.frame.height, width: self.view.frame.width, height: self.view.frame.height / 2)
             //self.noDataView.isHidden = true
@@ -276,7 +288,7 @@ class ViewController: UIViewController {
             
             self.refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
             let superWidth = self.view.frame.width
-            self.refreshSubview.frame = CGRect(x: superWidth / 2 - 10, y: 5, width: 20, height: 20)
+            self.refreshSubview.frame = CGRect(x: superWidth / 2 - 10, y: self.bigCalcView.frame.maxY + 10, width: 20, height: 20)
             print(self.refreshSubview.frame, "ijhyghujijnhj")
             let image = UIImage(named: "plusIcon")
             let button = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
@@ -1562,7 +1574,7 @@ class ViewController: UIViewController {
     }
     
     //@IBOutlet weak var whiteBackground: UIView!
-    var  whiteBackgroundFrame = CGRect(x: 0, y: 0, width: 0, height: 0)
+
     var refreshData = false
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -1671,6 +1683,13 @@ class ViewController: UIViewController {
     }
 
 
+    @IBAction func addTransactionPressed(_ sender: UIButton) {
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: "goToEditVC", sender: self)
+        }
+    }
+    
+    
     
     @objc func addTransButtonPressed(_ sender: UIButton) {
         print("addtrans")

@@ -10,13 +10,13 @@ import UIKit
 
 class DebtsVC: UIViewController {
     @IBOutlet weak var tableView: UITableView!
-    
-    @IBOutlet weak var titleView: UIView!
+
     var delegate: DebtsVCProtocol?
     var debts: [DebtsStruct] = []
     var emptyValuesTableData: [DebtsTableStruct] = []
     var plusValues: [DebtsTableStruct] = []
     var _tableData: [DebtsTableStruct] = []
+    var safeAreaButton: CGFloat = 0.0
     var tableData: [DebtsTableStruct] {
         get {
             return _tableData
@@ -34,33 +34,41 @@ class DebtsVC: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
 
     }
+    let footerHeight:CGFloat = 35
+    
+    let newDebtField = UITextField(frame: .zero)
+    var showAnimatonOnSwitch = true
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        newDebtField.delegate = self
+        DispatchQueue.main.async {
+            self.newDebtButton.layer.cornerRadius = 6
+            self.newDebtField.returnKeyType = .done
+            self.newDebtField.font = .systemFont(ofSize: 17, weight: .semibold)
+            self.newDebtField.clearButtonMode = .always
 
-       /* if hideTitle {
-            title = "Categories"
-            DispatchQueue.main.async {
-                let frame = self.headerView.frame
-                let selfFrame = self.tableView.frame
-                self.headerView.isHidden = true
-                self.tableView.translatesAutoresizingMaskIntoConstraints = true
-                self.tableView.frame = CGRect(x: 0, y: frame.minY, width: selfFrame.width, height: selfFrame.height + frame.height)
-            }
-        }*/
+            self.newDebtButton.layer.shadowPath = UIBezierPath(rect: self.newDebtButton.bounds).cgPath
+            self.newDebtButton.layer.shadowColor = UIColor.black.cgColor
+            self.newDebtButton.layer.shadowOpacity = 0.15
+            self.newDebtButton.layer.shadowOffset = .zero
+            self.newDebtButton.layer.shadowRadius = 6
+        }
+        NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+
         if darkAppearence {
             DispatchQueue.main.async {
-                let frame = self.titleView.frame
-                let selfFrame = self.tableView.frame
+                self.newDebtField.textColor = .white
                 self.tableView.translatesAutoresizingMaskIntoConstraints = true
-                self.tableView.frame = CGRect(x: 0, y: frame.minY, width: selfFrame.width, height: selfFrame.height + frame.height)
+
             }
         }
         if #available(iOS 13.0, *) {
             if darkAppearence {
+                self.newDebtField.keyboardAppearance = .dark
                 self.view.backgroundColor = UIColor(named: "darkTableColor")
                 self.tableView.separatorColor = UIColor(named: "darkSeparetor")
-                self.titleView.alpha = 0
                 
             }
         } else {
@@ -68,7 +76,6 @@ class DebtsVC: UIViewController {
                 if self.darkAppearence {
                     self.view.backgroundColor = UIColor(named: "darkTableColor")
                     self.tableView.separatorColor = UIColor(named: "darkSeparetor")
-                    self.titleView.alpha = 0
                 }
             }
         }
@@ -79,15 +86,47 @@ class DebtsVC: UIViewController {
         
     }
     
+    var tableContentOf:UIEdgeInsets = UIEdgeInsets.zero
+    @objc func keyboardWillHide(_ notification: Notification) {
+        self.addingNew = false
+        DispatchQueue.main.async {
+            self.newDebtButton.superview?.backgroundColor = .clear
+            self.newDebtField.removeFromSuperview()
+            self.tableView.contentInset = self.tableContentOf
+            self.newDebtButton.alpha = 1
+            UIView.animate(withDuration: 0.3) {
+                self.newDebtButton.superview?.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+            } completion: { (_) in
+                
+            }
+
+        }
+    }
+    
+    var keyHeight: CGFloat = 0.0
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+            if keyboardHeight > 1.0 {
+                DispatchQueue.main.async {
+                    self.tableView.contentInset.bottom = keyboardHeight - self.safeAreaButton + (self.newDebtButton.superview?.layer.frame.height ?? 0)
+                   // self.tableView.contentOffset = CGPoint(x: self.tableView.contentOffset.x, y: self.tableView.contentOffset.y - keyboardHeight)
+                    UIView.animate(withDuration: 0.3) {
+                        self.newDebtButton.superview?.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, (keyboardHeight - self.safeAreaButton) * (-1), 0)
+                    } completion: { (_) in
+                        
+                    }
+
+                }
+
+            }
+        }
+    }
+    
     func getDataFromLocal() {
         debts = Array(appData.getDebts())
-      /*  let categories = Array(appData.getDebts())
-        for i in 0..<categories.count {
-            if categories[i].debt {
-                debts.append(CategoriesStruct(name: categories[i].name, purpose: categories[i].purpose, count: categories[i].count, debt: categories[i].debt))
-                
-            } 
-        }*/
+
         let transactions = Array(appData.getTransactions)
         var result:[DebtsTableStruct] = []
         emptyValuesTableData.removeAll()
@@ -119,6 +158,11 @@ class DebtsVC: UIViewController {
         }
         plusValues = plusValues.sorted { $0.amount > $1.amount }
         tableData = result.sorted { $0.amount < $1.amount }
+        DispatchQueue.main.async {
+            if self.newDebtField.isFirstResponder {
+                self.newDebtField.endEditing(true)
+            }
+        }
     }
     
     @IBAction func closePressed(_ sender: UIButton) {
@@ -126,43 +170,8 @@ class DebtsVC: UIViewController {
             self.dismiss(animated: true)
         }
     }
-    
-    
-    @IBAction func addPressed(_ sender: UIButton) {
-        transactionAdded = true
-        let alert = UIAlertController(title: "Add Debt", message: "", preferredStyle: .alert)
-        alertTextFields(alert: alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
-        alert.addAction(UIAlertAction(title: "Done", style: .default, handler: { (action) in
 
-            DispatchQueue.main.async {
-                if let name = self.alertTextField.text {
-                    if name != "" {
 
-                   //     self.debts.append(CategoriesStruct(name: name, purpose: K.expense, count: 0))
-                        if appData.username != "" {
-                            self.sendToDBDebt(title: name, purpose: K.expense)
-                        } else {
-                            var allDebts = Array(appData.getDebts())
-                            allDebts.append(DebtsStruct(name: name, amountToPay: "", dueDate: ""))
-                            appData.saveDebts(allDebts)
-                            self.getDataFromLocal()
-                        }
-                    }
-                }
-            }
-
-        }))
-        present(alert, animated: true, completion: nil)
-    }
-    
-    var alertTextField = UITextField()
-    func alertTextFields(alert: UIAlertController) {
-        alert.addTextField { (category) in
-            category.placeholder = "Category name"
-            self.alertTextField = category
-        }
-    }
 
     func sendToDBDebt(title: String, purpose: String) {
         let Nickname = appData.username
@@ -216,7 +225,6 @@ class DebtsVC: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         print("will disap")
         if fromSettings {
-
             delegate?.catDebtSelected(name: "", amount: 0)
         }
     }
@@ -230,6 +238,14 @@ class DebtsVC: UIViewController {
     }
     var viewLoadedd = false
     override func viewDidAppear(_ animated: Bool) {
+
+        DispatchQueue.main.async {
+            let edg = UIEdgeInsets(top: self.tableView.contentInset.top, left: self.tableView.contentInset.left, bottom: self.tableView.contentInset.bottom + (self.newDebtButton.superview?.layer.frame.height ?? 0), right: self.tableView.contentInset.right)
+            self.tableView.contentInset = edg
+            self.tableContentOf = edg
+            self.tableView.reloadData()
+
+        }
         if viewLoadedd {
             getDataFromLocal()
         } else {
@@ -245,6 +261,26 @@ class DebtsVC: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         print("mainTouches")
     }
+
+    
+    var addingNew = false
+    @IBOutlet weak var newDebtButton: UIButton!
+    @IBAction func newDebtPressed(_ sender: Any) {
+        addingNew = true
+        showAnimatonOnSwitch = true
+        DispatchQueue.main.async {
+            self.newDebtButton.superview?.backgroundColor = self.view.backgroundColor
+            self.newDebtField.text = ""
+            self.newDebtButton.alpha = 0
+            let sup = self.newDebtButton.superview?.frame ?? .zero
+            self.newDebtField.frame = CGRect(x: 15, y: 0, width: sup.width - 30, height: sup.height)
+            self.newDebtButton.superview?.addSubview(self.newDebtField)
+            self.newDebtField.becomeFirstResponder()
+
+        }
+    }
+    
+    
 }
 
 extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
@@ -316,9 +352,6 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
                 print("def")
             }
             
-            
-            
-            
             var allDebts = Array(appData.debts)
             for i in 0..<allDebts.count {
                 if allDebts[i].amountToPay == amountToPay && allDebts[i].dueDate == dueDate && allDebts[i].name == title {
@@ -362,7 +395,7 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-       // let data = indexPath.section == 0 ? tableData[indexPath.row] : emptyValuesTableData[indexPath.row]
+
         var data: DebtsTableStruct?
         switch indexPath.section {
         case 0: data = tableData[indexPath.row]
@@ -371,19 +404,28 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
         default:
             data = tableData[indexPath.row]
         }
-        if let dat = data {
-            if !fromSettings {
-                DispatchQueue.main.async {
-                    self.delegate?.catDebtSelected(name: dat.name, amount: dat.amount)
-                }
-            } else {
-                selectedCellData = dat
-                DispatchQueue.main.async {
-                    self.performSegue(withIdentifier: "toHistory", sender: self)
+        if addingNew {
+            DispatchQueue.main.async {
+                self.newDebtField.endEditing(true)
+                self.tableView.deselectRow(at: indexPath, animated: true)
+            }
+        } else {
+            if let dat = data {
+                if !fromSettings {
+                    DispatchQueue.main.async {
+                        self.delegate?.catDebtSelected(name: dat.name, amount: dat.amount)
+                    }
+                } else {
+                    selectedCellData = dat
+                    DispatchQueue.main.async {
+                        self.performSegue(withIdentifier: "toHistory", sender: self)
+                    }
                 }
             }
         }
+        
     }
+
     
 }
 
@@ -398,3 +440,35 @@ class debtCell: UITableViewCell {
 }
 
 
+extension DebtsVC : UITextFieldDelegate {
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        print("clear")
+        DispatchQueue.main.async {
+            
+            self.newDebtField.endEditing(true)
+        }
+        return true
+    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        DispatchQueue.main.async {
+            if let name = self.newDebtField.text {
+                if name != "" {
+                    if appData.username != "" {
+                        self.sendToDBDebt(title: name, purpose: K.expense)
+                    } else {
+                        var allDebts = Array(appData.getDebts())
+                        allDebts.append(DebtsStruct(name: name, amountToPay: "", dueDate: ""))
+                        appData.saveDebts(allDebts)
+                        self.getDataFromLocal()
+                    }
+                    
+                } else {
+                    self.getDataFromLocal()
+                }
+            } else {
+                self.getDataFromLocal()
+            }
+        }
+        return true
+    }
+}

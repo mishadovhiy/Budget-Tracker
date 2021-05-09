@@ -14,16 +14,18 @@ protocol CategoriesVCProtocol {
 }
 
 class CategoriesVC: UIViewController {
-    @IBOutlet weak var addButton: UIButton!
-    @IBOutlet weak var titleLabel: UILabel!
+    //@IBOutlet weak var addButton: UIButton!
+   // @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     var catData = appData.categoryVC
     var refreshControl = UIRefreshControl()
-    @IBOutlet weak var headerView: UIView!
+    //@IBOutlet weak var headerView: UIView!
     var hideTitle = false
     var fromSettings = false
     var delegate: CategoriesVCProtocol?
     var darkAppearence = false
+    
+    var safeAreaButton: CGFloat = 0.0
     
     lazy var message: MessageView = {
         let message = MessageView(self)
@@ -38,44 +40,73 @@ class CategoriesVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if #available(iOS 13.0, *) {
-            if darkAppearence {
-                self.view.backgroundColor = UIColor(named: "darkTableColor")
-                self.headerView.backgroundColor = UIColor(named: "darkTableColor")
-                self.tableView.backgroundColor = UIColor(named: "darkTableColor")
-                self.tableView.separatorColor = UIColor(named: "darkSeparetor")
-            }
-        } else {
+        updateUI()
+       // self.tableView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tablePressed(_:))))
+        
+        
+    }
+    @objc func tablePressed(_ sender: UITapGestureRecognizer) {
+        if self.newCategoryTextField.isFirstResponder {
             DispatchQueue.main.async {
-                if self.darkAppearence {
-                    self.view.backgroundColor = UIColor(named: "darkTableColor")
-                    self.headerView.backgroundColor = UIColor(named: "darkTableColor")
-                    self.tableView.backgroundColor = UIColor(named: "darkTableColor")
-                    self.tableView.separatorColor = UIColor(named: "darkSeparetor")
-                }
+                self.newCategoryTextField.endEditing(true)
+                
             }
         }
-        
-        updateUI()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        toHistory = false
-        //navigationController?.setNavigationBarHidden(fromSettings ? true : false, animated: true)
-        navigationController?.setNavigationBarHidden(false, animated: true)
-        
+    var tableContentOf:UIEdgeInsets = UIEdgeInsets.zero
+    @objc func keyboardWillHide(_ notification: Notification) {
+        DispatchQueue.main.async {
+            self.tableView.contentInset = self.tableContentOf
+            self.editingValue = nil
+            self.tableView.reloadData()
+            
+        }
+    }
+    
+    var keyHeight: CGFloat = 0.0
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+            if keyboardHeight > 1.0 {
+                DispatchQueue.main.async {
+                    self.tableView.contentInset.bottom = keyboardHeight - self.safeAreaButton
+                   // self.tableView.contentOffset = CGPoint(x: self.tableView.contentOffset.x, y: self.tableView.contentOffset.y - keyboardHeight)
+                }
+
+            }
+        }
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        toHistory = false
+
+        navigationController?.setNavigationBarHidden(false, animated: true)
+       /* //if iphone
+        DispatchQueue.main.async {
+            let mainFrame = self.view.frame
+            if self.safeAreaButton > 0 {
+                let window = UIApplication.shared.keyWindow ?? UIWindow()
+            }
+
+        }*/
+        
+    }
+    
+    
     override func viewWillDisappear(_ animated: Bool) {
 
         if fromSettings {
         }
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         print("didApp")
         //getDataFromLocal()
+
         DispatchQueue.main.async {
+            self.tableContentOf = self.tableView.contentInset
             self.tableView.reloadData()
         }
         
@@ -103,6 +134,7 @@ class CategoriesVC: UIViewController {
     func updateUI() {
     
         getDataFromLocal()
+        newCategoryTextField.delegate = self
         catData.purposPicker.delegate = self
         catData.purposPicker.dataSource = self
         tableView.delegate = self
@@ -115,15 +147,32 @@ class CategoriesVC: UIViewController {
         hiseCatsSwipe.direction = .left
         view.addGestureRecognizer(hiseCatsSwipe);
         
-        if hideTitle {
-            title = "Categories"
-            DispatchQueue.main.async {
-                let frame = self.headerView.frame
-                let selfFrame = self.tableView.frame
-                self.headerView.isHidden = true
-                self.tableView.translatesAutoresizingMaskIntoConstraints = true
-                self.tableView.frame = CGRect(x: 0, y: frame.minY, width: selfFrame.width, height: selfFrame.height + frame.height)
+        if #available(iOS 13.0, *) {
+            if darkAppearence {
+                self.newCategoryTextField.textColor = .white
+                self.newCategoryTextField.keyboardAppearance = .dark
+                self.view.backgroundColor = UIColor(named: "darkTableColor")
+                self.tableView.backgroundColor = UIColor(named: "darkTableColor")
+                self.tableView.separatorColor = UIColor(named: "darkSeparetor")
             }
+        } else {
+            DispatchQueue.main.async {
+                if self.darkAppearence {
+                    self.newCategoryTextField.textColor = .white
+                    self.view.backgroundColor = UIColor(named: "darkTableColor")
+                    self.tableView.backgroundColor = UIColor(named: "darkTableColor")
+                    self.tableView.separatorColor = UIColor(named: "darkSeparetor")
+                }
+            }
+        }
+        NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        DispatchQueue.main.async {
+            self.title = "Categories"
+           // self.tableView.translatesAutoresizingMaskIntoConstraints = true
+            self.newCategoryTextField.returnKeyType = .done
+            self.newCategoryTextField.font = .systemFont(ofSize: 17, weight: .semibold)
+            self.newCategoryTextField.clearButtonMode = .always
         }
     }
     
@@ -131,7 +180,6 @@ class CategoriesVC: UIViewController {
     func getDataFromLocal() {
         expenses = []
         incomes = []
- //       debts = []
         let categories = Array(appData.getCategories())
         for i in 0..<categories.count {
             if categories[i].purpose == K.expense {
@@ -141,12 +189,16 @@ class CategoriesVC: UIViewController {
             }
         }
         whenNoCategories()
-        //print("expenses: \(expenses.count), incomes: \(incomes.count)", "debts: \(debts)")
         expenses = expenses.sorted { $0.1 > $1.1 }
         incomes = incomes.sorted { $0.1 > $1.1 }
         
         DispatchQueue.main.async {
-            self.tableView.reloadData()
+            
+            if self.newCategoryTextField.isFirstResponder {
+                self.newCategoryTextField.endEditing(true)
+            } else {
+                self.tableView.reloadData()
+            }
         }
         
         
@@ -200,15 +252,9 @@ class CategoriesVC: UIViewController {
     
     func whenNoCategories() {
         if expenses.count == 0 && incomes.count == 0 {
-            DispatchQueue.main.async {
-                self.titleLabel.text = "No categories"
-                self.titleLabel.textAlignment = .center
-            }
+
         } else {
-            DispatchQueue.main.async {
-                self.titleLabel.text = "Categories"
-                self.titleLabel.textAlignment = .left
-            }
+
         }
     }
     
@@ -367,12 +413,50 @@ class CategoriesVC: UIViewController {
                 if !fromSettings {
                     vc.delegate = self
                     vc.darkAppearence = self.darkAppearence
+                    vc.safeAreaButton = safeAreaButton
                 }
             }
         }
     }
     
     let darkSectionBackground = UIColor(red: 30/255, green: 30/255, blue: 30/255, alpha: 1)
+    
+    var editingValue: editingType?
+    enum editingType {
+        case expenses
+        case income
+    }
+    
+    var editingString: String?
+    
+    @objc func addPressed(_ sender: UITapGestureRecognizer) {
+        if let section = Int(sender.name ?? "") {
+            self.showAnimatonOnSwitch = true
+            self.editingString = ""
+            self.newCategoryTextField.removeFromSuperview()
+            switch section {
+            case 0:
+                editingValue = .expenses
+            case 1:
+                editingValue = .income
+            default:
+                return
+            }
+            
+            DispatchQueue.main.async {
+                //self.tableView.reloadData()
+                //self.tableView.scrollToRow(at: IndexPath(row: self.editingValue! == .expenses ? self.expenses.count-1 : self.incomes.count-1, section: section), at: .bottom, animated: true)
+                self.newCategoryTextField.text = self.editingString
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    let footerHeight:CGFloat = 35
+    
+    let newCategoryTextField = UITextField(frame: .zero)
+    var showAnimatonOnSwitch = true
+    //keyboardWillShoe and willHide - remove textfield
     
 }
 
@@ -461,15 +545,61 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     }
 
     
-    
-   /* func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        print(indexPath.section, "indexPath.section")
-        if indexPath.section != 0 {
-            if editingStyle == UITableViewCell.EditingStyle.delete {
-                deteteCategory(at: indexPath)
-            }
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        if section == 0 || section == 1 {
+            return footerHeight// + (safeAreaButton > 0 ? 10 : 0)
+        } else {
+            return 0
         }
-    }*/
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        if section == 0 || section == 1 {
+        //    let h = footerHeight + (safeAreaButton > 0 ? 10 : 0)
+            let view = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: footerHeight + 20))
+            view.backgroundColor = editingValue != nil ? ((section == 0 && editingValue! == .expenses) || (section == 1 && editingValue! == .income) ? self.tableView.backgroundColor : .clear) : .clear
+            view.layer.masksToBounds = false
+            view.layer.zPosition = 1
+            view.superview?.layer.masksToBounds = false
+
+            let button = UIButton(frame: CGRect(x: (tableView.frame.width / 2) - 55, y: self.safeAreaButton > 0 ? (darkAppearence ? 0 : 10) : 0, width: 110, height: footerHeight))
+            let title = "New \(section == 0 ? "expense" : "income")"
+            button.setTitle(title, for: .normal)
+            button.layer.cornerRadius = 6
+            button.backgroundColor = editingValue == nil ? K.Colors.yellow : K.Colors.pink
+            button.titleLabel?.font = .systemFont(ofSize: 15, weight: .semibold)
+            view.addSubview(button)
+            button.isUserInteractionEnabled = true
+            button.layer.shadowPath = UIBezierPath(rect: button.bounds).cgPath
+            button.layer.shadowColor = UIColor.black.cgColor
+            button.layer.shadowOpacity = 0.15
+            button.layer.shadowOffset = .zero
+            button.layer.shadowRadius = 6
+            
+            let addNew = UITapGestureRecognizer(target: self, action: #selector(addPressed(_:)))
+            addNew.name = "\(section)"
+            button.addGestureRecognizer(addNew)
+            button.alpha = editingValue == nil ? 1 : 0
+            if let isEditing = editingValue {
+                if (section == 0 && isEditing == .expenses) || (section == 1 && isEditing == .income) {
+                    button.alpha = 0
+                    self.newCategoryTextField.frame = CGRect(x: 15, y: 0, width: self.view.frame.width - 30, height: self.footerHeight)
+                    
+                    view.addSubview(self.newCategoryTextField)
+                    self.newCategoryTextField.becomeFirstResponder()
+                }
+            }
+            return view
+        } else {
+            return nil
+        }
+    }
+
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
+        return 100
+    }
+
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
 
         if indexPath.section != 2 {
@@ -485,28 +615,35 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 2 {
-            historyDataStruct = []
-            selectedCategoryName = ""
-            
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "toDebts", sender: self)
-            }
-        } else {
-            if !fromSettings {
-                delegate?.categorySelected(category: indexPath.section == 0 ? expenses[indexPath.row].0 : incomes[indexPath.row].0, purpose: indexPath.section, fromDebts: false, amount: 0)
-                navigationController?.popToRootViewController(animated: true)
+        if editingValue == nil {
+            if indexPath.section == 2 {
+                historyDataStruct = []
+                selectedCategoryName = ""
+                
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "toDebts", sender: self)
+                }
             } else {
-                switch indexPath.section {
-                case 0:
-                    toHistory(category: expenses[indexPath.row].0)
-                case 1:
-                    toHistory(category: incomes[indexPath.row].0)
-                default:
-                    self.dismiss(animated: true)
+                if !fromSettings {
+                    delegate?.categorySelected(category: indexPath.section == 0 ? expenses[indexPath.row].0 : incomes[indexPath.row].0, purpose: indexPath.section, fromDebts: false, amount: 0)
+                    navigationController?.popToRootViewController(animated: true)
+                } else {
+                    switch indexPath.section {
+                    case 0:
+                        toHistory(category: expenses[indexPath.row].0)
+                    case 1:
+                        toHistory(category: incomes[indexPath.row].0)
+                    default:
+                        self.dismiss(animated: true)
+                    }
                 }
             }
+        } else {
+            DispatchQueue.main.async {
+                self.newCategoryTextField.endEditing(true)
+            }
         }
+        
     }
     
 }
@@ -548,5 +685,43 @@ extension CategoriesVC: DebtsVCProtocol {
         navigationController?.popToRootViewController(animated: true)
     }
     
+    
+}
+
+extension CategoriesVC: UITextFieldDelegate {
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        print("clear")
+        DispatchQueue.main.async {
+            
+            self.newCategoryTextField.endEditing(true)
+        }
+        return true
+    }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        DispatchQueue.main.async {
+            if let name = self.newCategoryTextField.text {
+                if name != "" {
+                    if let puposee = self.editingValue {
+                        let purpose = puposee == .expenses ? K.expense : K.income
+                        if appData.username != "" {
+                            self.whenNoCategories()
+                            self.sendToDBCategory(title: name, purpose: purpose)
+                        } else {
+                            var categories = Array(appData.getCategories())
+                            categories.append(CategoriesStruct(name: name, purpose: purpose, count: 0))
+                            appData.saveCategories(categories)
+                            self.getDataFromLocal()
+                        }
+                    }
+                    
+                } else {
+                    self.getDataFromLocal()
+                }
+            } else {
+                self.getDataFromLocal()
+            }
+        }
+        return true
+    }
     
 }

@@ -91,6 +91,7 @@ class TransitionVC: UIViewController {
             vc.delegate = self
             vc.darkAppearence = true
             vc.hideTitle = true
+            vc.safeAreaButton = self.view.safeAreaInsets.bottom
         default:
             print("segue default")
         }
