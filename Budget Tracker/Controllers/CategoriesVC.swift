@@ -364,7 +364,7 @@ class CategoriesVC: UIViewController {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
+
     }
     
     var historyDataStruct: [TransactionsStruct] = []
@@ -432,7 +432,6 @@ class CategoriesVC: UIViewController {
     @objc func addPressed(_ sender: UITapGestureRecognizer) {
         if let section = Int(sender.name ?? "") {
             self.showAnimatonOnSwitch = true
-            self.editingString = ""
             self.newCategoryTextField.removeFromSuperview()
             switch section {
             case 0:
@@ -446,7 +445,7 @@ class CategoriesVC: UIViewController {
             DispatchQueue.main.async {
                 //self.tableView.reloadData()
                 //self.tableView.scrollToRow(at: IndexPath(row: self.editingValue! == .expenses ? self.expenses.count-1 : self.incomes.count-1, section: section), at: .bottom, animated: true)
-                self.newCategoryTextField.text = self.editingString
+                self.newCategoryTextField.text = ""
                 self.tableView.reloadData()
             }
         }
@@ -490,7 +489,7 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent, for: indexPath) as! categoriesVCcell
-        
+        cell.proView.layer.cornerRadius = 4
         if darkAppearence {
             cell.backgroundColor = UIColor(named: "darkTableColor")
         } else {
@@ -499,12 +498,15 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
         
         switch indexPath.section {
         case 0:
+            cell.proView.alpha = 0
             cell.categoryNameLabel.text = expenses[indexPath.row].0
             cell.qntLabel.text = "\(expenses[indexPath.row].1)"
         case 1:
+            cell.proView.alpha = 0
             cell.categoryNameLabel.text = incomes[indexPath.row].0
             cell.qntLabel.text = "\(incomes[indexPath.row].1)"
         case 2:
+            cell.proView.alpha = (appData.proVersion || appData.proTrial) ? 0 : 1
             cell.categoryNameLabel.text = "Debts"
             cell.qntLabel.text = "\((UserDefaults.standard.value(forKey: "allDebts") as? [[String]] ?? []).count)"
         default:
@@ -566,7 +568,8 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
             let title = "New \(section == 0 ? "expense" : "income")"
             button.setTitle(title, for: .normal)
             button.layer.cornerRadius = 6
-            button.backgroundColor = editingValue == nil ? K.Colors.yellow : K.Colors.pink
+            button.backgroundColor = self.editingValue == nil ? K.Colors.yellow : K.Colors.pink
+            
             button.titleLabel?.font = .systemFont(ofSize: 15, weight: .semibold)
             view.addSubview(button)
             button.isUserInteractionEnabled = true
@@ -579,14 +582,18 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
             let addNew = UITapGestureRecognizer(target: self, action: #selector(addPressed(_:)))
             addNew.name = "\(section)"
             button.addGestureRecognizer(addNew)
-            button.alpha = editingValue == nil ? 1 : 0
+            button.alpha = editingValue == nil ? 1 : 0.4
             if let isEditing = editingValue {
                 if (section == 0 && isEditing == .expenses) || (section == 1 && isEditing == .income) {
+                   
                     button.alpha = 0
                     self.newCategoryTextField.frame = CGRect(x: 15, y: 0, width: self.view.frame.width - 30, height: self.footerHeight)
-                    
                     view.addSubview(self.newCategoryTextField)
                     self.newCategoryTextField.becomeFirstResponder()
+                    
+                    
+                    
+                    
                 }
             }
             return view
@@ -617,12 +624,19 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if editingValue == nil {
             if indexPath.section == 2 {
-                historyDataStruct = []
-                selectedCategoryName = ""
-                
-                DispatchQueue.main.async {
-                    self.performSegue(withIdentifier: "toDebts", sender: self)
+                if appData.proVersion || appData.proTrial {
+                    historyDataStruct = []
+                    selectedCategoryName = ""
+                    
+                    DispatchQueue.main.async {
+                        self.performSegue(withIdentifier: "toDebts", sender: self)
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self.tableView.deselectRow(at: indexPath, animated: true)
+                    }
                 }
+                
             } else {
                 if !fromSettings {
                     delegate?.categorySelected(category: indexPath.section == 0 ? expenses[indexPath.row].0 : incomes[indexPath.row].0, purpose: indexPath.section, fromDebts: false, amount: 0)

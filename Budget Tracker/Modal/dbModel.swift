@@ -20,7 +20,19 @@ struct LoadFromDB {
                 var jsonElement = NSDictionary()
                 for i in 0..<jsonResult.count {
                     jsonElement = jsonResult[i] as! NSDictionary
-                    
+                    /*let arr = Array(appData.selectedUsernames)
+                    for i in 0..<arr.count {
+                        if arr[i] == (jsonElement["Nickname"] as? String ?? "") {
+                            if let name = jsonElement["Nickname"] as? String,
+                               let category = jsonElement["Category"] as? String,
+                               let date = jsonElement["Date"] as? String,
+                               let value = jsonElement["Value"] as? String,
+                               let comment = jsonElement["Comment"] as? String
+                            {
+                                loadedData.append([name, category, date, value, comment])
+                            }
+                        }
+                    }*///create one load with complition when jsonResult
                     if appData.username != "" {
                         if appData.username == (jsonElement["Nickname"] as? String ?? "") {
                             if let name = jsonElement["Nickname"] as? String,
@@ -49,7 +61,18 @@ struct LoadFromDB {
                 var jsonElement = NSDictionary()
                 for i in 0..<jsonResult.count {
                     jsonElement = jsonResult[i] as! NSDictionary
-                    
+                   /* let arr = Array(appData.selectedUsernames)
+                    for i in 0..<arr.count {
+                        if arr[i] == (jsonElement["Nickname"] as? String ?? "") {
+                            if let username = jsonElement["Nickname"] as? String,
+                               let name = jsonElement["name"] as? String,
+                               let amountToPay = jsonElement["amountToPay"] as? String,
+                               let dueDate = jsonElement["dueDate"] as? String
+                            {
+                                loadedData.append([username, name, amountToPay, dueDate])
+                            }
+                        }
+                    }*/
                     if appData.username != "" {
                         if appData.username == (jsonElement["Nickname"] as? String ?? "") {
                             if let username = jsonElement["Nickname"] as? String,
@@ -118,7 +141,18 @@ struct LoadFromDB {
                 
                 for i in 0..<jsonResult.count {
                     jsonElement = jsonResult[i] as! NSDictionary
-                    
+                    /*let arr = Array(appData.selectedUsernames)
+                    for i in 0..<arr.count {
+                        if arr[i] == (jsonElement["Nickname"] as? String ?? "") {
+                            if let name = jsonElement["Nickname"] as? String,
+                               let title = jsonElement["Title"] as? String,
+                               let purpose = jsonElement["Purpose"] as? String,
+                               let isExpecting = jsonElement["ExpectingPayment"] as? String
+                            {
+                                loadedData.append([name, title, purpose, isExpecting])
+                            }
+                        }
+                    }*/
                     if appData.username != "" {
                         if appData.username == (jsonElement["Nickname"] as? String ?? "") {
                             if let name = jsonElement["Nickname"] as? String,
@@ -128,7 +162,6 @@ struct LoadFromDB {
                             {
                                 loadedData.append([name, title, purpose, isExpecting])
                             }
-                            
                         }
                     } 
                     
@@ -240,17 +273,28 @@ struct SaveToDB {
             completion(error)
         })
     }
+    
+    func sendCode(toDataString: String, completion: @escaping (Bool) -> ()) {
+        //https://www.dovhiy.com/apps/budget-tracker-db/test.php?emailTo=hi@dovhiy.com&Nickname=huii&resetCode=1233
+        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/sendCode.php?\(toDataString)", toDataString: "", error: { (error) in
+            completion(error)
+        })
+    }
 
-    private func save(dbFileURL: String, toDataString: String, error: @escaping (Bool) -> ()) {
+    private func save(dbFileURL: String, httpMethod: String = "POST", toDataString: String, error: @escaping (Bool) -> ()) {
         
         let url = NSURL(string: dbFileURL)
         var request = URLRequest(url: url! as URL)
-        request.httpMethod = "POST"
+        request.httpMethod = httpMethod
         var dataToSend = "secretWord=44fdcv8jf3"
                 
         dataToSend = dataToSend + toDataString
         let dataD = dataToSend.data(using: .utf8)
+        
         do {
+            print("dbModel: saving data", dbFileURL)
+            print("dbModel: saving data", dataToSend)
+
             let uploadJob = URLSession.shared.uploadTask(with: request, from: dataD) { data, response, errr in
                 
                 if errr != nil {
@@ -261,13 +305,21 @@ struct SaveToDB {
                 } else {
                     if let unwrappedData = data {
                         let returnedData = NSString(data: unwrappedData, encoding: String.Encoding.utf8.rawValue)
-                        
+
                         if returnedData == "1" {
                             print("save: sended \(dataToSend)")
                             error(false)
                         } else {
-                            print("save: db error for (cats, etc)")
-                            error(true)
+                            let r = returnedData?.trimmingCharacters(in: .whitespacesAndNewlines)
+                            if r == "1" {
+                                print("save: sended \(dataToSend)")
+                                error(false)
+                            } else {
+                                print("save: db error for (cats, etc)")
+                                error(true)
+                            }
+                            
+                            
                         }
                         
                         

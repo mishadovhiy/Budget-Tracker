@@ -14,6 +14,7 @@ protocol UnsendedDataVCProtocol {
 
 class UnsendedDataVC: UIViewController {
 
+    @IBOutlet weak var proView: UIView!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var mainTitleLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
@@ -84,7 +85,7 @@ class UnsendedDataVC: UIViewController {
     
     var didapp = false
     let activity = UIActivityIndicatorView(frame: .zero)
-    let proView = UIView()
+    //let proView = UIView()
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -100,6 +101,10 @@ class UnsendedDataVC: UIViewController {
         
         
         DispatchQueue.main.async {
+            
+            self.proView.layer.cornerRadius = 6
+            self.proView.subviews.first?.layer.masksToBounds = true
+            self.proView.subviews.first?.layer.cornerRadius = 4
             let titleFrame = self.mainTitleLabel.frame
             //self.activity.frame = CGRect(x: titleFrame.maxX, y: titleFrame.minY + (self.mainTitleLabel.superview?.superview?.frame.minY ?? 0) + 6, width: 15, height: 15)
             self.activity.frame = CGRect(x: titleFrame.maxX + 17, y: 8 + (self.mainTitleLabel.superview?.frame.minY ?? 0) + (self.mainTitleLabel.superview?.superview?.frame.minY ?? 0), width: 15, height: 15)
@@ -122,18 +127,8 @@ class UnsendedDataVC: UIViewController {
 
         if !appData.proTrial && !appData.proVersion {
            // fatalError()
-            self.proView.removeFromSuperview()
-            self.proView.backgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.25)
-            self.proView.frame = selfBtn
-            proLabel.backgroundColor = K.Colors.yellow
-            proLabel.layer.masksToBounds = true
-            proLabel.layer.cornerRadius = 4
-            self.proView.layer.cornerRadius = self.saveAllButton.layer.cornerRadius
-            proLabel.textAlignment = .center
-            proLabel.text = "Pro"
-            proLabel.font = .systemFont(ofSize: 11, weight: .medium)
-            self.proView.addSubview(proLabel)
-            self.saveAllButton.superview?.addSubview(self.proView)
+          //  self.proView.removeFromSuperview()
+            self.proView.alpha = 1
             self.proView.isUserInteractionEnabled = true
             self.proView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.goToPro(_:))))
         } else {
@@ -142,15 +137,13 @@ class UnsendedDataVC: UIViewController {
                     proLabel.frame = CGRect(x: selfBtn.width - 40, y: 200, width: 25, height: 15)
                 } completion: { (_) in
                     UIView.animate(withDuration: 0.2) {
-                        self.proView.backgroundColor = .clear
-                    } completion: { (_) in
-                        self.proView.removeFromSuperview()
+                        self.proView.alpha = 0
                     }
 
                 }
 
             } else {
-                self.proView.removeFromSuperview()
+                self.proView.alpha = 0
             }
         }
     }
@@ -266,9 +259,15 @@ class UnsendedDataVC: UIViewController {
     var deletePress = false
     @IBAction func deletePressed(_ sender: UIButton) {
         deletePress = true
-        self.dismiss(animated: true) {
+        if self.navigationController != nil {
             self.delegate?.quiteUnsendedData(deletePressed: true, sendPressed: false)
+            self.navigationController?.popToRootViewController(animated: true)
+        } else {
+            self.dismiss(animated: true) {
+                self.delegate?.quiteUnsendedData(deletePressed: true, sendPressed: false)
+            }
         }
+        
     }
     
     

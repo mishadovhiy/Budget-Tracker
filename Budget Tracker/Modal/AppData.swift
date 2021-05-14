@@ -59,6 +59,28 @@ class AppData {
             defaults.set(value, forKey: "username")
         }
     }
+    
+    var selectedUsernames: [String] {//сохранять и пароль и имейл и все что приходит
+        get{
+            let users = defaults.value(forKey: "selectedUsernames") as? [String] ?? ([defaults.value(forKey: "username") as? String ?? ""])
+            return users// + ["mishadovhiy2"]
+        }
+        set(value){
+            print("new usernames setted - \(value)")
+            defaults.set(value, forKey: "selectedUsernames")
+        }
+    }
+    
+    var loggedUsers: [String] {
+        get{
+            let users = defaults.value(forKey: "selectedUsernames") as? [String] ?? ([defaults.value(forKey: "username") as? String ?? ""])
+            return users + ["mishadovhiy2"]
+        }
+        set(value){
+            print("new usernames setted - \(value)")
+            defaults.set(value, forKey: "selectedUsernames")
+        }
+    }
 
     var password: String {
         get{

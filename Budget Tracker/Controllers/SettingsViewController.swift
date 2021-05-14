@@ -15,6 +15,7 @@ protocol SettingsViewControllerProtocol {
 
 class SettingsViewController: UIViewController {
 
+    @IBOutlet weak var usersCollectionView: UICollectionView!
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var tableView: UITableView!
     var delegate: SettingsViewControllerProtocol?
@@ -31,9 +32,12 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUI()
-
+        if needGet {
+            needGet = false
+            getdata()
+        }
     }
-    
+    var needGet = true
     
     override func viewDidAppear(_ animated: Bool) {
         
@@ -47,8 +51,10 @@ class SettingsViewController: UIViewController {
                 UserDefaults.standard.setValue(true, forKey: "firstLaunchSettings")
             }
         }
+        if needGet {
+            getdata()
+        }
         
-        getdata()
         
        /* DispatchQueue.main.async {
             //self.view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2)
@@ -65,6 +71,9 @@ class SettingsViewController: UIViewController {
 
     
     func getdata() {
+     //   LoggedUsers = appData.loggedUsers
+       // selectedUsers = appData.selectedUsernames
+        
         categoriesDebtsCount = (0,0)
         let allCategories = UserDefaults.standard.value(forKey: "categoriesData") as? [[String]] ?? []//Array(appData.getCategories())
         /*      var debts:[CategoriesStruct] = []
@@ -85,6 +94,7 @@ class SettingsViewController: UIViewController {
             SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: (unsavedCat + unsavedTrans + unsavedDebts) > 0 ? "toSavedData" : "toSingIn"),
             SettingsSctruct(title: "Categories", description: "\(categoriesDebtsCount.0)", segue: "settingsToCategories"),
             SettingsSctruct(title: "Debts", description: "\(categoriesDebtsCount.1)", segue: (appData.proVersion || appData.proTrial) ? "toDebts" : "toProVC")
+            //toExpectingPayment
         ]
         tableData = data
         if appData.proTrial {
@@ -93,8 +103,15 @@ class SettingsViewController: UIViewController {
         }
         DispatchQueue.main.async {
             self.tableView.reloadData()
+           // self.usersCollectionView.reloadData()
         }
+        //loggedUsers
+        
+        
     }
+    var LoggedUsers: [String] = []
+    var selectedUsers: [String] = []
+    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         print("setting touches")
@@ -123,11 +140,12 @@ class SettingsViewController: UIViewController {
     
     
     override func viewDidDisappear(_ animated: Bool) {
-        DispatchQueue.main.async {
+
+       // DispatchQueue.main.async {
             //self.helperNavView.removeFromSuperview()
 
 
-        }
+       // }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -159,6 +177,8 @@ class SettingsViewController: UIViewController {
     func updateUI() {
         tableView.delegate = self
         tableView.dataSource = self
+        usersCollectionView.delegate = self
+        usersCollectionView.dataSource = self
        // contentView.layer.masksToBounds = true
         DispatchQueue.main.async {
            // self.view.backgroundColor = .red
@@ -197,6 +217,7 @@ class SettingsViewController: UIViewController {
     var toSegue = false
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
+        needGet = true
         //navigationController?.setNavigationBarHidden(false, animated: true)
         toSegue = true
         let messageText = "Check data from previous account before logging out"
@@ -343,6 +364,7 @@ extension SettingsViewController: UnsendedDataVCProtocol {
                 print("seletePressed")
                 appData.saveTransations([], key: K.Keys.localTrancations)
                 appData.saveCategories([], key: K.Keys.localCategories)
+                appData.saveDebts([], key: K.Keys.localDebts)
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                     self.performSegue(withIdentifier: "toSingIn", sender: self)
@@ -372,4 +394,51 @@ extension SettingsViewController: DebtsVCProtocol {
         getdata()
     }
 }*/
+
+extension SettingsViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        switch section {
+        case 0:
+            return selectedUsers.count
+        case 1:
+            return LoggedUsers.count + 1
+        default:
+            return 0
+        }
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 2
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "usersCollectionView", for: indexPath) as! usersCollectionView
+        cell.layer.cornerRadius = 5
+        cell.layer.shadowPath = UIBezierPath(rect: cell.layer.bounds).cgPath
+        cell.layer.shadowColor = UIColor.black.cgColor
+        cell.layer.shadowOpacity = 0.15
+        cell.layer.shadowOffset = .zero
+        cell.layer.shadowRadius = 6
+        
+        switch indexPath.section {
+        case 0:
+            cell.backgroundColor = K.Colors.yellow
+            cell.userNameLabel.text = selectedUsers[indexPath.row]
+        case 1:
+            cell.backgroundColor = indexPath.row != LoggedUsers.count ? K.Colors.category : K.Colors.yellow
+            cell.userNameLabel.text = indexPath.row != LoggedUsers.count ? LoggedUsers[indexPath.row] : "Add"
+
+        default:
+            print("default")
+        }
+        return cell
+    }
+    
+    
+}
+class usersCollectionView: UICollectionViewCell {
+    
+    @IBOutlet weak var userNameLabel: UILabel!
+}
 
