@@ -205,8 +205,9 @@ class LoginViewController: UIViewController {
                         print("wrong password", psswordFromDB)
                         self.actionButtonsEnabled = true
                         DispatchQueue.main.async {
-                            self.ai.fastHideIndicator { (_) in
-                                self.message.showMessage(text: "Wrong password", type: .error, autoHide: false)
+
+                            self.ai.completeWithDone(title: "Wrong password", error: true) { (_) in
+                                self.passwordLogLabel.becomeFirstResponder()
                             }
                             
                         }
@@ -242,15 +243,16 @@ class LoginViewController: UIViewController {
                         needFullReload = true
                         if fromPro {
                             DispatchQueue.main.async {
-                                self.ai.hideIndicator { (_) in
+                                self.ai.hideIndicator(completionText: "success", hideAfter: 1.0) { (_) in
                                     self.dismiss(animated: true, completion: nil)
                                 }
                             }
                         } else {
                             DispatchQueue.main.async {
-                                self.ai.hideIndicator { (_) in
+                                self.ai.hideIndicator(completionText: "success", hideAfter: 1.0) { (_) in
                                     self.performSegue(withIdentifier: "homeVC", sender: self)
                                 }
+
                             }
 
                         }
@@ -342,15 +344,17 @@ class LoginViewController: UIViewController {
                                     needFullReload = true
                                     if self.fromPro {
                                         DispatchQueue.main.async {
-                                            self.ai.hideIndicator { (_) in
+                                            self.ai.hideIndicator(completionText: "success", hideAfter: 1.0) { (_) in
                                                 self.dismiss(animated: true, completion: nil)
                                             }
+                                            
                                         }
                                     } else {
                                         DispatchQueue.main.async {
-                                            self.ai.hideIndicator { (_) in
+                                            self.ai.hideIndicator(completionText: "success", hideAfter: 1.0) { (_) in
                                                 self.performSegue(withIdentifier: "homeVC", sender: self)
                                             }
+                                            
                                         }
                                     }
                                 }

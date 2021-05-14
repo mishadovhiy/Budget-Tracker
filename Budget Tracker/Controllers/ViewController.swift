@@ -231,13 +231,14 @@ class ViewController: UIViewController {
     var canTouchHandleTap = true
     @objc func bigCalcTaps(_ sender:UITapGestureRecognizer) {
         if canTouchHandleTap {
-            let topSafeAr = self.view.safeAreaInsets.top
+            //let topSafeAr = self.view.safeAreaInsets.top
             let bigCalcFrame = bigCalcView.frame
             let touchPoint = sender.location(in: self.view)
             //local data pressed
+            let topMinus = dataFromTitleLabel.superview?.superview?.superview?.frame ?? .zero
             let width = dataFromTitleLabel.superview?.superview?.frame ?? .zero
             let supDataMinY = dataFromTitleLabel.superview?.superview?.superview?.superview?.frame ?? .zero
-            let localDataY = supDataMinY.minY + bigCalcFrame.minY
+            let localDataY = (supDataMinY.minY + bigCalcFrame.minY) + topMinus.minY
             let localDataPosition = CGRect(x: bigCalcFrame.minX, y: localDataY, width: width.width, height: width.height)
             let localDataPressed = localDataPosition.contains(touchPoint)
             //expenses pressed
@@ -276,10 +277,10 @@ class ViewController: UIViewController {
     func updateUI() {
      //   addTransitionButton.translatesAutoresizingMaskIntoConstraints = true
   //      self.mainTableView.backgroundColor = K.Colors.background
+        toggleNoData(show: true, text: "Loading", fromTop: true, appeareAnimation: false, addButtonHidden: true)
         downloadFromDB()
         self.mainTableView.delegate = self
         self.mainTableView.dataSource = self
-        toggleNoData(show: true, text: "Loading", fromTop: true, appeareAnimation: false, addButtonHidden: true)
         DispatchQueue.main.async {
            // for button in self.lightCornerButtons {
             self.addTransactionWhenEmptyButton.layer.cornerRadius = 5
@@ -324,10 +325,11 @@ class ViewController: UIViewController {
             
             self.refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
             let superWidth = self.view.frame.width
-            self.refreshSubview.frame = CGRect(x: superWidth / 2 - 10, y: self.bigCalcView.frame.maxY + 10, width: 20, height: 20)
+            self.refreshSubview.frame = CGRect(x: superWidth / 2 - 10, y: 20, width: 20, height: 20)
             print(self.refreshSubview.frame, "ijhyghujijnhj")
             let image = UIImage(named: "plusIcon")
             let button = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+            button.layer.cornerRadius = button.layer.frame.width / 2
             button.setImage(image, for: .normal)
             self.refreshSubview.addSubview(button)
             self.refreshSubview.backgroundColor = K.Colors.background
@@ -529,8 +531,10 @@ class ViewController: UIViewController {
             } else {
                 for i in 0..<loadedData.count {
                     if loadedData[i][0] == nick {
-                        appData.proVersion = loadedData[i][3] == "1" ? true : false
-                        
+                        print("checkPurchase for", nick)
+                        appData.proVersion = loadedData[i][4] == "1" ? true : false
+                        print(loadedData[i][4], "loadedData[i][3]loadedData[i][3]")
+                        print("checkPurchase appData.proVersion", appData.proVersion)
                         if loadedData[i][5] != "" {//test
                             if UserDefaults.standard.value(forKey: "checkTrialDate") as? Bool ?? true {
                                 appData.trialDate = loadedData[i][5]
@@ -1485,6 +1489,9 @@ class ViewController: UIViewController {
             let nav = segue.destination as! UINavigationController
             let vc = nav.topViewController as! StatisticVC
             vc.dataFromMain = tableData
+        case "toLogin":
+            let vc = segue.destination as! LoginViewController
+            vc.messagesFromOtherScreen = "Your password has been change"
         default: return
         }
  
