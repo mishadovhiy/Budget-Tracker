@@ -143,6 +143,9 @@ class LoadingIndicator {
     
  
     func completeWithDone(title: String, error:Bool = false, description: String? = nil, completion: @escaping (Bool) -> ()) {
+        if error {
+            UIImpactFeedbackGenerator().impactOccurred()
+        }
         let superFrame = self.superView.window?.frame ?? self.superView.frame
        // let descriptionLabel = UILabel(frame: CGRect(x: 5, y: (loadingViewSize.1 / 2) + 10, width: self.loadingViewSize.0 - 10, height: loadingViewSize.1))
         swipeToHide = true
@@ -162,7 +165,7 @@ class LoadingIndicator {
         loadingMainView.addGestureRecognizer(leftSwipe)
         
         self.textLabel.text = title
-        self.textLabel.textAlignment = .left
+        self.textLabel.textAlignment = description != nil ? .left : .center
         let descriptionNotNill = description != nil ? true : false
 
         let doneView = UIView(frame: CGRect(x: 0, y: 200, width: self.loadingViewSize.0, height: 50))
@@ -196,7 +199,7 @@ class LoadingIndicator {
         } completion: { (_) in
             UIView.animate(withDuration: 0.4) {
                 self.loadingView.frame = CGRect(x: loadingViewPosition.x, y: loadingViewPosition.y, width: self.loadingViewSize.0, height: self.loadingViewSize.1 / 2 + (descriptionNotNill ? 30 : (-10)))
-                self.textLabel.frame = CGRect(x: 10, y: 0, width: self.loadingViewSize.0 - 10, height: self.loadingViewSize.1 / 4)
+                self.textLabel.frame = CGRect(x: 10, y: 0, width: self.loadingViewSize.0 - 20, height: self.loadingViewSize.1 / 4)
                 doneView.frame = CGRect(x: 0, y: 40, width: self.loadingViewSize.0, height: 100)
                 doneLabel.textAlignment = .center
                 
@@ -216,6 +219,7 @@ class LoadingIndicator {
     var funccc: Any?
     
     @objc private func donePressed(sender: UITapGestureRecognizer) {
+        UIImpactFeedbackGenerator().impactOccurred()
         if let function = funccc as? (Bool) -> () {
             fastHideIndicator(completion: function)
         }

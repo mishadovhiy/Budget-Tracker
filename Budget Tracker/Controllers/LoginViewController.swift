@@ -127,9 +127,11 @@ class LoginViewController: UIViewController {
     
     let load = LoadFromDB()
     @IBAction func logInPressed(_ sender: UIButton) {
+        
         transactionAdded = true
         actionButtonsEnabled = false
         DispatchQueue.main.async {
+            UIImpactFeedbackGenerator().impactOccurred()
             self.ai = LoadingIndicator(superView: self.view)
             self.ai.showIndicator()
         }
@@ -175,9 +177,10 @@ class LoginViewController: UIViewController {
         
         //if email entered
         //else
-        
+
         
         DispatchQueue.main.async {
+            UIImpactFeedbackGenerator().impactOccurred()
             self.ai.showIndicator(text: "Wait")
             
         }
@@ -276,6 +279,9 @@ class LoginViewController: UIViewController {
 
     
     @IBAction func createAccountPressed(_ sender: Any) {
+        DispatchQueue.main.async {
+            UIImpactFeedbackGenerator().impactOccurred()
+        }
         transactionAdded = true
         self.actionButtonsEnabled = true
         DispatchQueue.main.async {
