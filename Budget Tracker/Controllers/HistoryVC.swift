@@ -8,6 +8,10 @@
 
 import UIKit
 var transactionAdded = false
+
+///TODO:
+// if from debts - first section (dif beckground, cornerRadios) - add/edit time (2 cells: date, amount to pay)
+
 class HistoryVC: UIViewController {
     
     @IBOutlet weak var addTransButton: UIButton!

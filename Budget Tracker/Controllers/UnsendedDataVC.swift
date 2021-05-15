@@ -89,6 +89,7 @@ class UnsendedDataVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+       // firstSectionHeight = self.view.frame.height - 200
         self.tableView.delegate = self
         self.tableView.dataSource = self
 
@@ -518,44 +519,78 @@ class UnsendedDataVC: UIViewController {
     let redPlusImage = UIImage(named: "ovalPlus") ?? UIImage()
     
     var debtsCellLabelsFrame: (CGRect, CGRect) = (.zero, .zero)
+    
+    //var firstSectionHeight: CGFloat = 0
+    //firstSectionHeight
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+       // let finger = scrollView.panGestureRecognizer.location(in: self.view)
+      /*  if scrollView.contentOffset.y < -10 {
+            
+            if firstSectionHeight == 0 {
+                firstSectionHeight = self.view.frame.height - 200
+                DispatchQueue.main.async {
+                    DispatchQueue.main.async {
+                        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
+                    }
+                }
+            }
+            
+        }*/
+    }
 }
 
 
 extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0: return foundInAListCount > 0 ? 1 : 0
-        case 1: return tableDataTransactions.count
-        case 2: return categoruesTableData.count
-        case 3: return debtsTableData.count
+        case 0: return 1
+        case 1: return foundInAListCount > 0 ? 1 : 0
+        case 2: return tableDataTransactions.count
+        case 3: return categoruesTableData.count
+        case 4: return debtsTableData.count
         default:
             return 0
         }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
+        return 5
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
-        case 1: return "Transactions"
-        case 2: return "Categories"
-        case 3: return "Debts"
+        case 2: return "Transactions"
+        case 3: return "Categories"
+        case 4: return "Debts"
         default:
             return ""
         }
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return indexPath == IndexPath(row: 0, section: 0) ? self.view.frame.height - 200 : UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+       /* if indexPath == IndexPath(row: 0, section: 0) {
+            firstSectionHeight = 0
+        }*/
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "descriptionCell") as! descriptionCell
+            
+            return cell
+        case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "repeatedDataCell") as! repeatedDataCell
             
             cell.selectButton.setTitle("Select (\(self.foundInAListCount))", for: .normal)
             cell.selectButton.addTarget(self, action: #selector(self.selectRepeatedPressed(_:)), for: .touchUpInside)
             return cell
-        case 1:
+        case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "unsendedTransactionsCell", for: indexPath) as! unsendedTransactionsCell
             let data = tableDataTransactions[indexPath.row]
             cell.categoryLabel.text = data.category
@@ -564,14 +599,14 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
             cell.valueLabel.text = String(format:"%.0f", Double(data.value) ?? 0.0)
             cell.treshImage.image = data.selected ? redTrash : lightTrash
             return cell
-        case 2:
+        case 3:
             let cell = tableView.dequeueReusableCell(withIdentifier: "unsendedCategoriesCell") as! unsendedCategoriesCell
             let data = categoruesTableData[indexPath.row]
             cell.nameLabel.text = data.name
             cell.perposeLabel.text = data.purpose
             cell.trashImage.image = data.selected ? redTrash : lightTrash
             return cell
-        case 3:
+        case 4:
             let cell = tableView.dequeueReusableCell(withIdentifier: "unsendedDebtsCell") as! unsendedDebtsCell
             let data = debtsTableData[indexPath.row]
             cell.nameLabel.text = data.name
@@ -592,15 +627,16 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch section {
         case 0: return 0
-        case 1: return tableDataTransactions.count == 0 ? 0 : 25
-        case 2: return categoruesTableData.count == 0 ? 0 : 25
-        case 3: return debtsTableData.count == 0 ? 0 : 25
+        case 1: return 0
+        case 2: return tableDataTransactions.count == 0 ? 0 : 25
+        case 3: return categoruesTableData.count == 0 ? 0 : 25
+        case 4: return debtsTableData.count == 0 ? 0 : 25
         default: return 0
         }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section != 0 {
+        if section != 0 || section != 1 {
             let mainFrame = self.view.frame
             let height:CGFloat = 25
             let view = UIView(frame: CGRect(x: 0, y: 0, width: mainFrame.width, height: height))
@@ -615,11 +651,11 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
             heplerView.addSubview(stackview)
             var title = ""
             switch section {
-            case 1:
-                title = "Transactions"
             case 2:
-                title = "Categories"
+                title = "Transactions"
             case 3:
+                title = "Categories"
+            case 4:
                 title = "Debts"
                // let secondheplerView = UIView(frame: CGRect(x: tableView.frame.width / 2 - 42, y: 0, width: tableView.frame.width / 2 - 42, height: height))
                 //secondheplerView.backgroundColor = .green
@@ -675,14 +711,14 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section != 0 {
+        if indexPath.section != 0 || indexPath.section != 1 {
 
             switch indexPath.section {
-            case 1:
-                tableDataTransactions[indexPath.row].selected = tableDataTransactions[indexPath.row].selected ? false : true
             case 2:
-                categoruesTableData[indexPath.row].selected = categoruesTableData[indexPath.row].selected ? false : true
+                tableDataTransactions[indexPath.row].selected = tableDataTransactions[indexPath.row].selected ? false : true
             case 3:
+                categoruesTableData[indexPath.row].selected = categoruesTableData[indexPath.row].selected ? false : true
+            case 4:
                 debtsTableData[indexPath.row].selected = debtsTableData[indexPath.row].selected ? false : true
             default:
                 print("default")
@@ -715,18 +751,18 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
-        if indexPath.section != 0 {
+        if indexPath.section != 0 || indexPath.section != 1 {
             let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
                 switch indexPath.section {
-                case 1:
+                case 2:
                     self.transactions.remove(at: indexPath.row)
                     appData.saveTransations(self.transactions, key: K.Keys.localTrancations)
                     self.getData()
-                case 2:
+                case 3:
                     self.categories.remove(at: indexPath.row)
                     appData.saveCategories(self.categories, key: K.Keys.localCategories)
                     self.getData()
-                case 3:
+                case 4:
                     self.debts.remove(at: indexPath.row)
                     appData.saveDebts(self.debts, key: K.Keys.localDebts)
                     self.getData()
@@ -780,3 +816,6 @@ class unsendedDebtsCell: UITableViewCell {
     @IBOutlet weak var treshImage: UIImageView!
 }
 
+class descriptionCell: UITableViewCell {
+    
+}

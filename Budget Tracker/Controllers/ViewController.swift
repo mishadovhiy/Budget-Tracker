@@ -68,27 +68,36 @@ class ViewController: UIViewController {
             }
             dataTaskCount = nil
             selectedCell = nil
-            
+            let tableDataDataCount = self.tableData.count
             DispatchQueue.main.async {
-            //    self.test()
+                UIView.animate(withDuration: 0.3) {
+                    self.darkBackgroundUnderTable.frame = CGRect(x: 0, y: self.view.frame.height, width: self.view.frame.width, height: 0)
+                }
+                if self.refreshControl.isRefreshing {
+                 //   self.refreshControl.backgroundColor = .clear
+                    self.refreshControl.endRefreshing()
+                }
+                
+                self.mainTableView.reloadData()
+                
+                self.mainTableView.alpha = tableDataDataCount == 0 ? 0 : 1
+                
+                self.calculateLabels(noData: tableDataDataCount == 0 ? true : false)
+                if tableDataDataCount == 0 {
+                    self.toggleNoData(show: true, text: (UserDefaults.standard.value(forKey: "transactionsData") as? [[String]])?.count ?? 0 == 0 ? "Add your first transaction" : "No transactions\nfor selected period")
+                } else {
+                    self.toggleNoData(show: false, addButtonHidden: true)
+                }
                 self.filterText = "Filter: \(selectedPeroud)"
                 self.calculationSView.alpha = 0
                 UIView.animate(withDuration: 0.8) {
                     self.calculationSView.alpha = 1
                 }
-                self.tableActionActivityIndicator.removeFromSuperview()
-                self.dataCountLabel.text = "\(datacountText)"
-                self.mainTableView.reloadData()
-                if self.refreshControl.isRefreshing {
-                    self.refreshControl.endRefreshing()
-                }
-                self.mainTableView.isScrollEnabled = self.tableData.count == 0 ? false : true
+                self.tableActionActivityIndicator.removeFromSuperview()//?
+               // self.dataCountLabel.text = "\(datacountText)"
                 
-                if self.tableData.count == 0 {
-                    self.toggleNoData(show: true, text: (UserDefaults.standard.value(forKey: "transactionsData") as? [[String]])?.count ?? 0 == 0 ? "Add your first transaction" : "No transactions\nfor selected period")
-                } else {
-                    self.toggleNoData(show: false, addButtonHidden: true)
-                }
+
+                
                 
                 if self.sendSavedData {
                     if appData.username != "" {
@@ -129,7 +138,7 @@ class ViewController: UIViewController {
                         }
                     }
                 }
-                
+                //self.refreshControl.backgroundColor = K.Colors.background
                /* if self.justLoaded {
                     self.justLoaded = false
                     let save = SaveToDB()
@@ -167,19 +176,22 @@ class ViewController: UIViewController {
         DispatchQueue.main.async {
             self.addTransactionWhenEmptyButton.isHidden = addButtonHidden
             if show {
-                let y = fromTop ? self.mainTableView.frame.minY : self.bigCalcView.frame.maxY
+                let y = fromTop ? self.mainTableView.frame.minY : (self.bigCalcView.frame.maxY + 10)
                 self.noDataView.isHidden = false
                 self.noDataLabel.text = text
-                UIView.animate(withDuration: appeareAnimation ? 0.3 : 0) {
+                UIView.animate(withDuration: appeareAnimation ? 0.35 : 0) {
                     self.noDataView.frame = CGRect(x: 0, y: y, width: self.view.frame.width, height: self.view.frame.height - y)
                 } completion: { (_) in
-                    
+                  //  self.calculateLabels(noData: true)
+                    self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
                 }
             } else {
-                UIView.animate(withDuration: 0.25) {
+                UIView.animate(withDuration: 0.35) {
                     self.noDataView.frame = CGRect(x: 0, y: self.view.frame.height, width: self.view.frame.width, height: self.view.frame.height / 2)
                 } completion: { (_) in
                     self.noDataView.isHidden = true
+                   // self.calculateLabels(noData: false)
+                    self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
                 }
             }
         }
@@ -205,27 +217,94 @@ class ViewController: UIViewController {
         
         //UIApplication.shared.applicationIconBadgeNumber = 0
        // mainTableView.isUserInteractionEnabled = false
-
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(bigCalcTaps(_:))))
         
 
     }
+    
+    func updateUI() {
+     //   addTransitionButton.translatesAutoresizingMaskIntoConstraints = true
+  //      self.mainTableView.backgroundColor = K.Colors.background
+        toggleNoData(show: true, text: "Loading", fromTop: true, appeareAnimation: false, addButtonHidden: true)
+        downloadFromDB()
+        self.mainTableView.delegate = self
+        self.mainTableView.dataSource = self
+        DispatchQueue.main.async {
+            self.unsendedDataLabel.superview?.superview?.isHidden = true
+            self.enableLocalDataPress = false
+            self.dataFromValueLabel.superview?.superview?.isHidden = true
+           // for button in self.lightCornerButtons {
+            self.addTransactionWhenEmptyButton.layer.cornerRadius = 5
+            self.addTransactionWhenEmptyButton.layer.masksToBounds = true
+          //  }
+           // self.darkBackgroundUnderTable
+            //self.noDataView.frame = CGRect(x: 0, y: self.view.frame.height, width: self.view.frame.width, height: self.view.frame.height / 2)
+            //self.noDataView.isHidden = true
+        //    self.noDataView.layer.zPosition = CGFloat(Float.greatestFiniteMagnitude)
+            self.noDataView.translatesAutoresizingMaskIntoConstraints = true
+            self.noDataView.layer.masksToBounds = true
+            self.noDataView.layer.cornerRadius = self.tableCorners
+            self.noDataView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+            self.darkBackgroundUnderTable.layer.masksToBounds = true
+            self.darkBackgroundUnderTable.layer.cornerRadius = self.tableCorners
+            self.darkBackgroundUnderTable.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+            self.darkBackgroundUnderTable.translatesAutoresizingMaskIntoConstraints = true
+            self.addTransitionButton.layer.cornerRadius = self.tableCorners
+            self.addTransitionButton.isHidden = true
+            self.addTransitionButton.alpha = 1
+            let tableFrame = self.mainTableView.frame
+            let TransFrame = self.addTransitionButton.frame
+            
+            self.addTransFrame = CGRect(x: tableFrame.width - TransFrame.width, y: tableFrame.minY, width: TransFrame.width, height: TransFrame.height)
+            print(self.addTransFrame, "self.addTransitionButton.frame", tableFrame.minY)
+            self.view.addSubview(self.filterHelperView)
+            self.filterHelperView.layer.shadowColor = UIColor.black.cgColor
+            self.filterHelperView.layer.shadowOpacity = 0.3
+            self.filterHelperView.layer.shadowOffset = .zero
+            self.filterHelperView.layer.shadowRadius = 10
+            self.filterHelperView.layer.cornerRadius = 9
+            self.filterHelperView.backgroundColor = K.Colors.pink
+            self.filterView.superview?.layer.masksToBounds = true
+            self.filterView.superview?.translatesAutoresizingMaskIntoConstraints = true
+            self.filterView.translatesAutoresizingMaskIntoConstraints = true
+            self.calculationSView.translatesAutoresizingMaskIntoConstraints = true
+            self.filterAndCalcFrameHolder.0 = self.filterView.frame
+            self.filterAndCalcFrameHolder.1 = self.calculationSView.frame
+            
+            let superframe = self.calculationSView.superview?.frame ?? .zero
+            let calcFrame = self.calculationSView.frame
+            self.calculationSView.frame = CGRect(x: -superframe.height, y: calcFrame.minY, width: calcFrame.width, height: calcFrame.height)
+            
+            self.refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
+            let superWidth = self.view.frame.width
+            self.refreshSubview.frame = CGRect(x: superWidth / 2 - 10, y: 0, width: 20, height: 20)
+            print(self.refreshSubview.frame, "ijhyghujijnhj")
+            let image = UIImage(named: "plusIcon")
+            let button = UIButton(frame: CGRect(x: 0, y: 10, width: 20, height: 20))
+            button.layer.masksToBounds = true
+            button.layer.cornerRadius = button.layer.frame.width / 2
+            button.setImage(image, for: .normal)
+            self.refreshSubview.addSubview(button)
+           // self.refreshSubview.backgroundColor = K.Colors.background
+            self.refreshSubview.alpha = 0
+            self.refreshControl.addSubview(self.refreshSubview)
+           // self.refreshControl.backgroundColor = .red//K.Colors.background
+            self.mainTableView.addSubview(self.refreshControl)
+            
+            
+        }
 
-    func test() {
-        //click on first section - detect position
-        print("appeare main vc")
-        let expencesSuperLabel = self.bigExpensesStack.frame
-        let ecpensesView = UIView(frame: CGRect(x: bigCalcView.frame.minX, y: bigCalcView.frame.minY, width: expencesSuperLabel.width, height: expencesSuperLabel.height))
-        ecpensesView.backgroundColor = .red
-        self.view.addSubview(ecpensesView)
-        
-        
-        let width = dataFromTitleLabel.superview?.superview?.frame ?? .zero
-        let addMarg = dataFromTitleLabel.superview?.superview?.superview?.frame ?? .zero
-        let greenView = UIView(frame: CGRect(x: 0, y: addMarg.minY + width.minY + bigCalcView.frame.minY + perioudBalanceView.frame.height + expencesStack.frame.height, width: width.width, height: width.height))
+        if appData.defaults.value(forKey: "firstLaunch") as? Bool ?? true {
+            appData.createFirstData {
+                self.prepareFilterOptions()
+                self.filter()
+                UserDefaults.standard.setValue(false, forKey: "firstLaunch")
+                DispatchQueue.main.async {
+                    self.message.showMessage(text: "Wellcome to Budget Tracker\nGet started by looking through demo data", type: .succsess, windowHeight: 80, bottomAppearence: self.view.frame.width < 500 ? true : false)
+                }
+            }
+        }
 
-        greenView.backgroundColor = .green
-        self.view.addSubview(greenView)
     }
     
     var canTouchHandleTap = true
@@ -272,90 +351,11 @@ class ViewController: UIViewController {
         }
         
     }
-
-    
-    func updateUI() {
-     //   addTransitionButton.translatesAutoresizingMaskIntoConstraints = true
-  //      self.mainTableView.backgroundColor = K.Colors.background
-        toggleNoData(show: true, text: "Loading", fromTop: true, appeareAnimation: false, addButtonHidden: true)
-        downloadFromDB()
-        self.mainTableView.delegate = self
-        self.mainTableView.dataSource = self
-        DispatchQueue.main.async {
-           // for button in self.lightCornerButtons {
-            self.addTransactionWhenEmptyButton.layer.cornerRadius = 5
-            self.addTransactionWhenEmptyButton.layer.masksToBounds = true
-          //  }
-           // self.darkBackgroundUnderTable
-            //self.noDataView.frame = CGRect(x: 0, y: self.view.frame.height, width: self.view.frame.width, height: self.view.frame.height / 2)
-            //self.noDataView.isHidden = true
-            self.noDataView.translatesAutoresizingMaskIntoConstraints = true
-            self.noDataView.layer.masksToBounds = true
-            self.noDataView.layer.cornerRadius = self.tableCorners
-            self.noDataView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-            self.darkBackgroundUnderTable.layer.masksToBounds = true
-            self.darkBackgroundUnderTable.layer.cornerRadius = self.tableCorners
-            self.darkBackgroundUnderTable.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-            self.darkBackgroundUnderTable.translatesAutoresizingMaskIntoConstraints = true
-            self.addTransitionButton.layer.cornerRadius = self.tableCorners
-            self.addTransitionButton.isHidden = true
-            self.addTransitionButton.alpha = 1
-            let tableFrame = self.mainTableView.frame
-            let TransFrame = self.addTransitionButton.frame
-            
-            self.addTransFrame = CGRect(x: tableFrame.width - TransFrame.width, y: tableFrame.minY, width: TransFrame.width, height: TransFrame.height)
-            print(self.addTransFrame, "self.addTransitionButton.frame", tableFrame.minY)
-            self.view.addSubview(self.filterHelperView)
-            self.filterHelperView.layer.shadowColor = UIColor.black.cgColor
-            self.filterHelperView.layer.shadowOpacity = 0.3
-            self.filterHelperView.layer.shadowOffset = .zero
-            self.filterHelperView.layer.shadowRadius = 10
-            self.filterHelperView.layer.cornerRadius = 9
-            self.filterHelperView.backgroundColor = K.Colors.pink
-            self.filterView.superview?.layer.masksToBounds = true
-            self.filterView.superview?.translatesAutoresizingMaskIntoConstraints = true
-            self.filterView.translatesAutoresizingMaskIntoConstraints = true
-            self.calculationSView.translatesAutoresizingMaskIntoConstraints = true
-            self.filterAndCalcFrameHolder.0 = self.filterView.frame
-            self.filterAndCalcFrameHolder.1 = self.calculationSView.frame
-            
-            let superframe = self.calculationSView.superview?.frame ?? .zero
-            let calcFrame = self.calculationSView.frame
-            self.calculationSView.frame = CGRect(x: -superframe.height, y: calcFrame.minY, width: calcFrame.width, height: calcFrame.height)
-            
-            self.refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
-            let superWidth = self.view.frame.width
-            self.refreshSubview.frame = CGRect(x: superWidth / 2 - 10, y: 20, width: 20, height: 20)
-            print(self.refreshSubview.frame, "ijhyghujijnhj")
-            let image = UIImage(named: "plusIcon")
-            let button = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
-            button.layer.cornerRadius = button.layer.frame.width / 2
-            button.setImage(image, for: .normal)
-            self.refreshSubview.addSubview(button)
-            self.refreshSubview.backgroundColor = K.Colors.background
-            self.refreshSubview.alpha = 0
-            self.refreshControl.addSubview(self.refreshSubview)
-            self.mainTableView.addSubview(self.refreshControl)
-            
-            
-        }
-
-        if appData.defaults.value(forKey: "firstLaunch") as? Bool ?? true {
-            appData.createFirstData {
-                self.prepareFilterOptions()
-                self.filter()
-                UserDefaults.standard.setValue(false, forKey: "firstLaunch")
-                DispatchQueue.main.async {
-                    self.message.showMessage(text: "Wellcome to Budget Tracker\nGet started by looking through demo data", type: .succsess, windowHeight: 80, bottomAppearence: self.view.frame.width < 500 ? true : false)
-                }
-            }
-        }
-
-    }
     
     
     var enableLocalDataPress = false
-    func updateDataLabels() {
+    func updateDataLabels(reloadAndAnimate: Bool = true, noData: Bool = false) {
+        print("updateDataLabelsCalled")
         let unsendedCount = appData.unsendedData.count
         let localCount = ((UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String]] ?? []) + (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String]] ?? []) + (UserDefaults.standard.value(forKey: K.Keys.localDebts) as? [[String]] ?? [])).count
         let prevName = UserDefaults.standard.value(forKey: "prevUserName") as? String ?? "previous account"
@@ -364,18 +364,20 @@ class ViewController: UIViewController {
             self.unsendedDataLabel.text = "\(unsendedCount)"
             self.dataFromTitleLabel.text = "Data from \(prevName == "" ? "previous account" : prevName):"
             self.dataFromValueLabel.text = "\(localCount)"
-            
-            UIView.animate(withDuration: 0.25) {
-                self.unsendedDataLabel.superview?.superview?.isHidden = unsendedCount == 0 ? true : false
-                self.enableLocalDataPress = localCount == 0 ? false : true
-                self.dataFromValueLabel.superview?.superview?.isHidden = localCount == 0 ? true : false
-            } completion: { (_) in
-                self.correctFrameBackground = CGRect(x: 0, y: self.bigCalcView.frame.maxY + 20, width: self.darkBackgroundUnderTable.frame.width, height: self.view.frame.height - self.bigCalcView.frame.maxY)
-                self.darkBackgroundUnderTable.frame = self.correctFrameBackground
-                self.mainTableView.reloadData()
+            if reloadAndAnimate {
+                UIView.animate(withDuration: noData ? 0.0 : 0.35) {
+                    self.unsendedDataLabel.superview?.superview?.isHidden = unsendedCount == 0 ? true : false
+                    self.enableLocalDataPress = localCount == 0 ? false : true
+                    self.dataFromValueLabel.superview?.superview?.isHidden = localCount == 0 ? true : false
+                } completion: { (_) in
+                    self.correctFrameBackground = CGRect(x: 0, y: self.bigCalcView.frame.maxY + 30, width: self.darkBackgroundUnderTable.frame.width, height: self.view.frame.height - self.bigCalcView.frame.maxY)
+                    UIView.animate(withDuration: 0.3) {
+                        self.darkBackgroundUnderTable.frame = self.correctFrameBackground
+                    }
+                    
+                    //self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
+                }
             }
-
-            
         }
     }
     
@@ -478,12 +480,8 @@ class ViewController: UIViewController {
     }
     var undendedCount = 0
     var filterAndCalcFrameHolder = (CGRect.zero, CGRect.zero)
-    var viewLoadedvar = false
-    override func viewDidLayoutSubviews() {
-        if !viewLoadedvar {
-           // whiteBackgroundFrame = whiteBackground.frame
-        }
-    }
+    var wasSendingUnsended = false
+
     
     var refreshSubview = UIView.init(frame: .zero)
     struct tableStuct {
@@ -506,6 +504,7 @@ class ViewController: UIViewController {
     }
     
     func filter() {
+        print("filterCalled")
         dataTaskCount = (0,0)
         animateCellWillAppear = true
         DispatchQueue.main.async {
@@ -516,7 +515,7 @@ class ViewController: UIViewController {
             allDaysBetween()
         }
         let allFilteredData = performFiltering(from: appData.filter.from, to: appData.filter.to, all: appData.filter.showAll).sorted{ $0.dateFromString < $1.dateFromString }
-        calculateLabels()
+     //   calculateLabels()
         newTableData = createTableData(filteredData: allFilteredData)
 
     }
@@ -777,16 +776,17 @@ class ViewController: UIViewController {
         }
     }
     var timers: [Timer] = []
-    
 
     
    // var didloadCalled = false
     var sendSavedData = false
+    //here
     func sendUnsaved() {
         let dataCount = appData.unsendedData.count
-        updateDataLabels()
+        
         print(dataCount, "dataCountdataCountdataCountdataCountdataCountdataCount")
-        if forseSendUnsendedData {
+        if forseSendUnsendedData {//wasSendingUnsended
+            updateDataLabels(reloadAndAnimate: false)
             if dataCount > 0 {
                 self.animateCellWillAppear = false
                 let save = SaveToDB()
@@ -1022,14 +1022,17 @@ class ViewController: UIViewController {
                                 self.sendSavedData = false
                                 self.forseSendUnsendedData = false
                                 self.downloadFromDB()
-                                DispatchQueue.main.async {
+                               /* DispatchQueue.main.async {
                                     self.message.showMessage(text: "Done!", type: .succsess, windowHeight: 40, bottomAppearence: true)
-                                }
+                                }*/
                             }
                         }
                     }
                 } else {
+                    //unsavedComplited
                     self.filter()
+                    
+                    
                 }
                 
             }
@@ -1179,10 +1182,10 @@ class ViewController: UIViewController {
 
     var totalBalance = 0.0
     
-    func calculateLabels() {
+    func calculateLabels(noData: Bool = false) {
         let tableTrans = Array(tableData)
         let allTrans = Array(appData.getTransactions)
-        recalculation(i: self.incomeLabels, e: self.ecpensesLabels, periudData: tableTrans)
+        recalculation(i: self.incomeLabels, e: self.ecpensesLabels, periudData: tableTrans, noData:noData)
         var totalExpenses = 0.0
         var totalIncomes = 0.0
         for i in 0..<allTrans.count {
@@ -1225,12 +1228,12 @@ class ViewController: UIViewController {
             }
         }
         
-        updateDataLabels()
+        
         statisticBrain.getlocalData(from: tableTrans)
         sumAllCategories = statisticBrain.statisticData
     }
     
-    func recalculation(i:[UILabel], e: [UILabel], periudData: [TransactionsStruct]) {
+    private func recalculation(i:[UILabel], e: [UILabel], periudData: [TransactionsStruct], noData: Bool = false) {
         var sumIncomes = 0.0
         var sumExpenses = 0.0
         var sumPeriodBalance = 0.0
@@ -1276,10 +1279,10 @@ class ViewController: UIViewController {
         }
         DispatchQueue.main.async {
 
-            UIView.animate(withDuration: 0.25) {
+            UIView.animate(withDuration: noData ? 0.0 : 0.35) {
                 self.perioudBalanceLabels.first?.superview?.isHidden = (self.totalBalance == sumPeriodBalance || sumPeriodBalance == 0) ? true : false
             } completion: { (_) in
-                
+                self.updateDataLabels(noData: noData)
             }
 
         }
@@ -1744,6 +1747,13 @@ class ViewController: UIViewController {
     
     var animateCellWillAppear = true
     var calcViewHeight:CGFloat = 0
+    
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        DispatchQueue.main.async {
+            self.mainTableView.reloadData()
+        }
+    }
 }
 
 //MARK: - extension
@@ -2001,7 +2011,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 && indexPath.row == 0 {
-            return bigCalcView.layer.frame.height + 10
+            return bigCalcView.layer.frame.height + 20
         } else {
             return UITableView.automaticDimension
             //tableView.cellForRow(at: indexPath)?.layer.frame.height ?? 0
@@ -2103,13 +2113,16 @@ extension ViewController: TransitionVCProtocol {
         } else {
             print("reloaddd")
             DispatchQueue.main.async {
-                self.mainTableView.reloadData()
-                self.refreshControl.endRefreshing()
+                if self.refreshControl.isRefreshing {
+                    self.refreshControl.endRefreshing()
+                }
+                self.calculateLabels()
             }
         }
     }
     
     func quiteTransactionVC(){
+
         print("quite trans")
     }
     
@@ -2161,7 +2174,7 @@ extension ViewController: SettingsViewControllerProtocol {
                 print("ViewController needFiltering")
                 self.downloadFromDB()
             } else {
-                calculateLabels()
+               // calculateLabels()
             }
             
         }

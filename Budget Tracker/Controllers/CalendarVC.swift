@@ -183,8 +183,9 @@ class CalendarVC: UIViewController {
         }*/
     }
     
+    var daystoWeekStart = 0
     func getDays() {
-        
+        daystoWeekStart = 0
         let dateComponents = DateComponents(year: year, month: month)
         let calendar = Calendar.current
         let date = calendar.date(from: dateComponents)!
@@ -202,6 +203,7 @@ class CalendarVC: UIViewController {
         
         let weekRes = weekNumber < 0 ? 7 + weekNumber : weekNumber
         for _ in 0..<weekRes{
+            daystoWeekStart += 1
             days.append(0)
         }
         for i in 0..<numDays {
@@ -393,20 +395,21 @@ class CalendarVC: UIViewController {
             if getYearFrom(string: selectedTo) == getYearFrom(string: selectedFrom) && (getMonthFrom(string: selectedTo) == getMonthFrom(string: selectedFrom)) {
                 
                 let dayFrom = appData.filter.getDayFromString(s: selectedFrom)
+                print(dayFrom, "dayFromdayFromdayFromdayFromdayFrom")
                 let dayTo = appData.filter.getDayFromString(s: selectedTo)
                 let between = (dayTo - dayFrom) - 1
-                var start = dayFrom
+                var start = dayFrom + daystoWeekStart
                 for _ in 0..<between {
-                    
                     let dayCell = makeTwo(n: days[start])
                     let monthCell = makeTwo(n: month)
                     let yearCell = makeTwo(n: year)
-                    daysBetween.append("\(dayCell).\(monthCell).\(yearCell)")
+                    let new = "\(dayCell).\(monthCell).\(yearCell)"
+                    daysBetween.append(new)
                     start += 1
                 }
                 
             } else {
-                allDaysBetween()
+               // allDaysBetween()
             }
 
         }
@@ -646,6 +649,19 @@ class CalendarVC: UIViewController {
     
     var upToFour = (0,0)
     
+    func containdInBetween(date: String) -> Bool {
+        print(daysBetween, "daysBetweendaysBetweendaysBetweendaysBetween")
+        var result = false
+        for i in 0..<self.daysBetween.count {
+            if self.daysBetween[i] == date {
+                result = true
+                //break
+            }
+        }
+        //не добавлять дни между а просто считать больше чем "с" и меньше ли "по"
+        return result
+    }
+    
 }
 
 
@@ -681,7 +697,7 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
         cell.cellTypeLabel.text = "\(dayCell).\(monthCell).\(yearCell)"
 
         DispatchQueue.main.async {
-            if self.selectedTo == cell.cellTypeLabel.text || self.selectedFrom == cell.cellTypeLabel.text {
+            if self.selectedTo == "\(dayCell).\(monthCell).\(yearCell)" || self.selectedFrom == "\(dayCell).\(monthCell).\(yearCell)" || self.containdInBetween(date: "\(dayCell).\(monthCell).\(yearCell)") {
                 cell.backgroundCell.backgroundColor = K.Colors.yellow
             }else {
                 cell.backgroundCell.backgroundColor = self.darkAppearence ? UIColor(named: "darkTableColor") : K.Colors.background
@@ -689,14 +705,15 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
             }
         }
         
-        DispatchQueue.main.async {
+       /* DispatchQueue.main.async {
             for i in 0..<self.daysBetween.count {
                 if self.daysBetween[i] == cell.cellTypeLabel.text {
                     cell.backgroundCell.backgroundColor = K.Colors.separetor
                     cell.dayLabel.alpha = 0.2
                 }
             }
-        }
+        }*/
+
         if cell.cellTypeLabel.text == today {
             DispatchQueue.main.async {
                 cell.dayLabel.textColor = K.Colors.negative

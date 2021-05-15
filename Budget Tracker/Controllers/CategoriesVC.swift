@@ -9,6 +9,11 @@
 import UIKit
 import CoreData
 
+
+///TODO:
+//no data cell
+
+
 protocol CategoriesVCProtocol {
     func categorySelected(category: String, purpose: Int, fromDebts: Bool, amount: Int)
 }

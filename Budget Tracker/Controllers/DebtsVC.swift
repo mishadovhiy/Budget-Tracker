@@ -8,6 +8,13 @@
 
 import UIKit
 
+///TODO:
+// add due date and amount view, add labels in cells
+
+//no data cell
+
+//first cell - description (если там тоже самое что и в noDataView то не отобр description если dataCount == 0)
+
 class DebtsVC: UIViewController {
     @IBOutlet weak var tableView: UITableView!
 
