@@ -25,11 +25,12 @@ class LoadingIndicator {
         self.loadingView = UIView(frame: .zero)
         self.ai = UIActivityIndicatorView.init(style: .whiteLarge)
         self.funccc = nil
+        
     }
 
     private let loadingViewSize = (CGFloat(250), CGFloat(200))
     func showIndicator(text: String = "Wait") {
-        
+        self.superView.isUserInteractionEnabled = false
         let superFrame = self.superView.window?.frame ?? self.superView.frame
             self.loadingMainView.frame = CGRect(x: 0, y: 0, width: superFrame.width, height: superFrame.height)
         let loadingViewPosition = CGPoint(x: (superFrame.width / 2) - (loadingViewSize.0 / 2), y: (superFrame.height / 2) - (loadingViewSize.1 / 2))
@@ -58,6 +59,7 @@ class LoadingIndicator {
     }
     
     func showSmallIndicator() {
+        self.superView.isUserInteractionEnabled = false
         swipeToHide = false
         let superFrame = self.superView.window?.frame ?? self.superView.frame
         self.loadingMainView.frame = CGRect(x: 0, y: 0, width: superFrame.width, height: superFrame.height)
@@ -87,6 +89,7 @@ class LoadingIndicator {
     }
     
     func hideIndicator(force: Bool = false, completionText: String = "Done", hideAfter: TimeInterval = 0.0, completion: @escaping (Bool) -> ()) {
+        self.superView.isUserInteractionEnabled = true
         self.textLabel.numberOfLines = 1
         if force {
             self.loadingMainView.removeFromSuperview()
@@ -143,6 +146,7 @@ class LoadingIndicator {
     
  
     func completeWithDone(title: String, error:Bool = false, description: String? = nil, completion: @escaping (Bool) -> ()) {
+        self.superView.isUserInteractionEnabled = true
         if error {
             UIImpactFeedbackGenerator().impactOccurred()
         }
@@ -228,6 +232,7 @@ class LoadingIndicator {
     }
     
     func fastHideIndicator(completion: @escaping (Bool) -> ()) {
+        self.superView.isUserInteractionEnabled = true
         let superFrame = self.superView.window?.frame ?? self.superView.frame
         UIView.animate(withDuration: 0.15) {
             self.loadingMainView.backgroundColor = .clear

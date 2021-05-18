@@ -67,6 +67,7 @@ class MessageView {
     }
     
     func showMessage(text: String, type: MessageType, windowHeight: CGFloat = 50, autoHide: Bool = true, bottomAppearence: Bool = false) {
+        
         let mainViewFrame = self.mainView.view.bounds
         let width = (mainViewFrame.width < 500 ? mainViewFrame.width : 500) - 30
 

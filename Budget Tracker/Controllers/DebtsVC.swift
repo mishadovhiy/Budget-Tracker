@@ -276,6 +276,7 @@ class DebtsVC: UIViewController {
         addingNew = true
         showAnimatonOnSwitch = true
         DispatchQueue.main.async {
+            UIImpactFeedbackGenerator().impactOccurred()
             self.newDebtButton.superview?.backgroundColor = self.view.backgroundColor
             self.newDebtField.text = ""
             self.newDebtButton.alpha = 0

@@ -11,6 +11,11 @@ var needFullReload = false
 
 //on login or create an account if account not in a list - append to "loggedInUsers"
 
+//forgot password - if show (if from settings and if nick == "")
+//change password - if nick != ""
+//log out - if nick != ""
+
+
 class LoginViewController: UIViewController {
 
     @IBOutlet weak var logIn: UIStackView!
@@ -46,8 +51,6 @@ class LoginViewController: UIViewController {
     
     var messagesFromOtherScreen = ""
     
-    @IBOutlet weak var logoutButton: UIButton!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         helperNavView.backgroundColor = K.Colors.background
@@ -55,19 +58,172 @@ class LoginViewController: UIViewController {
         print("localTransactions:", appData.getTransactions.count)
         updateUI()
 
-        logoutButton.alpha = appData.username != "" ? 1 : 0
+      //  logoutButton.alpha = appData.username != "" ? 1 : 0
 
-    }
-    @IBAction func logoutPressed(_ sender: UIButton) {
-        transactionAdded = true
-        appData.username = ""
-        appData.password = ""
         DispatchQueue.main.async {
-            self.nicknameLogLabel.text = ""
-            self.passwordLogLabel.text = ""
-            self.performSegue(withIdentifier: "homeVC", sender: self)
+            self.title = appData.username == "" ? "Sing In" : appData.username
+        }
+        
+    }
+    
+    var waitingType:waitingFor?
+    
+    var currectAnsware = ""
+    
+    func fortgotPaswordPressed() {
+        let username = appData.username
+        if username != "" {
+            self.currectAnsware = ""
+            DispatchQueue.main.async {
+                UIImpactFeedbackGenerator().impactOccurred()
+                self.ai.showIndicator()
+            }
+            
+    
+            DispatchQueue.init(label: "getEmail").async {
+                
+                let load = LoadFromDB()
+                load.Users { (loadedData, error) in
+                    if error {
+                        DispatchQueue.main.async {
+                            self.ai.fastHideIndicator { (_) in
+                                self.message.showMessage(text: "No Internet!", type: .internetError)
+                            }
+                        }
+                    } else {
+                        var emailToSend = ""
+                        for i in 0..<loadedData.count {
+                            if loadedData[i][0] == username {
+                                emailToSend = loadedData[i][1]
+                                break
+                            }
+                        }
+                        
+                        let code = "\(Int.random(in: 0...9))\(Int.random(in: 0...9))\(Int.random(in: 0...9))\(Int.random(in: 0...9))"
+                        
+                        let save = SaveToDB()
+                        save.sendCode(toDataString: "emailTo=\(emailToSend)&Nickname=\(username)&resetCode=\(code)") { (codeError) in
+                            if codeError {
+                                DispatchQueue.main.async {
+                                    self.ai.fastHideIndicator { (_) in
+                                        self.message.showMessage(text: "No Internet!", type: .internetError)
+                                    }
+                                }
+                            } else {
+                                self.currectAnsware = code
+                                self.waitingType = .code
+                                DispatchQueue.main.async {
+                                    self.performSegue(withIdentifier: "toEnterVC", sender: self)
+                                }
+                                
+                            }
+                        }
+                    }
+                }
+            }
+            
+            
+        } else {
+            //wait for nickname
+        }
+    }
+    
+    func getEmail(username: String) -> String {
+        var result = ""
+        var errorr = true
+        let load = LoadFromDB()
+        load.Users { (loadedData, error) in
+            errorr = error
+            for i in 0..<loadedData.count {
+                if loadedData[i][0] == username {
+                    result = loadedData[i][1]
+                    break
+                }
+            }
+        }
+        
+        if errorr {
+            DispatchQueue.main.async {
+                self.ai.fastHideIndicator { (_) in
+                    self.message.showMessage(text: "No Internet!", type: .internetError)
+                }
+            }
+        } else {
+            if result == "" {
+                DispatchQueue.main.async {
+                    self.ai.fastHideIndicator { (_) in
+                        self.message.showMessage(text: "Username not found!", type: .internetError)
+                    }
+                }
+            }
             
         }
+        return result
+        
+        
+    }
+    
+    //here
+    @IBAction func moreButtonPressed(_ sender: UIButton) {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: "", message: "", preferredStyle: .actionSheet)
+            
+            
+            let forgotPassword = UIAlertAction(title: "Forgot password", style: .default, handler: { (_) in
+                
+                self.fortgotPaswordPressed()
+            })
+            
+            
+            
+            let changeEmail = UIAlertAction(title: "Change password", style: .default) { (ac) in
+                
+            }
+            let logout = UIAlertAction(title: "Log out", style: .destructive, handler: { (_) in
+                transactionAdded = true
+                appData.username = ""
+                appData.password = ""
+                self.nicknameLogLabel.text = ""
+                self.passwordLogLabel.text = ""
+                self.title = "Sing In"
+            })
+            
+
+            alert.addAction(forgotPassword)
+            if appData.username != "" {
+                alert.addAction(changeEmail)
+                alert.addAction(logout)
+                //change email // enter code we send on your old email
+                //get email
+            }
+            
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (_) in
+            }))
+            self.present(alert, animated: true)
+        }
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case "toEnterVC":
+            let vc = segue.destination as! enterValueVC
+            vc.delegate = self
+            switch waitingType {
+            case .code:
+                print("")
+            default:
+                break
+            }
+        default:
+            break
+        }
+    }
+    
+
+    
+    @IBAction func logoutPressed(_ sender: UIButton) {
+        
     }
     
     func updateUI() {
@@ -173,25 +329,6 @@ class LoginViewController: UIViewController {
     lazy var ai : LoadingIndicator = {
         return LoadingIndicator(superView: self.view)
     }()
-    @IBAction func forgotPassPressed(_ sender: Any) {
-        
-        //if email entered
-        //else
-
-        
-        DispatchQueue.main.async {
-            UIImpactFeedbackGenerator().impactOccurred()
-            self.ai.showIndicator(text: "Wait")
-            
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let vccc = storyboard.instantiateViewController(withIdentifier: "enterValueVC") as! enterValueVC
-            vccc.modalPresentationStyle = .overCurrentContext
-            self.present(vccc, animated: true)
-        }
-        
-    }
 
     
     
@@ -560,7 +697,7 @@ class LoginViewController: UIViewController {
                     let selectedTextfieldd = textfields[index]
                     let dif = self.view.frame.height - CGFloat(keyboardHeight) - (selectedTextfieldd.superview?.frame.maxY ?? 0)
                     if dif < 20 {
-                        //here
+
                         
                         DispatchQueue.main.async {
                             UIView.animate(withDuration: 0.3) {
@@ -612,7 +749,11 @@ class LoginViewController: UIViewController {
         return [nicknameLabelCreate, emailLabel, passwordLabel, confirmPasswordLabel, nicknameLogLabel, passwordLogLabel]
     }
     
-    
+    enum waitingFor {
+        case newPassword
+        case nickname
+        case code
+    }
 
 }
 
@@ -761,60 +902,58 @@ extension UITextField {
     }
 }
 
-//var difference: [TransactionsStruct] = []
 
-/*var DBTransactions:[TransactionsStruct] {
-// creating and using only in login - local vc
-    get {
-        let dick = appData.defaults.value(forKey: "DBTransactions") as? [[String]] ?? []
-        var data: [TransactionsStruct] = []
-        for i in 0..<dick.count {
-            data.append(TransactionsStruct(value: dick[i][1], category: dick[i][2], date: dick[i][3], comment: dick[i][4]))
+
+extension LoginViewController: enterValueVCProtocol {
+    func hideScreen(close: Bool, value: String) {
+        
+        if !close {
+            DispatchQueue.init(label: "getWaitingValue").async {
+                var errorText = ""
+                switch self.waitingType {
+                case .code:
+                    if value == self.currectAnsware {
+                        //ask email
+                        self.currectAnsware = ""
+                        self.waitingType = .newPassword
+                        DispatchQueue.main.async {
+                            self.performSegue(withIdentifier: "toEnterVC", sender: self)
+                        }
+                    } else {
+                        errorText = "Wrong code!"
+                    }
+                case .newPassword:
+                    print("new password")
+                    //delete user with old password
+                    //add user with new password
+                //load users = save all user data as loaded
+                //delete user where - loadedUserData
+                //saveUser with new userData
+                // if error not nil - show password has changed on all your devices - else - show message succsess password changed on this device and will be changed on other devices when you laung app when you connected to the internet
+                    
+                case .nickname:
+                    errorText = "Nickname not found"
+                default:
+                    errorText = "Values didn't much"
+                }
+                if value != self.currectAnsware {
+                    DispatchQueue.main.async {
+                        self.ai.completeWithDone(title: errorText, error: true) { (_) in
+                        }
+                    }
+                }
+                
+            }
+            
+        } else {
+            DispatchQueue.main.async {
+                self.ai.fastHideIndicator { (_) in
+                    
+                }
+            }
         }
-        print("DBTransactions: called, count: \(data.count)")
-        return data
+
     }
     
-    set(dataStruct){
-        var dick: [[String]] = []
-        let datastr = Array(dataStruct)
-        let nickname = appData.username
-        
-        for i in 0..<datastr.count {
-            let nickname = nickname
-            let value = datastr[i].value
-            let category = datastr[i].category
-            let date = datastr[i].date
-            let comment = datastr[i].comment
-            dick.append([nickname, value, category, date, comment])
-        }
-
-        
-        print("DBTransactions: saved \(dick.count)")
-        appData.defaults.set(dick, forKey: "DBTransactions")
-    }
-}*/
-/*var DBCategories:[CategoriesStruct] {
-    get {
-        let dick = appData.defaults.value(forKey: "DBCategories") as? [[String]] ?? []
-        var data: [CategoriesStruct] = []
-        for i in 0..<dick.count {
-            data.append(CategoriesStruct(name: dick[i][1], purpose: dick[i][2], count: 0, debt: dick[i][3]))
-        }
-        print("DBCategories: returned \(data.count)")
-        return data
-    }
     
-    set(dataStruct){
-        var dick: [[String]] = []
-        
-        for i in 0..<dataStruct.count {
-            let nickname = appData.username
-            let name = dataStruct[i].name
-            let purpose = dataStruct[i].purpose
-            dick.append([nickname, name, purpose])
-        }
-        print("DBCategories: saved \(dataStruct)")
-        appData.defaults.set(dick, forKey: "DBCategories")
-    }
-}*/
+}

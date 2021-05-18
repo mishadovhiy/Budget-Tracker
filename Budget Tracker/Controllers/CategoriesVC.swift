@@ -435,6 +435,7 @@ class CategoriesVC: UIViewController {
     var editingString: String?
     
     @objc func addPressed(_ sender: UITapGestureRecognizer) {
+        
         if let section = Int(sender.name ?? "") {
             self.showAnimatonOnSwitch = true
             self.newCategoryTextField.removeFromSuperview()
@@ -448,6 +449,7 @@ class CategoriesVC: UIViewController {
             }
             
             DispatchQueue.main.async {
+                UIImpactFeedbackGenerator().impactOccurred()
                 //self.tableView.reloadData()
                 //self.tableView.scrollToRow(at: IndexPath(row: self.editingValue! == .expenses ? self.expenses.count-1 : self.incomes.count-1, section: section), at: .bottom, animated: true)
                 self.newCategoryTextField.text = ""

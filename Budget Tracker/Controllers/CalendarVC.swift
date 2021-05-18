@@ -636,7 +636,9 @@ class CalendarVC: UIViewController {
     }
     
     @IBAction func donePressed(_ sender: UIButton) {
-
+        DispatchQueue.main.async {
+            UIImpactFeedbackGenerator().impactOccurred()
+        }
         if doneIsActive {
             appData.filter.from = selectedFrom == "" ? selectedTo : selectedFrom
             appData.filter.to = selectedTo == "" ? selectedFrom : selectedTo
@@ -697,7 +699,7 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
         cell.cellTypeLabel.text = "\(dayCell).\(monthCell).\(yearCell)"
 
         DispatchQueue.main.async {
-            if self.selectedTo == "\(dayCell).\(monthCell).\(yearCell)" || self.selectedFrom == "\(dayCell).\(monthCell).\(yearCell)" || self.containdInBetween(date: "\(dayCell).\(monthCell).\(yearCell)") {
+            if self.selectedTo == "\(dayCell).\(monthCell).\(yearCell)" || self.selectedFrom == "\(dayCell).\(monthCell).\(yearCell)" {//|| self.containdInBetween(date: "\(dayCell).\(monthCell).\(yearCell)")
                 cell.backgroundCell.backgroundColor = K.Colors.yellow
             }else {
                 cell.backgroundCell.backgroundColor = self.darkAppearence ? UIColor(named: "darkTableColor") : K.Colors.background
@@ -725,7 +727,9 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+        DispatchQueue.main.async {
+            UIImpactFeedbackGenerator().impactOccurred()
+        }
         let cell = collectionView.cellForItem(at: indexPath) as! CVCell
         let dayCell = makeTwo(n: days[indexPath.row])
         let monthCell = makeTwo(n: month)

@@ -179,14 +179,14 @@ class ViewController: UIViewController {
                 let y = fromTop ? self.mainTableView.frame.minY : (self.bigCalcView.frame.maxY + 10)
                 self.noDataView.isHidden = false
                 self.noDataLabel.text = text
-                UIView.animate(withDuration: appeareAnimation ? 0.35 : 0) {
+                UIView.animate(withDuration: appeareAnimation ? 0.25 : 0) {
                     self.noDataView.frame = CGRect(x: 0, y: y, width: self.view.frame.width, height: self.view.frame.height - y)
                 } completion: { (_) in
                   //  self.calculateLabels(noData: true)
                     self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
                 }
             } else {
-                UIView.animate(withDuration: 0.35) {
+                UIView.animate(withDuration: 0.25) {
                     self.noDataView.frame = CGRect(x: 0, y: self.view.frame.height, width: self.view.frame.width, height: self.view.frame.height / 2)
                 } completion: { (_) in
                     self.noDataView.isHidden = true
@@ -543,7 +543,7 @@ class ViewController: UIViewController {
                         
                         if loadedData[i][2] != appData.password {
                             DispatchQueue.main.async {
-                                self.performSegue(withIdentifier: "toLogin", sender: self)
+                                self.performSegue(withIdentifier: "toSingIn", sender: self)
                             }
                         }
                         break
@@ -1022,6 +1022,9 @@ class ViewController: UIViewController {
                                 self.sendSavedData = false
                                 self.forseSendUnsendedData = false
                                 self.downloadFromDB()
+                                DispatchQueue.main.async {
+                                    UIImpactFeedbackGenerator().impactOccurred()
+                                }
                                /* DispatchQueue.main.async {
                                     self.message.showMessage(text: "Done!", type: .succsess, windowHeight: 40, bottomAppearence: true)
                                 }*/
@@ -1031,7 +1034,9 @@ class ViewController: UIViewController {
                 } else {
                     //unsavedComplited
                     self.filter()
-                    
+                    DispatchQueue.main.async {
+                        UIImpactFeedbackGenerator().impactOccurred()
+                    }
                     
                 }
                 
@@ -1492,7 +1497,7 @@ class ViewController: UIViewController {
             let nav = segue.destination as! UINavigationController
             let vc = nav.topViewController as! StatisticVC
             vc.dataFromMain = tableData
-        case "toLogin":
+        case "toSingIn":
             let vc = segue.destination as! LoginViewController
             vc.messagesFromOtherScreen = "Your password has been change"
         default: return
@@ -1586,7 +1591,6 @@ class ViewController: UIViewController {
                 self.whiteBackground.frame = self.whiteBackgroundFrame
             }*/
      //   }
-        print("ended!!!")
     }
 
     var lastWhiteBackheight = 0

@@ -242,6 +242,9 @@ class UnsendedDataVC: UIViewController {
     }
     var sendPres = false
     @IBAction func sendPressed(_ sender: UIButton) {
+        DispatchQueue.main.async {
+            UIImpactFeedbackGenerator().impactOccurred()
+        }
         print(self.selectedCount, "self.selectedCountself.selectedCountself.selectedCountself.selectedCount")
         if !appData.proTrial && !appData.proVersion {
             DispatchQueue.main.async {
@@ -259,6 +262,9 @@ class UnsendedDataVC: UIViewController {
     }
     var deletePress = false
     @IBAction func deletePressed(_ sender: UIButton) {
+        DispatchQueue.main.async {
+            UIImpactFeedbackGenerator().impactOccurred()
+        }
         deletePress = true
         if self.navigationController != nil {
             self.delegate?.quiteUnsendedData(deletePressed: true, sendPressed: false)
@@ -349,7 +355,11 @@ class UnsendedDataVC: UIViewController {
     
 
     @IBAction func deleteSelectedPressed(_ sender: UIButton) {
+        
         if selectedCount != 0 {
+            DispatchQueue.main.async {
+                UIImpactFeedbackGenerator().impactOccurred()
+            }
             var result: [TransactionsStruct] = []
             result.removeAll()
             var newTable: [UnsendedTransactions] = []
@@ -406,6 +416,9 @@ class UnsendedDataVC: UIViewController {
     
 
     @objc func selectRepeatedPressed(_ sender: UIButton){
+        DispatchQueue.main.async {
+            UIImpactFeedbackGenerator().impactOccurred()
+        }
         defaultsTransactions = appData.getTransactions
         selectedCount = 0
         foundInAListCount = 0
@@ -456,6 +469,7 @@ class UnsendedDataVC: UIViewController {
     @objc func selectAllInSectionPressed(_ sender: UITapGestureRecognizer) {
         DispatchQueue.main.async {
             self.tableView.reloadData()
+            UIImpactFeedbackGenerator().impactOccurred()
         }
         
         if let name = sender.name {
@@ -480,13 +494,13 @@ class UnsendedDataVC: UIViewController {
                 }
                 
                 switch section {
-                case 1:
+                case 2:
                     for i in 0..<holder.count {
                         selectedCount += 1
                         holder[i].selected = true
                     }
                     self.tableDataTransactions = holder
-                case 2:
+                case 3:
                     var catHolder = categoruesTableData
                     for i in 0..<catHolder.count {
                         selectedCount += 1
@@ -495,7 +509,7 @@ class UnsendedDataVC: UIViewController {
                     
                     self.categoruesTableData = catHolder
                     self.tableDataTransactions = holder
-                case 3:
+                case 4:
                     var debtsHolder = debtsTableData
                     for i in 0..<debtsHolder.count {
                         selectedCount += 1
@@ -568,15 +582,15 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+  /*  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return indexPath == IndexPath(row: 0, section: 0) ? self.view.frame.height - 200 : UITableView.automaticDimension
-    }
+    }*/
     
-    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    /*func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
        /* if indexPath == IndexPath(row: 0, section: 0) {
             firstSectionHeight = 0
         }*/
-    }
+    }*/
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
