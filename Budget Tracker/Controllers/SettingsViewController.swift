@@ -36,10 +36,73 @@ class SettingsViewController: UIViewController {
             needGet = false
             getdata()
         }
+        
+        
+        let window = UIApplication.shared.keyWindow ?? UIWindow()
+        let newView = IndicatorView.instanceFromNib() as! IndicatorView
+        window.addSubview(newView)
+        
+        Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { (_) in
+            newView.show(title: "Downloading data")
+        }
+       
+       /* Timer.scheduledTimer(withTimeInterval: 10.0, repeats: false) { (_) in
+            newView.show(showingAI: false, title: "Waiting purchase", description: "follow steps to complite purchase", appeareAnimation: true, attention: true)
+        }
+        
+        
+        Timer.scheduledTimer(withTimeInterval: 20.0, repeats: false) { (_) in
+            newView.show(title: "Downloading data", description: "waite for data to be downloaded", appeareAnimation: true)
+        }*/
+        
+       /* Timer.scheduledTimer(withTimeInterval: 25.0, repeats: false) { (_) in
+            newView.hideIndicator(title: "Yu have logged in succsessfully") { (_) in
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true) {
+                    }
+                }
+            }
+        }*/
+        
+        Timer.scheduledTimer(withTimeInterval: 7.0, repeats: false) { (_) in
+          /*  newView.completeWithActions { (_) in
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true) {
+                    }
+                }
+            }*/
+            //add second button check how is it
+            /*newView.completeWithActions(buttonsTitles: ("Cancel", "Sing in"), rightButtonActon: { (_) in
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true) {
+                    }
+                }
+            }, title: "Sing in required", description: "Purchase on this device will be availible accross all devices")*/
+            
+            newView.showTextField(type: .code, title: "Enter Nickname", description: "You will receive code on email asigned to this account") { (textFieldValue) in
+                print("mainVC end Editing", textFieldValue)
+                newView.show(showingAI: true, title: "Sending", description: textFieldValue, appeareAnimation: true, attention: false)
+                
+                Timer.scheduledTimer(withTimeInterval: 7.0, repeats: false) { (_) in
+                    newView.completeWithActions(buttonsTitles: ("Cancel", "Sing in"), rightButtonActon: { (_) in
+                        DispatchQueue.main.async {
+                            self.dismiss(animated: true) {
+                            }
+                        }
+                    }, title: "Sing in required", description: "Purchase on this device will be availible accross all devices")
+                }
+
+            }
+         }
+        
     }
     var needGet = true
     
     override func viewDidAppear(_ animated: Bool) {
+        
+        
+        
+        
         
         toSegue = false
         if UserDefaults.standard.value(forKey: "firstLaunchSettings") as? Bool ?? false == false {

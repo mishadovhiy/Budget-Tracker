@@ -29,6 +29,8 @@
 		8BA57843261F617700C48524 /* watchOS.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 8BA57824261F617200C48524 /* watchOS.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8BD2E77C25B8622100D4DFBF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */; };
 		8BF011C225FD93670082F871 /* DebtsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF011C125FD93670082F871 /* DebtsVC.swift */; };
+		8BFAB7BC265482A300B9F2A4 /* ActivityIndicatorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BFAB7BB265482A300B9F2A4 /* ActivityIndicatorView.xib */; };
+		8BFAB7C12654864000B9F2A4 /* IndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFAB7C02654864000B9F2A4 /* IndicatorView.swift */; };
 		8D36724224D315BC00CE90A9 /* dbModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D36724124D315BC00CE90A9 /* dbModel.swift */; };
 		8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5206662421695200772CD5 /* StatisticBrain.swift */; };
 		8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D52066824216A2900772CD5 /* StatisticVC.swift */; };
@@ -121,6 +123,8 @@
 		8BA57840261F617700C48524 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
 		8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8BF011C125FD93670082F871 /* DebtsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebtsVC.swift; sourceTree = "<group>"; };
+		8BFAB7BB265482A300B9F2A4 /* ActivityIndicatorView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ActivityIndicatorView.xib; sourceTree = "<group>"; };
+		8BFAB7C02654864000B9F2A4 /* IndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorView.swift; sourceTree = "<group>"; };
 		8D36724124D315BC00CE90A9 /* dbModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dbModel.swift; sourceTree = "<group>"; };
 		8D5206662421695200772CD5 /* StatisticBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticBrain.swift; sourceTree = "<group>"; };
 		8D52066824216A2900772CD5 /* StatisticVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticVC.swift; sourceTree = "<group>"; };
@@ -265,6 +269,7 @@
 				8DBA7E5523F0316F00D8214C /* Main.storyboard */,
 				8DD89D8223F1468E00273904 /* mainVCcell.swift */,
 				8B4E086026544AD2006E42DA /* LogIn.storyboard */,
+				8BFAB7BB265482A300B9F2A4 /* ActivityIndicatorView.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -300,6 +305,7 @@
 				8D36724124D315BC00CE90A9 /* dbModel.swift */,
 				8B35DA6525C6F124008A8719 /* Keychain.swift */,
 				8B60D5AA2629E64400BA690B /* LoadingIndicator.swift */,
+				8BFAB7C02654864000B9F2A4 /* IndicatorView.swift */,
 			);
 			path = Modal;
 			sourceTree = "<group>";
@@ -425,6 +431,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BFAB7BC265482A300B9F2A4 /* ActivityIndicatorView.xib in Resources */,
 				8B4E086126544AD2006E42DA /* LogIn.storyboard in Resources */,
 				8DBA7E5F23F0317100D8214C /* LaunchScreen.storyboard in Resources */,
 				8DBA7E5C23F0317100D8214C /* Assets.xcassets in Resources */,
@@ -508,6 +515,7 @@
 				8D8B6C3C245023D0007260A0 /* FilterTVC.swift in Sources */,
 				8DD89D9023F1496100273904 /* CategoriesVC.swift in Sources */,
 				8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */,
+				8BFAB7C12654864000B9F2A4 /* IndicatorView.swift in Sources */,
 				8DBA7E5223F0316F00D8214C /* SceneDelegate.swift in Sources */,
 				8DB1A6FA24E19069002DE486 /* SettingsViewController.swift in Sources */,
 				8DD89D8723F1471400273904 /* AppData.swift in Sources */,

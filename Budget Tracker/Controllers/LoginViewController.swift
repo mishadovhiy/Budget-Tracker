@@ -176,9 +176,16 @@ class LoginViewController: UIViewController {
             
             
             
-            let changeEmail = UIAlertAction(title: "Change password", style: .default) { (ac) in
+            let changePassword = UIAlertAction(title: "Change password", style: .default) { (ac) in
                 
             }
+            
+            
+            let changeEmail = UIAlertAction(title: "Change email", style: .default) { (ac) in
+                
+            }
+            
+            
             let logout = UIAlertAction(title: "Log out", style: .destructive, handler: { (_) in
                 transactionAdded = true
                 appData.username = ""
@@ -192,6 +199,7 @@ class LoginViewController: UIViewController {
             alert.addAction(forgotPassword)
             if appData.username != "" {
                 alert.addAction(changeEmail)
+                alert.addAction(changePassword)
                 alert.addAction(logout)
                 //change email // enter code we send on your old email
                 //get email

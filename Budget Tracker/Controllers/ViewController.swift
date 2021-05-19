@@ -778,6 +778,13 @@ class ViewController: UIViewController {
     var timers: [Timer] = []
 
     
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        
+    }
+    
+    
    // var didloadCalled = false
     var sendSavedData = false
     //here
