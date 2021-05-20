@@ -41,6 +41,7 @@ class SettingsViewController: SuperViewController {
         }
         
         
+        
        /* let window = UIApplication.shared.keyWindow ?? UIWindow()
         let newView = IndicatorView.instanceFromNib() as! IndicatorView
         window.addSubview(newView)*/

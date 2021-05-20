@@ -64,6 +64,16 @@ class LoginViewController: SuperViewController {
             self.title = appData.username == "" ? "Sing In" : appData.username
         }
         
+       /* Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { (_) in
+            self.loadingIndicator.show()
+            Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { (_) in
+                self.loadingIndicator.showTextField(type: .password, title: "ff", userData: ("d", "g"), showSecondTF: true) { (firstText, secondText) in
+                    print(firstText, "scheduledTimer")
+                    print(secondText, "scheduledTimer")
+                    self.loadingIndicator.show()
+                }
+            }
+        }*/
     }
     
     var waitingType:waitingFor?
@@ -75,7 +85,6 @@ class LoginViewController: SuperViewController {
         if username != "" {
             self.currectAnsware = ""
             DispatchQueue.main.async {
-                UIImpactFeedbackGenerator().impactOccurred()
                 self.loadingIndicator.show()
             }
             
@@ -88,7 +97,6 @@ class LoginViewController: SuperViewController {
                         DispatchQueue.main.async {
                             self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
                                 self.loadingIndicator.hideIndicator(fast: true) { (co) in
-                                    
                                 }
                             }, title: "Internet error", description: "Try again later", error: true)
                         }
@@ -115,14 +123,9 @@ class LoginViewController: SuperViewController {
                             } else {
                                 self.currectAnsware = code
                                 self.waitingType = .code
-                                /*DispatchQueue.main.async {
-                                    self.performSegue(withIdentifier: "toEnterVC", sender: self)
-                                }*///here
-                                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
-                                    self.loadingIndicator.showTextField(type: .code, title: "Resoration code", description: "check email: \(emailToSend)") { (code) in
-                                        self.checkRestoreCode(value: code)
-                                    }
-                                })
+                                self.loadingIndicator.showTextField(type: .code, title: "Resoration code", description: "We have sent 4-digit resoration code on your email", userData: (username, emailToSend)) { (code, not) in
+                                    self.checkRestoreCode(value: code, userData: (username, emailToSend))
+                                }
                                 
                             }
                         }
@@ -133,44 +136,104 @@ class LoginViewController: SuperViewController {
             
         } else {
             //wait for nickname
-            
+           // ask username
+            //add restore by email button - ask email and show tableView and ask to chose username he wansta restore
         }
     }
     
     
-    func checkRestoreCode(value: String) {
+    func checkRestoreCode(value: String, userData: (String, String)) {
         if value == self.currectAnsware {
-            //ask email
             self.currectAnsware = ""
             self.waitingType = .newPassword
             DispatchQueue.main.async {
-                self.loadingIndicator.showTextField(type: .password, title: "Create your new password") { (password) in
+                self.loadingIndicator.showTextField(type: .password, title: "Create your new password", userData: userData) { (password, notUsing) in
                     
-                    self.loadingIndicator.showTextField(type: .password, title: "Repeate password") { (newPassword) in
-                        
-                        self.checkNewPassword(one: password, two: newPassword)
+                    self.loadingIndicator.showTextField(type: .password, title: "Repeat password", userData: userData, showSecondTF: true) { (newPassword, passwordRepeat) in
+                        print("")
+                        self.checkNewPassword(one: password, two: passwordRepeat ?? "", userData: userData)
                     }
                 }
             }
         } else {
             DispatchQueue.main.async {
-                self.loadingIndicator.showTextField(type: .code, title: "Restoration code", description: "We have send you 4 digits code on your email") { (code) in
+                self.loadingIndicator.showMessage(show: true, title: "Wrong code!", description: "You have entered: \(value)", helpAction: nil)
+                self.loadingIndicator.showTextField(type: .code, title: "Repeate code", dontChangeText: true) { (code, notUsing) in
                     
-                    self.checkRestoreCode(value: code)
+                    self.checkRestoreCode(value: code, userData: userData)
                 }
             }
         }
     }
     
-    func checkNewPassword(one: String, two: String) {
+    
+    
+    func checkNewPassword(one: String, two: String, userData: (String, String)) {
+        print("checkNewPassword:", "one:", one, "  ", "two:", two)
         if one == two {
             //send new password
+            DispatchQueue.main.async {
+                self.loadingIndicator.show(appeareAnimation: true)
+                self.cangePasswordDB(username: userData.0, newPassword: two)
+            }
         } else {
-            self.loadingIndicator.showTextField(type: .password, title: "Repeate password") { (newPassword) in
-                self.checkNewPassword(one: one, two: newPassword)
+            self.loadingIndicator.showMessage(show: true, title: "Psswords not much", helpAction: nil)
+            self.loadingIndicator.showTextField(type: .password, title: "Repeat password", userData: userData, showSecondTF: true) { (newPassword, passwordRepeat) in
+                
+                self.checkNewPassword(one: newPassword, two: passwordRepeat ?? "", userData: userData)
             }
         }
     }
+    
+    func cangePasswordDB(username: String, newPassword: String) {
+        DispatchQueue.init(label: "DB").async {
+            let load = LoadFromDB()
+            load.Users { (loadedData, error) in
+                if error {
+                    DispatchQueue.main.async {
+                        self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
+                            self.loadingIndicator.hideIndicator(fast: true) { (co) in
+                                
+                            }
+                        }, title: "No internet", description: "Try again later", error: true)
+                    }
+                } else {
+                    var userData: [String] = []
+                    for i in 0..<loadedData.count {
+                        if loadedData[i][0] == username {
+                            userData = loadedData[i]
+                            break
+                        }
+                    }
+                    let save = SaveToDB()
+                    let toDataStringMian = "&Nickname=\(userData[0])" + "&Email=\(userData[1])" + "&Password=\(newPassword)" + "&Registration_Date=\(userData[3])" + "&ProVersion=\(userData[4])" + "&trialDate=\(userData[5])"
+                    save.Users(toDataString: toDataStringMian ) { (error) in
+                        if error {
+                            appData.unsendedData.append(["saveUser": toDataStringMian])
+                        }
+                        let delete = DeleteFromDB()
+                        let dataStringDelete = "&Nickname=\(userData[0])" + "&Email=\(userData[1])" + "&Password=\(userData[2])" + "&Registration_Date=\(userData[3])" + "&ProVersion=\(userData[4])" + "&trialDate=\(userData[5])"
+                        print(dataStringDelete)
+                        delete.User(toDataString: dataStringDelete) { (errorr) in
+                            if errorr {
+                                appData.unsendedData.append(["deleteUser": dataStringDelete])
+                            }
+                            appData.password = newPassword
+                            DispatchQueue.main.async {
+                                self.loadingIndicator.hideIndicator(title: "Your password has been changed") { (_) in
+                                    
+                                }
+                            }
+                        }
+                    }
+                    
+                }
+            }
+            
+        }
+    }
+    
+    
     
     func getEmail(username: String) -> String {
         var result = ""
@@ -209,7 +272,7 @@ class LoginViewController: SuperViewController {
         
     }
     
-    //here
+
     @IBAction func moreButtonPressed(_ sender: UIButton) {
         DispatchQueue.main.async {
             let alert = UIAlertController(title: "", message: "", preferredStyle: .actionSheet)
@@ -228,7 +291,9 @@ class LoginViewController: SuperViewController {
             
             
             let changeEmail = UIAlertAction(title: "Change email", style: .default) { (ac) in
-                
+                //load data
+                //ask code we send on old email
+                //enter new email
             }
             
             
@@ -260,25 +325,12 @@ class LoginViewController: SuperViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
-        case "toEnterVC":
-            let vc = segue.destination as! enterValueVC
-            vc.delegate = self
-            switch waitingType {
-            case .code:
-                print("")
-            default:
-                break
-            }
         default:
             break
         }
     }
     
 
-    
-    @IBAction func logoutPressed(_ sender: UIButton) {
-        
-    }
     
     func updateUI() {
         toggleScreen(options: .createAccount, animation: 0.0)
@@ -396,12 +448,10 @@ class LoginViewController: SuperViewController {
                         print("wrong password", psswordFromDB)
                         self.actionButtonsEnabled = true
                         DispatchQueue.main.async {
-
-                            self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "Again"), rightButtonActon: { (_) in
-                                self.loadingIndicator.hideIndicator(fast: true) { (co) in
-                                    self.passwordLogLabel.becomeFirstResponder()
-                                }
-                            }, title: "Wrong password", error: true)
+                            
+                            self.loadingIndicator.hideIndicator(fast: true) { (_) in
+                                self.message.showMessage(text: "Wrong password!", type: .error)
+                            }
                             
                         }
                     } else {
@@ -457,11 +507,11 @@ class LoginViewController: SuperViewController {
             self.actionButtonsEnabled = true
             DispatchQueue.main.async {
                 DispatchQueue.main.async {
-                    self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "Again"), rightButtonActon: { (_) in
-                        self.loadingIndicator.hideIndicator(fast: true) { (co) in
-                            self.passwordLogLabel.becomeFirstResponder()
-                        }
-                    }, title: "User not found", error: true)
+                    
+                    self.loadingIndicator.hideIndicator(fast: true) { (_) in
+                        self.message.showMessage(text: "User not found", type: .error)
+                        
+                    }
                 }
 
             }
@@ -513,9 +563,11 @@ class LoginViewController: SuperViewController {
 
                                 self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "Try again"), rightButtonActon: { (_) in
                                     self.loadingIndicator.hideIndicator(fast: true) { (co) in
-                                        self.passwordLogLabel.becomeFirstResponder()
+                                        self.emailLabel.becomeFirstResponder()
                                     }
                                 }, title: "Enter valid email address", description: "With correct email address you could restore your password in the future", error: true)
+                                
+                                
                             }
                         } else {
                             let save = SaveToDB()
@@ -524,7 +576,7 @@ class LoginViewController: SuperViewController {
                                 if error {
                                     print("error")
                                     DispatchQueue.main.async {
-                                        self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "Again"), rightButtonActon: { (_) in
+                                        self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
                                             self.loadingIndicator.hideIndicator(fast: true) { (co) in
                                                 self.passwordLogLabel.becomeFirstResponder()
                                             }
@@ -570,13 +622,12 @@ class LoginViewController: SuperViewController {
                     } else {
                         self.actionButtonsEnabled = true
                         DispatchQueue.main.async {
-                            self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "Try again"), rightButtonActon: { (_) in
-                                self.loadingIndicator.hideIndicator(fast: true) { (co) in
-                                    self.passwordLogLabel.becomeFirstResponder()
-                                }
-                            }, title: "Username '\(name)' is already taken", error: true)
+
+                            self.loadingIndicator.hideIndicator(fast: true) { (_) in
+                                self.message.showMessage(text: "Username '\(name)' is already taken", type: .error, windowHeight: 65)
+                                
+                            }
                         }
-                        print("username '\(name)' is already taken")
                     }
                 
                 } else {
@@ -585,23 +636,19 @@ class LoginViewController: SuperViewController {
                     self.showWrongFields()
 
                     DispatchQueue.main.async {
-                        
-                        self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
-                            self.loadingIndicator.hideIndicator(fast: true) { (co) in
-                                self.passwordLogLabel.becomeFirstResponder()
-                            }
-                        }, title: "All fields are required", error: true)
+                        self.loadingIndicator.hideIndicator(fast: true) { (_) in
+                            self.message.showMessage(text: "All fields are required", type: .error)
+                        }
                     }
                     print("all fields are required")
                 }
             } else {
                 self.actionButtonsEnabled = true
                 DispatchQueue.main.async {
-                    self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
-                        self.loadingIndicator.hideIndicator(fast: true) { (co) in
-                            self.passwordLogLabel.becomeFirstResponder()
-                        }
-                    }, title: "Passwords not match", error: true)
+
+                    self.loadingIndicator.hideIndicator(fast: true) { (_) in
+                        self.message.showMessage(text: "Passwords not match", type: .error)
+                    }
                 }
                 print("passwords not much")
             }
@@ -613,6 +660,7 @@ class LoginViewController: SuperViewController {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
+        hideKeyboard()
     }
     
     
@@ -816,7 +864,7 @@ class LoginViewController: SuperViewController {
            if obthervValues {
                showWrongFields()
            }
-       }
+    }
 
     var selectedTextfield: Int?
     var textfields: [UITextField] {
@@ -978,56 +1026,4 @@ extension UITextField {
 
 
 
-extension LoginViewController: enterValueVCProtocol {
-    func hideScreen(close: Bool, value: String) {
-        
-        if !close {
-            DispatchQueue.init(label: "getWaitingValue").async {
-                var errorText = ""
-                switch self.waitingType {
-                case .code:
-                    if value == self.currectAnsware {
-                        //ask email
-                        self.currectAnsware = ""
-                        self.waitingType = .newPassword
-                        DispatchQueue.main.async {
-                            self.performSegue(withIdentifier: "toEnterVC", sender: self)
-                        }
-                    } else {
-                        errorText = "Wrong code!"
-                    }
-                case .newPassword:
-                    print("new password")
-                    //delete user with old password
-                    //add user with new password
-                //load users = save all user data as loaded
-                //delete user where - loadedUserData
-                //saveUser with new userData
-                // if error not nil - show password has changed on all your devices - else - show message succsess password changed on this device and will be changed on other devices when you laung app when you connected to the internet
-                    
-                case .nickname:
-                    errorText = "Nickname not found"
-                default:
-                    errorText = "Values didn't much"
-                }
-              /*  if value != self.currectAnsware {
-                    DispatchQueue.main.async {
-                        self.ai.completeWithDone(title: errorText, error: true) { (_) in
-                        }
-                    }
-                }*/
-                
-            }
-            
-        } else {
-          /*  DispatchQueue.main.async {
-                self.ai.fastHideIndicator { (_) in
-                    
-                }
-            }*/
-        }
 
-    }
-    
-    
-}

@@ -16,7 +16,6 @@
 		8B63312F260FD65200D9E117 /* buyProVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B63312E260FD65200D9E117 /* buyProVC.swift */; };
 		8B633132260FDB3900D9E117 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B633131260FDB3900D9E117 /* StoreKit.framework */; };
 		8B633135260FE7FF00D9E117 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B633134260FE7FF00D9E117 /* AuthenticationServices.framework */; };
-		8B71A2EE26486A1E008B934A /* enterValueVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B71A2ED26486A1E008B934A /* enterValueVC.swift */; };
 		8B7B63CC2655CAFB0067C434 /* SuperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7B63CB2655CAFB0067C434 /* SuperViewController.swift */; };
 		8B8D556125BB218400D7C6A7 /* UnsendedDataVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D556025BB218400D7C6A7 /* UnsendedDataVC.swift */; };
 		8BA57828261F617200C48524 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BA57826261F617200C48524 /* Interface.storyboard */; };
@@ -108,7 +107,6 @@
 		8B63312E260FD65200D9E117 /* buyProVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = buyProVC.swift; sourceTree = "<group>"; };
 		8B633131260FDB3900D9E117 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		8B633134260FE7FF00D9E117 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
-		8B71A2ED26486A1E008B934A /* enterValueVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = enterValueVC.swift; sourceTree = "<group>"; };
 		8B7B63CB2655CAFB0067C434 /* SuperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperViewController.swift; sourceTree = "<group>"; };
 		8B8D556025BB218400D7C6A7 /* UnsendedDataVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsendedDataVC.swift; sourceTree = "<group>"; };
 		8BA57824261F617200C48524 /* watchOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = watchOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -270,8 +268,8 @@
 			children = (
 				8DBA7E5523F0316F00D8214C /* Main.storyboard */,
 				8DD89D8223F1468E00273904 /* mainVCcell.swift */,
-				8B4E086026544AD2006E42DA /* LogIn.storyboard */,
 				8BFAB7BB265482A300B9F2A4 /* ActivityIndicatorView.xib */,
+				8B4E086026544AD2006E42DA /* LogIn.storyboard */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -293,7 +291,6 @@
 				8BF011C125FD93670082F871 /* DebtsVC.swift */,
 				8B63312E260FD65200D9E117 /* buyProVC.swift */,
 				8B5BE4782648038F005B182C /* expectingPaymentsVC.swift */,
-				8B71A2ED26486A1E008B934A /* enterValueVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -504,7 +501,6 @@
 			files = (
 				8B60D5AB2629E64400BA690B /* LoadingIndicator.swift in Sources */,
 				8DD89D8323F1468E00273904 /* mainVCcell.swift in Sources */,
-				8B71A2EE26486A1E008B934A /* enterValueVC.swift in Sources */,
 				8B63312F260FD65200D9E117 /* buyProVC.swift in Sources */,
 				8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */,
 				8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */,
@@ -586,6 +582,7 @@
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				IBSC_MODULE = watchOS_Extension;
 				INFOPLIST_FILE = watchOS/Info.plist;
+				MARKETING_VERSION = 3.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker.watchkitapp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -607,6 +604,7 @@
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				IBSC_MODULE = watchOS_Extension;
 				INFOPLIST_FILE = watchOS/Info.plist;
+				MARKETING_VERSION = 3.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker.watchkitapp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -792,7 +790,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3;
+				MARKETING_VERSION = 3.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
@@ -817,7 +815,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3;
+				MARKETING_VERSION = 3.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;

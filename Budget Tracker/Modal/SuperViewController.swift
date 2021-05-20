@@ -19,10 +19,15 @@ class SuperViewController: UIViewController {
         super.viewDidLoad()
         DispatchQueue.main.async {
             let window = UIApplication.shared.keyWindow ?? UIWindow()
+            self.loadingIndicator.alpha = 0
             window.addSubview(self.loadingIndicator)
         }
     }
-    
+    override func viewDidAppear(_ animated: Bool) {
+        DispatchQueue.main.async {
+            self.loadingIndicator.alpha = 1
+        }
+    }
 
     
     override func viewDidDisappear(_ animated: Bool) {

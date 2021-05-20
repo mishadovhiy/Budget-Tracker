@@ -178,6 +178,7 @@ class ViewController: SuperViewController {
                 self.noDataLabel.text = text
                 UIView.animate(withDuration: appeareAnimation ? 0.25 : 0) {
                     self.noDataView.frame = CGRect(x: 0, y: y, width: self.view.frame.width, height: self.view.frame.height - y)
+                    //self.darkBackgroundUnderTable.frame = CGRect(x: 0, y: y, width: self.view.frame.width, height: self.view.frame.height)
                 } completion: { (_) in
                   //  self.calculateLabels(noData: true)
                     self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
@@ -528,7 +529,10 @@ class ViewController: SuperViewController {
                 for i in 0..<loadedData.count {
                     if loadedData[i][0] == nick {
                         print("checkPurchase for", nick)
-                        appData.proVersion = loadedData[i][4] == "1" ? true : false
+                        if !appData.purchasedOnThisDevice {
+                            appData.proVersion = loadedData[i][4] == "1" ? true : false
+                        }
+                        
                         print(loadedData[i][4], "loadedData[i][3]loadedData[i][3]")
                         print("checkPurchase appData.proVersion", appData.proVersion)
                         if loadedData[i][5] != "" {//test
