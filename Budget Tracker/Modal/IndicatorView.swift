@@ -27,6 +27,7 @@ class IndicatorView: UIView {
         print("indicatorView draw")
         DispatchQueue.main.async {
             self.setAllHidden()
+            self.textField.delegate = self
             self.closeButton.layer.zPosition = 100
             self.rightButton.layer.cornerRadius = 6
             self.leftButton.layer.cornerRadius = 6
@@ -48,7 +49,6 @@ class IndicatorView: UIView {
         canCloseOnSwipe = false
         descriptionLabel.isHidden = true
         titleLabel.isHidden = true
-        textField.delegate = self
         ai.isHidden = true
         closeButton.isHidden = true
         leftButton.superview?.isHidden = true
@@ -60,9 +60,14 @@ class IndicatorView: UIView {
         self.isHidden = true
     }
     
-    func show(showingAI: Bool = true, title: String? = nil, description: String? = nil, appeareAnimation: Bool = false, attention: Bool = false) {
+    func show(showingAI: Bool = true, title: String? = "Processing", description: String? = nil, appeareAnimation: Bool = false, attention: Bool = false) {
+        
+        if !isShowing {
+            isShowing = true
+        }
         canCloseOnSwipe = false
-        isShowing = true
+        
+        
         DispatchQueue.main.async {
             self.isHidden = false
             self.titleLabel.text = title
@@ -114,11 +119,11 @@ class IndicatorView: UIView {
     }
 
     private var rightFunc: Any?
-    
+    private var leftFunc: Any?
     func completeWithActions(buttonsTitles: (String?, String?)? = nil, leftButtonActon: ((Bool) -> ())? = nil, rightButtonActon: ((Bool) -> ())? = nil, title: String? = "Done", description: String? = nil, error: Bool = false) {
-        isShowing = true
+
         rightFunc = rightButtonActon
-        //leftFunc = leftButtonActon
+        leftFunc = leftButtonActon
         DispatchQueue.main.async {
             UIImpactFeedbackGenerator().impactOccurred()
             self.leftButton.superview?.superview?.isHidden = false
@@ -129,18 +134,21 @@ class IndicatorView: UIView {
             self.rightButton.setTitle(buttonsTitles?.1, for: .normal)
             self.titleLabel.text = title
             self.descriptionLabel.text = description
-            UIView.animate(withDuration: 0.25) {
-                self.descriptionLabel.isHidden = description == nil ? true : false
-                self.backgroundView.backgroundColor = self.accentBackgroundColor
-                self.ai.isHidden = true
-            } completion: { (_) in
-                UIView.animate(withDuration: 0.20) {
-                    self.rightButton.isHidden = rightButtonActon == nil ? true : false
-                    self.leftButton.isHidden = false//leftButtonActon == nil ? true : false
+            self.checkIfShowing { (_) in
+                UIView.animate(withDuration: 0.25) {
+                    self.descriptionLabel.isHidden = description == nil ? true : false
+                    self.backgroundView.backgroundColor = self.accentBackgroundColor
+                    self.ai.isHidden = true
                 } completion: { (_) in
-                    
+                    UIView.animate(withDuration: 0.20) {
+                        self.rightButton.isHidden = rightButtonActon == nil ? true : false
+                        self.leftButton.isHidden = buttonsTitles?.0 ?? "" == "" ? true : false
+                    } completion: { (_) in
+                        
+                    }
                 }
             }
+            
 
         }
     }
@@ -148,10 +156,10 @@ class IndicatorView: UIView {
     private var vcActionOnTFHide: Any?
     
     func showTextField(type: textType, title: String, description: String? = nil, whenHide: @escaping (String) -> ()) {
-        isShowing = true
         vcActionOnTFHide = whenHide
         DispatchQueue.main.async {
-            UIImpactFeedbackGenerator().impactOccurred()
+            self.textField.text = ""
+            
             self.leftButton.superview?.superview?.isHidden = false
             self.textField.superview?.isHidden = false
             self.titleLabel.text = title
@@ -168,20 +176,53 @@ class IndicatorView: UIView {
             case .email:
                 self.textField.keyboardType = .emailAddress
                 self.textField.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
+            case .password:
+                self.textField.keyboardType = .default
+                self.textField.attributedPlaceholder = NSAttributedString(string: "Password", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
             }
             
-            UIView.animate(withDuration: 0.25) {
-                self.closeButton.isHidden = false
-                self.descriptionLabel.isHidden = description == nil ? true : false
-                self.backgroundView.backgroundColor = self.accentBackgroundColor
-                self.ai.isHidden = true
-            } completion: { (_) in
-                UIView.animate(withDuration: 0.20) {
-                    self.textField.isHidden = false
+            self.checkIfShowing { (sh) in
+                print("strarrt")
+                UIImpactFeedbackGenerator().impactOccurred()
+                UIView.animate(withDuration: 0.25) {
+                    self.closeButton.isHidden = false
+                    self.descriptionLabel.isHidden = description == nil ? true : false
+                    self.backgroundView.backgroundColor = self.accentBackgroundColor
+                    self.ai.isHidden = true
                 } completion: { (_) in
-                    self.textField.becomeFirstResponder()
+                    UIView.animate(withDuration: 0.20) {
+                        self.textField.isHidden = false
+                    } completion: { (_) in
+                        self.textField.becomeFirstResponder()
+                    }
                 }
             }
+
+            
+            
+        }
+    }
+    
+    private func checkIfShowing(showed: @escaping (Bool) -> ()) {
+        if !isShowing {
+            print("NOT SHOWINGG")
+            isShowing = true
+            DispatchQueue.main.async {
+                self.isHidden = false
+                self.titleLabel.isHidden = false
+                UIView.animate(withDuration: 0.25) {
+                    self.backgroundView.backgroundColor = self.normalBackgroundColor
+                } completion: { (com) in
+                    UIView.animate(withDuration: 0.25) {
+                        self.backgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+                    } completion: { (_) in
+                        showed(true)
+                    }
+                }
+            }
+
+        } else {
+            showed(true)
         }
     }
     
@@ -189,12 +230,18 @@ class IndicatorView: UIView {
         if let function = vcActionOnTFHide as? (String) -> () {
             DispatchQueue.main.async {
                 self.closeButton.isHidden = true
-                self.textField.isHidden = true
-                self.textField.superview?.isHidden = true
                 self.additionalDoneButton.isHidden = true
-                self.textField.endEditing(true)
+                UIView.animate(withDuration: 0.3) {
+                    self.textField.isHidden = true
+                    self.textField.superview?.isHidden = true
+                } completion: { (_) in
+                    self.textField.endEditing(true)
+                    Timer.scheduledTimer(withTimeInterval: 0.8, repeats: false) { (_) in
+                        function(text)
+                    }
+                }
             }
-            function(text)
+            
         }
         
     }
@@ -219,8 +266,12 @@ class IndicatorView: UIView {
         switch sender.tag {
         case 0:
             print("leftButtonPress")
-            fastHide { (_) in
+            if let function = rightFunc as? (Bool) -> () {
+                hideIndicator(fast: true) { (_) in
+                    function(true)
+                }
             }
+            
         case 1:
             print("rightButtonPress")
             if let function = rightFunc as? (Bool) -> () {
@@ -256,9 +307,11 @@ class IndicatorView: UIView {
         case code
         case nickname
         case email
+        case password
     }
     private let accentBackgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.55)
     private let normalBackgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.19)
+
     class func instanceFromNib() -> UIView {
         return UINib(nibName: "ActivityIndicatorView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! UIView
     }

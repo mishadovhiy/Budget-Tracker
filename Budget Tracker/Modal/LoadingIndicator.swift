@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LoadingIndicator {
+class LoadingIndicatorOld {
     
     private let superView: UIView
     

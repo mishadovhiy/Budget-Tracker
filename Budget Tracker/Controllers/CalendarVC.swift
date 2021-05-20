@@ -12,7 +12,7 @@ protocol CalendarVCProtocol {
     func dateSelected(date: String)
 }
 
-class CalendarVC: UIViewController {
+class CalendarVC: SuperViewController {
     
     @IBOutlet weak var headerView: UIView!
     @IBOutlet weak var collectionView: UICollectionView!

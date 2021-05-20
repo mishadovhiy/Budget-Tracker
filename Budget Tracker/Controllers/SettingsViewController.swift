@@ -13,7 +13,7 @@ protocol SettingsViewControllerProtocol {
     func closeSettings(sendSavedData:Bool, needFiltering: Bool)
 }
 
-class SettingsViewController: UIViewController {
+class SettingsViewController: SuperViewController {
 
     @IBOutlet weak var usersCollectionView: UICollectionView!
     @IBOutlet weak var contentView: UIView!
@@ -28,9 +28,12 @@ class SettingsViewController: UIViewController {
         let message = MessageView(self)
         return message
     }()
+    //here
+ 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         updateUI()
         if needGet {
             needGet = false
@@ -38,12 +41,12 @@ class SettingsViewController: UIViewController {
         }
         
         
-        let window = UIApplication.shared.keyWindow ?? UIWindow()
+       /* let window = UIApplication.shared.keyWindow ?? UIWindow()
         let newView = IndicatorView.instanceFromNib() as! IndicatorView
-        window.addSubview(newView)
+        window.addSubview(newView)*/
         
-        Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { (_) in
-            newView.show(title: "Downloading data")
+        /*Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { (_) in
+            self.loadingIndicator.show(title: "Downloading data")
         }
        
        /* Timer.scheduledTimer(withTimeInterval: 10.0, repeats: false) { (_) in
@@ -64,7 +67,7 @@ class SettingsViewController: UIViewController {
             }
         }*/
         
-        Timer.scheduledTimer(withTimeInterval: 7.0, repeats: false) { (_) in
+        Timer.scheduledTimer(withTimeInterval: 4.0, repeats: false) { (_) in
           /*  newView.completeWithActions { (_) in
                 DispatchQueue.main.async {
                     self.dismiss(animated: true) {
@@ -79,28 +82,35 @@ class SettingsViewController: UIViewController {
                 }
             }, title: "Sing in required", description: "Purchase on this device will be availible accross all devices")*/
             
-            newView.showTextField(type: .code, title: "Enter Nickname", description: "You will receive code on email asigned to this account") { (textFieldValue) in
+            self.loadingIndicator.showTextField(type: .code, title: "Enter Nickname", description: "You will receive code on email asigned to this account") { (textFieldValue) in
                 print("mainVC end Editing", textFieldValue)
-                newView.show(showingAI: true, title: "Sending", description: textFieldValue, appeareAnimation: true, attention: false)
+                self.loadingIndicator.show(showingAI: true, title: "Sending", description: textFieldValue, appeareAnimation: true, attention: false)
                 
-                Timer.scheduledTimer(withTimeInterval: 7.0, repeats: false) { (_) in
-                    newView.completeWithActions(buttonsTitles: ("Cancel", "Sing in"), rightButtonActon: { (_) in
+                Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { (_) in
+                    self.loadingIndicator.completeWithActions(buttonsTitles: ("Cancel", "Sing in"), rightButtonActon: { (_) in
                         DispatchQueue.main.async {
-                            self.dismiss(animated: true) {
+                           /* self.dismiss(animated: true) {
+                            }*/
+                            Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { (_) in
+                                self.loadingIndicator.showTextField(type: .nickname, title: "jg") { (word) in
+                                    self.loadingIndicator.hideIndicator(fast: true) { (_) in
+                                        
+                                    }
+                                }
                             }
                         }
                     }, title: "Sing in required", description: "Purchase on this device will be availible accross all devices")
                 }
 
             }
-         }
+         }*/
         
     }
     var needGet = true
     
     override func viewDidAppear(_ animated: Bool) {
         
-        
+
         
         
         
@@ -253,9 +263,10 @@ class SettingsViewController: UIViewController {
         }
     }
 
-    
+
     
     override func viewWillAppear(_ animated: Bool) {
+        
         navigationController?.setNavigationBarHidden(true, animated: true)
        /* let wasBack = self.view.backgroundColor
         DispatchQueue.main.async {

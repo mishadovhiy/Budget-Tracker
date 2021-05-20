@@ -8,7 +8,7 @@
 
 import UIKit
 
-class expectingPaymentsVC: UIViewController {
+class expectingPaymentsVC: SuperViewController {
 
     @IBOutlet weak var tableView: UITableView!
     

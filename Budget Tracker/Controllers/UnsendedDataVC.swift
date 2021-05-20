@@ -12,7 +12,7 @@ protocol UnsendedDataVCProtocol {
     func quiteUnsendedData(deletePressed: Bool, sendPressed: Bool)
 }
 
-class UnsendedDataVC: UIViewController {
+class UnsendedDataVC: SuperViewController {
 
     @IBOutlet weak var proView: UIView!
     @IBOutlet weak var closeButton: UIButton!

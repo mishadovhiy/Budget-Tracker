@@ -18,7 +18,7 @@ protocol CategoriesVCProtocol {
     func categorySelected(category: String, purpose: Int, fromDebts: Bool, amount: Int)
 }
 
-class CategoriesVC: UIViewController {
+class CategoriesVC: SuperViewController {
     //@IBOutlet weak var addButton: UIButton!
    // @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!

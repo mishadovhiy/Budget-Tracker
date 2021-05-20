@@ -23,6 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UserDefaults.standard.setValue(today, forKey: "lastLaunching")
             lastSelectedDate = nil
         }
+
         print(today, "didFinishLaunchingWithOptions")
         return true
     }

@@ -10,7 +10,7 @@ import CoreData
 
 var ifCustom = false
 
-class FilterTVC: UIViewController {
+class FilterTVC: SuperViewController {
     var months: [String] = []
     var years: [String] = []
     var sectionsCount = 3

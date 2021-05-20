@@ -16,7 +16,7 @@ var needFullReload = false
 //log out - if nick != ""
 
 
-class LoginViewController: UIViewController {
+class LoginViewController: SuperViewController {
 
     @IBOutlet weak var logIn: UIStackView!
     @IBOutlet weak var createAcount: UIStackView!
@@ -76,7 +76,7 @@ class LoginViewController: UIViewController {
             self.currectAnsware = ""
             DispatchQueue.main.async {
                 UIImpactFeedbackGenerator().impactOccurred()
-                self.ai.showIndicator()
+                self.loadingIndicator.show()
             }
             
     
@@ -86,9 +86,11 @@ class LoginViewController: UIViewController {
                 load.Users { (loadedData, error) in
                     if error {
                         DispatchQueue.main.async {
-                            self.ai.fastHideIndicator { (_) in
-                                self.message.showMessage(text: "No Internet!", type: .internetError)
-                            }
+                            self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
+                                self.loadingIndicator.hideIndicator(fast: true) { (co) in
+                                    
+                                }
+                            }, title: "Internet error", description: "Try again later", error: true)
                         }
                     } else {
                         var emailToSend = ""
@@ -105,16 +107,22 @@ class LoginViewController: UIViewController {
                         save.sendCode(toDataString: "emailTo=\(emailToSend)&Nickname=\(username)&resetCode=\(code)") { (codeError) in
                             if codeError {
                                 DispatchQueue.main.async {
-                                    self.ai.fastHideIndicator { (_) in
-                                        self.message.showMessage(text: "No Internet!", type: .internetError)
-                                    }
+                                    self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
+                                        self.loadingIndicator.hideIndicator(fast: true) { (co) in
+                                        }
+                                    }, title: "Internet error", description: "Try again later", error: true)
                                 }
                             } else {
                                 self.currectAnsware = code
                                 self.waitingType = .code
-                                DispatchQueue.main.async {
+                                /*DispatchQueue.main.async {
                                     self.performSegue(withIdentifier: "toEnterVC", sender: self)
-                                }
+                                }*///here
+                                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
+                                    self.loadingIndicator.showTextField(type: .code, title: "Resoration code", description: "check email: \(emailToSend)") { (code) in
+                                        self.checkRestoreCode(value: code)
+                                    }
+                                })
                                 
                             }
                         }
@@ -125,6 +133,42 @@ class LoginViewController: UIViewController {
             
         } else {
             //wait for nickname
+            
+        }
+    }
+    
+    
+    func checkRestoreCode(value: String) {
+        if value == self.currectAnsware {
+            //ask email
+            self.currectAnsware = ""
+            self.waitingType = .newPassword
+            DispatchQueue.main.async {
+                self.loadingIndicator.showTextField(type: .password, title: "Create your new password") { (password) in
+                    
+                    self.loadingIndicator.showTextField(type: .password, title: "Repeate password") { (newPassword) in
+                        
+                        self.checkNewPassword(one: password, two: newPassword)
+                    }
+                }
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.loadingIndicator.showTextField(type: .code, title: "Restoration code", description: "We have send you 4 digits code on your email") { (code) in
+                    
+                    self.checkRestoreCode(value: code)
+                }
+            }
+        }
+    }
+    
+    func checkNewPassword(one: String, two: String) {
+        if one == two {
+            //send new password
+        } else {
+            self.loadingIndicator.showTextField(type: .password, title: "Repeate password") { (newPassword) in
+                self.checkNewPassword(one: one, two: newPassword)
+            }
         }
     }
     
@@ -144,14 +188,16 @@ class LoginViewController: UIViewController {
         
         if errorr {
             DispatchQueue.main.async {
-                self.ai.fastHideIndicator { (_) in
-                    self.message.showMessage(text: "No Internet!", type: .internetError)
-                }
+                self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
+                    self.loadingIndicator.hideIndicator(fast: true) { (co) in
+                        
+                    }
+                }, title: "Internet error", description: "Try again later", error: true)
             }
         } else {
             if result == "" {
                 DispatchQueue.main.async {
-                    self.ai.fastHideIndicator { (_) in
+                    self.loadingIndicator.hideIndicator(fast: true) { (_) in
                         self.message.showMessage(text: "Username not found!", type: .internetError)
                     }
                 }
@@ -296,9 +342,8 @@ class LoginViewController: UIViewController {
         actionButtonsEnabled = false
         DispatchQueue.main.async {
             UIImpactFeedbackGenerator().impactOccurred()
-            self.ai = LoadingIndicator(superView: self.view)
-            self.ai.showIndicator()
         }
+        self.loadingIndicator.show(title: "Logging in")
         hideKeyboard()
         load.Users { (loadedData, Error) in
             if !Error {
@@ -310,7 +355,7 @@ class LoginViewController: UIViewController {
                     } else {
                         self.actionButtonsEnabled = true
                         DispatchQueue.main.async {
-                            self.ai.fastHideIndicator { (_) in
+                            self.loadingIndicator.hideIndicator(fast: true) { (_) in
                                 self.message.showMessage(text: "All fields are required", type: .error, autoHide: false)
                             }
                             
@@ -323,9 +368,11 @@ class LoginViewController: UIViewController {
                 print("error!!!")
                 self.actionButtonsEnabled = true
                 DispatchQueue.main.async {
-                    self.ai.completeWithDone(title: "Internet error", error: true) { (_) in
-                        
-                    }
+                    self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
+                        self.loadingIndicator.hideIndicator(fast: true) { (co) in
+                            
+                        }
+                    }, title: "No internet", description: "Try again later", error: true)
                 }
             }
         }
@@ -333,10 +380,6 @@ class LoginViewController: UIViewController {
         
     }
     
-    
-    lazy var ai : LoadingIndicator = {
-        return LoadingIndicator(superView: self.view)
-    }()
 
     
     
@@ -354,9 +397,11 @@ class LoginViewController: UIViewController {
                         self.actionButtonsEnabled = true
                         DispatchQueue.main.async {
 
-                            self.ai.completeWithDone(title: "Wrong password", error: true) { (_) in
-                                self.passwordLogLabel.becomeFirstResponder()
-                            }
+                            self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "Again"), rightButtonActon: { (_) in
+                                self.loadingIndicator.hideIndicator(fast: true) { (co) in
+                                    self.passwordLogLabel.becomeFirstResponder()
+                                }
+                            }, title: "Wrong password", error: true)
                             
                         }
                     } else {
@@ -391,16 +436,15 @@ class LoginViewController: UIViewController {
                         needFullReload = true
                         if fromPro {
                             DispatchQueue.main.async {
-                                self.ai.hideIndicator(completionText: "success", hideAfter: 1.0) { (_) in
+                                self.loadingIndicator.hideIndicator(fast: false, title: "Login success") { (_) in
                                     self.dismiss(animated: true, completion: nil)
                                 }
                             }
                         } else {
                             DispatchQueue.main.async {
-                                self.ai.hideIndicator(completionText: "success", hideAfter: 1.0) { (_) in
+                                self.loadingIndicator.hideIndicator(fast: false, title: "Login success") { (_) in
                                     self.performSegue(withIdentifier: "homeVC", sender: self)
                                 }
-
                             }
 
                         }
@@ -413,9 +457,11 @@ class LoginViewController: UIViewController {
             self.actionButtonsEnabled = true
             DispatchQueue.main.async {
                 DispatchQueue.main.async {
-                    self.ai.completeWithDone(title: "User not found", error: true) { (_) in
-                        
-                    }
+                    self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "Again"), rightButtonActon: { (_) in
+                        self.loadingIndicator.hideIndicator(fast: true) { (co) in
+                            self.passwordLogLabel.becomeFirstResponder()
+                        }
+                    }, title: "User not found", error: true)
                 }
 
             }
@@ -430,7 +476,7 @@ class LoginViewController: UIViewController {
         transactionAdded = true
         self.actionButtonsEnabled = true
         DispatchQueue.main.async {
-            self.ai.showIndicator(text: "Wait")
+            self.loadingIndicator.show(showingAI: true, title: "Creating an account")
         }
         hideKeyboard()
         load.Users { (loadedData, Error) in
@@ -439,8 +485,11 @@ class LoginViewController: UIViewController {
             } else {
                 self.actionButtonsEnabled = true
                 DispatchQueue.main.async {
-                    self.ai.completeWithDone(title: "Internet error", error: true) { (_) in
-                    }
+                    self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "Again"), rightButtonActon: { (_) in
+                        self.loadingIndicator.hideIndicator(fast: true) { (co) in
+                            self.passwordLogLabel.becomeFirstResponder()
+                        }
+                    }, title: "No internet", description: "Try again later", error: true)
                 }
             }
         }
@@ -461,8 +510,12 @@ class LoginViewController: UIViewController {
                             self.obthervValues = true
                             self.showWrongFields()
                             DispatchQueue.main.async {
-                                self.ai.completeWithDone(title: "Enter valid email address", error: true) { (_) in
-                                }
+
+                                self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "Try again"), rightButtonActon: { (_) in
+                                    self.loadingIndicator.hideIndicator(fast: true) { (co) in
+                                        self.passwordLogLabel.becomeFirstResponder()
+                                    }
+                                }, title: "Enter valid email address", description: "With correct email address you could restore your password in the future", error: true)
                             }
                         } else {
                             let save = SaveToDB()
@@ -471,8 +524,11 @@ class LoginViewController: UIViewController {
                                 if error {
                                     print("error")
                                     DispatchQueue.main.async {
-                                        self.ai.completeWithDone(title: "Internet error", error: true) { (_) in
-                                        }
+                                        self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "Again"), rightButtonActon: { (_) in
+                                            self.loadingIndicator.hideIndicator(fast: true) { (co) in
+                                                self.passwordLogLabel.becomeFirstResponder()
+                                            }
+                                        }, title: "No internet", description: "Try again later", error: true)
                                     }
                                 } else {
                                     
@@ -495,14 +551,14 @@ class LoginViewController: UIViewController {
                                     needFullReload = true
                                     if self.fromPro {
                                         DispatchQueue.main.async {
-                                            self.ai.hideIndicator(completionText: "success", hideAfter: 1.0) { (_) in
+                                            self.loadingIndicator.hideIndicator(fast: false, title: "Account created successfully") { (_) in
                                                 self.dismiss(animated: true, completion: nil)
                                             }
-                                            
                                         }
                                     } else {
                                         DispatchQueue.main.async {
-                                            self.ai.hideIndicator(completionText: "success", hideAfter: 1.0) { (_) in
+
+                                            self.loadingIndicator.hideIndicator(fast: false, title: "Account created successfully") { (_) in
                                                 self.performSegue(withIdentifier: "homeVC", sender: self)
                                             }
                                             
@@ -514,8 +570,11 @@ class LoginViewController: UIViewController {
                     } else {
                         self.actionButtonsEnabled = true
                         DispatchQueue.main.async {
-                            self.ai.completeWithDone(title: "Username '\(name)' is already taken", error: true) { (_) in
-                            }
+                            self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "Try again"), rightButtonActon: { (_) in
+                                self.loadingIndicator.hideIndicator(fast: true) { (co) in
+                                    self.passwordLogLabel.becomeFirstResponder()
+                                }
+                            }, title: "Username '\(name)' is already taken", error: true)
                         }
                         print("username '\(name)' is already taken")
                     }
@@ -526,16 +585,23 @@ class LoginViewController: UIViewController {
                     self.showWrongFields()
 
                     DispatchQueue.main.async {
-                        self.ai.completeWithDone(title: "All fields are required", error: true) { (_) in
-                        }
+                        
+                        self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
+                            self.loadingIndicator.hideIndicator(fast: true) { (co) in
+                                self.passwordLogLabel.becomeFirstResponder()
+                            }
+                        }, title: "All fields are required", error: true)
                     }
                     print("all fields are required")
                 }
             } else {
                 self.actionButtonsEnabled = true
                 DispatchQueue.main.async {
-                    self.ai.completeWithDone(title: "Passwords not match", error: true) { (_) in
-                    }
+                    self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
+                        self.loadingIndicator.hideIndicator(fast: true) { (co) in
+                            self.passwordLogLabel.becomeFirstResponder()
+                        }
+                    }, title: "Passwords not match", error: true)
                 }
                 print("passwords not much")
             }
@@ -944,21 +1010,21 @@ extension LoginViewController: enterValueVCProtocol {
                 default:
                     errorText = "Values didn't much"
                 }
-                if value != self.currectAnsware {
+              /*  if value != self.currectAnsware {
                     DispatchQueue.main.async {
                         self.ai.completeWithDone(title: errorText, error: true) { (_) in
                         }
                     }
-                }
+                }*/
                 
             }
             
         } else {
-            DispatchQueue.main.async {
+          /*  DispatchQueue.main.async {
                 self.ai.fastHideIndicator { (_) in
                     
                 }
-            }
+            }*/
         }
 
     }

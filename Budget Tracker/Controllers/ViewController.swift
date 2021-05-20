@@ -16,7 +16,7 @@ var allSelectedTransactionsData: [TransactionsStruct] = []
 var expenseLabelPressed = true
 var selectedPeroud = ""
 
-class ViewController: UIViewController {
+class ViewController: SuperViewController {
     
     @IBOutlet weak var addTransactionWhenEmptyButton: UIButton!
     @IBOutlet weak var noDataView: UIView!
@@ -45,9 +45,6 @@ class ViewController: UIViewController {
     
     
     var correctFrameBackground:CGRect = .zero
-    lazy var ai : LoadingIndicator = {
-        return LoadingIndicator(superView: self.view)
-    }()
     var refreshControl = UIRefreshControl()
     var tableData:[TransactionsStruct] = []
     var _TableData: [tableStuct] = []

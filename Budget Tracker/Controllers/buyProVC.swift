@@ -9,7 +9,7 @@
 import UIKit
 import StoreKit
 
-class BuyProVC: UIViewController {
+class BuyProVC: SuperViewController {
     
     @IBOutlet weak var tryFree: UIButton!
     @IBOutlet weak var priceLabel: UILabel!
@@ -31,9 +31,6 @@ class BuyProVC: UIViewController {
     
     var requestProd = SKProductsRequest()
     var proVProduct: SKProduct?
-    lazy var ai : LoadingIndicator = {
-        return LoadingIndicator(superView: self.view)
-    }()
     
     override func viewDidLoad() {
         DispatchQueue.main.async {
@@ -156,15 +153,17 @@ class BuyProVC: UIViewController {
         if !appData.proVersion {
             if appData.username != "" {
                 DispatchQueue.main.async {
-                    self.ai = LoadingIndicator(superView: self.view)
-                    self.ai.showIndicator()
+                    self.loadingIndicator.show()
                 }
                 let load = LoadFromDB()
                 load.Users { (loadedData, error) in
                     if error {
                         DispatchQueue.main.async {
-                            self.ai.completeWithDone(title: "Internet Error") { (_) in
-                            }
+                            self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
+                                self.loadingIndicator.hideIndicator(fast: true) { (co) in
+                                    
+                                }
+                            }, title: "Internet error", description: "Try again later", error: true)
                         }
                     } else {
                         let nik = appData.username
@@ -172,9 +171,13 @@ class BuyProVC: UIViewController {
                             if loadedData[i][0] == nik {
                                 if loadedData[i][5] != "" {
                                     DispatchQueue.main.async {
-                                        self.ai.fastHideIndicator { (_) in
-                                            self.message.showMessage(text: "You have already tried trial version", type: .error, windowHeight: 65)
-                                        }
+                                        self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
+                                            self.loadingIndicator.hideIndicator(fast: true) { (co) in
+                                                
+                                            }
+                                        }, title: "Access denied", description: "You have already tried trial version", error: true)
+
+                                        
                                     }
                                     return
                                 } else {
@@ -188,29 +191,34 @@ class BuyProVC: UIViewController {
                 }
             } else {
                 DispatchQueue.main.async {
-                    let alert = UIAlertController(title: "Would you like to sign in?", message: "Sign in to try trial across all your devices", preferredStyle: .alert);
                     
-                    alert.addAction(UIAlertAction.init(title: "Try without an account", style: .default, handler: { (action: UIAlertAction!) in
-                        
-                        appData.proTrial = true
-                        appData.trialDate = appData.filter.getToday(appData.filter.filterObjects.currentDate)
-                        self.ai.completeWithDone(title: "Trial started!", description: "Pro features available across all your devices") { (_) in
-                            Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { (_) in
-                                self.performSegue(withIdentifier: "homeVC", sender: self)
-                            }
-                        }
-                    }));
-                    alert.addAction(UIAlertAction(title: "Sign in", style: .default, handler: { (action) in
+                    self.loadingIndicator.completeWithActions(buttonsTitles: ("No", "Sing in"), leftButtonActon: { (_) in
+                        self.trialWithoutAcoount()
+                    }, rightButtonActon: { (_) in
                         DispatchQueue.main.async {
                             self.performSegue(withIdentifier: "toSingIn", sender: self)
                         }
-                    }))
-                    self.present(alert, animated: true, completion: nil);
+                        
+                    }, title: "Would you like to sign in?", description: "Sign in to try trial across all your devices")
+
                 }
             }
         }
     }
     
+    
+    func trialWithoutAcoount() {
+        appData.proTrial = true
+        appData.trialDate = appData.filter.getToday(appData.filter.filterObjects.currentDate)
+
+        self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "Start"), rightButtonActon: { (_) in
+            self.loadingIndicator.hideIndicator(fast: true) { (co) in
+                Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { (_) in
+                    self.performSegue(withIdentifier: "homeVC", sender: self)
+                }
+            }
+        }, title: "Success", description: "Trial has been started successfully")
+    }
     
     func performTrial() {
         let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
@@ -233,11 +241,14 @@ class BuyProVC: UIViewController {
                 DispatchQueue.main.async {
                     appData.proTrial = true
                     appData.trialDate = today
-                    self.ai.completeWithDone(title: "Success!", description: "Pro features available across all your devices") { (_) in
-                        Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { (_) in
-                            self.performSegue(withIdentifier: "homeVC", sender: self)
+
+                    self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "Start"), rightButtonActon: { (_) in
+                        self.loadingIndicator.hideIndicator(fast: true) { (co) in
+                            Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { (_) in
+                                self.performSegue(withIdentifier: "homeVC", sender: self)
+                            }
                         }
-                    }
+                    }, title: "Success", description: "Trial has been started successfully")
                 }
             }
         }
@@ -260,8 +271,7 @@ class BuyProVC: UIViewController {
                 }
             } else {
                 DispatchQueue.main.async {
-                    self.ai = LoadingIndicator(superView: self.view)
-                    self.ai.showIndicator()
+                    self.loadingIndicator.show()
                 }
                 let load = LoadFromDB()
                 load.Users { (loadedData, error) in
@@ -286,8 +296,11 @@ class BuyProVC: UIViewController {
                         }
                     } else {
                         DispatchQueue.main.async {
-                            self.ai.completeWithDone(title: "Internet Error") { (_) in
-                            }
+                            self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
+                                self.loadingIndicator.hideIndicator(fast: true) { (co) in
+                                    
+                                }
+                            }, title: "Internet error", description: "Try again later", error: true)
                         }
                     }
                     
@@ -311,8 +324,7 @@ class BuyProVC: UIViewController {
             SKPaymentQueue.default().restoreCompletedTransactions()
             SKPaymentQueue.default().add(self)
             DispatchQueue.main.async {
-                self.ai = LoadingIndicator(superView: self.view)
-                self.ai.showIndicator()
+                self.loadingIndicator.show()
             }
             restoreRequest.delegate = self
             restoreRequest.start()
@@ -359,9 +371,11 @@ extension BuyProVC: SKPaymentTransactionObserver {
     func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
         print("restoreCompletedTransactionsFailedWithError")
         DispatchQueue.main.async {
-            self.ai.completeWithDone(title: "Payment not found", error: true) { (_) in
-                //if not logged in - show log in button
-            }
+            self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
+                self.loadingIndicator.hideIndicator(fast: true) { (co) in
+                    
+                }
+            }, title: "Payment not found", error: true)
         }
     }
 
@@ -397,11 +411,13 @@ extension BuyProVC: SKPaymentTransactionObserver {
                             }
                             DispatchQueue.main.async {
                                 self.showPurchasedIndicator()
-                                self.ai.completeWithDone(title: "Success!", description: "Pro features available across all your devices") { (_) in
-                                    Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { (_) in
-                                        self.performSegue(withIdentifier: "homeVC", sender: self)
+                                self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "Start"), rightButtonActon: { (_) in
+                                    self.loadingIndicator.hideIndicator(fast: true) { (co) in
+                                        Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { (_) in
+                                            self.performSegue(withIdentifier: "homeVC", sender: self)
+                                        }
                                     }
-                                }
+                                }, title: "Success", description: "Pro features available across all your devices")
                             }
                         }
                     }
@@ -414,17 +430,18 @@ extension BuyProVC: SKPaymentTransactionObserver {
                 SKPaymentQueue.default().finishTransaction(transaction)
                 SKPaymentQueue.default().remove(self)
                 DispatchQueue.main.async {
-                    self.ai.completeWithDone(title: "Payment Error", error: true) { (_) in
-                        
-                    }
+                    self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
+                        self.loadingIndicator.hideIndicator(fast: true) { (co) in
+                            
+                        }
+                    }, title: "Payment failed", error: true)
                 }
                 break
             default:
-                SKPaymentQueue.default().finishTransaction(transaction)
-                SKPaymentQueue.default().remove(self)
                 DispatchQueue.main.async {
-                    self.ai.fastHideIndicator { (_) in
-                        
+                    self.loadingIndicator.hideIndicator(fast: true) { (_) in
+                        SKPaymentQueue.default().finishTransaction(transaction)
+                        SKPaymentQueue.default().remove(self)
                     }
                 }
             }

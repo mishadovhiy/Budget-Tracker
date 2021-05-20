@@ -12,7 +12,7 @@ protocol enterValueVCProtocol {
     func hideScreen(close: Bool, value: String)
 }
 
-class enterValueVC: UIViewController {
+class enterValueVC: SuperViewController {
 
     //if numbers - textfield - user interface enabled false, dont show keybpoard but show blue indicator
     //delegate
