@@ -42,15 +42,17 @@ class CategoriesVC: SuperViewController {
     var expenses: [(String, Int)] = []
     var incomes: [(String, Int)] = []
     
+    lazy var viewTap:UITapGestureRecognizer = {
+        return UITapGestureRecognizer(target: self, action: #selector(pressedToDismiss(_:)))
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         updateUI()
-       // self.tableView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tablePressed(_:))))
-        
         
     }
-    @objc func tablePressed(_ sender: UITapGestureRecognizer) {
+    @objc func pressedToDismiss(_ sender: UITapGestureRecognizer) {
         if self.newCategoryTextField.isFirstResponder {
             DispatchQueue.main.async {
                 self.newCategoryTextField.endEditing(true)
@@ -61,6 +63,7 @@ class CategoriesVC: SuperViewController {
     
     var tableContentOf:UIEdgeInsets = UIEdgeInsets.zero
     @objc func keyboardWillHide(_ notification: Notification) {
+          self.view.removeGestureRecognizer(viewTap)
         DispatchQueue.main.async {
             self.tableView.contentInset = self.tableContentOf
             self.editingValue = nil
@@ -71,6 +74,7 @@ class CategoriesVC: SuperViewController {
     
     var keyHeight: CGFloat = 0.0
     @objc func keyboardWillShow(_ notification: Notification) {
+        self.view.addGestureRecognizer(viewTap)
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
@@ -367,10 +371,7 @@ class CategoriesVC: SuperViewController {
     @IBAction func closePressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 
-    }
     
     var historyDataStruct: [TransactionsStruct] = []
     var selectedCategoryName = ""
@@ -571,18 +572,19 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
             view.layer.zPosition = 1
             view.superview?.layer.masksToBounds = false
 
-            let button = UIButton(frame: CGRect(x: (tableView.frame.width / 2) - 55, y: self.safeAreaButton > 0 ? (darkAppearence ? 0 : 10) : 0, width: 110, height: footerHeight))
+            let button = UIButton(frame: CGRect(x: (tableView.frame.width / 2) - 55, y: self.safeAreaButton > 0 ? (darkAppearence ? 0 : 5) : 0, width: 110, height: footerHeight))
             let title = "New \(section == 0 ? "expense" : "income")"
             button.setTitle(title, for: .normal)
             button.layer.cornerRadius = 6
-            button.backgroundColor = self.editingValue == nil ? K.Colors.yellow : K.Colors.pink
-            
+            button.backgroundColor = self.editingValue == nil ? (darkAppearence ? K.Colors.category : K.Colors.darkTable) : K.Colors.pink
+            //button.tintColor = darkAppearence ? K.Colors.darkTable : K.Colors.category
             button.titleLabel?.font = .systemFont(ofSize: 15, weight: .semibold)
+            button.setTitleColor(darkAppearence ? K.Colors.darkTable : K.Colors.category, for: .normal)
             view.addSubview(button)
             button.isUserInteractionEnabled = true
             button.layer.shadowPath = UIBezierPath(rect: button.bounds).cgPath
             button.layer.shadowColor = UIColor.black.cgColor
-            button.layer.shadowOpacity = 0.15
+            button.layer.shadowOpacity = 0.25
             button.layer.shadowOffset = .zero
             button.layer.shadowRadius = 6
             
@@ -660,9 +662,9 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
                 }
             }
         } else {
-            DispatchQueue.main.async {
+           /* DispatchQueue.main.async {
                 self.newCategoryTextField.endEditing(true)
-            }
+            }*/
         }
         
     }

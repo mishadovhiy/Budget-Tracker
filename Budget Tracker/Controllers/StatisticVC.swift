@@ -48,13 +48,14 @@ class StatisticVC: UIViewController, CALayerDelegate {
             }
         }
         
-        if let goIndex = filterAndGoToStatistic {
+        if let goIndex = filterAndGoToStatistic { // search by name
+            filterAndGoToStatistic = nil
             if allData.count > goIndex.row {
-                DispatchQueue.main.async {
+               /* DispatchQueue.main.async {
                     self.tableView.scrollToRow(at: goIndex, at: .middle, animated: true)
-                }
+                }*/
             } else {
-                filterAndGoToStatistic = nil
+                //filterAndGoToStatistic = nil
             }
             
         }
@@ -318,7 +319,7 @@ extension StatisticVC: UITableViewDelegate, UITableViewDataSource {
 
 
     
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+   /* func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let goIndex = filterAndGoToStatistic {
             if indexPath == goIndex {
                 
@@ -331,7 +332,7 @@ extension StatisticVC: UITableViewDelegate, UITableViewDataSource {
                 }
             }
         }
-    }
+    }*/
 }
 
 

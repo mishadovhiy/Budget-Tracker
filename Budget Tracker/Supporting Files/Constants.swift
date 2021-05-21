@@ -64,6 +64,7 @@ struct K {
         static let sectionBackground = UIColor(named: "sectionBackgroundColor")
         static let loginColor = UIColor(named: "loginColor")
         static let notOnDBColor = UIColor(named: "notOnDBColor")
+        static let darkTable = UIColor(named: "darkTableColor")
     }
 }
 

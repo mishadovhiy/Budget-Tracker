@@ -57,7 +57,7 @@ class DebtsVC: SuperViewController {
 
             self.newDebtButton.layer.shadowPath = UIBezierPath(rect: self.newDebtButton.bounds).cgPath
             self.newDebtButton.layer.shadowColor = UIColor.black.cgColor
-            self.newDebtButton.layer.shadowOpacity = 0.15
+            self.newDebtButton.layer.shadowOpacity = 0.25
             self.newDebtButton.layer.shadowOffset = .zero
             self.newDebtButton.layer.shadowRadius = 6
         }
@@ -68,7 +68,8 @@ class DebtsVC: SuperViewController {
             DispatchQueue.main.async {
                 self.newDebtField.textColor = .white
                 self.tableView.translatesAutoresizingMaskIntoConstraints = true
-
+                self.newDebtButton.setTitleColor(K.Colors.darkTable, for: .normal)
+                self.newDebtButton.backgroundColor = K.Colors.category
             }
         }
         if #available(iOS 13.0, *) {
@@ -90,11 +91,22 @@ class DebtsVC: SuperViewController {
         tableView.dataSource = self
 
         getDataFromLocal()
-        
+
     }
     
+    @objc func pressedToDismiss(_ sender: UITapGestureRecognizer) {
+        if self.newDebtField.isFirstResponder {
+            DispatchQueue.main.async {
+                self.newDebtField.endEditing(true)
+            }
+        }
+    }
+    lazy var viewTap:UITapGestureRecognizer = {
+        return UITapGestureRecognizer(target: self, action: #selector(pressedToDismiss(_:)))
+    }()
     var tableContentOf:UIEdgeInsets = UIEdgeInsets.zero
     @objc func keyboardWillHide(_ notification: Notification) {
+        self.view.removeGestureRecognizer(viewTap)
         self.addingNew = false
         DispatchQueue.main.async {
             self.newDebtButton.superview?.backgroundColor = .clear
@@ -112,6 +124,7 @@ class DebtsVC: SuperViewController {
     
     var keyHeight: CGFloat = 0.0
     @objc func keyboardWillShow(_ notification: Notification) {
+        self.view.addGestureRecognizer(viewTap)
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
@@ -413,10 +426,10 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
             data = tableData[indexPath.row]
         }
         if addingNew {
-            DispatchQueue.main.async {
+           /* DispatchQueue.main.async {
                 self.newDebtField.endEditing(true)
                 self.tableView.deselectRow(at: indexPath, animated: true)
-            }
+            }*/
         } else {
             if let dat = data {
                 if !fromSettings {

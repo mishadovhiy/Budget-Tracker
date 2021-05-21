@@ -1506,8 +1506,11 @@ class ViewController: SuperViewController {
             let vc = nav.topViewController as! StatisticVC
             vc.dataFromMain = tableData
         case "toSingIn":
-            let vc = segue.destination as! LoginViewController
-            vc.messagesFromOtherScreen = "Your password has been change"
+            let nav = segue.destination as! UINavigationController
+            let vc = nav.topViewController as! LoginViewController
+            UserDefaults.standard.setValue(appData.username, forKey: "UsernameHolder")
+            appData.username = ""
+            vc.messagesFromOtherScreen = "Your password has been changed"
         default: return
         }
  
@@ -1566,8 +1569,8 @@ class ViewController: SuperViewController {
     @IBAction func settingsPressed(_ sender: UIButton) {
         //toSettingsFullScreen
         if #available(iOS 13.0, *) {
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "toSettings", sender: self)
+            DispatchQueue.main.async {//toSettings
+                self.performSegue(withIdentifier: "toSettingsFullScreen", sender: self)
             }
         } else {
             DispatchQueue.main.async {
@@ -1939,9 +1942,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             let dateLabel = UILabel()//UILabel(frame: CGRect(x: 10, y: 0, width: tableFrame.width - 40, height: view.frame.height))
             dateLabel.font = .systemFont(ofSize: 28, weight: .bold)
             dateLabel.textColor = UIColor(red: 241/255, green: 129/255, blue: 58/255, alpha: 1)
-            print(newTableData, "newTableData")
-            
-            
+
             let monthLabel = UILabel()
             monthLabel.font = .systemFont(ofSize: 10, weight: .regular)
             monthLabel.textColor = K.Colors.balanceT

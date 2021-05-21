@@ -10,6 +10,7 @@ import UIKit
 
 class IndicatorView: UIView {
 
+    @IBOutlet weak var backgroundHelper: UIView!
     @IBOutlet weak var userDataStack: UIStackView!
     @IBOutlet weak var actionsStack: UIStackView!
     @IBOutlet private weak var additionalDoneButton: UIButton!
@@ -91,6 +92,7 @@ class IndicatorView: UIView {
             } completion: { (_) in
                 UIView.animate(withDuration: 0.15) {
                     self.backgroundView.backgroundColor = attention ? self.accentBackgroundColor : self.normalBackgroundColor
+                    self.backgroundHelper.backgroundColor = attention ? self.accentBackgroundColor : self.normalBackgroundColor
                     self.mainView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
                 } completion: { (_) in
                     /*if showingAI {
@@ -105,7 +107,15 @@ class IndicatorView: UIView {
 
         }
     }
+
     
+    func internetError() {
+        completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
+            self.hideIndicator(fast: true) { (co) in
+                
+            }
+        }, title: "No internet", description: "Try again later", error: true)
+    }
     
     @IBOutlet private weak var usernameLabel: UILabel!
     @IBOutlet private weak var emailLabel: UILabel!
@@ -120,6 +130,7 @@ class IndicatorView: UIView {
                     self.descriptionLabel.isHidden = true
                     self.ai.isHidden = true
                     self.backgroundView.backgroundColor = self.normalBackgroundColor
+                    self.backgroundHelper.backgroundColor = self.normalBackgroundColor
                 } completion: { (_) in
                     self.ai.stopAnimating()
                     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
@@ -153,6 +164,7 @@ class IndicatorView: UIView {
                 UIView.animate(withDuration: 0.25) {
                     self.descriptionLabel.isHidden = description == nil ? true : false
                     self.backgroundView.backgroundColor = self.accentBackgroundColor
+                    self.backgroundHelper.backgroundColor = self.accentBackgroundColor
                     self.ai.isHidden = true
                     self.mainView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
                 } completion: { (_) in
@@ -177,11 +189,12 @@ class IndicatorView: UIView {
         
         vcActionOnTFHide = whenHide
         DispatchQueue.main.async {
+            self.userDataStack.isHidden = true // test when need!!!
             if !showSecondTF {
                 self.textField.text = ""
             }
             self.leftButton.superview?.superview?.isHidden = false
-            self.textField.superview?.superview?.isHidden = false
+            self.textField.superview?.superview?.superview?.isHidden = false
             self.repeatePasswordTextField.isHidden = true
             if !dontChangeText {
                 self.titleLabel.text = title
@@ -230,11 +243,11 @@ class IndicatorView: UIView {
                         self.descriptionLabel.isHidden = description == nil ? true : false
                     }
                     self.backgroundView.backgroundColor = self.accentBackgroundColor
+                    self.backgroundHelper.backgroundColor = self.accentBackgroundColor
                     self.ai.isHidden = true
                     self.textField.isHidden = false
-                    if showUserStack {
-                        self.userDataStack.isHidden = false
-                    }
+                    self.userDataStack.isHidden = showUserStack ? false : true
+
                     if showSecondTF {
                         self.repeatePasswordTextField.isHidden = false
                     }
@@ -272,6 +285,7 @@ class IndicatorView: UIView {
                 self.titleLabel.isHidden = false
                 UIView.animate(withDuration: 0.25) {
                     self.backgroundView.backgroundColor = self.normalBackgroundColor
+                    self.backgroundHelper.backgroundColor = self.normalBackgroundColor
                 } completion: { (com) in
                     UIView.animate(withDuration: 0.25) {
                         self.backgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
@@ -293,13 +307,13 @@ class IndicatorView: UIView {
                 self.closeButton.isHidden = true
                 self.additionalDoneButton.isHidden = true
                 UIView.animate(withDuration: 0.3) {
-                    self.textField.isHidden = true
-                    self.textField.superview?.superview?.isHidden = true
+                    self.textField.superview?.superview?.superview?.isHidden = true
                     self.mainView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
                 } completion: { (_) in
                     self.textField.endEditing(true)
                     self.repeatePasswordTextField.endEditing(true)
                     self.textFieldMode = nil
+                    self.textField.isHidden = true
 
                     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                         function(text, secondText)
@@ -384,6 +398,7 @@ class IndicatorView: UIView {
             let window = UIApplication.shared.keyWindow ?? UIWindow()
             UIView.animate(withDuration: 0.15) {
                 self.backgroundView.backgroundColor = .clear
+                self.backgroundHelper.backgroundColor = .clear
             } completion: { (_) in
                 UIView.animate(withDuration: 0.22) {
                     self.backgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, window.frame.height + 100, 0)
@@ -448,7 +463,7 @@ class IndicatorView: UIView {
         ai.isHidden = true
         closeButton.isHidden = true
         leftButton.superview?.isHidden = true
-        textField.superview?.superview?.isHidden = true
+        textField.superview?.superview?.superview?.isHidden = true
         leftButton.isHidden = true
         rightButton.isHidden = true
         additionalDoneButton.isHidden = true

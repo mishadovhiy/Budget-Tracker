@@ -635,7 +635,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kTa-v1-Lr8">
-                                <rect key="frame" x="0.0" y="0.0" width="428" height="764"/>
+                                <rect key="frame" x="0.0" y="108" width="428" height="764"/>
                                 <color key="backgroundColor" name="backgroundColor"/>
                                 <color key="separatorColor" name="separetorColor"/>
                                 <inset key="separatorInset" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
@@ -736,7 +736,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="64o-Oh-zGw">
-                                <rect key="frame" x="0.0" y="0.0" width="428" height="764"/>
+                                <rect key="frame" x="0.0" y="108" width="428" height="764"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="separatorColor" name="separetorColor"/>
                                 <inset key="separatorInset" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
@@ -841,11 +841,11 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fU2-rH-OWC">
-                                <rect key="frame" x="0.0" y="729" width="428" height="35"/>
+                                <rect key="frame" x="0.0" y="803" width="428" height="35"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B1k-R5-b8U">
                                         <rect key="frame" x="169.66666666666666" y="0.0" width="88.999999999999972" height="35"/>
-                                        <color key="backgroundColor" name="yellowColor"/>
+                                        <color key="backgroundColor" name="darkTableColor"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
@@ -1378,7 +1378,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Ojr-kf-P4O">
-                                <rect key="frame" x="0.0" y="0.0" width="428" height="764"/>
+                                <rect key="frame" x="0.0" y="108" width="428" height="730"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="expectingPaymentsCell" id="YLE-Yx-4aq" customClass="expectingPaymentsCell" customModule="Budget_Tracker" customModuleProvider="target">
@@ -1667,7 +1667,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nMe-Ik-tvJ">
-                                <rect key="frame" x="0.0" y="0.0" width="428" height="764"/>
+                                <rect key="frame" x="0.0" y="108" width="428" height="764"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="separatorColor" name="separetorColor"/>
                                 <inset key="separatorInset" minX="7" minY="0.0" maxX="7" maxY="0.0"/>
@@ -1764,7 +1764,7 @@
                                 </prototypes>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4la-rP-xjs">
-                                <rect key="frame" x="0.0" y="709" width="428" height="55"/>
+                                <rect key="frame" x="0.0" y="783" width="428" height="55"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gIt-0L-4IJ">
                                         <rect key="frame" x="189" y="0.0" width="50" height="50"/>
@@ -2249,7 +2249,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3iE-AP-MUF" userLabel="contentView">
-                                <rect key="frame" x="10" y="504" width="408" height="250"/>
+                                <rect key="frame" x="10" y="578" width="408" height="250"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xJt-XL-sIK">
                                         <rect key="frame" x="15" y="0.0" width="393" height="60"/>
@@ -2506,12 +2506,15 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="xca-cI-lLJ" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="aaR-5s-fN2"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" largeTitles="YES" id="Hwq-jc-JeC">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="Hwq-jc-JeC">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="108"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" name="backgroundColor"/>
                         <color key="tintColor" name="darkTableColor"/>
                         <color key="barTintColor" name="backgroundColor"/>
+                        <textAttributes key="largeTitleTextAttributes">
+                            <offsetWrapper key="textShadowOffset" horizontal="0.0" vertical="0.0"/>
+                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
