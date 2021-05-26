@@ -591,8 +591,8 @@ struct CategoriesStruct {
 
 struct DebtsStruct {
     let name: String
-    let amountToPay: String
-    let dueDate: String
+    var amountToPay: String
+    var dueDate: String
 }
 
 

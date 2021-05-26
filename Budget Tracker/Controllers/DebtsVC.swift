@@ -334,8 +334,10 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
         }
         if let dat = data {
             cell.categoryLabel.text = dat.name
-            cell.amountLabel.text = indexPath.section == 2 ? "No records" : "\(dat.amount)"
+            let withTotal = data?.amountToPay == "" || data?.amountToPay == "0" ? "\(dat.amount)" : "\(dat.amount)/\(dat.amountToPay)"
+            cell.amountLabel.text = indexPath.section == 2 ? "No records" : "\(withTotal)"
         }
+        cell.dueDate.text = data?.dueDate == "" ? "" : data?.dueDate
         cell.categoryLabel.textColor = darkAppearence ? K.Colors.category : .black
         cell.amountLabel.textColor = (data?.amount ?? 0) >= 0 ? (darkAppearence ? K.Colors.category : K.Colors.balanceV) : K.Colors.negative
         cell.amountLabel.alpha = indexPath.section == 2 ? 0.4 : 1
@@ -454,11 +456,7 @@ protocol DebtsVCProtocol {
     func catDebtSelected(name: String, amount: Int)
 }
 
-class debtCell: UITableViewCell {
-    
-    @IBOutlet weak var categoryLabel: UILabel!
-    @IBOutlet weak var amountLabel: UILabel!
-}
+
 
 
 extension DebtsVC : UITextFieldDelegate {
@@ -492,4 +490,12 @@ extension DebtsVC : UITextFieldDelegate {
         }
         return true
     }
+}
+
+
+class debtCell: UITableViewCell {
+    
+    @IBOutlet weak var categoryLabel: UILabel!
+    @IBOutlet weak var amountLabel: UILabel!
+    @IBOutlet weak var dueDate: UILabel!
 }

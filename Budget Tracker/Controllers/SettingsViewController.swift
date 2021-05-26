@@ -30,6 +30,9 @@ class SettingsViewController: SuperViewController {
     }()
     //here
  
+  /*  lazy var ai : IndicatorView = {
+        return (UIApplication.shared.keyWindow ?? UIWindow()).viewWithTag(23450) as! IndicatorView
+    }()*/
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +44,28 @@ class SettingsViewController: SuperViewController {
         }
         
         
+        
+        
+    }
+    var needGet = true
+    
+    func testShowIndicator(error: Bool = false) {
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+            self.loadingIndicator.showTextField(type: .code, error: error ? ("неправильный код!", "") : nil, title: "code") { (j, jf) in
+                if j == "6590" {
+                    //должна быть крутилка 10 сек
+                    Timer.scheduledTimer(withTimeInterval: 10.0, repeats: false) { (_) in
+                        self.loadingIndicator.fastHide { (_) in
+                            print("complited")
+                        }
+                    }
+                } else {
+                    self.testShowIndicator(error: true)
+                }
+                
+            }
+        }
         
        /* let window = UIApplication.shared.keyWindow ?? UIWindow()
         let newView = IndicatorView.instanceFromNib() as! IndicatorView
@@ -105,16 +130,14 @@ class SettingsViewController: SuperViewController {
 
             }
          }*/
-        
     }
-    var needGet = true
     
     override func viewDidAppear(_ animated: Bool) {
-        
-
-        
-        
-        
+     /*   DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+            self.loadingIndicator.show { (_) in
+                self.testShowIndicator()
+            }
+        }*/
         toSegue = false
         if UserDefaults.standard.value(forKey: "firstLaunchSettings") as? Bool ?? false == false {
             if appData.username == "" {

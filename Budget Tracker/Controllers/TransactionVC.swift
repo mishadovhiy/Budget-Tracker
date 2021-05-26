@@ -474,7 +474,7 @@ class CustomTextField: UITextField {
 }
 
 extension TransitionVC: CalendarVCProtocol {
-    func dateSelected(date: String) {
+    func dateSelected(date: String, time: DateComponents?) {
         DispatchQueue.main.async {
             self.dateTextField.text = date
         }

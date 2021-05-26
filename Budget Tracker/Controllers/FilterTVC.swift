@@ -163,6 +163,16 @@ class FilterTVC: SuperViewController {
         
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        switch segue.identifier {
+        case K.toCalendar:
+            let vc = segue.destination as! CalendarVC
+            vc.needPressDone = true
+        default:
+            break
+        }
+    }
+    
     func defaultFilter() {
         
         let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)

@@ -152,43 +152,44 @@ class BuyProVC: SuperViewController {
     @IBAction func tryFreePressed(_ sender: UIButton) {
         if !appData.proVersion {
             if appData.username != "" {
-                DispatchQueue.main.async {
-                    self.loadingIndicator.show()
-                }
-                let load = LoadFromDB()
-                load.Users { (loadedData, error) in
-                    if error {
-                        DispatchQueue.main.async {
-                            self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
-                                self.loadingIndicator.hideIndicator(fast: true) { (co) in
-                                    
-                                }
-                            }, title: "Internet error", description: "Try again later", error: true)
-                        }
-                    } else {
-                        let nik = appData.username
-                        for i in 0..<loadedData.count {
-                            if loadedData[i][0] == nik {
-                                if loadedData[i][5] != "" {
-                                    DispatchQueue.main.async {
-                                        self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
-                                            self.loadingIndicator.hideIndicator(fast: true) { (co) in
-                                                
-                                            }
-                                        }, title: "Access denied", description: "You have already tried trial version", error: true)
 
+                self.loadingIndicator.show { (_) in
+                    let load = LoadFromDB()
+                    load.Users { (loadedData, error) in
+                        if error {
+                            DispatchQueue.main.async {
+                                self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
+                                    self.loadingIndicator.hideIndicator(fast: true) { (co) in
                                         
                                     }
-                                    return
-                                } else {
-                                    self.userData = (loadedData[i][1], loadedData[i][2], loadedData[i][3], loadedData[i][5])
-                                    self.performTrial()
-                                    break
+                                }, title: "Internet error", description: "Try again later", error: true)
+                            }
+                        } else {
+                            let nik = appData.username
+                            for i in 0..<loadedData.count {
+                                if loadedData[i][0] == nik {
+                                    if loadedData[i][5] != "" {
+                                        DispatchQueue.main.async {
+                                            self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
+                                                self.loadingIndicator.hideIndicator(fast: true) { (co) in
+                                                    
+                                                }
+                                            }, title: "Access denied", description: "You have already tried trial version", error: true)
+
+                                            
+                                        }
+                                        return
+                                    } else {
+                                        self.userData = (loadedData[i][1], loadedData[i][2], loadedData[i][3], loadedData[i][5])
+                                        self.performTrial()
+                                        break
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                
             } else {
                 DispatchQueue.main.async {
                     
@@ -270,41 +271,45 @@ class BuyProVC: SuperViewController {
                     self.performSegue(withIdentifier: "toSingIn", sender: self)
                 }
             } else {
-                DispatchQueue.main.async {
+                /*DispatchQueue.main.async {
                     self.loadingIndicator.show()
-                }
-                let load = LoadFromDB()
-                load.Users { (loadedData, error) in
-                    if !error {
-                        for i in 0..<loadedData.count {
-                            if loadedData[i][0] == nick {
-                                self.userData = (loadedData[i][1], loadedData[i][2], loadedData[i][3], loadedData[i][5])
-                                break
+                }*/
+                self.loadingIndicator.show { (_) in
+                    let load = LoadFromDB()
+                    load.Users { (loadedData, error) in
+                        if !error {
+                            for i in 0..<loadedData.count {
+                                if loadedData[i][0] == nick {
+                                    self.userData = (loadedData[i][1], loadedData[i][2], loadedData[i][3], loadedData[i][5])
+                                    break
+                                }
+                            }
+                            print("buyPressed")
+                            guard let myProduct = self.proVProduct else {
+                                return
+                            }
+                            if SKPaymentQueue.canMakePayments() {
+                                print("can make true")
+                                let payment = SKPayment(product: myProduct)
+                                SKPaymentQueue.default().add(self)
+                                SKPaymentQueue.default().add(payment)
+                            } else {
+                                print("go to restrictions")
+                            }
+                        } else {
+                            DispatchQueue.main.async {
+                                self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
+                                    self.loadingIndicator.hideIndicator(fast: true) { (co) in
+                                        
+                                    }
+                                }, title: "Internet error", description: "Try again later", error: true)
                             }
                         }
-                        print("buyPressed")
-                        guard let myProduct = self.proVProduct else {
-                            return
-                        }
-                        if SKPaymentQueue.canMakePayments() {
-                            print("can make true")
-                            let payment = SKPayment(product: myProduct)
-                            SKPaymentQueue.default().add(self)
-                            SKPaymentQueue.default().add(payment)
-                        } else {
-                            print("go to restrictions")
-                        }
-                    } else {
-                        DispatchQueue.main.async {
-                            self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
-                                self.loadingIndicator.hideIndicator(fast: true) { (co) in
-                                    
-                                }
-                            }, title: "Internet error", description: "Try again later", error: true)
-                        }
+                        
                     }
-                    
                 }
+                
+                
                 
                 
             }
@@ -323,11 +328,12 @@ class BuyProVC: SuperViewController {
         if SKPaymentQueue.canMakePayments() {
             SKPaymentQueue.default().restoreCompletedTransactions()
             SKPaymentQueue.default().add(self)
-            DispatchQueue.main.async {
-                self.loadingIndicator.show()
+
+            self.loadingIndicator.show { (_) in
+                self.restoreRequest.delegate = self
+                self.restoreRequest.start()
             }
-            restoreRequest.delegate = self
-            restoreRequest.start()
+            
         } else {
             print("go to restrictions")
         }

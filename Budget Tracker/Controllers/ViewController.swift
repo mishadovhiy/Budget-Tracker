@@ -218,6 +218,7 @@ class ViewController: SuperViewController {
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(bigCalcTaps(_:))))
         
 
+        
     }
     
     func updateUI() {
@@ -228,6 +229,7 @@ class ViewController: SuperViewController {
         self.mainTableView.delegate = self
         self.mainTableView.dataSource = self
         DispatchQueue.main.async {
+            self.center.removeAllDeliveredNotifications()
             self.unsendedDataLabel.superview?.superview?.isHidden = true
             self.enableLocalDataPress = false
             self.dataFromValueLabel.superview?.superview?.isHidden = true
@@ -624,13 +626,7 @@ class ViewController: SuperViewController {
         }
     }
     
-    func stringToDateComponent(s: String) -> DateComponents {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy"
-        let date = dateFormatter.date(from: s)
-        return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date ?? Date())
-        
-    }
+    
     
     func createTableData(filteredData: [TransactionsStruct]) -> [tableStuct] {
         var result: [tableStuct] = []
@@ -778,10 +774,12 @@ class ViewController: SuperViewController {
     }
     var timers: [Timer] = []
 
-    
+
     
     override func viewDidAppear(_ animated: Bool) {
-        
+        super.viewDidAppear(true)
+        print("DIDAPPPP")
+
         
     }
     
@@ -1312,49 +1310,7 @@ class ViewController: SuperViewController {
     var daysBetween = [""]
     var selectedFromDayInt = 0
     var selectedToDayInt = 0
-    func makeTwo(n: Int) -> String {
-        if n < 10 {
-            return "0\(n)"
-        } else {
-            return "\(n)"
-        }
-    }
-    func getMonthFrom(string: String) -> Int {
-        if string != "" {
-            if string.count == 10 {
-                var monthS = string
-                for _ in 0..<3 {
-                    monthS.removeFirst()
-                }
-                for _ in 0..<5 {
-                    monthS.removeLast()
-                }
-                return Int(monthS) ?? 11
-            } else {
-                return 11
-            }
-            
-        } else {
-            return 11
-        }
-    }
-    func getYearFrom(string: String) -> Int {
-        if string != "" {
-            if string.count == 10 {
-                var yearS = string
-                for _ in 0..<6 {
-                    yearS.removeFirst()
-                }
-                return Int(yearS) ?? 1996
-            } else {
-                return 1996
-            }
-            
-            
-        } else {
-            return 1996
-        }
-    }
+    
 
     var editingRow: Int?
     func editRow(at: IndexPath) {
@@ -1752,13 +1708,7 @@ class ViewController: SuperViewController {
         }
     }
     
-    func returnMonth(_ month: Int) -> String {
-        let monthes = [
-            1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "Jun",
-            7: "Jul", 8: "Aug", 9: "Sep", 10: "Oct", 11: "Nov", 12: "Dec"
-        ]
-        return monthes[month] ?? "Jan"
-    }
+    
     
     var animateCellWillAppear = true
     var calcViewHeight:CGFloat = 0

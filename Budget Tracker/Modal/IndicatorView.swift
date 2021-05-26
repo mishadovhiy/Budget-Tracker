@@ -15,7 +15,7 @@ class IndicatorView: UIView {
     @IBOutlet weak var actionsStack: UIStackView!
     @IBOutlet private weak var additionalDoneButton: UIButton!
     @IBOutlet private weak var backgroundView: UIView!
-    @IBOutlet private weak var mainView: UIView!
+    @IBOutlet weak var mainView: UIView!
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var closeButton: UIButton!
     @IBOutlet private weak var descriptionLabel: UILabel!
@@ -37,6 +37,8 @@ class IndicatorView: UIView {
     override func draw(_ rect: CGRect) {
         print("indicatorView draw")
         DispatchQueue.main.async {
+           // self.alpha = 0
+
             self.textFields = [self.textField, self.repeatePasswordTextField]
             self.setAllHidden()
             for textField in self.textFields {
@@ -68,13 +70,14 @@ class IndicatorView: UIView {
     }
     
 
-    func show(showingAI: Bool = true, title: String? = "Processing", description: String? = nil, appeareAnimation: Bool = false, attention: Bool = false) {
+    func show(showingAI: Bool = true, title: String? = "Processing", description: String? = nil, appeareAnimation: Bool = false, attention: Bool = false, completion: @escaping (Bool) -> ()) {
         
         if !isShowing {
             isShowing = true
         }
         canCloseOnSwipe = false
         DispatchQueue.main.async {
+           // self.alpha = 1
             if !showingAI {
                 self.ai.stopAnimating()
             } else {
@@ -86,6 +89,7 @@ class IndicatorView: UIView {
             self.backgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
             self.actionsStack.isHidden = true
             UIView.animate(withDuration: appeareAnimation ? 0.25 : 0.0) {
+                
                 self.titleLabel.isHidden = title == nil ? true : false
                 self.descriptionLabel.isHidden = description == nil ? true : false
                 self.ai.isHidden = showingAI ? false : true
@@ -95,13 +99,14 @@ class IndicatorView: UIView {
                     self.backgroundHelper.backgroundColor = attention ? self.accentBackgroundColor : self.normalBackgroundColor
                     self.mainView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
                 } completion: { (_) in
+              //      self.alpha = 1
                     /*if showingAI {
                         if self.ai.frame.minY < 0 {
                             self.ai.isHidden = false
                         }
                     }*/
                     
-                    
+                    completion(true)
                 }
             }
 
@@ -110,6 +115,7 @@ class IndicatorView: UIView {
 
     
     func internetError() {
+        canCloseOnSwipe = true
         completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
             self.hideIndicator(fast: true) { (co) in
                 
@@ -121,6 +127,7 @@ class IndicatorView: UIView {
     @IBOutlet private weak var emailLabel: UILabel!
     
     func hideIndicator(fast: Bool = false, title: String? = nil, hideAfter: Int = 2, completion: @escaping (Bool) -> ()) {
+        canCloseOnSwipe = true
         if !fast {
             DispatchQueue.main.async {
                 self.titleLabel.text = title
@@ -133,7 +140,7 @@ class IndicatorView: UIView {
                     self.backgroundHelper.backgroundColor = self.normalBackgroundColor
                 } completion: { (_) in
                     self.ai.stopAnimating()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(hideAfter)) {
                         self.fastHide(completion: completion)
                     }
                 }
@@ -146,12 +153,12 @@ class IndicatorView: UIView {
 
     private var rightFunc: Any?
     private var leftFunc: Any?
-    func completeWithActions(buttonsTitles: (String?, String?)? = nil, leftButtonActon: ((Bool) -> ())? = nil, rightButtonActon: ((Bool) -> ())? = nil, title: String? = "Done", description: String? = nil, error: Bool = false) {
-
+    func completeWithActions(buttonsTitles: (String?, String?)? = nil, showCloseButton: Bool = false, leftButtonActon: ((Bool) -> ())? = nil, rightButtonActon: ((Bool) -> ())? = nil, title: String? = "Done", description: String? = nil, error: Bool = false) {
+    
         rightFunc = rightButtonActon
         leftFunc = leftButtonActon
         DispatchQueue.main.async {
-            UIImpactFeedbackGenerator().impactOccurred()
+          //  UIImpactFeedbackGenerator().impactOccurred()
             self.leftButton.superview?.superview?.isHidden = false
             self.leftButton.superview?.isHidden = false
             self.leftButton.isHidden = true
@@ -161,18 +168,21 @@ class IndicatorView: UIView {
             self.titleLabel.text = title
             self.descriptionLabel.text = description
             self.checkIfShowing { (_) in
-                UIView.animate(withDuration: 0.25) {
+                UIView.animate(withDuration: 0.20) {
                     self.descriptionLabel.isHidden = description == nil ? true : false
                     self.backgroundView.backgroundColor = self.accentBackgroundColor
                     self.backgroundHelper.backgroundColor = self.accentBackgroundColor
                     self.ai.isHidden = true
                     self.mainView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+                    self.rightButton.isHidden = rightButtonActon == nil ? true : false
+                    self.leftButton.isHidden = buttonsTitles?.0 ?? "" == "" ? true : false
+                    
                 } completion: { (_) in
                     self.ai.stopAnimating()
-                    UIView.animate(withDuration: 0.20) {
-                        self.rightButton.isHidden = rightButtonActon == nil ? true : false
-                        self.leftButton.isHidden = buttonsTitles?.0 ?? "" == "" ? true : false
-                    } completion: { (_) in
+                    if showCloseButton {
+                        UIView.animate(withDuration: 0.15) {
+                            self.closeButton.isHidden = false
+                        }
                         
                     }
                 }
@@ -185,7 +195,7 @@ class IndicatorView: UIView {
     private var vcActionOnTFHide: Any?
     private var textFieldMode: textType? = nil
     
-    func showTextField(type: textType, title: String, description: String? = nil, dontChangeText: Bool = false, userData: (String, String)? = nil, showSecondTF: Bool = false, whenHide: @escaping (String, String?) -> ()) {
+    func showTextField(type: textType, error: (String, String)? = nil, textFieldText: String = "", title: String, description: String? = nil, dontChangeText: Bool = false, userData: (String, String)? = nil, showSecondTF: Bool = false, whenHide: @escaping (String, String?) -> ()) {
         
         vcActionOnTFHide = whenHide
         DispatchQueue.main.async {
@@ -202,9 +212,12 @@ class IndicatorView: UIView {
             }
             var showUserStack: Bool = false
             var needAdditionalButton = false
+            var enableAdditionalButton = false
             self.textFieldMode = type
+            
             switch type {
             case .code:
+                enableAdditionalButton = false
                 self.textField.isSecureTextEntry = false
                 self.textField.keyboardType = .numberPad
                 needAdditionalButton = true
@@ -234,11 +247,27 @@ class IndicatorView: UIView {
                     self.usernameLabel.text = userData?.0
                     self.emailLabel.text = userData?.1
                 }
+            case .amount:
+                enableAdditionalButton = true
+                self.textField.isSecureTextEntry = false
+                self.textField.keyboardType = .numberPad
+                needAdditionalButton = true
+                self.textField.attributedPlaceholder = NSAttributedString(string: "Enter amount", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
+                showUserStack = false
+                if !dontChangeText {
+                    self.usernameLabel.text = userData?.0
+                    self.emailLabel.text = userData?.1
+                }
             }
+            
+            
             
             self.checkIfShowing { (sh) in
                 print("strarrt")
                 UIView.animate(withDuration: 0.25) {
+                    self.leftButton.superview?.isHidden = true
+                    self.leftButton.isHidden = true
+                    self.rightButton.isHidden = true
                     if !dontChangeText {
                         self.descriptionLabel.isHidden = description == nil ? true : false
                     }
@@ -248,27 +277,40 @@ class IndicatorView: UIView {
                     self.textField.isHidden = false
                     self.userDataStack.isHidden = showUserStack ? false : true
 
+                    self.closeButton.isHidden = false
+                     self.mainView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, self.moveMainOnTop * (-1), 0)
+                     if needAdditionalButton {
+                         self.additionalDoneButton.isHidden = false
+                         self.additionalDoneButton.isEnabled = enableAdditionalButton
+                     }
                     if showSecondTF {
                         self.repeatePasswordTextField.isHidden = false
                     }
                 } completion: { (_) in
                     self.ai.stopAnimating()
-                    UIImpactFeedbackGenerator().impactOccurred()
                     if !showSecondTF {
                         self.textField.becomeFirstResponder()
                     } else {
                         self.repeatePasswordTextField.becomeFirstResponder()
                     }
-                    UIView.animate(withDuration: 0.25) {
+                    if textFieldText != "" {
+                        self.textField.text = textFieldText
+                    }
+                    /*UIView.animate(withDuration: 0.25) {
                         self.closeButton.isHidden = false
                         self.mainView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, self.moveMainOnTop * (-1), 0)
                         if needAdditionalButton {
                             self.additionalDoneButton.isHidden = false
-                            self.additionalDoneButton.isEnabled = false
+                            self.additionalDoneButton.isEnabled = enableAdditionalButton
                         }
-                    } completion: { (_) in
-                        
-                    }
+                    } completion: { (_) in*/
+                        if error != nil {
+                            UIImpactFeedbackGenerator().impactOccurred()
+                            self.showMessage(show: true, title: error?.0 ?? "Error!", description: error?.1, helpAction: nil) { (_) in
+                                
+                            }
+                        }
+                    //}
 
                 }
             }
@@ -281,17 +323,23 @@ class IndicatorView: UIView {
             print("NOT SHOWINGG")
             isShowing = true
             DispatchQueue.main.async {
+                self.mainView.isHidden = false
+                self.backgroundView.isHidden = false
+                self.backgroundHelper.isHidden = false
                 self.isHidden = false
                 self.titleLabel.isHidden = false
-                UIView.animate(withDuration: 0.25) {
-                    self.backgroundView.backgroundColor = self.normalBackgroundColor
-                    self.backgroundHelper.backgroundColor = self.normalBackgroundColor
+                UIView.animate(withDuration: 0.30) {
+                    
+                    self.backgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
                 } completion: { (com) in
-                    UIView.animate(withDuration: 0.25) {
-                        self.backgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+                    
+                    UIView.animate(withDuration: 0.20) {
+                        self.backgroundView.backgroundColor = self.normalBackgroundColor
+                        self.backgroundHelper.backgroundColor = self.normalBackgroundColor
                     } completion: { (_) in
                         showed(true)
                     }
+
                 }
             }
         } else {
@@ -303,10 +351,15 @@ class IndicatorView: UIView {
     private func completeEditingTextField(closePressed: Bool, text: String, secondText: String) {
         if let function = vcActionOnTFHide as? (String, String?) -> () {
             DispatchQueue.main.async {
-                self.showMessage(show: false, title: "", helpAction: nil)
+                
                 self.closeButton.isHidden = true
                 self.additionalDoneButton.isHidden = true
-                UIView.animate(withDuration: 0.3) {
+                if self.showingMessage {
+                    self.showMessage(show: false, title: "", helpAction: nil) { (_) in
+                        self.completeEditingTextField(closePressed: closePressed, text: text, secondText: secondText)
+                    }
+                }
+                UIView.animate(withDuration: 0.1) {
                     self.textField.superview?.superview?.superview?.isHidden = true
                     self.mainView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
                 } completion: { (_) in
@@ -314,10 +367,13 @@ class IndicatorView: UIView {
                     self.repeatePasswordTextField.endEditing(true)
                     self.textFieldMode = nil
                     self.textField.isHidden = true
-
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                    self.show(showingAI: true, appeareAnimation: true) { (_) in
                         function(text, secondText)
                     }
+                    
+                 /*   DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                        function(text, secondText)
+                    }test end editing*/
                 }
             }
         }
@@ -326,7 +382,7 @@ class IndicatorView: UIView {
     
     
     var showingMessage = false
-    func showMessage(show: Bool, title: String, description: String? = nil, helpAction: Any?) {
+    func showMessage(show: Bool, title: String, description: String? = nil, helpAction: Any?, completionn: @escaping (Bool) -> ()) {
         showingMessage = show
         DispatchQueue.main.async {
             if show {
@@ -347,6 +403,8 @@ class IndicatorView: UIView {
                     if !show {
                         self.messageView.isHidden = true
                     }
+                    completionn(true)
+                    
                 }
             }
         }
@@ -358,17 +416,17 @@ class IndicatorView: UIView {
         DispatchQueue.main.async {
             let text = self.textField.text ?? ""
             let SecText = self.repeatePasswordTextField.text ?? ""
-            self.completeEditingTextField(closePressed: false, text: text, secondText: SecText)
+            self.showMessage(show: false, title: "", helpAction: nil) { (_) in
+                self.completeEditingTextField(closePressed: false, text: text, secondText: SecText)
+            }
+            
 
         }
     }
     
     @IBAction private func closePressed(_ sender: UIButton) {
         hideIndicator(fast: true) { (_) in
-            DispatchQueue.main.async {
-                self.textField.endEditing(true)
-                self.repeatePasswordTextField.endEditing(true)
-            }
+            
         }
     }
     
@@ -376,7 +434,7 @@ class IndicatorView: UIView {
         switch sender.tag {
         case 0:
             print("leftButtonPress")
-            if let function = rightFunc as? (Bool) -> () {
+            if let function = leftFunc as? (Bool) -> () {
                 hideIndicator(fast: true) { (_) in
                     function(true)
                 }
@@ -384,16 +442,17 @@ class IndicatorView: UIView {
         case 1:
             print("rightButtonPress")
             if let function = rightFunc as? (Bool) -> () {
-                hideIndicator(fast: true) { (_) in
+                function(true)
+                /*hideIndicator(fast: true) { (_) in
                     function(true)
-                }
+                }*/
             }
         default:
             break
         }
     }
 
-    private func fastHide(completion: @escaping (Bool) -> ()) {
+    func fastHide(completion: @escaping (Bool) -> ()) {
         DispatchQueue.main.async {
             let window = UIApplication.shared.keyWindow ?? UIWindow()
             UIView.animate(withDuration: 0.15) {
@@ -418,6 +477,7 @@ class IndicatorView: UIView {
         case nickname
         case email
         case password
+        case amount
     }
     private let accentBackgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.55)
     private let normalBackgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.19)
@@ -438,9 +498,10 @@ class IndicatorView: UIView {
             DispatchQueue.main.async {
                 if textField.text?.count == 4 {
                     self.additionalDoneButton.isEnabled = true
-                    if self.showingMessage {
-                        self.showMessage(show: false, title: "", helpAction: nil)
-                    }
+                    /*if self.showingMessage {
+                        self.showMessage(show: false, title: "", helpAction: nil) { (_) in
+                        }
+                    }*/
                 } else {
                     self.additionalDoneButton.isEnabled = false
                     if textField.text?.count ?? 0 > 4 {
@@ -457,7 +518,6 @@ class IndicatorView: UIView {
             textfield.isHidden = true
         }
         isShowing = false
-        canCloseOnSwipe = false
         descriptionLabel.isHidden = true
         titleLabel.isHidden = true
         ai.isHidden = true
@@ -468,9 +528,28 @@ class IndicatorView: UIView {
         rightButton.isHidden = true
         additionalDoneButton.isHidden = true
         self.isHidden = true
-        showMessage(show: false, title: "", helpAction: nil)
+        showMessage(show: false, title: "", helpAction: nil) { (_) in
+        }
         mainView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+        
+        DispatchQueue.main.async {
+            self.textField.text = ""
+            self.repeatePasswordTextField.text = ""
+            self.textField.endEditing(true)
+            self.repeatePasswordTextField.endEditing(true)
+        }
     }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print(touches, "gyuikmnbhj")
+        if canCloseOnSwipe {
+            canCloseOnSwipe = false
+            self.fastHide { (_) in
+                
+            }
+        }
+    }
+    
 }
 
 extension IndicatorView: UITextFieldDelegate {
@@ -480,7 +559,10 @@ extension IndicatorView: UITextFieldDelegate {
             let one = self.textField.text ?? ""
             let two = self.repeatePasswordTextField.text ?? ""
             if textField.text != "" {
-                self.completeEditingTextField(closePressed: false, text: one, secondText: two)
+                self.showMessage(show: false, title: "", helpAction: nil) { (_) in
+                    self.completeEditingTextField(closePressed: false, text: one, secondText: two)
+                }
+                
             }
         }
         return true

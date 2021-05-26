@@ -34,6 +34,7 @@ struct K {
     static let quitFilterTVC = "quitFilterTVC"
     static let collectionCell = "collectionCell"
     static let calendarClosed = "CalendarClosed"
+    static let fullDateFormat = "dd.MM.yyyy HH:mm:ss"
     
     struct Text {
         static let unknExpense = "Uncategorized Expense"

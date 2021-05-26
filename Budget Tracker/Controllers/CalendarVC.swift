@@ -9,10 +9,17 @@
 import UIKit
 
 protocol CalendarVCProtocol {
-    func dateSelected(date: String)
+    func dateSelected(date: String, time: DateComponents?)
 }
 
 class CalendarVC: SuperViewController {
+    
+  //  @IBOutlet weak var reminderTimeLabel: UILabel!
+    @IBOutlet weak var timePicker: UIDatePicker!
+    @IBOutlet weak var mainDescriptionLabel: UILabel!
+    @IBOutlet weak var mainTitleLabel: UILabel!
+    
+    var vcHeaderData: headerData?
     
     @IBOutlet weak var headerView: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
@@ -28,7 +35,7 @@ class CalendarVC: SuperViewController {
     @IBOutlet weak var weekDaySeparetorView: UIView!
     
     var delegate: CalendarVCProtocol?
-    
+    var canSelectOnlyOne = false
     var selectedFrom = ""
     var selectedTo = ""
     var days = [0]
@@ -36,20 +43,55 @@ class CalendarVC: SuperViewController {
     var selectedFromDayInt = 0
     var selectedToDayInt = 0
     var darkAppearence = false
-    var reminders = false // reminder screen type
+    var needPressDone = false
     
     var year = 1996
     var month = 11
     
+    @objc func dateSelected(_ sender: UIDatePicker) {
+        print(sender.date)
+    }
+    
+    var datePickerDate: String?
     override func viewDidLoad() {
         super.viewDidLoad()
+        /*DispatchQueue.main.async {
+            self.reminderTimeLabel.isHidden = true
+        }*/
         let height = self.view.frame.height
-        self.startButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, height + self.startButton.layer.frame.height, 0)
-        self.endButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, height + self.endButton.layer.frame.height, 0)
+        startButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, height + self.startButton.layer.frame.height, 0)
+        endButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, height + self.endButton.layer.frame.height, 0)
         textField.layer.masksToBounds = true
         textField.layer.cornerRadius = 5
 
+        if let pickerDate = datePickerDate {
+            timePicker.alpha = 1
+            timePicker.addTarget(self, action: #selector(dateSelected(_:)), for: .valueChanged)
+            if datePickerDate != "" {
+                timePicker.date = stringToDate(s: pickerDate, dateFormat: K.fullDateFormat)
+            } else {
+                //default date from settings
+                //timePicker.date = stringToDate(s: pickerDate, dateFormat: K.fullDateFormat)
+            }
+            
+        } else {
+            timePicker.alpha = 0
+        }
+        
 
+        
+        
+        
+        if vcHeaderData != nil {
+            DispatchQueue.main.async {
+                if self.vcHeaderData?.title != "" {
+                    self.mainTitleLabel.text = self.vcHeaderData?.title
+                }
+                if self.vcHeaderData?.description != "" {
+                    self.mainDescriptionLabel.text = self.vcHeaderData?.description
+                }
+            }
+        }
         
         if #available(iOS 13.0, *) {
             if darkAppearence {
@@ -84,12 +126,15 @@ class CalendarVC: SuperViewController {
         updaiteUI()
     }
 
+
     
     override func viewWillAppear(_ animated: Bool) {
         if delegate != nil {
-            navigationController?.setNavigationBarHidden(false, animated: true)
-            headerView.isHidden = true
-            title = "Calendar"
+            if vcHeaderData == nil {
+                navigationController?.setNavigationBarHidden(false, animated: true)
+                headerView.isHidden = true
+                title = "Calendar"
+            }
         }
     }
     
@@ -115,7 +160,12 @@ class CalendarVC: SuperViewController {
                     doneIsActive = true
                     doneButtonIsActive()
                     ifEndInvisible()
+
                     DispatchQueue.main.async {
+                      /*  UIView.animate(withDuration: 0.3) {
+                            self.reminderTimeLabel.isHidden = false
+                            self.timePicker.alpha = 1
+                        }*/
                         self.collectionView.reloadData()
                     }
                 } else {
@@ -227,13 +277,13 @@ class CalendarVC: SuperViewController {
         }
     }
     
-    func returnMonth(_ month: Int) -> String {
+    /*ovverrideTest func returnMonth(_ month: Int) -> String {
         let monthes = [
             1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "Jun",
             7: "Jul", 8: "Aug", 9: "Sep", 10: "Oct", 11: "Nov", 12: "Dec"
         ]
         return monthes[month] ?? "Jan"
-    }
+    }*/
     
     @IBAction func changeMonthPressed(_ sender: UIButton) {
         if sender.tag == 0 {
@@ -324,7 +374,6 @@ class CalendarVC: SuperViewController {
     }
     
     func removeSelected(cell: CVCell) {
-        
         DispatchQueue.main.async {
             if self.selectedTo == cell.cellTypeLabel.text {
                 self.selectedTo = ""
@@ -348,7 +397,7 @@ class CalendarVC: SuperViewController {
         }
     }
     
-    func getMonthFrom(string: String) -> Int {
+/*ovverrideTestfunc getMonthFrom(string: String) -> Int {
         
         if string != "" {
             var monthS = string
@@ -362,9 +411,9 @@ class CalendarVC: SuperViewController {
         } else {
             return 11
         }
-    }
+    }*/
     
-    func getYearFrom(string: String) -> Int {
+/*ovverrideTestfunc getYearFrom(string: String) -> Int {
         
         if string != "" {
             var yearS = string
@@ -376,7 +425,7 @@ class CalendarVC: SuperViewController {
         } else {
             return 1996
         }
-    }
+    }*/
     func dateFrom(sting: String) -> Date? {
         print("dateFrom", sting)
         let dateFormatter = DateFormatter()
@@ -386,7 +435,6 @@ class CalendarVC: SuperViewController {
     }
     
     func getBetweens() {
-
         daysBetween.removeAll()
         if selectedFrom != "" && selectedTo != "" {
             print("daysBetween from:", selectedFrom)
@@ -490,13 +538,13 @@ class CalendarVC: SuperViewController {
         }
     }
     
-    func makeTwo(n: Int) -> String {
+/*ovverrideTestfunc makeTwo(n: Int) -> String {
         if n < 10 {
             return "0\(n)"
         } else {
             return "\(n)"
         }
-    }
+    }*/
     
     @IBAction func goPressed(_ sender: UIButton) {
         
@@ -635,18 +683,36 @@ class CalendarVC: SuperViewController {
         }
     }
     
+    var showTimePicker = false
     @IBAction func donePressed(_ sender: UIButton) {
-        DispatchQueue.main.async {
-            UIImpactFeedbackGenerator().impactOccurred()
-        }
-        if doneIsActive {
-            appData.filter.from = selectedFrom == "" ? selectedTo : selectedFrom
-            appData.filter.to = selectedTo == "" ? selectedFrom : selectedTo
+        if delegate == nil {
             DispatchQueue.main.async {
-                self.performSegue(withIdentifier: K.calendarClosed, sender: self)
+                UIImpactFeedbackGenerator().impactOccurred()
             }
-           
+            if doneIsActive {
+                appData.filter.from = selectedFrom == "" ? selectedTo : selectedFrom
+                appData.filter.to = selectedTo == "" ? selectedFrom : selectedTo
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: K.calendarClosed, sender: self)
+                }
+               
+            }
+        } else {
+           /* if needPressDone {// test selecting from filtertwo values
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true) {
+                        self.delegate?.dateSelected(date: self.selectedFrom)
+                    }
+                }
+            }*/
+            let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: self.timePicker.date)
+            DispatchQueue.main.async {
+                self.dismiss(animated: true) {
+                    self.delegate?.dateSelected(date: self.selectedFrom, time: components)
+                }
+            }
         }
+        
     }
     
     var upToFour = (0,0)
@@ -663,6 +729,8 @@ class CalendarVC: SuperViewController {
         //не добавлять дни между а просто считать больше чем "с" и меньше ли "по"
         return result
     }
+    
+    
     
 }
 
@@ -701,6 +769,7 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
         DispatchQueue.main.async {
             if self.selectedTo == "\(dayCell).\(monthCell).\(yearCell)" || self.selectedFrom == "\(dayCell).\(monthCell).\(yearCell)" {//|| self.containdInBetween(date: "\(dayCell).\(monthCell).\(yearCell)")
                 cell.backgroundCell.backgroundColor = K.Colors.yellow
+                cell.dayLabel.textColor = self.darkAppearence ? K.Colors.category : UIColor(named: "darkTableColor")
             }else {
                 cell.backgroundCell.backgroundColor = self.darkAppearence ? UIColor(named: "darkTableColor") : K.Colors.background
                 cell.dayLabel.textColor = self.darkAppearence ? K.Colors.category : UIColor(named: "darkTableColor")
@@ -734,17 +803,35 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
         let dayCell = makeTwo(n: days[indexPath.row])
         let monthCell = makeTwo(n: month)
         let yearCell = makeTwo(n: year)
-        
-        if delegate == nil {
+        if needPressDone {
             if cell.cellTypeLabel.text == selectedFrom || cell.cellTypeLabel.text == selectedTo {
+              /*  DispatchQueue.main.async {
+                    UIView.animate(withDuration: 0.3) {
+                        self.reminderTimeLabel.isHidden = true
+                        self.timePicker.alpha = 0.3
+                    }
+                }*/
                 removeSelected(cell: cell)
             } else {
                 if selectedFrom == "" {
+                    
+                   /* DispatchQueue.main.async {
+                        UIView.animate(withDuration: 0.3) {
+                            self.reminderTimeLabel.isHidden = false
+                            self.timePicker.alpha = 1
+                        }
+                    }*/
                     selectedFrom = "\(dayCell).\(monthCell).\(yearCell)"
                     selectedFromDayInt = indexPath.row + 1
                 } else {
-                    selectedTo = "\(dayCell).\(monthCell).\(yearCell)"
-                    selectedToDayInt = indexPath.row + 1
+                    if canSelectOnlyOne {
+                        selectedFrom = "\(dayCell).\(monthCell).\(yearCell)"
+                        selectedFromDayInt = indexPath.row + 1
+                    } else {
+                        selectedTo = "\(dayCell).\(monthCell).\(yearCell)"
+                        selectedToDayInt = indexPath.row + 1
+                    }
+                    
                 }
                 ifToSmaller()
             }
@@ -775,13 +862,19 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
                 }
             }
         } else {
-            let day = cell.cellTypeLabel.text
-            if let result = day {
-                delegate?.dateSelected(date: result)
-                navigationController?.popToRootViewController(animated: true)
+            if delegate != nil {
+                let day = cell.cellTypeLabel.text
+                if needPressDone {
+                    
+                } else {
+                    if let result = day {
+                        delegate?.dateSelected(date: result, time: nil)
+                        navigationController?.popToRootViewController(animated: true)
+                    }
+                }
             }
-            
         }
+
     }
     
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
