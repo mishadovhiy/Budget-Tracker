@@ -328,14 +328,13 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             print(dateComponent, "dateComponentdateComponentdateComponent")
             let date = "\(makeTwo(n: dateComponent.day ?? 0))"
             let month = "\(returnMonth(dateComponent.month ?? 0)), \(dateComponent.year ?? 0)"
-            
+            let expired = dateExpired(debt?.dueDate ?? "")
+            let defaultBackground = cell.imageBackgroundView.backgroundColor
+            cell.imageBackgroundView.backgroundColor = expired ? K.Colors.negative : defaultBackground
             cell.imageBackgroundView.layer.masksToBounds = true
             cell.imageBackgroundView.layer.cornerRadius = cell.imageBackgroundView.layer.frame.width / 2
-            cell.noAlertIndicator.isHidden = debt?.dueDate == "" ? false : true
-            cell.noAlertIndicator.layer.masksToBounds = true
-            cell.noAlertIndicator.layer.cornerRadius = cell.noAlertIndicator.layer.frame.width / 2
             cell.alertDateLabel.text = debt?.dueDate != "" ? date : "Due date"
-            cell.alertMonthLabel.text = debt?.dueDate != "" ? month : "Unset"//"Select a date you would like to receive notification reminder for \(debt?.name ?? "unknown")"
+            cell.alertMonthLabel.text = debt?.dueDate != "" ? month : "Unset"
             cell.mainView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(toCalendarPressed(_:))))
             return cell
         case 1:

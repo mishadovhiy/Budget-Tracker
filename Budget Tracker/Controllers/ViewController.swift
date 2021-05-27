@@ -199,10 +199,7 @@ class ViewController: SuperViewController {
     var newTransaction: TransactionsStruct?
     var highliteCell: IndexPath?
     var tableDHolder: [tableStuct] = []
-    lazy var message: MessageView = {
-        let message = MessageView(self)
-        return message
-    }()
+
 
     @IBOutlet weak var bigExpensesStack: UIStackView!
     let tableCorners: CGFloat = 14

@@ -44,10 +44,7 @@ class LoginViewController: SuperViewController {
     var selectedScreen: screenType = .createAccount
     var fromPro = false
     
-    lazy var message: MessageView = {
-        let message = MessageView(self)
-        return message
-    }()
+   
     
     var messagesFromOtherScreen = ""
     
@@ -76,322 +73,14 @@ class LoginViewController: SuperViewController {
         }*/
     }
     
-    var waitingType:waitingFor?
     
-    func saveNewPasswordDB() {
-        
-    }
-    
-    var currectAnsware = ""
-    var foundUsername: String?
-    
-    
-    func sendRestorationCode(toChange: restoreCodeAction) {
-
-        let username = foundUsername != nil ? foundUsername! : appData.username
-        if username != "" {
-            self.currectAnsware = ""
-
-            self.loadingIndicator.show { (_) in
-                DispatchQueue.init(label: "getEmail").async {
-                    
-                    let load = LoadFromDB()
-                    load.Users { (loadedData, error) in
-                        if error {
-                            DispatchQueue.main.async {
-                                self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
-                                    self.loadingIndicator.hideIndicator(fast: true) { (co) in
-                                    }
-                                }, title: "Internet error", description: "Try again later", error: true)
-                            }
-                        } else {
-                            var emailToSend = ""
-                            for i in 0..<loadedData.count {
-                                if loadedData[i][0] == username {
-                                    emailToSend = loadedData[i][1]
-                                    break
-                                }
-                            }
-                            
-                            let code = "\(Int.random(in: 0...9))\(Int.random(in: 0...9))\(Int.random(in: 0...9))\(Int.random(in: 0...9))"
-                            
-                            let save = SaveToDB()
-                            save.sendCode(toDataString: "emailTo=\(emailToSend)&Nickname=\(username)&resetCode=\(code)") { (codeError) in
-                                if codeError {
-                                    DispatchQueue.main.async {
-                                        self.loadingIndicator.internetError()
-                                    }
-                                } else {
-                                    self.currectAnsware = code
-                                    self.waitingType = .code
-                                    self.loadingIndicator.showTextField(type: .code, title: "Resoration code", description: "We have sent 4-digit resoration code on your email", userData: (username, emailToSend)) { (code, not) in
-                                        self.checkRestoreCode(value: code, userData: (username, emailToSend), ifCorrect: toChange)
-                                    }
-                                    
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-    
-            
-            
-            
-        } else {
-
-            loadingIndicator.showTextField(type: .nickname, title: "Enter your username", description: "You will receive 4-digits code on email asigned to this username") { (enteredUsername, _) in
-                self.seekingUser(enteredUsername: enteredUsername)
-            }
-        }
-    }
-    
-    func seekingUser(enteredUsername: String, wasError: Bool = false) {
-        
-        
-        loadingIndicator.showTextField(type: .nickname, error: ("User not found", ""), title: "Enter your username", description: "You will receive 4-digits code on email asigned to this username") { (enteredUsername, _) in
-           // self.loadingIndicator.show(appeareAnimation: true)
-            self.loadingIndicator.show(appeareAnimation: true) { (_) in
-                let load = LoadFromDB()
-                load.Users { (allUsers, error) in
-                    if !error {
-                        
-                        var found = false
-                        for i in 0..<allUsers.count {
-                            if allUsers[i][0] == enteredUsername {
-                                found = true
-                                break
-                            }
-                        }
-                        
-                        if found {
-                            self.foundUsername = enteredUsername
-                            self.sendRestorationCode(toChange: .changePassword)
-                        } else {
-                            self.seekingUser(enteredUsername: enteredUsername, wasError: true)
-                            
-                        }
-                        
-                    } else {
-                        DispatchQueue.main.async {
-                            self.loadingIndicator.internetError()
-                        }
-                    }
-                }
-            }
-            
-        }
-        if wasError {
-            self.seekingUser(enteredUsername: enteredUsername, wasError: true)
-        }
-    }
-    
-    
-    func dbChangePassword(userData: (String, String)) {
-        self.loadingIndicator.showTextField(type: .password, title: "Create your new password", userData: userData) { (password, notUsing) in
-            
-            self.loadingIndicator.showTextField(type: .password, title: "Repeat password", userData: userData, showSecondTF: true) { (newPassword, passwordRepeat) in
-                
-                self.checkNewPassword(one: newPassword, two: passwordRepeat ?? "", userData: userData)
-            }
-        }
-    }
-    
-    
-    func dbChangeEmail(userData: (String, String), error: Bool = false) {
-        
-        self.loadingIndicator.showTextField(type: .email, error: error ? ("Enter valid email address","") : nil, title: "Enter you new email", userData: userData) { (newEmail, _) in
-            if !(newEmail).contains("@") || !(newEmail).contains(".") {
-                self.dbChangeEmail(userData: userData, error: true)
-            } else {
-                self.loadUserData(username: userData.0) { (loadedData) in
-                    if let dbData = loadedData {
-                        //here
-                        let save = SaveToDB()
-                        let toDataStringMian = "&Nickname=\(dbData[0])" + "&Email=\(newEmail)" + "&Password=\(dbData[2])" + "&Registration_Date=\(dbData[3])" + "&ProVersion=\(dbData[4])" + "&trialDate=\(dbData[5])"
-                        save.Users(toDataString: toDataStringMian ) { (error) in
-                            if error {
-                                appData.unsendedData.append(["saveUser": toDataStringMian])
-                            }
-                            let delete = DeleteFromDB()
-                            let dataStringDelete = "&Nickname=\(dbData[0])" + "&Email=\(dbData[1])" + "&Password=\(dbData[2])" + "&Registration_Date=\(dbData[3])" + "&ProVersion=\(dbData[4])" + "&trialDate=\(dbData[5])"
-                            print(dataStringDelete)
-                            delete.User(toDataString: dataStringDelete) { (errorr) in
-                                if errorr {
-                                    appData.unsendedData.append(["deleteUser": dataStringDelete])
-                                }
-                                DispatchQueue.main.async {
-                                    self.loadingIndicator.hideIndicator(title: "Your email has been changed") { (_) in
-                                        
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    
-    enum restoreCodeAction {
-        case changePassword
-        case changeEmail
-    }
-    
-    func checkRestoreCode(value: String, userData: (String, String), ifCorrect: restoreCodeAction) {
-        if value == self.currectAnsware {
-            self.currectAnsware = ""
-            self.waitingType = .newPassword
-            switch ifCorrect {
-            case .changePassword:
-                DispatchQueue.main.async {
-                    self.dbChangePassword(userData: userData)
-                }
-            case .changeEmail:
-                DispatchQueue.main.async {
-                    self.dbChangeEmail(userData: userData)
-                }
-            }
-            
-        } else {
-            DispatchQueue.main.async {
-                //self.loadingIndicator.showMessage(show: true, title: "Wrong code!", description: "You have entered: \(value)", helpAction: nil)
-                self.loadingIndicator.showTextField(type: .code, error: ("Wrong code!","You have entered: \(value)"), title: "Repeate code", dontChangeText: true) { (code, notUsing) in
-                    
-                    self.checkRestoreCode(value: code, userData: userData, ifCorrect: ifCorrect)
-                }
-            }
-        }
-    }
-    
-    
-    
-    func checkNewPassword(one: String, two: String, userData: (String, String)) {
-        print("checkNewPassword:", "one:", one, "  ", "two:", two)
-        if one == two {
-            //send new password
-            DispatchQueue.main.async {
-                self.loadingIndicator.show(appeareAnimation: true) { (_) in
-                    self.cangePasswordDB(username: userData.0, newPassword: two)
-                }
-                
-            }
-        } else {
-           // self.loadingIndicator.showMessage(show: true, title: "Psswords not much", helpAction: nil)
-            self.loadingIndicator.showTextField(type: .password, error: ("Psswords not much",""), title: "Repeat password", userData: userData, showSecondTF: true) { (newPassword, passwordRepeat) in
-                
-                self.checkNewPassword(one: newPassword, two: passwordRepeat ?? "", userData: userData)
-            }
-        }
-    }
-    
-    func cangePasswordDB(username: String, newPassword: String) {
-        DispatchQueue.init(label: "DB").async {
-            let load = LoadFromDB()
-            load.Users { (loadedData, error) in
-                if error {
-                    DispatchQueue.main.async {
-                        self.loadingIndicator.internetError()
-                    }
-                } else {
-                    var userData: [String] = []
-                    for i in 0..<loadedData.count {
-                        if loadedData[i][0] == username {
-                            userData = loadedData[i]
-                            break
-                        }
-                    }
-                    let save = SaveToDB()
-                    let toDataStringMian = "&Nickname=\(userData[0])" + "&Email=\(userData[1])" + "&Password=\(newPassword)" + "&Registration_Date=\(userData[3])" + "&ProVersion=\(userData[4])" + "&trialDate=\(userData[5])"
-                    save.Users(toDataString: toDataStringMian ) { (error) in
-                        if error {
-                            appData.unsendedData.append(["saveUser": toDataStringMian])
-                        }
-                        let delete = DeleteFromDB()
-                        let dataStringDelete = "&Nickname=\(userData[0])" + "&Email=\(userData[1])" + "&Password=\(userData[2])" + "&Registration_Date=\(userData[3])" + "&ProVersion=\(userData[4])" + "&trialDate=\(userData[5])"
-                        print(dataStringDelete)
-                        delete.User(toDataString: dataStringDelete) { (errorr) in
-                            if errorr {
-                                appData.unsendedData.append(["deleteUser": dataStringDelete])
-                            }
-                            appData.password = newPassword
-                            KeychainService.updatePassword(service: "BudgetTrackerApp", account: userData[0], data: newPassword)
-                            DispatchQueue.main.async {
-                                self.loadingIndicator.hideIndicator(title: "Your password has been changed") { (_) in
-                                    
-                                }
-                            }
-                        }
-                    }
-                    
-                }
-            }
-        }
-    }
-    
-    func loadUserData(username: String, completion: @escaping ([String]?) -> ()){
-        
-        let load = LoadFromDB()
-        load.Users { (loadedData, error) in
-            if error {
-                DispatchQueue.main.async {
-                    self.loadingIndicator.internetError()
-                }
-                completion(nil)
-            } else {
-                var userData: [String] = []
-                for i in 0..<loadedData.count {
-                    if loadedData[i][0] == username {
-                        userData = loadedData[i]
-                        break
-                    }
-                }
-                completion(userData)
-                
-            }
-        }
-
-    }
-    
-    func getEmail(username: String) -> String {
-        var result = ""
-        var errorr = true
-        let load = LoadFromDB()
-        load.Users { (loadedData, error) in
-            errorr = error
-            for i in 0..<loadedData.count {
-                if loadedData[i][0] == username {
-                    result = loadedData[i][1]
-                    break
-                }
-            }
-        }
-        
-        if errorr {
-            DispatchQueue.main.async {
-                self.loadingIndicator.internetError()
-            }
-        } else {
-            if result == "" {
-                DispatchQueue.main.async {
-                    self.loadingIndicator.hideIndicator(fast: true) { (_) in
-                        self.message.showMessage(text: "Username not found!", type: .error)
-                    }
-                }
-            }
-            
-        }
-        return result
-        
-        
-    }
     
 
     @IBAction func moreButtonPressed(_ sender: UIButton) {
-        foundUsername = nil
+        //foundUsername = nil
         DispatchQueue.main.async {
-            let alert = UIAlertController(title: "", message: "", preferredStyle: .actionSheet)
+            self.performSegue(withIdentifier: "toAccountSettings", sender: self)
+            /*let alert = UIAlertController(title: "", message: "", preferredStyle: .actionSheet)
             
             
             let forgotPassword = UIAlertAction(title: "Forgot password", style: .default, handler: { (_) in
@@ -518,33 +207,18 @@ class LoginViewController: SuperViewController {
             
             alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (_) in
             }))
-            self.present(alert, animated: true)
+            self.present(alert, animated: true)*/
         }
         
     }
     
-    func checkOldPassword(_ password: String, dbPassword: String, email: String){
-        if password != dbPassword {
-            self.loadingIndicator.showTextField(type: .password, error: ("Wrong password",""), title: "Enter your old password", userData: (appData.username, email)) { (enteredPassword, _) in
-                self.checkOldPassword(enteredPassword, dbPassword: dbPassword, email: email)
-            }
-            /*DispatchQueue.main.async {
-                self.loadingIndicator.showMessage(show: true, title: "Wrong password", helpAction: nil)
-            }*/
-            
-        } else {
-            self.loadingIndicator.showTextField(type: .password, title: "Create your new password", userData: (appData.username, email)) { (password, _) in
-                
-                self.loadingIndicator.showTextField(type: .password, title: "Repeat password", userData: (appData.username, email), showSecondTF: true) { (newPassword, passwordRepeat) in
-                    print("")
-                    self.checkNewPassword(one: newPassword, two: passwordRepeat ?? "", userData: (appData.username, email))
-                }
-            }
-        }
-    }
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
+        case "toAccountSettings":
+            let vc = segue.destination as! accountSettingsVC
+            vc.tableTopMargin = self.view.frame.minY
         default:
             break
         }
@@ -1090,11 +764,7 @@ class LoginViewController: SuperViewController {
         return [nicknameLabelCreate, emailLabel, passwordLabel, confirmPasswordLabel, nicknameLogLabel, passwordLogLabel]
     }
     
-    enum waitingFor {
-        case newPassword
-        case nickname
-        case code
-    }
+    
 
 }
 

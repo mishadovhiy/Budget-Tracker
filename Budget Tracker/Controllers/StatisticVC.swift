@@ -10,16 +10,13 @@ import UIKit
 import CorePlot
 
 var filterAndGoToStatistic: IndexPath?
-class StatisticVC: UIViewController, CALayerDelegate {
+class StatisticVC: SuperViewController, CALayerDelegate {
     @IBOutlet weak var hostView: CPTGraphHostingView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentControll: UISegmentedControl!
     @IBOutlet weak var titleLabel: UILabel!
     var allData = [GraphDataStruct]()
-    lazy var message: MessageView = {
-        let message = MessageView(self)
-        return message
-    }()
+
     
     var dataFromMain: [TransactionsStruct] = []
     var sum = 0.0

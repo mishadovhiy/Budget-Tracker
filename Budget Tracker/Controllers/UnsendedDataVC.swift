@@ -78,10 +78,7 @@ class UnsendedDataVC: SuperViewController {
     }
     
     var messageText = ""
-    lazy var message: MessageView = {
-        let message = MessageView(self)
-        return message
-    }()
+
     
     var didapp = false
     let activity = UIActivityIndicatorView(frame: .zero)

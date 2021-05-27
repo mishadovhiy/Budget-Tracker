@@ -255,11 +255,7 @@ class BuyProVC: SuperViewController {
         }
     }
     
-    
-    lazy var message: MessageView = {
-        let message = MessageView(self)
-        return message
-    }()
+
     
     var userData = ("","","","")
     @IBAction func buyPressed(_ sender: UIButton) {

@@ -14,7 +14,8 @@ protocol CalendarVCProtocol {
 
 class CalendarVC: SuperViewController {
     
-  //  @IBOutlet weak var reminderTimeLabel: UILabel!
+    @IBOutlet weak var commentTextField: UITextField!
+    //  @IBOutlet weak var reminderTimeLabel: UILabel!
     @IBOutlet weak var timePicker: UIDatePicker!
     @IBOutlet weak var mainDescriptionLabel: UILabel!
     @IBOutlet weak var mainTitleLabel: UILabel!

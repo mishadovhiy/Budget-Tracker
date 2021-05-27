@@ -334,10 +334,13 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
         }
         if let dat = data {
             cell.categoryLabel.text = dat.name
-            let withTotal = data?.amountToPay == "" || data?.amountToPay == "0" ? "\(dat.amount)" : "\(dat.amount)/\(dat.amountToPay)"
+            let withTotal = data?.amountToPay == "" || data?.amountToPay == "0" ? "\(dat.amount)" : "\(dat.amount)\n\(dat.amountToPay)"
             cell.amountLabel.text = indexPath.section == 2 ? "No records" : "\(withTotal)"
         }
-        cell.dueDate.text = data?.dueDate == "" ? "" : data?.dueDate
+        let dateComp = stringToDateComponent(s: data?.dueDate ?? "", dateFormat: K.fullDateFormat)
+        let expired = dateExpired(data?.dueDate ?? "")
+        cell.dueDate.textColor = expired ? K.Colors.negative : K.Colors.balanceV
+        cell.dueDate.text = data?.dueDate == "" ? "-" : "\(dateComp.day ?? 0) of \(returnMonth(dateComp.month ?? 0)), \(dateComp.year ?? 0)"
         cell.categoryLabel.textColor = darkAppearence ? K.Colors.category : .black
         cell.amountLabel.textColor = (data?.amount ?? 0) >= 0 ? (darkAppearence ? K.Colors.category : K.Colors.balanceV) : K.Colors.negative
         cell.amountLabel.alpha = indexPath.section == 2 ? 0.4 : 1

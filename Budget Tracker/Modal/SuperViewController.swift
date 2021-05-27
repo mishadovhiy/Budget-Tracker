@@ -127,10 +127,26 @@ class SuperViewController: UIViewController, UNUserNotificationCenterDelegate {
         return monthes[month] ?? "Jan"
     }
     
+    
+    func differenceFromNow(startDate: Date) -> DateComponents {
+        return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: startDate, to: Date())
+    }
+    
+    func dateExpired(_ string: String) -> Bool {
+        let dateDate = stringToDate(s: string, dateFormat: K.fullDateFormat)
+        let difference = differenceFromNow(startDate: dateDate)
+        return (difference.year ?? 0 < 0 || difference.month ?? 0 < 0 || difference.day ?? 0 < 0 || difference.hour ?? 0 < 0 || difference.minute ?? 0 < 0 || difference.second ?? 0 < 0) ? false : true
+    }
+    
     struct headerData {
         let title: String
         let description: String?
     }
+    
+    lazy var message: MessageView = {
+        let message = MessageView(self)
+        return message
+    }()
     
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {

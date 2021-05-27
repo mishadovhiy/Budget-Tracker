@@ -31,11 +31,7 @@ class CategoriesVC: SuperViewController {
     var darkAppearence = false
     
     var safeAreaButton: CGFloat = 0.0
-    
-    lazy var message: MessageView = {
-        let message = MessageView(self)
-        return message
-    }()
+
     
     
     //(categories[i].name, categories[i].count, categories[i].debt)

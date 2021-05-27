@@ -44,11 +44,7 @@ class TransitionVC: UIViewController {
     var editingComment = ""
     
     var pressedValueArrey: [String] =  []
-    
-    lazy var message: MessageView = {
-        let message = MessageView(self)
-        return message
-    }()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()

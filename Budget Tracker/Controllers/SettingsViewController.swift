@@ -24,10 +24,7 @@ class SettingsViewController: SuperViewController {
         SettingsSctruct(title: "Categories", description: "\(categoriesDebtsCount.0)", segue: "settingsToCategories"),
         SettingsSctruct(title: "Debts", description: "\(categoriesDebtsCount.1)", segue: (appData.proVersion || appData.proTrial) ? "toDebts" : "toProVC")
     ]
-    lazy var message: MessageView = {
-        let message = MessageView(self)
-        return message
-    }()
+
     //here
  
   /*  lazy var ai : IndicatorView = {
