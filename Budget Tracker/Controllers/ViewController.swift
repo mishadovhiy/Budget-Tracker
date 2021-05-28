@@ -16,7 +16,7 @@ var allSelectedTransactionsData: [TransactionsStruct] = []
 var expenseLabelPressed = true
 var selectedPeroud = ""
 
-class ViewController: SuperViewController {
+class ViewController: SuperViewController, UNUserNotificationCenterDelegate {
     
     @IBOutlet weak var addTransactionWhenEmptyButton: UIButton!
     @IBOutlet weak var noDataView: UIView!
@@ -207,17 +207,16 @@ class ViewController: SuperViewController {
     var addTransFrame = CGRect.zero
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        center.delegate = self
         updateUI()
         
         //UIApplication.shared.applicationIconBadgeNumber = 0
        // mainTableView.isUserInteractionEnabled = false
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(bigCalcTaps(_:))))
-        
-
-        
     }
-    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+       notificationReceiver(notification: notification)
+    }
     func updateUI() {
      //   addTransitionButton.translatesAutoresizingMaskIntoConstraints = true
   //      self.mainTableView.backgroundColor = K.Colors.background

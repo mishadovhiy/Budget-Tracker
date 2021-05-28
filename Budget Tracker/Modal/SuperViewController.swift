@@ -9,7 +9,7 @@
 import UIKit
 import UserNotifications
 
-class SuperViewController: UIViewController, UNUserNotificationCenterDelegate {
+class SuperViewController: UIViewController {
 
     let center = UNUserNotificationCenter.current()
     lazy var loadingIndicator: IndicatorView = {
@@ -20,7 +20,6 @@ class SuperViewController: UIViewController, UNUserNotificationCenterDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        center.delegate = self
         
         print(center.delegate, "center.descriptioncenter.description")
       /*  let window = UIApplication.shared.keyWindow ?? UIWindow()
@@ -149,12 +148,7 @@ class SuperViewController: UIViewController, UNUserNotificationCenterDelegate {
     }()
     
     
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        print("userNotificationCenter didReceive")
-    }
-    
-    var notificationShowed: Bool = true
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    public func notificationReceiver(notification: UNNotification) {
         print("willPresentwillPresent")
         print("received notification:", notification.request.content.body)
       //  notification.request.content.threadIdentifier == "Debts"
@@ -198,6 +192,9 @@ class SuperViewController: UIViewController, UNUserNotificationCenterDelegate {
             }
         }, title: notification.request.content.title, description: notification.request.content.body, error: false)
     }
+    
+    var notificationShowed: Bool = true
+
     
     func showHistory(categpry: String, transactions: [TransactionsStruct]) {
         print("showHistory")

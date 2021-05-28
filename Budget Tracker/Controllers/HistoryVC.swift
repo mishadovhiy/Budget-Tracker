@@ -16,7 +16,7 @@ var transactionAdded = false
 // if from debts - first section (dif beckground, cornerRadios) - add/edit time (2 cells: date, amount to pay)
 
 
-class HistoryVC: SuperViewController {
+class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
     
     @IBOutlet weak var addTransButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
@@ -30,7 +30,7 @@ class HistoryVC: SuperViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        center.delegate = self
         print(selectedPurposeH, "selectedPurposeselectedPurposeH didlo")
         if !allowEditing {
             DispatchQueue.main.async {
@@ -52,6 +52,10 @@ class HistoryVC: SuperViewController {
         
     }
 
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+       notificationReceiver(notification: notification)
+    }
+    
     var fromStatistic = false
 
     override func viewWillAppear(_ animated: Bool) {

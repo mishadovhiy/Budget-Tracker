@@ -16,7 +16,7 @@ var needFullReload = false
 //log out - if nick != ""
 
 
-class LoginViewController: SuperViewController {
+class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate {
 
     @IBOutlet weak var logIn: UIStackView!
     @IBOutlet weak var createAcount: UIStackView!
@@ -50,6 +50,7 @@ class LoginViewController: SuperViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        center.delegate = self
         helperNavView.backgroundColor = K.Colors.background
         print("username: \(appData.username)")
         print("localTransactions:", appData.getTransactions.count)
@@ -73,7 +74,9 @@ class LoginViewController: SuperViewController {
         }*/
     }
     
-    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+       notificationReceiver(notification: notification)
+    }
     
 
     @IBAction func moreButtonPressed(_ sender: UIButton) {

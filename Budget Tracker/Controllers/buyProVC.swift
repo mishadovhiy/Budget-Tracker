@@ -9,7 +9,7 @@
 import UIKit
 import StoreKit
 
-class BuyProVC: SuperViewController {
+class BuyProVC: SuperViewController, UNUserNotificationCenterDelegate {
     
     @IBOutlet weak var tryFree: UIButton!
     @IBOutlet weak var priceLabel: UILabel!
@@ -33,6 +33,8 @@ class BuyProVC: SuperViewController {
     var proVProduct: SKProduct?
     
     override func viewDidLoad() {
+        super.viewDidLoad()
+        center.delegate = self
         DispatchQueue.main.async {
             if appData.proVersion || appData.proTrial || appData.trialDate != "" {
                 self.tryFree.alpha = 0
@@ -66,6 +68,10 @@ class BuyProVC: SuperViewController {
 
         self.closeButton.alpha = navigationController == nil ? 1 : 0
         
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+       notificationReceiver(notification: notification)
     }
     
     @objc func productSwipped(_ sender: UISwipeGestureRecognizer) {

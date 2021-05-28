@@ -12,7 +12,7 @@ protocol UnsendedDataVCProtocol {
     func quiteUnsendedData(deletePressed: Bool, sendPressed: Bool)
 }
 
-class UnsendedDataVC: SuperViewController {
+class UnsendedDataVC: SuperViewController, UNUserNotificationCenterDelegate {
 
     @IBOutlet weak var proView: UIView!
     @IBOutlet weak var closeButton: UIButton!
@@ -85,7 +85,7 @@ class UnsendedDataVC: SuperViewController {
     //let proView = UIView()
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        center.delegate = self
        // firstSectionHeight = self.view.frame.height - 200
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -118,6 +118,12 @@ class UnsendedDataVC: SuperViewController {
         
         
     }
+    
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+       notificationReceiver(notification: notification)
+    }
+    
     
     func togglePurchaseButton(hideWithAnimation: Bool = false) {
         let selfBtn = self.saveAllButton.layer.frame

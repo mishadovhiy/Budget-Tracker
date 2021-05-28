@@ -8,7 +8,7 @@
 
 import UIKit
 
-class accountSettingsVC: SuperViewController {
+class accountSettingsVC: SuperViewController, UNUserNotificationCenterDelegate {
     var tableTopMargin:CGFloat = 0
     
     @IBOutlet weak var tableView: UITableView!
@@ -16,6 +16,7 @@ class accountSettingsVC: SuperViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        center.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
         tableView.contentInset.top = tableTopMargin + 10
@@ -23,6 +24,10 @@ class accountSettingsVC: SuperViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         getData()
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+       notificationReceiver(notification: notification)
     }
     
     func changeEmailTapped() {

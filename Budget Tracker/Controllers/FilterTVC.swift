@@ -10,7 +10,7 @@ import CoreData
 
 var ifCustom = false
 
-class FilterTVC: SuperViewController {
+class FilterTVC: SuperViewController, UNUserNotificationCenterDelegate {
     var months: [String] = []
     var years: [String] = []
     var sectionsCount = 3
@@ -21,10 +21,14 @@ class FilterTVC: SuperViewController {
     var frame = CGRect.zero
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        center.delegate = self
         tableview.delegate = self
         tableview.dataSource = self
         
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+       notificationReceiver(notification: notification)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

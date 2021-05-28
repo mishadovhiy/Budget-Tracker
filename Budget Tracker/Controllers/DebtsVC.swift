@@ -15,7 +15,7 @@ import UIKit
 
 //first cell - description (если там тоже самое что и в noDataView то не отобр description если dataCount == 0)
 
-class DebtsVC: SuperViewController {
+class DebtsVC: SuperViewController, UNUserNotificationCenterDelegate {
     @IBOutlet weak var tableView: UITableView!
 
     var delegate: DebtsVCProtocol?
@@ -47,7 +47,7 @@ class DebtsVC: SuperViewController {
     var showAnimatonOnSwitch = true
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        center.delegate = self
         newDebtField.delegate = self
         DispatchQueue.main.async {
             self.newDebtButton.layer.cornerRadius = 6
@@ -93,6 +93,11 @@ class DebtsVC: SuperViewController {
         getDataFromLocal()
 
     }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+       notificationReceiver(notification: notification)
+    }
+    
     
     @objc func pressedToDismiss(_ sender: UITapGestureRecognizer) {
         if self.newDebtField.isFirstResponder {

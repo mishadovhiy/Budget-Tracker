@@ -12,7 +12,7 @@ protocol CalendarVCProtocol {
     func dateSelected(date: String, time: DateComponents?)
 }
 
-class CalendarVC: SuperViewController {
+class CalendarVC: SuperViewController, UNUserNotificationCenterDelegate {
     
     @IBOutlet weak var commentTextField: UITextField!
     //  @IBOutlet weak var reminderTimeLabel: UILabel!
@@ -59,6 +59,7 @@ class CalendarVC: SuperViewController {
         /*DispatchQueue.main.async {
             self.reminderTimeLabel.isHidden = true
         }*/
+        center.delegate = self
         let height = self.view.frame.height
         startButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, height + self.startButton.layer.frame.height, 0)
         endButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, height + self.endButton.layer.frame.height, 0)
@@ -128,6 +129,9 @@ class CalendarVC: SuperViewController {
     }
 
 
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+       notificationReceiver(notification: notification)
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         if delegate != nil {

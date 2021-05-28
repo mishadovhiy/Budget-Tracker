@@ -18,7 +18,7 @@ protocol CategoriesVCProtocol {
     func categorySelected(category: String, purpose: Int, fromDebts: Bool, amount: Int)
 }
 
-class CategoriesVC: SuperViewController {
+class CategoriesVC: SuperViewController, UNUserNotificationCenterDelegate {
     //@IBOutlet weak var addButton: UIButton!
    // @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
@@ -44,10 +44,15 @@ class CategoriesVC: SuperViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        center.delegate = self
         updateUI()
         
     }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+       notificationReceiver(notification: notification)
+    }
+    
     @objc func pressedToDismiss(_ sender: UITapGestureRecognizer) {
         if self.newCategoryTextField.isFirstResponder {
             DispatchQueue.main.async {

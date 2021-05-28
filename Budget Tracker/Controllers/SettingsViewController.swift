@@ -13,7 +13,7 @@ protocol SettingsViewControllerProtocol {
     func closeSettings(sendSavedData:Bool, needFiltering: Bool)
 }
 
-class SettingsViewController: SuperViewController {
+class SettingsViewController: SuperViewController, UNUserNotificationCenterDelegate {
 
     @IBOutlet weak var usersCollectionView: UICollectionView!
     @IBOutlet weak var contentView: UIView!
@@ -33,18 +33,18 @@ class SettingsViewController: SuperViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        center.delegate = self
         updateUI()
         if needGet {
             needGet = false
             getdata()
         }
-        
-        
-        
-        
     }
     var needGet = true
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+       notificationReceiver(notification: notification)
+    }
     
     func testShowIndicator(error: Bool = false) {
         
