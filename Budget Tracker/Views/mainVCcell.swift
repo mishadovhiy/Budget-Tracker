@@ -164,10 +164,11 @@ class HistoryCell: UITableViewCell {
 
 class HistoryCellTotal: UITableViewCell {
     
-    @IBOutlet weak var restToPayLabel: UILabel!
+    @IBOutlet weak var totalToPayLabel: UILabel!
     @IBOutlet weak var noRestToPay: UIButton!
     @IBOutlet weak var valueLabel: UILabel!
     @IBOutlet weak var perioudLabel: UILabel!
+    @IBOutlet weak var restToPayyLabel: UILabel!
     
 }
 

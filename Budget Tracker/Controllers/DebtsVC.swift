@@ -339,13 +339,19 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
         }
         if let dat = data {
             cell.categoryLabel.text = dat.name
-            let withTotal = data?.amountToPay == "" || data?.amountToPay == "0" ? "\(dat.amount)" : "\(dat.amount)\n\(dat.amountToPay)"
-            cell.amountLabel.text = indexPath.section == 2 ? "No records" : "\(withTotal)"
-        }
+            //let withTotal = data?.amountToPay == "" || data?.amountToPay == "0" ? "\(dat.amount)" : "\(dat.amount)\n\(dat.amountToPay)"
+            cell.amountLabel.text = indexPath.section == 2 ? "No records" : "\(dat.amount)"
+            cell.amountToPay.text = "\(dat.amountToPay)"
+        } 
         let dateComp = stringToDateComponent(s: data?.dueDate ?? "", dateFormat: K.fullDateFormat)
         let expired = dateExpired(data?.dueDate ?? "")
+        let diff = dateExpiredCount(startDate: data?.dueDate ?? "")
         cell.dueDate.textColor = expired ? K.Colors.negative : K.Colors.balanceV
-        cell.dueDate.text = data?.dueDate == "" ? "-" : "\(dateComp.day ?? 0) of \(returnMonth(dateComp.month ?? 0)), \(dateComp.year ?? 0)"
+        
+        let dueDateText = data?.dueDate == "" ? "" : "Due date \(dateComp.day ?? 0) of \(returnMonth(dateComp.month ?? 0)), \(dateComp.year ?? 0)"
+        let expText = expiredText(diff)
+        cell.dueDate.text = data?.dueDate == "" ? "" : (!expired ? dueDateText : "Expired:" + "\(expText == "" ? " recently" : expText)" )
+        cell.dueDate.isHidden = data?.dueDate ?? "" == "" ? true : false
         cell.categoryLabel.textColor = darkAppearence ? K.Colors.category : .black
         cell.amountLabel.textColor = (data?.amount ?? 0) >= 0 ? (darkAppearence ? K.Colors.category : K.Colors.balanceV) : K.Colors.negative
         cell.amountLabel.alpha = indexPath.section == 2 ? 0.4 : 1
@@ -356,12 +362,15 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
 
         
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
-            transactionAdded = true
-            let mainFrame = view.frame
-            let ai = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: mainFrame.width, height: mainFrame.height))
+            let ai = UIActivityIndicatorView(frame: view.frame)
             ai.style = .gray
-            view.addSubview(ai)
             ai.startAnimating()
+            view.addSubview(ai)
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+            transactionAdded = true
+            //let mainFrame = view.frame
             
             var title = ""
             var amountToPay = ""
@@ -383,26 +392,48 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
                 print("def")
             }
             
+            
+            
             var allDebts = Array(appData.debts)
             for i in 0..<allDebts.count {
                 if allDebts[i].amountToPay == amountToPay && allDebts[i].dueDate == dueDate && allDebts[i].name == title {
-                    allDebts.remove(at: i)
+                    
+                    self.center.getPendingNotificationRequests { (requests) in
+                        DispatchQueue.main.async {
+                            UIApplication.shared.applicationIconBadgeNumber = requests.count
+                        }
+                        
+                        
+                        for i in 0..<requests.count {
+                            print(requests[i], "requestsrequestsrequests")
+                            
+                            let id = "Debts\(allDebts[i].name)"
+                            if requests[i].identifier == id {
+                                self.center.removePendingNotificationRequests(withIdentifiers: [id])
+                            }
+                        }
+                        allDebts.remove(at: i)
+                        appData.saveDebts(allDebts)
+                        
+                        if appData.username != "" {
+                            let delete = DeleteFromDB()
+                            let tods = "&Nickname=\(appData.username)" + "&name=\(title)" + "&amountToPay=\(amountToPay)" + "&dueDate=\(dueDate)"
+                            print(tods, "todstodstods")
+                            delete.Debts(toDataString: tods) { (error) in
+                                if error {
+                                    appData.unsendedData.append(["deleteDebt": tods])
+                                }
+                                self.getDataFromLocal()
+                            }
+                        }
+                        
+                        
+                        
+                    }
                     break
                 }
             }
-            appData.saveDebts(allDebts)
             
-            if appData.username != "" {
-                let delete = DeleteFromDB()
-                let tods = "&Nickname=\(appData.username)" + "&name=\(title)" + "&amountToPay=\(amountToPay)" + "&dueDate=\(dueDate)"
-                print(tods, "todstodstods")
-                delete.Debts(toDataString: tods) { (error) in
-                    if error {
-                        appData.unsendedData.append(["deleteDebt": tods])
-                    }
-                }
-            }
-            self.getDataFromLocal()
             
             
         }
@@ -447,6 +478,8 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
                         self.delegate?.catDebtSelected(name: dat.name, amount: dat.amount)
                     }
                 } else {
+                    
+                    
                     selectedCellData = dat
                     DispatchQueue.main.async {
                         self.performSegue(withIdentifier: "toHistory", sender: self)
@@ -503,6 +536,7 @@ extension DebtsVC : UITextFieldDelegate {
 
 class debtCell: UITableViewCell {
     
+    @IBOutlet weak var amountToPay: UILabel!
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var amountLabel: UILabel!
     @IBOutlet weak var dueDate: UILabel!

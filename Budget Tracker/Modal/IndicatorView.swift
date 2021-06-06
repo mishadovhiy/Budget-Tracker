@@ -158,24 +158,25 @@ class IndicatorView: UIView {
         rightFunc = rightButtonActon
         leftFunc = leftButtonActon
         DispatchQueue.main.async {
-          //  UIImpactFeedbackGenerator().impactOccurred()
-            self.leftButton.superview?.superview?.isHidden = false
-            self.leftButton.superview?.isHidden = false
-            self.leftButton.isHidden = true
-            self.rightButton.isHidden = true
+            if error {
+                UIImpactFeedbackGenerator().impactOccurred()
+            }
             self.leftButton.setTitle(buttonsTitles?.0, for: .normal)
             self.rightButton.setTitle(buttonsTitles?.1, for: .normal)
             self.titleLabel.text = title
             self.descriptionLabel.text = description
             self.checkIfShowing { (_) in
                 UIView.animate(withDuration: 0.20) {
+                    self.leftButton.superview?.isHidden = false
+                    self.rightButton.isHidden = rightButtonActon == nil ? true : false
+                    self.leftButton.isHidden = buttonsTitles?.0 ?? "" == "" ? true : false
+                    self.leftButton.superview?.superview?.isHidden = false
                     self.descriptionLabel.isHidden = description == nil ? true : false
                     self.backgroundView.backgroundColor = self.accentBackgroundColor
                     self.backgroundHelper.backgroundColor = self.accentBackgroundColor
                     self.ai.isHidden = true
                     self.mainView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
-                    self.rightButton.isHidden = rightButtonActon == nil ? true : false
-                    self.leftButton.isHidden = buttonsTitles?.0 ?? "" == "" ? true : false
+                    
                     
                 } completion: { (_) in
                     self.ai.stopAnimating()
@@ -203,9 +204,11 @@ class IndicatorView: UIView {
             if !showSecondTF {
                 self.textField.text = ""
             }
-            self.leftButton.superview?.superview?.isHidden = false
             self.textField.superview?.superview?.superview?.isHidden = false
             self.repeatePasswordTextField.isHidden = true
+            self.leftButton.superview?.superview?.isHidden = false
+            self.leftButton.superview?.isHidden = true
+            
             if !dontChangeText {
                 self.titleLabel.text = title
                 self.descriptionLabel.text = description
@@ -265,7 +268,7 @@ class IndicatorView: UIView {
             self.checkIfShowing { (sh) in
                 print("strarrt")
                 UIView.animate(withDuration: 0.25) {
-                    self.leftButton.superview?.isHidden = true
+                    
                     self.leftButton.isHidden = true
                     self.rightButton.isHidden = true
                     if !dontChangeText {
@@ -328,12 +331,12 @@ class IndicatorView: UIView {
                 self.backgroundHelper.isHidden = false
                 self.isHidden = false
                 self.titleLabel.isHidden = false
-                UIView.animate(withDuration: 0.30) {
+                UIView.animate(withDuration: 0.28) {
                     
                     self.backgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
                 } completion: { (com) in
                     
-                    UIView.animate(withDuration: 0.20) {
+                    UIView.animate(withDuration: 0.12) {
                         self.backgroundView.backgroundColor = self.normalBackgroundColor
                         self.backgroundHelper.backgroundColor = self.normalBackgroundColor
                     } completion: { (_) in

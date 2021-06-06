@@ -46,8 +46,8 @@ class CreateNotificationVC: UIViewController, UNUserNotificationCenterDelegate {
         content.title = "newnewnew"
         content.body = "Some body most likelly in a few lines"
         content.sound = UNNotificationSound.default
-        let was = UIApplication.shared.applicationIconBadgeNumber
-        content.badge = NSNumber(value: was + 1)
+      //  let was = UIApplication.shared.applicationIconBadgeNumber
+      //  content.badge = NSNumber(value: was + 1)
         content.categoryIdentifier = "Local Notification"
         var dateComponents = DateComponents()
         dateComponents.calendar = Calendar.current

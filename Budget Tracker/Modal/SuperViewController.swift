@@ -18,10 +18,21 @@ class SuperViewController: UIViewController {
         //return (UIApplication.shared.keyWindow ?? UIWindow()).viewWithTag(23450) as? IndicatorView ?? IndicatorView(frame: .zero)
     }()
     
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        DispatchQueue.main.async {
+           // self.loadingIndicator.alpha = 1
+            let window = UIApplication.shared.keyWindow ?? UIWindow()
+           // self.loadingIndicator.alpha = 0
+            window.addSubview(self.loadingIndicator)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(center.delegate, "center.descriptioncenter.description")
+     //   print(center.delegate, "center.descriptioncenter.description")
       /*  let window = UIApplication.shared.keyWindow ?? UIWindow()
         let indd = IndicatorView.instanceFromNib() as! IndicatorView
         indd.tag = 23450
@@ -30,12 +41,7 @@ class SuperViewController: UIViewController {
             window.superview?.addSubview(indd)
         }
         */
-        DispatchQueue.main.async {
-           // self.loadingIndicator.alpha = 1
-            let window = UIApplication.shared.keyWindow ?? UIWindow()
-           // self.loadingIndicator.alpha = 0
-            window.addSubview(self.loadingIndicator)
-        }
+        
         /*DispatchQueue.main.async {
             let window = UIApplication.shared.keyWindow ?? UIWindow()
            // self.loadingIndicator.alpha = 0
@@ -134,7 +140,19 @@ class SuperViewController: UIViewController {
     func dateExpired(_ string: String) -> Bool {
         let dateDate = stringToDate(s: string, dateFormat: K.fullDateFormat)
         let difference = differenceFromNow(startDate: dateDate)
-        return (difference.year ?? 0 < 0 || difference.month ?? 0 < 0 || difference.day ?? 0 < 0 || difference.hour ?? 0 < 0 || difference.minute ?? 0 < 0 || difference.second ?? 0 < 0) ? false : true
+        return (difference.year ?? 1 < 0 || difference.month ?? 1 < 0 || difference.day ?? 1 < 0 || difference.hour ?? 1 < 0 || difference.minute ?? 1 < 0 || difference.second ?? 1 < 0) ? false : true
+    }
+    
+    func expiredText(_ diff: DateComponents) -> String {
+        let month = diff.month ?? 0 > 0 ? " \(diff.month ?? 0) month" + (diff.month ?? 0 > 1 ? "s": "") : ""
+        let day = diff.day ?? 0 > 0 ? " \(diff.day ?? 0) day" + (diff.day ?? 0 > 1 ? "s": "") : ""
+        let hour = diff.hour ?? 0 > 0 ? " \(diff.hour ?? 0) hour" + (diff.hour ?? 0 > 1 ? "s": "") : ""
+        return month + day + hour
+    }
+    
+    func dateExpiredCount(startDate: String) -> DateComponents {
+        let dateDate = stringToDate(s: startDate, dateFormat: K.fullDateFormat)
+        return differenceFromNow(startDate: dateDate)
     }
     
     struct headerData {
@@ -147,6 +165,10 @@ class SuperViewController: UIViewController {
         return message
     }()
     
+    
+    func showNotification(notification: UNNotification, completion: @escaping (Any?) -> ()) {
+        
+    }
     
     public func notificationReceiver(notification: UNNotification) {
         print("willPresentwillPresent")

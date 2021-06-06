@@ -14,7 +14,7 @@ protocol CalendarVCProtocol {
 
 class CalendarVC: SuperViewController, UNUserNotificationCenterDelegate {
     
-    @IBOutlet weak var commentTextField: UITextField!
+    //@IBOutlet weak var commentTextField: UITextField!
     //  @IBOutlet weak var reminderTimeLabel: UILabel!
     @IBOutlet weak var timePicker: UIDatePicker!
     @IBOutlet weak var mainDescriptionLabel: UILabel!
@@ -65,7 +65,9 @@ class CalendarVC: SuperViewController, UNUserNotificationCenterDelegate {
         endButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, height + self.endButton.layer.frame.height, 0)
         textField.layer.masksToBounds = true
         textField.layer.cornerRadius = 5
-
+        
+      //  commentTextField.layer.masksToBounds = true
+        //commentTextField.layer.cornerRadius = 5
         if let pickerDate = datePickerDate {
             timePicker.alpha = 1
             timePicker.addTarget(self, action: #selector(dateSelected(_:)), for: .valueChanged)
@@ -101,7 +103,6 @@ class CalendarVC: SuperViewController, UNUserNotificationCenterDelegate {
                 self.textField.superview?.backgroundColor = UIColor(named: "darkTableColor")
                 self.collectionView.backgroundColor = UIColor(named: "darkTableColor")
                 self.textField.textColor = K.Colors.background
-                
                 weekDaySeparetorView.backgroundColor = UIColor(named: "darkSeparetor")
                 for i in 0..<weekDayLabels.count{
                     weekDayLabels[i].backgroundColor = UIColor(named: "darkTableColor")
@@ -790,12 +791,14 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
             }
         }*/
 
+        
+        cell.dayLabel.alpha = upToFour.1 == 1 ? 0.3 : 1
         if cell.cellTypeLabel.text == today {
             DispatchQueue.main.async {
                 cell.dayLabel.textColor = K.Colors.negative
+                cell.dayLabel.alpha = 1
             }
         }
-        cell.dayLabel.alpha = upToFour.1 == 1 ? 0.3 : 1
         upToFour = (upToFour.0 + 1, upToFour.1)
         return cell
     }

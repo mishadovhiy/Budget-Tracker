@@ -33,9 +33,9 @@ class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
         center.delegate = self
         print(selectedPurposeH, "selectedPurposeselectedPurposeH didlo")
         if !allowEditing {
-            DispatchQueue.main.async {
+         //   DispatchQueue.main.async {
                 self.addTransButton.alpha = 0
-            }
+           // }
         } else {
             addTransButton.layer.shadowColor = UIColor.black.cgColor
             addTransButton.layer.shadowOpacity = 0.15
@@ -48,7 +48,13 @@ class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
         tableView.dataSource = self
         title = selectedCategoryName.capitalized
 
+   //     DispatchQueue.main.async {
+            self.addTransButton.layer.cornerRadius = self.addTransButton.layer.frame.width / 2
+            //self.addTransButton.layer.masksToBounds = true
+     //   }
+        getDebtData()
         
+        //here exp
         
     }
 
@@ -64,16 +70,18 @@ class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        getDebtData()
         
         
         //  addLocalNotification(date: "")
-        center.getPendingNotificationRequests { (requests) in
-            for i in 0..<requests.count {
-                print(requests[i], "requestsrequestsrequests")
+        
+       
+        if allowEditing {
+            DispatchQueue.main.async {
+                self.tableView.contentInset.bottom = self.addTransButton.frame.height + 20
             }
         }
-       
+        
+        
     }
     
     func stringToInterval(s: String) -> DateComponents {
@@ -99,12 +107,14 @@ class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
           }
         }
         
+        
         let content = UNMutableNotificationContent()
         content.title = title//"Kirill"
         content.body = "Due date is expiring today"
         content.sound = UNNotificationSound.default
-        let was = UIApplication.shared.applicationIconBadgeNumber
-        content.badge = NSNumber(value: was + 1)
+       // let was = UIApplication.shared.applicationIconBadgeNumber
+       // content.badge = NSNumber(value: was + 1)
+        
         content.categoryIdentifier = title
         content.threadIdentifier = "Debts"
         var dateComponents = DateComponents()
@@ -132,6 +142,11 @@ class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
                 var all = UserDefaults.standard.value(forKey: "notifications") as? [UNNotificationRequest] ?? []
                 all.append(request)
                 completion(true)
+                self.center.getPendingNotificationRequests { (requests) in
+                    DispatchQueue.main.async {
+                        UIApplication.shared.applicationIconBadgeNumber = requests.count
+                    }
+                }
             }
         }
     }
@@ -146,6 +161,28 @@ class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
                     break
                 }
             }
+
+            if let name = self.debt?.name {
+            
+                if debt?.dueDate != "" {
+                    let expired = dateExpired(debt?.dueDate ?? "")
+                    if expired {
+                        let id = "Debts\(name)"
+                        self.center.removePendingNotificationRequests(withIdentifiers: [id])
+                    }
+                }
+                
+                center.getPendingNotificationRequests { (requests) in
+                    DispatchQueue.main.async {
+                        UIApplication.shared.applicationIconBadgeNumber = requests.count
+                    }
+                    for i in 0..<requests.count {
+                        print(requests[i], "requestsrequestsrequests")
+                    }
+                }
+                
+            }
+            
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
@@ -153,16 +190,15 @@ class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
     }
     
 
-    func totalSum(label: UILabel, hasTotalAmount: Bool) {
+    func totalSum() -> Double {
         var sum = 0.0
         for i in 0..<historyDataStruct.count {
             sum += Double(historyDataStruct[i].value) ?? 1.0
         }
 
-        let text = (sum < Double(Int.max) ? "\(Int(sum))" : "\(sum)") + (hasTotalAmount ? "/" : "")
-        DispatchQueue.main.async {
-            label.text = text
-        }
+        return sum
+        //let text = (sum < Double(Int.max) ? "\(Int(sum))" : "\(sum)") + (hasTotalAmount ? "/" : "")
+        
     }
     
     @IBAction func toTransPressed(_ sender: UIButton) {
@@ -201,19 +237,83 @@ class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
     var toAddVC = false
     
     @objc func toCalendarPressed(_ sender: UITapGestureRecognizer) {
-        center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
-            if granted {
-                print("Yay!")
-            } else {
-                print("D'oh")
-            }
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "toCalendar", sender: self)
-            }
-        }
+        tocalendatPressed()
         
     }
     
+    
+    func changeDueDate(fullDate: String) {
+        //self.addLocalNotification(date: dateComp, title: self.debt?.name ?? "") { (_) in
+            self.dbLoadRemoveBeforeUpdate { (loadedData, _) in
+                let save = SaveToDB()
+                let saveToDs = "&Nickname=\(appData.username)" + "&name=\(self.debt?.name ?? "")" + "&amountToPay=\(self.debt?.amountToPay ?? "")" + "&dueDate=\(fullDate)"
+                save.Debts(toDataString: saveToDs) { (error) in
+                    self.debt?.dueDate = fullDate
+                    print(self.debt?.dueDate, "self.debt?.dueDateself.debt?.dueDate")
+                    if error {
+                        appData.unsendedData.append(["debt": saveToDs])
+                    }
+                    
+                    var dataToSafe = loadedData
+                    for i in 0..<dataToSafe.count {
+                        if dataToSafe[i].name == self.debt?.name {
+                            dataToSafe[i].dueDate = fullDate
+                            break
+                        }
+                    }
+                    appData.saveDebts(dataToSafe)
+                    if self.loadingIndicator.isShowing {
+                        self.loadingIndicator.fastHide { (_) in
+                            
+                            DispatchQueue.main.async {
+                                self.tableView.reloadData()
+                            }
+                        }
+                    }
+                    
+                }
+            }
+        //}
+    }
+    
+    func tocalendatPressed() {
+        
+        if self.debt?.dueDate ?? "" == "" {
+            center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+                if granted {
+                    print("Yay!")
+                } else {
+                    print("D'oh")
+                }
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "toCalendar", sender: self)
+                }
+            }
+        } else {
+            self.loadingIndicator.completeWithActions(buttonsTitles: ("Remove","Change"), showCloseButton: true, leftButtonActon: { (_) in
+                
+                self.changeDueDate(fullDate: "")
+                
+                let id = "Debts\(self.debt?.name ?? "")"
+                self.center.removePendingNotificationRequests(withIdentifiers: [id])
+                
+                
+            }, rightButtonActon: { (_) in
+                self.center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+                    if granted {
+                        print("Yay!")
+                    } else {
+                        print("D'oh")
+                    }
+                    DispatchQueue.main.async {
+                        self.performSegue(withIdentifier: "toCalendar", sender: self)
+                    }
+                }
+            }, title: "Do you want to change due date?", error: false)
+        }
+        
+        
+    }
     
     func dbLoadRemoveBeforeUpdate(completion: @escaping ([DebtsStruct], Bool) -> ()) {
         //self.loadingIndicator.show(title: "Updating data", appeareAnimation: true)
@@ -328,18 +428,35 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "DebtDescriptionCell", for: indexPath) as! DebtDescriptionCell
+            
             let dateComponent = stringToDateComponent(s: debt?.dueDate ?? "", dateFormat: K.fullDateFormat)
             print(dateComponent, "dateComponentdateComponentdateComponent")
             let date = "\(makeTwo(n: dateComponent.day ?? 0))"
             let month = "\(returnMonth(dateComponent.month ?? 0)), \(dateComponent.year ?? 0)"
             let expired = dateExpired(debt?.dueDate ?? "")
-            let defaultBackground = cell.imageBackgroundView.backgroundColor
-            cell.imageBackgroundView.backgroundColor = expired ? K.Colors.negative : defaultBackground
+            
+            let diff = dateExpiredCount(startDate: debt?.dueDate ?? "")
+            let expText = expiredText(diff)
+            cell.expiredDaysCount.text = "Expired:" + (expText == "" ? " recently" : "\(expText) ago")
+            cell.expiredDaysCount.superview?.isHidden = expired ? ((debt?.dueDate == "" ? true : false)) : true
+
+            print(expired, "expiredexpiredexpired")
+            let defaultBackground = UIColor(red: 199/255, green: 197/255, blue: 197/255, alpha: 1)
+            cell.imageBackgroundView.backgroundColor = defaultBackground//expired ? K.Colors.negative : defaultBackground
             cell.imageBackgroundView.layer.masksToBounds = true
             cell.imageBackgroundView.layer.cornerRadius = cell.imageBackgroundView.layer.frame.width / 2
             cell.alertDateLabel.text = debt?.dueDate != "" ? date : "Due date"
             cell.alertMonthLabel.text = debt?.dueDate != "" ? month : "Unset"
-            cell.mainView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(toCalendarPressed(_:))))
+            cell.timeLabel.backgroundColor = defaultBackground
+            cell.timeLabel.layer.cornerRadius = 4
+            cell.timeLabel.layer.masksToBounds = true
+            cell.AlertDateStack.axis = debt?.dueDate != "" ? .horizontal : .vertical
+            cell.AlertDateStack.alignment = debt?.dueDate != "" ? .firstBaseline : .fill
+            cell.timeLabel.isHidden = debt?.dueDate != "" ? false : true
+            cell.timeLabel.text = "\(makeTwo(n: dateComponent.hour ?? 0)):" + "\(makeTwo(n: dateComponent.minute ?? 0))"
+            cell.mainView.alpha = expired ? (debt?.dueDate == "" ? 1 : 0.4) : 1
+          //  cell.mainView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(toCalendarPressed(_:))))
+            
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: K.historyCellIdent, for: indexPath) as! HistoryCell
@@ -356,13 +473,21 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                 cell.valueLabel.text = "\(Int(Double(data.value) ?? 0.0))"
             } else {
                 cell.valueLabel.text = "\(data.value)"
-                
             }
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: K.historyCellTotalIdent) as! HistoryCellTotal
-            cell.valueLabel.font = .systemFont(ofSize: debt?.amountToPay == "" ? 21 : 15, weight: debt?.amountToPay == "" ? .medium : .regular)
-            totalSum(label: cell.valueLabel, hasTotalAmount: debt?.amountToPay ?? "" == "" ? false : true)
+           // cell.valueLabel.font = .systemFont(ofSize: debt?.amountToPay == "" ? 21 : 15, weight: debt?.amountToPay == "" ? .medium : .regular)
+            let hasTotalSum = debt?.amountToPay ?? "" == "" || debt?.amountToPay ?? "0" == "" ? false : true
+            let totalSumm = totalSum()
+            cell.valueLabel.text = (totalSumm < Double(Int.max) ? "\(Int(totalSumm))" : "\(totalSumm)")
+            
+            cell.totalToPayLabel.text = debt?.amountToPay
+            let rest = (Double(debt?.amountToPay ?? "0") ?? 0.0) - totalSumm
+            cell.restToPayyLabel.text = (rest < Double(Int.max) ? "\(Int(rest))" : "\(rest)") //+ (rest > 0.0 ? " Complited" : "") //"\(rest)"
+            cell.totalToPayLabel.superview?.isHidden = hasTotalSum ? false : true
+            cell.restToPayyLabel.superview?.isHidden = hasTotalSum ? false : true
+            cell.restToPayyLabel.superview?.superview?.isHidden = hasTotalSum ? false : true
             if fromCategories {
                 cell.perioudLabel.isHidden = true
             } else {
@@ -370,17 +495,17 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             }
             if debt == nil {
                 cell.noRestToPay.isHidden = true
-                cell.restToPayLabel.isHidden = true
+                cell.totalToPayLabel.isHidden = true
             } else {
                 cell.noRestToPay.layer.masksToBounds = true
                 cell.noRestToPay.layer.cornerRadius = 4
                 if debt?.amountToPay == "" || debt?.amountToPay == "0" {
                     cell.noRestToPay.isHidden = false
-                    cell.restToPayLabel.isHidden = true
+                    cell.totalToPayLabel.isHidden = true
                 } else {
                     cell.noRestToPay.isHidden = true
-                    cell.restToPayLabel.isHidden = false
-                    cell.restToPayLabel.text = debt?.amountToPay
+                    cell.totalToPayLabel.isHidden = false
+                    cell.totalToPayLabel.text = debt?.amountToPay
                 }
             }
             
@@ -505,6 +630,8 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
 
                 
             }
+        } else {
+            tocalendatPressed()
         }
     }
     
@@ -578,11 +705,14 @@ extension HistoryVC: TransitionVCProtocol {
 
 class DebtDescriptionCell: UITableViewCell {
     
+    @IBOutlet weak var AlertDateStack: UIStackView!
     @IBOutlet weak var mainView: UIView!
     @IBOutlet weak var noAlertIndicator: UILabel!
     @IBOutlet weak var imageBackgroundView: UIView!
     @IBOutlet weak var alertDateLabel: UILabel!
     @IBOutlet weak var alertMonthLabel: UILabel!
+    @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var expiredDaysCount: UILabel!
 }
 
 
@@ -598,10 +728,14 @@ extension HistoryVC: CalendarVCProtocol {
                 
                 
                 self.addLocalNotification(date: dateComp, title: self.debt?.name ?? "") { (_) in
-                    self.dbLoadRemoveBeforeUpdate { (loadedData, _) in
+                    
+                    self.changeDueDate(fullDate: fullDate)
+                    /*self.dbLoadRemoveBeforeUpdate { (loadedData, _) in
                         let save = SaveToDB()
                         let saveToDs = "&Nickname=\(appData.username)" + "&name=\(self.debt?.name ?? "")" + "&amountToPay=\(self.debt?.amountToPay ?? "")" + "&dueDate=\(fullDate)"
                         save.Debts(toDataString: saveToDs) { (error) in
+                            self.debt?.dueDate = fullDate
+                            print(self.debt?.dueDate, "self.debt?.dueDateself.debt?.dueDate")
                             if error {
                                 appData.unsendedData.append(["debt": saveToDs])
                             }
@@ -616,13 +750,15 @@ extension HistoryVC: CalendarVCProtocol {
                             appData.saveDebts(dataToSafe)
                             
                             self.loadingIndicator.fastHide { (_) in
-                                self.debt?.dueDate = fullDate
+                                
                                 DispatchQueue.main.async {
                                     self.tableView.reloadData()
                                 }
+                                    
+                                
                             }
                         }
-                    }
+                    }*/
                 }
             }
             
