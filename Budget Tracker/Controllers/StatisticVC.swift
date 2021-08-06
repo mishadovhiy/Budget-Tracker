@@ -32,6 +32,7 @@ class StatisticVC: SuperViewController, CALayerDelegate, UNUserNotificationCente
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
         deselectAllCells()
         if transactionAdded {
             filterAndGoToStatistic = selectedIndexPathToHighlite

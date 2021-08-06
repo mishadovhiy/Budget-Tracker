@@ -111,6 +111,7 @@ class BuyProVC: SuperViewController, UNUserNotificationCenterDelegate {
     var fromSettings = false
     override func viewDidAppear(_ animated: Bool) {
         //did lo - transform - small
+        super.viewDidAppear(true)
         showPurchasedIndicator()
         getProducts()
     }

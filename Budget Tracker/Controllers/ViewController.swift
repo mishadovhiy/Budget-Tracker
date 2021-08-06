@@ -170,9 +170,12 @@ class ViewController: SuperViewController, UNUserNotificationCenterDelegate {
     }
     
     func toggleNoData(show: Bool, text: String = "No Transactions", fromTop: Bool = false, appeareAnimation: Bool = true, addButtonHidden: Bool = false) {
+        
         DispatchQueue.main.async {
+            
             self.addTransactionWhenEmptyButton.isHidden = addButtonHidden
             if show {
+                self.addTransactionWhenEmptyButton.alpha = 1
                 let y = fromTop ? self.mainTableView.frame.minY : (self.bigCalcView.frame.maxY + 10)
                 self.noDataView.isHidden = false
                 self.noDataLabel.text = text
@@ -378,6 +381,8 @@ class ViewController: SuperViewController, UNUserNotificationCenterDelegate {
     }
     
     func downloadFromDB() {
+        _categoriesHolder.removeAll()
+        _debtsHolder.removeAll()
         print("downloadFromDBdownloadFromDB")
         lastSelectedDate = nil
         if appData.username != "" {
@@ -405,8 +410,13 @@ class ViewController: SuperViewController, UNUserNotificationCenterDelegate {
                             transactionsResult.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
                         }
                         appData.saveTransations(transactionsResult)
-                        
-                        load.Categories{(loadedCategories, error) in
+                        self.checkPurchase()
+                        self.prepareFilterOptions()
+                        self.filter()
+                     /*   DispatchQueue.main.async {
+                            
+                        }*/
+                       /* load.Categories{(loadedCategories, error) in
                             if error == "" {
                                 print("loaded \(loadedCategories) Categories from DB")
                                 var categoriesResult: [CategoriesStruct] = []
@@ -450,7 +460,7 @@ class ViewController: SuperViewController, UNUserNotificationCenterDelegate {
                                     self.message.showMessage(text: error, type: .internetError)
                                 }
                             }
-                        }
+                        }*/
                     } else {
                         print("error loading data1")
                         self.filter()
@@ -503,10 +513,10 @@ class ViewController: SuperViewController, UNUserNotificationCenterDelegate {
         print("filterCalled")
         dataTaskCount = (0,0)
         animateCellWillAppear = true
+        selectedPeroud = selectedPeroud != "" ? selectedPeroud : "This Month"
         DispatchQueue.main.async {
             self.filterText = "Filtering"
         }
-        selectedPeroud = selectedPeroud != "" ? selectedPeroud : "This Month"
         if !appData.filter.showAll {
             allDaysBetween()
         }
@@ -514,44 +524,63 @@ class ViewController: SuperViewController, UNUserNotificationCenterDelegate {
      //   calculateLabels()
         newTableData = createTableData(filteredData: allFilteredData)
 
+
     }
     
     func checkPurchase() {
-        let nick = appData.username
-        let load = LoadFromDB()
-        load.Users { (loadedData, error) in
-            print(loadedData, "checkPurchase")
-            if error {
-                
-            } else {
-                for i in 0..<loadedData.count {
-                    if loadedData[i][0] == nick {
-                        print("checkPurchase for", nick)
-                        if !appData.purchasedOnThisDevice {
-                            appData.proVersion = loadedData[i][4] == "1" ? true : false
-                        }
-                        
-                        print(loadedData[i][4], "loadedData[i][3]loadedData[i][3]")
-                        print("checkPurchase appData.proVersion", appData.proVersion)
-                        if loadedData[i][5] != "" {//test
-                            if UserDefaults.standard.value(forKey: "checkTrialDate") as? Bool ?? true {
-                                appData.trialDate = loadedData[i][5]
-                                self.checkProTrial()
+     //   DispatchQueue.main.async {
+            let nick = appData.username
+            let load = LoadFromDB()
+            load.Users { (loadedData, error) in
+                print(loadedData, "checkPurchase")
+                if error {
+                    
+                } else {
+                    for i in 0..<loadedData.count {
+                        if loadedData[i][0] == nick {
+                            print("checkPurchase for", nick)
+                            if !appData.purchasedOnThisDevice {
+                                appData.proVersion = loadedData[i][4] == "1" ? true : false
+                                
+                                print("checkPurchase appData.proVersion", appData.proVersion)
+                                if loadedData[i][5] != "" {//test
+                                    if UserDefaults.standard.value(forKey: "checkTrialDate") as? Bool ?? true {
+                                        appData.trialDate = loadedData[i][5]
+                                        self.checkProTrial()
+                                    }
+                                }
                             }
-                        }
+                            
+                            print(loadedData[i][4], "loadedData[i][3]loadedData[i][3]")
+                            
+                            
+                            if loadedData[i][2] != appData.password {
                         
-                        if loadedData[i][2] != appData.password {
-                            DispatchQueue.main.async {
-                                self.performSegue(withIdentifier: "toSingIn", sender: self)
+                                UserDefaults.standard.setValue(appData.username, forKey: "UsernameHolder")
+                                appData.username = ""
+                                //toSingIn
+                                if #available(iOS 13.0, *) {
+                                    
+                                    DispatchQueue.main.async {
+                                        self.performSegue(withIdentifier: "toSingIn", sender: self)
+                                    }
+                                } else {
+                                    self.resetPassword = true
+                                    DispatchQueue.main.async {
+                                        self.performSegue(withIdentifier: "toSettingsFullScreen", sender: self)
+                                    }
+                                }
+                                
                             }
+                            break
                         }
-                        break
                     }
                 }
+                
             }
-            
-        }
+       // }
     }
+    var resetPassword = false
     func checkProTrial() {
         //debts did lo if trial - check pro trial
         let wasStr = appData.trialDate
@@ -630,9 +659,7 @@ class ViewController: SuperViewController, UNUserNotificationCenterDelegate {
         let otherSections = 1
         //dataTaskCount?.1 = filteredData.count
         for i in 0..<filteredData.count {
-            DispatchQueue.main.async {
-                self.dataTaskCount = (i+1, filteredData.count)
-            }
+            dataTaskCount = (i+1, filteredData.count)
             currentDate = filteredData[i].date
             if i > 0 {
                 if filteredData[i-otherSections].date != currentDate {
@@ -746,22 +773,23 @@ class ViewController: SuperViewController, UNUserNotificationCenterDelegate {
                             self.timers[i].invalidate()
                         }
                         return
-                    }
-                    switch dots {
-                    case "":
-                        dots = "."
-                    case ".":
-                        dots = ".."
-                    case "..":
-                        dots = "..."
-                    case "...":
-                        dots = ""
-                    default:
-                        dots = ""
-                    }
+                    } else {
+                        switch dots {
+                        case "":
+                            dots = "."
+                        case ".":
+                            dots = ".."
+                        case "..":
+                            dots = "..."
+                        case "...":
+                            dots = ""
+                        default:
+                            dots = ""
+                        }
 
-                    DispatchQueue.main.async {
-                        self.filterTextLabel.text = self._filterText + dots
+                        DispatchQueue.main.async {
+                            self.filterTextLabel.text = self._filterText + dots
+                        }
                     }
                 }
                 timers.append(timer)
@@ -1452,6 +1480,8 @@ class ViewController: SuperViewController, UNUserNotificationCenterDelegate {
             let vc = nav.topViewController as! SettingsViewController//segue.destination as! SettingsViewController
            // segue.kin
             vc.delegate = self
+            vc.resetPassword = resetPassword
+            resetPassword = false
 
         case "toStatisticVC":
             let nav = segue.destination as! UINavigationController
@@ -1460,8 +1490,7 @@ class ViewController: SuperViewController, UNUserNotificationCenterDelegate {
         case "toSingIn":
             let nav = segue.destination as! UINavigationController
             let vc = nav.topViewController as! LoginViewController
-            UserDefaults.standard.setValue(appData.username, forKey: "UsernameHolder")
-            appData.username = ""
+            
             vc.messagesFromOtherScreen = "Your password has been changed"
         default: return
         }
@@ -1491,7 +1520,7 @@ class ViewController: SuperViewController, UNUserNotificationCenterDelegate {
             if appData.fromLoginVCMessage != "" {
                 print("appData.fromLoginVCMessage", appData.fromLoginVCMessage)
                 DispatchQueue.main.async {
-                    self.message.showMessage(text: appData.fromLoginVCMessage, type: .succsess, windowHeight: 65, bottomAppearence: true)
+                    self.message.showMessage(text: appData.fromLoginVCMessage, type: .succsess, windowHeight: 45, bottomAppearence: true)
                     appData.fromLoginVCMessage = ""
                 }
             }
@@ -2045,6 +2074,9 @@ extension ViewController: TransitionVCProtocol {
         }
 
         if value != "" && category != "" && date != "" {
+            DispatchQueue.main.async {
+                self.filterText = "Adding"
+            }
             if appData.username != "" {
                 let toDataString = "&Nickname=\(appData.username)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
                 let save = SaveToDB()

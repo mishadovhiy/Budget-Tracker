@@ -179,6 +179,7 @@ class UnsendedDataVC: SuperViewController, UNUserNotificationCenterDelegate {
     
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
         if messageText != "" {
             DispatchQueue.main.async {
                 self.message.showMessage(text: self.messageText, type: .error, windowHeight: 65, bottomAppearence: true)
@@ -499,15 +500,19 @@ class UnsendedDataVC: SuperViewController, UNUserNotificationCenterDelegate {
                 switch section {
                 case 2:
                     for i in 0..<holder.count {
-                        selectedCount += 1
-                        holder[i].selected = true
+                        if !holder[i].selected {
+                            selectedCount += 1
+                            holder[i].selected = true
+                        }
                     }
                     self.tableDataTransactions = holder
                 case 3:
                     var catHolder = categoruesTableData
                     for i in 0..<catHolder.count {
-                        selectedCount += 1
-                        catHolder[i].selected = true
+                        if !catHolder[i].selected {
+                            selectedCount += 1
+                            catHolder[i].selected = true
+                        }
                     }
                     
                     self.categoruesTableData = catHolder
@@ -515,8 +520,10 @@ class UnsendedDataVC: SuperViewController, UNUserNotificationCenterDelegate {
                 case 4:
                     var debtsHolder = debtsTableData
                     for i in 0..<debtsHolder.count {
-                        selectedCount += 1
-                        debtsHolder[i].selected = true
+                        if !debtsHolder[i].selected {
+                            selectedCount += 1
+                            debtsHolder[i].selected = true
+                        }
                     }
                     self.debtsTableData = debtsHolder
                     self.tableDataTransactions = holder
@@ -585,9 +592,9 @@ extension UnsendedDataVC: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-  /*  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath == IndexPath(row: 0, section: 0) ? self.view.frame.height - 200 : UITableView.automaticDimension
-    }*/
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return indexPath == IndexPath(row: 0, section: 0) ? 0 : UITableView.automaticDimension //self.view.frame.height - 200
+    }
     
     /*func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
        /* if indexPath == IndexPath(row: 0, section: 0) {

@@ -12,7 +12,7 @@ import CoreData
 
 ///TODO:
 //no data cell
-
+var _categoriesHolder: [CategoriesStruct] = []
 
 protocol CategoriesVCProtocol {
     func categorySelected(category: String, purpose: Int, fromDebts: Bool, amount: Int)
@@ -46,6 +46,48 @@ class CategoriesVC: SuperViewController, UNUserNotificationCenterDelegate {
         super.viewDidLoad()
         center.delegate = self
         updateUI()
+        if _categoriesHolder.count == 0 {
+            if appData.username != "" {
+                let load = LoadFromDB()
+                load.Categories{ (loadedData, error) in
+                    
+                    if error == "" {
+                        print("loaded \(loadedData.count) Categories from DB")
+                        var dataStruct: [CategoriesStruct] = []
+                        for i in 0..<loadedData.count {
+                            
+                            let name = loadedData[i][1]
+                            let purpose = loadedData[i][2]
+                            let isDebt = loadedData[i][3] == "0" ? false : true
+                            dataStruct.append(CategoriesStruct(name: name, purpose: purpose, count: 0))
+                        }
+                        _categoriesHolder = dataStruct
+                        appData.saveCategories(dataStruct)
+                        self.getDataFromLocal()
+                    } else {
+                        self.getDataFromLocal()
+                    }
+                    DispatchQueue.main.async {
+                        self.tableView.delegate = self
+                        self.tableView.dataSource = self
+                    }
+                }
+            } else {
+                getDataFromLocal()
+                DispatchQueue.main.async {
+                    self.tableView.delegate = self
+                    self.tableView.dataSource = self
+                }
+            }
+        } else {
+            
+            self.getDataFromLocal()
+            DispatchQueue.main.async {
+                self.tableView.delegate = self
+                self.tableView.dataSource = self
+            }
+        }
+
         
     }
     
@@ -114,7 +156,7 @@ class CategoriesVC: SuperViewController, UNUserNotificationCenterDelegate {
     override func viewDidAppear(_ animated: Bool) {
         print("didApp")
         //getDataFromLocal()
-
+        super.viewDidAppear(true)
         DispatchQueue.main.async {
             self.tableContentOf = self.tableView.contentInset
             self.tableView.reloadData()
@@ -143,12 +185,10 @@ class CategoriesVC: SuperViewController, UNUserNotificationCenterDelegate {
     var wasEdited = false
     func updateUI() {
     
-        getDataFromLocal()
+        
         newCategoryTextField.delegate = self
         catData.purposPicker.delegate = self
         catData.purposPicker.dataSource = self
-        tableView.delegate = self
-        tableView.dataSource = self
         if appData.username != "" {
             addRefreshControll()
         }
@@ -188,6 +228,7 @@ class CategoriesVC: SuperViewController, UNUserNotificationCenterDelegate {
     
 
     func getDataFromLocal() {
+
         expenses = []
         incomes = []
         let categories = Array(appData.getCategories())
@@ -203,7 +244,10 @@ class CategoriesVC: SuperViewController, UNUserNotificationCenterDelegate {
         incomes = incomes.sorted { $0.1 > $1.1 }
         
         DispatchQueue.main.async {
-            
+            self.tableView.reloadData()
+            if self.refreshControl.isRefreshing {
+                self.refreshControl.endRefreshing()
+            }
             if self.newCategoryTextField.isFirstResponder {
                 self.newCategoryTextField.endEditing(true)
             } else {
@@ -223,12 +267,15 @@ class CategoriesVC: SuperViewController, UNUserNotificationCenterDelegate {
     }
     
     func addRefreshControll() {
-        refreshControl.addTarget(self, action: #selector(refresh(sender:)), for: UIControl.Event.valueChanged)
-        tableView.addSubview(refreshControl)
+        DispatchQueue.main.async {
+            self.refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
+            self.tableView.addSubview(self.refreshControl)
+        }
     }
     @IBAction func addButtonPressedNavBar(_ sender: UIButton) {
         addPressed()
     }
+
     
     @objc func refresh(sender:AnyObject) {
         if appData.username != "" {
@@ -241,15 +288,12 @@ class CategoriesVC: SuperViewController, UNUserNotificationCenterDelegate {
                         
                         let name = loadedData[i][1]
                         let purpose = loadedData[i][2]
-                        let isDebt = loadedData[i][3] == "0" ? false : true
+                       // let isDebt = loadedData[i][3] == "0" ? false : true
                         dataStruct.append(CategoriesStruct(name: name, purpose: purpose, count: 0))
                     }
                     appData.saveCategories(dataStruct)
                     self.getDataFromLocal()
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                        self.refreshControl.endRefreshing()
-                    }
+                    
                 } else {
                     DispatchQueue.main.async {
                         self.message.showMessage(text: error, type: .internetError)
@@ -257,6 +301,8 @@ class CategoriesVC: SuperViewController, UNUserNotificationCenterDelegate {
                     }
                 }
             }
+        } else {
+            getDataFromLocal()
         }
     }
     

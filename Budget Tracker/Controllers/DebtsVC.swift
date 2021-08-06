@@ -8,6 +8,7 @@
 
 import UIKit
 
+var _debtsHolder: [DebtsStruct] = []
 ///TODO:
 // add due date and amount view, add labels in cells
 
@@ -31,6 +32,9 @@ class DebtsVC: SuperViewController, UNUserNotificationCenterDelegate {
         set {
             _tableData = newValue
             DispatchQueue.main.async {
+                if self.refreshControl.isRefreshing {
+                    self.refreshControl.endRefreshing()
+                }
                 self.tableView.reloadData()
             }
         }
@@ -45,11 +49,23 @@ class DebtsVC: SuperViewController, UNUserNotificationCenterDelegate {
     
     let newDebtField = UITextField(frame: .zero)
     var showAnimatonOnSwitch = true
+    
+    var refreshControl = UIRefreshControl()
+    func addRefreshControll() {
+        DispatchQueue.main.async {
+            self.refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
+            self.tableView.addSubview(self.refreshControl)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         center.delegate = self
         newDebtField.delegate = self
         DispatchQueue.main.async {
+            if appData.username != "" {
+                self.addRefreshControll()
+            }
             self.newDebtButton.layer.cornerRadius = 6
             self.newDebtField.returnKeyType = .done
             self.newDebtField.font = .systemFont(ofSize: 17, weight: .semibold)
@@ -90,8 +106,54 @@ class DebtsVC: SuperViewController, UNUserNotificationCenterDelegate {
         tableView.delegate = self
         tableView.dataSource = self
 
-        getDataFromLocal()
+        if appData.username != "" {
+            if _debtsHolder.count == 0 {
+                let load = LoadFromDB()
+                load.Debts { (loadedDebts, debtsError) in
+                    if debtsError == "" {
+                        print("loaded \(loadedDebts) Debts from DB")
+                        var debtsResult: [DebtsStruct] = []
+                        for i in 0..<loadedDebts.count {
+                            let name = loadedDebts[i][1]
+                            let amountToPay = loadedDebts[i][2]
+                            let dueDate = loadedDebts[i][3]
+                            debtsResult.append(DebtsStruct(name: name, amountToPay: amountToPay, dueDate: dueDate))
+                        }
+                        _debtsHolder = debtsResult
+                        appData.saveDebts(debtsResult)
+                        self.getDataFromLocal()
+                    }
+                }
+            } else {
+                getDataFromLocal()
+            }
+        } else {
+            getDataFromLocal()
+        }
+        
+      //  getDataFromLocal()
 
+    }
+    
+    @objc func refresh(sender:AnyObject) {
+        let load = LoadFromDB()
+        load.Debts { (loadedDebts, debtsError) in
+            if debtsError == "" {
+                print("loaded \(loadedDebts) Debts from DB")
+                var debtsResult: [DebtsStruct] = []
+                for i in 0..<loadedDebts.count {
+                    let name = loadedDebts[i][1]
+                    let amountToPay = loadedDebts[i][2]
+                    let dueDate = loadedDebts[i][3]
+                    debtsResult.append(DebtsStruct(name: name, amountToPay: amountToPay, dueDate: dueDate))
+                }
+                _debtsHolder = debtsResult
+                appData.saveDebts(debtsResult)
+                self.getDataFromLocal()
+                
+            }
+            
+        }
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
@@ -184,6 +246,7 @@ class DebtsVC: SuperViewController, UNUserNotificationCenterDelegate {
         plusValues = plusValues.sorted { $0.amount > $1.amount }
         tableData = result.sorted { $0.amount < $1.amount }
         DispatchQueue.main.async {
+            
             if self.newDebtField.isFirstResponder {
                 self.newDebtField.endEditing(true)
             }
@@ -263,7 +326,7 @@ class DebtsVC: SuperViewController, UNUserNotificationCenterDelegate {
     }
     var viewLoadedd = false
     override func viewDidAppear(_ animated: Bool) {
-
+        super.viewDidAppear(true)
         DispatchQueue.main.async {
             let edg = UIEdgeInsets(top: self.tableView.contentInset.top, left: self.tableView.contentInset.left, bottom: self.tableView.contentInset.bottom + (self.newDebtButton.superview?.layer.frame.height ?? 0), right: self.tableView.contentInset.right)
             self.tableView.contentInset = edg
@@ -348,9 +411,9 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
         let diff = dateExpiredCount(startDate: data?.dueDate ?? "")
         cell.dueDate.textColor = expired ? K.Colors.negative : K.Colors.balanceV
         
-        let dueDateText = data?.dueDate == "" ? "" : "Due date \(dateComp.day ?? 0) of \(returnMonth(dateComp.month ?? 0)), \(dateComp.year ?? 0)"
+        let dueDateText = data?.dueDate == "" ? "" : "Due date: \(dateComp.day ?? 0) of \(returnMonth(dateComp.month ?? 0)), \(dateComp.year ?? 0)"
         let expText = expiredText(diff)
-        cell.dueDate.text = data?.dueDate == "" ? "" : (!expired ? dueDateText : "Expired:" + "\(expText == "" ? " recently" : expText)" )
+        cell.dueDate.text = data?.dueDate == "" ? "" : (!expired ? dueDateText : "Expired:" + "\(expText == "" ? " recently" : (expText + " ago"))" )
         cell.dueDate.isHidden = data?.dueDate ?? "" == "" ? true : false
         cell.categoryLabel.textColor = darkAppearence ? K.Colors.category : .black
         cell.amountLabel.textColor = (data?.amount ?? 0) >= 0 ? (darkAppearence ? K.Colors.category : K.Colors.balanceV) : K.Colors.negative

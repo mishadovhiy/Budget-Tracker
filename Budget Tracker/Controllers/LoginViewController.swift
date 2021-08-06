@@ -50,8 +50,9 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        categoriesDebtsCount = (0,0)
         center.delegate = self
-        helperNavView.backgroundColor = K.Colors.background
+      //  srlf.helperNavView.backgroundColor = K.Colors.background
         print("username: \(appData.username)")
         print("localTransactions:", appData.getTransactions.count)
         updateUI()
@@ -78,11 +79,19 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
        notificationReceiver(notification: notification)
     }
     
-
+    @IBOutlet weak var moreButton: UIButton!
+    var aai:UIActivityIndicatorView?
     @IBAction func moreButtonPressed(_ sender: UIButton) {
         //foundUsername = nil
         DispatchQueue.main.async {
+          //  self.loadingIndicator.show { _ in
+            self.aai = UIActivityIndicatorView(frame: CGRect(x: self.moreButton.frame.width - self.moreButton.frame.height, y: 0, width: self.moreButton.frame.height, height: self.moreButton.frame.height))
+            self.moreButton.addSubview(self.aai ?? UIView(frame: .zero))
+            self.aai?.startAnimating()
+            
             self.performSegue(withIdentifier: "toAccountSettings", sender: self)
+          //  }
+            
             /*let alert = UIAlertController(title: "", message: "", preferredStyle: .actionSheet)
             
             
@@ -220,8 +229,10 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "toAccountSettings":
+            
             let vc = segue.destination as! accountSettingsVC
             vc.tableTopMargin = self.view.frame.minY
+            vc.delegate = self
         default:
             break
         }
@@ -264,10 +275,11 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
     
     override func viewDidDisappear(_ animated: Bool) {
         DispatchQueue.main.async {
-            self.helperNavView.removeFromSuperview()
+            self.helperNavView?.removeFromSuperview()
         }
     }
 
+    
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: true)
@@ -343,6 +355,7 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
             for i in 0..<loadedData.count {
                 if loadedData[i][DBusernameIndex] == nickname {
                     psswordFromDB = loadedData[i][DBpasswordIndex]
+                    
                     if password != psswordFromDB {
                         print("wrong password", psswordFromDB)
                         self.actionButtonsEnabled = true
@@ -366,32 +379,46 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
                         appData.username = nickname
                         appData.password = password
                         if prevUserName != nickname {
+
                             UserDefaults.standard.setValue(prevUserName, forKey: "prevUserName")
                             let wasTrans = appData.getLocalTransactions
-                            let trans = wasTrans + appData.getTransactions
-                            appData.saveTransations(trans, key: K.Keys.localTrancations)
+                            let trans: [TransactionsStruct] = prevUserName == "" ? [] : wasTrans + appData.getTransactions
+
                             let wascats = appData.getCategories(key: K.Keys.localCategories)
                             let cats = wascats + appData.getCategories()
-                            var catResult: [CategoriesStruct] = []
+                            var catResult: [CategoriesStruct] = prevUserName == "" ? [] : cats
                             for i in 0..<cats.count {
                                 catResult.append(CategoriesStruct(name: cats[i].name, purpose: cats[i].purpose, count: cats[i].count))
 
                             }
-                            let wasDebts = appData.getDebts() + appData.getDebts(key: K.Keys.localDebts)
-                            appData.saveDebts(wasDebts, key: K.Keys.localDebts)
-                            appData.saveCategories(catResult, key: K.Keys.localCategories)
-                            appData.fromLoginVCMessage = trans.count > 0 ? "Wellcome, \(appData.username), \nYour Data has been saved localy" : "Wellcome, \(appData.username)"
+                            let wasDebts = prevUserName == "" ? [] : appData.getDebts() + appData.getDebts(key: K.Keys.localDebts)
+                            
+                            if prevUserName == "" {
+                                appData.saveDebts(wasDebts, key: K.Keys.localDebts)
+                                appData.saveCategories(catResult, key: K.Keys.localCategories)
+                                appData.saveTransations(trans, key: K.Keys.localTrancations)
+                            }
+                            
+
+                            appData.fromLoginVCMessage = (trans.count + wasDebts.count + catResult.count) > 0 ? "Wellcome, \(appData.username), \nYour Data has been saved localy" : "Wellcome, \(appData.username)"
                         }
                         needFullReload = true
+                        lastSelectedDate = nil
+                        _debtsHolder.removeAll()
+                        _categoriesHolder.removeAll()
+                        UserDefaults.standard.setValue(nil, forKey: "lastSelectedCategory")
+                        if !appData.purchasedOnThisDevice {
+                            appData.proVersion = loadedData[i][4] == "1" ? true : appData.proVersion
+                        }
                         if fromPro {
                             DispatchQueue.main.async {
-                                self.loadingIndicator.hideIndicator(fast: false, title: "Login success") { (_) in
+                                self.loadingIndicator.fastHide { _ in
                                     self.dismiss(animated: true, completion: nil)
                                 }
                             }
                         } else {
                             DispatchQueue.main.async {
-                                self.loadingIndicator.hideIndicator(fast: false, title: "Login success") { (_) in
+                                self.loadingIndicator.fastHide { _ in
                                     self.performSegue(withIdentifier: "homeVC", sender: self)
                                 }
                             }
@@ -475,34 +502,45 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
                                         self.loadingIndicator.internetError()
                                     }
                                 } else {
-                                    
-                                    UserDefaults.standard.setValue(appData.username, forKey: "prevUserName")
+                                    let prevUsere = appData.username
+                                    UserDefaults.standard.setValue(prevUsere, forKey: "prevUserName")
                                     KeychainService.savePassword(service: "BudgetTrackerApp", account: name, data: password)
                                     appData.username = name
                                     appData.password = password
-                                    let wasTransactions = appData.getTransactions + appData.getLocalTransactions
-                                    appData.saveTransations(wasTransactions, key: K.Keys.localTrancations)
+                                    let wasTransactions: [TransactionsStruct] = prevUsere == "" ? [] : appData.getTransactions + appData.getLocalTransactions
+                                    
                                     let wasCats = appData.getCategories() + appData.getCategories(key: K.Keys.localCategories)
-                                    var catResult: [CategoriesStruct] = []
+                                    var catResult: [CategoriesStruct] = prevUsere == "" ? [] : wasCats
                                     for i in 0..<wasCats.count {
                                         catResult.append(CategoriesStruct(name: wasCats[i].name, purpose: wasCats[i].purpose, count: wasCats[i].count))
 
                                     }
-                                    appData.saveCategories(catResult, key: K.Keys.localCategories)
-                                    let wasDebts = appData.getDebts() + appData.getDebts(key: K.Keys.localDebts)
-                                    appData.saveDebts(wasDebts, key: K.Keys.localDebts)
-                                    appData.fromLoginVCMessage = wasTransactions.count > 0 ? "Wellcome, \(appData.username), \nYour Data has been saved localy" : "Wellcome, \(appData.username)"
+
+                                    
+                                    let wasDebts = prevUsere == "" ? [] : appData.getDebts() + appData.getDebts(key: K.Keys.localDebts)
+
+                                    if prevUsere == "" {
+                                        appData.saveTransations(wasTransactions, key: K.Keys.localTrancations)
+                                        appData.saveDebts(wasDebts, key: K.Keys.localDebts)
+                                        appData.saveCategories(catResult, key: K.Keys.localCategories)
+                                    }
+                                    
+                                    appData.fromLoginVCMessage = wasTransactions.count + catResult.count + wasDebts.count > 0 ? "Wellcome, \(appData.username), \nYour Data has been saved localy" : "Wellcome, \(appData.username)"
                                     needFullReload = true
+                                    lastSelectedDate = nil
+                                    _debtsHolder.removeAll()
+                                    _categoriesHolder.removeAll()
+                                    UserDefaults.standard.setValue(nil, forKey: "lastSelectedCategory")
                                     if self.fromPro {
                                         DispatchQueue.main.async {
-                                            self.loadingIndicator.hideIndicator(fast: false, title: "Account created successfully") { (_) in
+                                            self.loadingIndicator.fastHide { _ in
                                                 self.dismiss(animated: true, completion: nil)
                                             }
                                         }
                                     } else {
                                         DispatchQueue.main.async {
-
-                                            self.loadingIndicator.hideIndicator(fast: false, title: "Account created successfully") { (_) in
+                                            
+                                            self.loadingIndicator.fastHide { _ in
                                                 self.performSegue(withIdentifier: "homeVC", sender: self)
                                             }
                                             
@@ -577,13 +615,13 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
         if fromSettings {
             DispatchQueue.main.async {
                 let window = UIApplication.shared.keyWindow ?? UIWindow()
-                self.helperNavView.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: safeArTopHeight)
-                window.addSubview(self.helperNavView)
+                self.helperNavView?.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: safeArTopHeight)
+                window.addSubview(self.helperNavView ?? UIView())
                 self.message.hideMessage(duration: 0)
             }
         }
     }
-    let helperNavView = UIView()
+    var helperNavView: UIView?
     func userExists(name: String, loadedData: [[String]]) -> Bool {
         var userExists = false
         //load users
@@ -843,7 +881,7 @@ extension LoginViewController: UITextFieldDelegate {
                             self.passwordLogLabel.isSecureTextEntry = false
                             self.passwordLogLabel.text = keychainPassword
                             self.nicknameLogLabel.endEditing(true)
-                            self.message.showMessage(text: "Password loaded from Keychain", type: .succsess, windowHeight: 65)
+                         //   self.message.showMessage(text: "Password loaded from Keychain", type: .succsess, windowHeight: 65)
                         }
                     } else {
                         DispatchQueue.main.async {
@@ -919,3 +957,46 @@ extension UITextField {
 
 
 
+extension LoginViewController: accountSettingsVCDelegate {
+    func logout() {
+        lastSelectedDate = nil
+        _debtsHolder.removeAll()
+        _categoriesHolder.removeAll()
+        UserDefaults.standard.setValue(nil, forKey: "lastSelectedCategory")
+        
+        DispatchQueue.main.async {
+            self.title = "Sing in"
+            self.passwordLabel.text = ""
+            self.passwordLogLabel.text = ""
+            self.nicknameLogLabel.text = ""
+        }
+    }
+    
+    func dataLoaded() {
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 0.3) {
+             //   self.view.alpha = 0.2
+                
+                self.navigationController?.navigationBar.alpha = 0.2
+            } completion: {_ in
+                self.aai?.removeFromSuperview()
+            }
+
+            
+            /*self.loadingIndicator.fastHide { _ in
+                accountSettingsVC.shared?.dataLoadedAnimation()
+            }*/
+            
+        }
+    }
+    
+    func dismissed() {
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 0.3) {
+                self.navigationController?.navigationBar.alpha = 1
+            } completion: {_ in
+                
+            }
+        }
+    }
+}

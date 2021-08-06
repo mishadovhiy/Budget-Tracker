@@ -22,6 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if value != today {
             UserDefaults.standard.setValue(today, forKey: "lastLaunching")
             lastSelectedDate = nil
+            _categoriesHolder.removeAll()
+            _debtsHolder.removeAll()
         }
 
         print(today, "didFinishLaunchingWithOptions")

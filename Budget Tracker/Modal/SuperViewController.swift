@@ -21,17 +21,31 @@ class SuperViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        DispatchQueue.main.async {
+    /*
+        //DispatchQueue.main.async {
            // self.loadingIndicator.alpha = 1
             let window = UIApplication.shared.keyWindow ?? UIWindow()
            // self.loadingIndicator.alpha = 0
+            window.addSubview(self.loadingIndicator)
+        //}
+ */
+    }
+    
+    var loadedSubviews: Bool = false
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if !loadedSubviews {
+            //self.ai = LoadingIndicator.instanceFromNib() as! LoadingIndicator
+            loadedSubviews = true
+            let window = UIApplication.shared.keyWindow ?? UIWindow()
+            self.loadingIndicator.frame = window.frame
             window.addSubview(self.loadingIndicator)
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        definesPresentationContext = true
      //   print(center.delegate, "center.descriptioncenter.description")
       /*  let window = UIApplication.shared.keyWindow ?? UIWindow()
         let indd = IndicatorView.instanceFromNib() as! IndicatorView
@@ -144,10 +158,11 @@ class SuperViewController: UIViewController {
     }
     
     func expiredText(_ diff: DateComponents) -> String {
+        let year = diff.year ?? 0 > 0 ? " \(diff.year ?? 0) year" + (diff.year ?? 0 > 1 ? "s": "") : ""
         let month = diff.month ?? 0 > 0 ? " \(diff.month ?? 0) month" + (diff.month ?? 0 > 1 ? "s": "") : ""
         let day = diff.day ?? 0 > 0 ? " \(diff.day ?? 0) day" + (diff.day ?? 0 > 1 ? "s": "") : ""
         let hour = diff.hour ?? 0 > 0 ? " \(diff.hour ?? 0) hour" + (diff.hour ?? 0 > 1 ? "s": "") : ""
-        return month + day + hour
+        return year + month + day + hour
     }
     
     func dateExpiredCount(startDate: String) -> DateComponents {

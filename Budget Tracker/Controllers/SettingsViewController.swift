@@ -30,7 +30,7 @@ class SettingsViewController: SuperViewController, UNUserNotificationCenterDeleg
   /*  lazy var ai : IndicatorView = {
         return (UIApplication.shared.keyWindow ?? UIWindow()).viewWithTag(23450) as! IndicatorView
     }()*/
-    
+    var resetPassword = false
     override func viewDidLoad() {
         super.viewDidLoad()
         center.delegate = self
@@ -39,6 +39,15 @@ class SettingsViewController: SuperViewController, UNUserNotificationCenterDeleg
             needGet = false
             getdata()
         }
+        
+        if resetPassword {
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "toSingIn", sender: self)
+            }
+            return
+        }
+        
+        
     }
     var needGet = true
     
@@ -135,6 +144,7 @@ class SettingsViewController: SuperViewController, UNUserNotificationCenterDeleg
                 self.testShowIndicator()
             }
         }*/
+        super.viewDidAppear(true)
         toSegue = false
         if UserDefaults.standard.value(forKey: "firstLaunchSettings") as? Bool ?? false == false {
             if appData.username == "" {
@@ -187,7 +197,8 @@ class SettingsViewController: SuperViewController, UNUserNotificationCenterDeleg
         let data = [
             SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: (unsavedCat + unsavedTrans + unsavedDebts) > 0 ? "toSavedData" : "toSingIn"),
             SettingsSctruct(title: "Categories", description: "\(categoriesDebtsCount.0)", segue: "settingsToCategories"),
-            SettingsSctruct(title: "Debts", description: "\(categoriesDebtsCount.1)", segue: (appData.proVersion || appData.proTrial) ? "toDebts" : "toProVC")
+            SettingsSctruct(title: "Debts", description: "\(categoriesDebtsCount.1)", segue: (appData.proVersion || appData.proTrial) ? "toDebts" : "toProVC"),
+            SettingsSctruct(title: "Notification Center", description: "", segue: "toNotificationsVC")
             //toExpectingPayment
         ]
         tableData = data
@@ -325,6 +336,10 @@ class SettingsViewController: SuperViewController, UNUserNotificationCenterDeleg
             let vc = segue.destination as! LoginViewController
             vc.selectedScreen = .singIn
             vc.fromSettings = true
+            if resetPassword {
+                vc.messagesFromOtherScreen = "Your password has been changed"
+            }
+            
         case "toSavedData":
             let vc = segue.destination as! UnsendedDataVC
             vc.delegate = self

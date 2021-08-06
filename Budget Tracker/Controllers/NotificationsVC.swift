@@ -1,0 +1,84 @@
+//
+//  NotificationsVC.swift
+//  Budget Tracker
+//
+//  Created by Mikhailo Dovhyi on 23.06.2021.
+//  Copyright © 2021 Misha Dovhiy. All rights reserved.
+//
+
+import UIKit
+
+class NotificationsVC: SuperViewController, UNUserNotificationCenterDelegate {
+
+    @IBOutlet weak var tableView: UITableView!
+    
+    var tableData: [String] = []
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        tableView.delegate = self
+        tableView.dataSource = self
+        center.delegate = self
+        self.title = "Notification center"
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+       /* center.getDeliveredNotifications { (requests) in
+            var res:[String] = []
+            for i in 0..<requests.count {
+                
+                let text = requests[i].request.identifier + "\n" + requests[i].request.content.title + "\n" + requests[i].request.content.subtitle + "\n" + requests[i].request.content.body
+                res.append(text + "\n" + requests[i].request.content.categoryIdentifier + "\n" + String(describing: requests[i].request.trigger))
+            }
+            self.tableData = res
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }*/
+        center.getPendingNotificationRequests { (requests) in
+            
+            var res:[String] = []
+            for i in 0..<requests.count {
+                
+                let text = requests[i].identifier + "\n" + requests[i].content.title + "\n" + requests[i].content.subtitle + "\n" + requests[i].content.body
+                res.append(text + "\n" + requests[i].content.categoryIdentifier + "\n" + String(describing: requests[i].trigger))
+            }
+            self.tableData = res
+            DispatchQueue.main.async {
+              //  self.title = "Notification center"
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+
+}
+
+extension NotificationsVC: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return tableData.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "NotificationsVCCell", for: indexPath) as! NotificationsVCCell
+        
+        cell.mainLabel.text = tableData[indexPath.row]
+        
+        return cell
+    }
+    
+    
+}
+
+class NotificationsVCCell: UITableViewCell {
+    @IBOutlet weak var mainLabel: UILabel!
+    
+}
