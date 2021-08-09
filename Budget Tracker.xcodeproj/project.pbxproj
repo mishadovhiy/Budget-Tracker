@@ -12,7 +12,6 @@
 		8B35DA6625C6F124008A8719 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B35DA6525C6F124008A8719 /* Keychain.swift */; };
 		8B4E086126544AD2006E42DA /* LogIn.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B4E086026544AD2006E42DA /* LogIn.storyboard */; };
 		8B5BE4792648038F005B182C /* expectingPaymentsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5BE4782648038F005B182C /* expectingPaymentsVC.swift */; };
-		8B5D72DE25F147E5009D7C38 /* CreateNotificationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5D72DD25F147E5009D7C38 /* CreateNotificationVC.swift */; };
 		8B60D5AB2629E64400BA690B /* LoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B60D5AA2629E64400BA690B /* LoadingIndicator.swift */; };
 		8B63312F260FD65200D9E117 /* buyProVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B63312E260FD65200D9E117 /* buyProVC.swift */; };
 		8B633132260FDB3900D9E117 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B633131260FDB3900D9E117 /* StoreKit.framework */; };
@@ -67,7 +66,6 @@
 		8B35DA6525C6F124008A8719 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		8B4E086026544AD2006E42DA /* LogIn.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LogIn.storyboard; sourceTree = "<group>"; };
 		8B5BE4782648038F005B182C /* expectingPaymentsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = expectingPaymentsVC.swift; sourceTree = "<group>"; };
-		8B5D72DD25F147E5009D7C38 /* CreateNotificationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNotificationVC.swift; sourceTree = "<group>"; };
 		8B60D5AA2629E64400BA690B /* LoadingIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingIndicator.swift; sourceTree = "<group>"; };
 		8B63312E260FD65200D9E117 /* buyProVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = buyProVC.swift; sourceTree = "<group>"; };
 		8B633131260FDB3900D9E117 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
@@ -206,7 +204,6 @@
 				8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */,
 				8DB1A6F924E19069002DE486 /* SettingsViewController.swift */,
 				8B8D556025BB218400D7C6A7 /* UnsendedDataVC.swift */,
-				8B5D72DD25F147E5009D7C38 /* CreateNotificationVC.swift */,
 				8BF011C125FD93670082F871 /* DebtsVC.swift */,
 				8B63312E260FD65200D9E117 /* buyProVC.swift */,
 				8B5BE4782648038F005B182C /* expectingPaymentsVC.swift */,
@@ -373,7 +370,6 @@
 				8DD89D8723F1471400273904 /* AppData.swift in Sources */,
 				8B8D556125BB218400D7C6A7 /* UnsendedDataVC.swift in Sources */,
 				8D52066B24216A6200772CD5 /* HistoryVC.swift in Sources */,
-				8B5D72DE25F147E5009D7C38 /* CreateNotificationVC.swift in Sources */,
 				8B5BE4792648038F005B182C /* expectingPaymentsVC.swift in Sources */,
 				8DD89D8C23F1485700273904 /* Constants.swift in Sources */,
 				8D36724224D315BC00CE90A9 /* dbModel.swift in Sources */,

@@ -126,10 +126,27 @@ class SuperViewController: UIViewController {
         return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date ?? Date())
     }
     
-    func stringToDate(s: String, dateFormat:String="dd.MM.yyyy") -> Date {
+    func stringToDate(s: String, fullDate: Bool) -> Date {//==false
+        let defaultFormat = "dd.MM.yyyy"
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = dateFormat
-        return dateFormatter.date(from: s) ?? Date()
+        dateFormatter.dateFormat = fullDate ? K.fullDateFormat : defaultFormat
+        if let rsult = dateFormatter.date(from: s) {
+            return rsult
+        } else {
+            dateFormatter.dateFormat = defaultFormat
+            if let res2 = dateFormatter.date(from: s) {
+                return res2
+            } else {
+                print("ERROR stringToDate: string: \(s); fullDate:\(fullDate)")
+                dateFormatter.locale = Locale(identifier: "ua_UA_POSIX")
+                dateFormatter.setLocalizedDateFormatFromTemplate(defaultFormat)
+                dateFormatter.calendar = .init(identifier: .gregorian)
+                
+                return dateFormatter.date(from: s) ?? Date()
+            }
+            
+        }
+
     }
     
     func dateToString(dateFormat:String="dd.MM.yyyy", date: Date = Date()) -> String {
@@ -152,7 +169,7 @@ class SuperViewController: UIViewController {
     }
     
     func dateExpired(_ string: String) -> Bool {
-        let dateDate = stringToDate(s: string, dateFormat: K.fullDateFormat)
+        let dateDate = stringToDate(s: string, fullDate: true)//remove!
         let difference = differenceFromNow(startDate: dateDate)
         return (difference.year ?? 1 < 0 || difference.month ?? 1 < 0 || difference.day ?? 1 < 0 || difference.hour ?? 1 < 0 || difference.minute ?? 1 < 0 || difference.second ?? 1 < 0) ? false : true
     }
@@ -166,8 +183,8 @@ class SuperViewController: UIViewController {
     }
     
     func dateExpiredCount(startDate: String) -> DateComponents {
-        let dateDate = stringToDate(s: startDate, dateFormat: K.fullDateFormat)
-        return differenceFromNow(startDate: dateDate)
+        let dateDate = stringToDate(s: startDate, fullDate: true)
+        return differenceFromNow(startDate: dateDate)//remove!
     }
     
     struct headerData {
@@ -182,7 +199,7 @@ class SuperViewController: UIViewController {
     
     
     func showNotification(notification: UNNotification, completion: @escaping (Any?) -> ()) {
-        
+        print("showNotification")
     }
     
     public func notificationReceiver(notification: UNNotification) {

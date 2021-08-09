@@ -16,6 +16,17 @@ var _debtsHolder: [DebtsStruct] = []
 
 //first cell - description (если там тоже самое что и в noDataView то не отобр description если dataCount == 0)
 
+
+/// todo:
+//get delivered notifications
+//get pending notifications
+//show unseen indicator
+//show if not on this device text
+//|?- show if delivered - not found on this account (when login, create account, logout - remove all pending/delivered notifications) --
+
+// - account vc -
+// login transfare data from (acount)
+
 class DebtsVC: SuperViewController, UNUserNotificationCenterDelegate {
     @IBOutlet weak var tableView: UITableView!
 
@@ -328,7 +339,7 @@ class DebtsVC: SuperViewController, UNUserNotificationCenterDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         DispatchQueue.main.async {
-            let edg = UIEdgeInsets(top: self.tableView.contentInset.top, left: self.tableView.contentInset.left, bottom: self.tableView.contentInset.bottom + (self.newDebtButton.superview?.layer.frame.height ?? 0), right: self.tableView.contentInset.right)
+            let edg = UIEdgeInsets(top: self.tableView.contentInset.top, left: self.tableView.contentInset.left, bottom: self.view.safeAreaInsets.bottom + (self.newDebtButton.superview?.layer.frame.height ?? 0), right: self.tableView.contentInset.right)
             self.tableView.contentInset = edg
             self.tableContentOf = edg
             self.tableView.reloadData()
@@ -461,8 +472,8 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
             for i in 0..<allDebts.count {
                 if allDebts[i].amountToPay == amountToPay && allDebts[i].dueDate == dueDate && allDebts[i].name == title {
                     
-                    self.center.getPendingNotificationRequests { (requests) in
-                        DispatchQueue.main.async {
+                  /*  self.center.getPendingNotificationRequests { (requests) in
+                        /* DispatchQueue.main.async {
                             UIApplication.shared.applicationIconBadgeNumber = requests.count
                         }
                         
@@ -474,8 +485,8 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
                             if requests[i].identifier == id {
                                 self.center.removePendingNotificationRequests(withIdentifiers: [id])
                             }
-                        }
-                        allDebts.remove(at: i)
+                        }*/
+                   /*     allDebts.remove(at: i)
                         appData.saveDebts(allDebts)
                         
                         if appData.username != "" {
@@ -488,12 +499,12 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
                                 }
                                 self.getDataFromLocal()
                             }
-                        }
+                        }*/
                         
                         
                         
                     }
-                    break
+                    break*/
                 }
             }
             

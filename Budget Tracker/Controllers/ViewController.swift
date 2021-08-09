@@ -210,16 +210,23 @@ class ViewController: SuperViewController, UNUserNotificationCenterDelegate {
     var addTransFrame = CGRect.zero
     override func viewDidLoad() {
         super.viewDidLoad()
-        center.delegate = self
+      //  center.delegate = self
         updateUI()
         
-        //UIApplication.shared.applicationIconBadgeNumber = 0
+
        // mainTableView.isUserInteractionEnabled = false
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(bigCalcTaps(_:))))
     }
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
        notificationReceiver(notification: notification)
     }
+    
+    
+  /*  lazy var ai: IndicatorView = {
+        
+        return AppDelegate.shared?.loadingIndicator ?? IndicatorView(frame: self.view.frame)
+    }()*/
+    
     func updateUI() {
      //   addTransitionButton.translatesAutoresizingMaskIntoConstraints = true
   //      self.mainTableView.backgroundColor = K.Colors.background
@@ -228,7 +235,6 @@ class ViewController: SuperViewController, UNUserNotificationCenterDelegate {
         self.mainTableView.delegate = self
         self.mainTableView.dataSource = self
         DispatchQueue.main.async {
-            self.center.removeAllDeliveredNotifications()
             self.unsendedDataLabel.superview?.superview?.isHidden = true
             self.enableLocalDataPress = false
             self.dataFromValueLabel.superview?.superview?.isHidden = true
@@ -803,8 +809,11 @@ class ViewController: SuperViewController, UNUserNotificationCenterDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         print("DIDAPPPP")
-
-        
+        center.getDeliveredNotifications { notifications in
+            DispatchQueue.main.async {
+                UIApplication.shared.applicationIconBadgeNumber = notifications.count
+            }
+        }
     }
     
     

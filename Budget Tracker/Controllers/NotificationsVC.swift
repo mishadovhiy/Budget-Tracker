@@ -43,13 +43,26 @@ class NotificationsVC: SuperViewController, UNUserNotificationCenterDelegate {
                 self.tableView.reloadData()
             }
         }*/
-        center.getPendingNotificationRequests { (requests) in
+       /* center.getPendingNotificationRequests { (requests) in
             
             var res:[String] = []
             for i in 0..<requests.count {
                 
                 let text = requests[i].identifier + "\n" + requests[i].content.title + "\n" + requests[i].content.subtitle + "\n" + requests[i].content.body
                 res.append(text + "\n" + requests[i].content.categoryIdentifier + "\n" + String(describing: requests[i].trigger))
+            }
+            self.tableData = res
+            DispatchQueue.main.async {
+              //  self.title = "Notification center"
+                self.tableView.reloadData()
+            }
+        }*/
+        
+        center.getDeliveredNotifications { delivered in
+            var res:[String] = []
+            for i in 0..<delivered.count {
+                let text = delivered[i].request.identifier + "\n" + delivered[i].request.content.title + "\n" + delivered[i].request.content.subtitle + "\n" + delivered[i].request.content.body
+                res.append(text + "\n" + delivered[i].request.content.categoryIdentifier + "\n" + String(describing: delivered[i].request.trigger))
             }
             self.tableData = res
             DispatchQueue.main.async {

@@ -73,6 +73,15 @@ class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
         
         
         //  addLocalNotification(date: "")
+        if let debt = self.debt {
+      //      center.removePendingNotificationRequests(withIdentifiers: ["Debts\(debt.name)"])
+            center.removeDeliveredNotifications(withIdentifiers: ["Debts\(debt.name)"])
+            center.getDeliveredNotifications { notifications in
+                DispatchQueue.main.async {
+                    UIApplication.shared.applicationIconBadgeNumber = notifications.count
+                }
+            }
+        }
         
        
         if allowEditing {
@@ -96,11 +105,12 @@ class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
     }
     
     
-    func addLocalNotification(date: DateComponents, title: String, completion: @escaping (Bool) -> ()) {
+    func addLocalNotification(date: DateComponents, completion: @escaping (Bool) -> ()) {
         
         //if date > today
-        let id = "Debts\(title)"
-        center.removePendingNotificationRequests(withIdentifiers: [id])
+        let title = self.debt?.name ?? ""
+        let id = "Debts\(self.debt?.name ?? "")"
+        center.removePendingNotificationRequests(withIdentifiers: ["Debts\(self.debt?.name ?? "")"])
         center.getNotificationSettings { (settings) in
             if settings.authorizationStatus != .authorized {
             // Notifications not allowed
@@ -112,11 +122,10 @@ class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
         content.title = title//"Kirill"
         content.body = "Due date is expiring today"
         content.sound = UNNotificationSound.default
-       // let was = UIApplication.shared.applicationIconBadgeNumber
-       // content.badge = NSNumber(value: was + 1)
+        content.badge = NSNumber(value: UIApplication.shared.applicationIconBadgeNumber + 1)
         
         content.categoryIdentifier = title
-        content.threadIdentifier = "Debts"
+        content.threadIdentifier = id
         var dateComponents = DateComponents()
         dateComponents.calendar = Calendar.current
         
@@ -139,14 +148,10 @@ class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
                 print("notif add error")
             } else {
                 print("no errorrs")
-                var all = UserDefaults.standard.value(forKey: "notifications") as? [UNNotificationRequest] ?? []
-                all.append(request)
+               // var all = UserDefaults.standard.value(forKey: "notifications") as? [UNNotificationRequest] ?? []
+                //all.append(request)
                 completion(true)
-                self.center.getPendingNotificationRequests { (requests) in
-                    DispatchQueue.main.async {
-                        UIApplication.shared.applicationIconBadgeNumber = requests.count
-                    }
-                }
+
             }
         }
     }
@@ -165,21 +170,21 @@ class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
             if let name = self.debt?.name {
             
                 if debt?.dueDate != "" {
-                    let expired = dateExpired(debt?.dueDate ?? "")
+                 /*   let expired = dateExpired(debt?.dueDate ?? "")
                     if expired {
                         let id = "Debts\(name)"
-                        self.center.removePendingNotificationRequests(withIdentifiers: [id])
-                    }
+                     //   self.center.removePendingNotificationRequests(withIdentifiers: [id])
+                    }*/
                 }
                 
-                center.getPendingNotificationRequests { (requests) in
+          /*      center.getPendingNotificationRequests { (requests) in
                     DispatchQueue.main.async {
                         UIApplication.shared.applicationIconBadgeNumber = requests.count
                     }
                     for i in 0..<requests.count {
                         print(requests[i], "requestsrequestsrequests")
                     }
-                }
+                }*/
                 
             }
             
@@ -721,15 +726,24 @@ extension HistoryVC: CalendarVCProtocol {
         DispatchQueue.main.async {
             self.loadingIndicator.show { (_) in
 
+                //check if has am pm
+                //or save as isoDate without
                 let fullDate = "\(date) \(self.makeTwo(n: time?.hour ?? 0)):\(self.makeTwo(n: time?.minute ?? 0)):\(self.makeTwo(n: time?.second ?? 0))"
                 print(fullDate, "fullDatefullDatefullDatefullDate")
                 let dateComp = self.stringToDateComponent(s: fullDate, dateFormat: K.fullDateFormat)
                 print(dateComp, "dateCompdateCompdateComp")
                 
                 
-                self.addLocalNotification(date: dateComp, title: self.debt?.name ?? "") { (_) in
+                self.addLocalNotification(date: dateComp) { (added) in
+                    if added {
+                        self.changeDueDate(fullDate: fullDate)
+                    } else {
+                        //show error
+                        self.loadingIndicator.fastHide { _ in
+                            
+                        }
+                    }
                     
-                    self.changeDueDate(fullDate: fullDate)
                     /*self.dbLoadRemoveBeforeUpdate { (loadedData, _) in
                         let save = SaveToDB()
                         let saveToDs = "&Nickname=\(appData.username)" + "&name=\(self.debt?.name ?? "")" + "&amountToPay=\(self.debt?.amountToPay ?? "")" + "&dueDate=\(fullDate)"

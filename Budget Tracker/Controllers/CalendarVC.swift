@@ -72,7 +72,7 @@ class CalendarVC: SuperViewController, UNUserNotificationCenterDelegate {
             timePicker.alpha = 1
             timePicker.addTarget(self, action: #selector(dateSelected(_:)), for: .valueChanged)
             if datePickerDate != "" {
-                timePicker.date = stringToDate(s: pickerDate, dateFormat: K.fullDateFormat)
+                timePicker.date = stringToDate(s: pickerDate, fullDate: true)
             } else {
                 //default date from settings
                 //timePicker.date = stringToDate(s: pickerDate, dateFormat: K.fullDateFormat)
