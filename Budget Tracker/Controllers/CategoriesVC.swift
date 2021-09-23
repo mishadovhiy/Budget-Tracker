@@ -18,7 +18,7 @@ protocol CategoriesVCProtocol {
     func categorySelected(category: String, purpose: Int, fromDebts: Bool, amount: Int)
 }
 
-class CategoriesVC: SuperViewController, UNUserNotificationCenterDelegate {
+class CategoriesVC: SuperViewController {
     //@IBOutlet weak var addButton: UIButton!
    // @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
@@ -44,7 +44,7 @@ class CategoriesVC: SuperViewController, UNUserNotificationCenterDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        center.delegate = self
+
         updateUI()
         if _categoriesHolder.count == 0 {
             if appData.username != "" {

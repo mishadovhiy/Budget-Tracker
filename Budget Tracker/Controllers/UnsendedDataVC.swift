@@ -12,7 +12,7 @@ protocol UnsendedDataVCProtocol {
     func quiteUnsendedData(deletePressed: Bool, sendPressed: Bool)
 }
 
-class UnsendedDataVC: SuperViewController, UNUserNotificationCenterDelegate {
+class UnsendedDataVC: SuperViewController {
 
     @IBOutlet weak var proView: UIView!
     @IBOutlet weak var closeButton: UIButton!
@@ -85,7 +85,7 @@ class UnsendedDataVC: SuperViewController, UNUserNotificationCenterDelegate {
     //let proView = UIView()
     override func viewDidLoad() {
         super.viewDidLoad()
-        center.delegate = self
+
        // firstSectionHeight = self.view.frame.height - 200
         self.tableView.delegate = self
         self.tableView.dataSource = self

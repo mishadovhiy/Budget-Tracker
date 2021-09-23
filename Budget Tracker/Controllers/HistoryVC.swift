@@ -16,7 +16,7 @@ var transactionAdded = false
 // if from debts - first section (dif beckground, cornerRadios) - add/edit time (2 cells: date, amount to pay)
 
 
-class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
+class HistoryVC: SuperViewController {
     
     @IBOutlet weak var addTransButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
@@ -30,7 +30,7 @@ class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        center.delegate = self
+
         print(selectedPurposeH, "selectedPurposeselectedPurposeH didlo")
         if !allowEditing {
          //   DispatchQueue.main.async {
@@ -75,8 +75,8 @@ class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
         //  addLocalNotification(date: "")
         if let debt = self.debt {
       //      center.removePendingNotificationRequests(withIdentifiers: ["Debts\(debt.name)"])
-            center.removeDeliveredNotifications(withIdentifiers: ["Debts\(debt.name)"])
-            center.getDeliveredNotifications { notifications in
+            center?.removeDeliveredNotifications(withIdentifiers: ["Debts\(debt.name)"])
+            center?.getDeliveredNotifications { notifications in
                 DispatchQueue.main.async {
                     UIApplication.shared.applicationIconBadgeNumber = notifications.count
                 }
@@ -104,14 +104,14 @@ class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
         }
     }
     
-    
+    let center = AppDelegate.shared?.center
     func addLocalNotification(date: DateComponents, completion: @escaping (Bool) -> ()) {
         
         //if date > today
         let title = self.debt?.name ?? ""
         let id = "Debts\(self.debt?.name ?? "")"
-        center.removePendingNotificationRequests(withIdentifiers: ["Debts\(self.debt?.name ?? "")"])
-        center.getNotificationSettings { (settings) in
+        center?.removePendingNotificationRequests(withIdentifiers: ["Debts\(self.debt?.name ?? "")"])
+        center?.getNotificationSettings { (settings) in
             if settings.authorizationStatus != .authorized {
             // Notifications not allowed
           }
@@ -143,7 +143,7 @@ class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
         
 
         //center.removeAllPendingNotificationRequests()
-        center.add(request) { (error) in
+        center?.add(request) { (error) in
             if error != nil {
                 print("notif add error")
             } else {
@@ -267,12 +267,10 @@ class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
                         }
                     }
                     appData.saveDebts(dataToSafe)
-                    if self.loadingIndicator.isShowing {
-                        self.loadingIndicator.fastHide { (_) in
-                            
-                            DispatchQueue.main.async {
-                                self.tableView.reloadData()
-                            }
+                    self.ai.fastHide { (_) in
+                        
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
                         }
                     }
                     
@@ -284,7 +282,7 @@ class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
     func tocalendatPressed() {
         
         if self.debt?.dueDate ?? "" == "" {
-            center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+            center?.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
                 if granted {
                     print("Yay!")
                 } else {
@@ -295,16 +293,47 @@ class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
                 }
             }
         } else {
-            self.loadingIndicator.completeWithActions(buttonsTitles: ("Remove","Change"), showCloseButton: true, leftButtonActon: { (_) in
+            let okButton = IndicatorView.button(title: "remove", style: .standart, close: false) { _ in
+                self.changeDueDate(fullDate: "")
+                
+                let id = "Debts\(self.debt?.name ?? "")"
+                self.center?.removePendingNotificationRequests(withIdentifiers: [id])
+                DispatchQueue.main.async {
+                    self.ai.fastHide(completionn: { _ in
+                        
+                    })
+                }
+            }
+                                        
+            let showButton = IndicatorView.button(title: "Change", style: .success, close: false) { _ in
+                self.center?.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+                    if granted {
+                        print("Yay!")
+                    } else {
+                        print("D'oh")
+                    }
+                    DispatchQueue.main.async {
+                        self.ai.fastHide(completionn: { _ in
+                            self.performSegue(withIdentifier: "toCalendar", sender: self)
+                        })
+                        
+                    }
+                }
+            }
+                                
+            DispatchQueue.main.async {
+                self.ai.completeWithActions(buttons: (okButton, showButton), title: "Do you want to change due date?", descriptionText: "")
+            }
+          /*  self.loadingIndicator.completeWithActions(buttonsTitles: ("Remove","Change"), showCloseButton: true, leftButtonActon: { (_) in
                 
                 self.changeDueDate(fullDate: "")
                 
                 let id = "Debts\(self.debt?.name ?? "")"
-                self.center.removePendingNotificationRequests(withIdentifiers: [id])
+                self.center?.removePendingNotificationRequests(withIdentifiers: [id])
                 
                 
             }, rightButtonActon: { (_) in
-                self.center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+                self.center?.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
                     if granted {
                         print("Yay!")
                     } else {
@@ -314,7 +343,7 @@ class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
                         self.performSegue(withIdentifier: "toCalendar", sender: self)
                     }
                 }
-            }, title: "Do you want to change due date?", error: false)
+            }, title: "Do you want to change due date?", error: false)*/
         }
         
         
@@ -322,7 +351,7 @@ class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
     
     func dbLoadRemoveBeforeUpdate(completion: @escaping ([DebtsStruct], Bool) -> ()) {
         //self.loadingIndicator.show(title: "Updating data", appeareAnimation: true)
-        self.loadingIndicator.show(title: "Updating data", appeareAnimation: true) { (_) in
+       // self.loadingIndicator?.show(title: "", appeareAnimation: true) { (_) in
             let load = LoadFromDB()
             load.Debts { (loadedDebts, error) in
                 if error == "" {
@@ -351,14 +380,14 @@ class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
                     }
                     
                 } else {
-                    self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
+                /*    self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
                         self.loadingIndicator.hideIndicator(fast: true) { (_) in
                         }
-                    }, title: "No internet", description: "Enable to edit debts data in offline mode, come back later when you will be connected to the internet", error: true)
+                    }, title: "No internet", description: "Enable to edit debts data in offline mode, come back later when you will be connected to the internet", error: true)*/
                 }
                 
             }
-        }
+       // }
         
     }
     
@@ -387,11 +416,11 @@ class HistoryVC: SuperViewController, UNUserNotificationCenterDelegate {
     }
     
     func changeAmountToPayWithtextField() {
-        self.loadingIndicator.showTextField(type: .amount, textFieldText: self.debt?.amountToPay ?? "", title: "Amount to pay", description: "Enter how much is rest to pay") { (enteredAmount, _) in
+        self.ai.showTextField(type: .amount, textFieldText: self.debt?.amountToPay ?? "", title: "Amount to pay", description: "Enter how much is rest to pay") { (enteredAmount, _) in
             
 
             self.changeAmountToPay(enteredAmount: enteredAmount) { (_) in
-                self.loadingIndicator.fastHide { (_) in
+                self.ai.fastHide { (_) in
                     let result = enteredAmount == "0" ? "" : enteredAmount
                     self.debt?.amountToPay = result
                     DispatchQueue.main.async {
@@ -616,21 +645,27 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                 if self.debt?.amountToPay ?? "" == "" || self.debt?.amountToPay ?? "" == "0" {
                     self.changeAmountToPayWithtextField()
                 } else {
-                    self.loadingIndicator.completeWithActions(buttonsTitles: ("Remove","Change"), showCloseButton: true, leftButtonActon: { (_) in
-                        //remove amount to pay
-
+                    let okButton = IndicatorView.button(title: "Change", style: .standart, close: false) { _ in
+                        self.changeAmountToPayWithtextField()
+                    }
+                            
+                    let changeButton = IndicatorView.button(title: "Remove", style: .error, close: false) { _ in
                         self.changeAmountToPay(enteredAmount: "") { (_) in
-                            self.loadingIndicator.fastHide { (_) in
-                                self.debt?.amountToPay = ""
-                                DispatchQueue.main.async {
+                            self.debt?.amountToPay = ""
+                            DispatchQueue.main.async {
+                                self.ai.fastHide(completionn: { _ in
                                     self.tableView.reloadData()
-                                }
+                                })
+                                
                             }
                         }
-                        
-                    }, rightButtonActon: { (_) in
-                        self.changeAmountToPayWithtextField()
-                    }, title: "Do you want to change amount", error: false)
+                    }
+                    
+                    DispatchQueue.main.async {
+                        self.ai.completeWithActions(buttons: (okButton, changeButton), title: "Do you want to change amount", descriptionText: "")
+                    }
+                    
+
                 }
 
                 
@@ -724,7 +759,7 @@ class DebtDescriptionCell: UITableViewCell {
 extension HistoryVC: CalendarVCProtocol {
     func dateSelected(date: String, time: DateComponents?) {
         DispatchQueue.main.async {
-            self.loadingIndicator.show { (_) in
+            self.ai.show { (_) in
 
                 //check if has am pm
                 //or save as isoDate without
@@ -739,7 +774,7 @@ extension HistoryVC: CalendarVCProtocol {
                         self.changeDueDate(fullDate: fullDate)
                     } else {
                         //show error
-                        self.loadingIndicator.fastHide { _ in
+                        self.ai.fastHide { _ in
                             
                         }
                     }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class expectingPaymentsVC: SuperViewController, UNUserNotificationCenterDelegate {
+class expectingPaymentsVC: SuperViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
@@ -24,7 +24,7 @@ class expectingPaymentsVC: SuperViewController, UNUserNotificationCenterDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        center.delegate = self
+
         tableView.delegate = self
         tableView.dataSource = self
     }

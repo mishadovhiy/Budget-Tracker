@@ -10,7 +10,7 @@ import CoreData
 
 var ifCustom = false
 
-class FilterTVC: SuperViewController, UNUserNotificationCenterDelegate {
+class FilterTVC: SuperViewController {
     var months: [String] = []
     var years: [String] = []
     var sectionsCount = 3
@@ -21,7 +21,7 @@ class FilterTVC: SuperViewController, UNUserNotificationCenterDelegate {
     var frame = CGRect.zero
     override func viewDidLoad() {
         super.viewDidLoad()
-        center.delegate = self
+
         tableview.delegate = self
         tableview.dataSource = self
         

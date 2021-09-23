@@ -16,7 +16,7 @@ var allSelectedTransactionsData: [TransactionsStruct] = []
 var expenseLabelPressed = true
 var selectedPeroud = ""
 
-class ViewController: SuperViewController, UNUserNotificationCenterDelegate {
+class ViewController: SuperViewController {
     
     @IBOutlet weak var addTransactionWhenEmptyButton: UIButton!
     @IBOutlet weak var noDataView: UIView!
@@ -222,10 +222,6 @@ class ViewController: SuperViewController, UNUserNotificationCenterDelegate {
     }
     
     
-  /*  lazy var ai: IndicatorView = {
-        
-        return AppDelegate.shared?.loadingIndicator ?? IndicatorView(frame: self.view.frame)
-    }()*/
     
     func updateUI() {
      //   addTransitionButton.translatesAutoresizingMaskIntoConstraints = true
@@ -805,11 +801,11 @@ class ViewController: SuperViewController, UNUserNotificationCenterDelegate {
     var timers: [Timer] = []
 
 
-    
+    let center = AppDelegate.shared?.center
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         print("DIDAPPPP")
-        center.getDeliveredNotifications { notifications in
+        center?.getDeliveredNotifications { notifications in
             DispatchQueue.main.async {
                 UIApplication.shared.applicationIconBadgeNumber = notifications.count
             }

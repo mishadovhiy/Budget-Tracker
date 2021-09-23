@@ -9,7 +9,23 @@
 import UIKit
 import StoreKit
 
-class BuyProVC: SuperViewController, UNUserNotificationCenterDelegate {
+class BuyProVC: SuperViewController {
+    
+    func showAlert(title:String,text:String?, error: Bool, goHome: Bool = false) {
+        
+        let okButton = IndicatorView.button(title: "OK", style: .standart, close: true) { _ in
+            if goHome {
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "homeVC", sender: self)
+                }
+            }
+        }
+        
+        DispatchQueue.main.async {
+            self.ai.completeWithActions(buttons: (okButton, nil), title: title, descriptionText: text, type: error ? .error : .standard)
+        }
+
+    }
     
     @IBOutlet weak var tryFree: UIButton!
     @IBOutlet weak var priceLabel: UILabel!
@@ -34,7 +50,7 @@ class BuyProVC: SuperViewController, UNUserNotificationCenterDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        center.delegate = self
+
         DispatchQueue.main.async {
             if appData.proVersion || appData.proTrial || appData.trialDate != "" {
                 self.tryFree.alpha = 0
@@ -160,31 +176,19 @@ class BuyProVC: SuperViewController, UNUserNotificationCenterDelegate {
         if !appData.proVersion {
             if appData.username != "" {
 
-                self.loadingIndicator.show { (_) in
+                self.ai.show { (_) in
                     let load = LoadFromDB()
                     load.Users { (loadedData, error) in
                         if error {
-                            DispatchQueue.main.async {
-                                self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
-                                    self.loadingIndicator.hideIndicator(fast: true) { (co) in
-                                        
-                                    }
-                                }, title: "Internet error", description: "Try again later", error: true)
-                            }
+
+                            self.showAlert(title: "Internet error", text: "Try again later", error: true)
                         } else {
                             let nik = appData.username
                             for i in 0..<loadedData.count {
                                 if loadedData[i][0] == nik {
                                     if loadedData[i][5] != "" {
-                                        DispatchQueue.main.async {
-                                            self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
-                                                self.loadingIndicator.hideIndicator(fast: true) { (co) in
-                                                    
-                                                }
-                                            }, title: "Access denied", description: "You have already tried trial version", error: true)
 
-                                            
-                                        }
+                                        self.showAlert(title: "Access denied", text: "You have already tried trial version", error: true)
                                         return
                                     } else {
                                         self.userData = (loadedData[i][1], loadedData[i][2], loadedData[i][3], loadedData[i][5])
@@ -198,7 +202,7 @@ class BuyProVC: SuperViewController, UNUserNotificationCenterDelegate {
                 }
                 
             } else {
-                DispatchQueue.main.async {
+        /*        DispatchQueue.main.async {
                     
                     self.loadingIndicator.completeWithActions(buttonsTitles: ("No", "Sing in"), leftButtonActon: { (_) in
                         self.trialWithoutAcoount()
@@ -209,6 +213,18 @@ class BuyProVC: SuperViewController, UNUserNotificationCenterDelegate {
                         
                     }, title: "Would you like to sign in?", description: "Sign in to try trial across all your devices")
 
+                }*/
+                let firstButton = IndicatorView.button(title: "No", style: .standart, close: true) { _ in
+                    self.trialWithoutAcoount()
+                }
+                let secondButton = IndicatorView.button(title: "Sing in", style: .standart, close: true) { _ in
+                    DispatchQueue.main.async {
+                        self.performSegue(withIdentifier: "toSingIn", sender: self)
+                    }
+                }
+                
+                DispatchQueue.main.async {
+                    self.ai.completeWithActions(buttons: (firstButton, secondButton), title: "Would you like to sign in?", descriptionText: "Sign in to try trial across all your devices", type: .standard)
                 }
             }
         }
@@ -219,13 +235,15 @@ class BuyProVC: SuperViewController, UNUserNotificationCenterDelegate {
         appData.proTrial = true
         appData.trialDate = appData.filter.getToday(appData.filter.filterObjects.currentDate)
 
-        self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "Start"), rightButtonActon: { (_) in
+        showAlert(title: "Success", text: "Trial has been started successfully", error: false, goHome: true)
+     /*   self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "Start"), rightButtonActon: { (_) in
             self.loadingIndicator.hideIndicator(fast: true) { (co) in
                 Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { (_) in
                     self.performSegue(withIdentifier: "homeVC", sender: self)
                 }
             }
-        }, title: "Success", description: "Trial has been started successfully")
+        }, title: "Success", description: "Trial has been started successfully")*/
+        
     }
     
     func performTrial() {
@@ -249,14 +267,8 @@ class BuyProVC: SuperViewController, UNUserNotificationCenterDelegate {
                 DispatchQueue.main.async {
                     appData.proTrial = true
                     appData.trialDate = today
+                    self.showAlert(title: "Success", text: "Trial has been started successfully", error: false, goHome: true)
 
-                    self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "Start"), rightButtonActon: { (_) in
-                        self.loadingIndicator.hideIndicator(fast: true) { (co) in
-                            Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { (_) in
-                                self.performSegue(withIdentifier: "homeVC", sender: self)
-                            }
-                        }
-                    }, title: "Success", description: "Trial has been started successfully")
                 }
             }
         }
@@ -277,7 +289,7 @@ class BuyProVC: SuperViewController, UNUserNotificationCenterDelegate {
                 /*DispatchQueue.main.async {
                     self.loadingIndicator.show()
                 }*/
-                self.loadingIndicator.show { (_) in
+                self.ai.show { (_) in
                     let load = LoadFromDB()
                     load.Users { (loadedData, error) in
                         if !error {
@@ -300,13 +312,8 @@ class BuyProVC: SuperViewController, UNUserNotificationCenterDelegate {
                                 print("go to restrictions")
                             }
                         } else {
-                            DispatchQueue.main.async {
-                                self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
-                                    self.loadingIndicator.hideIndicator(fast: true) { (co) in
-                                        
-                                    }
-                                }, title: "Internet error", description: "Try again later", error: true)
-                            }
+
+                            self.showAlert(title: "Internet error", text: "Try again later", error: true)
                         }
                         
                     }
@@ -332,7 +339,7 @@ class BuyProVC: SuperViewController, UNUserNotificationCenterDelegate {
             SKPaymentQueue.default().restoreCompletedTransactions()
             SKPaymentQueue.default().add(self)
 
-            self.loadingIndicator.show { (_) in
+            self.ai.show { (_) in
                 self.restoreRequest.delegate = self
                 self.restoreRequest.start()
             }
@@ -379,13 +386,13 @@ extension BuyProVC: SKPaymentTransactionObserver {
     
     func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
         print("restoreCompletedTransactionsFailedWithError")
-        DispatchQueue.main.async {
+      /*  DispatchQueue.main.async {
             self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
                 self.loadingIndicator.hideIndicator(fast: true) { (co) in
                     
                 }
             }, title: "Payment not found", error: true)
-        }
+        }*/
     }
 
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
@@ -420,13 +427,14 @@ extension BuyProVC: SKPaymentTransactionObserver {
                             }
                             DispatchQueue.main.async {
                                 self.showPurchasedIndicator()
-                                self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "Start"), rightButtonActon: { (_) in
+                                self.showAlert(title: "Success", text: "Pro features available across all your devices", error: false, goHome: true)
+                          /*      self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "Start"), rightButtonActon: { (_) in
                                     self.loadingIndicator.hideIndicator(fast: true) { (co) in
                                         Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { (_) in
                                             self.performSegue(withIdentifier: "homeVC", sender: self)
                                         }
                                     }
-                                }, title: "Success", description: "Pro features available across all your devices")
+                                }, title: "Success", description: "Pro features available across all your devices")*/
                             }
                         }
                     }
@@ -439,16 +447,13 @@ extension BuyProVC: SKPaymentTransactionObserver {
                 SKPaymentQueue.default().finishTransaction(transaction)
                 SKPaymentQueue.default().remove(self)
                 DispatchQueue.main.async {
-                    self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
-                        self.loadingIndicator.hideIndicator(fast: true) { (co) in
-                            
-                        }
-                    }, title: "Payment failed", error: true)
+
+                    self.showAlert(title: "Payment failed", text: nil, error: true)
                 }
                 break
             default:
                 DispatchQueue.main.async {
-                    self.loadingIndicator.hideIndicator(fast: true) { (_) in
+                    self.ai.hideIndicator(fast: true) { (_) in
                         SKPaymentQueue.default().finishTransaction(transaction)
                         SKPaymentQueue.default().remove(self)
                     }

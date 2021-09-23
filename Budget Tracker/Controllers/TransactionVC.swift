@@ -17,7 +17,7 @@ protocol TransitionVCProtocol {
     func quiteTransactionVC()
 }
 
-class TransitionVC: SuperViewController, UNUserNotificationCenterDelegate {
+class TransitionVC: SuperViewController {
     @IBOutlet weak var dateTextField: CustomTextField!
     @IBOutlet weak var categoryTextField: CustomTextField!
     @IBOutlet weak var purposeSwitcher: UISegmentedControl!
@@ -48,7 +48,7 @@ class TransitionVC: SuperViewController, UNUserNotificationCenterDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        center.delegate = self
+
         updateUI()
         purposeSwitcher.selectedSegmentIndex = 0
         purposeSwitched(purposeSwitcher)

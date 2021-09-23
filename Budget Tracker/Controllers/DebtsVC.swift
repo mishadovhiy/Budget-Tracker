@@ -27,7 +27,7 @@ var _debtsHolder: [DebtsStruct] = []
 // - account vc -
 // login transfare data from (acount)
 
-class DebtsVC: SuperViewController, UNUserNotificationCenterDelegate {
+class DebtsVC: SuperViewController {
     @IBOutlet weak var tableView: UITableView!
 
     var delegate: DebtsVCProtocol?
@@ -71,7 +71,7 @@ class DebtsVC: SuperViewController, UNUserNotificationCenterDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        center.delegate = self
+
         newDebtField.delegate = self
         DispatchQueue.main.async {
             if appData.username != "" {

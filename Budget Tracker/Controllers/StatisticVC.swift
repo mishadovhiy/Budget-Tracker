@@ -10,7 +10,7 @@ import UIKit
 import CorePlot
 
 var filterAndGoToStatistic: IndexPath?
-class StatisticVC: SuperViewController, CALayerDelegate, UNUserNotificationCenterDelegate {
+class StatisticVC: SuperViewController, CALayerDelegate {
     @IBOutlet weak var hostView: CPTGraphHostingView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentControll: UISegmentedControl!
@@ -22,7 +22,7 @@ class StatisticVC: SuperViewController, CALayerDelegate, UNUserNotificationCente
     var sum = 0.0
     override func viewDidLoad() {
         super.viewDidLoad()
-        center.delegate = self
+
         updateUI()
 
     }

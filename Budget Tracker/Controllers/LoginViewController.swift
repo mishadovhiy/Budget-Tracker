@@ -16,7 +16,7 @@ var needFullReload = false
 //log out - if nick != ""
 
 
-class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate {
+class LoginViewController: SuperViewController {
 
     @IBOutlet weak var logIn: UIStackView!
     @IBOutlet weak var createAcount: UIStackView!
@@ -51,7 +51,7 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         categoriesDebtsCount = (0,0)
-        center.delegate = self
+
       //  srlf.helperNavView.backgroundColor = K.Colors.background
         print("username: \(appData.username)")
         print("localTransactions:", appData.getTransactions.count)
@@ -85,10 +85,10 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
         //foundUsername = nil
         DispatchQueue.main.async {
           //  self.loadingIndicator.show { _ in
-            self.aai = UIActivityIndicatorView(frame: CGRect(x: self.moreButton.frame.width - self.moreButton.frame.height, y: 0, width: self.moreButton.frame.height, height: self.moreButton.frame.height))
+          /*  self.aai = UIActivityIndicatorView(frame: CGRect(x: self.moreButton.frame.width - self.moreButton.frame.height, y: 0, width: self.moreButton.frame.height, height: self.moreButton.frame.height))
             self.moreButton.addSubview(self.aai ?? UIView(frame: .zero))
             self.aai?.startAnimating()
-            
+            */
             self.performSegue(withIdentifier: "toAccountSettings", sender: self)
           //  }
             
@@ -229,7 +229,7 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "toAccountSettings":
-            
+            break
             let vc = segue.destination as! accountSettingsVC
             vc.tableTopMargin = self.view.frame.minY
             vc.delegate = self
@@ -239,6 +239,16 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
     }
     
 
+    func showAlert(title:String,text:String?, error: Bool) {
+        
+        let okButton = IndicatorView.button(title: "OK", style: .standart, close: true) { _ in
+        }
+        
+        DispatchQueue.main.async {
+            self.ai.completeWithActions(buttons: (okButton, nil), title: title, descriptionText: text, type: error ? .error : .standard)
+        }
+
+    }
     
     
     func updateUI() {
@@ -308,7 +318,7 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
             UIImpactFeedbackGenerator().impactOccurred()
         }
 
-        self.loadingIndicator.show(title: "Logging in") { (_) in
+        self.ai.show(title: "Logging in") { (_) in
             self.hideKeyboard()
             self.load.Users { (loadedData, Error) in
                 if !Error {
@@ -320,7 +330,7 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
                         } else {
                             self.actionButtonsEnabled = true
                             DispatchQueue.main.async {
-                                self.loadingIndicator.hideIndicator(fast: true) { (_) in
+                                self.ai.hideIndicator(fast: true) { (_) in
                                     self.message.showMessage(text: "All fields are required", type: .error, autoHide: false)
                                 }
                                 
@@ -332,9 +342,7 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
                 } else {
                     print("error!!!")
                     self.actionButtonsEnabled = true
-                    DispatchQueue.main.async {
-                        self.loadingIndicator.internetError()
-                    }
+                    self.showAlert(title: "No internet", text: nil, error: true)
                 }
             }
         }
@@ -361,7 +369,7 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
                         self.actionButtonsEnabled = true
                         DispatchQueue.main.async {
                             
-                            self.loadingIndicator.hideIndicator(fast: true) { (_) in
+                            self.ai.hideIndicator(fast: true) { (_) in
                                 self.message.showMessage(text: "Wrong password!", type: .error)
                             }
                             
@@ -412,13 +420,13 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
                         }
                         if fromPro {
                             DispatchQueue.main.async {
-                                self.loadingIndicator.fastHide { _ in
+                                self.ai.fastHide { _ in
                                     self.dismiss(animated: true, completion: nil)
                                 }
                             }
                         } else {
                             DispatchQueue.main.async {
-                                self.loadingIndicator.fastHide { _ in
+                                self.ai.fastHide { _ in
                                     self.performSegue(withIdentifier: "homeVC", sender: self)
                                 }
                             }
@@ -434,7 +442,7 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
             DispatchQueue.main.async {
                 DispatchQueue.main.async {
                     
-                    self.loadingIndicator.hideIndicator(fast: true) { (_) in
+                    self.ai.hideIndicator(fast: true) { (_) in
                         self.message.showMessage(text: "User not found", type: .error)
                         
                     }
@@ -452,16 +460,14 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
         transactionAdded = true
         self.actionButtonsEnabled = true
 
-        self.loadingIndicator.show(title: "Creating an account") { (_) in
+        self.ai.show(title: "Creating an account") { (_) in
             self.hideKeyboard()
             self.load.Users { (loadedData, Error) in
                 if !Error {
                     self.createAccoun(loadedData: loadedData)
                 } else {
                     self.actionButtonsEnabled = true
-                    DispatchQueue.main.async {
-                        self.loadingIndicator.internetError()
-                    }
+                    self.showAlert(title: "No internet", text: nil, error: true)
                 }
             }
         }
@@ -482,7 +488,17 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
                         if !email.contains("@") || !email.contains(".") {
                             self.obthervValues = true
                             self.showWrongFields()
+                            
+                            
+                            let firstButton = IndicatorView.button(title: "Try again", style: .standart, close: true) { _ in
+                                self.emailLabel.becomeFirstResponder()
+                            }
+
+                                            
                             DispatchQueue.main.async {
+                                self.ai.completeWithActions(buttons: (firstButton, nil), title: "Enter valid email address", descriptionText: "With correct email address you could restore your password in the future", type: .error)
+                            }
+                      /*      DispatchQueue.main.async {
 
                                 self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "Try again"), rightButtonActon: { (_) in
                                     self.loadingIndicator.hideIndicator(fast: true) { (co) in
@@ -491,16 +507,14 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
                                 }, title: "Enter valid email address", description: "With correct email address you could restore your password in the future", error: true)
                                 
                                 
-                            }
+                            }*/
                         } else {
                             let save = SaveToDB()
                             let toDataString = "&Nickname=\(name)" + "&Email=\(email)" + "&Password=\(password)" + "&Registration_Date=\(regDate)"
                             save.Users(toDataString: toDataString) { (error) in
                                 if error {
                                     print("error")
-                                    DispatchQueue.main.async {
-                                        self.loadingIndicator.internetError()
-                                    }
+                                    self.showAlert(title: "No internet", text: nil, error: true)
                                 } else {
                                     let prevUsere = appData.username
                                     UserDefaults.standard.setValue(prevUsere, forKey: "prevUserName")
@@ -533,14 +547,14 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
                                     UserDefaults.standard.setValue(nil, forKey: "lastSelectedCategory")
                                     if self.fromPro {
                                         DispatchQueue.main.async {
-                                            self.loadingIndicator.fastHide { _ in
+                                            self.ai.fastHide { _ in
                                                 self.dismiss(animated: true, completion: nil)
                                             }
                                         }
                                     } else {
                                         DispatchQueue.main.async {
                                             
-                                            self.loadingIndicator.fastHide { _ in
+                                            self.ai.fastHide { _ in
                                                 self.performSegue(withIdentifier: "homeVC", sender: self)
                                             }
                                             
@@ -553,7 +567,7 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
                         self.actionButtonsEnabled = true
                         DispatchQueue.main.async {
 
-                            self.loadingIndicator.hideIndicator(fast: true) { (_) in
+                            self.ai.hideIndicator(fast: true) { (_) in
                                 self.message.showMessage(text: "Username '\(name)' is already taken", type: .error, windowHeight: 65)
                                 
                             }
@@ -566,7 +580,7 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
                     self.showWrongFields()
 
                     DispatchQueue.main.async {
-                        self.loadingIndicator.hideIndicator(fast: true) { (_) in
+                        self.ai.hideIndicator(fast: true) { (_) in
                             self.message.showMessage(text: "All fields are required", type: .error)
                         }
                     }
@@ -576,7 +590,7 @@ class LoginViewController: SuperViewController, UNUserNotificationCenterDelegate
                 self.actionButtonsEnabled = true
                 DispatchQueue.main.async {
 
-                    self.loadingIndicator.hideIndicator(fast: true) { (_) in
+                    self.ai.hideIndicator(fast: true) { (_) in
                         self.message.showMessage(text: "Passwords not match", type: .error)
                     }
                 }

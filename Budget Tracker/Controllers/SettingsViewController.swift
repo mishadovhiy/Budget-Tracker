@@ -13,7 +13,7 @@ protocol SettingsViewControllerProtocol {
     func closeSettings(sendSavedData:Bool, needFiltering: Bool)
 }
 
-class SettingsViewController: SuperViewController, UNUserNotificationCenterDelegate {
+class SettingsViewController: SuperViewController {
 
     @IBOutlet weak var usersCollectionView: UICollectionView!
     @IBOutlet weak var contentView: UIView!
@@ -33,7 +33,7 @@ class SettingsViewController: SuperViewController, UNUserNotificationCenterDeleg
     var resetPassword = false
     override func viewDidLoad() {
         super.viewDidLoad()
-        center.delegate = self
+
         updateUI()
         if needGet {
             needGet = false
@@ -58,11 +58,11 @@ class SettingsViewController: SuperViewController, UNUserNotificationCenterDeleg
     func testShowIndicator(error: Bool = false) {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-            self.loadingIndicator.showTextField(type: .code, error: error ? ("неправильный код!", "") : nil, title: "code") { (j, jf) in
+            self.ai.showTextField(type: .code, error: error ? ("неправильный код!", "") : nil, title: "code") { (j, jf) in
                 if j == "6590" {
                     //должна быть крутилка 10 сек
                     Timer.scheduledTimer(withTimeInterval: 10.0, repeats: false) { (_) in
-                        self.loadingIndicator.fastHide { (_) in
+                        self.ai.fastHide { (_) in
                             print("complited")
                         }
                     }
@@ -198,7 +198,7 @@ class SettingsViewController: SuperViewController, UNUserNotificationCenterDeleg
             SettingsSctruct(title: "Account", description: appData.username == "" ? "Sing In": appData.username, segue: (unsavedCat + unsavedTrans + unsavedDebts) > 0 ? "toSavedData" : "toSingIn"),
             SettingsSctruct(title: "Categories", description: "\(categoriesDebtsCount.0)", segue: "settingsToCategories"),
             SettingsSctruct(title: "Debts", description: "\(categoriesDebtsCount.1)", segue: (appData.proVersion || appData.proTrial) ? "toDebts" : "toProVC"),
-            SettingsSctruct(title: "Notification Center", description: "", segue: "toNotificationsVC")
+            //SettingsSctruct(title: "Notification Center", description: "", segue: "toNotificationsVC")
             //toExpectingPayment
         ]
         tableData = data

@@ -11,11 +11,10 @@ import UserNotifications
 
 class SuperViewController: UIViewController {
 
-    let center = UNUserNotificationCenter.current()
-    lazy var loadingIndicator: IndicatorView = {
-        let newView = IndicatorView.instanceFromNib() as! IndicatorView
+
+    lazy var ai: IndicatorView = {
+        let newView = AppDelegate.shared?.ai ?? IndicatorView.instanceFromNib() as! IndicatorView
         return newView
-        //return (UIApplication.shared.keyWindow ?? UIWindow()).viewWithTag(23450) as? IndicatorView ?? IndicatorView(frame: .zero)
     }()
     
     
@@ -37,16 +36,13 @@ class SuperViewController: UIViewController {
         if !loadedSubviews {
             //self.ai = LoadingIndicator.instanceFromNib() as! LoadingIndicator
             loadedSubviews = true
-            let window = UIApplication.shared.keyWindow ?? UIWindow()
-            self.loadingIndicator.frame = window.frame
-            window.addSubview(self.loadingIndicator)
+
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         definesPresentationContext = true
-     //   print(center.delegate, "center.descriptioncenter.description")
       /*  let window = UIApplication.shared.keyWindow ?? UIWindow()
         let indd = IndicatorView.instanceFromNib() as! IndicatorView
         indd.tag = 23450
@@ -67,11 +63,8 @@ class SuperViewController: UIViewController {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(true)
-      //  center.delegate = nil
         
-        DispatchQueue.main.async {
-            self.loadingIndicator.removeFromSuperview()
-        }
+
     }
     
     
@@ -207,7 +200,7 @@ class SuperViewController: UIViewController {
         print("received notification:", notification.request.content.body)
       //  notification.request.content.threadIdentifier == "Debts"
         notificationShowed = false
-        self.loadingIndicator.completeWithActions(buttonsTitles: ("Cancel", "View"), showCloseButton: false, leftButtonActon: { (_) in
+      /*  self.loadingIndicator.completeWithActions(buttonsTitles: ("Cancel", "View"), showCloseButton: false, leftButtonActon: { (_) in
             self.loadingIndicator.fastHide { (_) in
                 self.notificationShowed = true
             }
@@ -244,7 +237,7 @@ class SuperViewController: UIViewController {
                 self.notificationShowed = true
                 
             }
-        }, title: notification.request.content.title, description: notification.request.content.body, error: false)
+        }, title: notification.request.content.title, description: notification.request.content.body, error: false)*///PASTAI
     }
     
     var notificationShowed: Bool = true
@@ -252,16 +245,16 @@ class SuperViewController: UIViewController {
     
     func showHistory(categpry: String, transactions: [TransactionsStruct]) {
         print("showHistory")
-        
-        
-       // self.presentedViewController?.dismiss(animated: true, completion: nil)
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vccc = storyboard.instantiateViewController(withIdentifier: "HistoryVC") as! HistoryVC
-        vccc.modalPresentationStyle = .formSheet
-        vccc.historyDataStruct = transactions
-        vccc.selectedCategoryName = categpry
-        vccc.fromCategories = true
-        self.present(vccc, animated: true)
+
+        DispatchQueue.main.async {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let vccc = storyboard.instantiateViewController(withIdentifier: "HistoryVC") as! HistoryVC
+            vccc.modalPresentationStyle = .formSheet
+            vccc.historyDataStruct = transactions
+            vccc.selectedCategoryName = categpry
+            vccc.fromCategories = true
+            self.present(vccc, animated: true)
+        }
         
     }
     

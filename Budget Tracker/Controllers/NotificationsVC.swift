@@ -8,19 +8,19 @@
 
 import UIKit
 
-class NotificationsVC: SuperViewController, UNUserNotificationCenterDelegate {
+class NotificationsVC: SuperViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
     var tableData: [String] = []
     
-    
+    let center = AppDelegate.shared?.center
     override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.delegate = self
         tableView.dataSource = self
-        center.delegate = self
+
         self.title = "Notification center"
         
     }
@@ -58,7 +58,7 @@ class NotificationsVC: SuperViewController, UNUserNotificationCenterDelegate {
             }
         }*/
         
-        center.getDeliveredNotifications { delivered in
+        center?.getDeliveredNotifications { delivered in
             var res:[String] = []
             for i in 0..<delivered.count {
                 let text = delivered[i].request.identifier + "\n" + delivered[i].request.content.title + "\n" + delivered[i].request.content.subtitle + "\n" + delivered[i].request.content.body

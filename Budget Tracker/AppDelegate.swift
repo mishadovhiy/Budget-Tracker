@@ -10,18 +10,27 @@ import UIKit
 import CoreData
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate{//, UNUserNotificationCenterDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate{
 
     var window: UIWindow?
- //   let center = UNUserNotificationCenter.current()
- //   static var shared: AppDelegate?
+    static var shared: AppDelegate?
+    
+    
+    let center = UNUserNotificationCenter.current()
+    
+    
+    lazy var ai: IndicatorView = {
+        let newView = IndicatorView.instanceFromNib() as! IndicatorView
+        return newView
+    }()
     
     
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
+        center.delegate = self
+        AppDelegate.shared = self
         let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
         let value = UserDefaults.standard.value(forKey: "lastLaunching") as? String ?? ""
         if value != today {
@@ -31,6 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{//, UNUserNotificationCent
             _debtsHolder.removeAll()
         }
 
+        
         print(today, "didFinishLaunchingWithOptions")
         
       //  center.delegate = self
@@ -42,23 +52,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{//, UNUserNotificationCent
         return true
     }
 
-    // MARK: UISceneSession Lifecycle
 
-    @available(iOS 13.0, *)
-    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-        // Called when a new scene session is being created.
-        // Use this method to select a configuration to create the new scene with.
-        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
-    }
-
-    @available(iOS 13.0, *)
-    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-        // Called when the user discards a scene session.
-        // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
-        // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
-    }
-
-    
     
     
   /*  lazy var loadingIndicator: IndicatorView = {
@@ -120,3 +114,62 @@ class AppDelegate: UIResponder, UIApplicationDelegate{//, UNUserNotificationCent
 
 }
 
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        
+        
+        let okButton = IndicatorView.button(title: "OK", style: .standart, close: true) { _ in
+            
+        }
+        
+        let showButton = IndicatorView.button(title: "Show", style: .success, close: false) { _ in
+            let load = LoadFromDB()
+            load.Debts { (loadedDebts, debtsError) in
+                var debtsResult: [DebtsStruct] = []
+                for i in 0..<loadedDebts.count {
+                    let name = loadedDebts[i][1]
+                    let amountToPay = loadedDebts[i][2]
+                    let dueDate = loadedDebts[i][3]
+                    debtsResult.append(DebtsStruct(name: name, amountToPay: amountToPay, dueDate: dueDate))
+                }
+                if debtsError == "" {
+                    appData.saveDebts(debtsResult)
+                }
+                var transactions:[TransactionsStruct] = []
+                let allTrans = Array(appData.getTransactions)
+                for i in 0..<allTrans.count{
+                    if allTrans[i].category == notification.request.content.title {
+                        transactions.append(allTrans[i])
+                    }
+                }
+                DispatchQueue.main.async {
+                    self.ai.fastHide { (_) in
+                        self.showHistory(categpry: notification.request.content.title, transactions: transactions)
+                    }
+                }
+            }
+        }
+        DispatchQueue.main.async {
+            self.ai.completeWithActions(buttons: (okButton, showButton), title: notification.request.content.title, descriptionText: notification.request.content.body)
+        }
+
+    }
+    
+    
+    func showHistory(categpry: String, transactions: [TransactionsStruct]) {
+        print("showHistory")
+        
+        
+       // self.presentedViewController?.dismiss(animated: true, completion: nil)
+        DispatchQueue.main.async {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let vccc = storyboard.instantiateViewController(withIdentifier: "HistoryVC") as! HistoryVC
+            vccc.modalPresentationStyle = .formSheet
+            vccc.historyDataStruct = transactions
+            vccc.selectedCategoryName = categpry
+            vccc.fromCategories = true
+            self.window?.rootViewController?.present(vccc, animated: true)
+        }
+        
+    }
+}
