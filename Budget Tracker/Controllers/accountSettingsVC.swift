@@ -35,14 +35,16 @@ class accountSettingsVC: SuperViewController {
 
     }
     
-    
+    var loadscroll:CGFloat = 0.0
     override func viewDidLoad() {
         super.viewDidLoad()
         accountSettingsVC.shared = self
         count = 0
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.contentInset.top = self.view.frame.height / 2
+        tableView.contentInset.top = self.view.frame.height / 2 + (self.view.frame.height / 8)
+        loadscroll = tableView.contentOffset.y
+        print(loadscroll, "bhjkbjkbnjk")
         if appData.username == "" {
             let forgotPassword = {
              //   DispatchQueue.main.async {
@@ -836,13 +838,23 @@ class accountSettingsVC: SuperViewController {
         }
     }*/
     
-    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        dragPos = scrollView.contentOffset.y
+        print(dragPos)
+        let result = dragPos - loadscroll
+        print(result, "ghuiknhjuilknjk")
+        if result < -160  {
+            UIImpactFeedbackGenerator().impactOccurred()
+        }
+    }
     
     var dragPos:CGFloat=0.0
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         dragPos = scrollView.contentOffset.y
         print(dragPos)
-        if dragPos < -130  {
+        let result = dragPos - loadscroll
+        print(result, "ghuiknhjuilknjk")
+        if result < -160  {
             //UIImpactFeedbackGenerator().impactOccurred()
             self.dismiss(animated: true) {
                 

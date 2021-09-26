@@ -205,14 +205,16 @@ class ViewController: SuperViewController {
 
 
     @IBOutlet weak var bigExpensesStack: UIStackView!
-    let tableCorners: CGFloat = 14
+    let tableCorners: CGFloat = 22
     var forseSendUnsendedData = true
     var addTransFrame = CGRect.zero
     override func viewDidLoad() {
         super.viewDidLoad()
       //  center.delegate = self
         updateUI()
-        
+        if #available(iOS 15.0, *) {
+            self.mainTableView.sectionHeaderTopPadding = 0
+        }
 
        // mainTableView.isUserInteractionEnabled = false
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(bigCalcTaps(_:))))
