@@ -215,7 +215,7 @@ class ViewController: SuperViewController {
         if #available(iOS 15.0, *) {
             self.mainTableView.sectionHeaderTopPadding = 0
         }
-
+        self.mainTableView.layer.cornerRadius = 15
        // mainTableView.isUserInteractionEnabled = false
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(bigCalcTaps(_:))))
     }
@@ -1319,13 +1319,19 @@ class ViewController: SuperViewController {
                 }
             }
         }
+        
+        let hidePerioudBalance = (self.totalBalance == sumPeriodBalance || sumPeriodBalance == 0) ? true : false
         DispatchQueue.main.async {
-
-            UIView.animate(withDuration: noData ? 0.0 : 0.35) {
-                self.perioudBalanceLabels.first?.superview?.isHidden = (self.totalBalance == sumPeriodBalance || sumPeriodBalance == 0) ? true : false
-            } completion: { (_) in
+            if self.perioudBalanceLabels.first?.superview?.isHidden ?? false != hidePerioudBalance {
+                UIView.animate(withDuration: noData ? 0.0 : 0.35) {
+                    self.perioudBalanceLabels.first?.superview?.isHidden = hidePerioudBalance
+                } completion: { (_) in
+                    self.updateDataLabels(noData: noData)
+                }
+            } else {
                 self.updateDataLabels(noData: noData)
             }
+            
 
         }
         //hide or not
@@ -1758,13 +1764,11 @@ class ViewController: SuperViewController {
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        switch section {
-        case 0: return 1
-        case 1..<(1 + newTableData.count):
-            let n = newTableData[section - 1].transactions.count
-            return n
-        default: return 0
+        if section == 0 {
+            return 1
+            
+        } else {
+            return newTableData[section - 1].transactions.count + 1
         }
     }
     
@@ -1773,74 +1777,36 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.section {
-        case 0:
+        
+        if indexPath.section == 0 {
             let calculationCell = tableView.dequeueReusableCell(withIdentifier: "calcCell") as? calcCell
             calculationCell?.isUserInteractionEnabled = false
             calculationCell?.contentView.isUserInteractionEnabled = false
-            
-           /* let sendedCount = (UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String]] ?? []) + (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String]] ?? []) + (UserDefaults.standard.value(forKey: K.Keys.localDebts) as? [[String]] ?? [])
-
-            //prevUserName
-            let prevName = UserDefaults.standard.value(forKey: "prevUserName") as? String ?? "previous account"
-            calculationCell.prevAcountDataLabel.text = "Data from \(prevName == "" ? "previous account" : prevName):"
-            calculationCell.savedTransactionsLabel.text = "\(sendedCount.count)"
-            let newUnsendedCount = appData.unsendedData.count
-            calculationCell.unsesndedTransactionsLabel.text = "\(newUnsendedCount)"
-            
-            
-            calculationCell.savedTransactionsLabel.superview?.superview?.superview?.superview?.isHidden = (sendedCount.count + newUnsendedCount) == 0 ? true : false
-            calculationCell.unsesndedTransactionsLabel.superview?.superview?.isHidden = newUnsendedCount > 0 ? false : true
-            calculationCell.savedTransactionsLabel.superview?.superview?.isHidden = sendedCount.count > 0  ? false : true
-            
-            calculationCell.setup(calculations: (totalBalance, sumExpenses, sumIncomes, sumPeriodBalance))
-            calculationCell.incomeLabel.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(incomePressed(_:))))
-            calculationCell.expensesLabel.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(expensesPressed(_:))))
-            
-            calculationCell.savedTransactionsLabel.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(savedTransPressed(_:))))
-            
-            
-            
-            if UserDefaults.standard.value(forKey: "StatisticVCFirstLaunch") as? Bool ?? false == false {
-                Timer.scheduledTimer(withTimeInterval: 0.8, repeats: true) { (timer) in
-                    if calculationCell.expensesLabel.layer.shadowColor != UIColor.black.cgColor {
-                        print("StatisticVCFirstLaunch shadowcalled")
-                        calculationCell.expensesLabel.layer.shadowColor = UIColor.black.cgColor
-                        calculationCell.expensesLabel.layer.shadowOpacity = 0.4
-                        calculationCell.expensesLabel.layer.shadowOffset = .zero
-                    }
-                    UIView.animate(withDuration: 0.4) {
-                        calculationCell.expensesLabel.layer.shadowOpacity = calculationCell.expensesLabel.layer.shadowOpacity == 0.0 ? 0.4 : 0.0
-                    }
-
-                    if UserDefaults.standard.value(forKey: "StatisticVCFirstLaunch") as? Bool ?? false == true {
-                        calculationCell.expensesLabel.layer.shadowOpacity = 0.0
-                        timer.invalidate()
-                    }
-                    
-                }
-            }*/
-            
-            
             return calculationCell ?? UITableViewCell()
+        } else {
+            if newTableData[indexPath.section - 1].transactions.count == indexPath.row {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "mainFooterCell") as! mainFooterCell
+                cell.totalLabel.text = "\(newTableData[indexPath.section - 1].amount)"
+                cell.cornerView.layer.cornerRadius = 15
+                cell.cornerView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+                return cell
+            } else {
+                let transactionsCell = tableView.dequeueReusableCell(withIdentifier: K.mainCellIdent, for: indexPath) as! mainVCcell
+                print("row:", indexPath.row)
+                print("count:", newTableData[indexPath.section - 1].transactions.count)
+                let data = newTableData[indexPath.section - 1].transactions[indexPath.row]
+                transactionsCell.setupCell(data, i: indexPath.row, tableData: tableData, selectedCell: selectedCell, indexPath: indexPath)
+                return transactionsCell
+            }
             
-        case 1..<(1 + newTableData.count):
-            let data = newTableData[indexPath.section - 1].transactions[indexPath.row]
-            let transactionsCell = tableView.dequeueReusableCell(withIdentifier: K.mainCellIdent, for: indexPath) as! mainVCcell
-            transactionsCell.setupCell(data, i: indexPath.row, tableData: tableData, selectedCell: selectedCell, indexPath: indexPath)
-            return transactionsCell
-            
-        default: return UITableViewCell()
         }
+
     }
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        switch indexPath.section {
-        case 0:
-            print("firstSection")
-        case 1..<(1 + newTableData.count):
+        if indexPath.section != 0 {
             if newTableData[indexPath.section-1].transactions[indexPath.row].comment != "" {
                 let previusSelected = selectedCell
                 if selectedCell == indexPath {
@@ -1852,15 +1818,12 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                     self.mainTableView.reloadRows(at: previusSelected != nil ? [indexPath, previusSelected ?? indexPath] : [indexPath], with: .middle)
                 }
             }
-        default:
-            print("did sel def")
         }
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
     
-        switch indexPath.section {
-        case 1..<(1 + newTableData.count):
+        if indexPath.section != 0 {
             let editeAction = UIContextualAction(style: .destructive, title: "Edit") {  (contextualAction, view, boolValue) in
                 self.editRow(at: IndexPath(row: indexPath.row, section: indexPath.section - 1))
             }
@@ -1873,9 +1836,10 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             editeAction.backgroundColor = K.Colors.yellow
             deleteAction.backgroundColor = K.Colors.negative
             return UISwipeActionsConfiguration(actions: [editeAction, deleteAction])
-        default:
-            return UISwipeActionsConfiguration(actions: [])
-        }
+                                               
+                                               } else {
+                return UISwipeActionsConfiguration(actions: [])
+            }
         
         
     }
@@ -1891,93 +1855,37 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "mainHeaderCell") as! mainHeaderCell
         
-        if section > 0 {
-            let tableFrame = self.mainTableView.layer.frame
-            let main = UIView(frame: CGRect(x: 0, y: 0, width: tableFrame.width, height: 2))
-            main.backgroundColor = .clear//section == 1 ? K.Colors.background : UIColor.clear
-            let view = UIView(frame: CGRect(x: 0, y: 0, width: tableFrame.width, height: 52))
-            view.backgroundColor = UIColor(named: "darkTableColor")//UIColor(red: 80/255, green: 80/255, blue: 80/255, alpha: 1)
-            view.layer.masksToBounds = true
-            view.layer.cornerRadius = section == 1 ? tableCorners : 0
-            //self.mainTableView.layer.cornerRadius = 15
-            view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-            main.addSubview(view)
-            if section == 1 {
-                let button = UIButton(frame: CGRect(x: view.frame.width - 60, y: 0, width: 60, height: 60))
-                button.addTarget(self, action: #selector(addTransButtonPressed(_:)), for: .touchDown)
-                button.setImage(UIImage(named: "plusIcon"), for: .normal)
-                button.contentVerticalAlignment = .top
-                button.contentHorizontalAlignment = .right
-                button.contentEdgeInsets = .init(top: 7, left: 0, bottom: 0, right: 7)
-                view.addSubview(button)
-            }
-            
-            let stackHelper = UIView(frame: CGRect(x: 15, y: 10, width: 200, height: view.frame.height - 5))
-            let amountStack = UIStackView()
-            amountStack.spacing = 2
-            amountStack.alignment = .fill//.firstBaseline
-            amountStack.distribution = .equalSpacing
-            amountStack.axis = .horizontal
-            stackHelper.addSubview(amountStack)
-            amountStack.translatesAutoresizingMaskIntoConstraints = false
-            let dateLabel = UILabel()//UILabel(frame: CGRect(x: 10, y: 0, width: tableFrame.width - 40, height: view.frame.height))
-            dateLabel.font = .systemFont(ofSize: 28, weight: .bold)
-            dateLabel.textColor = UIColor(red: 241/255, green: 129/255, blue: 58/255, alpha: 1)
+        cell.dateLabel.text = "\(makeTwo(n: newTableData[section - 1].date.day ?? 0))"
+        cell.monthLabel.text = "\(returnMonth(newTableData[section - 1].date.month ?? 0)),\n\(newTableData[section - 1].date.year ?? 0)"
+        cell.yearLabel.text = "\(newTableData[section - 1].date.year ?? 0)"
+        cell.mainView.layer.cornerRadius = 15
+        cell.mainView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        return cell.contentView
 
-            let monthLabel = UILabel()
-            monthLabel.font = .systemFont(ofSize: 10, weight: .regular)
-            monthLabel.textColor = K.Colors.balanceT
-            
-            monthLabel.numberOfLines = 0
-            let amountStackLabels: [UILabel] = [dateLabel, monthLabel]
-            for label in amountStackLabels {
-                label.translatesAutoresizingMaskIntoConstraints = false
-                label.adjustsFontSizeToFitWidth = true
-                amountStack.addArrangedSubview(label)
-            }
-            let amountview = UIView()
-            let amountLabel = UILabel()
-            amountLabel.font = .systemFont(ofSize: 10, weight: .semibold)
-            amountLabel.textColor = UIColor(named: "darkTableColor") ?? .black//K.Colors.balanceV//UIColor(named: "darkTableColor") ?? .black
-            amountLabel.backgroundColor = K.Colors.balanceV
-            amountLabel.layer.masksToBounds = true
-            amountLabel.layer.cornerRadius = 2
-            
-
-            amountview.addSubview(amountLabel)
-            amountLabel.translatesAutoresizingMaskIntoConstraints = false
-            let constraints: [NSLayoutConstraint] = [
-                amountLabel.leftAnchor.constraint(equalTo: amountview.leftAnchor, constant: 0),
-                amountLabel.rightAnchor.constraint(equalTo: amountview.rightAnchor, constant: 0),
-                amountLabel.centerYAnchor.constraint(equalTo: amountview.centerYAnchor, constant: 0),
-            ]
-            NSLayoutConstraint.activate(constraints)
-            amountStack.addArrangedSubview(amountview)
-            view.addSubview(stackHelper)
-            
-            if newTableData.count > section - 1 {
-                dateLabel.text = "\(makeTwo(n: newTableData[section - 1].date.day ?? 0))"
-                monthLabel.text = "\(returnMonth(newTableData[section - 1].date.month ?? 0)),\n\(newTableData[section - 1].date.year ?? 0)"
-                amountLabel.text = " \(newTableData[section - 1].amount > 0 ? "+" : "")\(newTableData[section - 1].amount) "
-            }
-            
-            return main
-            
-        } else {
-            return nil
-        }
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section > 0 {
-            return 50
+            return 60
         } else {
             return 0
         }
     }
     
-    
+   /* func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        if section > 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "mainFooterCell") as! mainFooterCell
+            cell.totalLabel.text = "\(newTableData[section - 1].amount)"
+            cell.cornerView.layer.cornerRadius = 15
+            cell.cornerView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+            return cell.contentView
+        } else {
+            return nil
+        }
+        
+    }*/
     
     
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -1987,10 +1895,11 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                    /* if self.newTableData.count > 0 {
                        // self.mainTableView.backgroundColor = UIColor(named: "darkTableColor") ?? .black
                     }*/
-                    self.mainTableView.layer.masksToBounds = true
+                   /* self.mainTableView.layer.masksToBounds = true
                     self.mainTableView.layer.cornerRadius = self.tableCorners
                     self.mainTableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-                    self.addTransitionButton.isHidden = false
+                    self.addTransitionButton.isHidden = false*/
+                    self.mainTableView.backgroundColor = self.view.backgroundColor
                     UIView.animate(withDuration: self.animateCellWillAppear ? 0.2 : 0) {
                         let superframe = self.filterView.superview?.frame ?? .zero
                         let selfFrame = self.filterView.frame
@@ -2031,7 +1940,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             highliteCell = nil
             DispatchQueue.main.async {
 
-                UIView.animate(withDuration: 0.23) {
+               /* UIView.animate(withDuration: 0.23) {
                     cell.backgroundColor = UIColor(red: 225/255, green: 114/255, blue: 44/255, alpha: 1)
                 } completion: { (_) in
                     UIView.animate(withDuration: 0.36) {
@@ -2041,7 +1950,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                            // self.mainTableView.backgroundColor = .clear
                         }*/
                     }
-                }
+                }*/
 
                 
                 
@@ -2054,9 +1963,10 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                     /*if self.newTableData.count > 0 {
                        // self.mainTableView.backgroundColor = .clear
                     }*/
-                    self.mainTableView.layer.cornerRadius = 0
-                    self.addTransitionButton.isHidden = true//!self.forseShowAddButton ? true : false
+                    //self.mainTableView.layer.cornerRadius = 0
+                   // self.addTransitionButton.isHidden = true//!self.forseShowAddButton ? true : false
                     UIView.animate(withDuration: self.animateCellWillAppear ? 0.3 : 0) {
+                        self.mainTableView.backgroundColor = .clear
                         let superframe = self.calculationSView.superview?.frame ?? .zero
                         let selfFrame = self.calculationSView.frame
                         self.calculationSView.frame = CGRect(x: selfFrame.minX, y: -superframe.height, width: selfFrame.width, height: selfFrame.height)
@@ -2179,4 +2089,22 @@ extension ViewController: SettingsViewControllerProtocol {
     }
     
     
+}
+
+
+
+
+class mainHeaderCell: UITableViewCell {
+    
+    @IBOutlet weak var mainView: UIView!
+    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var monthLabel: UILabel!
+    @IBOutlet weak var yearLabel: UILabel!
+    
+}
+
+class mainFooterCell: UITableViewCell {
+    
+    @IBOutlet weak var cornerView: UIView!
+    @IBOutlet weak var totalLabel: UILabel!
 }

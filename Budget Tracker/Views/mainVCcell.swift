@@ -25,6 +25,10 @@ class mainVCcell: UITableViewCell {
         } else {
             valueLabel.textColor = K.Colors.category
         }
+        
+        
+        
+        
         commentLabel.isHidden = true
         
         let value = String(format:"%.0f", Double(data.value) ?? 0.0)

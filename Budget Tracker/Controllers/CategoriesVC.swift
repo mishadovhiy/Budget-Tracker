@@ -506,7 +506,7 @@ class CategoriesVC: SuperViewController {
         }
     }
     
-    let footerHeight:CGFloat = 35
+    let footerHeight:CGFloat = 40
     
     let newCategoryTextField = UITextField(frame: .zero)
     var showAnimatonOnSwitch = true
@@ -519,7 +519,7 @@ class CategoriesVC: SuperViewController {
 
 extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return darkAppearence ? 3 : 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -545,11 +545,7 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent, for: indexPath) as! categoriesVCcell
         cell.proView.layer.cornerRadius = 4
-        if darkAppearence {
-            cell.backgroundColor = UIColor(named: "darkTableColor")
-        } else {
-            cell.backgroundColor = K.Colors.background
-        }
+        cell.backgroundColor = darkAppearence ? .black : .white
         
         switch indexPath.section {
         case 0:
@@ -581,15 +577,20 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let lightBackground = K.Colors.background //UIColor(red: 194/255, green: 194/255, blue: 194/255, alpha: 1)
-        view.backgroundColor = self.view.backgroundColor == K.Colors.background ? lightBackground : darkSectionBackground
-        let mainFrame = self.view.frame
-        let view = UIView(frame: CGRect(x: 0, y: 0, width: mainFrame.width, height: 25))
-        view.backgroundColor = self.view.backgroundColor == K.Colors.background ? lightBackground : darkSectionBackground
-        let label = UILabel(frame: CGRect(x: 15, y: 5, width: mainFrame.width - 40, height: 20))
+      //  let lightBackground = K.Colors.balanceT //UIColor(red: 194/255, green: 194/255, blue: 194/255, alpha: 1)
+     //   view.backgroundColor = self.view.backgroundColor == K.Colors.background ? lightBackground : darkSectionBackground
+        let mainFrame = tableView.frame
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: mainFrame.width, height: footerHeight))
+        let helperView = UIView(frame: CGRect(x: 0, y: 10, width:mainFrame.width, height: footerHeight - 10))
+        helperView.layer.cornerRadius = 6
+        helperView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        helperView.backgroundColor = darkAppearence ? .black : .white
+        view.backgroundColor = self.view.backgroundColor
+        let label = UILabel(frame: CGRect(x: 10, y: 15, width: mainFrame.width - 40, height: 20))
         label.text = section == 0 ? K.expense : K.income
-        label.textColor = view.backgroundColor == lightBackground ? K.Colors.balanceT : K.Colors.balanceV
+        label.textColor = darkAppearence ? .white : K.Colors.balanceV
         label.font = .systemFont(ofSize: 14, weight: .medium)
+        view.addSubview(helperView)
         view.addSubview(label)
         switch section {
         case 0: label.text = K.expense
@@ -601,6 +602,14 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
         
     }
 
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 0 || section == 1 {
+            return footerHeight// + (safeAreaButton > 0 ? 10 : 0)
+        } else {
+            return 0
+        }
+    }
+    
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if section == 0 || section == 1 {
@@ -612,9 +621,23 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if section == 0 || section == 1 {
+            ///text filed
+            ///send button - appeares on tf value chenge
+            
+            let cell = tableView.dequeueReusableCell(withIdentifier: "newCategoryCell") as! newCategoryCell
+            cell.categoryTextField.placeholder = "New " + (section == 0 ? "expence" : "income")
+            cell.categoryTextField.delegate = self
+            cell.categoryTextField.tag = section
+            cell.contentView.layer.cornerRadius = 6
+            cell.contentView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+            cell.contentView.backgroundColor = darkAppearence ? .black : .white
+            return cell.contentView
+            
+       /*
+            
         //    let h = footerHeight + (safeAreaButton > 0 ? 10 : 0)
             let view = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: footerHeight + 20))
-            view.backgroundColor = editingValue != nil ? ((section == 0 && editingValue! == .expenses) || (section == 1 && editingValue! == .income) ? self.tableView.backgroundColor : .clear) : .clear
+            view.backgroundColor = K.Colors.balanceT//editingValue != nil ? ((section == 0 && editingValue! == .expenses) || (section == 1 && editingValue! == .income) ? self.tableView.backgroundColor : .clear) : .clear
             view.layer.masksToBounds = false
             view.layer.zPosition = 1
             view.superview?.layer.masksToBounds = false
@@ -652,7 +675,7 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
                     
                 }
             }
-            return view
+            return view*/
         } else {
             return nil
         }
@@ -768,7 +791,26 @@ extension CategoriesVC: UITextFieldDelegate {
         return true
     }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        let newCategory = textField.text ?? ""
+        if newCategory != "" {
+            let purpose = textField.tag == 0 ? K.expense : K.income
+            if appData.username != "" {
+                self.whenNoCategories()
+                self.sendToDBCategory(title: newCategory, purpose: purpose)
+            } else {
+                var categories = Array(appData.getCategories())
+                categories.append(CategoriesStruct(name: newCategory, purpose: purpose, count: 0))
+                appData.saveCategories(categories)
+                self.getDataFromLocal()
+            }
+        }
         DispatchQueue.main.async {
+            textField.endEditing(true)
+        }
+        
+        return true
+      /*  DispatchQueue.main.async {
             if let name = self.newCategoryTextField.text {
                 if name != "" {
                     if let puposee = self.editingValue {
@@ -792,6 +834,16 @@ extension CategoriesVC: UITextFieldDelegate {
             }
         }
         return true
+    }*/
     }
+    
+}
+
+
+
+class newCategoryCell: UITableViewCell {
+    
+    
+    @IBOutlet weak var categoryTextField: UITextField!
     
 }

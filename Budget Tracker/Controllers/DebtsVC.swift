@@ -69,10 +69,16 @@ class DebtsVC: SuperViewController {
         }
     }
     
+    @IBOutlet weak var newDebtTextField: UITextField!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        newDebtField.delegate = self
+        
+        newDebtTextField.delegate = self
+        newDebtTextField.superview?.backgroundColor = darkAppearence ? .black : .white
+        newDebtTextField.superview?.layer.cornerRadius = 6
+        tableView.layer.cornerRadius = 6
         DispatchQueue.main.async {
             if appData.username != "" {
                 self.addRefreshControll()
@@ -99,6 +105,9 @@ class DebtsVC: SuperViewController {
                 self.newDebtButton.backgroundColor = K.Colors.category
             }
         }
+        
+        tableView.backgroundColor = darkAppearence ? .black : .white
+        
         if #available(iOS 13.0, *) {
             if darkAppearence {
                 self.newDebtField.keyboardAppearance = .dark
@@ -208,10 +217,10 @@ class DebtsVC: SuperViewController {
             let keyboardHeight = keyboardRectangle.height
             if keyboardHeight > 1.0 {
                 DispatchQueue.main.async {
-                    self.tableView.contentInset.bottom = keyboardHeight - self.safeAreaButton + (self.newDebtButton.superview?.layer.frame.height ?? 0)
+                    self.tableView.contentInset.bottom = keyboardHeight - self.safeAreaButton + (self.newDebtTextField.superview?.layer.frame.height ?? 0)
                    // self.tableView.contentOffset = CGPoint(x: self.tableView.contentOffset.x, y: self.tableView.contentOffset.y - keyboardHeight)
                     UIView.animate(withDuration: 0.3) {
-                        self.newDebtButton.superview?.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, (keyboardHeight - self.safeAreaButton) * (-1), 0)
+                        self.newDebtTextField.superview?.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, (keyboardHeight - self.safeAreaButton) * (-1), 0)
                     } completion: { (_) in
                         
                     }
@@ -258,8 +267,8 @@ class DebtsVC: SuperViewController {
         tableData = result.sorted { $0.amount < $1.amount }
         DispatchQueue.main.async {
             
-            if self.newDebtField.isFirstResponder {
-                self.newDebtField.endEditing(true)
+            if self.newDebtTextField.isFirstResponder {
+                self.newDebtTextField.endEditing(true)
             }
         }
     }
@@ -403,6 +412,7 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "debtCell", for: indexPath) as! debtCell
         //let data = indexPath.section == 0 ? tableData[indexPath.row] : emptyValuesTableData[indexPath.row]
+        cell.amountToPay.isHidden = true
         var data: DebtsTableStruct?
         switch indexPath.section {
         case 0: data = tableData[indexPath.row]
@@ -416,6 +426,10 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
             //let withTotal = data?.amountToPay == "" || data?.amountToPay == "0" ? "\(dat.amount)" : "\(dat.amount)\n\(dat.amountToPay)"
             cell.amountLabel.text = indexPath.section == 2 ? "No records" : "\(dat.amount)"
             cell.amountToPay.text = "\(dat.amountToPay)"
+            if dat.amountToPay != "" {
+                cell.amountToPay.isHidden = false
+            }
+            
         } 
         let dateComp = stringToDateComponent(s: data?.dueDate ?? "", dateFormat: K.fullDateFormat)
         let expired = dateExpired(data?.dueDate ?? "")
@@ -585,7 +599,7 @@ extension DebtsVC : UITextFieldDelegate {
     }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         DispatchQueue.main.async {
-            if let name = self.newDebtField.text {
+            if let name = textField.text {
                 if name != "" {
                     if appData.username != "" {
                         self.sendToDBDebt(title: name, purpose: K.expense)
