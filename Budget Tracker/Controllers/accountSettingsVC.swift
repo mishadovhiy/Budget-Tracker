@@ -42,7 +42,7 @@ class accountSettingsVC: SuperViewController {
         count = 0
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.contentInset.top = self.view.frame.height / 2 + (self.view.frame.height / 8)
+       // tableView.contentInset.top = self.view.frame.height / 2 + (self.view.frame.height / 8)
         loadscroll = tableView.contentOffset.y
         print(loadscroll, "bhjkbjkbnjk")
         if appData.username == "" {
@@ -178,6 +178,15 @@ class accountSettingsVC: SuperViewController {
                             self.ai.showTextField(type: .password, title: "Enter your old password", userData: (("username:", username), ("email:",userData[1]))) { (enteredPassword, _) in
                                 self.checkOldPassword(enteredPassword, dbPassword: userData[2], email: userData[1])
                             }
+                        
+                        let nextAction = {
+                            let new = EnterValueVC.shared?.textFieldText ?? ""
+                            self.checkOldPassword(new, dbPassword: userData[2], email: userData[1])
+                        }
+                        
+                        let userrData:((String, String)?, (String, String)?)? = ((),())
+                        
+                        self.enterValueVCScreenData = EnterValueVCScreenData(taskName: "Change password", title: "Enter your old password", subTitle: nil, placeHolder: "Old password", nextAction: nextAction, descriptionTable: userData)
                        // }
                         
                     } else {
@@ -767,7 +776,6 @@ class accountSettingsVC: SuperViewController {
                                     self.enterValueVCScreenData = EnterValueVCScreenData(taskName: taskNameTitle, title: "Restoration code", subTitle: "We have sent 4-digit resoration code on your email", placeHolder: "Code", nextAction: nextAction, descriptionTable: userData)
                                     
                                     
-                                    
                                 }
                             }
                         }
@@ -867,22 +875,42 @@ class accountSettingsVC: SuperViewController {
 
 
 extension accountSettingsVC: UITableViewDelegate, UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableData.count
+        
+        return section == 1 ? tableData.count : 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "accountSettingsCell", for: indexPath) as! accountSettingsCell
-        
-        cell.nameLabel.text = tableData[indexPath.row].name
-        cell.valueLabel.text = tableData[indexPath.row].value
-        cell.accessoryType = tableData[indexPath.row].needIndicator ? .disclosureIndicator : .none
-        
-        cell.nameLabel.textColor = !tableData[indexPath.row].needIndicator ? K.Colors.balanceT : (tableData[indexPath.row].isRed ? K.Colors.negative : K.Colors.darkTable)//K.Colors.darkTable
-        cell.valueLabel.textColor = !tableData[indexPath.row].needIndicator ? K.Colors.balanceT : K.Colors.darkTable
-        
-        
-        return cell
+        if indexPath.section == 1 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "accountSettingsCell", for: indexPath) as! accountSettingsCell
+            
+            cell.nameLabel.text = tableData[indexPath.row].name
+            cell.valueLabel.text = tableData[indexPath.row].value
+            cell.accessoryType = tableData[indexPath.row].needIndicator ? .disclosureIndicator : .none
+            
+            cell.nameLabel.textColor = !tableData[indexPath.row].needIndicator ? K.Colors.balanceT : (tableData[indexPath.row].isRed ? K.Colors.negative : K.Colors.darkTable)//K.Colors.darkTable
+            cell.valueLabel.textColor = !tableData[indexPath.row].needIndicator ? K.Colors.balanceT : K.Colors.darkTable
+            
+            
+            return cell
+        } else {
+            let cell = UITableViewCell()
+            let selection = UIView()
+            selection.backgroundColor = .clear
+            cell.selectedBackgroundView = selection
+            cell.backgroundColor = .clear
+            cell.contentView.backgroundColor = .clear
+            return cell
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return indexPath.section == 0 ? ((self.view.frame.height / 2) + (self.view.frame.height / 8)) : UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -892,8 +920,14 @@ extension accountSettingsVC: UITableViewDelegate, UITableViewDataSource {
                 print("dddd")
             }
         }*/
-        tableData[indexPath.row].action()
-        tableView.deselectRow(at: indexPath, animated: true)
+        if indexPath.section == 1 {
+            tableData[indexPath.row].action()
+            tableView.deselectRow(at: indexPath, animated: true)
+        } else {
+            self.dismiss(animated: true) {
+                
+            }
+        }
     }
 }
 
