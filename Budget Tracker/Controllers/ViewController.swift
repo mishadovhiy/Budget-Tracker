@@ -385,6 +385,8 @@ class ViewController: SuperViewController {
     }
     
     func downloadFromDB() {
+        //check purchase
+        //ckeck password
         _categoriesHolder.removeAll()
         _debtsHolder.removeAll()
         print("downloadFromDBdownloadFromDB")

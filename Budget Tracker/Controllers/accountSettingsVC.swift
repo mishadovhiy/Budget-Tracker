@@ -38,6 +38,9 @@ class accountSettingsVC: SuperViewController {
     var loadscroll:CGFloat = 0.0
     override func viewDidLoad() {
         super.viewDidLoad()
+        if appData.username != "" && appData.password == "" {
+            appData.username = ""
+        }
         accountSettingsVC.shared = self
         count = 0
         tableView.delegate = self
@@ -45,26 +48,7 @@ class accountSettingsVC: SuperViewController {
        // tableView.contentInset.top = self.view.frame.height / 2 + (self.view.frame.height / 8)
         loadscroll = tableView.contentOffset.y
         print(loadscroll, "bhjkbjkbnjk")
-        if appData.username == "" {
-            let forgotPassword = {
-             //   DispatchQueue.main.async {
-                    self.forgotPasswordTapped()
-              //  }
-                
-            }
-            self.tableData = [
-                tableStruct(name: "Device purchase", value: appData.purchasedOnThisDevice ? "Yes":"No", needIndicator: false, action: self.breakAction),
-                tableStruct(name: "Forgot password", value: "", needIndicator: true, action: forgotPassword)
-            ]
-
-            DispatchQueue.main.async {
-              //  self.delegate?.dataLoaded()
-                self.tableView.reloadData()
-            }
-            
-        } else {
-            loadScreen()
-        }
+        loadScreen()
     }
     
     var webPurchuase:Bool?
@@ -76,9 +60,38 @@ class accountSettingsVC: SuperViewController {
             self.logout()
         }
         let forgotPassword = {
-            DispatchQueue.main.async {
+            if appData.username != "" {
                 self.forgotPasswordTapped()
+            } else {
+                
+                    
+                
+                let nextAction = {
+                    self.ai.show { _ in
+                    let newValue = EnterValueVC.shared?.textFieldText ?? ""
+                    self.loadUsers { users in
+                        var found = false
+                        for i in 0..<users.count {
+                            if users[i][0] == newValue {
+                                found = true
+                            }
+                        }
+                        
+                        if !found {
+                            self.showAlert(title: "User not found", text: nil, error: true)
+                        } else {
+                            appData.username = newValue
+                            appData.password = ""
+                            self.sendRestorationCode(toChange: .changePassword)
+                        }
+                        
+                    }
+                    }
+                }
+                
+                self.enterValueVCScreenData = EnterValueVCScreenData(taskName: "Forgot password", title: "Enter your username", placeHolder: "Username", nextAction: nextAction)
             }
+            
            /* DispatchQueue.main.async {
                 self.performSegue(withIdentifier: "toEnterValueVC", sender: self)
             }*/
@@ -87,7 +100,9 @@ class accountSettingsVC: SuperViewController {
             self.changePasswordTapped()
         }
         
-        self.tableData = [
+        
+        
+        self.tableData = appData.username != "" ? [
             tableStruct(name: "Username", value: appData.username, needIndicator: false, action: self.breakAction),
             tableStruct(name: "Web purchase", value: webPurchuase == nil ? "" : (webPurchuase ?? false ? "Yes" : "No"), needIndicator: false, action: self.breakAction),
             tableStruct(name: "Device purchase", value: appData.purchasedOnThisDevice ? "Yes":"No", needIndicator: false, action: self.breakAction),
@@ -95,6 +110,9 @@ class accountSettingsVC: SuperViewController {
             tableStruct(name: "Change password", value: "", needIndicator: true, action: changePassword),
             tableStruct(name: "Forgot password", value: "", needIndicator: true, action: forgotPassword),
             tableStruct(name: "Log out", value: "", needIndicator: true, action: logoutAction, isRed: true)
+        ] : [
+            tableStruct(name: "Device purchase", value: appData.purchasedOnThisDevice ? "Yes":"No", needIndicator: false, action: self.breakAction),
+            tableStruct(name: "Forgot password", value: "", needIndicator: true, action: forgotPassword),
         ]
 
         DispatchQueue.main.async {
@@ -104,11 +122,20 @@ class accountSettingsVC: SuperViewController {
     }
     
     
+    func loadUsers(completion:@escaping ([[String]]) -> ()) {
+        let load = LoadFromDB()
+        load.Users { (users, error) in
+            if !error {
+                completion(users)
+            } else {
+                self.showAlert(title: "Ошибка", text: "", error: true)
+            }
+        }
+    }
+    
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        if appData.username != "" {
-            getData()
-        }
         
     }
     
@@ -119,6 +146,7 @@ class accountSettingsVC: SuperViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillAppear(true)
         delegate?.dismissed()
+        
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
@@ -175,18 +203,16 @@ class accountSettingsVC: SuperViewController {
                         }
 
                         //DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                            self.ai.showTextField(type: .password, title: "Enter your old password", userData: (("username:", username), ("email:",userData[1]))) { (enteredPassword, _) in
-                                self.checkOldPassword(enteredPassword, dbPassword: userData[2], email: userData[1])
-                            }
+
                         
                         let nextAction = {
                             let new = EnterValueVC.shared?.textFieldText ?? ""
-                            self.checkOldPassword(new, dbPassword: userData[2], email: userData[1])
+                            self.checkChangeOldPassword(new, dbPassword: userData[2], email: userData[1])
                         }
                         
-                        let userrData:((String, String)?, (String, String)?)? = ((),())
+                        let userrData:((String, String)?, (String, String)?)? = (("Email:", userData[1]),("Nickname:",userData[0]))
                         
-                        self.enterValueVCScreenData = EnterValueVCScreenData(taskName: "Change password", title: "Enter your old password", subTitle: nil, placeHolder: "Old password", nextAction: nextAction, descriptionTable: userData)
+                        self.enterValueVCScreenData = EnterValueVCScreenData(taskName: "Change password", title: "Enter your old password", subTitle: nil, placeHolder: "Old password", nextAction: nextAction, descriptionTable: userrData)
                        // }
                         
                     } else {
@@ -214,27 +240,14 @@ class accountSettingsVC: SuperViewController {
                                     break
                                 }
                             }
-                          /*  self.ai.completeWithActions(buttonsTitles: ("Cancel", "Send"), leftButtonActon: { (_) in
-                                self.ai.fastHide { (_) in
-                                    
-                                }
-                            }, rightButtonActon: { (_) in
-                                self.foundUsername = nil
-                                self.ai.show(title: "Sending", appeareAnimation: true) { _ in
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                                        self.sendRestorationCode(toChange: .changePassword)
-                                    }
-                                }
-                                
-                                
-                            }, title: "Send code", description: "to change password we will have to send you a restoration code on email: \(emailToSend)", error: false)*/
+
                             let firstButton = IndicatorView.button(title: "Cancel", style: .standart, close: true) { _ in
                             }
                             let secondButton = IndicatorView.button(title: "Send", style: .standart, close: false) { _ in
                                 self.sendRestorationCode(toChange: .changePassword)
                             }
                             DispatchQueue.main.async {
-                                self.ai.completeWithActions(buttons: (firstButton, secondButton), title: "Send code", descriptionText: "to change password we will have to send you a restoration code on email: \(emailToSend)", type: .error)
+                                self.ai.completeWithActions(buttons: (firstButton, secondButton), title: "Send code", descriptionText: "to change password we will have to send you a restoration code on email: \(emailToSend)", type: .standard)
                             }
                         } else {
                             self.sendRestorationCode(toChange: .changePassword)
@@ -316,6 +329,8 @@ class accountSettingsVC: SuperViewController {
     
     var userEmail = ""
     func getData() {
+        if appData.username != "" {
+            
         
         let load = LoadFromDB()
         load.Users { (loadedData, error) in
@@ -336,6 +351,10 @@ class accountSettingsVC: SuperViewController {
                 
             }
         }
+        }
+        else {
+            loadScreen()
+        }
     }
     func dataLoadedAnimation() {
         DispatchQueue.main.async {
@@ -355,39 +374,28 @@ class accountSettingsVC: SuperViewController {
     var currectAnsware = ""
     var foundUsername: String?
     
-    func checkOldPassword(_ password: String, dbPassword: String, email: String){
-    /*    if password != dbPassword {
-            self.ai.showTextField(type: .password, error: ("Wrong password",""), title: "Enter your old password", userData: (appData.username, email)) { (enteredPassword, _) in
-                self.ai.show { _ in
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                        self.checkOldPassword(enteredPassword, dbPassword: dbPassword, email: email)
-                    }
-                }
-            }
-            self.message.showMessage(text: "Wrong password", type: .error)
-            /*DispatchQueue.main.async {
-                self.ai.showMessage(show: true, title: "Wrong password", helpAction: nil)
-            }*/
-            
+    func checkChangeOldPassword(_ password: String, dbPassword: String, email: String){
+        
+        if password != dbPassword {
+            self.message.showMessage(text: "Error", type: .error)
         } else {
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                self.ai.showTextField(type: .password, title: "Create your new password", userData: (appData.username, email)) { (password, _) in
-                    
-                    self.ai.show { _ in
-                        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                            self.ai.showTextField(type: .password, title: "Repeat password", userData: (appData.username, email), showSecondTF: true) { (newPassword, passwordRepeat) in
-                                print("")
-                                self.ai.show { _ in
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                                        self.checkNewPassword(one: newPassword, two: passwordRepeat ?? "", userData: (appData.username, email))
-                                    }
-                                }
-                            }
-                        }
+            let repeateActionn = {
+                let fromPrev = EnterValueVC.shared?.textFieldText ?? ""
+                let repeatPasAction = {
+                    let new = EnterValueVC.shared?.textFieldText ?? ""
+                    if fromPrev != new {
+                        self.showAlert(title: "Passwords not much!", text: nil, error: true)
+                        EnterValueVC.shared?.clearAll(animated: true)
+                    } else {
+                        self.cangePasswordDB(username: appData.username, newPassword: new)
                     }
                 }
+                EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Change password", title: "Repeate password", placeHolder: "Password", nextAction: repeatPasAction))
             }
-        }*///NEWSCREEN
+            EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Change password", title: "Create your new password", placeHolder: "Password", nextAction: repeateActionn))
+        }
+        
+
     }
     
     
@@ -433,39 +441,24 @@ class accountSettingsVC: SuperViewController {
     
     
     func dbChangePassword(userData: (String, String)) {
-       /* self.ai.showTextField(type: .password, title: "Create your new password", userData: userData) { (password, notUsing) in
-            
-            self.ai.show { _ in
-                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                    self.ai.showTextField(type: .password, title: "Repeat password", userData: userData, showSecondTF: true) { (newPassword, passwordRepeat) in
-                        
-                        self.ai.show { _ in
-                            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                                self.checkNewPassword(one: newPassword, two: passwordRepeat ?? "", userData: userData)
-                            }
-                        }
-                    }
-                }
-            }
-        }*///NEWSCREEN
+
         
         let repeateActionn = {
             
             let fromPrev = EnterValueVC.shared?.textFieldText ?? ""
             
             let repeatPasAction = {
+                
                 let new = EnterValueVC.shared?.textFieldText ?? ""
                 if fromPrev != new {
-                    self.showAlert(title: "Wrong Code!", text: nil, error: true)
+                    self.showAlert(title: "Passwords not much!", text: nil, error: true)
                     EnterValueVC.shared?.clearAll(animated: true)
                 } else {
-                    EnterValueVC.shared?.closeVC(closeMessage: "Password has been changed Succsessfully!")
+                    self.cangePasswordDB(username: appData.username, newPassword: new)
                 }
             }
-            //task: "Change password", title: "Repeate password", doneAction: repeatPasAction
             EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Change password", title: "Repeate password", placeHolder: "Password", nextAction: repeatPasAction))
         }
-        //task: "Change password", title: "Create your new password", doneAction: repeateActionn
         EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Change password", title: "Create your new password", placeHolder: "Password", nextAction: repeateActionn))
     }
     
@@ -576,40 +569,7 @@ class accountSettingsVC: SuperViewController {
         }
     }
     
-    
-    
-    func checkNewPassword(one: String, two: String, userData: (String, String)) {
-        print("checkNewPassword:", "one:", one, "  ", "two:", two)
-        if one == two {
-            //send new password
-            DispatchQueue.main.async {
-                self.ai.show(appeareAnimation: true) { (_) in
-                    self.cangePasswordDB(username: userData.0, newPassword: two)
-                }
-                
-            }
-        } else {
-           // self.ai.showMessage(show: true, title: "Psswords not much", helpAction: nil)
-            let usrdat = (("username:", userData.0),("email:", userData.1))
-            self.ai.showTextField(type: .password, title: "Restoration code", description: "We have sent 4-digit resoration code on your email", userData: usrdat, showSecondTF: true) { newPassword, passwordRepeat in
-                
-               // self.ai.show { _ in
-                 //   DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                        self.checkNewPassword(one: newPassword, two: passwordRepeat ?? "", userData: userData)
-                  //  }
-              //  }
-            }
-            self.message.showMessage(text: "Passwords not much", type: .error)
-            /*self.ai.showTextField(type: .password, error: ("Psswords not much",""), title: "Repeat password", userData: userData, showSecondTF: true) { (newPassword, passwordRepeat) in
-                
-                self.ai.show { _ in
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                        self.checkNewPassword(one: newPassword, two: passwordRepeat ?? "", userData: userData)
-                    }
-                }
-            }*/
-        }
-    }
+
     
     func cangePasswordDB(username: String, newPassword: String) {
         DispatchQueue.init(label: "DB").async {
@@ -640,11 +600,7 @@ class accountSettingsVC: SuperViewController {
                             }
                             appData.password = newPassword
                             KeychainService.updatePassword(service: "BudgetTrackerApp", account: userData[0], data: newPassword)
-                            DispatchQueue.main.async {
-                                self.ai.hideIndicator(title: "Your password has been changed") { (_) in
-                                    
-                                }
-                            }
+                            EnterValueVC.shared?.closeVC(closeMessage: "Your password has been changed")
                         }
                     }
                     
@@ -788,9 +744,32 @@ class accountSettingsVC: SuperViewController {
             
         } else {
 
-            ai.showTextField(type: .nickname, title: "Enter your username", description: "You will receive 4-digits code on email asigned to this username") { (useer, _) in
-                self.seekingUser(enteredUsername: useer)
+            let nextAction = {
+                if appData.username != "" {
+                    self.ai.show(title: nil) { _ in
+                        let enteredUsername = EnterValueVC.shared?.textFieldText ?? ""
+                        
+                        let load = LoadFromDB()
+                        load.Users { (users, error) in
+                            
+                            for i in 0..<users.count {
+                                if enteredUsername == users[i][0] {
+                                    self.sendRestorationCode(toChange: toChange)
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    
+                }
+                
             }
+            
+            enterValueVCScreenData = EnterValueVCScreenData(taskName: "Forgot password", title: "Enter your username", subTitle: "You will receive restoration code", placeHolder: "Username", nextAction: nextAction)
+            
+           /* ai.showTextField(type: .nickname, title: "Enter your username", description: "You will receive 4-digits code on email asigned to this username") { (useer, _) in
+                self.seekingUser(enteredUsername: useer)
+            }*/
         }
     }
     

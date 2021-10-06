@@ -1009,7 +1009,7 @@ extension LoginViewController: accountSettingsVCDelegate {
             UIView.animate(withDuration: 0.3) {
                 self.navigationController?.navigationBar.alpha = 1
             } completion: {_ in
-                
+            
             }
         }
     }

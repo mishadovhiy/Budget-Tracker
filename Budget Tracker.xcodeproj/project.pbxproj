@@ -10,6 +10,7 @@
 		297BDB649113044757C2CEF2 /* Pods_Budget_Tracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F84A1AEB24B0EC857F848E0 /* Pods_Budget_Tracker.framework */; };
 		8B052E3D26EFD48E000BA66A /* IndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B052E3C26EFD48E000BA66A /* IndicatorView.swift */; };
 		8B052E3F26EFD4A0000BA66A /* IndicatorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B052E3E26EFD4A0000BA66A /* IndicatorView.xib */; };
+		8B1FD85D270C4DE2004E225E /* splitVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1FD85C270C4DE2004E225E /* splitVC.swift */; };
 		8B324B692683118000E72275 /* NotificationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B324B682683118000E72275 /* NotificationsVC.swift */; };
 		8B35DA6625C6F124008A8719 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B35DA6525C6F124008A8719 /* Keychain.swift */; };
 		8B4E086126544AD2006E42DA /* LogIn.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B4E086026544AD2006E42DA /* LogIn.storyboard */; };
@@ -64,6 +65,7 @@
 		60EB2258A12489890A827616 /* Pods-Budget Tracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Budget Tracker.release.xcconfig"; path = "Target Support Files/Pods-Budget Tracker/Pods-Budget Tracker.release.xcconfig"; sourceTree = "<group>"; };
 		8B052E3C26EFD48E000BA66A /* IndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndicatorView.swift; sourceTree = "<group>"; };
 		8B052E3E26EFD4A0000BA66A /* IndicatorView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IndicatorView.xib; sourceTree = "<group>"; };
+		8B1FD85C270C4DE2004E225E /* splitVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = splitVC.swift; sourceTree = "<group>"; };
 		8B324B682683118000E72275 /* NotificationsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsVC.swift; sourceTree = "<group>"; };
 		8B35DA6525C6F124008A8719 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		8B4E086026544AD2006E42DA /* LogIn.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LogIn.storyboard; sourceTree = "<group>"; };
@@ -209,6 +211,7 @@
 				8B901F1B265F0A0100E0D2BB /* accountSettingsVC.swift */,
 				8B324B682683118000E72275 /* NotificationsVC.swift */,
 				8B5F342B26FB2D97000DDCAF /* EnterValueVC.swift */,
+				8B1FD85C270C4DE2004E225E /* splitVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -355,6 +358,7 @@
 				8DD89D8A23F1472E00273904 /* MessageView.swift in Sources */,
 				8DD89D8E23F1495300273904 /* TransactionVC.swift in Sources */,
 				8D8B6C3E245023EC007260A0 /* CalendarVC.swift in Sources */,
+				8B1FD85D270C4DE2004E225E /* splitVC.swift in Sources */,
 				8DBA7E5423F0316F00D8214C /* ViewController.swift in Sources */,
 				8BD2E77C25B8622100D4DFBF /* LoginViewController.swift in Sources */,
 				8B35DA6625C6F124008A8719 /* Keychain.swift in Sources */,
