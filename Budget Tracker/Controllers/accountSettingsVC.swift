@@ -556,16 +556,7 @@ class accountSettingsVC: SuperViewController {
             }
             
         } else {
-            DispatchQueue.main.async {
-                //self.ai.showMessage(show: true, title: "Wrong code!", description: "You have entered: \(value)", helpAction: nil)
-              /*  self.ai.showTextField(type: .code, error: ("Wrong code!","You have entered: \(value)"), title: "Repeate code", dontChangeText: true) { (code, notUsing) in
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                        self.checkRestoreCode(value: code, userData: userData, ifCorrect: ifCorrect)
-                    }
-                }*/
-                self.showAlert(title: "Wrong code!", text: "You have entered: \(value)", error: true)
-            }
+            showAlert(title: "Wrong code!", text: "You have entered: \(value)", error: true)
         }
     }
     
