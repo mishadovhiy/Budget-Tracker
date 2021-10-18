@@ -17,7 +17,7 @@ var transactionAdded = false
 
 
 class HistoryVC: SuperViewController {
-    
+    private var amountToPayTFTag = 9
     @IBOutlet weak var addTransButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
     var historyDataStruct: [TransactionsStruct] = []
@@ -26,7 +26,32 @@ class HistoryVC: SuperViewController {
     var allowEditing = true
     var debt: DebtsStruct? //use this indeed
     
+    var amountToPayEditing = false
     
+    @IBOutlet weak var moreButton: UIButton!
+    
+    @IBAction func moreButtonPressed(_ sender: UIButton) {
+        let appData = AppData()
+        //get screen data
+        let addAmountToPay = {
+            self.amountToPayEditing = true
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 2), at: .bottom, animated: true)
+            }
+        }
+        
+        let addDueDate = {
+            self.tocalendatPressed()
+            
+        }
+        
+        let moreData = [
+            MoreVC.ScreenData(name: "Add amount to pay", description: "", action: addAmountToPay),
+            MoreVC.ScreenData(name: "Add Due date", description: "", action: addDueDate),
+        ]
+        appData.presentMoreVC(currentVC: self, data: moreData, dismissOnAction: true)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -168,7 +193,11 @@ class HistoryVC: SuperViewController {
             }
 
             if let name = self.debt?.name {
-            
+                DispatchQueue.main.async {
+                    if self.moreButton.isHidden != false {
+                        self.moreButton.isHidden = false
+                    }
+                }
                 if debt?.dueDate != "" {
                  /*   let expired = dateExpired(debt?.dueDate ?? "")
                     if expired {
@@ -438,8 +467,49 @@ class HistoryVC: SuperViewController {
         //
     }
     
-    
+    var calendarAmountPressed = (false, false)
 }
+
+
+
+
+
+extension HistoryVC:UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        DispatchQueue.main.async {
+            textField.endEditing(true)
+            
+        }
+        switch textField.tag {
+        case amountToPayTFTag:
+            DispatchQueue.main.async {
+                self.ai.show(title: "Sending") { _ in
+                    let text = textField.text ?? ""
+                    if let _ = Int(text) {
+                        self.changeAmountToPay(enteredAmount: text) { (_) in
+                            self.ai.fastHide { (_) in
+                                let result = text == "0" ? "" : text
+                                self.debt?.amountToPay = result
+                                self.amountToPayEditing = false
+                                //DispatchQueue.main.async {
+                                    self.tableView.reloadData()
+                                //}
+                            }
+                        }
+                    }
+                }
+            }
+        default:
+            break
+        }
+        
+        return true
+    }
+}
+
+
+
+
 
 extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -462,6 +532,14 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "DebtDescriptionCell", for: indexPath) as! DebtDescriptionCell
+            let hideButtons = calendarAmountPressed.1 ? false : true
+            if cell.changeButton.superview?.isHidden ?? true != hideButtons {
+                cell.changeButton.superview?.isHidden = hideButtons
+            }
+            
+            
+            
+            
             
             let dateComponent = stringToDateComponent(s: debt?.dueDate ?? "", dateFormat: K.fullDateFormat)
             print(dateComponent, "dateComponentdateComponentdateComponent")
@@ -493,6 +571,10 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             
             return cell
         case 1:
+            if historyDataStruct.count == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "EmptyCell") as! EmptyCell
+                return cell
+            } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: K.historyCellIdent, for: indexPath) as! HistoryCell
             let data = historyDataStruct[indexPath.row]
             
@@ -509,9 +591,25 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                 cell.valueLabel.text = "\(data.value)"
             }
             return cell
+            }
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: K.historyCellTotalIdent) as! HistoryCellTotal
            // cell.valueLabel.font = .systemFont(ofSize: debt?.amountToPay == "" ? 21 : 15, weight: debt?.amountToPay == "" ? .medium : .regular)
+            let hideTF = amountToPayEditing ? false : true
+            if hideTF != cell.amountTF.isHidden {
+                cell.amountTF.isHidden = hideTF
+                
+            }
+            if amountToPayEditing {
+                cell.amountTF.tag = amountToPayTFTag
+                cell.amountTF.delegate = self
+                cell.amountTF.becomeFirstResponder()
+            }
+            
+            let hideButtons = calendarAmountPressed.1 ? false : true
+            if cell.changeButton.superview?.isHidden ?? true != hideButtons {
+                cell.changeButton.superview?.isHidden = hideButtons
+            }
             let hasTotalSum = debt?.amountToPay ?? "" == "" || debt?.amountToPay ?? "0" == "" ? false : true
             let totalSumm = totalSum()
             cell.valueLabel.text = (totalSumm < Double(Int.max) ? "\(Int(totalSumm))" : "\(totalSumm)")
@@ -528,16 +626,16 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                 cell.perioudLabel.text = selectedPeroud
             }
             if debt == nil {
-                cell.noRestToPay.isHidden = true
+              //  cell.noRestToPay.isHidden = true
                 cell.totalToPayLabel.isHidden = true
             } else {
-                cell.noRestToPay.layer.masksToBounds = true
-                cell.noRestToPay.layer.cornerRadius = 4
+               // cell.noRestToPay.layer.masksToBounds = true
+              //  cell.noRestToPay.layer.cornerRadius = 4
                 if debt?.amountToPay == "" || debt?.amountToPay == "0" {
-                    cell.noRestToPay.isHidden = false
+             //       cell.noRestToPay.isHidden = false
                     cell.totalToPayLabel.isHidden = true
                 } else {
-                    cell.noRestToPay.isHidden = true
+               //     cell.noRestToPay.isHidden = true
                     cell.totalToPayLabel.isHidden = false
                     cell.totalToPayLabel.text = debt?.amountToPay
                 }
@@ -611,7 +709,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                 
             }
             deleteAction.backgroundColor = K.Colors.negative
-            return UISwipeActionsConfiguration(actions: allowEditing ? [deleteAction] : [])
+            return historyDataStruct.count == 0 ? nil : UISwipeActionsConfiguration(actions: allowEditing ? [deleteAction] : [])
         } else {
             //check if debts has total amount
             return nil
@@ -634,18 +732,22 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
     }*/
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        calendarAmountPressed = (false,false)
         DispatchQueue.main.async {
             self.tableView.deselectRow(at: indexPath, animated: true)
         }
         if indexPath.section == 2 {
+            
             DispatchQueue.main.async {
                 if self.debt?.name == "" {
                     return
                 }
                 if self.debt?.amountToPay ?? "" == "" || self.debt?.amountToPay ?? "" == "0" {
+                    
                     self.changeAmountToPayWithtextField()
                 } else {
-                    let okButton = IndicatorView.button(title: "Change", style: .standart, close: false) { _ in
+                    self.calendarAmountPressed = (false, self.calendarAmountPressed.1 ? false : true)
+                 /*   let okButton = IndicatorView.button(title: "Change", style: .standart, close: false) { _ in
                         self.changeAmountToPayWithtextField()
                     }
                             
@@ -663,7 +765,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                     
                     DispatchQueue.main.async {
                         self.ai.completeWithActions(buttons: (okButton, changeButton), title: "Do you want to change amount", descriptionText: "")
-                    }
+                    }*/
                     
 
                 }
@@ -671,8 +773,23 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                 
             }
         } else {
-            tocalendatPressed()
+            if indexPath.section == 0 {
+                if self.debt?.dueDate ?? "" != "" {
+                    calendarAmountPressed = (calendarAmountPressed.0 ? false : true, false)
+                } else {
+                    tocalendatPressed()
+                }
+                
+            }
+            
         }
+        
+        tableView.reloadData()
+        
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return indexPath.section == 1 ? (historyDataStruct.count == 0 ? tableView.frame.height - 300 : UITableView.automaticDimension) : UITableView.automaticDimension
     }
     
 }
@@ -753,6 +870,16 @@ class DebtDescriptionCell: UITableViewCell {
     @IBOutlet weak var alertMonthLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var expiredDaysCount: UILabel!
+    
+    @IBAction func changeDatePressed(_ sender: Any) {
+    }
+    @IBOutlet weak var changeButton: UIButton!
+    @IBOutlet weak var doneButton: UIButton!
+    
+    @IBAction func doneDatePressed(_ sender: Any) {
+    }
+    
+
 }
 
 

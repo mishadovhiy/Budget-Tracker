@@ -50,6 +50,25 @@ class AppData {
         }
     }
     
+    
+    func presentMoreVC(currentVC: UIViewController, data: [MoreVC.ScreenData], dismissOnAction:Bool = false) {
+        DispatchQueue.main.async {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let vccc = storyboard.instantiateViewController(withIdentifier: "MoreVC") as! MoreVC
+            vccc.modalPresentationStyle = .overCurrentContext //.pageSheet
+            vccc.navigationController?.setNavigationBarHidden(true, animated: false)
+            currentVC.present(vccc, animated: true)
+            vccc.tableData = data
+            vccc.dismissOnAction = dismissOnAction
+        }
+        
+    }
+    
+    
+    
+    
+    
+    
     var username: String {
         get{
             return defaults.value(forKey: "username") as? String ?? ""

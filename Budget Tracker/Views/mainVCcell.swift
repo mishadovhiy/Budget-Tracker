@@ -166,6 +166,9 @@ class HistoryCell: UITableViewCell {
 }
 
 
+
+
+
 class HistoryCellTotal: UITableViewCell {
     
     @IBOutlet weak var totalToPayLabel: UILabel!
@@ -174,6 +177,13 @@ class HistoryCellTotal: UITableViewCell {
     @IBOutlet weak var perioudLabel: UILabel!
     @IBOutlet weak var restToPayyLabel: UILabel!
     
+    @IBOutlet weak var amountTF: UITextField!
+    @IBOutlet weak var doneButton: UIButton!
+    @IBOutlet weak var changeButton: UIButton!
+    @IBAction func changePressed(_ sender: Any) {
+    }
+    @IBAction func donePressed(_ sender: Any) {
+    }
 }
 
 class FilterCell: UITableViewCell {
@@ -193,4 +203,11 @@ class CVCell: UICollectionViewCell {
         backgroundCell.layer.masksToBounds = true
         backgroundCell.layer.cornerRadius = 3//backgroundCell.bounds.width / 2
     }
+}
+
+
+
+
+class EmptyCell:UITableViewCell {
+    
 }
