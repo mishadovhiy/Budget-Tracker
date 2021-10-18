@@ -14,9 +14,12 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var dismissOnAction = false
     var dataHolder:[ScreenData] = []
     
+    var firstLaunch = true
+    var firstCellHeight:CGFloat = 0
     var tableData:[ScreenData] {
         set {
             dataHolder = newValue
+            
             DispatchQueue.main.async {
                 if self.tableView != nil {
                     self.tableView.reloadData()
@@ -126,7 +129,9 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath.section == 0 ? tableView.frame.height - tableView.contentSize.height : UITableView.automaticDimension
+        //firstCellHeight
+        //tableView.frame.height - tableView.contentSize.height
+        return indexPath.section == 0 ? firstCellHeight : UITableView.automaticDimension
     }
     
 }
