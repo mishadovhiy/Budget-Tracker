@@ -30,7 +30,7 @@ class CategoriesVC: SuperViewController {
     var delegate: CategoriesVCProtocol?
     var darkAppearence = false
     
-    var safeAreaButton: CGFloat = 0.0
+    
 
     
     
@@ -123,7 +123,7 @@ class CategoriesVC: SuperViewController {
             let keyboardHeight = keyboardRectangle.height
             if keyboardHeight > 1.0 {
                 DispatchQueue.main.async {
-                    self.tableView.contentInset.bottom = keyboardHeight - self.safeAreaButton
+                    self.tableView.contentInset.bottom = keyboardHeight - appData.safeArea.1//self.safeAreaButton
                    // self.tableView.contentOffset = CGPoint(x: self.tableView.contentOffset.x, y: self.tableView.contentOffset.y - keyboardHeight)
                 }
 
@@ -466,7 +466,7 @@ class CategoriesVC: SuperViewController {
                 if !fromSettings {
                     vc.delegate = self
                     vc.darkAppearence = self.darkAppearence
-                    vc.safeAreaButton = safeAreaButton
+                    vc.safeAreaButton = appData.safeArea.1//safeAreaButton
                 }
             }
         }
@@ -621,61 +621,16 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if section == 0 || section == 1 {
-            ///text filed
-            ///send button - appeares on tf value chenge
-            
             let cell = tableView.dequeueReusableCell(withIdentifier: "newCategoryCell") as! newCategoryCell
             cell.categoryTextField.placeholder = "New " + (section == 0 ? "expence" : "income")
             cell.categoryTextField.delegate = self
             cell.categoryTextField.tag = section
-            cell.contentView.layer.cornerRadius = 6
-            cell.contentView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-            cell.contentView.backgroundColor = darkAppearence ? .black : .white
-            return cell.contentView
-            
-       /*
-            
-        //    let h = footerHeight + (safeAreaButton > 0 ? 10 : 0)
-            let view = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: footerHeight + 20))
-            view.backgroundColor = K.Colors.balanceT//editingValue != nil ? ((section == 0 && editingValue! == .expenses) || (section == 1 && editingValue! == .income) ? self.tableView.backgroundColor : .clear) : .clear
-            view.layer.masksToBounds = false
-            view.layer.zPosition = 1
-            view.superview?.layer.masksToBounds = false
+            let view = cell.contentView
+            view.layer.cornerRadius = 6
+            view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+            view.backgroundColor = darkAppearence ? .black : .white
+            return view
 
-            let button = UIButton(frame: CGRect(x: (tableView.frame.width / 2) - 55, y: self.safeAreaButton > 0 ? (darkAppearence ? 0 : 5) : 0, width: 110, height: footerHeight))
-            let title = "New \(section == 0 ? "expense" : "income")"
-            button.setTitle(title, for: .normal)
-            button.layer.cornerRadius = 6
-            button.backgroundColor = self.editingValue == nil ? (darkAppearence ? K.Colors.category : K.Colors.darkTable) : K.Colors.pink
-            //button.tintColor = darkAppearence ? K.Colors.darkTable : K.Colors.category
-            button.titleLabel?.font = .systemFont(ofSize: 15, weight: .semibold)
-            button.setTitleColor(darkAppearence ? K.Colors.darkTable : K.Colors.category, for: .normal)
-            view.addSubview(button)
-            button.isUserInteractionEnabled = true
-            button.layer.shadowPath = UIBezierPath(rect: button.bounds).cgPath
-            button.layer.shadowColor = UIColor.black.cgColor
-            button.layer.shadowOpacity = 0.25
-            button.layer.shadowOffset = .zero
-            button.layer.shadowRadius = 6
-            
-            let addNew = UITapGestureRecognizer(target: self, action: #selector(addPressed(_:)))
-            addNew.name = "\(section)"
-            button.addGestureRecognizer(addNew)
-            button.alpha = editingValue == nil ? 1 : 0.4
-            if let isEditing = editingValue {
-                if (section == 0 && isEditing == .expenses) || (section == 1 && isEditing == .income) {
-                   
-                    button.alpha = 0
-                    self.newCategoryTextField.frame = CGRect(x: 15, y: 0, width: self.view.frame.width - 30, height: self.footerHeight)
-                    view.addSubview(self.newCategoryTextField)
-                    self.newCategoryTextField.becomeFirstResponder()
-                    
-                    
-                    
-                    
-                }
-            }
-            return view*/
         } else {
             return nil
         }

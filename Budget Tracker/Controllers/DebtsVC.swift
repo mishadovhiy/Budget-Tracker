@@ -56,7 +56,8 @@ class DebtsVC: SuperViewController {
     override func viewDidDisappear(_ animated: Bool) {
 
     }
-    let footerHeight:CGFloat = 35
+    
+    let footerHeight:CGFloat = 40
     
     let newDebtField = UITextField(frame: .zero)
     var showAnimatonOnSwitch = true
@@ -69,15 +70,15 @@ class DebtsVC: SuperViewController {
         }
     }
     
-    @IBOutlet weak var newDebtTextField: UITextField!
+ //   @IBOutlet weak var newDebtTextField: UITextField!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        newDebtTextField.delegate = self
-        newDebtTextField.superview?.backgroundColor = darkAppearence ? .black : .white
-        newDebtTextField.superview?.layer.cornerRadius = 6
+
+      //  newDebtTextField.delegate = self
+      //  newDebtTextField.superview?.backgroundColor = darkAppearence ? .black : .white
+      //  newDebtTextField.superview?.layer.cornerRadius = 6
         tableView.layer.cornerRadius = 6
         DispatchQueue.main.async {
             if appData.username != "" {
@@ -106,7 +107,7 @@ class DebtsVC: SuperViewController {
             }
         }
         
-        tableView.backgroundColor = darkAppearence ? .black : .white
+        tableView.backgroundColor = .clear//darkAppearence ? .black : .white
         
         if #available(iOS 13.0, *) {
             if darkAppearence {
@@ -201,7 +202,7 @@ class DebtsVC: SuperViewController {
             self.tableView.contentInset = self.tableContentOf
             self.newDebtButton.alpha = 1
             UIView.animate(withDuration: 0.3) {
-                self.newDebtButton.superview?.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+                //self.newDebtButton.superview?.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
             } completion: { (_) in
                 
             }
@@ -217,13 +218,9 @@ class DebtsVC: SuperViewController {
             let keyboardHeight = keyboardRectangle.height
             if keyboardHeight > 1.0 {
                 DispatchQueue.main.async {
-                    self.tableView.contentInset.bottom = keyboardHeight - self.safeAreaButton + (self.newDebtTextField.superview?.layer.frame.height ?? 0)
+                    self.tableView.contentInset.bottom = keyboardHeight - appData.safeArea.1//keyboardHeight - self.safeAreaButton + (self.newDebtTextField.superview?.layer.frame.height ?? 0)
                    // self.tableView.contentOffset = CGPoint(x: self.tableView.contentOffset.x, y: self.tableView.contentOffset.y - keyboardHeight)
-                    UIView.animate(withDuration: 0.3) {
-                        self.newDebtTextField.superview?.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, (keyboardHeight - self.safeAreaButton) * (-1), 0)
-                    } completion: { (_) in
-                        
-                    }
+
 
                 }
 
@@ -264,12 +261,14 @@ class DebtsVC: SuperViewController {
             print(resultTransactions)
         }
         plusValues = plusValues.sorted { $0.amount > $1.amount }
-        tableData = result.sorted { $0.amount < $1.amount }
+        let res = emptyValuesTableData + plusValues
+        tableData = result.sorted { $0.amount < $1.amount } + res
+     //   addingNew = false
         DispatchQueue.main.async {
-            
-            if self.newDebtTextField.isFirstResponder {
-                self.newDebtTextField.endEditing(true)
-            }
+            self.tableView.reloadData()
+          //  if self.newDebtTextField.isFirstResponder {
+          //      self.newDebtTextField.endEditing(true)
+          //  }
         }
     }
     
@@ -348,9 +347,10 @@ class DebtsVC: SuperViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         DispatchQueue.main.async {
-            let edg = UIEdgeInsets(top: self.tableView.contentInset.top, left: self.tableView.contentInset.left, bottom: self.view.safeAreaInsets.bottom + (self.newDebtButton.superview?.layer.frame.height ?? 0), right: self.tableView.contentInset.right)
-            self.tableView.contentInset = edg
-            self.tableContentOf = edg
+            //let edg = UIEdgeInsets(top: self.tableView.contentInset.top, left: self.tableView.contentInset.left, bottom: self.view.safeAreaInsets.bottom + (self.newDebtButton.superview?.layer.frame.height ?? 0), right: self.tableView.contentInset.right)
+            //self.tableView.contentInset = edg
+            //self.tableContentOf = edg
+            self.tableContentOf = self.tableView.contentInset
             self.tableView.reloadData()
 
         }
@@ -395,54 +395,61 @@ class DebtsVC: SuperViewController {
 extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         //return 4 //income debts // expences debts //complited //empty
-        return 3
+        return 1//3
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0: return tableData.count//emptyValuesTableData
-        case 1: return plusValues.count//emptyValuesTableData
-        case 2: return emptyValuesTableData.count
-        default:
-            return 0
-        }
+        return tableData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "debtCell", for: indexPath) as! debtCell
         //let data = indexPath.section == 0 ? tableData[indexPath.row] : emptyValuesTableData[indexPath.row]
+        
+        cell.backgroundColor = darkAppearence ? .black : .white
+        
         cell.amountToPay.isHidden = true
-        var data: DebtsTableStruct?
-        switch indexPath.section {
-        case 0: data = tableData[indexPath.row]
-        case 1: data = plusValues[indexPath.row]
+        let data: DebtsTableStruct = tableData[indexPath.row]
+      //  switch indexPath.section {
+    //    case 0: data = tableData[indexPath.row]
+       /* case 1: data = plusValues[indexPath.row]
         case 2: data = emptyValuesTableData[indexPath.row]
         default:
             data = tableData[indexPath.row]
-        }
-        if let dat = data {
-            cell.categoryLabel.text = dat.name
+        }*/
+   //     if let dat = data {
+            cell.categoryLabel.text = data.name
             //let withTotal = data?.amountToPay == "" || data?.amountToPay == "0" ? "\(dat.amount)" : "\(dat.amount)\n\(dat.amountToPay)"
-            cell.amountLabel.text = indexPath.section == 2 ? "No records" : "\(dat.amount)"
-            cell.amountToPay.text = "\(dat.amountToPay)"
-            if dat.amountToPay != "" {
-                cell.amountToPay.isHidden = false
+
+        cell.amountLabel.text = tableData[indexPath.row].transactions.count == 0 && tableData[indexPath.row].amount == 0 ? "No records" : "\(data.amount)"
+        cell.amountToPay.text = "\(data.amountToPay)"
+        
+            if data.amountToPay != "" {
+                if cell.amountToPay.isHidden != false {
+                    cell.amountToPay.isHidden = false
+                }
+                
+            } else {
+                if cell.amountToPay.isHidden != true {
+                    cell.amountToPay.isHidden = true
+                }
+                
             }
             
-        } 
-        let dateComp = stringToDateComponent(s: data?.dueDate ?? "", dateFormat: K.fullDateFormat)
-        let expired = dateExpired(data?.dueDate ?? "")
-        let diff = dateExpiredCount(startDate: data?.dueDate ?? "")
+   //     }
+        let dateComp = stringToDateComponent(s: data.dueDate, dateFormat: K.fullDateFormat)
+        let expired = dateExpired(data.dueDate)
+        let diff = dateExpiredCount(startDate: data.dueDate)
         cell.dueDate.textColor = expired ? K.Colors.negative : K.Colors.balanceV
         
-        let dueDateText = data?.dueDate == "" ? "" : "Due date: \(dateComp.day ?? 0) of \(returnMonth(dateComp.month ?? 0)), \(dateComp.year ?? 0)"
+        let dueDateText = data.dueDate == "" ? "" : "Due date: \(dateComp.day ?? 0) of \(returnMonth(dateComp.month ?? 0)), \(dateComp.year ?? 0)"
         let expText = expiredText(diff)
-        cell.dueDate.text = data?.dueDate == "" ? "" : (!expired ? dueDateText : "Expired:" + "\(expText == "" ? " recently" : (expText + " ago"))" )
-        cell.dueDate.isHidden = data?.dueDate ?? "" == "" ? true : false
+        cell.dueDate.text = data.dueDate == "" ? "" : (!expired ? dueDateText : "Expired:" + "\(expText == "" ? " recently" : (expText + " ago"))" )
+        cell.dueDate.isHidden = data.dueDate == "" ? true : false
         cell.categoryLabel.textColor = darkAppearence ? K.Colors.category : .black
-        cell.amountLabel.textColor = (data?.amount ?? 0) >= 0 ? (darkAppearence ? K.Colors.category : K.Colors.balanceV) : K.Colors.negative
-        cell.amountLabel.alpha = indexPath.section == 2 ? 0.4 : 1
+        cell.amountLabel.textColor = (data.amount) >= 0 ? (darkAppearence ? K.Colors.category : K.Colors.balanceV) : K.Colors.negative
+        cell.amountLabel.alpha = tableData[indexPath.row].transactions.count == 0 && tableData[indexPath.row].amount == 0 ? 0.4 : 1//indexPath.section == 2 ? 0.4 : 1
         return cell
     }
     
@@ -454,53 +461,32 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
             ai.style = .gray
             ai.startAnimating()
             view.addSubview(ai)
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
+
             transactionAdded = true
-            //let mainFrame = view.frame
-            
-            var title = ""
-            var amountToPay = ""
-            var dueDate = ""
-            switch indexPath.section {
-            case 0:
-                title = self.tableData[indexPath.row].name
-                amountToPay = self.tableData[indexPath.row].amountToPay
-                dueDate = self.tableData[indexPath.row].dueDate
-            case 1:
-                title = self.plusValues[indexPath.row].name
-                amountToPay = self.plusValues[indexPath.row].amountToPay
-                dueDate = self.plusValues[indexPath.row].dueDate
-            case 2:
-                title = self.emptyValuesTableData[indexPath.row].name
-                amountToPay = self.emptyValuesTableData[indexPath.row].amountToPay
-                dueDate = self.emptyValuesTableData[indexPath.row].dueDate
-            default:
-                print("def")
-            }
+
+            let title = self.tableData[indexPath.row].name
+            let amountToPay = self.tableData[indexPath.row].amountToPay
+            let dueDate = self.tableData[indexPath.row].dueDate
             
             
             
             var allDebts = Array(appData.debts)
             for i in 0..<allDebts.count {
                 if allDebts[i].amountToPay == amountToPay && allDebts[i].dueDate == dueDate && allDebts[i].name == title {
-                    
-                  /*  self.center.getPendingNotificationRequests { (requests) in
-                        /* DispatchQueue.main.async {
-                            UIApplication.shared.applicationIconBadgeNumber = requests.count
-                        }
-                        
-                        
+                    let center = AppDelegate.shared?.center
+                    center?.getPendingNotificationRequests { (requests) in
+                        var ids:[String] = []
                         for i in 0..<requests.count {
                             print(requests[i], "requestsrequestsrequests")
                             
                             let id = "Debts\(allDebts[i].name)"
+                            
                             if requests[i].identifier == id {
-                                self.center.removePendingNotificationRequests(withIdentifiers: [id])
+                                ids.append(id)
                             }
-                        }*/
-                   /*     allDebts.remove(at: i)
+                        }
+                        center?.removePendingNotificationRequests(withIdentifiers: ids)
+                        allDebts.remove(at: i)
                         appData.saveDebts(allDebts)
                         
                         if appData.username != "" {
@@ -513,12 +499,12 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
                                 }
                                 self.getDataFromLocal()
                             }
-                        }*/
+                        }
                         
                         
                         
                     }
-                    break*/
+                    break
                 }
             }
             
@@ -527,55 +513,61 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
         }
         deleteAction.backgroundColor = K.Colors.negative
         return UISwipeActionsConfiguration(actions: [deleteAction])
-        /*switch indexPath.section {
-        case 0:
-            return UISwipeActionsConfiguration(actions: [])
-        case 1:
-            if plusValues[indexPath.row].amount == 0 {
-                return UISwipeActionsConfiguration(actions: [deleteAction])
-            } else {
-                return UISwipeActionsConfiguration(actions: [])
-            }
-        case 2:
-            return UISwipeActionsConfiguration(actions: [deleteAction])
-        default:
-            return UISwipeActionsConfiguration(actions: [])
-        }*/
+
         
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-        var data: DebtsTableStruct?
-        switch indexPath.section {
-        case 0: data = tableData[indexPath.row]
-        case 1: data = plusValues[indexPath.row]
-        case 2: data = emptyValuesTableData[indexPath.row]
-        default:
-            data = tableData[indexPath.row]
-        }
+        let data = tableData[indexPath.row]
         if addingNew {
-           /* DispatchQueue.main.async {
+            DispatchQueue.main.async {
                 self.newDebtField.endEditing(true)
                 self.tableView.deselectRow(at: indexPath, animated: true)
-            }*/
+            }
         } else {
-            if let dat = data {
-                if !fromSettings {
-                    DispatchQueue.main.async {
-                        self.delegate?.catDebtSelected(name: dat.name, amount: dat.amount)
-                    }
-                } else {
-                    
-                    
-                    selectedCellData = dat
-                    DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: "toHistory", sender: self)
-                    }
+            if !fromSettings {
+                DispatchQueue.main.async {
+                    self.delegate?.catDebtSelected(name: data.name, amount: data.amount)
+                }
+            } else {
+                selectedCellData = data
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "toHistory", sender: self)
                 }
             }
         }
         
+    }
+    
+    
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "debtHeader") as! debtHeader
+        let view = cell.contentView
+        view.backgroundColor = darkAppearence ? .black : .white
+        view.layer.cornerRadius = 6
+        cell.contentView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        return view
+    }
+    
+    
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "newCategoryCell") as! newCategoryCell
+        cell.categoryTextField.placeholder = "New Debt Category"
+        cell.categoryTextField.delegate = self
+        cell.categoryTextField.tag = 2
+        let view = cell.contentView
+        view.layer.cornerRadius = 6
+        view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        view.backgroundColor = darkAppearence ? .black : .white
+        return view
+    }
+    
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return footerHeight
     }
 
     
@@ -589,18 +581,20 @@ protocol DebtsVCProtocol {
 
 
 extension DebtsVC : UITextFieldDelegate {
-    func textFieldShouldClear(_ textField: UITextField) -> Bool {
-        print("clear")
-        DispatchQueue.main.async {
-            
-            self.newDebtField.endEditing(true)
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField.tag == 2 {
+            addingNew = true
         }
-        return true
     }
+    
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         DispatchQueue.main.async {
+            textField.endEditing(true)
             if let name = textField.text {
                 if name != "" {
+                    textField.text = ""
                     if appData.username != "" {
                         self.sendToDBDebt(title: name, purpose: K.expense)
                     } else {
@@ -628,4 +622,11 @@ class debtCell: UITableViewCell {
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var amountLabel: UILabel!
     @IBOutlet weak var dueDate: UILabel!
+    
+}
+
+
+
+class debtHeader:UITableViewCell {
+    
 }

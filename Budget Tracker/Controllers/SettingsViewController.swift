@@ -348,7 +348,7 @@ class SettingsViewController: SuperViewController {
             let vc = segue.destination as! CategoriesVC
           //  let vc = nav.topViewController as! CategoriesVC
           //  vc.delegate = self
-            vc.safeAreaButton = self.view.safeAreaInsets.bottom
+          //  vc.safeAreaButton = appData.safeArea.1 //self.view.safeAreaInsets.bottom
             vc.fromSettings = true
         case "toDebts":
             print("")
@@ -358,7 +358,7 @@ class SettingsViewController: SuperViewController {
             vc.safeAreaButton = self.view.safeAreaInsets.bottom
             vc.fromSettings = true
         default:
-            print("default")
+            break
         }
         
 

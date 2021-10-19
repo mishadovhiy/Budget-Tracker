@@ -69,6 +69,7 @@ class HistoryVC: SuperViewController {
         }
         transactionAdded = false
         historyDataStruct = historyDataStruct.sorted{ $0.dateFromString < $1.dateFromString }
+        print(historyDataStruct.count, "didlocount")
         tableView.delegate = self
         tableView.dataSource = self
         title = selectedCategoryName.capitalized
@@ -95,9 +96,7 @@ class HistoryVC: SuperViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        
-        
-        //  addLocalNotification(date: "")
+
         if let debt = self.debt {
       //      center.removePendingNotificationRequests(withIdentifiers: ["Debts\(debt.name)"])
             center?.removeDeliveredNotifications(withIdentifiers: ["Debts\(debt.name)"])
@@ -310,72 +309,12 @@ class HistoryVC: SuperViewController {
     
     func tocalendatPressed() {
         
-        if self.debt?.dueDate ?? "" == "" {
-            center?.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
-                if granted {
-                    print("Yay!")
-                } else {
-                    print("D'oh")
-                }
-                DispatchQueue.main.async {
-                    self.performSegue(withIdentifier: "toCalendar", sender: self)
-                }
-            }
-        } else {
-            let okButton = IndicatorView.button(title: "remove", style: .standart, close: false) { _ in
-                self.changeDueDate(fullDate: "")
-                
-                let id = "Debts\(self.debt?.name ?? "")"
-                self.center?.removePendingNotificationRequests(withIdentifiers: [id])
-                DispatchQueue.main.async {
-                    self.ai.fastHide(completionn: { _ in
-                        
-                    })
-                }
-            }
-                                        
-            let showButton = IndicatorView.button(title: "Change", style: .success, close: false) { _ in
-                self.center?.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
-                    if granted {
-                        print("Yay!")
-                    } else {
-                        print("D'oh")
-                    }
-                    DispatchQueue.main.async {
-                        self.ai.fastHide(completionn: { _ in
-                            self.performSegue(withIdentifier: "toCalendar", sender: self)
-                        })
-                        
-                    }
-                }
-            }
-                                
+        center?.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+
             DispatchQueue.main.async {
-                self.ai.completeWithActions(buttons: (okButton, showButton), title: "Do you want to change due date?", descriptionText: "")
+                self.performSegue(withIdentifier: "toCalendar", sender: self)
             }
-          /*  self.loadingIndicator.completeWithActions(buttonsTitles: ("Remove","Change"), showCloseButton: true, leftButtonActon: { (_) in
-                
-                self.changeDueDate(fullDate: "")
-                
-                let id = "Debts\(self.debt?.name ?? "")"
-                self.center?.removePendingNotificationRequests(withIdentifiers: [id])
-                
-                
-            }, rightButtonActon: { (_) in
-                self.center?.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
-                    if granted {
-                        print("Yay!")
-                    } else {
-                        print("D'oh")
-                    }
-                    DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: "toCalendar", sender: self)
-                    }
-                }
-            }, title: "Do you want to change due date?", error: false)*/
         }
-        
-        
     }
     
     func dbLoadRemoveBeforeUpdate(completion: @escaping ([DebtsStruct], Bool) -> ()) {
@@ -468,6 +407,7 @@ class HistoryVC: SuperViewController {
     }
     
     var calendarAmountPressed = (false, false)
+    
 }
 
 
@@ -482,23 +422,28 @@ extension HistoryVC:UITextFieldDelegate {
         }
         switch textField.tag {
         case amountToPayTFTag:
-            DispatchQueue.main.async {
-                self.ai.show(title: "Sending") { _ in
+            
+                
                     let text = textField.text ?? ""
                     if let _ = Int(text) {
-                        self.changeAmountToPay(enteredAmount: text) { (_) in
-                            self.ai.fastHide { (_) in
-                                let result = text == "0" ? "" : text
-                                self.debt?.amountToPay = result
-                                self.amountToPayEditing = false
-                                //DispatchQueue.main.async {
-                                    self.tableView.reloadData()
-                                //}
+                        DispatchQueue.main.async {
+                            self.ai.show(title: "Sending") { _ in
+                                self.changeAmountToPay(enteredAmount: text) { (_) in
+                                    self.ai.fastHide { (_) in
+                                        let result = text == "0" ? "" : text
+                                        self.debt?.amountToPay = result
+                                        self.amountToPayEditing = false
+                                        //DispatchQueue.main.async {
+                                            self.tableView.reloadData()
+                                        //}
+                                    }
+                                }
                             }
                         }
+                        
                     }
-                }
-            }
+                
+            
         default:
             break
         }
@@ -516,7 +461,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
 
         switch section {
         case 0: return debt == nil ? 0 : 1
-        case 1: return historyDataStruct.count
+        case 1: return historyDataStruct.count == 0 ? 1 : historyDataStruct.count
         case 2: return 1
         default:
             return 0
@@ -527,31 +472,53 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
         return 3
     }
     
+    
+    func removeDueDate() {
+        self.changeDueDate(fullDate: "")
+                        
+                        let id = "Debts\(self.debt?.name ?? "")"
+                        self.center?.removePendingNotificationRequests(withIdentifiers: [id])
+                        DispatchQueue.main.async {
+                            self.ai.fastHide(completionn: { _ in
+                                
+                            })
+                        }
+    }
+    
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "DebtDescriptionCell", for: indexPath) as! DebtDescriptionCell
-            let hideButtons = calendarAmountPressed.1 ? false : true
-            if cell.changeButton.superview?.isHidden ?? true != hideButtons {
-                cell.changeButton.superview?.isHidden = hideButtons
+            cell.cellPressed = calendarAmountPressed.0
+
+
+            
+            cell.changeButton.superview?.isHidden = calendarAmountPressed.0 ? false : true
+            
+
+            let changeAction = {
+                self.tocalendatPressed()
             }
+            let removeAction = {
+                self.removeDueDate()
+            }
+            cell.changeAction = changeAction
             
-            
-            
-            
+
+            cell.removeAction = removeAction
             
             let dateComponent = stringToDateComponent(s: debt?.dueDate ?? "", dateFormat: K.fullDateFormat)
             print(dateComponent, "dateComponentdateComponentdateComponent")
             let date = "\(makeTwo(n: dateComponent.day ?? 0))"
             let month = "\(returnMonth(dateComponent.month ?? 0)), \(dateComponent.year ?? 0)"
             let expired = dateExpired(debt?.dueDate ?? "")
-            
+            cell.expired = expired
             let diff = dateExpiredCount(startDate: debt?.dueDate ?? "")
             let expText = expiredText(diff)
             cell.expiredDaysCount.text = "Expired:" + (expText == "" ? " recently" : "\(expText) ago")
             cell.expiredDaysCount.superview?.isHidden = expired ? ((debt?.dueDate == "" ? true : false)) : true
-
             print(expired, "expiredexpiredexpired")
             let defaultBackground = UIColor(red: 199/255, green: 197/255, blue: 197/255, alpha: 1)
             cell.imageBackgroundView.backgroundColor = defaultBackground//expired ? K.Colors.negative : defaultBackground
@@ -573,6 +540,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
         case 1:
             if historyDataStruct.count == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "EmptyCell") as! EmptyCell
+                cell.selectionStyle = .none
                 return cell
             } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: K.historyCellIdent, for: indexPath) as! HistoryCell
@@ -595,18 +563,41 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: K.historyCellTotalIdent) as! HistoryCellTotal
            // cell.valueLabel.font = .systemFont(ofSize: debt?.amountToPay == "" ? 21 : 15, weight: debt?.amountToPay == "" ? .medium : .regular)
+            
+            
+            let removeAmountAction = {
+                self.removeAmountToPay()
+            }
+            
+            cell.deleteFunc = removeAmountAction
+            
+            let changeFunc = {
+                self.amountToPayEditing = true
+                self.calendarAmountPressed = (false,false)
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+            
+            cell.changeFunc = changeFunc
+            
             let hideTF = amountToPayEditing ? false : true
             if hideTF != cell.amountTF.isHidden {
                 cell.amountTF.isHidden = hideTF
                 
             }
+            
+            
+            
+            
+            
             if amountToPayEditing {
                 cell.amountTF.tag = amountToPayTFTag
                 cell.amountTF.delegate = self
                 cell.amountTF.becomeFirstResponder()
             }
             
-            let hideButtons = calendarAmountPressed.1 ? false : true
+            let hideButtons = calendarAmountPressed.1 ? (amountToPayEditing ? true : (debt?.amountToPay ?? "0" == "" ? true : false)) : true
             if cell.changeButton.superview?.isHidden ?? true != hideButtons {
                 cell.changeButton.superview?.isHidden = hideButtons
             }
@@ -649,6 +640,20 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
         
 
     }
+    
+    
+    func removeAmountToPay() {
+        self.changeAmountToPay(enteredAmount: "") { (_) in
+            self.ai.fastHide { (_) in
+                self.debt?.amountToPay = ""
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+        }
+    }
+    
+    
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
 
@@ -715,6 +720,8 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             return nil
         } 
     }
+
+    
     
    /* func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let i = newItem {
@@ -737,59 +744,35 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             self.tableView.deselectRow(at: indexPath, animated: true)
         }
         if indexPath.section == 2 {
-            
             DispatchQueue.main.async {
                 if self.debt?.name == "" {
                     return
                 }
-                if self.debt?.amountToPay ?? "" == "" || self.debt?.amountToPay ?? "" == "0" {
-                    
-                    self.changeAmountToPayWithtextField()
-                } else {
+                if self.debt?.amountToPay ?? "" != "" {
                     self.calendarAmountPressed = (false, self.calendarAmountPressed.1 ? false : true)
-                 /*   let okButton = IndicatorView.button(title: "Change", style: .standart, close: false) { _ in
-                        self.changeAmountToPayWithtextField()
-                    }
-                            
-                    let changeButton = IndicatorView.button(title: "Remove", style: .error, close: false) { _ in
-                        self.changeAmountToPay(enteredAmount: "") { (_) in
-                            self.debt?.amountToPay = ""
-                            DispatchQueue.main.async {
-                                self.ai.fastHide(completionn: { _ in
-                                    self.tableView.reloadData()
-                                })
-                                
-                            }
-                        }
-                    }
-                    
-                    DispatchQueue.main.async {
-                        self.ai.completeWithActions(buttons: (okButton, changeButton), title: "Do you want to change amount", descriptionText: "")
-                    }*/
-                    
-
+                    tableView.reloadData()
                 }
-
-                
             }
         } else {
             if indexPath.section == 0 {
                 if self.debt?.dueDate ?? "" != "" {
                     calendarAmountPressed = (calendarAmountPressed.0 ? false : true, false)
-                } else {
-                    tocalendatPressed()
+                    tableView.reloadData()
                 }
-                
             }
             
         }
         
-        tableView.reloadData()
-        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath.section == 1 ? (historyDataStruct.count == 0 ? tableView.frame.height - 300 : UITableView.automaticDimension) : UITableView.automaticDimension
+        let ifDueDate = indexPath.section == 0 ? (self.debt?.dueDate ?? "" == "" ? 0 : UITableView.automaticDimension) : UITableView.automaticDimension
+        
+        
+        let dueViewHeight:CGFloat = self.debt?.dueDate ?? "" == "" ? 0 : 40
+        let heightWhenNoData = tableView.frame.height - (appData.safeArea.1 + appData.safeArea.0 + dueViewHeight)
+        
+        return indexPath.section == 1 ? (historyDataStruct.count == 0 ? heightWhenNoData : UITableView.automaticDimension) : ifDueDate
     }
     
 }
@@ -860,27 +843,7 @@ extension HistoryVC: TransitionVCProtocol {
 }
 
 
-class DebtDescriptionCell: UITableViewCell {
-    
-    @IBOutlet weak var AlertDateStack: UIStackView!
-    @IBOutlet weak var mainView: UIView!
-    @IBOutlet weak var noAlertIndicator: UILabel!
-    @IBOutlet weak var imageBackgroundView: UIView!
-    @IBOutlet weak var alertDateLabel: UILabel!
-    @IBOutlet weak var alertMonthLabel: UILabel!
-    @IBOutlet weak var timeLabel: UILabel!
-    @IBOutlet weak var expiredDaysCount: UILabel!
-    
-    @IBAction func changeDatePressed(_ sender: Any) {
-    }
-    @IBOutlet weak var changeButton: UIButton!
-    @IBOutlet weak var doneButton: UIButton!
-    
-    @IBAction func doneDatePressed(_ sender: Any) {
-    }
-    
 
-}
 
 
 extension HistoryVC: CalendarVCProtocol {
@@ -897,44 +860,11 @@ extension HistoryVC: CalendarVCProtocol {
                 
                 
                 self.addLocalNotification(date: dateComp) { (added) in
-                    if added {
-                        self.changeDueDate(fullDate: fullDate)
-                    } else {
-                        //show error
-                        self.ai.fastHide { _ in
-                            
-                        }
+                    self.changeDueDate(fullDate: fullDate)
+                    if !added {
+                        //todo: show message error
                     }
-                    
-                    /*self.dbLoadRemoveBeforeUpdate { (loadedData, _) in
-                        let save = SaveToDB()
-                        let saveToDs = "&Nickname=\(appData.username)" + "&name=\(self.debt?.name ?? "")" + "&amountToPay=\(self.debt?.amountToPay ?? "")" + "&dueDate=\(fullDate)"
-                        save.Debts(toDataString: saveToDs) { (error) in
-                            self.debt?.dueDate = fullDate
-                            print(self.debt?.dueDate, "self.debt?.dueDateself.debt?.dueDate")
-                            if error {
-                                appData.unsendedData.append(["debt": saveToDs])
-                            }
-                            
-                            var dataToSafe = loadedData
-                            for i in 0..<dataToSafe.count {
-                                if dataToSafe[i].name == self.debt?.name {
-                                    dataToSafe[i].dueDate = fullDate
-                                    break
-                                }
-                            }
-                            appData.saveDebts(dataToSafe)
-                            
-                            self.loadingIndicator.fastHide { (_) in
-                                
-                                DispatchQueue.main.async {
-                                    self.tableView.reloadData()
-                                }
-                                    
-                                
-                            }
-                        }
-                    }*/
+
                 }
             }
             
@@ -942,4 +872,109 @@ extension HistoryVC: CalendarVCProtocol {
     }
     
     
+}
+
+
+
+
+
+
+
+
+
+
+
+//cells
+class DebtDescriptionCell: UITableViewCell {
+    
+    @IBOutlet weak var AlertDateStack: UIStackView!
+    @IBOutlet weak var mainView: UIView!
+    @IBOutlet weak var noAlertIndicator: UILabel!
+    @IBOutlet weak var imageBackgroundView: UIView!
+    @IBOutlet weak var alertDateLabel: UILabel!
+    @IBOutlet weak var alertMonthLabel: UILabel!
+    @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var expiredDaysCount: UILabel!
+    
+    var cellPressed = false
+    var _expired = false
+    var expired:Bool {
+        get {
+            return _expired
+        }
+        set {
+            _expired = newValue
+            DispatchQueue.main.async {
+                self.changeButton.superview?.isHidden = newValue ? false : (self.cellPressed ? false : true)
+            }
+        }
+    }
+
+    private let ai = AppDelegate.shared?.ai ?? IndicatorView.instanceFromNib() as! IndicatorView
+    
+    var removeAction:(() -> ())?
+    @IBAction func changeDatePressed(_ sender: Any) {//remove
+        DispatchQueue.main.async {
+            self.ai.show(title: "Wait") { _ in
+                if let funcc = self.removeAction {
+                    funcc()
+                }
+            }
+        }
+        
+
+    }
+    @IBOutlet weak var changeButton: UIButton!
+    @IBOutlet weak var doneButton: UIButton!
+    
+    
+    
+    var changeAction:(() -> ())?
+    @IBAction func doneDatePressed(_ sender: Any) {//change
+        if let funcc = changeAction {
+            funcc()
+        }
+    }
+    
+
+}
+
+
+class HistoryCellTotal: UITableViewCell {
+    
+    @IBOutlet weak var totalToPayLabel: UILabel!
+    @IBOutlet weak var noRestToPay: UIButton!
+    @IBOutlet weak var valueLabel: UILabel!
+    @IBOutlet weak var perioudLabel: UILabel!
+    @IBOutlet weak var restToPayyLabel: UILabel!
+    
+    @IBOutlet weak var amountTF: UITextField!
+    @IBOutlet weak var doneButton: UIButton!
+    @IBOutlet weak var changeButton: UIButton!
+    
+    private let ai = AppDelegate.shared?.ai ?? IndicatorView.instanceFromNib() as! IndicatorView
+    
+    @IBAction func changePressed(_ sender: Any) {
+        DispatchQueue.main.async {
+            self.ai.show(title: "Wait") { _ in
+                if let funcc = self.deleteFunc {
+                    funcc()
+                }
+            }
+        }
+        
+    }
+    @IBAction func donePressed(_ sender: Any) {//change
+        DispatchQueue.main.async {
+            DispatchQueue.main.async {
+                self.amountTF.text = self.restToPayyLabel.text
+                self.amountTF.placeholder = self.restToPayyLabel.text
+            }
+            if let funcc = self.changeFunc {
+                funcc()
+            }
+        }
+    }
+    var changeFunc: (() -> ())?
+    var deleteFunc:(() -> ())?
 }

@@ -89,7 +89,7 @@ class TransitionVC: SuperViewController {
             vc.delegate = self
             vc.darkAppearence = true
             vc.hideTitle = true
-            vc.safeAreaButton = self.view.safeAreaInsets.bottom
+           // vc.safeAreaButton = appData.safeArea.1//self.view.safeAreaInsets.bottom
         default:
             print("segue default")
         }

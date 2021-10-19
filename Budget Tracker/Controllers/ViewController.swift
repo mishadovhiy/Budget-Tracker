@@ -210,7 +210,8 @@ class ViewController: SuperViewController {
     var addTransFrame = CGRect.zero
     override func viewDidLoad() {
         super.viewDidLoad()
-      //  center.delegate = self
+
+        
         updateUI()
         if #available(iOS 15.0, *) {
             self.mainTableView.sectionHeaderTopPadding = 0
@@ -814,6 +815,8 @@ class ViewController: SuperViewController {
                 UIApplication.shared.applicationIconBadgeNumber = notifications.count
             }
         }
+
+        appData.safeArea = (self.view.safeAreaInsets.top, self.view.safeAreaInsets.bottom)
     }
     
     
@@ -1791,6 +1794,8 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 cell.totalLabel.text = "\(newTableData[indexPath.section - 1].amount)"
                 cell.cornerView.layer.cornerRadius = 15
                 cell.cornerView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+                cell.separatorInset.left = tableView.frame.width / 2
+                cell.separatorInset.right = tableView.frame.width / 2
                 return cell
             } else {
                 let transactionsCell = tableView.dequeueReusableCell(withIdentifier: K.mainCellIdent, for: indexPath) as! mainVCcell
@@ -1837,7 +1842,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             }
             editeAction.backgroundColor = K.Colors.yellow
             deleteAction.backgroundColor = K.Colors.negative
-            return UISwipeActionsConfiguration(actions: [editeAction, deleteAction])
+            return UISwipeActionsConfiguration(actions: newTableData[indexPath.section - 1].transactions.count != indexPath.row ? [editeAction, deleteAction] : [] )
                                                
                                                } else {
                 return UISwipeActionsConfiguration(actions: [])

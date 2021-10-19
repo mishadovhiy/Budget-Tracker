@@ -9,7 +9,7 @@
 import UIKit
 import StoreKit
 
-class BuyProVC: SuperViewController {
+class BuyProVC: SuperViewController {//ЗАПИСЫВАТЬ ДЕЛЕГАТЫ ИЛИ ВЫЗЫВАТЬ ИЗ ЕП ДЕЛЕГАТА
     
     func showAlert(title:String,text:String?, error: Bool, goHome: Bool = false) {
         

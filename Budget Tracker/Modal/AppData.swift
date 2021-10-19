@@ -12,7 +12,7 @@ import CoreData
 class AppData {
 
     let defaults = UserDefaults.standard
-    
+    var safeArea: (CGFloat, CGFloat) = (0.0, 0.0)
     var unshowedErrors = ""
     
     var deptsData: [CategoriesStruct] = []
@@ -55,14 +55,16 @@ class AppData {
         DispatchQueue.main.async {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let vccc = storyboard.instantiateViewController(withIdentifier: "MoreVC") as! MoreVC
-            vccc.modalPresentationStyle = .pageSheet //.pageSheet
+            vccc.modalPresentationStyle = .pageSheet
           //  vccc.navigationController?.setNavigationBarHidden(true, animated: false)
             currentVC.present(vccc, animated: true)
             vccc.tableData = data
             vccc.dismissOnAction = dismissOnAction
-            let contentHeight = (data.count + 1) * 45
-            let tableInButtom =  currentVC.view.frame.height - CGFloat(contentHeight) - (currentVC.additionalSafeAreaInsets.top + currentVC.additionalSafeAreaInsets.bottom)
-            vccc.firstCellHeight = CGFloat(contentHeight) > currentVC.view.frame.height / 2 ? currentVC.view.frame.height / 2 : tableInButtom
+            vccc.navigationController?.setNavigationBarHidden(true, animated: false)
+            /*let contentHeight = (data.count + 1) * 45
+            let tableInButtom = (currentVC.view.frame.height - (currentVC.view.safeAreaInsets.top + currentVC.view.safeAreaInsets.bottom)) - CGFloat(contentHeight)
+            print(tableInButtom, "hjkhjk")
+            vccc.firstCellHeight = CGFloat(contentHeight) > currentVC.view.frame.height / 2 ? currentVC.view.frame.height / 2 : tableInButtom*/
             print(vccc.firstCellHeight, "gyuijhjk")
         }
         
