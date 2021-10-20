@@ -153,6 +153,8 @@ class accountSettingsVC: SuperViewController {
        notificationReceiver(notification: notification)
     }
     
+    
+    
     func changeEmailTapped() {
         ai.show { (_) in
             let load = LoadFromDB()
@@ -462,37 +464,7 @@ class accountSettingsVC: SuperViewController {
         EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Change password", title: "Create your new password", placeHolder: "Password", nextAction: repeateActionn))
     }
     
-    func performChanageEmail(userData: (String, String), newEmail: String) {
-        if !(newEmail).contains("@") || !(newEmail).contains(".") {
-            self.dbChangeEmail(userData: userData, error: true)
-        } else {
-            self.loadUserData(username: userData.0) { (loadedData) in
-                if let dbData = loadedData {
-                    //here
-                    let save = SaveToDB()
-                    let toDataStringMian = "&Nickname=\(dbData[0])" + "&Email=\(newEmail)" + "&Password=\(dbData[2])" + "&Registration_Date=\(dbData[3])" + "&ProVersion=\(dbData[4])" + "&trialDate=\(dbData[5])"
-                    save.Users(toDataString: toDataStringMian ) { (error) in
-                        if error {
-                            appData.unsendedData.append(["saveUser": toDataStringMian])
-                        }
-                        let delete = DeleteFromDB()
-                        let dataStringDelete = "&Nickname=\(dbData[0])" + "&Email=\(dbData[1])" + "&Password=\(dbData[2])" + "&Registration_Date=\(dbData[3])" + "&ProVersion=\(dbData[4])" + "&trialDate=\(dbData[5])"
-                        print(toDataStringMian)
-                        delete.User(toDataString: dataStringDelete) { (errorr) in
-                            if errorr {
-                                appData.unsendedData.append(["deleteUser": dataStringDelete])
-                            }
-                            DispatchQueue.main.async {
-                                self.dismiss(animated: true) {
-                                    self.showAlert(title: "Your email has been changed", text: "", error: false)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+    
     
     func dbChangeEmail(userData: (String, String), error: Bool = false) {
         
@@ -537,6 +509,38 @@ class accountSettingsVC: SuperViewController {
         }*///NEWSCREEN
     }
     
+    
+    func performChanageEmail(userData: (String, String), newEmail: String) {
+        if !(newEmail).contains("@") || !(newEmail).contains(".") {
+            self.dbChangeEmail(userData: userData, error: true)
+        } else {
+            self.loadUserData(username: userData.0) { (loadedData) in
+                if let dbData = loadedData {
+                    //here
+                    let save = SaveToDB()
+                    let toDataStringMian = "&Nickname=\(dbData[0])" + "&Email=\(newEmail)" + "&Password=\(dbData[2])" + "&Registration_Date=\(dbData[3])" + "&ProVersion=\(dbData[4])" + "&trialDate=\(dbData[5])"
+                    save.Users(toDataString: toDataStringMian ) { (error) in
+                        if error {
+                            appData.unsendedData.append(["saveUser": toDataStringMian])
+                        }
+                        let delete = DeleteFromDB()
+                        let dataStringDelete = "&Nickname=\(dbData[0])" + "&Email=\(dbData[1])" + "&Password=\(dbData[2])" + "&Registration_Date=\(dbData[3])" + "&ProVersion=\(dbData[4])" + "&trialDate=\(dbData[5])"
+                        print(toDataStringMian)
+                        delete.User(toDataString: dataStringDelete) { (errorr) in
+                            if errorr {
+                                appData.unsendedData.append(["deleteUser": dataStringDelete])
+                            }
+                            DispatchQueue.main.async {
+                                self.dismiss(animated: true) {
+                                    self.showAlert(title: "Your email has been changed", text: "", error: false)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     enum restoreCodeAction {
         case changePassword

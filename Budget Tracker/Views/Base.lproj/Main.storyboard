@@ -1107,7 +1107,7 @@
                     <navigationItem key="navigationItem" title="Debts" largeTitleDisplayMode="always" id="q4C-sm-hrL">
                         <barButtonItem key="rightBarButtonItem" style="plain" id="Xeg-Nw-KA0">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="kZf-XK-NJp">
-                                <rect key="frame" x="313" y="12.666666666666664" width="95" height="31"/>
+                                <rect key="frame" x="313" y="11" width="95" height="34.333333333333336"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="More"/>
@@ -2347,6 +2347,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="F3j-aD-U8y">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="56"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" name="backgroundColor"/>
                         <color key="tintColor" name="darkTableColor"/>
                         <color key="barTintColor" name="backgroundColor"/>
                         <textAttributes key="titleTextAttributes">
@@ -3164,11 +3165,22 @@
                     <navigationItem key="navigationItem" id="xfO-Vd-iYW"/>
                     <connections>
                         <outlet property="tableView" destination="y5f-s0-Rg1" id="LCl-js-1Z6"/>
+                        <segue destination="cqV-Pb-w89" kind="show" identifier="toEnterValueVC" id="HIb-eb-cof"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eHJ-lX-wWU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4304" y="1164"/>
+        </scene>
+        <!--enterValueNav-->
+        <scene sceneID="V5R-2h-AMk">
+            <objects>
+                <viewControllerPlaceholder storyboardName="LogIn" referencedIdentifier="enterValueNav" id="cqV-Pb-w89" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="p7j-Cz-n4V"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="N2m-fy-POS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5863" y="1088"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

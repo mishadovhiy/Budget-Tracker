@@ -203,6 +203,7 @@
                         <outletCollection property="titleLabels" destination="D9o-OF-iWv" collectionClass="NSMutableArray" id="1Aq-WJ-yCa"/>
                         <segue destination="CSo-nd-Zvm" kind="unwind" identifier="homeVC" unwindAction="homeVCWithSegue:" id="J2f-dn-705"/>
                         <segue destination="nuE-Pd-1Ll" kind="presentation" identifier="toAccountSettings" modalPresentationStyle="overFullScreen" modalTransitionStyle="coverVertical" id="x3s-9L-l4G"/>
+                        <segue destination="g3f-NZ-v6H" kind="show" identifier="toEnterValueVC" id="jP6-jS-NGM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5fo-pJ-69T" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -290,16 +291,32 @@
             </objects>
             <point key="canvasLocation" x="3934.7826086956525" y="-2472.3214285714284"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="SvC-HV-Dqr">
+            <objects>
+                <navigationController storyboardIdentifier="enterValueNav" id="J5r-nC-PYA" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="A9d-7k-gWh">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="g3f-NZ-v6H" kind="relationship" relationship="rootViewController" id="L2Z-z7-BqA"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="445-ee-frL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4520" y="-3232"/>
+        </scene>
         <!--Forgot password-->
         <scene sceneID="KBb-7x-KEM">
             <objects>
                 <viewController storyboardIdentifier="EnterValueVC" id="g3f-NZ-v6H" customClass="EnterValueVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WCz-zX-LTb">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="in9-wI-9lJ">
-                                <rect key="frame" x="10" y="98" width="394" height="191"/>
+                                <rect key="frame" x="10" y="10" width="394" height="191"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="wfW-zS-Z3i">
                                         <rect key="frame" x="0.0" y="0.0" width="394" height="70"/>
@@ -1221,6 +1238,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="x3s-9L-l4G"/>
+        <segue reference="jP6-jS-NGM"/>
         <segue reference="v5h-7J-ubq"/>
     </inferredMetricsTieBreakers>
     <resources>
