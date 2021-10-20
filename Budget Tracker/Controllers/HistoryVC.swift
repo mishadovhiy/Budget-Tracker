@@ -739,7 +739,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
     }*/
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        calendarAmountPressed = (false,false)
+        
         DispatchQueue.main.async {
             self.tableView.deselectRow(at: indexPath, animated: true)
         }
@@ -748,17 +748,30 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                 if self.debt?.name == "" {
                     return
                 }
-                if self.debt?.amountToPay ?? "" != "" {
-                    self.calendarAmountPressed = (false, self.calendarAmountPressed.1 ? false : true)
+                if self.debt?.amountToPay ?? "" != "" && !self.calendarAmountPressed.1 {
+                    let isPressed = self.calendarAmountPressed.1 ? false : true
+                    print(isPressed, "isPressedisPressedisPressed")
+                    self.calendarAmountPressed = (false, isPressed)
+                    tableView.reloadData()
+                } else {
+                    self.calendarAmountPressed = (false,false)
                     tableView.reloadData()
                 }
             }
         } else {
             if indexPath.section == 0 {
-                if self.debt?.dueDate ?? "" != "" {
-                    calendarAmountPressed = (calendarAmountPressed.0 ? false : true, false)
+                if self.debt?.dueDate ?? "" != "" && !self.calendarAmountPressed.0 {
+                    let isPressed = calendarAmountPressed.0 ? false : true
+                    print(isPressed, "isPressedisPressedisPressed")
+                    calendarAmountPressed = (isPressed, false)
+                    tableView.reloadData()
+                } else {
+                    calendarAmountPressed = (false,false)
                     tableView.reloadData()
                 }
+            } else {
+                calendarAmountPressed = (false,false)
+                tableView.reloadData()
             }
             
         }
