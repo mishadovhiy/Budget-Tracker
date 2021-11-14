@@ -507,7 +507,7 @@
                                                             </label>
                                                         </subviews>
                                                     </stackView>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7F0-h6-2hn">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7F0-h6-2hn">
                                                         <rect key="frame" x="0.0" y="0.0" width="76.666666666666671" height="35"/>
                                                         <connections>
                                                             <action selector="statisticLabelPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="TWB-B1-Wp6"/>
@@ -1149,7 +1149,10 @@
                                     <constraint firstAttribute="height" constant="60" id="QfJ-Sy-RuP"/>
                                     <constraint firstAttribute="width" constant="60" id="oeW-ij-yYp"/>
                                 </constraints>
-                                <state key="normal" image="darkClose"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" image="cancel">
+                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="24"/>
+                                </state>
                                 <connections>
                                     <action selector="cancelPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="K1H-9z-eyO"/>
                                 </connections>
@@ -2450,7 +2453,7 @@
             <objects>
                 <viewController storyboardIdentifier="CalendarVC" id="5n4-P6-pnR" customClass="CalendarVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="67i-SE-sWB">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="872"/>
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="816"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ur5-R3-sfZ">
@@ -2579,7 +2582,7 @@
                                 </cells>
                             </collectionView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="XFt-LS-Qbp">
-                                <rect key="frame" x="20" y="783" width="388" height="35"/>
+                                <rect key="frame" x="20" y="761" width="388" height="35"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j8N-A3-4Wm">
                                         <rect key="frame" x="0.0" y="0.0" width="100" height="35"/>
@@ -2734,10 +2737,10 @@
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="InH-AG-csp" userLabel="timeViewStack View">
-                                <rect key="frame" x="56.666666666666657" y="530" width="315" height="243"/>
+                                <rect key="frame" x="56.666666666666657" y="530" width="315" height="221"/>
                                 <subviews>
                                     <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="h2d-GY-FrE">
-                                        <rect key="frame" x="0.0" y="0.0" width="315" height="243"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="315" height="221"/>
                                     </datePicker>
                                 </subviews>
                             </stackView>
@@ -3186,7 +3189,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="Luq-UL-jWz"/>
         <segue reference="aJl-S5-eUb"/>
-        <segue reference="HlC-bb-GVq"/>
+        <segue reference="rIb-KG-K0i"/>
         <segue reference="Lvn-mS-peb"/>
         <segue reference="ueD-IJ-ozA"/>
         <segue reference="71t-lV-JHv"/>
@@ -3197,7 +3200,6 @@
         <image name="cancel" width="30" height="30"/>
         <image name="categoriesIcon" width="27" height="19"/>
         <image name="comment" width="15" height="9"/>
-        <image name="darkClose" width="30" height="30"/>
         <image name="done" width="30" height="30"/>
         <image name="minus" width="12" height="19"/>
         <image name="plus" catalog="system" width="128" height="113"/>

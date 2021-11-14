@@ -168,6 +168,7 @@ class HistoryVC: SuperViewController {
 
         //center.removeAllPendingNotificationRequests()
         center?.add(request) { (error) in
+            
             if error != nil {
                 print("notif add error")
             } else {

@@ -209,7 +209,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5fo-pJ-69T" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="CSo-nd-Zvm" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2135" y="-2476"/>
+            <point key="canvasLocation" x="2134.7826086956525" y="-2476.3392857142858"/>
         </scene>
         <!--Account SettingsVC-->
         <scene sceneID="ozw-Vv-3FZ">
@@ -1238,7 +1238,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="x3s-9L-l4G"/>
         <segue reference="jP6-jS-NGM"/>
         <segue reference="v5h-7J-ubq"/>
     </inferredMetricsTieBreakers>
