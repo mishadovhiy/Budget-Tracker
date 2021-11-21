@@ -262,12 +262,13 @@ class ViewController: SuperViewController {
             self.addTransFrame = CGRect(x: tableFrame.width - TransFrame.width, y: tableFrame.minY, width: TransFrame.width, height: TransFrame.height)
             print(self.addTransFrame, "self.addTransitionButton.frame", tableFrame.minY)
             self.view.addSubview(self.filterHelperView)
-            self.filterHelperView.layer.shadowColor = UIColor.black.cgColor
+            self.shadow(for: self.filterHelperView)
+            /*self.filterHelperView.layer.shadowColor = UIColor.black.cgColor
             self.filterHelperView.layer.shadowOpacity = 0.3
             self.filterHelperView.layer.shadowOffset = .zero
             self.filterHelperView.layer.shadowRadius = 10
             self.filterHelperView.layer.cornerRadius = 9
-            self.filterHelperView.backgroundColor = K.Colors.pink
+            self.filterHelperView.backgroundColor = K.Colors.secondaryBackground //K.Colors.pink*/
             self.filterView.superview?.layer.masksToBounds = true
             self.filterView.superview?.translatesAutoresizingMaskIntoConstraints = true
             self.filterView.translatesAutoresizingMaskIntoConstraints = true
@@ -1219,10 +1220,14 @@ class ViewController: SuperViewController {
 
 
     override func viewWillAppear(_ animated: Bool) {
+        
         print("today is", appData.filter.getToday(appData.filter.filterObjects.currentDate))
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
 
+    
+    
     
 //MARK: - Calculation
     
@@ -1502,8 +1507,8 @@ class ViewController: SuperViewController {
             resetPassword = false
 
         case "toStatisticVC":
-            let nav = segue.destination as! UINavigationController
-            let vc = nav.topViewController as! StatisticVC
+           // let nav = segue.destination as! UINavigationController
+            let vc = segue.destination as! StatisticVC//nav.topViewController as! StatisticVC
             vc.dataFromMain = tableData
         case "toSingIn":
             let nav = segue.destination as! UINavigationController

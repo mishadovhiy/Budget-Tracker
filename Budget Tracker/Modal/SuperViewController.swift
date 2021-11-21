@@ -119,6 +119,14 @@ class SuperViewController: UIViewController {
         return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date ?? Date())
     }
     
+    func stringToCompIso(s: String, dateFormat:String="dd.MM.yyyy") -> DateComponents {
+        if let date = s.iso8601withFractionalSeconds {
+            return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
+        } else {
+            return stringToDateComponent(s: s, dateFormat: dateFormat)
+        }
+    }
+    
     func stringToDate(s: String, fullDate: Bool) -> Date {//==false
         let defaultFormat = "dd.MM.yyyy"
         let dateFormatter = DateFormatter()
@@ -262,3 +270,18 @@ class SuperViewController: UIViewController {
 
 
 
+extension ISO8601DateFormatter {
+    convenience init(_ formatOptions: Options) {
+        self.init()
+        self.formatOptions = formatOptions
+    }
+}
+extension Formatter {
+    static let iso8601withFractionalSeconds = ISO8601DateFormatter([.withInternetDateTime, .withFractionalSeconds])
+}
+extension Date {
+    var iso8601withFractionalSeconds: String { return Formatter.iso8601withFractionalSeconds.string(from: self) }
+}
+extension String {
+    var iso8601withFractionalSeconds: Date? { return Formatter.iso8601withFractionalSeconds.date(from: self) }
+}

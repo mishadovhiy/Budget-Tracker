@@ -861,6 +861,25 @@ extension HistoryVC: TransitionVCProtocol {
 
 
 extension HistoryVC: CalendarVCProtocol {
+    
+    func createDateComp(date:String, time:DateComponents?) -> DateComponents? {
+        var date = stringToCompIso(s: date)
+        if let time = time {
+            date.second = time.second
+            date.minute = time.minute
+            date.hour = time.hour
+            
+        }
+        return date
+    }
+    
+    func dateCompToIso(isoComp: DateComponents) -> String? {
+        if let date = Calendar.current.date(from: isoComp){ //isoComp.date {
+            return date.iso8601withFractionalSeconds
+        }
+        return nil
+    }
+    
     func dateSelected(date: String, time: DateComponents?) {
         DispatchQueue.main.async {
             self.ai.show { (_) in
@@ -869,17 +888,39 @@ extension HistoryVC: CalendarVCProtocol {
                 //or save as isoDate without
                 let fullDate = "\(date) \(self.makeTwo(n: time?.hour ?? 0)):\(self.makeTwo(n: time?.minute ?? 0)):\(self.makeTwo(n: time?.second ?? 0))"
                 print(fullDate, "fullDatefullDatefullDatefullDate")
-                let dateComp = self.stringToDateComponent(s: fullDate, dateFormat: K.fullDateFormat)
-                print(dateComp, "dateCompdateCompdateComp")
-                
-                
-                self.addLocalNotification(date: dateComp) { (added) in
-                    self.changeDueDate(fullDate: fullDate)
-                    if !added {
-                        //todo: show message error
-                    }
+                if let dateComp = self.createDateComp(date: date, time: time) {
+                    print(dateComp, "dateCompdateCompdateComp")
+                    
+                    if let isoFullString = self.dateCompToIso(isoComp: dateComp) {
+                        self.addLocalNotification(date: dateComp) { (added) in
+                            
+                            
+                            self.changeDueDate(fullDate: isoFullString)
+                            if !added {
+                                //todo: show message error
+                            }
 
+                        }
+                    } else {
+                        print("error convering to comp from iso")
+                        self.ai.fastHide { _ in
+                            
+                        }
+                        
+                    }
+                    
+                    
+                } //self.stringToDateComponent(s: fullDate, dateFormat: K.fullDateFormat)
+                
+                else {
+                    //todo: show message error
+                    print("error creating iso")
+                    self.ai.fastHide { _ in
+                        
+                    }
                 }
+                
+                
             }
             
         }

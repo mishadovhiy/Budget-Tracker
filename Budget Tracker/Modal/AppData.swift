@@ -577,6 +577,23 @@ class AppData {
     
 }
 
+
+extension UIViewController {
+    func shadow(for view:UIView, color: UIColor = K.Colors.secondaryBackground) {
+        DispatchQueue.main.async {
+            view.layer.shadowColor = UIColor.black.cgColor
+            view.layer.shadowOpacity = 0.4
+            view.layer.shadowOffset = .zero
+            view.layer.shadowRadius = 12
+            view.layer.cornerRadius = 9
+            view.backgroundColor = color
+        }
+    }
+}
+
+
+
+
 //MARK: - sort Item Extension
 
 

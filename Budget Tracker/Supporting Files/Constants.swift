@@ -66,6 +66,10 @@ struct K {
         static let loginColor = UIColor(named: "loginColor")
         static let notOnDBColor = UIColor(named: "notOnDBColor")
         static let darkTable = UIColor(named: "darkTableColor")
+        
+        
+        static let primaryBacground = UIColor(named: "PrimaryBackgroundColor") ?? .black
+        static let secondaryBackground = UIColor(named: "SecondaryBacroundColor") ?? .black
     }
 }
 

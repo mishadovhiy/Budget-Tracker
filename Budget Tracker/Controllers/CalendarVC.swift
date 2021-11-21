@@ -43,7 +43,7 @@ class CalendarVC: SuperViewController {
     var daysBetween = [""]
     var selectedFromDayInt = 0
     var selectedToDayInt = 0
-    var darkAppearence = false
+  //  var darkAppearence = false
     var needPressDone = false
     
     var year = 1996
@@ -97,7 +97,7 @@ class CalendarVC: SuperViewController {
             }
         }
         
-        if #available(iOS 13.0, *) {
+      /*  if #available(iOS 13.0, *) {
             if darkAppearence {
                 self.view.backgroundColor = UIColor(named: "darkTableColor")
                 self.textField.superview?.backgroundColor = UIColor(named: "darkTableColor")
@@ -124,7 +124,7 @@ class CalendarVC: SuperViewController {
                     }
                 }
             }
-        }
+        }*/
         
         updaiteUI()
     }
@@ -524,8 +524,9 @@ class CalendarVC: SuperViewController {
                 cell.backgroundCell.backgroundColor = K.Colors.yellow
                 cell.dayLabel.textColor = UIColor.white
             }else {
-                cell.backgroundCell.backgroundColor = self.darkAppearence ? UIColor(named: "darkTableColor") : K.Colors.background
-                cell.dayLabel.textColor = self.darkAppearence ? K.Colors.category : UIColor(named: "darkTableColor")
+                let viewColor = self.view.backgroundColor
+                cell.backgroundCell.backgroundColor = viewColor//self.darkAppearence ? UIColor(named: "darkTableColor") : K.Colors.background
+                cell.dayLabel.textColor = viewColor//self.darkAppearence ? K.Colors.category : UIColor(named: "darkTableColor")
             }
         }
         
@@ -776,10 +777,10 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
         DispatchQueue.main.async {
             if self.selectedTo == "\(dayCell).\(monthCell).\(yearCell)" || self.selectedFrom == "\(dayCell).\(monthCell).\(yearCell)" {//|| self.containdInBetween(date: "\(dayCell).\(monthCell).\(yearCell)")
                 cell.backgroundCell.backgroundColor = K.Colors.yellow
-                cell.dayLabel.textColor = self.darkAppearence ? K.Colors.category : UIColor(named: "darkTableColor")
+                cell.dayLabel.textColor = K.Colors.category//self.darkAppearence ? K.Colors.category : UIColor(named: "darkTableColor")
             }else {
-                cell.backgroundCell.backgroundColor = self.darkAppearence ? UIColor(named: "darkTableColor") : K.Colors.background
-                cell.dayLabel.textColor = self.darkAppearence ? K.Colors.category : UIColor(named: "darkTableColor")
+                cell.backgroundCell.backgroundColor = self.view.backgroundColor //self.darkAppearence ? UIColor(named: "darkTableColor") : K.Colors.background
+                cell.dayLabel.textColor = K.Colors.category//self.darkAppearence ? K.Colors.category : UIColor(named: "darkTableColor")
             }
         }
         

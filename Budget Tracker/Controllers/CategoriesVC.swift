@@ -28,7 +28,7 @@ class CategoriesVC: SuperViewController {
     var hideTitle = false
     var fromSettings = false
     var delegate: CategoriesVCProtocol?
-    var darkAppearence = false
+    //var darkAppearence = false
     
     
 
@@ -197,24 +197,7 @@ class CategoriesVC: SuperViewController {
         hiseCatsSwipe.direction = .left
         view.addGestureRecognizer(hiseCatsSwipe);
         
-        if #available(iOS 13.0, *) {
-            if darkAppearence {
-                self.newCategoryTextField.textColor = .white
-                self.newCategoryTextField.keyboardAppearance = .dark
-                self.view.backgroundColor = UIColor(named: "darkTableColor")
-                self.tableView.backgroundColor = UIColor(named: "darkTableColor")
-                self.tableView.separatorColor = UIColor(named: "darkSeparetor")
-            }
-        } else {
-            DispatchQueue.main.async {
-                if self.darkAppearence {
-                    self.newCategoryTextField.textColor = .white
-                    self.view.backgroundColor = UIColor(named: "darkTableColor")
-                    self.tableView.backgroundColor = UIColor(named: "darkTableColor")
-                    self.tableView.separatorColor = UIColor(named: "darkSeparetor")
-                }
-            }
-        }
+
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         DispatchQueue.main.async {
@@ -465,7 +448,7 @@ class CategoriesVC: SuperViewController {
       //          vc.debts = debts
                 if !fromSettings {
                     vc.delegate = self
-                    vc.darkAppearence = self.darkAppearence
+                 //   vc.darkAppearence = self.darkAppearence
                     vc.safeAreaButton = appData.safeArea.1//safeAreaButton
                 }
             }
@@ -519,14 +502,14 @@ class CategoriesVC: SuperViewController {
 
 extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return darkAppearence ? 3 : 2
+        return fromSettings ? 2 : 3//darkAppearence ? 3 : 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0: return expenses.count
         case 1: return incomes.count
-        case 2: return darkAppearence ? 1 : 0
+        case 2: return fromSettings ? 0 : 1 // darkAppearence ? 1 : 0
         default:
             return expenses.count
         }
@@ -545,7 +528,7 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent, for: indexPath) as! categoriesVCcell
         cell.proView.layer.cornerRadius = 4
-        cell.backgroundColor = darkAppearence ? .black : .white
+       // cell.backgroundColor = darkAppearence ? .black : .white
         
         switch indexPath.section {
         case 0:
@@ -566,8 +549,8 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
         
         
         
-        if darkAppearence {
-            cell.categoryNameLabel.textColor = K.Colors.background
+        if !fromSettings {
+         //   cell.categoryNameLabel.textColor = K.Colors.background
             cell.qntLabel.text = ""
             cell.accessoryType = indexPath.section == 2 ? .disclosureIndicator : .none
         }
@@ -584,11 +567,11 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
         let helperView = UIView(frame: CGRect(x: 0, y: 10, width:mainFrame.width, height: footerHeight - 10))
         helperView.layer.cornerRadius = 6
         helperView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        helperView.backgroundColor = darkAppearence ? .black : .white
+        helperView.backgroundColor = K.Colors.secondaryBackground//darkAppearence ? .black : .white
         view.backgroundColor = self.view.backgroundColor
         let label = UILabel(frame: CGRect(x: 10, y: 15, width: mainFrame.width - 40, height: 20))
         label.text = section == 0 ? K.expense : K.income
-        label.textColor = darkAppearence ? .white : K.Colors.balanceV
+        label.textColor = K.Colors.balanceV
         label.font = .systemFont(ofSize: 14, weight: .medium)
         view.addSubview(helperView)
         view.addSubview(label)
@@ -628,7 +611,7 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
             let view = cell.contentView
             view.layer.cornerRadius = 6
             view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-            view.backgroundColor = darkAppearence ? .black : .white
+            view.backgroundColor = K.Colors.secondaryBackground
             return view
 
         } else {

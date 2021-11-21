@@ -51,7 +51,7 @@ class DebtsVC: SuperViewController {
         }
     }
     var hideTitle = false
-    var darkAppearence = false
+   // var darkAppearence = false
     var fromSettings = false
     override func viewDidDisappear(_ animated: Bool) {
 
@@ -98,18 +98,18 @@ class DebtsVC: SuperViewController {
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
 
-        if darkAppearence {
+       /* if darkAppearence {
             DispatchQueue.main.async {
                 self.newDebtField.textColor = .white
                 self.tableView.translatesAutoresizingMaskIntoConstraints = true
                 self.newDebtButton.setTitleColor(K.Colors.darkTable, for: .normal)
                 self.newDebtButton.backgroundColor = K.Colors.category
             }
-        }
+        }*/
         
         tableView.backgroundColor = .clear//darkAppearence ? .black : .white
         
-        if #available(iOS 13.0, *) {
+     /*   if #available(iOS 13.0, *) {
             if darkAppearence {
                 self.newDebtField.keyboardAppearance = .dark
                 self.view.backgroundColor = UIColor(named: "darkTableColor")
@@ -123,7 +123,7 @@ class DebtsVC: SuperViewController {
                     self.tableView.separatorColor = UIColor(named: "darkSeparetor")
                 }
             }
-        }
+        }*/
         tableView.delegate = self
         tableView.dataSource = self
 
@@ -407,7 +407,7 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "debtCell", for: indexPath) as! debtCell
         //let data = indexPath.section == 0 ? tableData[indexPath.row] : emptyValuesTableData[indexPath.row]
         
-        cell.backgroundColor = darkAppearence ? .black : .white
+       // cell.backgroundColor = darkAppearence ? .black : .white
         
         cell.amountToPay.isHidden = true
         let data: DebtsTableStruct = tableData[indexPath.row]
@@ -438,17 +438,18 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
             }
             
    //     }
-        let dateComp = stringToDateComponent(s: data.dueDate, dateFormat: K.fullDateFormat)
+        let dateComp = stringToCompIso(s: data.dueDate, dateFormat: K.fullDateFormat) //stringToDateComponent(s: data.dueDate, dateFormat: K.fullDateFormat)
         let expired = dateExpired(data.dueDate)
         let diff = dateExpiredCount(startDate: data.dueDate)
         cell.dueDate.textColor = expired ? K.Colors.negative : K.Colors.balanceV
         
         let dueDateText = data.dueDate == "" ? "" : "Due date: \(dateComp.day ?? 0) of \(returnMonth(dateComp.month ?? 0)), \(dateComp.year ?? 0)"
         let expText = expiredText(diff)
-        cell.dueDate.text = data.dueDate == "" ? "" : (!expired ? dueDateText : "Expired:" + "\(expText == "" ? " recently" : (expText + " ago"))" )
+        cell.dueDate.text = dateComp.description //data.dueDate == "" ? "" : (!expired ? dueDateText : "Expired:" + "\(expText == "" ? " recently" : (expText + " ago"))" )
         cell.dueDate.isHidden = data.dueDate == "" ? true : false
-        cell.categoryLabel.textColor = darkAppearence ? K.Colors.category : .black
-        cell.amountLabel.textColor = (data.amount) >= 0 ? (darkAppearence ? K.Colors.category : K.Colors.balanceV) : K.Colors.negative
+  //      cell.categoryLabel.textColor = darkAppearence ? K.Colors.category : .black
+       // cell.amountLabel.textColor = (data.amount) >= 0 ? (darkAppearence ? K.Colors.category : K.Colors.balanceV) : K.Colors.negative
+        cell.amountLabel.textColor = (data.amount) >= 0 ? K.Colors.category : K.Colors.negative
         cell.amountLabel.alpha = tableData[indexPath.row].transactions.count == 0 && tableData[indexPath.row].amount == 0 ? 0.4 : 1//indexPath.section == 2 ? 0.4 : 1
         return cell
     }
@@ -545,7 +546,7 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = tableView.dequeueReusableCell(withIdentifier: "debtHeader") as! debtHeader
         let view = cell.contentView
-        view.backgroundColor = darkAppearence ? .black : .white
+        view.backgroundColor = K.Colors.secondaryBackground//darkAppearence ? .black : .white
         view.layer.cornerRadius = 6
         cell.contentView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         return view
@@ -561,7 +562,7 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
         let view = cell.contentView
         view.layer.cornerRadius = 6
         view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        view.backgroundColor = darkAppearence ? .black : .white
+        view.backgroundColor = K.Colors.secondaryBackground
         return view
     }
     

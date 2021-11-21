@@ -79,7 +79,7 @@ class TransitionVC: SuperViewController {
         case "toCalendar":
             let vc = segue.destination as! CalendarVC
             vc.delegate = self
-            vc.darkAppearence = true
+      //      vc.darkAppearence = true
             if let date = dateTextField.text {
                 vc.selectedFrom = date
             }
@@ -87,7 +87,7 @@ class TransitionVC: SuperViewController {
         case "toCategories":
             let vc = segue.destination as! CategoriesVC
             vc.delegate = self
-            vc.darkAppearence = true
+        //    vc.darkAppearence = true
             vc.hideTitle = true
            // vc.safeAreaButton = appData.safeArea.1//self.view.safeAreaInsets.bottom
         default:

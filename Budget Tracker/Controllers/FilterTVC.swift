@@ -366,7 +366,7 @@ extension FilterTVC: UITableViewDelegate, UITableViewDataSource {
         default:
             label.text = ""
         }
-        view.backgroundColor = UIColor(red: 190/255, green: 185/255, blue: 185/255, alpha: 1) //UIColor(named: "darkTableColor") //K.Colors.separetor//UIColor(named: "darkTableColor")
+        view.backgroundColor = K.Colors.primaryBacground//UIColor(red: 190/255, green: 185/255, blue: 185/255, alpha: 1) //UIColor(named: "darkTableColor") //K.Colors.separetor//UIColor(named: "darkTableColor")
         view.addSubview(label)
         return view
     }

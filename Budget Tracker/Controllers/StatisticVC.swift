@@ -41,8 +41,8 @@ class StatisticVC: SuperViewController, CALayerDelegate {
                 self.performSegue(withIdentifier: "homeVC", sender: self)
             }
         }
-        segmentControll.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white], for: .normal)
-        segmentControll.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "darkTableColor") ?? .black], for: .selected)
+       // segmentControll.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white], for: .normal)
+       // segmentControll.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "darkTableColor") ?? .black], for: .selected)
         
         if appData.defaults.value(forKey: "StatisticVCFirstLaunch") as? Bool ?? false == false {
             appData.defaults.setValue(true, forKey: "StatisticVCFirstLaunch")
@@ -166,6 +166,15 @@ class StatisticVC: SuperViewController, CALayerDelegate {
     @IBAction func clodePressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+      //  navigationController?.navigationBar.backgr
+        navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+    
+  /*  override func viewWillDisappear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(true, animated: true)
+    }*/
     
     var fromDebts: Bool = false
     var historyDataStruct: [TransactionsStruct] = []

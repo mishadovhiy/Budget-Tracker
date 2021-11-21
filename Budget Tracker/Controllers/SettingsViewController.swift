@@ -422,7 +422,10 @@ extension SettingsViewController: UITableViewDelegate, UITableViewDataSource {
 
         cell.accessoryType = tableData[indexPath.row].textInCenter ? .none : .disclosureIndicator
         cell.titleLbel.textAlignment = tableData[indexPath.row].textInCenter ? .center : .left
-        cell.titleLbel.textColor = tableData[indexPath.row].textInCenter ? K.Colors.balanceT : UIColor(named: "darkTableColor")
+        //cell.titleLbel.textColor = tableData[indexPath.row].textInCenter ? K.Colors.balanceT : UIColor(named: "darkTableColor")
+        
+        cell.titleLbel.alpha = tableData[indexPath.row].textInCenter ? 0.5 : 1
+        
         //med 17
         cell.titleLbel.font = .systemFont(ofSize: tableData[indexPath.row].textInCenter ? 13 : 17, weight: .medium)
         return cell
