@@ -68,7 +68,7 @@ class accountSettingsVC: SuperViewController {
                 
                 let nextAction = {
                     self.ai.show { _ in
-                    let newValue = EnterValueVC.shared?.textFieldText ?? ""
+                    let newValue = EnterValueVC.shared?.enteringValue ?? ""
                     self.loadUsers { users in
                         var found = false
                         for i in 0..<users.count {
@@ -89,7 +89,7 @@ class accountSettingsVC: SuperViewController {
                     }
                 }
                 
-                self.enterValueVCScreenData = EnterValueVCScreenData(taskName: "Forgot password", title: "Enter your username", placeHolder: "Username", nextAction: nextAction)
+                self.enterValueVCScreenData = EnterValueVCScreenData(taskName: "Forgot password", title: "Enter your username", placeHolder: "Username", nextAction: nextAction, screenType: .password)
             }
             
            /* DispatchQueue.main.async {
@@ -208,13 +208,13 @@ class accountSettingsVC: SuperViewController {
 
                         
                         let nextAction = {
-                            let new = EnterValueVC.shared?.textFieldText ?? ""
+                            let new = EnterValueVC.shared?.enteringValue ?? ""
                             self.checkChangeOldPassword(new, dbPassword: userData[2], email: userData[1])
                         }
                         
                         let userrData:((String, String)?, (String, String)?)? = (("Email:", userData[1]),("Nickname:",userData[0]))
                         
-                        self.enterValueVCScreenData = EnterValueVCScreenData(taskName: "Change password", title: "Enter your old password", subTitle: nil, placeHolder: "Old password", nextAction: nextAction, descriptionTable: userrData)
+                        self.enterValueVCScreenData = EnterValueVCScreenData(taskName: "Change password", title: "Enter your old password", subTitle: nil, placeHolder: "Old password", nextAction: nextAction, screenType: .password, descriptionTable: userrData)
                        // }
                         
                     } else {
@@ -382,9 +382,9 @@ class accountSettingsVC: SuperViewController {
             self.message.showMessage(text: "Error", type: .error)
         } else {
             let repeateActionn = {
-                let fromPrev = EnterValueVC.shared?.textFieldText ?? ""
+                let fromPrev = EnterValueVC.shared?.enteringValue ?? ""
                 let repeatPasAction = {
-                    let new = EnterValueVC.shared?.textFieldText ?? ""
+                    let new = EnterValueVC.shared?.enteringValue ?? ""
                     if fromPrev != new {
                         self.showAlert(title: "Passwords not much!", text: nil, error: true)
                         EnterValueVC.shared?.clearAll(animated: true)
@@ -392,9 +392,9 @@ class accountSettingsVC: SuperViewController {
                         self.cangePasswordDB(username: appData.username, newPassword: new)
                     }
                 }
-                EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Change password", title: "Repeate password", placeHolder: "Password", nextAction: repeatPasAction))
+                EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Change password", title: "Repeate password", placeHolder: "Password", nextAction: repeatPasAction, screenType: .password))
             }
-            EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Change password", title: "Create your new password", placeHolder: "Password", nextAction: repeateActionn))
+            EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Change password", title: "Create your new password", placeHolder: "Password", nextAction: repeateActionn, screenType: .password))
         }
         
 
@@ -447,11 +447,11 @@ class accountSettingsVC: SuperViewController {
         
         let repeateActionn = {
             
-            let fromPrev = EnterValueVC.shared?.textFieldText ?? ""
+            let fromPrev = EnterValueVC.shared?.enteringValue ?? ""
             
             let repeatPasAction = {
                 
-                let new = EnterValueVC.shared?.textFieldText ?? ""
+                let new = EnterValueVC.shared?.enteringValue ?? ""
                 if fromPrev != new {
                     self.showAlert(title: "Passwords not much!", text: nil, error: true)
                     EnterValueVC.shared?.clearAll(animated: true)
@@ -459,9 +459,9 @@ class accountSettingsVC: SuperViewController {
                     self.cangePasswordDB(username: appData.username, newPassword: new)
                 }
             }
-            EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Change password", title: "Repeate password", placeHolder: "Password", nextAction: repeatPasAction))
+            EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Change password", title: "Repeate password", placeHolder: "Password", nextAction: repeatPasAction, screenType: .password))
         }
-        EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Change password", title: "Create your new password", placeHolder: "Password", nextAction: repeateActionn))
+        EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Change password", title: "Create your new password", placeHolder: "Password", nextAction: repeateActionn, screenType: .password))
     }
     
     
@@ -469,7 +469,7 @@ class accountSettingsVC: SuperViewController {
     func dbChangeEmail(userData: (String, String), error: Bool = false) {
         
         let emailAction = {
-            let newEmail = EnterValueVC.shared?.textFieldText ?? ""
+            let newEmail = EnterValueVC.shared?.enteringValue ?? ""
             if !(newEmail).contains("@") || !(newEmail).contains(".") {
                 self.showAlert(title: "Enter valid email", error: true)
             } else {
@@ -480,7 +480,7 @@ class accountSettingsVC: SuperViewController {
             
         }
         
-        EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Change email", title: "Enter your new email", placeHolder: "Email", nextAction: emailAction))
+        EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Change email", title: "Enter your new email", placeHolder: "Email", nextAction: emailAction, screenType: .email))
         
      /*   self.ai.showTextField(type: .email, error: error ? ("Enter valid email address","") : nil, title: "Enter your new email", description: nil, userData: userData) { (newEmail, _) in
             
@@ -713,10 +713,10 @@ class accountSettingsVC: SuperViewController {
                                     let userData = (("Email",emailToSend),("Username",username))
                                     
                                     let nextAction = {
-                                        if EnterValueVC.shared?.textFieldText.count ?? 0 == 4 {
+                                        if EnterValueVC.shared?.enteringValue.count ?? 0 == 4 {
                                             self.ai.show(title: nil) { _ in
                                                 
-                                                self.checkRestoreCode(value: EnterValueVC.shared?.textFieldText ?? "", userData: (username, emailToSend), ifCorrect: toChange)
+                                                self.checkRestoreCode(value: EnterValueVC.shared?.enteringValue ?? "", userData: (username, emailToSend), ifCorrect: toChange)
                                             }
                                         } else {
                                             self.showAlert(title: "Wrong code!", text: "Enter 4 digits\n we have send you", error: true)
@@ -724,7 +724,7 @@ class accountSettingsVC: SuperViewController {
                                         
                                     }
                                     
-                                    self.enterValueVCScreenData = EnterValueVCScreenData(taskName: taskNameTitle, title: "Restoration code", subTitle: "We have sent 4-digit resoration code on your email", placeHolder: "Code", nextAction: nextAction, descriptionTable: userData)
+                                    self.enterValueVCScreenData = EnterValueVCScreenData(taskName: taskNameTitle, title: "Restoration code", subTitle: "We have sent 4-digit resoration code on your email", placeHolder: "Code", nextAction: nextAction, screenType: .code, descriptionTable: userData)
                                     
                                     
                                 }
@@ -742,7 +742,7 @@ class accountSettingsVC: SuperViewController {
             let nextAction = {
                 if appData.username != "" {
                     self.ai.show(title: nil) { _ in
-                        let enteredUsername = EnterValueVC.shared?.textFieldText ?? ""
+                        let enteredUsername = EnterValueVC.shared?.enteringValue ?? ""
                         
                         let load = LoadFromDB()
                         load.Users { (users, error) in
@@ -760,7 +760,7 @@ class accountSettingsVC: SuperViewController {
                 
             }
             
-            enterValueVCScreenData = EnterValueVCScreenData(taskName: "Forgot password", title: "Enter your username", subTitle: "You will receive restoration code", placeHolder: "Username", nextAction: nextAction)
+            enterValueVCScreenData = EnterValueVCScreenData(taskName: "Forgot password", title: "Enter your username", subTitle: "You will receive restoration code", placeHolder: "Username", nextAction: nextAction, screenType: .code)
             
            /* ai.showTextField(type: .nickname, title: "Enter your username", description: "You will receive 4-digits code on email asigned to this username") { (useer, _) in
                 self.seekingUser(enteredUsername: useer)

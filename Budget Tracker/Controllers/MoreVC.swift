@@ -37,16 +37,10 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         tableView.delegate = self
         tableView.dataSource = self
        // loadData()
-        
-        let contentHeight = (tableData.count + 1) * 65
-        let safeAt = self.view.safeAreaInsets.top
-        let safebt = self.view.safeAreaInsets.bottom
         if #available(iOS 15.0, *) {
             self.tableView.sectionHeaderTopPadding = 0
         }
-        let tableInButtom = (self.view.frame.height - (safeAt + safebt + 150)) - CGFloat(contentHeight)
-        print(tableInButtom, "hjkhjk")
-        firstCellHeight = CGFloat(contentHeight) > self.view.frame.height / 2 ? self.view.frame.height / 2 : tableInButtom
+        
         
     }
 

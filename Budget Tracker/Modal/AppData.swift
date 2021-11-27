@@ -565,11 +565,26 @@ class AppData {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let vccc = storyboard.instantiateViewController(withIdentifier: "MoreVC") as! MoreVC
             vccc.modalPresentationStyle = .pageSheet
-            currentVC.present(vccc, animated: true)
+            
             vccc.tableData = data
             vccc.dismissOnAction = dismissOnAction
             vccc.navigationController?.setNavigationBarHidden(true, animated: false)
-            print(vccc.firstCellHeight, "gyuijhjk")
+            
+            let contentHeight = (data.count + 1) * 65//65-hardcoded MoreVC cell height
+            let safeAt = appData.safeArea.1
+            let safebt = appData.safeArea.0
+            
+            //let tableInButtom = (currentVC.view.frame.height - (safeAt + safebt + 150)) - CGFloat(contentHeight)
+            let tableInButtom = currentVC.view.frame.height - (CGFloat(contentHeight) - (safeAt + safebt))
+            print(tableInButtom, "sectionHeight")
+            print(currentVC.view.frame.height, "ScreenHeight")
+          //  firstCellHeight = CGFloat(contentHeight) > self.view.frame.height / 2 ? self.view.frame.height / 2 : tableInButtom
+            if CGFloat(contentHeight) > currentVC.view.frame.height / 2 {
+                vccc.firstCellHeight = currentVC.view.frame.height / 2
+            } else {
+                vccc.firstCellHeight = tableInButtom
+            }
+            currentVC.present(vccc, animated: true)
         }
         
     }

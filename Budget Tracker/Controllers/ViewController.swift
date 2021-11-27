@@ -1785,6 +1785,15 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1 + newTableData.count
     }
+  /*  func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        var titles: [String] = ["."]
+        let data = newTableData
+        for i in 0..<data.count {
+            
+            titles.append("\(data[i].date.day ?? 0)")
+        }
+        return titles
+    }*/
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         

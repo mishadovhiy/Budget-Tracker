@@ -434,15 +434,15 @@ class CategoriesVC: SuperViewController {
     var toHistory = false
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == "toHistory" {
+        switch segue.identifier {
+        case "toHistory":
             toHistory = true
             let vc = segue.destination as! HistoryVC
             vc.historyDataStruct = historyDataStruct
             vc.selectedCategoryName = selectedCategoryName
             vc.fromCategories = true
             vc.allowEditing = false
-            
-        } else {
+        case "toDebts":
             if segue.identifier == "toDebts" {
                 let vc = segue.destination as! DebtsVC
       //          vc.debts = debts
@@ -452,7 +452,14 @@ class CategoriesVC: SuperViewController {
                     vc.safeAreaButton = appData.safeArea.1//safeAreaButton
                 }
             }
+        case "selectIcon":
+            let vc = segue.destination as! IconsVC
+           // vc.delegate = self
+        default:
+            break
         }
+        
+
     }
     
     let darkSectionBackground = UIColor(red: 30/255, green: 30/255, blue: 30/255, alpha: 1)
@@ -494,6 +501,15 @@ class CategoriesVC: SuperViewController {
     let newCategoryTextField = UITextField(frame: .zero)
     var showAnimatonOnSwitch = true
     //keyboardWillShoe and willHide - remove textfield
+    
+    func iconPressed() {
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: "selectIcon", sender: self)
+        }
+    }
+    @objc func iconTapped(_ sender: UITapGestureRecognizer) {
+        iconPressed()
+    }
     
 }
 
@@ -608,6 +624,8 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
             cell.categoryTextField.placeholder = "New " + (section == 0 ? "expence" : "income")
             cell.categoryTextField.delegate = self
             cell.categoryTextField.tag = section
+            cell.iconImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(iconTapped(_:))))
+            //cell.iconPressedFunc = iconPressed
             let view = cell.contentView
             view.layer.cornerRadius = 6
             view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
@@ -728,6 +746,12 @@ extension CategoriesVC: UITextFieldDelegate {
         }
         return true
     }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        print("")//+
+    }
+    
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
         let newCategory = textField.text ?? ""
@@ -748,31 +772,7 @@ extension CategoriesVC: UITextFieldDelegate {
         }
         
         return true
-      /*  DispatchQueue.main.async {
-            if let name = self.newCategoryTextField.text {
-                if name != "" {
-                    if let puposee = self.editingValue {
-                        let purpose = puposee == .expenses ? K.expense : K.income
-                        if appData.username != "" {
-                            self.whenNoCategories()
-                            self.sendToDBCategory(title: name, purpose: purpose)
-                        } else {
-                            var categories = Array(appData.getCategories())
-                            categories.append(CategoriesStruct(name: name, purpose: purpose, count: 0))
-                            appData.saveCategories(categories)
-                            self.getDataFromLocal()
-                        }
-                    }
-                    
-                } else {
-                    self.getDataFromLocal()
-                }
-            } else {
-                self.getDataFromLocal()
-            }
-        }
-        return true
-    }*/
+
     }
     
 }
@@ -781,6 +781,14 @@ extension CategoriesVC: UITextFieldDelegate {
 
 class newCategoryCell: UITableViewCell {
     
+    @IBOutlet weak var iconImage: UIButton!
+    var iconPressedFunc:(() -> ())?
+    
+    @IBAction func iconPressed(_ sender: UIButton) {
+        if let fucn = iconPressedFunc {
+            fucn()
+        }
+    }
     
     @IBOutlet weak var categoryTextField: UITextField!
     

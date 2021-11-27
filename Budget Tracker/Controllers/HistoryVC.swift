@@ -783,7 +783,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
         let ifDueDate = indexPath.section == 0 ? (self.debt?.dueDate ?? "" == "" ? 0 : UITableView.automaticDimension) : UITableView.automaticDimension
         
         
-        let dueViewHeight:CGFloat = self.debt?.dueDate ?? "" == "" ? 0 : 40
+        let dueViewHeight:CGFloat = self.debt?.dueDate ?? "" == "" ? 70 : 150
         let heightWhenNoData = tableView.frame.height - (appData.safeArea.1 + appData.safeArea.0 + dueViewHeight)
         
         return indexPath.section == 1 ? (historyDataStruct.count == 0 ? heightWhenNoData : UITableView.automaticDimension) : ifDueDate
