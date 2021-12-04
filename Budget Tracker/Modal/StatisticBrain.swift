@@ -28,15 +28,15 @@ class StatisticBrain {
         
         var index = 0
         for i in 0..<tableData.count {
-            if statisticArreyNames[index] != tableData[i].category {
-                statisticArreyNames.append(tableData[i].category)
+            if statisticArreyNames[index] != tableData[i].categoryID {
+                statisticArreyNames.append(tableData[i].categoryID)
                 index += 1
             }
         }
         statisticArreyNames.removeFirst()
         
         for i in 0..<tableData.count {
-            if statisticArreyNames[index2] == tableData[i].category {
+            if statisticArreyNames[index2] == tableData[i].categoryID {
                 updateGraphValue(i: i, tableData: tableData)
             } else {
                 index2 += 1
@@ -48,7 +48,7 @@ class StatisticBrain {
     
     func updateGraphValue(i: Int, tableData: [TransactionsStruct]) {
             
-        statisticData.updateValue((Double(tableData[i].value) ?? 0.0) + (statisticData[tableData[i].category] ?? 0.0), forKey: tableData[i].category)
+        statisticData.updateValue((Double(tableData[i].value) ?? 0.0) + (statisticData[tableData[i].categoryID] ?? 0.0), forKey: tableData[i].categoryID)
         
     }
     

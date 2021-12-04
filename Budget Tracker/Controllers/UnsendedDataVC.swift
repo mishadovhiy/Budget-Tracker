@@ -206,7 +206,7 @@ class UnsendedDataVC: SuperViewController {
         defaultsTransactions = appData.getTransactions
         for transaction in transactions {
             foundInAListCount = contains(transaction) ? foundInAListCount + 1 : foundInAListCount
-            let new = UnsendedTransactions(value: transaction.value, category: transaction.category, date: transaction.date, comment: transaction.comment, selected: false)
+            let new = UnsendedTransactions(value: transaction.value, category: transaction.categoryID, date: transaction.date, comment: transaction.comment, selected: false)
             holder.append(new)
         }
         var catHolder: [UnsendedCategories] = []
@@ -289,7 +289,7 @@ class UnsendedDataVC: SuperViewController {
         
         for i in 0..<dbData.count {
             if value.comment == dbData[i].comment &&
-                value.category == dbData[i].category &&
+                value.categoryID == dbData[i].categoryID &&
                 value.date == dbData[i].date &&
                 value.value == dbData[i].value {
                 
@@ -373,7 +373,7 @@ class UnsendedDataVC: SuperViewController {
             defaultsTransactions = appData.getTransactions
             for trans in tableDataTransactions {
                 if !trans.selected {
-                    let new = TransactionsStruct(value: trans.value, category: trans.category, date: trans.date, comment: trans.comment)
+                    let new = TransactionsStruct(value: trans.value, categoryID: trans.category, date: trans.date, comment: trans.comment)
                     foundInAListCount = contains(new) ? foundInAListCount + 1 : foundInAListCount
                     result.append(new)
                     newTable.append(trans)
@@ -431,7 +431,7 @@ class UnsendedDataVC: SuperViewController {
             if all[i].selected {
                 self.selectedCount += 1
             } else {
-                if contains(TransactionsStruct(value: all[i].value, category: all[i].category, date: all[i].date, comment: all[i].comment)) {
+                if contains(TransactionsStruct(value: all[i].value, categoryID: all[i].category, date: all[i].date, comment: all[i].comment)) {
                     self.selectedCount += 1
                     all[i].selected = true
                 }

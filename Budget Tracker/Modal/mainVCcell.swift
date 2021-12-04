@@ -33,7 +33,7 @@ class mainVCcell: UITableViewCell {
         
         let value = String(format:"%.0f", Double(data.value) ?? 0.0)
         valueLabel.text = Double(data.value) ?? 0.0 > 0.0 ? "+\(value)" : value
-        categoryLabel.text = data.category
+        categoryLabel.text = data.categoryID
         commentLabel.text = data.comment
         commentImage.alpha = data.comment == "" ? 0 : 1
         if selectedCell != nil {
@@ -116,13 +116,7 @@ class calcCell: UITableViewCell {
 }
 
 
-class categoriesVCcell: UITableViewCell {
-    
-    @IBOutlet weak var categoryNameLabel: UILabel!
-    @IBOutlet weak var qntLabel: UILabel!
-    
-    @IBOutlet weak var proView: UIView!
-}
+
 
 
 class PlotCell: UITableViewCell {

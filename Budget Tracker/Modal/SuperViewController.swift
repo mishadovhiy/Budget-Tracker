@@ -112,20 +112,9 @@ class SuperViewController: UIViewController {
         }
     }
     
-    func stringToDateComponent(s: String, dateFormat:String="dd.MM.yyyy") -> DateComponents {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = dateFormat
-        let date = dateFormatter.date(from: s)
-        return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date ?? Date())
-    }
     
-    func stringToCompIso(s: String, dateFormat:String="dd.MM.yyyy") -> DateComponents {
-        if let date = s.iso8601withFractionalSeconds {
-            return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
-        } else {
-            return stringToDateComponent(s: s, dateFormat: dateFormat)
-        }
-    }
+    
+    
     
     func stringToDate(s: String, fullDate: Bool) -> Date {//==false
         let defaultFormat = "dd.MM.yyyy"
@@ -169,7 +158,7 @@ class SuperViewController: UIViewController {
         return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: startDate, to: Date())
     }
     
-    func dateExpired(_ string: String) -> Bool {
+    func dateExpired(_ string: String) -> Bool {//      MODIFY TO USE ISO
         let dateDate = stringToDate(s: string, fullDate: true)//remove!
         let difference = differenceFromNow(startDate: dateDate)
         return (difference.year ?? 1 < 0 || difference.month ?? 1 < 0 || difference.day ?? 1 < 0 || difference.hour ?? 1 < 0 || difference.minute ?? 1 < 0 || difference.second ?? 1 < 0) ? false : true

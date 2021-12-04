@@ -25,6 +25,7 @@ class AppData {
             defaults.set(value, forKey: "proVersion")
         }
     }
+    
     var purchasedOnThisDevice: Bool {
         get{
             return defaults.value(forKey: "purchasedOnThisDevice") as? Bool ?? false
@@ -33,6 +34,7 @@ class AppData {
             defaults.set(value, forKey: "purchasedOnThisDevice")
         }
     }
+    
     var trialDate: String {
         get{
             return defaults.value(forKey: "trialDate") as? String ?? ""
@@ -41,6 +43,7 @@ class AppData {
             defaults.set(value, forKey: "trialDate")
         }
     }
+    
     var proTrial: Bool {
         get{
             return defaults.value(forKey: "proTrial") as? Bool ?? false
@@ -134,7 +137,7 @@ class AppData {
         for i in 0..<data.count {
             let nickname = username
             let value = data[i].value
-            let category = data[i].category
+            let category = data[i].categoryID
             let date = data[i].date
             let comment = data[i].comment
             
@@ -205,7 +208,7 @@ class AppData {
                 let category = localData[i][2]
                 let date = localData[i][3]
                 let comment = localData[i][4]
-                results.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
+                results.append(TransactionsStruct(value: value, categoryID: category, date: date, comment: comment))
             }
             return results
         }
@@ -220,7 +223,7 @@ class AppData {
                 let category = localData[i][2]
                 let date = localData[i][3]
                 let comment = localData[i][4]
-                results.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
+                results.append(TransactionsStruct(value: value, categoryID: category, date: date, comment: comment))
             }
             return results
         }
@@ -228,6 +231,10 @@ class AppData {
     
 
 
+    
+    
+    
+    
     //"savedCategories" -- from prev acc
     //"unsavedCategories" -- when no internet
     func saveCategories(_ data: [CategoriesStruct], key: String = "categoriesData") {
@@ -520,7 +527,6 @@ class AppData {
         
         let allPurposes = [K.expense, K.income]
         var categoryTextField = UITextField()
-        var purposPicker = UIPickerView()
         var purposeField = UITextField()
         var selectedPurpose = 0
         
@@ -530,11 +536,11 @@ class AppData {
     func createFirstData(completion: @escaping () -> ()) {
         
         let transactions = [
-            TransactionsStruct(value: "5000", category: "Freelance", date: "\(filter.getToday(filter.filterObjects.currentDate, dateformatter: "01.MM.yyyy"))", comment: ""),
-            TransactionsStruct(value: "10000", category: "Work", date: "\(filter.getToday(filter.filterObjects.currentDate, dateformatter: "01.01.yyyy"))", comment: ""),
-            TransactionsStruct(value: "-100", category: "Food", date: "\(filter.getToday(filter.filterObjects.currentDate, dateformatter: "01.MM.yyyy"))", comment: ""),
-            TransactionsStruct(value: "-400", category: "Food", date: "\(filter.getToday(filter.filterObjects.currentDate))", comment: ""),
-            TransactionsStruct(value: "-1000", category: "Bills", date: "\(filter.getToday(filter.filterObjects.currentDate))", comment: ""),
+            TransactionsStruct(value: "5000", categoryID: "Freelance", date: "\(filter.getToday(filter.filterObjects.currentDate, dateformatter: "01.MM.yyyy"))", comment: ""),
+            TransactionsStruct(value: "10000", categoryID: "Work", date: "\(filter.getToday(filter.filterObjects.currentDate, dateformatter: "01.01.yyyy"))", comment: ""),
+            TransactionsStruct(value: "-100", categoryID: "Food", date: "\(filter.getToday(filter.filterObjects.currentDate, dateformatter: "01.MM.yyyy"))", comment: ""),
+            TransactionsStruct(value: "-400", categoryID: "Food", date: "\(filter.getToday(filter.filterObjects.currentDate))", comment: ""),
+            TransactionsStruct(value: "-1000", categoryID: "Bills", date: "\(filter.getToday(filter.filterObjects.currentDate))", comment: ""),
         ]
         let categories = [
             CategoriesStruct(name: "Food", purpose: K.expense, count: 0),
@@ -633,9 +639,15 @@ extension TransactionsStruct {
 
 struct TransactionsStruct {
     let value: String
-    let category: String
+    let categoryID: String
     let date: String
     let comment: String
+    
+    var category:NewCategories {
+        let db = DataBase()
+        return db.category(categoryID) ?? NewCategories(id: -1, name: "Unknown", icon: "", color: "", purpose: .expense)
+    }
+    
 }
 
 
@@ -643,6 +655,99 @@ struct CategoriesStruct {
     let name: String
     let purpose: String
     let count: Int
+}
+
+
+
+
+/*
+//"savedCategories" -- from prev acc
+//"unsavedCategories" -- when no internet
+func saveCategoriesNew(_ data: [CategoriesStruct], key: String = "categoriesData") {
+    var dict: [[String]] = []
+    for i in 0..<data.count {
+        let nickname = username
+        let name = data[i].name
+        let purpose = data[i].purpose
+        dict.append([nickname, name, purpose])
+    }
+    print("categories saved to user defaults, count: \(dict.count), \(dict), key:", key)
+    defaults.set(dict, forKey: key)
+}
+
+//"savedCategories" -- from prev acc
+//"unsavedCategories" -- when no internet
+func getCategoriesNew(key: String = "categoriesData") -> [CategoriesStruct] {
+    let localData = defaults.value(forKey: key) as? [[String]] ?? []
+    var results: [CategoriesStruct] = []
+   // let trans = Array(transactions)
+    let trans = UserDefaults.standard.value(forKey: "transactionsData") as? [[String]] ?? []
+    for i in 0..<localData.count {
+        let name = localData[i][1]
+        let purpose = localData[i][2]
+        var count = 0
+        for t in 0..<trans.count {
+            if trans[t][2] == name {
+                count += 1
+            }
+        }
+        results.append(CategoriesStruct(name: name, purpose: purpose, count: count))
+    }
+    return results
+}
+*/
+
+
+
+
+/*class NewCategories {
+    let id: Int
+    let name: String
+    let purpose: CategoryPurpose
+    var dueDate: DateComponents? = nil
+    var amountToPay: Double? = nil
+    
+    var count: Int {
+        get {
+            return 0
+        }
+    }
+    
+    init(id:Int, name:String, purpose: CategoryPurpose, dueDate:DateComponents, amountToPay:Double) {
+        self.id = id
+        self.name = name
+        self.purpose = purpose
+        self.dueDate = dueDate
+        self.amountToPay = amountToPay
+    }
+    
+}*/
+enum CategoryPurpose {
+    case expense
+    case income
+    case debt
+}
+func purposeToString(_ pupose:CategoryPurpose) -> String {
+    switch pupose {
+    case .debt:
+        return "debt"
+    case .income:
+        return K.income
+    case .expense:
+        return K.expense
+    }
+}
+func stringToPurpose(_ string: String) -> CategoryPurpose {
+    switch string {
+    case K.income:
+        return .income
+    case K.expense:
+        return .expense
+    case "Debt":
+        return .debt
+    default:
+        return .debt
+    }
 }
 
 struct DebtsStruct {
@@ -661,4 +766,35 @@ class NavigationController : UINavigationController {
    /* override func viewWillDisappear(_ animated: Bool) {
         
     }*/
+}
+
+
+func stringToDateComponent(s: String, dateFormat:String="dd.MM.yyyy") -> DateComponents {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = dateFormat
+    let date = dateFormatter.date(from: s)
+    return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date ?? Date())
+}
+func stringToCompIso(s: String, dateFormat:String="dd.MM.yyyy") -> DateComponents {
+    if let date = s.iso8601withFractionalSeconds {
+        return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
+    } else {
+        return stringToDateComponent(s: s, dateFormat: dateFormat)
+    }
+}
+
+func dateCompToIso(isoComp: DateComponents) -> String? {
+    if let date = Calendar.current.date(from: isoComp){ //isoComp.date {
+        return date.iso8601withFractionalSeconds
+    }
+    return nil
+}
+
+
+func iconNamed(_ name: String?) -> UIImage {
+    return UIImage(named: name ?? "") ?? UIImage(named: "unknown")!
+}
+
+func colorNamed(_ name: String?) -> UIColor {
+    return UIColor(named: name ?? "") ?? (K.Colors.yellow ?? .red)
 }

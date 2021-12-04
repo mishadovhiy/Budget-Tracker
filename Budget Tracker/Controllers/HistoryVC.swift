@@ -673,24 +673,24 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                 var found = false
                 for i in 0..<transactions.count {
                     if !found {
-                        if transactions[i].comment == self.historyDataStruct[indexPath.row].comment && transactions[i].date == self.historyDataStruct[indexPath.row].date && transactions[i].value == self.historyDataStruct[indexPath.row].value && transactions[i].category == self.historyDataStruct[indexPath.row].category{
+                        if transactions[i].comment == self.historyDataStruct[indexPath.row].comment && transactions[i].date == self.historyDataStruct[indexPath.row].date && transactions[i].value == self.historyDataStruct[indexPath.row].value && transactions[i].categoryID == self.historyDataStruct[indexPath.row].categoryID{
                             found = true
                         } else {
                             result.append(transactions[i])
-                            if transactions[i].category == self.historyDataStruct[indexPath.row].category {
+                            if transactions[i].categoryID == self.historyDataStruct[indexPath.row].categoryID {
                                 newTableData.append(transactions[i])
                             }
                         }
                     } else {
                         result.append(transactions[i])
-                        if transactions[i].category == self.historyDataStruct[indexPath.row].category {
+                        if transactions[i].categoryID == self.historyDataStruct[indexPath.row].categoryID {
                             newTableData.append(transactions[i])
                         }
                     }
                 }
                 
                 if appData.username != "" {
-                    let toDataString = "&Nickname=\(appData.username)" + "&Category=\(self.historyDataStruct[indexPath.row].category)" + "&Date=\(self.historyDataStruct[indexPath.row].date)" + "&Value=\(self.historyDataStruct[indexPath.row].value)" + "&Comment=\(self.historyDataStruct[indexPath.row].comment)"
+                    let toDataString = "&Nickname=\(appData.username)" + "&Category=\(self.historyDataStruct[indexPath.row].categoryID)" + "&Date=\(self.historyDataStruct[indexPath.row].date)" + "&Value=\(self.historyDataStruct[indexPath.row].value)" + "&Comment=\(self.historyDataStruct[indexPath.row].comment)"
                     let delete = DeleteFromDB()
                     delete.Transactions(toDataString: toDataString, completion: { (error) in
                         if error {
@@ -796,7 +796,7 @@ extension HistoryVC: TransitionVCProtocol {
     }
     func addNewTransaction(value: String, category: String, date: String, comment: String) {
         toAddVC = false
-        let new = TransactionsStruct(value: value, category: category, date: date, comment: comment)
+        let new = TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)
         print(new, "newnewnewnew")
         
         if value != "" && category != "" && date != "" {
@@ -814,7 +814,7 @@ extension HistoryVC: TransitionVCProtocol {
                     trans.append(new)
                     appData.saveTransations(trans)
                     
-                    self.historyDataStruct.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
+                    self.historyDataStruct.append(TransactionsStruct(value: value, categoryID: category, date: date, comment: comment))
                     self.historyDataStruct = self.historyDataStruct.sorted{ $0.dateFromString < $1.dateFromString }
                     
                     DispatchQueue.main.async {
@@ -822,7 +822,7 @@ extension HistoryVC: TransitionVCProtocol {
                     }
                     var indexPath: IndexPath?
                     for i in 0..<self.historyDataStruct.count {
-                        if self.historyDataStruct[i].category == new.category && self.historyDataStruct[i].comment == new.comment && self.historyDataStruct[i].date == new.date && self.historyDataStruct[i].value == new.value {
+                        if self.historyDataStruct[i].categoryID == new.categoryID && self.historyDataStruct[i].comment == new.comment && self.historyDataStruct[i].date == new.date && self.historyDataStruct[i].value == new.value {
                             indexPath = IndexPath(row: i, section: 1)
                             break
                         }
@@ -841,7 +841,7 @@ extension HistoryVC: TransitionVCProtocol {
                 trans.append(new)
                 appData.saveTransations(trans)
                 
-                self.historyDataStruct.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
+                self.historyDataStruct.append(TransactionsStruct(value: value, categoryID: category, date: date, comment: comment))
                 self.historyDataStruct = self.historyDataStruct.sorted{ $0.dateFromString < $1.dateFromString }
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
@@ -873,12 +873,7 @@ extension HistoryVC: CalendarVCProtocol {
         return date
     }
     
-    func dateCompToIso(isoComp: DateComponents) -> String? {
-        if let date = Calendar.current.date(from: isoComp){ //isoComp.date {
-            return date.iso8601withFractionalSeconds
-        }
-        return nil
-    }
+    
     
     func dateSelected(date: String, time: DateComponents?) {
         DispatchQueue.main.async {
@@ -891,7 +886,7 @@ extension HistoryVC: CalendarVCProtocol {
                 if let dateComp = self.createDateComp(date: date, time: time) {
                     print(dateComp, "dateCompdateCompdateComp")
                     
-                    if let isoFullString = self.dateCompToIso(isoComp: dateComp) {
+                    if let isoFullString = dateCompToIso(isoComp: dateComp) {
                         self.addLocalNotification(date: dateComp) { (added) in
                             
                             

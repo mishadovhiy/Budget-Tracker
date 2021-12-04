@@ -184,7 +184,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
         selectedIndexPathToHighlite = IndexPath(row: indexPathRow, section: 0)
         historyDataStruct = []
         for i in 0..<dataFromMain.count {
-            if allData[indexPathRow].category == dataFromMain[i].category {
+            if allData[indexPathRow].category == dataFromMain[i].categoryID {
                 historyDataStruct.append(dataFromMain[i])
             }
         }

@@ -73,7 +73,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                 var transactions:[TransactionsStruct] = []
                 let allTrans = Array(appData.getTransactions)
                 for i in 0..<allTrans.count{
-                    if allTrans[i].category == notification.request.content.title {
+                    if allTrans[i].categoryID == notification.request.content.title {
                         transactions.append(allTrans[i])
                     }
                 }

@@ -239,10 +239,10 @@ class DebtsVC: SuperViewController {
             var amount = 0.0
             var resultTransactions: [TransactionsStruct] = []
             for transaction in transactions {
-                if category.name == transaction.category {
+                if category.name == transaction.categoryID {
                     amount = amount + (Double(transaction.value) ?? 0.0)
                     resultTransactions.append(transaction)
-                    print(resultTransactions, "appended c1/c2: \(category.name)/\(transaction.category)")
+                    print(resultTransactions, "appended c1/c2: \(category.name)/\(transaction.categoryID)")
                 }
             }
             let new = DebtsTableStruct(name: category.name, amount: Int(amount), transactions: transactions, amountToPay: category.amountToPay, dueDate: category.dueDate)
@@ -317,7 +317,7 @@ class DebtsVC: SuperViewController {
                 var result:[TransactionsStruct] = []
                 let allTrans = Array(appData.getTransactions)
                 for i in 0..<allTrans.count{
-                    if allTrans[i].category == data.name {
+                    if allTrans[i].categoryID == data.name {
                         result.append(allTrans[i])
                     }
                 }

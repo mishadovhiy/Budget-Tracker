@@ -110,7 +110,7 @@ class ViewController: SuperViewController {
                         print("date:", date )
                         if new.date == "\(date)" {
                             for t in 0..<newValue[i].transactions.count {
-                                if new.category == newValue[i].transactions[t].category && new.comment == newValue[i].transactions[t].comment && new.value == newValue[i].transactions[t].value
+                                if new.categoryID == newValue[i].transactions[t].categoryID && new.comment == newValue[i].transactions[t].comment && new.value == newValue[i].transactions[t].value
                                 {
                                     let cell = IndexPath(row: t, section: i+1)
                                     self.highliteCell = cell
@@ -393,6 +393,25 @@ class ViewController: SuperViewController {
         _debtsHolder.removeAll()
         print("downloadFromDBdownloadFromDB")
         lastSelectedDate = nil
+        
+        
+        let unsend = appData.unsendedData
+        undendedCount = unsend.count
+        if unsend.count > 0 {
+            let load = LoadFromDB()
+            load.newTransactions { loadedData, error in
+                self.checkPurchase()
+                self.prepareFilterOptions()
+                self.filter()
+                if appData.username != "" {
+                    self.sendUnsaved()
+                }
+            }
+        }
+        
+        
+        
+        
         if appData.username != "" {
             let unsend = appData.unsendedData
             undendedCount = unsend.count
@@ -415,7 +434,7 @@ class ViewController: SuperViewController {
                             let category = loadedTransactions[i][1]
                             let date = loadedTransactions[i][2]
                             let comment = loadedTransactions[i][4]
-                            transactionsResult.append(TransactionsStruct(value: value, category: category, date: date, comment: comment))
+                            transactionsResult.append(TransactionsStruct(value: value, categoryID: category, date: date, comment: comment))
                         }
                         appData.saveTransations(transactionsResult)
                         self.checkPurchase()
@@ -736,13 +755,18 @@ class ViewController: SuperViewController {
             arr.removeAll()
             var matches = 0
             let days = Array(daysBetween)
-            let transactions = UserDefaults.standard.value(forKey: "transactionsData") as? [[String]] ?? []
+            let transactions = UserDefaults.standard.value(forKey: "transactionsData") as? [[String:Any]] ?? []
             for number in 0..<days.count {
                 for i in 0..<transactions.count {
                     if days.count > number {
-                        if days[number] == transactions[i][3] {
-                            matches += 1
-                            arr.append(TransactionsStruct(value: transactions[i][1], category: transactions[i][2], date: transactions[i][3], comment: transactions[i][4]))
+                        if days[number] == (transactions[i]["Date"] as? String ?? "") {
+                            if let new = db.transactionFrom(transactions[i]) {
+                                matches += 1
+                                arr.append(new)
+                            }
+                            
+                            
+                           // arr.append(TransactionsStruct(value: transactions[i][1], categoryID: transactions[i][2], date: transactions[i][3], comment: transactions[i][4]))
                         }
                     }
                 }
@@ -1017,7 +1041,7 @@ class ViewController: SuperViewController {
                         var trans = appData.getLocalTransactions
                         print("saved trans count:", trans.count)
                         if let tran = trans.first {
-                            let toDataString = "&Nickname=\(appData.username)" + "&Category=\(tran.category)" + "&Date=\(tran.date)" + "&Value=\(tran.value)" + "&Comment=\(tran.comment)"
+                            let toDataString = "&Nickname=\(appData.username)" + "&Category=\(tran.categoryID)" + "&Date=\(tran.date)" + "&Value=\(tran.value)" + "&Comment=\(tran.comment)"
                             save.Transactions(toDataString: toDataString) { (error) in
                                 if error {
                                     self.filter()
@@ -1172,7 +1196,7 @@ class ViewController: SuperViewController {
         selectedCell = nil
         let Nickname = appData.username
         if Nickname != "" {
-            let Category = newTableData[at.section].transactions[at.row].category
+            let Category = newTableData[at.section].transactions[at.row].categoryID
             let Date = newTableData[at.section].transactions[at.row].date
             let Value = newTableData[at.section].transactions[at.row].value
             let Comment = newTableData[at.section].transactions[at.row].comment
@@ -1186,7 +1210,7 @@ class ViewController: SuperViewController {
                 
                 var arr = Array(appData.getTransactions)
                 for i in 0..<arr.count{
-                    if arr[i].category == Category && arr[i].date == Date && arr[i].value == Value && arr[i].comment == Comment{
+                    if arr[i].categoryID == Category && arr[i].date == Date && arr[i].value == Value && arr[i].comment == Comment{
                         arr.remove(at: i)
                         appData.saveTransations(arr)
                         self.filter()
@@ -1207,7 +1231,7 @@ class ViewController: SuperViewController {
             for i in 0..<data.count {
                 for n in 0..<data[i].transactions.count {
                     let date = "(\(self.makeTwo(n: data[i].date.day ?? 0)).\(self.makeTwo(n: data[i].date.month ?? 0)).\(data[i].date.year ?? 0))"
-                    new.append(TransactionsStruct(value: data[i].transactions[n].value, category: data[i].transactions[n].category, date: date, comment: data[i].transactions[n].comment))
+                    new.append(TransactionsStruct(value: data[i].transactions[n].value, categoryID: data[i].transactions[n].categoryID, date: date, comment: data[i].transactions[n].comment))
                 }
             }
             appData.saveTransations(new)
@@ -1367,14 +1391,14 @@ class ViewController: SuperViewController {
         if appData.username != "" {
             if let trans = editingTransaction {
                 let delete = DeleteFromDB()
-                let toDataString = "&Nickname=\(appData.username)" + "&Category=\(trans.category)" + "&Date=\(trans.date)" + "&Value=\(trans.value)" + "&Comment=\(trans.comment)"
+                let toDataString = "&Nickname=\(appData.username)" + "&Category=\(trans.categoryID)" + "&Date=\(trans.date)" + "&Value=\(trans.value)" + "&Comment=\(trans.comment)"
                 delete.Transactions(toDataString: toDataString) { (error) in
                     if error {
                         appData.unsendedData.append(["deleteTransaction":toDataString])
                     }
                     var arr = Array(appData.getTransactions)
                     for i in 0..<arr.count{
-                        if arr[i].category == trans.category && arr[i].date == trans.date && arr[i].value == trans.value && arr[i].comment == trans.comment{
+                        if arr[i].categoryID == trans.categoryID && arr[i].date == trans.date && arr[i].value == trans.value && arr[i].comment == trans.comment{
                             arr.remove(at: i)
                             self.editingRow = i
                             appData.saveTransations(arr)
@@ -1391,7 +1415,7 @@ class ViewController: SuperViewController {
             if let trans = editingTransaction {
                 var arr = Array(appData.getTransactions)
                 for i in 0..<arr.count{
-                    if arr[i].category == trans.category && arr[i].date == trans.date && arr[i].value == trans.value && arr[i].comment == trans.comment{
+                    if arr[i].categoryID == trans.categoryID && arr[i].date == trans.date && arr[i].value == trans.value && arr[i].comment == trans.comment{
                         arr.remove(at: i)
                         self.editingRow = i
                         appData.saveTransations(arr)
@@ -1420,8 +1444,11 @@ class ViewController: SuperViewController {
             UserDefaults.standard.setValue(newValue, forKey: "filterOptions")
         }
     }
-    func prepareFilterOptions() {
-        let arr = Array(appData.getTransactions.sorted{ $0.dateFromString > $1.dateFromString })
+    let db = DataBase()
+    func prepareFilterOptions(_ data:[TransactionsStruct]? = nil) {
+        let dat = data == nil ? Array(db.transactions) : data!
+        let arr = Array(dat.sorted{ $0.dateFromString > $1.dateFromString })
+        //Array(appData.getTransactions.sorted{ $0.dateFromString > $1.dateFromString })
         var months:[String] = []
         var years:[String] = []
         for i in 0..<arr.count {
@@ -1439,7 +1466,7 @@ class ViewController: SuperViewController {
         ]
     }
     
-    func removeDayFromString(_ s: String) -> String {
+    func removeDayFromString(_ s: String) -> String {//-> date comp
         var m = s
         for _ in 0..<3 {
             m.removeFirst()
@@ -1488,7 +1515,7 @@ class ViewController: SuperViewController {
             if let transaction = editingTransaction {
                 vc.editingDate = transaction.date
                 vc.editingValue = Double(transaction.value) ?? 0.0
-                vc.editingCategory = transaction.category
+                vc.editingCategory = transaction.categoryID
                 vc.editingComment = transaction.comment
             }
         case "toUnsendedVC":
@@ -2003,7 +2030,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
 
 extension ViewController: TransitionVCProtocol {
     func addNewTransaction(value: String, category: String, date: String, comment: String) {
-        let new = TransactionsStruct(value: value, category: category, date: date, comment: comment)
+        let new = TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)
         self.newTransaction = new
         editingTransaction = nil
         self.animateCellWillAppear = false

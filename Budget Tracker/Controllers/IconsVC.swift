@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 
 protocol IconsVCDelegate {
-    func selected(img:String)
+    func selected(img:String, color:String)
 }
 
 class IconsVC: UIViewController {
@@ -65,6 +65,10 @@ class IconsVC: UIViewController {
     let colors:[UIColor] = [
         .yellow, .systemPink, .green, .orange, .red, .blue
     ]
+    let coloresStrTemporary = [
+        "yellowColor", "PinkColor", "GreenColor", "OrangeColor", "RedColor", "BlueColor"
+    ]
+    
     var selectedColorId:Int = 0
     var selectedIconIndex:IndexPath?
     
@@ -152,11 +156,13 @@ extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             selectedColorId = indexPath.row
+    
+            delegate?.selected(img: selectedIconIndex == nil ? "" : iconsData[selectedIconIndex!.section].data[selectedIconIndex!.row].name, color: coloresStrTemporary[indexPath.row])
             collectionView.reloadData()
         } else {
             selectedIconIndex = IndexPath(row: indexPath.row, section: indexPath.section - 1)
             collectionView.reloadData()
-            delegate?.selected(img: iconsData[indexPath.section].data[indexPath.row].name)
+            delegate?.selected(img: iconsData[selectedIconIndex!.section].data[selectedIconIndex!.row].name, color: coloresStrTemporary[selectedColorId])
             
         }
 

@@ -15,6 +15,7 @@
 		8B2A4D72271439520085E0F0 /* MoreVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2A4D71271439520085E0F0 /* MoreVC.swift */; };
 		8B324B692683118000E72275 /* NotificationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B324B682683118000E72275 /* NotificationsVC.swift */; };
 		8B35DA6625C6F124008A8719 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B35DA6525C6F124008A8719 /* Keychain.swift */; };
+		8B4728BC27533A470078BD34 /* DataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4728BB27533A470078BD34 /* DataBase.swift */; };
 		8B4E086126544AD2006E42DA /* LogIn.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B4E086026544AD2006E42DA /* LogIn.storyboard */; };
 		8B52DFE82750231000595A0C /* Numbers.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B52DFE72750231000595A0C /* Numbers.xib */; };
 		8B52DFEA2750232D00595A0C /* NumbersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B52DFE92750232D00595A0C /* NumbersView.swift */; };
@@ -31,7 +32,7 @@
 		8B901F1C265F0A0100E0D2BB /* accountSettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B901F1B265F0A0100E0D2BB /* accountSettingsVC.swift */; };
 		8BD2E77C25B8622100D4DFBF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */; };
 		8BF011C225FD93670082F871 /* DebtsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF011C125FD93670082F871 /* DebtsVC.swift */; };
-		8D36724224D315BC00CE90A9 /* dbModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D36724124D315BC00CE90A9 /* dbModel.swift */; };
+		8D36724224D315BC00CE90A9 /* NetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D36724124D315BC00CE90A9 /* NetworkModel.swift */; };
 		8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5206662421695200772CD5 /* StatisticBrain.swift */; };
 		8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D52066824216A2900772CD5 /* StatisticVC.swift */; };
 		8D52066B24216A6200772CD5 /* HistoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D52066A24216A6200772CD5 /* HistoryVC.swift */; };
@@ -76,6 +77,7 @@
 		8B2A4D71271439520085E0F0 /* MoreVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreVC.swift; sourceTree = "<group>"; };
 		8B324B682683118000E72275 /* NotificationsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsVC.swift; sourceTree = "<group>"; };
 		8B35DA6525C6F124008A8719 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
+		8B4728BB27533A470078BD34 /* DataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBase.swift; sourceTree = "<group>"; };
 		8B4E086026544AD2006E42DA /* LogIn.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LogIn.storyboard; sourceTree = "<group>"; };
 		8B52DFE72750231000595A0C /* Numbers.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Numbers.xib; sourceTree = "<group>"; };
 		8B52DFE92750232D00595A0C /* NumbersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumbersView.swift; sourceTree = "<group>"; };
@@ -92,7 +94,7 @@
 		8B901F1B265F0A0100E0D2BB /* accountSettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = accountSettingsVC.swift; sourceTree = "<group>"; };
 		8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8BF011C125FD93670082F871 /* DebtsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebtsVC.swift; sourceTree = "<group>"; };
-		8D36724124D315BC00CE90A9 /* dbModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dbModel.swift; sourceTree = "<group>"; };
+		8D36724124D315BC00CE90A9 /* NetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkModel.swift; sourceTree = "<group>"; };
 		8D5206662421695200772CD5 /* StatisticBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticBrain.swift; sourceTree = "<group>"; };
 		8D52066824216A2900772CD5 /* StatisticVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticVC.swift; sourceTree = "<group>"; };
 		8D52066A24216A6200772CD5 /* HistoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryVC.swift; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 		8B5CE1CF2720991B0092BBFB /* notUsing */ = {
 			isa = PBXGroup;
 			children = (
+				8B2163A1274070BA003EDFE0 /* snippets.swift */,
 				8B901F1B265F0A0100E0D2BB /* accountSettingsVC.swift */,
 				8B324B682683118000E72275 /* NotificationsVC.swift */,
 				8B5BE4782648038F005B182C /* expectingPaymentsVC.swift */,
@@ -241,11 +244,11 @@
 			children = (
 				8B7B63CB2655CAFB0067C434 /* SuperViewController.swift */,
 				8DD89D8623F1471400273904 /* AppData.swift */,
+				8B4728BB27533A470078BD34 /* DataBase.swift */,
+				8D36724124D315BC00CE90A9 /* NetworkModel.swift */,
 				8DD89D8923F1472E00273904 /* MessageView.swift */,
 				8D5206662421695200772CD5 /* StatisticBrain.swift */,
-				8D36724124D315BC00CE90A9 /* dbModel.swift */,
 				8B35DA6525C6F124008A8719 /* Keychain.swift */,
-				8B2163A1274070BA003EDFE0 /* snippets.swift */,
 				8B052E3C26EFD48E000BA66A /* IndicatorView.swift */,
 				8B052E3E26EFD4A0000BA66A /* IndicatorView.xib */,
 				8DD89D8223F1468E00273904 /* mainVCcell.swift */,
@@ -377,6 +380,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B4728BC27533A470078BD34 /* DataBase.swift in Sources */,
 				8DD89D8323F1468E00273904 /* mainVCcell.swift in Sources */,
 				8B63312F260FD65200D9E117 /* buyProVC.swift in Sources */,
 				8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */,
@@ -407,7 +411,7 @@
 				8D52066B24216A6200772CD5 /* HistoryVC.swift in Sources */,
 				8B5BE4792648038F005B182C /* expectingPaymentsVC.swift in Sources */,
 				8DD89D8C23F1485700273904 /* Constants.swift in Sources */,
-				8D36724224D315BC00CE90A9 /* dbModel.swift in Sources */,
+				8D36724224D315BC00CE90A9 /* NetworkModel.swift in Sources */,
 				8B5F342C26FB2D98000DDCAF /* EnterValueVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
