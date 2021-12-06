@@ -47,10 +47,47 @@ class IconsVC: UIViewController {
                 IconsData.Icon(name: "bolt.square.fill"),
                 IconsData.Icon(name: "books.vertical.fill"),
             ])
+            let briefcase = IconsData(sectionName: "briefcase", data: [
+                IconsData.Icon(name: "briefcase.fill"),
+                IconsData.Icon(name: "bubble.left.and.bubble.right.fill"),
+                IconsData.Icon(name: "bubble.left.fill"),
+                IconsData.Icon(name: "building.2.fill"),
+                IconsData.Icon(name: "building.columns.circle.fill-1"),
+                IconsData.Icon(name: "building.columns.circle.fill"),
+                IconsData.Icon(name: "building.columns.fill"),
+                IconsData.Icon(name: "burn"),
+                IconsData.Icon(name: "bus.fill"),
+                IconsData.Icon(name: "bus"),
+                IconsData.Icon(name: "camera.fill"),
+                IconsData.Icon(name: "camera.viewfinder"),
+                IconsData.Icon(name: "candybarphone"),
+                IconsData.Icon(name: "captions.bubble.fill"),
+                IconsData.Icon(name: "car.fill"),
+                IconsData.Icon(name: "cart.circle.fill"),
+                
+                IconsData.Icon(name: "cart.fill"),
+                IconsData.Icon(name: "cart"),
+                IconsData.Icon(name: "checkerboard.rectangle"),
+                IconsData.Icon(name: "checkmark"),
+                IconsData.Icon(name: "chevron.left.forwardslash.chevron.right"),
+                IconsData.Icon(name: "chevron.up.circle"),
+                IconsData.Icon(name: "clock.fill"),
+                IconsData.Icon(name: "cloud.bolt.fill"),
+                
+                IconsData.Icon(name: "cloud.bolt.rain.fill"),
+                IconsData.Icon(name: "cloud.rain.fill"),
+                IconsData.Icon(name: "cloud.snow.fill"),
+                IconsData.Icon(name: "comb.fill"),
+                IconsData.Icon(name: "cpu.fill"),
+                IconsData.Icon(name: "cpu"),
+                IconsData.Icon(name: "creditcard.fill"),
+                IconsData.Icon(name: "crown.fill")
+            ])
+            
             return [
                 animals,
                 bank,
-                animals,
+                briefcase,
                 bank,
                 animals,
                 bank,
@@ -138,7 +175,7 @@ extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "IconsVCColorCell", for: indexPath) as! IconsVCColorCell
             cell.layer.cornerRadius = 4
             cell.colorView.layer.cornerRadius = cell.colorView.layer.frame.width / 2
-            cell.colorView.backgroundColor = colors[indexPath.row]
+            cell.colorView.backgroundColor = colorNamed(coloresStrTemporary[indexPath.row])
             cell.backgroundColor = indexPath.row == selectedColorId ? K.Colors.secondaryBackground : .clear
             return cell
         } else {
@@ -146,8 +183,12 @@ extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
             cell.layer.cornerRadius = 4
             let index = IndexPath(row: indexPath.row, section: indexPath.section - 1)
             let data = iconsData[index.section].data[index.row]
-            cell.backgroundColor = index == selectedIconIndex ? K.Colors.secondaryBackground : .clear
+           // cell.backgroundColor = index == selectedIconIndex ? K.Colors.secondaryBackground : .clear
             cell.mainImage.image = UIImage(named: data.name)
+            
+            let selectedColor = colorNamed(coloresStrTemporary[selectedColorId])
+            cell.mainImage.tintColor = index == selectedIconIndex ? selectedColor :  K.Colors.balanceT
+            
             return cell
         }
         
