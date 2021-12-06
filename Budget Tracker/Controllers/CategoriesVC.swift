@@ -157,23 +157,27 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate {
     let db = DataBase()
     func saveNewCategory(section: Int, category: ScreenCategory) {
         
-        
-        var newCategory = category
-        let save = SaveToDB()
-
-        
-        let all = db.categories.sorted{ $0.id > $1.id }
-        let newID = (all.first?.id ?? 0) + 1
-        
-        print("new:", newCategory.category.name)
-        print("new id:", newID)
-        newCategory.category.id = newID
-        save.newCategories(newCategory.category) { error in
-            //CategoriesVC.shared?.loadData()
-            //CategoriesVC.shared?.categories = self.db.categories
-            self.tableData[section].newCategory.category.name = ""
-            self.tableData[section].data.append(newCategory)
+        let load = LoadFromDB()
+        load.newCategories { loadedData, error in
+            var newCategory = category
+            let save = SaveToDB()
+            let all = loadedData.sorted{ $0.id > $1.id }
+            let newID = (all.first?.id ?? 0) + 1
+            
+            print("new:", newCategory.category.name)
+            print("new id:", newID)
+            newCategory.category.id = newID
+            save.newCategories(newCategory.category) { error in
+                //CategoriesVC.shared?.loadData()
+                //CategoriesVC.shared?.categories = self.db.categories
+                self.tableData[section].newCategory.category.name = ""
+                self.tableData[section].data.append(newCategory)
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
         }
+        
     }
     
     @objc func newCategoryPressed(_ sender: UITapGestureRecognizer) {
@@ -433,41 +437,10 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate {
     }
     
     func deteteCategory(at: IndexPath) {
-
-     /*   transactionAdded = true
         let delete = DeleteFromDB()
-        let Nickname = appData.username
-        let Title = at.section == 0 ? expenses[at.row].0 : incomes[at.row].0
-        let Purpose = at.section == 0 ? K.expense : K.income
-        wasEdited = true
-        if appData.username != "" {
-            let toDataString = "&Nickname=\(Nickname)" + "&Title=\(Title)" + "&Purpose=\(Purpose)" + "&ExpectingPayment=0"
-            print("deleting:", toDataString)
-            delete.Categories(toDataString: toDataString, completion: { (error) in
-                if error {
-                    print("Errordeletingcategory")
-                    appData.unsendedData.append(["deleteCategory": toDataString])
-                }
-            })
+        delete.CategoriesNew(category: tableData[at.section].data[at.row].category) { _ in
+            self.categories = self.db.categories
         }
-        if at.section == 0 {
-            self.expenses.remove(at: at.row)
-        } else {
-            if at.section == 1 {
-                self.incomes.remove(at: at.row)
-            }
-            
-        }
-        var result: [CategoriesStruct] = []
-        for i in 0..<self.incomes.count {
-            result.append(CategoriesStruct(name: self.incomes[i].0, purpose: K.income, count: 0))
-        }
-        for i in 0..<self.expenses.count {
-            result.append(CategoriesStruct(name: self.expenses[i].0, purpose: K.expense, count: 0))
-        }
-        appData.saveCategories(result)
-        self.getDataFromLocal()
-        */
     }
 
     
@@ -709,9 +682,19 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
                 self.deteteCategory(at: indexPath)
             }
             deleteAction.backgroundColor = K.Colors.negative
-            return UISwipeActionsConfiguration(actions: [deleteAction])
+            
+            let editAction = UIContextualAction(style: .destructive, title: "Edit") {  (contextualAction, view, boolValue) in
+                //self.tableActionActivityIndicator.startAnimating()
+                self.tableData[indexPath.section].data[indexPath.row].editing = self.tableData[indexPath.section].data[indexPath.row].category
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+            editAction.backgroundColor = K.Colors.yellow
+            
+            return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
         } else {
-            return nil//UISwipeActionsConfiguration(actions: [])
+            return nil
         }
     }
     
@@ -973,8 +956,8 @@ class categoriesVCcell: UITableViewCell {
             if self.editingStack.isHidden != hideEditing {
                 self.editingStack.isHidden = hideEditing
             }
-            if self.qntLabel.isHidden != hideQnt {
-                self.qntLabel.isHidden = hideQnt
+            if self.qntLabel.superview?.isHidden ?? false != hideQnt {
+                self.qntLabel.superview?.isHidden = hideQnt
             }
             if self.categoryNameLabel.isHidden != hideTitle {
                 self.categoryNameLabel.isHidden = hideTitle
@@ -987,21 +970,26 @@ class categoriesVCcell: UITableViewCell {
             
             self.categoryNameLabel.text = category.category.name
             
+            self.accessoryType = category.editing != nil ? .none : .disclosureIndicator
             
             
+            let iconPressed = UITapGestureRecognizer(target: self, action: #selector(self.iconPressed(_:)))
+            self.iconimage.addGestureRecognizer(iconPressed)
             
             if let section = footer {
                 self.newCategoryTF.text = CategoriesVC.shared?.tableData[section].newCategory.category.name
             } else {
                 self.newCategoryTF.delegate = self
                 self.newCategoryTF.addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
+                
+                self.newCategoryTF.text = category.editing?.name ?? category.category.name
             }
             
         }
     }
 
     
-    func iconPressed(_ sender: UITapGestureRecognizer) {
+    @objc func iconPressed(_ sender: UITapGestureRecognizer) {
         if let indexPath = indexPath {
            // CategoriesVC.shared?.iconPressed()
             CategoriesVC.shared?.selectingIconFor.0 = indexPath
@@ -1010,6 +998,10 @@ class categoriesVCcell: UITableViewCell {
         
     }
     
+    
+    private func animateEditing() {
+        
+    }
     
     
     @objc private func textfieldValueChanged(_ textField: UITextField) {
@@ -1021,7 +1013,7 @@ class categoriesVCcell: UITableViewCell {
         } else {
             if let indexPath = indexPath {
                 DispatchQueue.main.async {
-                    CategoriesVC.shared?.tableData[indexPath.section].data[indexPath.row].category.name = textField.text ?? ""
+                    CategoriesVC.shared?.tableData[indexPath.section].data[indexPath.row].editing?.name = textField.text ?? ""
                 }
             }
         }
@@ -1034,6 +1026,12 @@ class categoriesVCcell: UITableViewCell {
     var currentCategory: CategoriesVC.ScreenCategory?
     
     @IBAction func cancelPressed(_ sender: UIButton) {
+        if let index = indexPath {
+            CategoriesVC.shared?.tableData[index.section].data[index.row].editing = nil
+            lo(index: index, footer: nil)
+        }
+        
+        
     }
     
     let db = DataBase()

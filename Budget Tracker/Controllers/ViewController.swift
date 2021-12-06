@@ -1792,7 +1792,12 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
         if indexPath.section != 0 {
             let editeAction = UIContextualAction(style: .destructive, title: "Edit") {  (contextualAction, view, boolValue) in
-                self.editRow(at: IndexPath(row: indexPath.row, section: indexPath.section - 1))
+               // self.editRow(at: IndexPath(row: indexPath.row, section: indexPath.section - 1)) -- its perform saving,
+                // go to trans vc indeed
+                self.editingTransaction = self.newTableData[indexPath.section - 1].transactions[indexPath.row]
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "goToEditVC", sender: self)
+                }
             }
             let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
                 self.tableActionActivityIndicator.startAnimating()

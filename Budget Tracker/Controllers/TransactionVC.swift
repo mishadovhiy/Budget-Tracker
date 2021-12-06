@@ -183,8 +183,11 @@ class TransitionVC: SuperViewController {
                 self.isModalInPresentation = true
             }
             minusPlusLabel.alpha = 1
+            let db = DataBase()
+            let category = db.category(self.editingCategory)
+            selectedCategory = category
             DispatchQueue.main.async {
-                self.categoryTextField.text = self.editingCategory
+                self.categoryTextField.text = category?.name ?? "-"
                 self.dateTextField.text = self.editingDate
                 self.commentTextField.text = self.editingComment
             }
