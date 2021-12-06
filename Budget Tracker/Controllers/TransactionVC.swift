@@ -255,19 +255,25 @@ class TransitionVC: SuperViewController {
     
 
     
+    
     @IBAction func donePressed(_ sender: UIButton) {
-        DispatchQueue.main.async {
-            if self.valueLabel.text != "0" {
-                let selectedSeg = self.purposeSwitcher.selectedSegmentIndex
-                let value = selectedSeg == 0 ? "\((Double(self.valueLabel.text ?? "") ?? 0.0) * (-1))" : self.valueLabel.text ?? ""
-                let category = self.categoryTextField.text ?? self.categoryTextField.placeholder!
-                let date = self.dateTextField.text ?? self.dateTextField.placeholder!
-                let comment = self.commentTextField.text ?? ""
-                self.addNew(value: value, category: category == "" ? self.categoryTextField.placeholder ?? (selectedSeg == 0 ? self.expenseArr[appData.selectedExpense] : self.incomeArr[appData.selectedIncome]) : category, date: date == "" ? self.dateTextField.placeholder ?? appData.stringDate(appData.objects.datePicker) : date, comment: comment)
-            } else {
-                self.errorSaving()
+     //   selectedCategory
+        if let category = selectedCategory {
+            DispatchQueue.main.async {
+                if self.valueLabel.text != "0" {
+                    let selectedSeg = self.purposeSwitcher.selectedSegmentIndex
+                    let value = selectedSeg == 0 ? "\((Double(self.valueLabel.text ?? "") ?? 0.0) * (-1))" : self.valueLabel.text ?? ""
+                   // let category = self.categoryTextField.text ?? self.categoryTextField.placeholder!
+                    let date = self.dateTextField.text ?? self.dateTextField.placeholder!
+                    let comment = self.commentTextField.text ?? ""
+                    //category: category == "" ? self.categoryTextField.placeholder ?? (selectedSeg == 0 ? self.expenseArr[appData.selectedExpense] : self.incomeArr[appData.selectedIncome]) : category
+                    self.addNew(value: value, category: "\(category.id)", date: date == "" ? self.dateTextField.placeholder ?? appData.stringDate(appData.objects.datePicker) : date, comment: comment)
+                } else {
+                    self.errorSaving()
+                }
             }
         }
+        
     }
     
     func errorSaving() {
@@ -320,16 +326,21 @@ class TransitionVC: SuperViewController {
                 DispatchQueue.main.async {
                     self.categoryTextField.text = ""
                 }
-                if let cat = UserDefaults.standard.value(forKey: "lastSelectedCategory") as? String {
-                    categoryTextField.placeholder = cat
-                    let allCats = Array(expenseArr)
-                    var found = false
-                    for i in 0..<allCats.count {
-                        if allCats[i] == cat {
-                            found = true
+                if let cat = UserDefaults.standard.value(forKey: "lastSelectedCategory") as? [String:Any] {
+                    let db = DataBase()
+                    if let cat = db.categoryFrom(cat) {
+                        categoryTextField.placeholder = cat.name
+                        selectedCategory = cat
+                        let allCats = Array(expenseArr)
+                        var found = false
+                        for i in 0..<allCats.count {
+                            if allCats[i] == cat.name {
+                                found = true
+                            }
                         }
+                        placeHolder = found == true ? cat.name : "\(expenseArr[appData.selectedExpense])"
                     }
-                    placeHolder = found == true ? cat : "\(expenseArr[appData.selectedExpense])"
+                    
                 } else {
                     placeHolder = "\(expenseArr[appData.selectedExpense])"
                 }
@@ -413,8 +424,7 @@ class TransitionVC: SuperViewController {
             minusPlusLabel.alpha = 0
         }
     }
-    
-
+    var selectedCategory: NewCategories?
     var fromDebts = false
     
 }
@@ -484,37 +494,42 @@ extension TransitionVC: CalendarVCProtocol {
 
 extension TransitionVC: CategoriesVCProtocol {
     
-    func categorySelected(category: String, purpose: Int, fromDebts: Bool, amount: Int) {
-        print("categorySelectedtransactionsvc", category)
-        self.fromDebts = fromDebts
-        if !fromDebts {
-            purposeSwitcher.selectedSegmentIndex = purpose
-            purposeSwitched(purposeSwitcher)
-            if purpose == 0 {
-                UserDefaults.standard.setValue(category, forKey: "lastSelectedCategory")
-            }
-        } else {
-            
-            
-            DispatchQueue.main.async {
-                if self.pressedValue == "" || self.pressedValue == "0" {
+    func categorySelected(category: NewCategories?, fromDebts: Bool, amount: Int) {
+        if let category = category {
+            print("categorySelectedtransactionsvc", category)
+            self.fromDebts = fromDebts
+            if !fromDebts {
+                purposeSwitcher.selectedSegmentIndex = category.purpose == .expense ? 0 : 1
+                purposeSwitched(purposeSwitcher)
+                if category.purpose == .expense {
+                    let db = DataBase()
+                    UserDefaults.standard.setValue(db.categoryToDict(category), forKey: "lastSelectedCategory")
                 }
-                self.valueLabel.text = "\(amount < 0 ? amount * (-1) : amount)"
-                self.minusPlusLabel.alpha = 1
-                self.purposeSwitcher.selectedSegmentIndex = amount * (-1) < 0 ? 0 : 1
-                self.purposeSwitched(self.purposeSwitcher)
+            } else {
                 
-                let selectedSeg = self.purposeSwitcher.selectedSegmentIndex
-                let value = selectedSeg == 0 ? "\(Double(self.valueLabel.text ?? "") ?? 0.0)" : self.valueLabel.text ?? ""
-                print(amount, "resultresultresultresult")
-                print(selectedSeg)
-                print(value, "selectedSegselectedSegselectedSeg")
-                
+                selectedCategory = category
+                DispatchQueue.main.async {
+                    if self.pressedValue == "" || self.pressedValue == "0" {
+                    }
+                    self.valueLabel.text = "\(amount < 0 ? amount * (-1) : amount)"
+                    self.minusPlusLabel.alpha = 1
+                    self.purposeSwitcher.selectedSegmentIndex = amount * (-1) < 0 ? 0 : 1
+                    self.purposeSwitched(self.purposeSwitcher)
+                    
+                    let selectedSeg = self.purposeSwitcher.selectedSegmentIndex
+                    let value = selectedSeg == 0 ? "\(Double(self.valueLabel.text ?? "") ?? 0.0)" : self.valueLabel.text ?? ""
+                    print(amount, "resultresultresultresult")
+                    print(selectedSeg)
+                    print(value, "selectedSegselectedSegselectedSeg")
+                    
+                }
+            }
+            selectedCategory = category
+            DispatchQueue.main.async {
+                self.categoryTextField.text = category.name
             }
         }
-        DispatchQueue.main.async {
-            self.categoryTextField.text = category
-        }
+        
     }
     
     

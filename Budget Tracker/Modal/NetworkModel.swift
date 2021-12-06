@@ -205,7 +205,7 @@ struct LoadFromDB {
             completion(local, .none)
         } else {
             var loadedData: [TransactionsStruct] = []
-            load(urlPath: "https://www.dovhiy.com/apps/budget-tracker-db/NewCategories.php") { jsonResult, error in
+            load(urlPath: "https://www.dovhiy.com/apps/budget-tracker-db/newTransactions.php") { jsonResult, error in
                 print(jsonResult, "jsonResultjsonResult")
                 if let error = error {
                     let local = db.transactions
@@ -315,7 +315,31 @@ struct SaveToDB {
         })
     }
     
-    func newCategories(_ category: NewCategories, completion: @escaping (Bool) -> ()) {
+    
+    func newTransaction(_ transaction: TransactionsStruct, toDataString:String? = nil, completion: @escaping (Bool) -> ()) {
+        if appData.username == "" {
+            db.transactions.append(transaction)
+            completion(false)
+        } else {
+
+            let data = toDataString != nil ? toDataString! : "&Nickname=\(appData.username)" + "&CategoryId=\(transaction.categoryID)" + "&Amount=\(transaction.value)" + "&Date=\(transaction.date)" + "&Comment=\(transaction.comment)"
+            save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-NewTransaction.php", toDataString: data, error: { (error) in
+                if error {
+                    if let toDataString = toDataString {
+                        appData.unsendedData.append(["transactionNew": toDataString])
+                    }
+                    
+                }
+                if toDataString == nil {
+                    db.transactions.append(transaction)
+                }
+                
+                completion(error)
+            })
+        }
+    }
+    //param: dont append and dont send to unsended when toDataString!= nil
+    func newCategories(_ category: NewCategories, toDataString:String? = nil, completion: @escaping (Bool) -> ()) {
         if appData.username == "" {
             db.categories.append(category)
             completion(false)
@@ -337,13 +361,19 @@ struct SaveToDB {
                 }
                 return ""
             }
-            
-            let toDataString = "&Nickname=\(appData.username)" + "&Id=\(category.id)" + "&Name=\(category.name)" + "&Icon=\(category.icon)" + "&Color=\(category.color)" + "&Purpose=\(pupose)" + amount + dueDate
-            save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-NewCategory.php", toDataString: toDataString, error: { (error) in
+            print(category.color, "category.colorcategory.colorcategory.color")
+            let data = toDataString != nil ? toDataString! : "&Nickname=\(appData.username)" + "&Id=\(category.id)" + "&Name=\(category.name)" + "&Icon=\(category.icon)" + "&Color=\(category.color)" + "&Purpose=\(pupose)" + amount + dueDate
+            save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-NewCategory.php", toDataString: data, error: { (error) in
                 if error {
-                    appData.unsendedData.append(["categoryNew": toDataString])
+                    if let toDataString = toDataString {
+                        appData.unsendedData.append(["categoryNew": toDataString])
+                    }
+                    
                 }
-                db.categories.append(category)
+                if toDataString == nil {
+                    db.categories.append(category)
+                }
+               
                 completion(error)
             })
         }
@@ -474,7 +504,9 @@ struct DeleteFromDB {
         db.categories = new
     }
     
-    func CategoriesNew(category: NewCategories, completion: @escaping (Bool) -> ()) {
+    
+    
+    func CategoriesNew(category: NewCategories, toDataString: String? = nil, completion: @escaping (Bool) -> ()) {
         if appData.username == "" {
             updateLocalCategory(category: category)
             completion(false)
@@ -496,18 +528,46 @@ struct DeleteFromDB {
                 return ""
             }
             
-            let toDataString = "&Nickname=\(appData.username)" + "&Id=\(category.id)" + "&Name=\(category.name)" + "&Icon=\(category.icon)" + "&Color=\(category.color)" + "&Purpose=\(pupose)" + amount + dueDate
-            delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-NewCategory.php", toDataString: toDataString, error: { (error) in
+            let data = toDataString != nil ? toDataString! : "&Nickname=\(appData.username)" + "&Id=\(category.id)" + "&Name=\(category.name)" + "&Icon=\(category.icon)" + "&Color=\(category.color)" + "&Purpose=\(pupose)" + amount + dueDate
+            delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-NewCategory.php", toDataString: data, error: { (error) in
                 if error {
-                    appData.unsendedData.append(["deleteCategoryNew": toDataString])
+                    if let toDataString = toDataString {
+                        appData.unsendedData.append(["deleteCategoryNew": toDataString])
+                    }
+                    
                 }
-                updateLocalCategory(category: category)
+                if toDataString == nil {
+                    updateLocalCategory(category: category)
+                }
+                
                 completion(error)
             })
         }
         
     }
     
+    func newTransaction(_ transaction: TransactionsStruct, toDataString:String? = nil, completion: @escaping (Bool) -> ()) {
+        if appData.username == "" {
+            db.transactions.append(transaction)
+            completion(false)
+        } else {
+
+            let data = toDataString != nil ? toDataString! : "&Nickname=\(appData.username)" + "&CategoryId=\(transaction.categoryID)" + "&Amount=\(transaction.value)" + "&Date=\(transaction.date)" + "&Comment=\(transaction.comment)"
+            delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-NewTransaction.php", toDataString: data, error: { (error) in
+                if error {
+                    if let toDataString = toDataString {
+                        appData.unsendedData.append(["deleteTransactionNew": toDataString])
+                    }
+                    
+                }
+                if toDataString == nil {
+                    db.transactions.append(transaction)
+                }
+                
+                completion(error)
+            })
+        }
+    }
 
     func Debts(toDataString: String, completion: @escaping (Bool) -> ()) {
         print(toDataString, "toDataStringtoDataStringtoDataStringtoDataStringtoDataString")

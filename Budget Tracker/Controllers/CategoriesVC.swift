@@ -15,7 +15,7 @@ import CoreData
 var _categoriesHolder: [CategoriesStruct] = []
 
 protocol CategoriesVCProtocol {
-    func categorySelected(category: String, purpose: Int, fromDebts: Bool, amount: Int)
+    func categorySelected(category: NewCategories?, fromDebts: Bool, amount: Int)
 }
 
 class CategoriesVC: SuperViewController, UITextFieldDelegate {
@@ -200,7 +200,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate {
         }
     }
     
-    
+    var endAll = false
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
        notificationReceiver(notification: notification)
@@ -285,9 +285,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate {
         if !toHistory {
             if fromSettings {
                 if !wasEdited {
-                    delegate?.categorySelected(category: "", purpose: 0, fromDebts: false, amount: 0)
+                    delegate?.categorySelected(category: nil, fromDebts: false, amount: 0)
                 } else {
-                    delegate?.categorySelected(category: "", purpose: 0, fromDebts: false, amount: 0)
+                    delegate?.categorySelected(category: nil, fromDebts: false, amount: 0)
                 }
             }
         }
@@ -478,9 +478,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate {
     
     var historyDataStruct: [TransactionsStruct] = []
     var selectedCategoryName = ""
-    func toHistory(category: String) {
+    func toHistory(category: NewCategories) {
         historyDataStruct = []
-        let trans =  UserDefaults.standard.value(forKey: "transactionsData") as? [[String]] ?? []
+        /*let trans =  UserDefaults.standard.value(forKey: "transactionsData") as? [[String]] ?? []
         var totValue = 0.0
         for i in 0..<trans.count {
             if trans[i][2] == category {
@@ -489,9 +489,10 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate {
                 historyDataStruct.append(TransactionsStruct(value: trans[i][1], categoryID: trans[i][2], date: trans[i][3], comment: trans[i][4]))
             }
         }
-
+*/
+        historyDataStruct = db.transactions(for: category)
         
-        selectedCategoryName = category
+        selectedCategoryName = category.name
         if historyDataStruct.count > 0 {
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: "toHistory", sender: self)
@@ -619,6 +620,9 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent, for: indexPath) as! categoriesVCcell
         cell.lo(index: indexPath, footer: nil)
 
+        if endAll {
+            cell.newCategoryTF.endEditing(true)
+        }
         return cell
     }
     
@@ -634,7 +638,7 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
         helperView.backgroundColor = K.Colors.secondaryBackground//darkAppearence ? .black : .white
         view.backgroundColor = self.view.backgroundColor
         let label = UILabel(frame: CGRect(x: 10, y: 15, width: mainFrame.width - 40, height: 20))
-        label.text = section == 0 ? K.expense : K.income
+        label.text = tableData[section].title
         label.textColor = K.Colors.balanceV
         label.font = .systemFont(ofSize: 14, weight: .medium)
         view.addSubview(helperView)
@@ -681,6 +685,9 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
             cell.newCategoryTF.delegate = self
             cell.newCategoryTF.tag = section
             cell.newCategoryTF.addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
+            if endAll {
+                cell.newCategoryTF.endEditing(true)
+            }
             let view = cell.contentView
             view.isUserInteractionEnabled = true
             view.layer.cornerRadius = 6
@@ -709,6 +716,34 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        if let editingValue = editingValue {
+            /*DispatchQueue.main.async {
+                 self.newCategoryTextField.endEditing(true)
+             }*/
+            endAll = true
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+                self.endAll = false
+            }
+        } else {
+            if !fromSettings {
+                delegate?.categorySelected(category: tableData[indexPath.section].data[indexPath.row].category, fromDebts: false, amount: 0)
+                navigationController?.popToRootViewController(animated: true)
+            } else {
+                switch indexPath.section {
+                case 0:
+                    toHistory(category: tableData[indexPath.section].data[indexPath.row].category)
+                case 1:
+                    toHistory(category: tableData[indexPath.section].data[indexPath.row].category)
+                default:
+                    self.dismiss(animated: true)
+                }
+            }
+        }
+        
        /* if editingValue == nil {
             if indexPath.section == 2 {
                 if appData.proVersion || appData.proTrial {
@@ -755,8 +790,8 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
 
 extension CategoriesVC: DebtsVCProtocol {
     func catDebtSelected(name: String, amount: Int) {
-        delegate?.categorySelected(category: name, purpose: 1, fromDebts: true, amount: amount)
-        navigationController?.popToRootViewController(animated: true)
+  //      delegate?.categorySelected(category: name, purpose: 1, fromDebts: true, amount: amount)
+    //    navigationController?.popToRootViewController(animated: true)
     }
     
     

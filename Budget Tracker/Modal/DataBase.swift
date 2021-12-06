@@ -43,6 +43,7 @@ class DataBase {
     
     func transactionFrom(_ dict:[String:Any]) -> TransactionsStruct? {
         if let id = dict["CategoryId"] as? String {
+            print("bhjsdbhf", id)
             let amount = dict["Amount"] as? String ?? ""
             let date = dict["Date"] as? String ?? ""
             let comment = dict["Comment"] as? String ?? ""
@@ -51,6 +52,15 @@ class DataBase {
             return TransactionsStruct(value: amount, categoryID: id, date: date, comment: comment)
         }
         return nil
+    }
+    func transactionToDict(_ transaction: TransactionsStruct) -> [String:Any] {
+        print(transaction.categoryID, "transaction.categoryIDtransaction.categoryIDtransaction.categoryID")
+        return [
+            "CategoryId":transaction.categoryID,
+            "Amount":transaction.value,
+            "Date":transaction.date,
+            "Comment":transaction.comment
+        ]
     }
     
     
@@ -77,16 +87,9 @@ class DataBase {
     }
     
     
-    func transactionToDict(_ transaction: TransactionsStruct) -> [String:Any] {
-        return [
-            "CategoryId":transaction.categoryID,
-            "Amount":transaction.value,
-            "Date":transaction.date,
-            "Comment":transaction.comment
-        ]
-    }
+    
 
-    private func categoryToDict(_ category: NewCategories) -> [String:Any] {
+    func categoryToDict(_ category: NewCategories) -> [String:Any] {
         
         let pupose = purposeToString(category.purpose)
         var result:[String:Any] = [

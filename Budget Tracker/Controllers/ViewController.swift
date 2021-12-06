@@ -168,46 +168,47 @@ class ViewController: SuperViewController {
             }
         }
     }
-    
-    func toggleNoData(show: Bool, text: String = "No Transactions", fromTop: Bool = false, appeareAnimation: Bool = true, addButtonHidden: Bool = false) {
+    func downloadFromDB(showError: Bool = false) {
+        _categoriesHolder.removeAll()
+        _debtsHolder.removeAll()
+        lastSelectedDate = nil
         
-        DispatchQueue.main.async {
-            
-            self.addTransactionWhenEmptyButton.isHidden = addButtonHidden
-            if show {
-                self.addTransactionWhenEmptyButton.alpha = 1
-                let y = fromTop ? self.mainTableView.frame.minY : (self.bigCalcView.frame.maxY + 10)
-                self.noDataView.isHidden = false
-                self.noDataLabel.text = text
-                UIView.animate(withDuration: appeareAnimation ? 0.25 : 0) {
-                    self.noDataView.frame = CGRect(x: 0, y: y, width: self.view.frame.width, height: self.view.frame.height - y)
-                    //self.darkBackgroundUnderTable.frame = CGRect(x: 0, y: y, width: self.view.frame.width, height: self.view.frame.height)
-                } completion: { (_) in
-                  //  self.calculateLabels(noData: true)
-                    self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
-                }
-            } else {
-                UIView.animate(withDuration: 0.25) {
-                    self.noDataView.frame = CGRect(x: 0, y: self.view.frame.height, width: self.view.frame.width, height: self.view.frame.height / 2)
-                } completion: { (_) in
-                    self.noDataView.isHidden = true
-                   // self.calculateLabels(noData: false)
-                    self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
+        let unsend = appData.unsendedData
+        undendedCount = unsend.count
+        if unsend.count > 0 {
+            if appData.username != "" {
+                self.sendUnsaved()
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.filterText = "Downloading"
+            }
+            let load = LoadFromDB()
+            load.newCategories { categoryes, error in
+                if error == .none {
+                    load.newTransactions { loadedData, error in
+                        self.tableData = loadedData
+                        self.checkPurchase()
+                        self.prepareFilterOptions()
+                        self.filter()
+                    }
+                } else {
+                    self.prepareFilterOptions()
+                    self.filter()
+                    if showError {
+                        DispatchQueue.main.async {
+                            self.message.showMessage(text: "Error", type: .internetError)
+                        }
+                    }
+
                 }
             }
         }
+
+
     }
     
-    var justLoaded = true
-    var newTransaction: TransactionsStruct?
-    var highliteCell: IndexPath?
-    var tableDHolder: [tableStuct] = []
-
-
-    @IBOutlet weak var bigExpensesStack: UIStackView!
-    let tableCorners: CGFloat = 22
-    var forseSendUnsendedData = true
-    var addTransFrame = CGRect.zero
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -358,6 +359,48 @@ class ViewController: SuperViewController {
     }
     
     
+    func toggleNoData(show: Bool, text: String = "No Transactions", fromTop: Bool = false, appeareAnimation: Bool = true, addButtonHidden: Bool = false) {
+        
+        DispatchQueue.main.async {
+            
+            self.addTransactionWhenEmptyButton.isHidden = addButtonHidden
+            if show {
+                self.addTransactionWhenEmptyButton.alpha = 1
+                let y = fromTop ? self.mainTableView.frame.minY : (self.bigCalcView.frame.maxY + 10)
+                self.noDataView.isHidden = false
+                self.noDataLabel.text = text
+                UIView.animate(withDuration: appeareAnimation ? 0.25 : 0) {
+                    self.noDataView.frame = CGRect(x: 0, y: y, width: self.view.frame.width, height: self.view.frame.height - y)
+                    //self.darkBackgroundUnderTable.frame = CGRect(x: 0, y: y, width: self.view.frame.width, height: self.view.frame.height)
+                } completion: { (_) in
+                  //  self.calculateLabels(noData: true)
+                    self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
+                }
+            } else {
+                UIView.animate(withDuration: 0.25) {
+                    self.noDataView.frame = CGRect(x: 0, y: self.view.frame.height, width: self.view.frame.width, height: self.view.frame.height / 2)
+                } completion: { (_) in
+                    self.noDataView.isHidden = true
+                   // self.calculateLabels(noData: false)
+                    self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
+                }
+            }
+        }
+    }
+    
+    var justLoaded = true
+    var newTransaction: TransactionsStruct?
+    var highliteCell: IndexPath?
+    var tableDHolder: [tableStuct] = []
+
+
+    @IBOutlet weak var bigExpensesStack: UIStackView!
+    let tableCorners: CGFloat = 22
+    var forseSendUnsendedData = true
+    var addTransFrame = CGRect.zero
+    
+    
+    
     var enableLocalDataPress = false
     func updateDataLabels(reloadAndAnimate: Bool = true, noData: Bool = false) {
         print("updateDataLabelsCalled")
@@ -386,131 +429,7 @@ class ViewController: SuperViewController {
         }
     }
     
-    func downloadFromDB() {
-        //check purchase
-        //ckeck password
-        _categoriesHolder.removeAll()
-        _debtsHolder.removeAll()
-        print("downloadFromDBdownloadFromDB")
-        lastSelectedDate = nil
-        
-        
-        let unsend = appData.unsendedData
-        undendedCount = unsend.count
-        if unsend.count > 0 {
-            let load = LoadFromDB()
-            load.newTransactions { loadedData, error in
-                self.checkPurchase()
-                self.prepareFilterOptions()
-                self.filter()
-                if appData.username != "" {
-                    self.sendUnsaved()
-                }
-            }
-        }
-        
-        
-        
-        
-        if appData.username != "" {
-            let unsend = appData.unsendedData
-            undendedCount = unsend.count
-            print("downloadFromDB: username: \(appData.username), not nill")
-            if unsend.count > 0 {
-                if appData.username != "" {
-                    self.sendUnsaved()
-                }
-            } else {
-                DispatchQueue.main.async {
-                    self.filterText = "Downloading"
-                }
-                let load = LoadFromDB()
-                load.Transactions{(loadedTransactions, error) in
-                    if error == "" {
-                        print("loaded \(loadedTransactions.count) transactions from DB")
-                        var transactionsResult: [TransactionsStruct] = []
-                        for i in 0..<loadedTransactions.count {
-                            let value = loadedTransactions[i][3]
-                            let category = loadedTransactions[i][1]
-                            let date = loadedTransactions[i][2]
-                            let comment = loadedTransactions[i][4]
-                            transactionsResult.append(TransactionsStruct(value: value, categoryID: category, date: date, comment: comment))
-                        }
-                        appData.saveTransations(transactionsResult)
-                        self.checkPurchase()
-                        self.prepareFilterOptions()
-                        self.filter()
-                     /*   DispatchQueue.main.async {
-                            
-                        }*/
-                       /* load.Categories{(loadedCategories, error) in
-                            if error == "" {
-                                print("loaded \(loadedCategories) Categories from DB")
-                                var categoriesResult: [CategoriesStruct] = []
-                                for i in 0..<loadedCategories.count {
-                                    let name = loadedCategories[i][1]
-                                    let purpose = loadedCategories[i][2]
-                                    categoriesResult.append(CategoriesStruct(name: name, purpose: purpose, count: 0))
-                                }
-                                appData.saveCategories(categoriesResult)
-                                load.Debts { (loadedDebts, debtsError) in
-                                    if debtsError == "" {
-                                        
-                                        print("loaded \(loadedDebts) Debts from DB")
-                                        var debtsResult: [DebtsStruct] = []
-                                        for i in 0..<loadedDebts.count {
-                                            let name = loadedDebts[i][1]
-                                            let amountToPay = loadedDebts[i][2]
-                                            let dueDate = loadedDebts[i][3]
-                                            debtsResult.append(DebtsStruct(name: name, amountToPay: amountToPay, dueDate: dueDate))
-                                        }
-                                        appData.saveDebts(debtsResult)
-                                        UserDefaults.standard.setValue(Date(), forKey: "LastLoadDataDate")
-                                        self.checkPurchase()
-                                        self.prepareFilterOptions()
-                                        self.filter()
-                                        
-                                    } else {
-                                        
-                                        self.filter()
-                                        self.prepareFilterOptions()
-                                        DispatchQueue.main.async {
-                                            self.message.showMessage(text: error, type: .internetError)
-                                        }
-                                    }
-                                }
-                                
-                            } else {
-                                self.filter()
-                                self.prepareFilterOptions()
-                                DispatchQueue.main.async {
-                                    self.message.showMessage(text: error, type: .internetError)
-                                }
-                            }
-                        }*/
-                    } else {
-                        print("error loading data1")
-                        self.filter()
-                        self.prepareFilterOptions()
-                        DispatchQueue.main.async {
-                            self.message.showMessage(text: error, type: .internetError)
-                        }
-                        
-                    }
-
-                }
-                
-            }
-            
-        } else {
-            DispatchQueue.main.async {
-                self.filterText = "Filtering"
-            }
-            prepareFilterOptions()
-            filter()
-        }
-
-    }
+    
     var undendedCount = 0
     var filterAndCalcFrameHolder = (CGRect.zero, CGRect.zero)
     var wasSendingUnsended = false
@@ -570,7 +489,7 @@ class ViewController: SuperViewController {
                                 appData.proVersion = loadedData[i][4] == "1" ? true : false
                                 
                                 print("checkPurchase appData.proVersion", appData.proVersion)
-                                if loadedData[i][5] != "" {//test
+                                if loadedData[i][5] != "" {
                                     if UserDefaults.standard.value(forKey: "checkTrialDate") as? Bool ?? true {
                                         appData.trialDate = loadedData[i][5]
                                         self.checkProTrial()
@@ -585,7 +504,6 @@ class ViewController: SuperViewController {
                         
                                 UserDefaults.standard.setValue(appData.username, forKey: "UsernameHolder")
                                 appData.username = ""
-                                //toSingIn
                                 if #available(iOS 13.0, *) {
                                     
                                     DispatchQueue.main.async {
@@ -744,7 +662,8 @@ class ViewController: SuperViewController {
         
         print("performFiltering called")
         if all == true {
-            tableData = appData.getTransactions
+            let db = DataBase()
+            tableData = db.transactions
             allSelectedTransactionsData = tableData
             return allSelectedTransactionsData
 
@@ -1192,7 +1111,7 @@ class ViewController: SuperViewController {
 //MARK: - MySQL
     
 
-    func deleteFromDB(at: IndexPath) {
+    func deleteFromDB(at: IndexPath) {///need modif
         selectedCell = nil
         let Nickname = appData.username
         if Nickname != "" {
@@ -1305,7 +1224,7 @@ class ViewController: SuperViewController {
         }
         
         
-        statisticBrain.getlocalData(from: tableTrans)
+      //  statisticBrain.getlocalData(from: tableTrans) -- change statistic
         sumAllCategories = statisticBrain.statisticData
     }
     
@@ -2042,30 +1961,15 @@ extension ViewController: TransitionVCProtocol {
             DispatchQueue.main.async {
                 self.filterText = "Adding"
             }
-            if appData.username != "" {
-                let toDataString = "&Nickname=\(appData.username)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
-                let save = SaveToDB()
-                save.Transactions(toDataString: toDataString) { (error) in
-                    if error {
-                        let neew: String = "&Nickname=\(appData.username)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
-                        appData.unsendedData.append(["transaction": neew])
-                    }
-                    
-                    var trans = appData.getTransactions
-                    trans.append(new)
-                    appData.saveTransations(trans)
-                    if !error {
-                        self.forseSendUnsendedData = true
-                        self.sendUnsaved()
-                    }
-                    self.filter()
-                }
-            } else {
-                var trans = appData.getTransactions
-                trans.append(new)
-                appData.saveTransations(trans)
+            let save = SaveToDB()
+            save.newTransaction(TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)) { error in
                 self.filter()
+                if !error {
+                    self.forseSendUnsendedData = true
+                    self.sendUnsaved()
+                }
             }
+
         } else {
             print("reloaddd")
             DispatchQueue.main.async {

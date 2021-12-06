@@ -10,6 +10,7 @@ import UIKit
 
 class mainVCcell: UITableViewCell {
     
+    @IBOutlet weak var categoryImage: UIImageView!
     @IBOutlet weak var commentImage: UIImageView!
     // @IBOutlet weak var bigDate: UILabel!
     @IBOutlet weak var categoryLabel: UILabel!
@@ -17,6 +18,7 @@ class mainVCcell: UITableViewCell {
  //   @IBOutlet weak var dailyTotalLabel: UILabel!
  //   @IBOutlet weak var sectionView: UIView!
     @IBOutlet weak var commentLabel: UILabel!
+    let db = DataBase()
     
     func setupCell(_ data: TransactionsStruct, i: Int, tableData: [TransactionsStruct], selectedCell: IndexPath?, indexPath: IndexPath) {
         if (Double(data.value) ?? 0.0) > 0 {
@@ -33,7 +35,12 @@ class mainVCcell: UITableViewCell {
         
         let value = String(format:"%.0f", Double(data.value) ?? 0.0)
         valueLabel.text = Double(data.value) ?? 0.0 > 0.0 ? "+\(value)" : value
-        categoryLabel.text = data.categoryID
+        let category = db.category(data.categoryID)
+        print(category, "vghjnvgujnbhj")
+        
+        categoryImage.image = iconNamed(category?.icon)
+        categoryImage.tintColor = colorNamed(category?.color)
+        categoryLabel.text = category?.name ?? "Unknown category"
         commentLabel.text = data.comment
         commentImage.alpha = data.comment == "" ? 0 : 1
         if selectedCell != nil {

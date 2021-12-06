@@ -36,12 +36,15 @@ class StatisticBrain {
         statisticArreyNames.removeFirst()
         
         for i in 0..<tableData.count {
-            if statisticArreyNames[index2] == tableData[i].categoryID {
-                updateGraphValue(i: i, tableData: tableData)
-            } else {
-                index2 += 1
-                updateGraphValue(i: i, tableData: tableData)
+            if (statisticArreyNames.count - 1) <= index2 {
+                if statisticArreyNames[index2] == tableData[i].categoryID {
+                    updateGraphValue(i: i, tableData: tableData)
+                } else {
+                    index2 += 1
+                    updateGraphValue(i: i, tableData: tableData)
+                }
             }
+            
         }
         getMax()
     }
