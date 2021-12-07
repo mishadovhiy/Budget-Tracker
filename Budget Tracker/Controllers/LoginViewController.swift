@@ -1037,12 +1037,12 @@ class LoginViewController: SuperViewController {
                 if self.textfields[i] == self.emailLabel {
                     if self.emailLabel.text != "" {
                         UIView.animate(withDuration: 0.3) {
-                            self.textfields[i].backgroundColor = !(self.emailLabel.text ?? "").contains("@") ? K.Colors.negative : K.Colors.loginColor
+                            self.textfields[i].backgroundColor = !(self.emailLabel.text ?? "").contains("@") ? K.Colors.negative : K.Colors.secondaryBackground
                         }
                     }
                 }
                 UIView.animate(withDuration: 0.3) {
-                    self.textfields[i].backgroundColor = self.textfields[i].text == "" ? K.Colors.negative : K.Colors.loginColor
+                    self.textfields[i].backgroundColor = self.textfields[i].text == "" ? K.Colors.negative : K.Colors.secondaryBackground
                 }
             }
         }
@@ -1112,7 +1112,7 @@ class LoginViewController: SuperViewController {
         }
         
         for i in 0..<textfields.count {
-            textfields[i].backgroundColor = K.Colors.loginColor
+            textfields[i].backgroundColor = K.Colors.secondaryBackground
         }
         obthervValues = false
         

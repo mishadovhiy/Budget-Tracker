@@ -554,7 +554,7 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
     
     
     
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+  /*  func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let cell = tableView.dequeueReusableCell(withIdentifier: "newCategoryCell") as! newCategoryCell
         cell.categoryTextField.placeholder = "New Debt Category"
         cell.categoryTextField.delegate = self
@@ -565,7 +565,7 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
         view.backgroundColor = K.Colors.secondaryBackground
         return view
     }
-    
+    */
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return footerHeight

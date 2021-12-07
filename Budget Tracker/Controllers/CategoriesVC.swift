@@ -35,7 +35,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate {
         set {
             _tableData = newValue
             DispatchQueue.main.async {
-                self.tableView.reloadData()
+                /*self.tableView.reloadData()
                 if self.refreshControl.isRefreshing {
                     self.refreshControl.endRefreshing()
                 }
@@ -43,7 +43,12 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate {
                     self.ai.fastHide { _ in
                         
                     }
-                }
+                }*/
+               /* if self.ai.isShowing {
+                    self.ai.fastHide { _ in
+                        
+                    }
+                }*/
                 
             }
         }
@@ -100,10 +105,20 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate {
                 ]
             case .debts:
                 self.tableData = [
-                    ScreenDataStruct(title: K.expense, data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .debt))),
+                    ScreenDataStruct(title: "", data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .debt))),
                 ]
             }
-            
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+                if self.refreshControl.isRefreshing {
+                    self.refreshControl.endRefreshing()
+                }
+                if self.ai.isShowing {
+                    self.ai.fastHide { _ in
+                        
+                    }
+                }
+            }
             
         }
     }
@@ -129,6 +144,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        title = screenType == .debts ? "Debts" : "Categories"
         CategoriesVC.shared = self
         updateUI()
         loadData()
@@ -198,6 +214,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate {
                     //CategoriesVC.shared?.categories = self.db.categories
                     CategoriesVC.shared?.tableData[index.section].data[index.row].category = editingValue
                     CategoriesVC.shared?.tableData[index.section].data[index.row].editing = nil
+                    DispatchQueue.main.async {
+                        CategoriesVC.shared?.tableView.reloadData()
+                    }
                 }
             }
             
@@ -314,13 +333,6 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate {
 
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        DispatchQueue.main.async {
-            self.title = "Categories"
-           // self.tableView.translatesAutoresizingMaskIntoConstraints = true
-         /*   self.newCategoryTextField.returnKeyType = .done
-            self.newCategoryTextField.font = .systemFont(ofSize: 17, weight: .semibold)
-            self.newCategoryTextField.clearButtonMode = .always*/
-        }
     }
     
 
@@ -452,21 +464,10 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate {
     var historyDataStruct: [TransactionsStruct] = []
     var selectedCategoryName = ""
     func toHistory(category: NewCategories) {
-        historyDataStruct = []
-        /*let trans =  UserDefaults.standard.value(forKey: "transactionsData") as? [[String]] ?? []
-        var totValue = 0.0
-        for i in 0..<trans.count {
-            if trans[i][2] == category {
-                
-                totValue = (Double(trans[i][1]) ?? 0.0) + totValue
-                historyDataStruct.append(TransactionsStruct(value: trans[i][1], categoryID: trans[i][2], date: trans[i][3], comment: trans[i][4]))
-            }
-        }
-*/
         historyDataStruct = db.transactions(for: category)
         
         selectedCategoryName = category.name
-        if historyDataStruct.count > 0 {
+        if historyDataStruct.count > 0 || screenType == .debts {
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: "toHistory", sender: self)
             }
@@ -591,6 +592,9 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent, for: indexPath) as! categoriesVCcell
+        let selected = UIView(frame: .zero)
+        selected.backgroundColor = K.Colors.primaryBacground
+        cell.selectedBackgroundView = selected
         cell.lo(index: indexPath, footer: nil)
 
         if endAll {
@@ -642,11 +646,7 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if section == 0 || section == 1 {
             let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent) as! categoriesVCcell
-            /*cell.categoryTextField.placeholder = "New " + (section == 0 ? "expence" : "income")
-            cell.categoryTextField.delegate = self
-            cell.categoryTextField.tag = section
-            cell.iconImage.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(iconTapped(_:))))
-            //cell.iconPressedFunc = iconPressed*/
+
             cell.lo(index: nil, footer: section)
             let savePressed = UITapGestureRecognizer(target: self, action: #selector(newCategoryPressed(_:)))
             savePressed.name = "\(section)"
@@ -726,42 +726,7 @@ extension CategoriesVC: UITableViewDelegate, UITableViewDataSource {
                 }
             }
         }
-        
-       /* if editingValue == nil {
-            if indexPath.section == 2 {
-                if appData.proVersion || appData.proTrial {
-                    historyDataStruct = []
-                    selectedCategoryName = ""
-                    
-                    DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: "toDebts", sender: self)
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        self.tableView.deselectRow(at: indexPath, animated: true)
-                    }
-                }
-                
-            } else {
-                if !fromSettings {
-                    delegate?.categorySelected(category: indexPath.section == 0 ? expenses[indexPath.row].0 : incomes[indexPath.row].0, purpose: indexPath.section, fromDebts: false, amount: 0)
-                    navigationController?.popToRootViewController(animated: true)
-                } else {
-                    switch indexPath.section {
-                    case 0:
-                        toHistory(category: expenses[indexPath.row].0)
-                    case 1:
-                        toHistory(category: incomes[indexPath.row].0)
-                    default:
-                        self.dismiss(animated: true)
-                    }
-                }
-            }
-        } else {
-           /* DispatchQueue.main.async {
-                self.newCategoryTextField.endEditing(true)
-            }*/
-        }*/
+
         
     }
     
@@ -777,63 +742,6 @@ extension CategoriesVC: DebtsVCProtocol {
     //    navigationController?.popToRootViewController(animated: true)
     }
     
-    
-}
-/*
-extension CategoriesVC: UITextFieldDelegate {
-    func textFieldShouldClear(_ textField: UITextField) -> Bool {
-        print("clear")
-        DispatchQueue.main.async {
-            
-            self.newCategoryTextField.endEditing(true)
-        }
-        return true
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        print("")//+
-    }
-    
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
-        let newCategory = textField.text ?? ""
-        if newCategory != "" {
-            let purpose = textField.tag == 0 ? K.expense : K.income
-            if appData.username != "" {
-                self.whenNoCategories()
-                self.sendToDBCategory(title: newCategory, purpose: purpose)
-            } else {
-                var categories = Array(appData.getCategories())
-                categories.append(CategoriesStruct(name: newCategory, purpose: purpose, count: 0))
-                appData.saveCategories(categories)
-             //   self.getDataFromLocal()
-            }
-        }
-        DispatchQueue.main.async {
-            textField.endEditing(true)
-        }
-        
-        return true
-
-    }
-    
-}
-
-*/
-
-class newCategoryCell: UITableViewCell {
-    
-    @IBOutlet weak var iconImage: UIButton!
-    var iconPressedFunc:(() -> ())?
-    
-    @IBAction func iconPressed(_ sender: UIButton) {
-        if let fucn = iconPressedFunc {
-            fucn()
-        }
-    }
-    
-    @IBOutlet weak var categoryTextField: UITextField!
     
 }
 
@@ -890,6 +798,9 @@ extension CategoriesVC: IconsVCDelegate {
                 }
                 
             }
+        }
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
         }
             
     }
@@ -973,16 +884,18 @@ class categoriesVCcell: UITableViewCell {
             self.accessoryType = category.editing != nil ? .none : .disclosureIndicator
             
             
-            let iconPressed = UITapGestureRecognizer(target: self, action: #selector(self.iconPressed(_:)))
-            self.iconimage.addGestureRecognizer(iconPressed)
+            
             
             if let section = footer {
+                
                 self.newCategoryTF.text = CategoriesVC.shared?.tableData[section].newCategory.category.name
             } else {
                 self.newCategoryTF.delegate = self
                 self.newCategoryTF.addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
                 
                 self.newCategoryTF.text = category.editing?.name ?? category.category.name
+                let iconPressed = UITapGestureRecognizer(target: self, action: #selector(self.iconPressed(_:)))
+                self.iconimage.addGestureRecognizer(iconPressed)
             }
             
         }
@@ -992,28 +905,28 @@ class categoriesVCcell: UITableViewCell {
     @objc func iconPressed(_ sender: UITapGestureRecognizer) {
         if let indexPath = indexPath {
            // CategoriesVC.shared?.iconPressed()
+            if let category = currentCategory {
+                
+            }
             CategoriesVC.shared?.selectingIconFor.0 = indexPath
         }
         
         
     }
-    
-    
-    private func animateEditing() {
-        
-    }
-    
+
     
     @objc private func textfieldValueChanged(_ textField: UITextField) {
         if let footerSection = footerSection {
             //adding new
             DispatchQueue.main.async {
                 CategoriesVC.shared?.tableData[footerSection].newCategory.category.name = textField.text ?? ""
+                
             }
         } else {
             if let indexPath = indexPath {
                 DispatchQueue.main.async {
                     CategoriesVC.shared?.tableData[indexPath.section].data[indexPath.row].editing?.name = textField.text ?? ""
+                    self.currentCategory?.editing?.name = textField.text ?? ""
                 }
             }
         }
@@ -1061,12 +974,12 @@ class categoriesVCcell: UITableViewCell {
     @IBAction func sendPressed(_ sender: UIButton) {
 
         DispatchQueue.main.async {
-            CategoriesVC.shared?.ai.show(completion: { _ in
+           // CategoriesVC.shared?.ai.show(completion: { _ in
                 if let currentCategory = self.currentCategory {
                     self.saveCategory(currentCategory)
                 }
                 
-            })
+          //  })
         }
         
     }

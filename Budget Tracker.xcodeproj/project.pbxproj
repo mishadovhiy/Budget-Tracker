@@ -158,6 +158,7 @@
 		8B5CE1CF2720991B0092BBFB /* notUsing */ = {
 			isa = PBXGroup;
 			children = (
+				8BF011C125FD93670082F871 /* DebtsVC.swift */,
 				8DB1A6F924E19069002DE486 /* SettingsViewController.swift */,
 				8B2163A1274070BA003EDFE0 /* snippets.swift */,
 				8B901F1B265F0A0100E0D2BB /* accountSettingsVC.swift */,
@@ -232,7 +233,6 @@
 				8D8B6C3D245023EC007260A0 /* CalendarVC.swift */,
 				8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */,
 				8B8D556025BB218400D7C6A7 /* UnsendedDataVC.swift */,
-				8BF011C125FD93670082F871 /* DebtsVC.swift */,
 				8B63312E260FD65200D9E117 /* buyProVC.swift */,
 				8B5F342B26FB2D97000DDCAF /* EnterValueVC.swift */,
 				8B2A4D71271439520085E0F0 /* MoreVC.swift */,

@@ -1358,6 +1358,7 @@ class ViewController: SuperViewController {
         case "toDebts":
             print("k")
             let vc = segue.destination as! CategoriesVC
+            vc.fromSettings = true
             vc.screenType = .debts
         case "toCategories":
             let vc = segue.destination as! CategoriesVC
