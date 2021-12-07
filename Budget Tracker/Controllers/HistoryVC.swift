@@ -792,9 +792,15 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension HistoryVC: TransitionVCProtocol {
-    func quiteTransactionVC(){
+    func editTransaction(_ transaction: TransactionsStruct, was: TransactionsStruct) {
+        //not using
     }
-    func addNewTransaction(value: String, category: String, date: String, comment: String) {
+    
+    func quiteTransactionVC(reload: Bool) {
+        
+    }
+
+    func addNewTransaction(value: String, category: String, date: String, comment: String) {//need modif
         toAddVC = false
         let new = TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)
         print(new, "newnewnewnew")

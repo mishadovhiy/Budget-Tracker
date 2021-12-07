@@ -934,7 +934,7 @@ class categoriesVCcell: UITableViewCell {
         
         
         var category:CategoriesVC.ScreenCategory {
-            let defaultCategory = CategoriesVC.ScreenCategory(category: NewCategories(id: -2, name: "-", icon: "", color: "", purpose: .expense))
+            let defaultCategory = CategoriesVC.ScreenCategory(category: NewCategories(id: -2, name: "-", icon: "", color: "", purpose: CategoriesVC.shared?.screenType == .debts ? .debt : .expense))
             if let index = index {
                 return CategoriesVC.shared?.tableData[index.section].data[index.row] ?? defaultCategory
             } else {

@@ -14,7 +14,8 @@ var lastSelectedDate:String?
 
 protocol TransitionVCProtocol {
     func addNewTransaction(value: String, category: String, date: String, comment: String)
-    func quiteTransactionVC()
+    func editTransaction(_ transaction:TransactionsStruct, was:TransactionsStruct)
+    func quiteTransactionVC(reload:Bool)
 }
 
 class TransitionVC: SuperViewController {
@@ -63,7 +64,7 @@ class TransitionVC: SuperViewController {
         super.viewWillDisappear(true)
         print(donePressed, "donePressed")
         if !donePressed {
-            self.delegate?.addNewTransaction(value: "", category: "", date: "", comment: "")
+            self.delegate?.quiteTransactionVC(reload: true)
         }
     }
 
@@ -244,10 +245,17 @@ class TransitionVC: SuperViewController {
     var donePressed = false
     func addNew(value: String, category: String, date: String, comment: String) {
         donePressed = true
-        UIImpactFeedbackGenerator().impactOccurred()
         print("addNew called", value)
-        self.dismiss(animated: true) {
-            self.delegate?.addNewTransaction(value: value, category: category, date: date, comment: comment)
+        DispatchQueue.main.async {
+            UIImpactFeedbackGenerator().impactOccurred()
+            self.dismiss(animated: true) {
+                if self.editingDate != "" {
+                    self.delegate?.editTransaction(TransactionsStruct(value: value, categoryID: category, date: date, comment: comment), was: TransactionsStruct(value: "\(self.editingValue)", categoryID: self.editingCategory, date: self.editingDate, comment: self.editingComment))
+                } else {
+                    self.delegate?.addNewTransaction(value: value, category: category, date: date, comment: comment)
+                }
+                
+            }
         }
     }
     
@@ -306,7 +314,7 @@ class TransitionVC: SuperViewController {
     }
     
     @IBAction func cancelPressed(_ sender: UIButton) {
-        if editingDate != "" {
+       /* if editingDate != "" {
             let value = "\(editingValueHolder)"
             let category = editingCategoryHolder
             let date = editingDateHolder
@@ -314,6 +322,13 @@ class TransitionVC: SuperViewController {
             addNew(value: value, category: category, date: date, comment: comment)
         } else {
             self.dismiss(animated: true, completion: nil)
+        }*/
+        DispatchQueue.main.async {
+            self.dismiss(animated: true) {
+                if self.editingDate != "" {
+                    self.delegate?.quiteTransactionVC(reload: true)
+                }
+            }
         }
     }
     

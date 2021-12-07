@@ -22,6 +22,7 @@
 		8B52DFEC27504D2900595A0C /* IconsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B52DFEB27504D2900595A0C /* IconsVC.swift */; };
 		8B52DFEE27506B3400595A0C /* ColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B52DFED27506B3400595A0C /* ColorView.swift */; };
 		8B52DFF027506B4B00595A0C /* ColorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B52DFEF27506B4B00595A0C /* ColorView.xib */; };
+		8B57837E275E6977007BA9EC /* SideBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B57837D275E6977007BA9EC /* SideBar.swift */; };
 		8B5BE4792648038F005B182C /* expectingPaymentsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5BE4782648038F005B182C /* expectingPaymentsVC.swift */; };
 		8B5F342C26FB2D98000DDCAF /* EnterValueVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F342B26FB2D97000DDCAF /* EnterValueVC.swift */; };
 		8B63312F260FD65200D9E117 /* buyProVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B63312E260FD65200D9E117 /* buyProVC.swift */; };
@@ -84,6 +85,7 @@
 		8B52DFEB27504D2900595A0C /* IconsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconsVC.swift; sourceTree = "<group>"; };
 		8B52DFED27506B3400595A0C /* ColorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorView.swift; sourceTree = "<group>"; };
 		8B52DFEF27506B4B00595A0C /* ColorView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ColorView.xib; sourceTree = "<group>"; };
+		8B57837D275E6977007BA9EC /* SideBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideBar.swift; sourceTree = "<group>"; };
 		8B5BE4782648038F005B182C /* expectingPaymentsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = expectingPaymentsVC.swift; sourceTree = "<group>"; };
 		8B5F342B26FB2D97000DDCAF /* EnterValueVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterValueVC.swift; sourceTree = "<group>"; };
 		8B63312E260FD65200D9E117 /* buyProVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = buyProVC.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 		8B5CE1CF2720991B0092BBFB /* notUsing */ = {
 			isa = PBXGroup;
 			children = (
+				8DB1A6F924E19069002DE486 /* SettingsViewController.swift */,
 				8B2163A1274070BA003EDFE0 /* snippets.swift */,
 				8B901F1B265F0A0100E0D2BB /* accountSettingsVC.swift */,
 				8B324B682683118000E72275 /* NotificationsVC.swift */,
@@ -228,7 +231,6 @@
 				8D8B6C3B245023D0007260A0 /* FilterTVC.swift */,
 				8D8B6C3D245023EC007260A0 /* CalendarVC.swift */,
 				8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */,
-				8DB1A6F924E19069002DE486 /* SettingsViewController.swift */,
 				8B8D556025BB218400D7C6A7 /* UnsendedDataVC.swift */,
 				8BF011C125FD93670082F871 /* DebtsVC.swift */,
 				8B63312E260FD65200D9E117 /* buyProVC.swift */,
@@ -249,13 +251,14 @@
 				8DD89D8923F1472E00273904 /* MessageView.swift */,
 				8D5206662421695200772CD5 /* StatisticBrain.swift */,
 				8B35DA6525C6F124008A8719 /* Keychain.swift */,
+				8DD89D8223F1468E00273904 /* mainVCcell.swift */,
 				8B052E3C26EFD48E000BA66A /* IndicatorView.swift */,
 				8B052E3E26EFD4A0000BA66A /* IndicatorView.xib */,
-				8DD89D8223F1468E00273904 /* mainVCcell.swift */,
-				8B52DFE72750231000595A0C /* Numbers.xib */,
 				8B52DFE92750232D00595A0C /* NumbersView.swift */,
+				8B52DFE72750231000595A0C /* Numbers.xib */,
 				8B52DFED27506B3400595A0C /* ColorView.swift */,
 				8B52DFEF27506B4B00595A0C /* ColorView.xib */,
+				8B57837D275E6977007BA9EC /* SideBar.swift */,
 			);
 			path = Modal;
 			sourceTree = "<group>";
@@ -386,6 +389,7 @@
 				8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */,
 				8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */,
 				8B52DFEE27506B3400595A0C /* ColorView.swift in Sources */,
+				8B57837E275E6977007BA9EC /* SideBar.swift in Sources */,
 				8BF011C225FD93670082F871 /* DebtsVC.swift in Sources */,
 				8DD89D8A23F1472E00273904 /* MessageView.swift in Sources */,
 				8DD89D8E23F1495300273904 /* TransactionVC.swift in Sources */,

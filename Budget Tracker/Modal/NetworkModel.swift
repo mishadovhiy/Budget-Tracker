@@ -548,7 +548,13 @@ struct DeleteFromDB {
     
     func newTransaction(_ transaction: TransactionsStruct, toDataString:String? = nil, completion: @escaping (Bool) -> ()) {
         if appData.username == "" {
-            db.transactions.append(transaction)
+            var all = db.transactions
+            for i in 0..<all.count {
+                if all[i].categoryID == transaction.categoryID && all[i].comment == transaction.comment && all[i].date == transaction.date && all[i].value == transaction.value {
+                    all.remove(at: i)
+                }
+            }
+            db.transactions = all
             completion(false)
         } else {
 
@@ -561,7 +567,15 @@ struct DeleteFromDB {
                     
                 }
                 if toDataString == nil {
-                    db.transactions.append(transaction)
+                    let all = db.transactions
+                    var new:[TransactionsStruct] = []
+                    for i in 0..<all.count {
+                        if all[i].categoryID == transaction.categoryID && all[i].comment == transaction.comment && all[i].date == transaction.date && all[i].value == transaction.value {
+                        } else {
+                            new.append(all[i])
+                        }
+                    }
+                    db.transactions = new
                 }
                 
                 completion(error)

@@ -792,9 +792,19 @@ func dateCompToIso(isoComp: DateComponents) -> String? {
 
 
 func iconNamed(_ name: String?) -> UIImage {
-    return UIImage(named: name ?? "") ?? UIImage(named: "unknown")!
+    print("iconNamed:", name ?? "-")
+    let namee = name ?? "unknown"
+    let resultName = namee != "" ? namee : "unknown"
+    
+    return UIImage(named: resultName)!
 }
 
 func colorNamed(_ name: String?) -> UIColor {
-    return UIColor(named: name ?? "") ?? (K.Colors.yellow ?? .red)
+    print("colorNamed:", name ?? "-")
+    let defaultCo = K.Colors.yellow ?? .red
+    if name ?? "" != "" {
+        return UIColor(named: name ?? "") ?? defaultCo
+    } else {
+        return defaultCo
+    }
 }

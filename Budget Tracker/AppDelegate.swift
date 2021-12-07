@@ -31,6 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         // Override point for customization after application launch.
         center.delegate = self
         AppDelegate.shared = self
+        window?.backgroundColor = K.Colors.primaryBacground
         let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
         let value = UserDefaults.standard.value(forKey: "lastLaunching") as? String ?? ""
         if value != today {

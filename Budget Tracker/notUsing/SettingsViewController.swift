@@ -346,9 +346,7 @@ class SettingsViewController: SuperViewController {
             vc.messageText = messageText
         case "settingsToCategories":
             let vc = segue.destination as! CategoriesVC
-          //  let vc = nav.topViewController as! CategoriesVC
-          //  vc.delegate = self
-          //  vc.safeAreaButton = appData.safeArea.1 //self.view.safeAreaInsets.bottom
+
             vc.fromSettings = true
         case "toDebts":
             print("")

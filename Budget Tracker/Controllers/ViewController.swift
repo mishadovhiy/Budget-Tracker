@@ -17,7 +17,9 @@ var expenseLabelPressed = true
 var selectedPeroud = ""
 
 class ViewController: SuperViewController {
+    @IBOutlet weak var sideTableView: UITableView!
     
+    @IBOutlet weak var sideBar: SideBar!
     @IBOutlet weak var addTransactionWhenEmptyButton: UIButton!
     @IBOutlet weak var noDataView: UIView!
     @IBOutlet weak var noDataLabel: UILabel!
@@ -208,19 +210,52 @@ class ViewController: SuperViewController {
 
     }
     
-    
+    static var shared: ViewController?
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
+        ViewController.shared = self
         updateUI()
         if #available(iOS 15.0, *) {
             self.mainTableView.sectionHeaderTopPadding = 0
         }
         self.mainTableView.layer.cornerRadius = 15
        // mainTableView.isUserInteractionEnabled = false
-        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(bigCalcTaps(_:))))
+     //   self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(bigCalcTaps(_:))))
+        sideBar.load()
+        toggleSideBar(false, animated: false)
     }
+    
+    @IBOutlet weak var mainContentViewHelpher: UIView!
+    @IBOutlet weak var mainContentView: UIView!
+    var sideBarShowing = false
+    var firstLod = true
+    func toggleSideBar(_ show: Bool, animated:Bool) {
+        sideBarShowing = show
+        DispatchQueue.main.async {
+            let frame = self.sideBar.layer.frame
+            UIView.animate(withDuration: animated ? 0.3 : 0) {
+                //self.sideBar.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width * (-1) : frame.width * (-1), 0, 0)
+                //self.view.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? 0 : frame.width * (-1), 0, 0)
+                self.mainContentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
+                self.mainContentViewHelpher.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
+            } completion: { _ in
+                if self.firstLod {
+                    self.firstLod = false
+                    self.sideBar.isHidden = false
+                    self.menuButton.isEnabled = true
+                }
+            }
+
+        }
+    }
+    @IBAction func menuPressed(_ sender: UIButton) {
+        toggleSideBar(!sideBarShowing, animated: true)
+    }
+    
+    @IBOutlet weak var menuButton: UIButton!
+    
+    
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
        notificationReceiver(notification: notification)
     }
@@ -254,14 +289,14 @@ class ViewController: SuperViewController {
             self.darkBackgroundUnderTable.layer.cornerRadius = self.tableCorners
             self.darkBackgroundUnderTable.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
             self.darkBackgroundUnderTable.translatesAutoresizingMaskIntoConstraints = true
-            self.addTransitionButton.layer.cornerRadius = self.tableCorners
-            self.addTransitionButton.isHidden = true
-            self.addTransitionButton.alpha = 1
-            let tableFrame = self.mainTableView.frame
-            let TransFrame = self.addTransitionButton.frame
+            self.addTransitionButton.layer.cornerRadius = self.addTransitionButton.layer.frame.width / 2
+        //    self.addTransitionButton.isHidden = true
+          //  self.addTransitionButton.alpha = 1
+          //  let tableFrame = self.mainTableView.frame
+          //  let TransFrame = self.addTransitionButton.frame
             
-            self.addTransFrame = CGRect(x: tableFrame.width - TransFrame.width, y: tableFrame.minY, width: TransFrame.width, height: TransFrame.height)
-            print(self.addTransFrame, "self.addTransitionButton.frame", tableFrame.minY)
+          //  self.addTransFrame = CGRect(x: tableFrame.width - TransFrame.width, y: tableFrame.minY, width: TransFrame.width, height: TransFrame.height)
+          //  print(self.addTransFrame, "self.addTransitionButton.frame", tableFrame.minY)
             self.view.addSubview(self.filterHelperView)
             self.shadow(for: self.filterHelperView)
             /*self.filterHelperView.layer.shadowColor = UIColor.black.cgColor
@@ -754,6 +789,7 @@ class ViewController: SuperViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         print("DIDAPPPP")
+        sideTableView.reloadData()
         center?.getDeliveredNotifications { notifications in
             DispatchQueue.main.async {
                 UIApplication.shared.applicationIconBadgeNumber = notifications.count
@@ -1111,49 +1147,11 @@ class ViewController: SuperViewController {
 //MARK: - MySQL
     
 
-    func deleteFromDB(at: IndexPath) {///need modif
+    
+    func deleteFromDB(at: IndexPath) {
         selectedCell = nil
-        let Nickname = appData.username
-        if Nickname != "" {
-            let Category = newTableData[at.section].transactions[at.row].categoryID
-            let Date = newTableData[at.section].transactions[at.row].date
-            let Value = newTableData[at.section].transactions[at.row].value
-            let Comment = newTableData[at.section].transactions[at.row].comment
-            
-            let toDataString = "&Nickname=\(Nickname)" + "&Category=\(Category)" + "&Date=\(Date)" + "&Value=\(Value)" + "&Comment=\(Comment)"
-            let delete = DeleteFromDB()
-            delete.Transactions(toDataString: toDataString, completion: { (error) in
-                if error {
-                    appData.unsendedData.append(["deleteTransaction": toDataString])
-                }
-                
-                var arr = Array(appData.getTransactions)
-                for i in 0..<arr.count{
-                    if arr[i].categoryID == Category && arr[i].date == Date && arr[i].value == Value && arr[i].comment == Comment{
-                        arr.remove(at: i)
-                        appData.saveTransations(arr)
-                        self.filter()
-                        return
-                    }
-                }
-
-            })
-            
-        } else {
-            print("noNickname")
-            //tableData.remove(at: at)
-            //newTableData[at.section].transactions.remove(at: at.row)
-            var data = newTableData
-            data[at.section].transactions.remove(at: at.row)
-            //appData.saveTransations(data)
-            var new: [TransactionsStruct] = []
-            for i in 0..<data.count {
-                for n in 0..<data[i].transactions.count {
-                    let date = "(\(self.makeTwo(n: data[i].date.day ?? 0)).\(self.makeTwo(n: data[i].date.month ?? 0)).\(data[i].date.year ?? 0))"
-                    new.append(TransactionsStruct(value: data[i].transactions[n].value, categoryID: data[i].transactions[n].categoryID, date: date, comment: data[i].transactions[n].comment))
-                }
-            }
-            appData.saveTransations(new)
+        let delete = DeleteFromDB()
+        delete.newTransaction(newTableData[at.section].transactions[at.row]) { _ in
             self.filter()
         }
     }
@@ -1302,55 +1300,6 @@ class ViewController: SuperViewController {
     var selectedToDayInt = 0
     
 
-    var editingRow: Int?
-    func editRow(at: IndexPath) {
-        print("change edit")
-        selectedCell = nil
-        editingTransaction = newTableData[at.section].transactions[at.row]
-        if appData.username != "" {
-            if let trans = editingTransaction {
-                let delete = DeleteFromDB()
-                let toDataString = "&Nickname=\(appData.username)" + "&Category=\(trans.categoryID)" + "&Date=\(trans.date)" + "&Value=\(trans.value)" + "&Comment=\(trans.comment)"
-                delete.Transactions(toDataString: toDataString) { (error) in
-                    if error {
-                        appData.unsendedData.append(["deleteTransaction":toDataString])
-                    }
-                    var arr = Array(appData.getTransactions)
-                    for i in 0..<arr.count{
-                        if arr[i].categoryID == trans.categoryID && arr[i].date == trans.date && arr[i].value == trans.value && arr[i].comment == trans.comment{
-                            arr.remove(at: i)
-                            self.editingRow = i
-                            appData.saveTransations(arr)
-                            DispatchQueue.main.async {
-                                self.tableActionActivityIndicator.removeFromSuperview()
-                                self.performSegue(withIdentifier: "goToEditVC", sender: self)
-                            }
-                            return
-                        }
-                    }
-                }
-            }
-        } else {
-            if let trans = editingTransaction {
-                var arr = Array(appData.getTransactions)
-                for i in 0..<arr.count{
-                    if arr[i].categoryID == trans.categoryID && arr[i].date == trans.date && arr[i].value == trans.value && arr[i].comment == trans.comment{
-                        arr.remove(at: i)
-                        self.editingRow = i
-                        appData.saveTransations(arr)
-                        DispatchQueue.main.async {
-                            self.tableActionActivityIndicator.removeFromSuperview()
-                            self.performSegue(withIdentifier: "goToEditVC", sender: self)
-                        }
-                        return
-                    }
-                }
-            }
-        }
-        
-        
-    }
-    var goToEdit = false
     var editingTransaction: TransactionsStruct?
     
     var prevSelectedPer = selectedPeroud
@@ -1406,6 +1355,13 @@ class ViewController: SuperViewController {
         print("prepare")
         selectedCell = nil
         switch segue.identifier {
+        case "toDebts":
+            print("k")
+            let vc = segue.destination as! CategoriesVC
+            vc.screenType = .debts
+        case "toCategories":
+            let vc = segue.destination as! CategoriesVC
+            vc.fromSettings = true
         case "toFiterVC":
             self.mainTableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
             prevSelectedPer = selectedPeroud
@@ -1416,9 +1372,10 @@ class ViewController: SuperViewController {
             DispatchQueue.main.async {
                 let filterFrame = self.filterView.frame//self.filterAndCalcFrameHolder.0
                 let superFilter = self.filterView.superview?.frame ?? .zero
-                let vcFrame = CGRect(x: filterFrame.minX + superFilter.minX, y: filterFrame.minY + superFilter.minY, width: filterFrame.width, height: filterFrame.width)
+                let helperFrame = self.mainContentViewHelpher.frame
+                let vcFrame = CGRect(x: filterFrame.minX + superFilter.minX, y: filterFrame.minY + superFilter.minY + helperFrame.height, width: filterFrame.width, height: filterFrame.width)
                 vc?.frame = vcFrame
-                self.filterHelperView.frame = CGRect(x: filterFrame.minX + superFilter.minX, y: filterFrame.minY + superFilter.minY, width: vcFrame.width, height: vcFrame.height)
+                self.filterHelperView.frame = CGRect(x: filterFrame.minX + superFilter.minX, y: vcFrame.minY, width: vcFrame.width, height: vcFrame.height)
                 self.filterHelperView.alpha = 0
                 Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { (_) in
                     UIView.animate(withDuration: 0.6) {
@@ -1446,8 +1403,7 @@ class ViewController: SuperViewController {
             
         case "toSettings", "toSettingsFullScreen":
             let nav = segue.destination as! UINavigationController
-            let vc = nav.topViewController as! SettingsViewController//segue.destination as! SettingsViewController
-           // segue.kin
+            let vc = nav.topViewController as! SettingsViewController
             vc.delegate = self
             vc.resetPassword = resetPassword
             resetPassword = false
@@ -1459,7 +1415,6 @@ class ViewController: SuperViewController {
         case "toSingIn":
             let nav = segue.destination as! UINavigationController
             let vc = nav.topViewController as! LoginViewController
-            
             vc.messagesFromOtherScreen = "Your password has been changed"
         default: return
         }
@@ -1555,7 +1510,9 @@ class ViewController: SuperViewController {
     }
 
     var lastWhiteBackheight = 0
-    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print(touches.first, "ghjnbguk")
+    }
     
     func compliteScrolling() {
         if mainTableView.contentOffset.y < self.bigCalcView.frame.height {
@@ -1745,8 +1702,10 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         
         if indexPath.section == 0 {
             let calculationCell = tableView.dequeueReusableCell(withIdentifier: "calcCell") as? calcCell
-            calculationCell?.isUserInteractionEnabled = false
-            calculationCell?.contentView.isUserInteractionEnabled = false
+          //  calculationCell?.isUserInteractionEnabled = false
+          //  calculationCell?.contentView.isUserInteractionEnabled = false
+            ///add touches in class
+            /////send
             return calculationCell ?? UITableViewCell()
         } else {
             if newTableData[indexPath.section - 1].transactions.count == indexPath.row {
@@ -1759,6 +1718,8 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 return cell
             } else {
                 let transactionsCell = tableView.dequeueReusableCell(withIdentifier: K.mainCellIdent, for: indexPath) as! mainVCcell
+                transactionsCell.isUserInteractionEnabled = true
+                transactionsCell.contentView.isUserInteractionEnabled = true
                 print("row:", indexPath.row)
                 print("count:", newTableData[indexPath.section - 1].transactions.count)
                 let data = newTableData[indexPath.section - 1].transactions[indexPath.row]
@@ -1772,7 +1733,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        print("selected")
         if indexPath.section != 0 {
             if newTableData[indexPath.section-1].transactions[indexPath.row].comment != "" {
                 let previusSelected = selectedCell
@@ -1953,6 +1914,16 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
 }
 
 extension ViewController: TransitionVCProtocol {
+    func editTransaction(_ transaction: TransactionsStruct, was: TransactionsStruct) {
+        let delete = DeleteFromDB()
+        delete.newTransaction(was) { _ in
+            let save = SaveToDB()
+            save.newTransaction(transaction) { _ in
+                self.filter()
+            }
+        }
+    }
+    
     func addNewTransaction(value: String, category: String, date: String, comment: String) {
         let new = TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)
         self.newTransaction = new
@@ -1986,8 +1957,12 @@ extension ViewController: TransitionVCProtocol {
         }
     }
     
-    func quiteTransactionVC(){
+    func quiteTransactionVC(reload:Bool){
 
+        if reload {
+            print("trloaddd")
+            filter()
+        }
         print("quite trans")
     }
     
