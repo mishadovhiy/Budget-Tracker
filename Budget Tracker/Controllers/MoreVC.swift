@@ -77,6 +77,21 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if let touch = touches.first {
+            DispatchQueue.main.async {
+                if touch.view != self.tableView {
+                    self.dismiss(animated: true) {
+                        
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
@@ -124,11 +139,20 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             if indexPath.section == 1 {
                 if let function = tableData[indexPath.row].action {
                     if dismissOnAction {
-                        DispatchQueue.main.async {
-                            self.dismiss(animated: true) {
-                                function()
+                        
+                        AppDelegate.shared?.ai.show(completion: { _ in
+                            DispatchQueue.main.async {
+                                self.dismiss(animated: true) {
+                                    if self.tableData[indexPath.row].distructive == true  {
+                                        AppDelegate.shared?.ai.fastHide(completionn: { _ in
+                                            function()
+                                        })
+                                    } else {
+                                        function()
+                                    }
+                                }
                             }
-                        }
+                        })
                     } else {
                         function()
                     }

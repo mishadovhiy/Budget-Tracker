@@ -60,7 +60,9 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
             if !hideCode {
                 self.numberView.delegate = self
                 let size = self.numberView.viewSize
-                self.numberView.frame = CGRect(x: 0, y: self.view.frame.height - size.height, width: size.width, height: size.height)
+                let centerPosition =
+                self.numberView.frame = CGRect(x: (self.view.frame.width / 2) - (size.width / 2), y: self.view.frame.height - size.height, width: size.width, height: size.height)
+               
                 self.view.addSubview(self.numberView)
                 
                 self.kayboardAppeared(self.numberView.frame.height)

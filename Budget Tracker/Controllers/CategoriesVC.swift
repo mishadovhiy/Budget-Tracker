@@ -437,7 +437,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
 
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y < -70.0 {
+        if scrollView.contentOffset.y < -60.0 {
             if let editing = editingTF {
                 editingTF = nil
                 toggleIcons(show: false, animated: true)

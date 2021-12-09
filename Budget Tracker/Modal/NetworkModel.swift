@@ -237,7 +237,6 @@ struct LoadFromDB {
     
     
     func Users(completion: @escaping ([[String]], Bool) -> ()) {
-        
         var loadedData: [[String]] = []
         let urlPath = "https://www.dovhiy.com/apps/budget-tracker-db/users.php"
         let url: URL = URL(string: urlPath)!

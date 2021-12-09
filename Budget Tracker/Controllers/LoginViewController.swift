@@ -1357,6 +1357,8 @@ extension UITextField {
 
 extension LoginViewController: accountSettingsVCDelegate {
     func logout() {
+        appData.username = ""
+        appData.password = ""
         lastSelectedDate = nil
         _debtsHolder.removeAll()
         _categoriesHolder.removeAll()

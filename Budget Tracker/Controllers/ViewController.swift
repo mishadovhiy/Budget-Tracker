@@ -510,6 +510,9 @@ class ViewController: SuperViewController {
     func checkPurchase() {
      //   DispatchQueue.main.async {
             let nick = appData.username
+        if nick == "" {
+            return
+        }
             let load = LoadFromDB()
             load.Users { (loadedData, error) in
                 print(loadedData, "checkPurchase")

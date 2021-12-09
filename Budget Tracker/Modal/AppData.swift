@@ -574,7 +574,7 @@ class AppData {
             vccc.dismissOnAction = dismissOnAction
             vccc.navigationController?.setNavigationBarHidden(true, animated: false)
             
-            let contentHeight = (data.count) * 45//cell height
+            let contentHeight = (data.count) * 50//cell height ///sets in storyboars /tableViewRawHeight
             let safeAt = appData.safeArea.1
             let safebt = appData.safeArea.0
             

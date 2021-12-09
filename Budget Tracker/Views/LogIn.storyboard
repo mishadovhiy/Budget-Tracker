@@ -325,14 +325,18 @@
                                         </subviews>
                                     </stackView>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="400" id="wuK-fg-Gnk"/>
+                                </constraints>
                             </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="5FN-ng-8Ho"/>
                         <color key="backgroundColor" name="PrimaryBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="in9-wI-9lJ" firstAttribute="centerX" secondItem="WCz-zX-LTb" secondAttribute="centerX" id="A66-AX-Fbb"/>
                             <constraint firstItem="in9-wI-9lJ" firstAttribute="centerY" secondItem="WCz-zX-LTb" secondAttribute="centerY" id="i5U-Ag-gaB"/>
-                            <constraint firstItem="5FN-ng-8Ho" firstAttribute="trailing" secondItem="in9-wI-9lJ" secondAttribute="trailing" constant="20" id="jHM-nF-kEd"/>
-                            <constraint firstItem="in9-wI-9lJ" firstAttribute="leading" secondItem="5FN-ng-8Ho" secondAttribute="leading" constant="20" id="z4H-Jk-gNM"/>
+                            <constraint firstItem="5FN-ng-8Ho" firstAttribute="trailing" secondItem="in9-wI-9lJ" secondAttribute="trailing" priority="999" constant="20" id="jHM-nF-kEd"/>
+                            <constraint firstItem="in9-wI-9lJ" firstAttribute="leading" secondItem="5FN-ng-8Ho" secondAttribute="leading" priority="999" constant="20" id="z4H-Jk-gNM"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Forgot password" id="nHH-wE-NmQ">
