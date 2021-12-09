@@ -771,6 +771,10 @@ class IndicatorView: UIView {
             print(hideIndicatorBlockDesibled)
             return
         }
+        if !isShowing {
+            completionn(false)
+            return
+        }
         drawed = false
         DispatchQueue.main.async {
             let window = UIApplication.shared.keyWindow ?? UIWindow()

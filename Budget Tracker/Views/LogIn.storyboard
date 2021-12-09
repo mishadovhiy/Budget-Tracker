@@ -15,7 +15,7 @@
             <objects>
                 <viewController storyboardIdentifier="LoginViewController" id="sFP-r5-fKW" customClass="LoginViewController" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4dJ-R2-Goj">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nzU-3z-m92">
@@ -31,44 +31,47 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="6S5-eJ-q0c">
-                                <rect key="frame" x="67" y="268" width="280" height="306"/>
+                                <rect key="frame" x="67" y="231.5" width="280" height="345"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Create an account" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="gLA-7i-pp5">
-                                        <rect key="frame" x="0.0" y="0.0" width="280" height="38.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="280" height="45"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="45" id="iJV-yP-3iU"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="32"/>
                                         <color key="textColor" name="CategoryColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Choose a nickname" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="AgY-cd-By3">
-                                        <rect key="frame" x="0.0" y="53.5" width="280" height="38.5"/>
+                                        <rect key="frame" x="0.0" y="60" width="280" height="45"/>
                                         <color key="backgroundColor" name="darkTableColor"/>
                                         <color key="textColor" name="darkTableColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" returnKeyType="next"/>
+                                        <textInputTraits key="textInputTraits" keyboardAppearance="alert" returnKeyType="next"/>
                                     </textField>
                                     <textField opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter your email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gag-gr-8tT">
-                                        <rect key="frame" x="0.0" y="107" width="280" height="38.5"/>
+                                        <rect key="frame" x="0.0" y="120" width="280" height="45"/>
                                         <color key="backgroundColor" name="loginColor"/>
                                         <color key="textColor" name="darkTableColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next" textContentType="email"/>
+                                        <textInputTraits key="textInputTraits" keyboardType="emailAddress" keyboardAppearance="alert" returnKeyType="next" textContentType="email"/>
                                     </textField>
                                     <textField opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="npv-KG-uXv">
-                                        <rect key="frame" x="0.0" y="160.5" width="280" height="38.5"/>
+                                        <rect key="frame" x="0.0" y="180" width="280" height="45"/>
                                         <color key="backgroundColor" name="loginColor"/>
                                         <color key="textColor" name="darkTableColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" returnKeyType="next" textContentType="password"/>
+                                        <textInputTraits key="textInputTraits" keyboardAppearance="alert" returnKeyType="next" textContentType="password"/>
                                     </textField>
                                     <textField opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Confirm password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pu2-Hv-iJ4">
-                                        <rect key="frame" x="0.0" y="214" width="280" height="38.5"/>
+                                        <rect key="frame" x="0.0" y="240" width="280" height="45"/>
                                         <color key="backgroundColor" name="SecondaryBacroundColor"/>
                                         <color key="textColor" name="CategoryColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" returnKeyType="done" textContentType="password"/>
+                                        <textInputTraits key="textInputTraits" keyboardAppearance="alert" returnKeyType="done" textContentType="password"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BR7-eH-6Pc">
-                                        <rect key="frame" x="0.0" y="267.5" width="280" height="38.5"/>
+                                        <rect key="frame" x="0.0" y="300" width="280" height="45"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                         <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="10" maxY="0.0"/>
                                         <state key="normal" title="Create">
@@ -84,36 +87,39 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="qqi-mE-aXa">
-                                <rect key="frame" x="67" y="321.5" width="280" height="199"/>
+                                <rect key="frame" x="67" y="291.5" width="280" height="225"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T3U-LH-Rgs">
-                                        <rect key="frame" x="0.0" y="0.0" width="280" height="38.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="280" height="45"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Log in" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D9o-OF-iWv">
-                                                <rect key="frame" x="0.0" y="0.0" width="280" height="38.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="280" height="45"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="32"/>
                                                 <color key="textColor" name="CategoryColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="45" id="F1I-b8-QWk"/>
+                                        </constraints>
                                     </stackView>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Nickname" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SIz-Iw-uxg">
-                                        <rect key="frame" x="0.0" y="53.5" width="280" height="38.5"/>
+                                        <rect key="frame" x="0.0" y="60" width="280" height="45"/>
                                         <color key="backgroundColor" name="SecondaryBacroundColor"/>
                                         <color key="textColor" name="CategoryColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" returnKeyType="next"/>
+                                        <textInputTraits key="textInputTraits" keyboardAppearance="alert" returnKeyType="next"/>
                                     </textField>
                                     <textField opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Teh-aO-0cJ">
-                                        <rect key="frame" x="0.0" y="107" width="280" height="38.5"/>
+                                        <rect key="frame" x="0.0" y="120" width="280" height="45"/>
                                         <color key="backgroundColor" name="SecondaryBacroundColor"/>
                                         <color key="textColor" name="CategoryColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES" textContentType="password"/>
+                                        <textInputTraits key="textInputTraits" keyboardAppearance="alert" returnKeyType="done" secureTextEntry="YES" textContentType="password"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z9u-BA-sZD">
-                                        <rect key="frame" x="0.0" y="160.5" width="280" height="38.5"/>
+                                        <rect key="frame" x="0.0" y="180" width="280" height="45"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                         <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="10" maxY="0.0"/>
                                         <state key="normal" title="Log in">
@@ -129,7 +135,7 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="zbq-j9-D0g">
-                                <rect key="frame" x="10" y="750" width="394" height="48"/>
+                                <rect key="frame" x="10" y="716" width="394" height="48"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don't have an cccount?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HIX-a1-kyd">
                                         <rect key="frame" x="0.0" y="0.0" width="394" height="18"/>
@@ -176,7 +182,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <color key="tintColor" name="yellowColor"/>
-                                <state key="normal" image="ellipsis.circle" catalog="system">
+                                <state key="normal" image="ellipsis" catalog="system">
                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="25"/>
                                 </state>
                                 <connections>
@@ -232,11 +238,11 @@
             <objects>
                 <viewController storyboardIdentifier="EnterValueVC" id="g3f-NZ-v6H" customClass="EnterValueVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WCz-zX-LTb">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="in9-wI-9lJ">
-                                <rect key="frame" x="20" y="310.5" width="374" height="221"/>
+                                <rect key="frame" x="20" y="293.5" width="374" height="221"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="wfW-zS-Z3i">
                                         <rect key="frame" x="0.0" y="0.0" width="374" height="65"/>
@@ -1117,11 +1123,11 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="jP6-jS-NGM"/>
-        <segue reference="v5h-7J-ubq"/>
+        <segue reference="B8J-lo-erp"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="cancel" width="30" height="30"/>
-        <image name="ellipsis.circle" catalog="system" width="128" height="121"/>
+        <image name="ellipsis" catalog="system" width="128" height="37"/>
         <image name="lightTrash" width="25" height="29"/>
         <namedColor name="CategoryColor">
             <color red="0.86699998378753662" green="0.86699998378753662" blue="0.86699998378753662" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

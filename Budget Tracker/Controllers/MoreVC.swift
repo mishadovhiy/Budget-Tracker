@@ -67,7 +67,15 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         let action: (() -> ())?
     }
     
-    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y < -100.0 {
+            DispatchQueue.main.async {
+                self.dismiss(animated: true) {
+                    
+                }
+            }
+        }
+    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2

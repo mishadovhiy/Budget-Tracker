@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreData
 
 var appData = AppData()
 var statisticBrain = StatisticBrain()

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CoreData
 
 class AppData {
 
@@ -570,18 +569,23 @@ class AppData {
         DispatchQueue.main.async {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let vccc = storyboard.instantiateViewController(withIdentifier: "MoreVC") as! MoreVC
-            vccc.modalPresentationStyle = .pageSheet
-            
+            vccc.modalPresentationStyle = .overFullScreen //.overCurrentContext - cant swipe close
             vccc.tableData = data
             vccc.dismissOnAction = dismissOnAction
             vccc.navigationController?.setNavigationBarHidden(true, animated: false)
             
-            let contentHeight = (data.count + 1) * 65//65-hardcoded MoreVC cell height
+            let contentHeight = (data.count) * 45//cell height
             let safeAt = appData.safeArea.1
             let safebt = appData.safeArea.0
             
             //let tableInButtom = (currentVC.view.frame.height - (safeAt + safebt + 150)) - CGFloat(contentHeight)
-            let tableInButtom = currentVC.view.frame.height - (CGFloat(contentHeight) - (safeAt + safebt))
+            
+            let window = UIApplication.shared.keyWindow ?? UIWindow()
+            let screenHeight = window.frame.height//currentVC.view.frame.height
+            print(safeAt, "safebtsafebt")
+            let additionalMargin:CGFloat = safeAt > 0 ? 25 : 40
+            let tableInButtom = (screenHeight - (safeAt + safebt + additionalMargin)) - (CGFloat(contentHeight))
+            //2
             print(tableInButtom, "sectionHeight")
             print(currentVC.view.frame.height, "ScreenHeight")
           //  firstCellHeight = CGFloat(contentHeight) > self.view.frame.height / 2 ? self.view.frame.height / 2 : tableInButtom
@@ -595,6 +599,9 @@ class AppData {
         
     }
 
+    
+
+    
     
 }
 

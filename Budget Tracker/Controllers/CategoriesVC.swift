@@ -7,8 +7,7 @@
 //
 
 import UIKit
-import CoreData
-
+import AVFoundation
 
 ///TODO:
 //no data cell
@@ -164,9 +163,11 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                     CategoriesVC.shared?.toggleIcons(show: false, animated: true)
                 }
                 DispatchQueue.main.async {
+                    self.ai.fastHide { _ in
+                        UIImpactFeedbackGenerator().impactOccurred()
+                    }
                     
-                    self.editingTF?.endEditing(true)
-                    self.editingTF = nil
+                    
                     self.tableView.reloadData()
                 }
             }
@@ -176,8 +177,17 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
     @objc func newCategoryPressed(_ sender: UITapGestureRecognizer) {
         if let section = Int(sender.name ?? "") {
-            let category = tableData[section].newCategory
-            saveNewCategory(section: section, category: category)
+            DispatchQueue.main.async {
+                UIImpactFeedbackGenerator().impactOccurred()
+                
+                self.ai.show { _ in
+                    self.editingTF?.endEditing(true)
+                    self.editingTF = nil
+                    let category = self.tableData[section].newCategory
+                    self.saveNewCategory(section: section, category: category)
+                }
+            }
+            
         }
     }
     
@@ -427,7 +437,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
 
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y < -80.0 {
+        if scrollView.contentOffset.y < -70.0 {
             if let editing = editingTF {
                 editingTF = nil
                 toggleIcons(show: false, animated: true)
@@ -819,6 +829,9 @@ class categoriesVCcell: UITableViewCell {
                 CategoriesVC.shared?.editingTF?.endEditing(true)
                 CategoriesVC.shared?.editingTF = nil
                 CategoriesVC.shared?.tableView.reloadData()
+                CategoriesVC.shared?.ai.fastHide { _ in
+                    
+                }
             }
         }
     }
@@ -847,6 +860,9 @@ class categoriesVCcell: UITableViewCell {
                                 CategoriesVC.shared?.editingTF?.endEditing(true)
                                 CategoriesVC.shared?.editingTF = nil
                                 CategoriesVC.shared?.tableView.reloadData()
+                                CategoriesVC.shared?.ai.fastHide(completionn: { _ in
+                                    UIImpactFeedbackGenerator().impactOccurred()
+                                })
                             }
                         }
                     }
@@ -858,26 +874,22 @@ class categoriesVCcell: UITableViewCell {
     
     
     @IBAction func sendPressed(_ sender: UIButton) {
-
-      //  DispatchQueue.main.async {
-            //start in screen animation
-            
-           // CategoriesVC.shared?.ai.show(completion: { _ in
-                if let currentCategory = self.currentCategory {
-                    if currentCategory.editing?.name != "" {
-                        saveCategory(currentCategory)
-                    } else {
-                        cancelEditing()
-                    }
+        
+        UIImpactFeedbackGenerator().impactOccurred()
+        CategoriesVC.shared?.ai.show { _ in
+            if let currentCategory = self.currentCategory {
+                if currentCategory.editing?.name != "" {
+                    self.saveCategory(currentCategory)
+                } else {
+                    self.cancelEditing()
                 }
+            }
+        }
         
         if CategoriesVC.shared?.showingIcons ?? false {
             CategoriesVC.shared?.toggleIcons(show: false, animated: true)
         }
-                
-          //  })
-        //}
-        
+
     }
     
 }

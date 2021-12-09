@@ -6,7 +6,6 @@
 //  Copyright © 2020 Misha Dovhiy. All rights reserved.
 //
 import UIKit
-import CoreData
 
 var ifCustom = false
 
