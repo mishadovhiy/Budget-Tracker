@@ -9,10 +9,10 @@
 import UIKit
 
 var count = 0
-class EnterValueVC:UIViewController {
+class EnterValueVC:UIViewController, UITextFieldDelegate {
     
     var screenData:EnterValueVCScreenData?
-    
+
     @IBOutlet weak private var codeLabel: UILabel!
     @IBOutlet weak private var mainStack: UIStackView!
     @IBOutlet weak private var mainTitleLabel: UILabel!
@@ -20,14 +20,18 @@ class EnterValueVC:UIViewController {
     @IBOutlet weak private var userTableStack: UIStackView!
     @IBOutlet weak private var emailLabel: UILabel!
     @IBOutlet weak private var userNameLabel: UILabel!
-    @IBOutlet weak private var valueTextField: UITextField!
+    @IBOutlet weak var valueTextField: UITextField!
+    
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        EnterValueVC.shared = self
         valueTextField.addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
         valueTextField.delegate = self
-        EnterValueVC.shared = self
         updateScreen()
+        
     }
     lazy var numberView: NumbersView = {
         let newView = NumbersView.instanceFromNib() as! NumbersView
@@ -38,6 +42,7 @@ class EnterValueVC:UIViewController {
         let hideTF = self.screenData?.screenType == .code ? true : false
         let hideCode = !hideTF
         DispatchQueue.main.async {
+            self.valueTextField.layer.cornerRadius = 6
             self.title = self.screenData?.taskName
             self.mainTitleLabel.text = self.screenData?.title
             self.descriptionLabel.text = self.screenData?.subTitle
@@ -57,6 +62,9 @@ class EnterValueVC:UIViewController {
                 let size = self.numberView.viewSize
                 self.numberView.frame = CGRect(x: 0, y: self.view.frame.height - size.height, width: size.width, height: size.height)
                 self.view.addSubview(self.numberView)
+                
+                self.kayboardAppeared(self.numberView.frame.height)
+                
             }
             
             self.valueTextField.placeholder = self.screenData?.placeHolder
@@ -65,6 +73,24 @@ class EnterValueVC:UIViewController {
             }
         }
     }
+    
+    
+    func kayboardAppeared(_ keyboardHeight:CGFloat) {
+        DispatchQueue.main.async {
+            let selectedTextfieldd = self.mainStack
+            let dif = self.view.frame.height - CGFloat(keyboardHeight) - (selectedTextfieldd?.superview?.frame.maxY ?? 0)
+            if dif < 20 {
+
+                
+             //   DispatchQueue.main.async {
+                    UIView.animate(withDuration: 0.3) {
+                        self.mainStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, (dif / 2) - 20, 0)
+                    }
+               // }
+            }
+        }
+    }
+    
     
     @objc func textfieldValueChanged(_ sender:UITextField) {
         DispatchQueue.main.async {
@@ -84,11 +110,16 @@ class EnterValueVC:UIViewController {
     
     static var shared:EnterValueVC?
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if let function = screenData?.nextAction as? () -> () {
+            function()
+        }
+        return true
+    }
+    
     @IBAction private func nextPressed(_ sender: UIButton) {
         if let function = screenData?.nextAction as? () -> () {
             function()
-        } else {
-            print("error")
         }
     }
 
@@ -118,7 +149,14 @@ class EnterValueVC:UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+        if self.screenData?.screenType != .code {
+            valueTextField.becomeFirstResponder()
+        }
+        
+        
     }
     
     enum screenType {
@@ -148,10 +186,39 @@ class EnterValueVC:UIViewController {
     
 }
 
+
+extension EnterValueVC {
+    @objc func keyboardWillShow(_ notification: Notification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+            
+            if keyboardHeight > 1.0 {
+                kayboardAppeared(keyboardHeight)
+            }
+        }
+    }
+       
+    @objc func keyboardWillHide(_ notification: Notification) {
+
+            DispatchQueue.main.async {
+                UIView.animate(withDuration: 0.3) {
+                    self.mainStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+                }
+            }
+    }
+}
+
+
+
 extension EnterValueVC:NumbersViewProtocol{
     func valuePressed(n: Int?, remove: NumbersView.SymbolType?) {
         if let num = n {
-            enteringValue += "\(num)"
+            let enter = enteringValue + "\(num)"
+            if enter.count <= 4 {
+                enteringValue += "\(num)"
+            }
+            
         }
         if let sumbol = remove {
             switch sumbol {
@@ -180,6 +247,4 @@ struct EnterValueVCScreenData {
 }
 
 
-extension EnterValueVC:UITextFieldDelegate {
-    
-}
+

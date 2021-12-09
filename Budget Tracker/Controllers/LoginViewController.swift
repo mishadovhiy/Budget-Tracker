@@ -52,8 +52,6 @@ class LoginViewController: SuperViewController {
         super.viewDidLoad()
         categoriesDebtsCount = (0,0)
 
-        print("username: \(appData.username)")
-        print("localTransactions:", appData.getTransactions.count)
         updateUI()
 
         DispatchQueue.main.async {
@@ -190,6 +188,7 @@ class LoginViewController: SuperViewController {
                             DispatchQueue.main.async {
                                 self.dismiss(animated: true) {
                                     self.showAlert(title: "Your email has been changed", text: "", error: false)
+                                    //pop to login nav
                                 }
                             }
                         }
@@ -425,7 +424,7 @@ class LoginViewController: SuperViewController {
     func checkChangeOldPassword(_ password: String, dbPassword: String, email: String){
         
         if password != dbPassword {
-            self.message.showMessage(text: "Error", type: .error)
+            showAlert(text: "Wrong password!", error: true)
         } else {
             let repeateActionn = {
                 let fromPrev = EnterValueVC.shared?.enteringValue ?? ""
@@ -502,7 +501,7 @@ class LoginViewController: SuperViewController {
                                 }
                             }
 
-                            let firstButton = IndicatorView.button(title: "Cancel", style: .standart, close: true) { _ in
+                            let firstButton = IndicatorView.button(title: "Cancel", style: .success, close: true) { _ in
                             }
                             let secondButton = IndicatorView.button(title: "Send", style: .standart, close: false) { _ in
                                 self.sendRestorationCode(toChange: .changePassword)
@@ -581,21 +580,21 @@ class LoginViewController: SuperViewController {
         
         
         let loggedUserData = [
-            MoreVC.ScreenData(name: "Username", description: "", action: nil),
-            MoreVC.ScreenData(name: "Web purchase", description: "", action: nil),
-            MoreVC.ScreenData(name: "Device purchase", description: "", action: nil),
-            MoreVC.ScreenData(name: "Account email", description: "", action: changeEmailAction),
+           // MoreVC.ScreenData(name: "Username", description: "", action: nil),
+           // MoreVC.ScreenData(name: "Web purchase", description: "", action: nil),
+           // MoreVC.ScreenData(name: "Device purchase", description: "", action: nil),
+            MoreVC.ScreenData(name: "Change Email", description: "", action: changeEmailAction),
             MoreVC.ScreenData(name: "Change password", description: "", action: changePassword),
             MoreVC.ScreenData(name: "Forgot password", description: "", action: forgotPassword),
-            MoreVC.ScreenData(name: "Log out", description: "", action: logoutAction),
+            MoreVC.ScreenData(name: "Log out", description: "", distructive: true, action: logoutAction),
         ]
         
         let notUserLogged = [
-            MoreVC.ScreenData(name: "Device purchase", description: appData.purchasedOnThisDevice ? "Yes":"No", action: nil),
+            //MoreVC.ScreenData(name: "Device purchase", description: appData.purchasedOnThisDevice ? "Yes":"No", action: nil),
             MoreVC.ScreenData(name: "Forgot password", description: "", action: forgotPassword),
         ]
         
-        appData.presentMoreVC(currentVC: self, data: loggedUserData, dismissOnAction: true)
+        appData.presentMoreVC(currentVC: self, data: appData.username == "" ? notUserLogged : loggedUserData, dismissOnAction: true)
 
     }
     
@@ -620,13 +619,16 @@ class LoginViewController: SuperViewController {
     }
     
 
-    func showAlert(title:String,text:String? = nil, error: Bool) {
+    func showAlert(title:String? = nil,text:String? = nil, error: Bool) {
+        
+        let resultTitle = title == nil ? (error ? "Error" : "Succsess!") : title!
         
         let okButton = IndicatorView.button(title: "OK", style: .standart, close: true) { _ in
         }
         
         DispatchQueue.main.async {
-            self.ai.completeWithActions(buttons: (okButton, nil), title: title, descriptionText: text, type: error ? .error : .standard)
+            EnterValueVC.shared?.valueTextField.endEditing(true)
+            self.ai.completeWithActions(buttons: (okButton, nil), title: resultTitle, descriptionText: text, type: error ? .error : .standard)
         }
 
     }
@@ -750,9 +752,10 @@ class LoginViewController: SuperViewController {
                         self.actionButtonsEnabled = true
                         DispatchQueue.main.async {
                             
-                            self.ai.hideIndicator(fast: true) { (_) in
-                                self.message.showMessage(text: "Wrong password!", type: .error)
-                            }
+                           // self.ai.hideIndicator(fast: true) { (_) in
+                            //    self.message.showMessage(text: "Wrong password!", type: .error)
+                                self.showAlert(text: "Wrong password!", error: true)
+                           // }
                             
                         }
                     } else {

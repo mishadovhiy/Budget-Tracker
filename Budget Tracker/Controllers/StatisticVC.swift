@@ -210,7 +210,8 @@ class StatisticVC: SuperViewController, CALayerDelegate {
             let vc = segue.destination as! HistoryVC
             vc.fromStatistic = true
             vc.historyDataStruct = historyDataStruct
-            vc.selectedCategoryName = selectedCategoryName
+            let db = DataBase()
+            vc.selectedCategory = db.category(selectedCategoryName)
             vc.selectedPurposeH = segmentControll.selectedSegmentIndex
             vc.fromCategories = fromDebts
         }

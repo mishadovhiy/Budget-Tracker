@@ -18,6 +18,10 @@ struct NewCategories {
     var dueDate: DateComponents?
     var amountToPay: Double? = nil
 
+    var transactions: [TransactionsStruct] {
+        let db = DataBase()
+        return db.transactions(for: self)
+    }
     
 }
 
@@ -213,5 +217,19 @@ class DataBase {
         }
     }
     
+    var debts: [NewCategories] {
+        let all = UserDefaults.standard.value(forKey: categoriesKey) as? [[String:Any]] ?? []
+        var result: [NewCategories] = []
+        for i in 0..<all.count {
+            if let new = categoryFrom(all[i]) {
+                if new.purpose == .debt {
+                    result.append(new)
+                }
+                
+            }
+            
+        }
+        return result
+    }
     
 }

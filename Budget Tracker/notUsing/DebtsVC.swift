@@ -308,7 +308,7 @@ class DebtsVC: SuperViewController {
     
     var selectedCellData:DebtsTableStruct?
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    /*override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toHistory" {
 
             let vc = segue.destination as! HistoryVC
@@ -327,7 +327,7 @@ class DebtsVC: SuperViewController {
             }
             
         }
-    }
+    }*/
 
     override func viewWillDisappear(_ animated: Bool) {
         print("will disap")

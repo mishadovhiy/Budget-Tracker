@@ -95,20 +95,24 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     func showHistory(categpry: String, transactions: [TransactionsStruct]) {
         print("showHistory")
 
-        DispatchQueue.main.async {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let vc = storyboard.instantiateViewController(withIdentifier: "HistoryVC") as! HistoryVC
-            let navController = UINavigationController(rootViewController: vc)
-            navController.modalPresentationStyle = .pageSheet
-            vc.historyDataStruct = transactions
-            vc.selectedCategoryName = categpry
-            vc.fromCategories = true
+        let db = DataBase()
+        if let categoryy = db.category(categpry) {
+            DispatchQueue.main.async {
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let vc = storyboard.instantiateViewController(withIdentifier: "HistoryVC") as! HistoryVC
+                let navController = UINavigationController(rootViewController: vc)
+                navController.modalPresentationStyle = .pageSheet
+                vc.historyDataStruct = transactions
+                vc.selectedCategory = categoryy
+                vc.fromCategories = true
 
-            UIApplication.shared.windows.last?.rootViewController?.present(navController, animated: true, completion: {
-                print("ok")
-            })
+                UIApplication.shared.windows.last?.rootViewController?.present(navController, animated: true, completion: {
+                    print("ok")
+                })
 
+            }
         }
+        
         
     }
 }

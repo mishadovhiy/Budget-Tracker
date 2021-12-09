@@ -242,16 +242,19 @@ class SuperViewController: UIViewController {
     
     func showHistory(categpry: String, transactions: [TransactionsStruct]) {
         print("showHistory")
-
-        DispatchQueue.main.async {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let vccc = storyboard.instantiateViewController(withIdentifier: "HistoryVC") as! HistoryVC
-            vccc.modalPresentationStyle = .formSheet
-            vccc.historyDataStruct = transactions
-            vccc.selectedCategoryName = categpry
-            vccc.fromCategories = true
-            self.present(vccc, animated: true)
+        let db = DataBase()
+        if let category = db.category(categpry) {
+            DispatchQueue.main.async {
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let vccc = storyboard.instantiateViewController(withIdentifier: "HistoryVC") as! HistoryVC
+                vccc.modalPresentationStyle = .formSheet
+                vccc.historyDataStruct = transactions
+                vccc.selectedCategory = category
+                vccc.fromCategories = true
+                self.present(vccc, animated: true)
+            }
         }
+        
         
     }
     
@@ -273,4 +276,21 @@ extension Date {
 }
 extension String {
     var iso8601withFractionalSeconds: Date? { return Formatter.iso8601withFractionalSeconds.date(from: self) }
+}
+
+
+
+extension UIViewController{//test
+    var previousViewController:UIViewController?{
+        if let controllersOnNavStack = self.navigationController?.viewControllers{
+            let n = controllersOnNavStack.count
+            //if self is still on Navigation stack
+            if controllersOnNavStack.last === self, n > 1{
+                return controllersOnNavStack[n - 2]
+            }else if n > 0{
+                return controllersOnNavStack[n - 1]
+            }
+        }
+        return nil
+    }
 }

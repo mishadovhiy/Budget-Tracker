@@ -40,7 +40,7 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         if #available(iOS 15.0, *) {
             self.tableView.sectionHeaderTopPadding = 0
         }
-        
+       
         
     }
 
@@ -139,9 +139,10 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         return indexPath.section == 0 ? firstCellHeight : UITableView.automaticDimension
     }
     
+    
+    
+    
 }
-
-
 
 
 

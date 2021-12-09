@@ -344,7 +344,7 @@ class IndicatorView: UIView {
         }
     }
     
-    private let blueColor = UIColor(red: 20/255, green: 94/255, blue: 244/255, alpha: 1)
+    private let blueColor = K.Colors.yellow
     private let lightBlueColor = UIColor(red: 163/255, green: 163/255, blue: 163/255, alpha: 1)
     private func setStyle(button: UIButton, style: ButtonType) {
         DispatchQueue.main.async {
@@ -354,7 +354,7 @@ class IndicatorView: UIView {
                 button.setTitleColor(.white, for: .normal)
             case .standart:
                 button.backgroundColor = self.lightBlueColor
-                button.setTitleColor(self.blueColor, for: .normal)
+                button.setTitleColor(.black, for: .normal)
             case .success:
                 button.backgroundColor = self.blueColor
                 button.setTitleColor(.white, for: .normal)

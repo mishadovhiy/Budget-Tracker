@@ -21,10 +21,9 @@ class HistoryVC: SuperViewController {
     @IBOutlet weak var addTransButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
     var historyDataStruct: [TransactionsStruct] = []
-    var selectedCategoryName = ""
+    var selectedCategory: NewCategories?
     var fromCategories = false
     var allowEditing = true
-    var debt: DebtsStruct? //use this indeed
     
     var amountToPayEditing = false
     
@@ -57,6 +56,8 @@ class HistoryVC: SuperViewController {
         super.viewDidLoad()
 
         print(selectedPurposeH, "selectedPurposeselectedPurposeH didlo")
+        NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+                NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         if !allowEditing {
          //   DispatchQueue.main.async {
                 self.addTransButton.alpha = 0
@@ -72,7 +73,7 @@ class HistoryVC: SuperViewController {
         print(historyDataStruct.count, "didlocount")
         tableView.delegate = self
         tableView.dataSource = self
-        title = selectedCategoryName.capitalized
+        title = selectedCategory?.name.capitalized
 
    //     DispatchQueue.main.async {
             self.addTransButton.layer.cornerRadius = self.addTransButton.layer.frame.width / 2
@@ -97,9 +98,9 @@ class HistoryVC: SuperViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
 
-        if let debt = self.debt {
+        if selectedCategory?.purpose == .debt {
       //      center.removePendingNotificationRequests(withIdentifiers: ["Debts\(debt.name)"])
-            center?.removeDeliveredNotifications(withIdentifiers: ["Debts\(debt.name)"])
+            center?.removeDeliveredNotifications(withIdentifiers: ["Debts\(self.selectedCategory?.name ?? "")"])
             center?.getDeliveredNotifications { notifications in
                 DispatchQueue.main.async {
                     UIApplication.shared.applicationIconBadgeNumber = notifications.count
@@ -132,9 +133,9 @@ class HistoryVC: SuperViewController {
     func addLocalNotification(date: DateComponents, completion: @escaping (Bool) -> ()) {
         
         //if date > today
-        let title = self.debt?.name ?? ""
-        let id = "Debts\(self.debt?.name ?? "")"
-        center?.removePendingNotificationRequests(withIdentifiers: ["Debts\(self.debt?.name ?? "")"])
+        let title = self.selectedCategory?.name ?? ""
+        let id = "Debts\(self.selectedCategory?.name ?? "")"
+        center?.removePendingNotificationRequests(withIdentifiers: ["Debts\(self.selectedCategory?.name ?? "")"])
         center?.getNotificationSettings { (settings) in
             if settings.authorizationStatus != .authorized {
             // Notifications not allowed
@@ -181,9 +182,23 @@ class HistoryVC: SuperViewController {
         }
     }
 
+    let db = DataBase()
     func getDebtData() {
-        if allowEditing {
-            let debts = Array(appData.debts)
+      //  if allowEditing {
+            if let id = selectedCategory?.id {
+                selectedCategory = db.category("\(id)")
+                if selectedCategory?.purpose == .debt {
+                    DispatchQueue.main.async {
+                        if self.moreButton.isHidden != false {
+                            self.moreButton.isHidden = false
+                            
+                        }
+                        self.tableView.reloadData()
+                    }
+                }
+            }
+            
+          /*newCat  let debts = Array(appData.debts)
             print(debts, "debtsdebtsdebts")
             for i in 0..<debts.count {
                 if selectedCategoryName == debts[i].name {
@@ -215,15 +230,39 @@ class HistoryVC: SuperViewController {
                     }
                 }*/
                 
-            }
+            }*/
             
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-        }
+            
+      //  }
     }
     
 
+    
+    
+    @objc func keyboardWillShow(_ notification: Notification) {
+
+            if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+                let keyboardRectangle = keyboardFrame.cgRectValue
+                let keyboardHeight = keyboardRectangle.height
+                if keyboardHeight > 1.0 {
+                    DispatchQueue.main.async {
+                                self.tableView.contentInset.bottom = keyboardHeight - appData.safeArea.1
+
+                            }
+                }
+            }
+        }
+    
+    @objc func keyboardWillHide(_ notification: Notification) {
+           
+            DispatchQueue.main.async {
+                self.tableView.contentInset.bottom = 0
+                self.tableView.reloadData()
+                
+            }
+        }
+    
+    
     func totalSum() -> Double {
         var sum = 0.0
         for i in 0..<historyDataStruct.count {
@@ -250,14 +289,15 @@ class HistoryVC: SuperViewController {
             let vc = nav.topViewController as! TransitionVC
             vc.delegate = self
             vc.fromDebts = fromCategories ? true : false
-            vc.editingCategory = self.selectedCategoryName
+            vc.editingCategory = "\(self.selectedCategory?.id ?? 0)"
             vc.selectedPurpose = selectedPurposeH
         case "toCalendar":
             let vc = segue.destination as! CalendarVC
             vc.delegate = self
-            let string = stringToDateComponent(s: self.debt?.dueDate ?? "", dateFormat: K.fullDateFormat)
-            vc.selectedFrom = self.debt?.dueDate ?? "" == "" ? "" : "\(self.makeTwo(n: string.day ?? 0)).\(self.makeTwo(n: string.month ?? 0)).\(string.year ?? 0)"
-            vc.datePickerDate = self.debt?.dueDate ?? ""
+             let string = self.selectedCategory?.dueDate
+            let stringDate = "\(self.makeTwo(n: string?.day ?? 0)).\(self.makeTwo(n: string?.month ?? 0)).\(string?.year ?? 0)"
+            vc.selectedFrom = (string == nil) ? "" : stringDate
+            vc.datePickerDate = string != nil ? stringDate : ""
             vc.vcHeaderData = headerData(title: "Create notification", description: "Get notification reminder on specific date")
             vc.needPressDone = true
             vc.canSelectOnlyOne = true
@@ -278,12 +318,30 @@ class HistoryVC: SuperViewController {
     
     func changeDueDate(fullDate: String) {
         //self.addLocalNotification(date: dateComp, title: self.debt?.name ?? "") { (_) in
+        if let category = selectedCategory {
+            let newDate = stringToCompIso(s: fullDate)
             self.dbLoadRemoveBeforeUpdate { (loadedData, _) in
                 let save = SaveToDB()
-                let saveToDs = "&Nickname=\(appData.username)" + "&name=\(self.debt?.name ?? "")" + "&amountToPay=\(self.debt?.amountToPay ?? "")" + "&dueDate=\(fullDate)"
+                var newCategory = category
+                newCategory.dueDate = newDate
+                save.newCategories(newCategory) { _ in
+                    self.selectedCategory = newCategory
+                    DispatchQueue.main.async {
+                        self.ai.fastHide { (_) in
+                            self.tableView.reloadData()
+                        }
+                        
+                    }
+                }
+            }
+        }
+        
+    }
+            
+                /*let saveToDs = "&Nickname=\(appData.username)" + "&name=\(self.debt?.name ?? "")" + "&amountToPay=\(self.debt?.amountToPay ?? "")" + "&dueDate=\(fullDate)"
                 save.Debts(toDataString: saveToDs) { (error) in
-                    self.debt?.dueDate = fullDate
-                    print(self.debt?.dueDate, "self.debt?.dueDateself.debt?.dueDate")
+                    self.selectedCategory?.dueDate = fullDate
+                    print(self.selectedCategory?.dueDate, "self.debt?.dueDateself.debt?.dueDate")
                     if error {
                         appData.unsendedData.append(["debt": saveToDs])
                     }
@@ -303,10 +361,10 @@ class HistoryVC: SuperViewController {
                         }
                     }
                     
-                }
-            }
+                }*/
+            
         //}
-    }
+    
     
     func tocalendatPressed() {
         
@@ -318,11 +376,28 @@ class HistoryVC: SuperViewController {
         }
     }
     
-    func dbLoadRemoveBeforeUpdate(completion: @escaping ([DebtsStruct], Bool) -> ()) {
+    func dbLoadRemoveBeforeUpdate(completion: @escaping ([NewCategories], Bool) -> ()) {
         //self.loadingIndicator.show(title: "Updating data", appeareAnimation: true)
        // self.loadingIndicator?.show(title: "", appeareAnimation: true) { (_) in
+        
+        
+        
             let load = LoadFromDB()
-            load.Debts { (loadedDebts, error) in
+        
+        load.newCategories { data, error in
+            if let id = self.selectedCategory?.id {
+                if let category = self.db.category("\(id)") {
+                    let delete = DeleteFromDB()
+                    delete.CategoriesNew(category: category) { errorBool in
+                        completion(data, errorBool)
+                    }
+                }
+            }
+            
+        }
+        
+        
+           /* load.Debts { (loadedDebts, error) in
                 if error == "" {
                     let username = appData.username
 
@@ -355,43 +430,52 @@ class HistoryVC: SuperViewController {
                     }, title: "No internet", description: "Enable to edit debts data in offline mode, come back later when you will be connected to the internet", error: true)*/
                 }
                 
-            }
+            }*/
        // }
         
     }
     
     func changeAmountToPay(enteredAmount:String, completion: @escaping (Any?) -> ()) {
-        self.dbLoadRemoveBeforeUpdate { (loadedData, _) in
-            let save = SaveToDB()
-            let saveToDs = "&Nickname=\(appData.username)" + "&name=\(self.debt?.name ?? "")" + "&amountToPay=\(enteredAmount)" + "&dueDate=\(self.debt?.dueDate ?? "")"
-            
-            save.Debts(toDataString: saveToDs) { (error) in
-                if error {
-                    appData.unsendedData.append(["debt": saveToDs])
+        
+        if let category = selectedCategory {
+            self.dbLoadRemoveBeforeUpdate { (loadedData, _) in
+                let save = SaveToDB()
+                var newCategory = category
+                newCategory.amountToPay = Double(enteredAmount)
+                save.newCategories(newCategory) { _ in
+                    self.selectedCategory = newCategory
+                    completion(nil)
                 }
+                /*let save = SaveToDB()
+                let saveToDs = "&Nickname=\(appData.username)" + "&name=\(self.debt?.name ?? "")" + "&amountToPay=\(enteredAmount)" + "&dueDate=\(self.debt?.dueDate ?? "")"
                 
-                var dataToSafe = loadedData
-                for i in 0..<dataToSafe.count {
-                    if dataToSafe[i].name == self.debt?.name {
-                        dataToSafe[i].amountToPay = enteredAmount
-                        break
+                save.Debts(toDataString: saveToDs) { (error) in
+                    if error {
+                        appData.unsendedData.append(["debt": saveToDs])
                     }
-                }
-                appData.saveDebts(dataToSafe)
-                completion(nil)
-                
+                    
+                    var dataToSafe = loadedData
+                    for i in 0..<dataToSafe.count {
+                        if dataToSafe[i].name == self.debt?.name {
+                            dataToSafe[i].amountToPay = enteredAmount
+                            break
+                        }
+                    }
+                    appData.saveDebts(dataToSafe)
+                    completion(nil)
+                    
+                }*/
             }
         }
+        
     }
     
     func changeAmountToPayWithtextField() {
-        self.ai.showTextField(type: .amount, textFieldText: self.debt?.amountToPay ?? "", title: "Amount to pay", description: "Enter how much is rest to pay") { (enteredAmount, _) in
+        self.ai.showTextField(type: .amount, textFieldText: "\(self.selectedCategory?.amountToPay ?? 0.0)", title: "Amount to pay", description: "Enter how much is rest to pay") { (enteredAmount, _) in
             
 
             self.changeAmountToPay(enteredAmount: enteredAmount) { (_) in
                 self.ai.fastHide { (_) in
-                    let result = enteredAmount == "0" ? "" : enteredAmount
-                    self.debt?.amountToPay = result
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                     }
@@ -431,8 +515,6 @@ extension HistoryVC:UITextFieldDelegate {
                             self.ai.show(title: "Sending") { _ in
                                 self.changeAmountToPay(enteredAmount: text) { (_) in
                                     self.ai.fastHide { (_) in
-                                        let result = text == "0" ? "" : text
-                                        self.debt?.amountToPay = result
                                         self.amountToPayEditing = false
                                         //DispatchQueue.main.async {
                                             self.tableView.reloadData()
@@ -461,7 +543,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
         switch section {
-        case 0: return debt == nil ? 0 : 1
+        case 0: return selectedCategory?.purpose != .debt ? 0 : 1
         case 1: return historyDataStruct.count == 0 ? 1 : historyDataStruct.count
         case 2: return 1
         default:
@@ -477,7 +559,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
     func removeDueDate() {
         self.changeDueDate(fullDate: "")
                         
-                        let id = "Debts\(self.debt?.name ?? "")"
+                        let id = "Debts\(self.selectedCategory?.name ?? "")"
                         self.center?.removePendingNotificationRequests(withIdentifiers: [id])
                         DispatchQueue.main.async {
                             self.ai.fastHide(completionn: { _ in
@@ -510,31 +592,31 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
 
             cell.removeAction = removeAction
             
-            let dateComponent = stringToDateComponent(s: debt?.dueDate ?? "", dateFormat: K.fullDateFormat)
+            let dateComponent = selectedCategory?.dueDate
             print(dateComponent, "dateComponentdateComponentdateComponent")
-            let date = "\(makeTwo(n: dateComponent.day ?? 0))"
-            let month = "\(returnMonth(dateComponent.month ?? 0)), \(dateComponent.year ?? 0)"
-            let expired = dateExpired(debt?.dueDate ?? "")
+            let date = "\(makeTwo(n: dateComponent?.day ?? 0))"
+            let month = "\(returnMonth(dateComponent?.month ?? 0)), \(dateComponent?.year ?? 0)"
+           /* let expired = dateExpired(debt?.dueDate ?? "")
             cell.expired = expired
             let diff = dateExpiredCount(startDate: debt?.dueDate ?? "")
             let expText = expiredText(diff)
             cell.expiredDaysCount.text = "Expired:" + (expText == "" ? " recently" : "\(expText) ago")
             cell.expiredDaysCount.superview?.isHidden = expired ? ((debt?.dueDate == "" ? true : false)) : true
-            print(expired, "expiredexpiredexpired")
+            print(expired, "expiredexpiredexpired")*/
             let defaultBackground = UIColor(red: 199/255, green: 197/255, blue: 197/255, alpha: 1)
             cell.imageBackgroundView.backgroundColor = defaultBackground//expired ? K.Colors.negative : defaultBackground
             cell.imageBackgroundView.layer.masksToBounds = true
             cell.imageBackgroundView.layer.cornerRadius = cell.imageBackgroundView.layer.frame.width / 2
-            cell.alertDateLabel.text = debt?.dueDate != "" ? date : "Due date"
-            cell.alertMonthLabel.text = debt?.dueDate != "" ? month : "Unset"
+            cell.alertDateLabel.text = selectedCategory?.dueDate != nil ? date : "Due date"
+            cell.alertMonthLabel.text = selectedCategory?.dueDate != nil ? month : "Unset"
             cell.timeLabel.backgroundColor = defaultBackground
             cell.timeLabel.layer.cornerRadius = 4
             cell.timeLabel.layer.masksToBounds = true
-            cell.AlertDateStack.axis = debt?.dueDate != "" ? .horizontal : .vertical
-            cell.AlertDateStack.alignment = debt?.dueDate != "" ? .firstBaseline : .fill
-            cell.timeLabel.isHidden = debt?.dueDate != "" ? false : true
-            cell.timeLabel.text = "\(makeTwo(n: dateComponent.hour ?? 0)):" + "\(makeTwo(n: dateComponent.minute ?? 0))"
-            cell.mainView.alpha = expired ? (debt?.dueDate == "" ? 1 : 0.4) : 1
+            cell.AlertDateStack.axis = selectedCategory?.dueDate != nil ? .horizontal : .vertical
+            cell.AlertDateStack.alignment = selectedCategory?.dueDate != nil ? .firstBaseline : .fill
+            cell.timeLabel.isHidden = selectedCategory?.dueDate != nil ? false : true
+            cell.timeLabel.text = "\(makeTwo(n: dateComponent?.hour ?? 0)):" + "\(makeTwo(n: dateComponent?.minute ?? 0))"
+         //   cell.mainView.alpha = expired ? (debt?.dueDate == "" ? 1 : 0.4) : 1
           //  cell.mainView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(toCalendarPressed(_:))))
             
             return cell
@@ -548,7 +630,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             let data = historyDataStruct[indexPath.row]
             
             if Double(data.value) ?? 0.0 > 0.0 {
-                cell.valueLabel.textColor = UIColor(named: "darkTableColor")
+                cell.valueLabel.textColor = K.Colors.category
             } else {
                 cell.valueLabel.textColor = K.Colors.negative
                 
@@ -598,16 +680,18 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                 cell.amountTF.becomeFirstResponder()
             }
             
-            let hideButtons = calendarAmountPressed.1 ? (amountToPayEditing ? true : (debt?.amountToPay ?? "0" == "" ? true : false)) : true
+            
+            
+            let hideButtons = calendarAmountPressed.1 ? (amountToPayEditing ? true : (selectedCategory?.amountToPay == nil ? true : false)) : true
             if cell.changeButton.superview?.isHidden ?? true != hideButtons {
                 cell.changeButton.superview?.isHidden = hideButtons
             }
-            let hasTotalSum = debt?.amountToPay ?? "" == "" || debt?.amountToPay ?? "0" == "" ? false : true
+            let hasTotalSum = selectedCategory?.amountToPay == nil || selectedCategory?.amountToPay ?? 0.0 == 0.0 ? false : true
             let totalSumm = totalSum()
             cell.valueLabel.text = (totalSumm < Double(Int.max) ? "\(Int(totalSumm))" : "\(totalSumm)")
             
-            cell.totalToPayLabel.text = debt?.amountToPay
-            let rest = (Double(debt?.amountToPay ?? "0") ?? 0.0) - totalSumm
+            cell.totalToPayLabel.text = "\(selectedCategory?.amountToPay)"
+            let rest = (selectedCategory?.amountToPay ?? 0.0) - totalSumm
             cell.restToPayyLabel.text = (rest < Double(Int.max) ? "\(Int(rest))" : "\(rest)") //+ (rest > 0.0 ? " Complited" : "") //"\(rest)"
             cell.totalToPayLabel.superview?.isHidden = hasTotalSum ? false : true
             cell.restToPayyLabel.superview?.isHidden = hasTotalSum ? false : true
@@ -617,19 +701,19 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             } else {
                 cell.perioudLabel.text = selectedPeroud
             }
-            if debt == nil {
+            if selectedCategory?.purpose != .debt {
               //  cell.noRestToPay.isHidden = true
                 cell.totalToPayLabel.isHidden = true
             } else {
                // cell.noRestToPay.layer.masksToBounds = true
               //  cell.noRestToPay.layer.cornerRadius = 4
-                if debt?.amountToPay == "" || debt?.amountToPay == "0" {
+                if selectedCategory?.amountToPay ?? 0.0 == 0.0 {
              //       cell.noRestToPay.isHidden = false
                     cell.totalToPayLabel.isHidden = true
                 } else {
                //     cell.noRestToPay.isHidden = true
                     cell.totalToPayLabel.isHidden = false
-                    cell.totalToPayLabel.text = debt?.amountToPay
+                    cell.totalToPayLabel.text = "\(selectedCategory?.amountToPay ?? 0.0)"
                 }
             }
             
@@ -646,7 +730,6 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
     func removeAmountToPay() {
         self.changeAmountToPay(enteredAmount: "") { (_) in
             self.ai.fastHide { (_) in
-                self.debt?.amountToPay = ""
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
@@ -746,10 +829,10 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
         }
         if indexPath.section == 2 {
             DispatchQueue.main.async {
-                if self.debt?.name == "" {
+                if self.selectedCategory?.purpose != .debt {
                     return
                 }
-                if self.debt?.amountToPay ?? "" != "" && !self.calendarAmountPressed.1 {
+                if self.selectedCategory?.amountToPay ?? 0.0 != 0.0 && !self.calendarAmountPressed.1 {
                     let isPressed = self.calendarAmountPressed.1 ? false : true
                     print(isPressed, "isPressedisPressedisPressed")
                     self.calendarAmountPressed = (false, isPressed)
@@ -761,7 +844,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             }
         } else {
             if indexPath.section == 0 {
-                if self.debt?.dueDate ?? "" != "" && !self.calendarAmountPressed.0 {
+                if self.selectedCategory?.dueDate != nil && !self.calendarAmountPressed.0 {
                     let isPressed = calendarAmountPressed.0 ? false : true
                     print(isPressed, "isPressedisPressedisPressed")
                     calendarAmountPressed = (isPressed, false)
@@ -780,10 +863,10 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let ifDueDate = indexPath.section == 0 ? (self.debt?.dueDate ?? "" == "" ? 0 : UITableView.automaticDimension) : UITableView.automaticDimension
+        let ifDueDate = indexPath.section == 0 ? (self.selectedCategory?.dueDate == nil ? 0 : UITableView.automaticDimension) : UITableView.automaticDimension
         
         
-        let dueViewHeight:CGFloat = self.debt?.dueDate ?? "" == "" ? 70 : 150
+        let dueViewHeight:CGFloat = self.selectedCategory?.dueDate == nil ? 70 : 150
         let heightWhenNoData = tableView.frame.height - (appData.safeArea.1 + appData.safeArea.0 + dueViewHeight)
         
         return indexPath.section == 1 ? (historyDataStruct.count == 0 ? heightWhenNoData : UITableView.automaticDimension) : ifDueDate
@@ -800,13 +883,25 @@ extension HistoryVC: TransitionVCProtocol {
         
     }
 
-    func addNewTransaction(value: String, category: String, date: String, comment: String) {//need modif
+    func addNewTransaction(value: String, category: String, date: String, comment: String) {
         toAddVC = false
+        transactionAdded = true
         let new = TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)
+        if value != "" && category != "" && date != "" {
+                    let save = SaveToDB()
+                    save.newTransaction(new) { error in
+                        self.selectedCategory = self.db.category(category)
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
+                    }
+
+                }
+       /* let new = TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)
         print(new, "newnewnewnew")
         
         if value != "" && category != "" && date != "" {
-            transactionAdded = true
+            
             if appData.username != "" {
                 let toDataString = "&Nickname=\(appData.username)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
                 let save = SaveToDB()
@@ -854,7 +949,7 @@ extension HistoryVC: TransitionVCProtocol {
                 }
                 
             }
-        }
+        }*/
     }
     
     

@@ -11,6 +11,8 @@ import UIKit
 class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
     
     var tableData:[TableData] {
+        let db = DataBase()
+        let debts = db.debts.count
         let pro = appData.proVersion || appData.proTrial
         var accountSegue:String {
             let dataCount = (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String]] ?? []).count + (UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String]] ?? []).count + (UserDefaults.standard.value(forKey: K.Keys.localDebts) as? [[String]] ?? []).count
@@ -20,8 +22,8 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         let accountSection = [CellData(name: "Account", value: appData.username == "" ? "Log in" : appData.username, segue: accountSegue, image: "person.fill")]
         
         let categories = [
-            CellData(name: "Categories", value: "0", segue: "toCategories", image: ""),
-            CellData(name: "Debts", value: "0", segue: pro ? "toDebts" : "toProVC", image: "", pro: pro)
+            CellData(name: "Categories", value: "\(db.categories.count - debts)", segue: "toCategories", image: ""),
+            CellData(name: "Debts", value: "\(debts)", segue: pro ? "toDebts" : "toProVC", image: "", pro: pro)
         ]
         
         let statistic = [
