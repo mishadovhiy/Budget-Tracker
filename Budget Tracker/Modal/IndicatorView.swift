@@ -83,7 +83,7 @@ class IndicatorView: UIView {
     
     
     
-    func show(showingAI: Bool = true, title: String? = "Wait", description: String? = nil, appeareAnimation: Bool = false, attention: Bool = false, completion: @escaping (Bool) -> ()) {
+    func show(showingAI: Bool = true, title: String? = "Loading", description: String? = nil, appeareAnimation: Bool = false, attention: Bool = false, completion: @escaping (Bool) -> ()) {
     //    DispatchQueue.global().async {
         
         DispatchQueue.init(label: "\(#function)", qos: .userInteractive).async {

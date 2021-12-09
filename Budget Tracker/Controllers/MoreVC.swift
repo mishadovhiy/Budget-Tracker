@@ -162,7 +162,13 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        DispatchQueue.main.async {
+            self.dismiss(animated: true) {
+                
+            }
+        }
+    }
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

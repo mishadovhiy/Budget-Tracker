@@ -16,8 +16,19 @@ var needFullReload = false
 //log out - if nick != ""
 
 
+/*
+ r o o l s
+ 
+ save to local data:
+ - when singIn/logIn and username == ""
+ 
+ */
+
 class LoginViewController: SuperViewController {
 
+    ///!!!! bug when saved app data username != "" (when password changed)
+    
+    
     @IBOutlet weak var logIn: UIStackView!
     @IBOutlet weak var createAcount: UIStackView!
     

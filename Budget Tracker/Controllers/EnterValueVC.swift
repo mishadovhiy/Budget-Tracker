@@ -76,6 +76,8 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
         }
     }
     
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    }
     
     func kayboardAppeared(_ keyboardHeight:CGFloat) {
         DispatchQueue.main.async {

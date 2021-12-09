@@ -16,7 +16,9 @@ class SuperViewController: UIViewController {
         let newView = AppDelegate.shared?.ai ?? IndicatorView.instanceFromNib() as! IndicatorView
         return newView
     }()
-    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        //screen rotation
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)

@@ -9,6 +9,9 @@
 import UIKit
 import AVFoundation
 
+///bug:
+//when quiting vc its refreshing on mainVC
+
 var lastSelectedDate:String?
 
 protocol TransitionVCProtocol {
