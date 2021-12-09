@@ -22,8 +22,7 @@ class SupportVC: UIViewController, UITextViewDelegate {
         //textView.addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
         //value did change
         title = "Support message"
-        navigationController?.setNavigationBarHidden(false, animated: false)
-        
+
         let swipe = UISwipeGestureRecognizer(target: self, action: #selector(closeSwipped(_:)))
         let closePress = UISwipeGestureRecognizer(target: self, action: #selector(closePressed(_:)))
         swipe.direction = .up
@@ -33,6 +32,10 @@ class SupportVC: UIViewController, UITextViewDelegate {
     }
     
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: true)
+    }
     
     var message: String = ""
     func textViewDidChange(_ textView: UITextView) {
