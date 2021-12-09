@@ -28,7 +28,7 @@ class LoginViewController: SuperViewController {
 
     ///!!!! bug when saved app data username != "" (when password changed)
     
-    
+    @IBOutlet weak var usersButton: UIButton!
     @IBOutlet weak var logIn: UIStackView!
     @IBOutlet weak var createAcount: UIStackView!
     
@@ -69,7 +69,26 @@ class LoginViewController: SuperViewController {
             self.title = appData.username == "" ? "Sing In" : appData.username
         }
         
+        
     }
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        let nik = appData.username
+        if nik != "" {
+            loadUsers { users in
+                for i in 0..<users.count {
+                    if users[i][0] == nik {
+                        self.userEmail = users[i][1]
+                        return
+                    }
+                }
+            }
+        }
+    }
+    
+    var userEmail = ""
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
        notificationReceiver(notification: notification)
@@ -81,7 +100,7 @@ class LoginViewController: SuperViewController {
             if !error {
                 completion(users)
             } else {
-                self.showAlert(title: "Ошибка", text: "", error: true)
+                self.showAlert(title: "Error", text: "", error: true)
             }
         }
     }
@@ -594,7 +613,7 @@ class LoginViewController: SuperViewController {
            // MoreVC.ScreenData(name: "Username", description: "", action: nil),
            // MoreVC.ScreenData(name: "Web purchase", description: "", action: nil),
            // MoreVC.ScreenData(name: "Device purchase", description: "", action: nil),
-            MoreVC.ScreenData(name: "Change Email", description: "", action: changeEmailAction),
+            MoreVC.ScreenData(name: "Change Email", description: userEmail, action: changeEmailAction),
             MoreVC.ScreenData(name: "Change password", description: "", action: changePassword),
             MoreVC.ScreenData(name: "Forgot password", description: "", action: forgotPassword),
             MoreVC.ScreenData(name: "Log out", description: "", distructive: true, action: logoutAction),
@@ -612,9 +631,10 @@ class LoginViewController: SuperViewController {
 
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         switch segue.identifier {
         case "toAccountSettings":
-            break
+          //  break
             let vc = segue.destination as! accountSettingsVC
             vc.tableTopMargin = self.view.frame.minY
             vc.delegate = self
@@ -623,6 +643,13 @@ class LoginViewController: SuperViewController {
             if let screenData = enterValueVCScreenData {
                 vc.screenData = screenData
                 
+            }
+        case "toSelectUserVC":
+            let vc = segue.destination as! SelectUserVC
+            vc.delegate = self
+            vc.users = enteredEmailUsers
+            DispatchQueue.main.async {
+                self.nicknameLogLabel.endEditing(true)
             }
         default:
             break
@@ -720,7 +747,14 @@ class LoginViewController: SuperViewController {
                         let name = self.nicknameLogLabel.text ?? ""
                         let password = self.passwordLogLabel.text ?? ""
                         if name != "" && password != "" {
-                            self.logIn(nickname: name, password: password, loadedData: loadedData)
+                            if !name.contains("@") {
+                                self.logIn(nickname: name, password: password, loadedData: loadedData)
+                            } else {
+                                self.checkUsers(for: name) { _ in
+                                    
+                                }
+                            }
+                            
                         } else {
                             self.actionButtonsEnabled = true
                             DispatchQueue.main.async {
@@ -877,7 +911,7 @@ class LoginViewController: SuperViewController {
             let password = self.passwordLabel.text ?? ""
             let regDate = appData.filter.getToday(appData.filter.filterObjects.currentDate)
             if password == self.confirmPasswordLabel.text ?? "" {
-                if name != "" && email != "" && password != "" {
+                if name != "" && !name.contains("@") && email != "" && password != "" {
                     if self.userExists(name: name, loadedData: loadedData) == false  {
                         self.actionButtonsEnabled = true
                         if !email.contains("@") || !email.contains(".") {
@@ -1214,18 +1248,95 @@ class LoginViewController: SuperViewController {
         return [nicknameLabelCreate, emailLabel, passwordLabel, confirmPasswordLabel, nicknameLogLabel, passwordLogLabel]
     }
     
-    
+    var _enteredEmailUsers: [String] = []
+    var enteredEmailUsers: [String] {
+        get {
+            return _enteredEmailUsers
+        }
+        set {
+            _enteredEmailUsers = newValue
+            
+            
+            let hideUserButton = newValue.count == 0 ?  true : false
+            DispatchQueue.main.async {
+                if self.usersButton.isHidden != hideUserButton {
+                    UIView.animate(withDuration: 0.3) {
+                        self.usersButton.isHidden = hideUserButton
+                    } completion: { _ in
+                        
+                    }
+                }
+                
 
+            }
+        }
+    }
+
+    
+    @IBAction func emailUsersPressed(_ sender: UIButton) {
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: "toSelectUserVC", sender: self)
+        }
+    }
 }
 
 // extentions
 
 extension LoginViewController: UITextFieldDelegate {
     
+    
+    func checkUsers(for email: String, completion: @escaping (Bool) -> ()) {
+      //  DispatchQueue.main.async {
+        //    self.ai.show { _ in
+        
+                self.enteredEmailUsers.removeAll()
+                var resultUsers: [String] = []
+                self.loadUsers { users in
+                    for i in 0..<users.count {
+                        if users[i][1] == email {
+                            resultUsers.append(users[i][0])
+                        }
+                    }
+                    
+                    self.enteredEmailUsers = resultUsers
+                    let found = resultUsers.count == 0 ? false : true
+                    completion(found)
+                    if found {
+                        DispatchQueue.main.async {
+                            self.performSegue(withIdentifier: "toSelectUserVC", sender: self)
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            self.showAlert(title: "Email not found!", error: true)
+                        }
+                    }
+                }
+         //   }
+      //  }
+        
+    }
+    
+    
+    func keyChainPassword(nick: String) {
+        if let keychainPassword = KeychainService.loadPassword(service: "BudgetTrackerApp", account: nick) {
+            DispatchQueue.main.async {
+                self.passwordLogLabel.isSecureTextEntry = false
+                self.passwordLogLabel.text = keychainPassword
+                self.nicknameLogLabel.endEditing(true)
+             //   self.message.showMessage(text: "Password loaded from Keychain", type: .succsess, windowHeight: 65)
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.passwordLogLabel.becomeFirstResponder()
+            }
+        }
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         switch textField {
         case nicknameLabelCreate:
-            if textField.text != "" {
+            if textField.text != "" && !(textField.text?.contains("@") ?? true) {
+                
                 DispatchQueue.main.async {
                     self.emailLabel.becomeFirstResponder()
                 }
@@ -1283,20 +1394,24 @@ extension LoginViewController: UITextFieldDelegate {
             }
             
         case nicknameLogLabel:
+            enteredEmailUsers.removeAll()
             if let nick = textField.text {
                 if nick != "" {
-                    if let keychainPassword = KeychainService.loadPassword(service: "BudgetTrackerApp", account: nick) {
+                    
+                    if nick.contains("@") {
                         DispatchQueue.main.async {
-                            self.passwordLogLabel.isSecureTextEntry = false
-                            self.passwordLogLabel.text = keychainPassword
-                            self.nicknameLogLabel.endEditing(true)
-                         //   self.message.showMessage(text: "Password loaded from Keychain", type: .succsess, windowHeight: 65)
+                            textField.endEditing(true)
+                            self.ai.show { _ in
+                                self.checkUsers(for: nick) { found in
+                                }
+                            }
                         }
+                        
                     } else {
-                        DispatchQueue.main.async {
-                            self.passwordLogLabel.becomeFirstResponder()
-                        }
+                        keyChainPassword(nick: nick)
                     }
+                    
+                    
                 } else {
                     DispatchQueue.main.async {
                         self.message.showMessage(text: "Enter username", type: .error, autoHide: false)
@@ -1339,6 +1454,11 @@ extension LoginViewController: UITextFieldDelegate {
         default:
             textField.endEditing(true)
         }
+    }
+    
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        enteredEmailUsers.removeAll()
+        return true
     }
 }
 
@@ -1410,4 +1530,19 @@ extension LoginViewController: accountSettingsVCDelegate {
             }
         }
     }
+}
+
+
+
+
+
+extension LoginViewController: SelectUserVCDelegate {
+    func selected(user: String) {
+        keyChainPassword(nick: user)
+        DispatchQueue.main.async {
+            self.nicknameLogLabel.text = user
+        }
+    }
+    
+    
 }

@@ -369,7 +369,13 @@ class IndicatorView: UIView {
     private var leftFunc: (Any?, Bool)?
     private var hideIndicatorBlockDesibled = true
     func completeWithActions(buttons: (button, button?), title: String? = "Done", descriptionText: String? = nil, descriptionTable: ((String, String), (String, String)?)? = nil, type: ViewType = .standard, showCloseButton: Bool = false) {
-    
+        if !hideIndicatorBlockDesibled {
+        let new = {
+            self.completeWithActions(buttons: buttons, title: title, descriptionText: descriptionText, descriptionTable: descriptionTable, type: type, showCloseButton: showCloseButton)
+        }
+            self.anshowedAIS.append(new)
+        return
+    }
 
         let hideDescription = (descriptionText == nil || descriptionText == "") ? true : false
         let hideDecriptionTable = descriptionTable == nil ? true : false
@@ -378,14 +384,7 @@ class IndicatorView: UIView {
         DispatchQueue.init(label: "\(#function)", qos: .userInteractive).async {
             
         
-            if !self.hideIndicatorBlockDesibled {
-                print(self.hideIndicatorBlockDesibled)
-            let new = {
-                self.completeWithActions(buttons: buttons, title: title, descriptionText: descriptionText, descriptionTable: descriptionTable, type: type, showCloseButton: showCloseButton)
-            }
-                self.anshowedAIS.append(new)
-            return
-        }
+            
         
             self.hideIndicatorBlockDesibled = false
         
@@ -767,23 +766,22 @@ class IndicatorView: UIView {
     var anshowedAIS: [Any] = []
     
     func fastHide(completionn: @escaping (Bool) -> ()) {
-        if !hideIndicatorBlockDesibled {
-            print(hideIndicatorBlockDesibled)
-            return
-        }
         if !isShowing {
             completionn(false)
+            return
+        }
+        if !hideIndicatorBlockDesibled {
             return
         }
         drawed = false
         DispatchQueue.main.async {
             let window = UIApplication.shared.keyWindow ?? UIWindow()
-            UIView.animate(withDuration: 0.3) {
+            UIView.animate(withDuration: 0.10) {
               //  self.closeButton.isHidden = true
                 self.backgroundView.backgroundColor = .clear
                 self.backgroundHelper.backgroundColor = .clear
             } completion: { (_) in
-                UIView.animate(withDuration: 0.22) {
+                UIView.animate(withDuration: 0.25) {
                     self.backgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, window.frame.height + 100, 0)
                 } completion: { (_) in
                     self.titleLabel.font = self.normalTitleSize
@@ -857,8 +855,8 @@ class IndicatorView: UIView {
             
             self.textField.text = ""
             self.repeatePasswordTextField.text = ""
-            self.textField.endEditing(true)
-            self.repeatePasswordTextField.endEditing(true)
+          ///not using  self.textField.endEditing(true)
+        //not using    self.repeatePasswordTextField.endEditing(true)
         }
        /* for textfield in textFields {
             textfield.isHidden = true

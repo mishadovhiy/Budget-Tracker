@@ -1354,6 +1354,7 @@ class ViewController: SuperViewController {
     
     var filterHelperView = UIView(frame: .zero)
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        toggleSideBar(false, animated: true)
         print("prepare")
         selectedCell = nil
         switch segue.identifier {

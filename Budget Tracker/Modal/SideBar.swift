@@ -9,7 +9,7 @@
 import UIKit
 
 class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
-    
+    //toSupportVC
     var tableData:[TableData] {
         let db = DataBase()
         let debts = db.debts.count
@@ -29,6 +29,10 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         let statistic = [
             CellData(name: "Statistic", value: "", segue: "toStatisticVC", image: "chart.pie.fill")
         ]
+        let support = [
+            CellData(name: "Support", value: "", segue: "toSupportVC", image: "")
+        ]
+        //toSupportVC
         //chart.pie.fill - statistic
         let emptySec = TableData(section: [CellData(name: "", value: "", segue: "", image: "")], title: "", hidden: false)
         return [
@@ -36,7 +40,9 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
             emptySec,
             TableData(section: categories, title: "", hidden: false),
             emptySec,
-            TableData(section: statistic, title: "", hidden: false)
+            TableData(section: statistic, title: "", hidden: false),
+            emptySec,
+            TableData(section: support, title: "", hidden: false)
         ]
     }
 
@@ -87,7 +93,6 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         print("sd")
         if tableData[indexPath.section].section[indexPath.row].name != "" {
             DispatchQueue.main.async {
-                ViewController.shared?.toggleSideBar(false, animated: true)
                 ViewController.shared?.performSegue(withIdentifier: self.tableData[indexPath.section].section[indexPath.row].segue, sender: self)
             }
         }
