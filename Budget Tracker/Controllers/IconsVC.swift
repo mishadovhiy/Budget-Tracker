@@ -99,6 +99,13 @@ class IconsVC: UIViewController {
         }
     }
 
+    var screenType:ScreenType = .all
+    enum ScreenType {
+        case all
+        case iconsOnly
+        case colorsOnly
+    }
+    
     let colors:[UIColor] = [
         .yellow, .systemPink, .green, .orange, .red, .blue
     ]
@@ -145,7 +152,11 @@ extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return section == 0 ? colors.count : iconsData[section - 1].data.count
+        
+        let colorsSection = screenType == .all || screenType == .colorsOnly ? colors.count : 0
+        let iconsSection = screenType == .all || screenType == .iconsOnly ? (section == 1 ? iconsData[section - 1].data.count : 0) : 0
+        
+        return section == 0 ? colorsSection : iconsSection
     }
     
     

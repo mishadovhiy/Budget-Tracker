@@ -616,7 +616,8 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         } else {
             if !fromSettings {
                 delegate?.categorySelected(category: tableData[indexPath.section].data[indexPath.row].category, fromDebts: false, amount: 0)
-                navigationController?.popToRootViewController(animated: true)//to prev vc indeed!!!
+                self.navigationController?.popViewController(animated: true)
+            //    navigationController?.popToRootViewController(animated: true)//to prev vc indeed!!!
             } else {
                 if tableData[indexPath.section].data[indexPath.row].editing == nil {
                     toHistory(category: tableData[indexPath.section].data[indexPath.row].category)

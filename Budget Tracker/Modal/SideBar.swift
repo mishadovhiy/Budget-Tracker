@@ -9,17 +9,24 @@
 import UIKit
 
 class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
-    //toSupportVC
+    //toSettingsVC
     var tableData:[TableData] {
         let db = DataBase()
         let debts = db.debts.count
         let pro = appData.proVersion || appData.proTrial
-        var accountSegue:String {
-            let dataCount = (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String]] ?? []).count + (UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String]] ?? []).count + (UserDefaults.standard.value(forKey: K.Keys.localDebts) as? [[String]] ?? []).count
-            return dataCount > 0 ? "toSavedData" : "toAccount"
+        
+        
+        
+        var accpuntCell:CellData {
+            var accountSegue:String {
+                let dataCount = (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String]] ?? []).count + (UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String]] ?? []).count + (UserDefaults.standard.value(forKey: K.Keys.localDebts) as? [[String]] ?? []).count
+                return dataCount > 0 ? "toSavedData" : "toAccount"
+            }
+            return CellData(name: "Account", value: appData.username == "" ? "Log in" : appData.username, segue: accountSegue, image: "person.fill")
         }
         
-        let accountSection = [CellData(name: "Account", value: appData.username == "" ? "Log in" : appData.username, segue: accountSegue, image: "person.fill")]
+        var settingsCell = CellData(name: "Settings", value: "", segue: "toSettingsVC", image: "")
+        
         
         let categories = [
             CellData(name: "Categories", value: "\(db.categories.count - debts)", segue: "toCategories", image: ""),
@@ -36,13 +43,11 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         //chart.pie.fill - statistic
         let emptySec = TableData(section: [CellData(name: "", value: "", segue: "", image: "")], title: "", hidden: false)
         return [
-            TableData(section: accountSection, title: "", hidden: false),
+            TableData(section: [accpuntCell, settingsCell], title: "", hidden: false),
             emptySec,
             TableData(section: categories, title: "", hidden: false),
             emptySec,
             TableData(section: statistic, title: "", hidden: false),
-            emptySec,
-            TableData(section: support, title: "", hidden: false)
         ]
     }
 

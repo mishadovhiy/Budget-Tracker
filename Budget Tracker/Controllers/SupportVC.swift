@@ -18,19 +18,22 @@ class SupportVC: UIViewController, UITextViewDelegate {
         super.viewDidLoad()
 
         textView.delegate = self
-        textView.becomeFirstResponder()
+        
         //textView.addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
         //value did change
         title = "Support message"
 
         let swipe = UISwipeGestureRecognizer(target: self, action: #selector(closeSwipped(_:)))
         let closePress = UISwipeGestureRecognizer(target: self, action: #selector(closePressed(_:)))
-        swipe.direction = .up
+        swipe.direction = .down
         
         self.view.addGestureRecognizer(swipe)
         self.view.addGestureRecognizer(closePress)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        textView.becomeFirstResponder()
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

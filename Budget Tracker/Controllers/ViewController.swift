@@ -209,10 +209,15 @@ class ViewController: SuperViewController {
 
     }
     
+    
+    
+    
     static var shared: ViewController?
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
+        
         ViewController.shared = self
         updateUI()
         if #available(iOS 15.0, *) {
@@ -786,19 +791,42 @@ class ViewController: SuperViewController {
     }
     var timers: [Timer] = []
 
+    override func viewWillDisappear(_ animated: Bool) {
+        safeArreaHelperView?.alpha = 1
+    }
 
+    var safeArreaHelperViewAdded = false
+    
+    var safeArreaHelperView: UIView?
+    
     let center = AppDelegate.shared?.center
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         print("DIDAPPPP")
         sideTableView.reloadData()
         center?.getDeliveredNotifications { notifications in
+            //add notif array that came when app was launched (i have to hendel it by myself)
             DispatchQueue.main.async {
                 UIApplication.shared.applicationIconBadgeNumber = notifications.count
             }
         }
 
-        appData.safeArea = (self.view.safeAreaInsets.top, self.view.safeAreaInsets.bottom)
+        let safeTop = self.view.safeAreaInsets.top
+        self.safeArreaHelperView?.alpha = 0
+        if !safeArreaHelperViewAdded {
+            safeArreaHelperViewAdded = true
+            if let window = AppDelegate.shared?.window {
+                DispatchQueue.main.async {
+                    let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: safeTop))
+                    self.safeArreaHelperView = view
+                    self.safeArreaHelperView?.alpha = 0
+                    view.backgroundColor = K.Colors.primaryBacground
+                    window.addSubview(self.safeArreaHelperView!)
+                }
+            }
+        }
+        
+        appData.safeArea = (safeTop, self.view.safeAreaInsets.bottom)
     }
     
     
@@ -1163,9 +1191,8 @@ class ViewController: SuperViewController {
 
 
     override func viewWillAppear(_ animated: Bool) {
-        
         print("today is", appData.filter.getToday(appData.filter.filterObjects.currentDate))
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
     
 
@@ -1739,17 +1766,20 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("selected")
         if indexPath.section != 0 {
-            if newTableData[indexPath.section-1].transactions[indexPath.row].comment != "" {
-                let previusSelected = selectedCell
-                if selectedCell == indexPath {
-                    selectedCell = nil
-                } else {
-                    selectedCell = indexPath
-                }
-                DispatchQueue.main.async {
-                    self.mainTableView.reloadRows(at: previusSelected != nil ? [indexPath, previusSelected ?? indexPath] : [indexPath], with: .middle)
+            if newTableData[indexPath.section-1].transactions.count != indexPath.row {
+                if newTableData[indexPath.section-1].transactions[indexPath.row].comment != "" {
+                    let previusSelected = selectedCell
+                    if selectedCell == indexPath {
+                        selectedCell = nil
+                    } else {
+                        selectedCell = indexPath
+                    }
+                    DispatchQueue.main.async {
+                        self.mainTableView.reloadRows(at: previusSelected != nil ? [indexPath, previusSelected ?? indexPath] : [indexPath], with: .middle)
+                    }
                 }
             }
+            
         }
     }
     

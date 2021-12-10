@@ -16,6 +16,18 @@ var needFullReload = false
 //log out - if nick != ""
 
 
+
+/*login pressed:
+ if email
+ load users
+ if password == data[i]["password"]
+ go to select user vc and when selected:
+ add to login tf and login pressed
+ 
+ //remove check email on return, check only when login pressed
+*/
+
+
 /*
  r o o l s
  

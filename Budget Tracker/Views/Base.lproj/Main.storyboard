@@ -374,23 +374,23 @@
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="TableViewCell" id="Yoe-FZ-wge" customClass="mainVCcell" customModule="Budget_Tracker" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="154.66666984558105" width="408" height="120"/>
+                                                <rect key="frame" x="0.0" y="154.66666984558105" width="408" height="121"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Yoe-FZ-wge" id="rhd-hO-2oH" userLabel="Cell View">
-                                                    <rect key="frame" x="0.0" y="0.0" width="408" height="120"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="408" height="121"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TsM-0N-KX6">
-                                                            <rect key="frame" x="0.0" y="0.0" width="408" height="120"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="408" height="121"/>
                                                             <subviews>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="gRC-oS-8Jh">
-                                                                    <rect key="frame" x="5" y="12" width="388" height="96"/>
+                                                                    <rect key="frame" x="5" y="12" width="388" height="97"/>
                                                                     <subviews>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x0F-qd-jVS">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="35" height="96"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="35" height="97"/>
                                                                             <subviews>
                                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HYZ-Uz-Asi">
-                                                                                    <rect key="frame" x="0.0" y="38" width="35" height="20"/>
+                                                                                    <rect key="frame" x="0.0" y="38.666666666666664" width="35" height="20"/>
                                                                                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                     <constraints>
                                                                                         <constraint firstAttribute="height" constant="20" id="TbQ-td-L4g"/>
@@ -406,7 +406,7 @@
                                                                             </constraints>
                                                                         </view>
                                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="MZV-uu-Z6n">
-                                                                            <rect key="frame" x="37" y="0.0" width="249" height="96"/>
+                                                                            <rect key="frame" x="37" y="0.0" width="249" height="97"/>
                                                                             <subviews>
                                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AJm-FA-Anu">
                                                                                     <rect key="frame" x="0.0" y="0.0" width="249" height="21"/>
@@ -436,7 +436,7 @@
                                                                                     </constraints>
                                                                                 </view>
                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fJn-PP-aQ1">
-                                                                                    <rect key="frame" x="0.0" y="23" width="249" height="73"/>
+                                                                                    <rect key="frame" x="0.0" y="23" width="249" height="74"/>
                                                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                                                     <color key="textColor" name="balanceTitleColor"/>
                                                                                     <nil key="highlightedColor"/>
@@ -444,7 +444,7 @@
                                                                             </subviews>
                                                                         </stackView>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="3" translatesAutoresizingMaskIntoConstraints="NO" id="jAj-JP-rqH">
-                                                                            <rect key="frame" x="288" y="0.0" width="100" height="96"/>
+                                                                            <rect key="frame" x="288" y="0.0" width="100" height="97"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="100" id="yrc-8r-r6X"/>
                                                                             </constraints>
@@ -484,7 +484,7 @@
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="mainFooterCell" id="YbM-kx-EJN" customClass="mainFooterCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="274.66666984558105" width="408" height="53"/>
+                                                <rect key="frame" x="0.0" y="275.66666984558105" width="408" height="53"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="YbM-kx-EJN" id="gz3-vh-s1H">
                                                     <rect key="frame" x="0.0" y="0.0" width="408" height="53"/>
@@ -895,6 +895,7 @@
                         <segue destination="Idf-nc-cty" kind="show" identifier="toAccount" id="g1u-Db-RGW"/>
                         <segue destination="NIc-Ro-QVQ" kind="show" identifier="toProVC" id="riu-P4-hGQ"/>
                         <segue destination="FwK-rC-fD4" kind="show" identifier="toSupportVC" id="5jl-oe-edg"/>
+                        <segue destination="2ZU-xp-0Yh" kind="show" identifier="toSettingsVC" id="jIk-bo-Flg"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -2808,6 +2809,16 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lMS-zE-gGO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1461" y="-2196"/>
+        </scene>
+        <!--SettingsVC-->
+        <scene sceneID="WD5-I2-TyS">
+            <objects>
+                <viewControllerPlaceholder storyboardName="LogIn" referencedIdentifier="SettingsVC" id="2ZU-xp-0Yh" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="tKw-ng-vGj"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="F0M-0W-oR4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-409" y="-679"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Jwx-Ci-wHe">
