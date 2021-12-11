@@ -58,6 +58,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         
         case categories
         case debts
+        case localData
     }
     
     var screenType: ScreenType = .categories
@@ -94,6 +95,12 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 self.tableData = [
                     ScreenDataStruct(title: "", data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .debt))),
                 ]
+            case .localData:
+                self.tableData = [
+                ScreenDataStruct(title: K.expense, data: resultDict[purposeToString(.expense)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .expense))),
+                ScreenDataStruct(title: K.income, data: resultDict[purposeToString(.income)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .income))),
+                ScreenDataStruct(title: K.income, data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .debt)))
+                ]
             }
             DispatchQueue.main.async {
                 self.editingTF = nil
@@ -113,20 +120,29 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         }
     }
 
-    
+    var transfaringCategories: [NewCategories]?
     func loadData(showError:Bool = false) {
 
-        let load = LoadFromDB()
-        load.newCategories { loadedData, error in
-            self.categories = loadedData
-            if error != .none {
-                if showError {
-                    DispatchQueue.main.async {
-                        self.message.showMessage(text: error == .internet ? "No Interner" : "Error", type: .internetError)
+        if screenType != .localData {
+            let load = LoadFromDB()
+            load.newCategories { loadedData, error in
+                self.categories = loadedData
+                if error != .none {
+                    if showError {
+                        DispatchQueue.main.async {
+                            self.message.showMessage(text: error == .internet ? "No Interner" : "Error", type: .internetError)
+                        }
                     }
                 }
             }
+        } else {
+            if let categories = transfaringCategories {
+                self.categories = categories
+            } else {
+                //load from ud
+            }
         }
+        
     }
     
     
@@ -527,11 +543,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 || section == 1 {
-            return footerHeight// + (safeAreaButton > 0 ? 10 : 0)
-        } else {
-            return 0
-        }
+        return footerHeight
     }
     
     var editingTF: UITextField?
@@ -558,17 +570,24 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             cell.saveButton.isHidden = hideSave
         }*/
         cell.categoryNameLabel.isHidden = true
-        let savePressed = UITapGestureRecognizer(target: self, action: #selector(newCategoryPressed(_:)))
-        savePressed.name = "\(section)"
-        cell.saveButton.addGestureRecognizer(savePressed)
+        if screenType != .localData {
+            let savePressed = UITapGestureRecognizer(target: self, action: #selector(newCategoryPressed(_:)))
+            savePressed.name = "\(section)"
+            cell.saveButton.addGestureRecognizer(savePressed)
+            
+            let iconPressed = UITapGestureRecognizer(target: self, action: #selector(iconTapped(_:)))
+            iconPressed.name = "\(section)"
+            cell.iconimage.addGestureRecognizer(iconPressed)
+            cell.newCategoryTF.backgroundColor = cell.newCategoryTF == editingTF ? K.Colors.primaryBacground : .clear
+            cell.newCategoryTF.delegate = self
+            cell.newCategoryTF.layer.name = "\(section)"
+            cell.newCategoryTF.addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
+        } else {
+            cell.iconimage.isHidden = true
+            cell.editingStack.isHidden = true
+            cell.saveButton.superview?.isHidden = true
+        }
         
-        let iconPressed = UITapGestureRecognizer(target: self, action: #selector(iconTapped(_:)))
-        iconPressed.name = "\(section)"
-        cell.iconimage.addGestureRecognizer(iconPressed)
-        cell.newCategoryTF.backgroundColor = cell.newCategoryTF == editingTF ? K.Colors.primaryBacground : .clear
-        cell.newCategoryTF.delegate = self
-        cell.newCategoryTF.layer.name = "\(section)"
-        cell.newCategoryTF.addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
 
         let view = cell.contentView
         view.isUserInteractionEnabled = true
@@ -609,22 +628,28 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if let editing = editingTF {
-            editingTF = nil
-            toggleIcons(show: false, animated: true)
-            editing.endEditing(true)
+        if screenType == .localData {
+            
         } else {
-            if !fromSettings {
-                delegate?.categorySelected(category: tableData[indexPath.section].data[indexPath.row].category, fromDebts: false, amount: 0)
-                self.navigationController?.popViewController(animated: true)
-            //    navigationController?.popToRootViewController(animated: true)//to prev vc indeed!!!
+            if let editing = editingTF {
+                editingTF = nil
+                toggleIcons(show: false, animated: true)
+                editing.endEditing(true)
             } else {
-                if tableData[indexPath.section].data[indexPath.row].editing == nil {
-                    toHistory(category: tableData[indexPath.section].data[indexPath.row].category)
+                if !fromSettings {
+                    delegate?.categorySelected(category: tableData[indexPath.section].data[indexPath.row].category, fromDebts: false, amount: 0)
+                    self.navigationController?.popViewController(animated: true)
+                //    navigationController?.popToRootViewController(animated: true)//to prev vc indeed!!!
+                } else {
+                    if tableData[indexPath.section].data[indexPath.row].editing == nil {
+                        toHistory(category: tableData[indexPath.section].data[indexPath.row].category)
+                    }
+                    
                 }
-                
             }
         }
+        
+        
 
 
         

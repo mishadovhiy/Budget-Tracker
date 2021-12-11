@@ -620,6 +620,10 @@ class LoginViewController: SuperViewController {
             self.changePasswordTapped()
         }
         
+        let transfareData = {
+            self.transfereData()
+        }
+        
         
         let loggedUserData = [
            // MoreVC.ScreenData(name: "Username", description: "", action: nil),
@@ -628,11 +632,13 @@ class LoginViewController: SuperViewController {
             MoreVC.ScreenData(name: "Change Email", description: userEmail, action: changeEmailAction),
             MoreVC.ScreenData(name: "Change password", description: "", action: changePassword),
             MoreVC.ScreenData(name: "Forgot password", description: "", action: forgotPassword),
+            MoreVC.ScreenData(name: "Transfare data", description: "", action: transfareData),
             MoreVC.ScreenData(name: "Log out", description: "", distructive: true, action: logoutAction),
         ]
         
         let notUserLogged = [
             //MoreVC.ScreenData(name: "Device purchase", description: appData.purchasedOnThisDevice ? "Yes":"No", action: nil),
+            MoreVC.ScreenData(name: "Transfare data", description: "", action: transfareData),
             MoreVC.ScreenData(name: "Forgot password", description: "", action: forgotPassword),
         ]
         
@@ -641,6 +647,52 @@ class LoginViewController: SuperViewController {
     }
     
 
+    func transfereData() {
+        //show ai
+        let nextAction = {
+            let new = EnterValueVC.shared?.enteringValue ?? ""
+            var dbPassword = ""
+            self.loadUsers { users in
+                var found = false
+                for i in 0..<users.count {
+                    if users[i][0] == new {
+                        dbPassword = users[i][2]
+                        found = true
+                    }
+                }
+                
+                if found {
+                    let checkPassword = {
+                        let enteredPassword = EnterValueVC.shared?.enteringValue ?? ""
+                        if enteredPassword == dbPassword {
+                            self.transferingData = TransferingData(nickname: "j", categories: [NewCategories(id: 0, name: "s", icon: "", color: "", purpose: .expense)], transactions: [])
+                            self.performSegue(withIdentifier: "toTransfareData", sender: self)
+                        } else {
+                            //message show not found
+                        }
+                    }
+                    
+                    EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Transfare data", title: "Enter password", placeHolder: "Password", nextAction: checkPassword, screenType: .password))
+                } else {
+                    //message show not found
+                }
+            }
+        }
+
+        self.enterValueVCScreenData = EnterValueVCScreenData(taskName: "Transfare data", title: "Enter username or email", subTitle: nil, placeHolder: "Username or email", nextAction: nextAction, screenType: .email)
+    }
+    
+    
+    var transferingData:TransferingData?
+    
+    struct TransferingData {
+        let nickname: String
+        let categories: [NewCategories]
+        let transactions: [TransactionsStruct]
+        
+    }
+    
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
@@ -663,6 +715,10 @@ class LoginViewController: SuperViewController {
             DispatchQueue.main.async {
                 self.nicknameLogLabel.endEditing(true)
             }
+        case "toTransfareData":
+            let vc = segue.destination as! CategoriesVC
+            vc.screenType = .localData
+            vc.transfaringCategories = transferingData?.categories
         default:
             break
         }

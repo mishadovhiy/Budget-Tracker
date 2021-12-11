@@ -234,12 +234,23 @@
                         <segue destination="CSo-nd-Zvm" kind="unwind" identifier="homeVC" unwindAction="homeVCWithSegue:" id="J2f-dn-705"/>
                         <segue destination="g3f-NZ-v6H" kind="show" identifier="toEnterValueVC" id="jP6-jS-NGM"/>
                         <segue destination="kne-Xe-qMY" kind="show" identifier="toSelectUserVC" id="z8x-ko-zTX"/>
+                        <segue destination="K9e-gj-3Mt" kind="show" identifier="toTransfareData" id="x2Y-ZN-4pP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5fo-pJ-69T" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="CSo-nd-Zvm" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="2134.7826086956525" y="-2476.3392857142858"/>
+        </scene>
+        <!--CategoriesVC-->
+        <scene sceneID="dE8-l7-8D0">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Main" referencedIdentifier="CategoriesVC" id="K9e-gj-3Mt" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="dza-Ce-4fN"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="O9U-9b-dRs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2595" y="-2956"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="SvC-HV-Dqr">

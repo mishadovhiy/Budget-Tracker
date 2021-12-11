@@ -8,6 +8,11 @@
 
 import UIKit
 
+
+//EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Change password", title: "Repeate password", placeHolder: "Password", nextAction: repeatPasAction, screenType: .password))
+
+//self.enterValueVCScreenData = EnterValueVCScreenData(taskName: "Transfare data", title: "Enter username or email", subTitle: nil, placeHolder: "Username or email", nextAction: nextAction, screenType: .email)
+
 var count = 0
 class EnterValueVC:UIViewController, UITextFieldDelegate {
     
@@ -23,7 +28,12 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
     @IBOutlet weak var valueTextField: UITextField!
     
     
-    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if self.screenData?.screenType != .code {
+            valueTextField.becomeFirstResponder()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -140,7 +150,7 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
     let ai = AppDelegate.shared?.ai
     public func showSelfVC(data: EnterValueVCScreenData) {
         DispatchQueue.main.async {
-           // var vcs = self.navigationController?.viewControllers ?? []
+          //  var vcs = self.navigationController?.viewControllers ?? []
            // vcs.removeLast()
             let storyboard = UIStoryboard(name: "LogIn", bundle: nil)
             let vccc = storyboard.instantiateViewController(withIdentifier: "EnterValueVC") as! EnterValueVC
@@ -156,9 +166,7 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
-        if self.screenData?.screenType != .code {
-            valueTextField.becomeFirstResponder()
-        }
+        
         
         
     }
