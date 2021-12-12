@@ -159,8 +159,9 @@ struct LoadFromDB {
     
     
     
-    func newCategories(completion: @escaping ([NewCategories], error) -> ()) {
-        if appData.username == "" {
+    func newCategories(otherUser: String? = nil, completion: @escaping ([NewCategories], error) -> ()) {
+        let user = otherUser == nil ? appData.username : otherUser!
+        if user == "" {
             let local = db.categories
             print(local, "locallocallocallocal")
             completion(local, .none)
@@ -174,7 +175,7 @@ struct LoadFromDB {
                     completion(local, error)
                 } else {
                     var jsonElement = NSDictionary()
-                    let myNik = appData.username
+                    let myNik = user
                     
                     for i in 0..<jsonResult.count {
                         jsonElement = jsonResult[i] as! NSDictionary
@@ -187,8 +188,9 @@ struct LoadFromDB {
                         }
                         
                     }
-
-                    db.categories = loadedData
+                    if otherUser == nil {
+                        db.categories = loadedData
+                    }
                     completion(loadedData, .none)
                 }
             }
@@ -198,8 +200,9 @@ struct LoadFromDB {
     
     
     
-    func newTransactions(completion: @escaping ([TransactionsStruct], error) -> ()) {
-        if appData.username == "" {
+    func newTransactions(otherUser: String? = nil, completion: @escaping ([TransactionsStruct], error) -> ()) {
+        let user = otherUser == nil ? appData.username : otherUser!
+        if user == "" {
             let local = db.transactions
             print(local, "locallocallocallocal")
             completion(local, .none)
@@ -213,7 +216,7 @@ struct LoadFromDB {
                     completion(local, error)
                 } else {
                     var jsonElement = NSDictionary()
-                    let myNik = appData.username
+                    let myNik = user
                     
                     for i in 0..<jsonResult.count {
                         jsonElement = jsonResult[i] as! NSDictionary
@@ -226,8 +229,10 @@ struct LoadFromDB {
                         }
                         
                     }
-
-                    db.transactions = loadedData
+                    if otherUser == nil {
+                        db.transactions = loadedData
+                    }
+                    
                     completion(loadedData, .none)
                 }
             }

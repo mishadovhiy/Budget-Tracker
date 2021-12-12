@@ -76,7 +76,7 @@
                                                                 <constraint firstAttribute="height" constant="120" id="6uh-ki-eX7"/>
                                                                 <constraint firstAttribute="width" constant="120" id="MOF-gF-A4T"/>
                                                             </constraints>
-                                                            <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <color key="color" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </activityIndicatorView>
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -97,7 +97,7 @@
                                                                 <constraint firstAttribute="width" constant="270" id="1q0-de-5xY"/>
                                                             </constraints>
                                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="24"/>
-                                                            <color key="textColor" name="CategoryColor"/>
+                                                            <color key="textColor" name="darkTableColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="description" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="270" translatesAutoresizingMaskIntoConstraints="NO" id="RnQ-6N-yf1">
@@ -106,7 +106,7 @@
                                                                 <constraint firstAttribute="height" relation="lessThanOrEqual" constant="300" id="SUG-BL-E6Z"/>
                                                             </constraints>
                                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                            <color key="textColor" name="balanceTitleColor"/>
+                                                            <color key="textColor" name="balanceValueColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
@@ -262,7 +262,7 @@
                                     </subviews>
                                 </stackView>
                             </subviews>
-                            <color key="backgroundColor" red="0.069876837976200035" green="0.069876837976200035" blue="0.069876837976200035" alpha="0.79975911873538474" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="backgroundColor" red="0.86699998378753662" green="0.86699998378753662" blue="0.86699998378753662" alpha="0.75" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstItem="SlJ-b0-wIK" firstAttribute="leading" secondItem="Nqa-Ge-IxV" secondAttribute="leading" constant="15" id="79e-4q-jac"/>
                                 <constraint firstAttribute="bottom" secondItem="SlJ-b0-wIK" secondAttribute="bottom" constant="15" id="ADd-Tm-OUQ"/>
@@ -336,14 +336,11 @@
         <namedColor name="BlueColor">
             <color red="0.0" green="0.55699998140335083" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="CategoryColor">
-            <color red="0.86699998378753662" green="0.86699998378753662" blue="0.86699998378753662" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="balanceTitleColor">
-            <color red="0.57999998331069946" green="0.57599997520446777" blue="0.57599997520446777" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="balanceValueColor">
             <color red="0.33700001239776611" green="0.33700001239776611" blue="0.33700001239776611" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="darkTableColor">
+            <color red="0.14900000393390656" green="0.14900000393390656" blue="0.14900000393390656" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="linkColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

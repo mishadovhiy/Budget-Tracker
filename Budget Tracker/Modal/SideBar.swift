@@ -17,10 +17,11 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         
         
         
+        
         var accpuntCell:CellData {
             var accountSegue:String {
                 let dataCount = (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String]] ?? []).count + (UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String]] ?? []).count + (UserDefaults.standard.value(forKey: K.Keys.localDebts) as? [[String]] ?? []).count
-                return dataCount > 0 ? "toSavedData" : "toAccount"
+                return "toAccount"//dataCount > 0 ? "toSavedData" : "toAccount"
             }
             return CellData(name: "Account", value: appData.username == "" ? "Log in" : appData.username, segue: accountSegue, image: "person.fill")
         }
@@ -28,10 +29,16 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         var settingsCell = CellData(name: "Settings", value: "", segue: "toSettingsVC", image: "")
         
         
-        let categories = [
+        
+        
+        var categories = [
             CellData(name: "Categories", value: "\(db.categories.count - debts)", segue: "toCategories", image: ""),
             CellData(name: "Debts", value: "\(debts)", segue: pro ? "toDebts" : "toProVC", image: "", pro: pro)
         ]
+        let localCount = ((UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String:Any]] ?? []) + (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String:Any]] ?? [])).count
+        if localCount > 0 {
+            categories.append(CellData(name: "local Data", value: "\(localCount)", segue: "toLocalData", image: ""))
+        }
         
         let statistic = [
             CellData(name: "Statistic", value: "", segue: "toStatisticVC", image: "chart.pie.fill")
@@ -42,6 +49,9 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         //toSupportVC
         //chart.pie.fill - statistic
         let emptySec = TableData(section: [CellData(name: "", value: "", segue: "", image: "")], title: "", hidden: false)
+        
+        
+        
         return [
             TableData(section: [accpuntCell, settingsCell], title: "", hidden: false),
             emptySec,

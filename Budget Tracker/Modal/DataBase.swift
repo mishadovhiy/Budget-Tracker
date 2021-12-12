@@ -30,10 +30,9 @@ class DataBase {
     
 
     
-    
-    func category(_ id: String) -> NewCategories? {
-        
-        let data = UserDefaults.standard.value(forKey: categoriesKey) as? [[String:Any]] ?? []
+    func category(_ id: String, local: Bool = false) -> NewCategories? {
+        //localCategories
+        let data = UserDefaults.standard.value(forKey: !local ? categoriesKey : K.Keys.localCategories) as? [[String:Any]] ?? []
         for i in 0..<data.count {
             if (data[i]["Id"] as? String ?? "") == id {
                 if let new = categoryFrom(data[i]) {
@@ -118,20 +117,20 @@ class DataBase {
 
 
     
-    func deleteCategory(id:String) {
-        let all = UserDefaults.standard.value(forKey: categoriesKey) as? [[String:Any]] ?? []
+    func deleteCategory(id:String, local: Bool = false) {
+        let all = UserDefaults.standard.value(forKey: local ? K.Keys.localCategories : categoriesKey) as? [[String:Any]] ?? []
         var result:[[String:Any]] = []
         for i in 0..<all.count {
             if (all[i]["Id"] as? String ?? "") != "\(id)" {
                 result.append(all[i])
             }
         }
-        UserDefaults.standard.setValue(result, forKey: categoriesKey)
+        UserDefaults.standard.setValue(result, forKey: local ? K.Keys.localCategories : categoriesKey)
     }
     
-    func update(_ category: NewCategories) {
+    func update(_ category: NewCategories, local: Bool = false) {
         ///adds or updates (if not found) local storage
-        var all = UserDefaults.standard.value(forKey: categoriesKey) as? [[String:Any]] ?? []
+        var all = UserDefaults.standard.value(forKey: local ? K.Keys.localCategories : categoriesKey) as? [[String:Any]] ?? []
         var found = false
         let new = categoryToDict(category)
         for i in 0..<all.count {
@@ -141,7 +140,7 @@ class DataBase {
             }
         }
         if found {
-            UserDefaults.standard.setValue(all, forKey: categoriesKey)
+            UserDefaults.standard.setValue(all, forKey: local ? K.Keys.localCategories : categoriesKey)
         } else {
             all.append(new)
         }
@@ -155,9 +154,9 @@ class DataBase {
     
     
     
-    func transactions(for category:NewCategories) -> [TransactionsStruct] {
+    func transactions(for category:NewCategories, local: Bool = false) -> [TransactionsStruct] {
         
-        let trans = UserDefaults.standard.value(forKey: "transactionsData") as? [[String:Any]] ?? []
+        let trans = UserDefaults.standard.value(forKey: !local ? "transactionsData" : K.Keys.localTrancations) as? [[String:Any]] ?? []
         var result:[TransactionsStruct] = []
         for t in 0..<trans.count {
             if (trans[t]["CategoryId"] as? String ?? "") == "\(category.id)" {
@@ -172,53 +171,101 @@ class DataBase {
     
     
     
+    
     var transactions:[TransactionsStruct] {
         get {
             let all = UserDefaults.standard.value(forKey: "transactionsData") as? [[String:Any]] ?? []
-            var result: [TransactionsStruct] = []
-            for i in 0..<all.count {
-                if let new = transactionFrom(all[i]) {
-                    result.append(new)
-                }
-                
-            }
+            let result = dictToTransactions(all: all)
             return result
         }
         set {
-            var result: [[String:Any]] = []
-            for i in 0..<newValue.count {
-                result.append(transactionToDict(newValue[i]))
-            }
+            let result = transactionsToDict(newValue: newValue)
             UserDefaults.standard.setValue(result, forKey: "transactionsData")
         }
     }
+    var localTransactions:[TransactionsStruct] {
+        get {
+            let all = UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String:Any]] ?? []
+            let result = dictToTransactions(all: all)
+            return result
+        }
+        set {
+            let result = transactionsToDict(newValue: newValue)
+            UserDefaults.standard.setValue(result, forKey: K.Keys.localTrancations)
+        }
+    }
+    private func dictToTransactions(all:[[String:Any]]) -> [TransactionsStruct] {
+        var result: [TransactionsStruct] = []
+        for i in 0..<all.count {
+            if let new = transactionFrom(all[i]) {
+                result.append(new)
+            }
+            
+        }
+        return result
+    }
+    private func transactionsToDict(newValue:[TransactionsStruct]) -> [[String:Any]] {
+        var result: [[String:Any]] = []
+        for i in 0..<newValue.count {
+            result.append(transactionToDict(newValue[i]))
+        }
+        return result
+    }
+    
     
 
     var categories: [NewCategories] {
-        
         get {
             let all = UserDefaults.standard.value(forKey: categoriesKey) as? [[String:Any]] ?? []
-            var result: [NewCategories] = []
-            for i in 0..<all.count {
-                if let new = categoryFrom(all[i]) {
-                    result.append(new)
-                }
-                
-            }
+            let result = dictToCategories(all: all)
             return result
         }
         
         set {
-            var result: [[String:Any]] = []
-            for i in 0..<newValue.count {
-                result.append(categoryToDict(newValue[i]))
-            }
+            let result = categoriesToDict(newValue: newValue)
             UserDefaults.standard.setValue(result, forKey: categoriesKey)
         }
     }
+    var localCategories: [NewCategories] {
+        get {
+            let all = UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String:Any]] ?? []
+            let result = dictToCategories(all: all)
+            return result
+        }
+        
+        set {
+            let result = categoriesToDict(newValue: newValue)
+            UserDefaults.standard.setValue(result, forKey: K.Keys.localCategories)
+        }
+    }
+    private func dictToCategories(all:[[String:Any]]) -> [NewCategories] {
+        var result: [NewCategories] = []
+        for i in 0..<all.count {
+            if let new = categoryFrom(all[i]) {
+                result.append(new)
+            }
+            
+        }
+        return result
+    }
+    private func categoriesToDict(newValue:[NewCategories]) -> [[String:Any]] {
+        var result: [[String:Any]] = []
+        for i in 0..<newValue.count {
+            result.append(categoryToDict(newValue[i]))
+        }
+        return result
+    }
     
+    
+    
+    
+    //K.Keys.localTrancations
     var debts: [NewCategories] {
         let all = UserDefaults.standard.value(forKey: categoriesKey) as? [[String:Any]] ?? []
+        let result = debts(all: all)
+        return result
+    }
+    private func debts(all: [[String:Any]]) -> [NewCategories] {
         var result: [NewCategories] = []
         for i in 0..<all.count {
             if let new = categoryFrom(all[i]) {

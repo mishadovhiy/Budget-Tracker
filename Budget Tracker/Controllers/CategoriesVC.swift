@@ -120,7 +120,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         }
     }
 
-    var transfaringCategories: [NewCategories]?
+    var transfaringCategories: LoginViewController.TransferingData?
     func loadData(showError:Bool = false) {
 
         if screenType != .localData {
@@ -136,10 +136,11 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 }
             }
         } else {
-            if let categories = transfaringCategories {
-                self.categories = categories
+            if let transfare = transfaringCategories {
+                self.categories = transfare.categories
             } else {
-                //load from ud
+                //ud
+                self.categories = db.localCategories
             }
         }
         
@@ -149,7 +150,18 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         toggleIcons(show: false, animated: false)
-        title = screenType == .debts ? "Debts" : "Categories"
+        
+        var strTitle:String {
+            switch screenType {
+            case .localData:
+                return "Local data"
+            case .categories:
+                return "Categories"
+            case .debts:
+                return "Debts"
+            }
+        }
+        title = strTitle
         CategoriesVC.shared = self
         updateUI()
         loadData()
@@ -389,7 +401,8 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     var historyDataStruct: [TransactionsStruct] = []
     var selectedCategory: NewCategories?
     func toHistory(category: NewCategories) {
-        historyDataStruct = db.transactions(for: category)
+        let localData = transfaringCategories?.transactions ?? []//or ud local
+        historyDataStruct = screenType != .localData ? db.transactions(for: category) : localData
         
         selectedCategory = category
         DispatchQueue.main.async {
@@ -420,7 +433,8 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             vc.historyDataStruct = historyDataStruct
             vc.selectedCategory = selectedCategory
             vc.fromCategories = true
-            vc.allowEditing = selectedCategory?.purpose == .debt ? true : false
+            vc.allowEditing = screenType != .localData ? (selectedCategory?.purpose == .debt ? true : false) : false
+            vc.screenType = screenType != .localData ? .db : transfaringCategories == nil ? .localData : .unsaved
         case "toDebts":
             if segue.identifier == "toDebts" {
                 let vc = segue.destination as! DebtsVC
@@ -471,58 +485,128 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
     let tableCorners:CGFloat = 10
     
+    var screenDescription: String = ""
+    
     func numberOfSections(in tableView: UITableView) -> Int {
-        return tableData.count //fromSettings ? 2 : 3//darkAppearence ? 3 : 2
+        return tableData.count + 2 //fromSettings ? 2 : 3//darkAppearence ? 3 : 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableData[section].data.count
+        if section == 0 {
+            return screenDescription == "" ? 0 : 1
+        } else {
+            if section == 1 {
+                return screenType == .localData ? 1 : 0
+            } else {
+                return tableData[section - 2].data.count
+            }
+        }
+        
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return tableData[section].title
+        if section == 0 || section == 1 {
+            return nil
+        } else {
+            return tableData[section - 2].title
+        }
+        
+    }
+    
+    func saveToLocal() {
+        if let transfaring = transfaringCategories {
+            db.localCategories = transfaring.categories
+            db.localTransactions = transfaring.transactions
+            transfaringCategories = nil
+            screenType = .localData
+            loadData()
+        }
+        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        if indexPath.section == 0 {
+            return UITableViewCell()
+        } else {
+            if indexPath.section == 1 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "LocalDataActionCell", for: indexPath) as! LocalDataActionCell
+                
+                cell.load()
+                
+                let hideDownload = transfaringCategories == nil ? true : false
+                
+                if cell.sendPressed.isHidden != !hideDownload {
+                    cell.sendPressed.isHidden = !hideDownload
+                }
+                if cell.deletePressed.isHidden != !hideDownload {
+                    cell.deletePressed.isHidden = !hideDownload
+                }
+                
+                if cell.saveLocallyView.isHidden != hideDownload {
+                    cell.saveLocallyView.isHidden = hideDownload
+                }
 
-        let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent, for: indexPath) as! categoriesVCcell
-        cell.lo(index: indexPath, footer: nil)
-        let selected = UIView(frame: .zero)
-        selected.backgroundColor = K.Colors.primaryBacground
-        cell.selectedBackgroundView = selected
-        let category = tableData[indexPath.section].data[indexPath.row]
+                let deleteAction = {
+                    self.db.localCategories = []
+                    self.db.localTransactions = []
+                    DispatchQueue.main.async {
+                        self.navigationController?.popToRootViewController(animated: true)
+                    }
+                }
+                
+                
+                
+                cell.saveAction = saveToLocal
+                cell.deleteAction = deleteAction
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent, for: indexPath) as! categoriesVCcell
+                
+                let index = IndexPath(row: indexPath.row, section: indexPath.section - 2)
+                cell.lo(index: index, footer: nil)
+                let selected = UIView(frame: .zero)
+                selected.backgroundColor = K.Colors.primaryBacground
+                cell.selectedBackgroundView = selected
+                let category = tableData[index.section].data[indexPath.row]
 
-        cell.accessoryType = category.editing != nil ? .none : .disclosureIndicator
-        let hideEditing = category.editing != nil ? false : true
-        let hideQnt = !hideEditing
-        let hideTitle = !hideEditing
+                cell.accessoryType = category.editing != nil ? .none : .disclosureIndicator
+                let hideEditing = category.editing != nil ? false : true
+                let hideQnt = !hideEditing
+                let hideTitle = !hideEditing
 
-        if cell.editingStack.isHidden != hideEditing {
-            cell.editingStack.isHidden = hideEditing
+                if cell.editingStack.isHidden != hideEditing {
+                    cell.editingStack.isHidden = hideEditing
+                }
+                if cell.qntLabel.superview?.isHidden ?? false != hideQnt {
+                    cell.qntLabel.superview?.isHidden = hideQnt
+                }
+                if cell.categoryNameLabel.isHidden != hideTitle {
+                    cell.categoryNameLabel.isHidden = hideTitle
+                }
+                cell.qntLabel.text = "\(category.category.transactions.count)"
+                cell.iconimage.image = category.editing == nil ? iconNamed(category.category.icon) : iconNamed(category.editing?.icon)
+                cell.iconimage.tintColor = category.editing == nil ? colorNamed(category.category.color) : colorNamed(category.editing?.color)
+                cell.categoryNameLabel.text = category.category.name
+                cell.newCategoryTF.backgroundColor = cell.newCategoryTF == editingTF ? K.Colors.primaryBacground : .clear
+                cell.newCategoryTF.text = category.editing?.name ?? category.category.name
+                //
+                cell.lo(index: index, footer: nil)
+                /*if endAll {
+                    cell.newCategoryTF.endEditing(true)
+                }*/
+                return cell
+            }
         }
-        if cell.qntLabel.superview?.isHidden ?? false != hideQnt {
-            cell.qntLabel.superview?.isHidden = hideQnt
-        }
-        if cell.categoryNameLabel.isHidden != hideTitle {
-            cell.categoryNameLabel.isHidden = hideTitle
-        }
-        cell.qntLabel.text = "\(category.category.transactions.count)"
-        cell.iconimage.image = category.editing == nil ? iconNamed(category.category.icon) : iconNamed(category.editing?.icon)
-        cell.iconimage.tintColor = category.editing == nil ? colorNamed(category.category.color) : colorNamed(category.editing?.color)
-        cell.categoryNameLabel.text = category.category.name
-        cell.newCategoryTF.backgroundColor = cell.newCategoryTF == editingTF ? K.Colors.primaryBacground : .clear
-        cell.newCategoryTF.text = category.editing?.name ?? category.category.name
-        //
-        cell.lo(index: indexPath, footer: nil)
-        /*if endAll {
-            cell.newCategoryTF.endEditing(true)
-        }*/
-        return cell
+        
+        
     }
     
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-
+        if section == 0 || section == 1 {
+            return nil
+        } else {
         let mainFrame = tableView.frame
         let view = UIView(frame: CGRect(x: 0, y: 0, width: mainFrame.width, height: footerHeight))
         let helperView = UIView(frame: CGRect(x: 0, y: 10, width:mainFrame.width, height: footerHeight - 10))
@@ -531,29 +615,38 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         helperView.backgroundColor = K.Colors.secondaryBackground//darkAppearence ? .black : .white
         view.backgroundColor = self.view.backgroundColor
         let label = UILabel(frame: CGRect(x: 10, y: 15, width: mainFrame.width - 40, height: 20))
-        label.text = tableData[section].title
+        label.text = tableData[section - 2].title
         label.textColor = K.Colors.balanceV
         label.font = .systemFont(ofSize: 14, weight: .medium)
         view.addSubview(helperView)
         view.addSubview(label)
 
-        label.text = tableData[section].title ?? ""
+        label.text = tableData[section - 2].title ?? ""
         return view
-        
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return footerHeight
+        if section == 0 || section == 1 {
+            return 0
+        } else {
+            return footerHeight
+        }
+        
     }
     
     var editingTF: UITextField?
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        if section == 0 || section == 1 {
+            return nil
+        } else {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent) as! categoriesVCcell
         /*let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell") as! CategoryCell
 */
+            let sect = section - 2
         //show only footer
-        let category = tableData[section].newCategory.category
-        cell.lo(index: nil, footer: section)
+        let category = tableData[sect].newCategory.category
+        cell.lo(index: nil, footer: sect)
         cell.newCategoryTF.text = category.name
         cell.iconimage.image = iconNamed(category.icon)
         cell.iconimage.tintColor = colorNamed(category.color)
@@ -572,15 +665,15 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         cell.categoryNameLabel.isHidden = true
         if screenType != .localData {
             let savePressed = UITapGestureRecognizer(target: self, action: #selector(newCategoryPressed(_:)))
-            savePressed.name = "\(section)"
+            savePressed.name = "\(sect)"
             cell.saveButton.addGestureRecognizer(savePressed)
             
             let iconPressed = UITapGestureRecognizer(target: self, action: #selector(iconTapped(_:)))
-            iconPressed.name = "\(section)"
+            iconPressed.name = "\(sect)"
             cell.iconimage.addGestureRecognizer(iconPressed)
             cell.newCategoryTF.backgroundColor = cell.newCategoryTF == editingTF ? K.Colors.primaryBacground : .clear
             cell.newCategoryTF.delegate = self
-            cell.newCategoryTF.layer.name = "\(section)"
+            cell.newCategoryTF.layer.name = "\(sect)"
             cell.newCategoryTF.addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
         } else {
             cell.iconimage.isHidden = true
@@ -598,56 +691,82 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         cell.footerBackground.layer.cornerRadius = tableCorners
         cell.footerBackground.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         return view
-
+    }
     }
 
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
 
-        if indexPath.section != 2 {
-            let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
-                //self.tableActionActivityIndicator.startAnimating()
-                self.deteteCategory(at: indexPath)
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
+            //self.tableActionActivityIndicator.startAnimating()
+            self.deteteCategory(at: indexPath)
+        }
+        deleteAction.backgroundColor = K.Colors.negative
+        
+        let editAction = UIContextualAction(style: .destructive, title: "Edit") {  (contextualAction, view, boolValue) in
+            //self.tableActionActivityIndicator.startAnimating()
+            self.tableData[indexPath.section].data[indexPath.row].editing = self.tableData[indexPath.section].data[indexPath.row].category
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
             }
-            deleteAction.backgroundColor = K.Colors.negative
-            
-            let editAction = UIContextualAction(style: .destructive, title: "Edit") {  (contextualAction, view, boolValue) in
-                //self.tableActionActivityIndicator.startAnimating()
-                self.tableData[indexPath.section].data[indexPath.row].editing = self.tableData[indexPath.section].data[indexPath.row].category
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            }
-            editAction.backgroundColor = K.Colors.yellow
-            
-            return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
-        } else {
+        }
+        editAction.backgroundColor = K.Colors.yellow
+        
+        
+        
+        if indexPath.section == 0 || indexPath.section == 1 {
             return nil
+        } else {
+            if screenType == .localData {
+                //delete cate from local
+                //
+                return transfaringCategories == nil ? UISwipeActionsConfiguration(actions: [deleteAction, editAction]) : nil
+            } else {
+                return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
+            }
+            
+            
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        if screenType == .localData {
-            
+        if indexPath.section == 0 || indexPath.section == 1 {
         } else {
-            if let editing = editingTF {
-                editingTF = nil
-                toggleIcons(show: false, animated: true)
-                editing.endEditing(true)
+            let dataIndex = IndexPath(row: indexPath.row, section: indexPath.section - 2)
+            
+            if let delegate = delegate {
+                delegate.categorySelected(category: tableData[dataIndex.section].data[dataIndex.row].category, fromDebts: false, amount: 0)
+                self.navigationController?.popViewController(animated: true)
             } else {
-                if !fromSettings {
-                    delegate?.categorySelected(category: tableData[indexPath.section].data[indexPath.row].category, fromDebts: false, amount: 0)
-                    self.navigationController?.popViewController(animated: true)
-                //    navigationController?.popToRootViewController(animated: true)//to prev vc indeed!!!
+                if tableData[dataIndex.section].data[dataIndex.row].editing == nil {
+                    toHistory(category: tableData[dataIndex.section].data[dataIndex.row].category)
+                }
+            }
+            
+            /*if screenType == .localData {
+                
+            } else {
+                if let editing = editingTF {
+                    editingTF = nil
+                    toggleIcons(show: false, animated: true)
+                    editing.endEditing(true)
                 } else {
-                    if tableData[indexPath.section].data[indexPath.row].editing == nil {
-                        toHistory(category: tableData[indexPath.section].data[indexPath.row].category)
+                    
+                    if !fromSettings {
+                        delegate?.categorySelected(category: tableData[dataIndex.section].data[dataIndex.row].category, fromDebts: false, amount: 0)
+                        self.navigationController?.popViewController(animated: true)
+                    //    navigationController?.popToRootViewController(animated: true)//to prev vc indeed!!!
+                    } else {
+                        if tableData[indexPath.section].data[indexPath.row].editing == nil {
+                            toHistory(category: tableData[dataIndex.section].data[dataIndex.row].category)
+                        }
+                        
                     }
                     
                 }
-            }
+            }*/
         }
+        
         
         
 
@@ -916,6 +1035,51 @@ class categoriesVCcell: UITableViewCell {
             CategoriesVC.shared?.toggleIcons(show: false, animated: true)
         }
 
+    }
+    
+}
+
+
+
+
+
+class LocalDataActionCell: UITableViewCell {
+    
+    @IBOutlet weak var deletePressed: UIView!
+    @IBOutlet weak var sendPressed: UIView!
+    @IBOutlet weak var saveLocallyView: UIView!
+    
+    @IBOutlet weak var deleteLabel: UILabel!
+    
+    var saveAction:(() -> ())?
+    var sendAction:(() -> ())?
+    var deleteAction:(() -> ())?
+    
+    func load() {
+        let savePressed = UITapGestureRecognizer(target: self, action: #selector(saveLocallyPress(_:)))
+        self.saveLocallyView.addGestureRecognizer(savePressed)
+        
+        let sendGesture = UITapGestureRecognizer(target: self, action: #selector(sendPress(_:)))
+        self.sendPressed.addGestureRecognizer(sendGesture)
+        
+        let deleteGesture = UITapGestureRecognizer(target: self, action: #selector(deletePress(_:)))
+        self.deletePressed.addGestureRecognizer(deleteGesture)
+    }
+    
+    @objc func saveLocallyPress(_ sender: UITapGestureRecognizer) {
+        if let action = saveAction {
+            action()
+        }
+    }
+    @objc func sendPress(_ sender: UITapGestureRecognizer) {
+        if let action = sendAction {
+            action()
+        }
+    }
+    @objc func deletePress(_ sender: UITapGestureRecognizer) {
+        if let action = deleteAction {
+            action()
+        }
     }
     
 }

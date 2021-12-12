@@ -98,7 +98,7 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
                 
              //   DispatchQueue.main.async {
                     UIView.animate(withDuration: 0.3) {
-                        self.mainStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, (dif / 2) - 20, 0)
+                        self.mainStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, ((dif / 2) - 20) / 2, 0)
                     }
                // }
             }

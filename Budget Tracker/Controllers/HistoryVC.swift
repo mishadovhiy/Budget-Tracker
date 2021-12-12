@@ -79,12 +79,27 @@ class HistoryVC: SuperViewController {
             self.addTransButton.layer.cornerRadius = self.addTransButton.layer.frame.width / 2
             //self.addTransButton.layer.masksToBounds = true
      //   }
-        getDebtData()
+        if screenType == .db {
+            getDebtData()
+        }
+        
         
         //here exp
         
     }
-
+    @IBOutlet weak var trashButton: UIButton!
+    
+    @IBAction func trashPressed(_ sender: UIButton) {
+    }
+    var screenType: ScreenType = .db
+    
+    enum ScreenType {
+        case localData
+        case allData
+        case unsaved//when transfar data from
+        case db
+    }
+    
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
        notificationReceiver(notification: notification)
     }

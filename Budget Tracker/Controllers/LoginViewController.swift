@@ -648,14 +648,13 @@ class LoginViewController: SuperViewController {
     
 
     func transfereData() {
-        //show ai
         let nextAction = {
-            let new = EnterValueVC.shared?.enteringValue ?? ""
+            let enteredUser = EnterValueVC.shared?.enteringValue ?? ""
             var dbPassword = ""
             self.loadUsers { users in
                 var found = false
                 for i in 0..<users.count {
-                    if users[i][0] == new {
+                    if users[i][0] == enteredUser {
                         dbPassword = users[i][2]
                         found = true
                     }
@@ -665,8 +664,33 @@ class LoginViewController: SuperViewController {
                     let checkPassword = {
                         let enteredPassword = EnterValueVC.shared?.enteringValue ?? ""
                         if enteredPassword == dbPassword {
-                            self.transferingData = TransferingData(nickname: "j", categories: [NewCategories(id: 0, name: "s", icon: "", color: "", purpose: .expense)], transactions: [])
-                            self.performSegue(withIdentifier: "toTransfareData", sender: self)
+                            
+                            
+                            
+                            
+                            self.load.newTransactions(otherUser: enteredUser) { loadedTransactions, errorTransactions in
+                                if errorTransactions == .none {
+                                    //loadTransactionsCategories
+                                    
+                                    self.load.newCategories(otherUser: enteredUser) { loaedCategories, categoriesError in
+                                        if categoriesError == .none {
+                                            
+                                            self.transferingData = TransferingData(nickname: enteredUser, categories: loaedCategories, transactions: loadedTransactions)
+                                            DispatchQueue.main.async {
+                                                self.performSegue(withIdentifier: "toTransfareData", sender: self)
+                                            }
+                                        }
+                                    }
+                                    
+                                    
+                                } else {
+                                    self.showAlert(title: "Error loading data", text: nil, error: true)
+                                }
+                            }
+                            
+                            
+                            
+                            
                         } else {
                             //message show not found
                         }
@@ -718,7 +742,7 @@ class LoginViewController: SuperViewController {
         case "toTransfareData":
             let vc = segue.destination as! CategoriesVC
             vc.screenType = .localData
-            vc.transfaringCategories = transferingData?.categories
+            vc.transfaringCategories = transferingData
         default:
             break
         }

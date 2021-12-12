@@ -444,12 +444,12 @@ class ViewController: SuperViewController {
     func updateDataLabels(reloadAndAnimate: Bool = true, noData: Bool = false) {
         print("updateDataLabelsCalled")
         let unsendedCount = appData.unsendedData.count
-        let localCount = ((UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String]] ?? []) + (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String]] ?? []) + (UserDefaults.standard.value(forKey: K.Keys.localDebts) as? [[String]] ?? [])).count
-        let prevName = UserDefaults.standard.value(forKey: "prevUserName") as? String ?? "previous account"
+        let localCount = ((UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String:Any]] ?? []) + (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String:Any]] ?? [])).count
+       // let prevName = UserDefaults.standard.value(forKey: "prevUserName") as? String ?? "previous account"
 
         DispatchQueue.main.async {
             self.unsendedDataLabel.text = "\(unsendedCount)"
-            self.dataFromTitleLabel.text = "Data from \(prevName == "" ? "previous account" : prevName):"
+            self.dataFromTitleLabel.text = "Local data:"//"Data from \(prevName == "" ? "previous account" : prevName):"
             self.dataFromValueLabel.text = "\(localCount)"
             if reloadAndAnimate {
                 UIView.animate(withDuration: noData ? 0.0 : 0.35) {
@@ -1390,8 +1390,9 @@ class ViewController: SuperViewController {
             let vc = segue.destination as! CategoriesVC
             vc.fromSettings = true
             vc.screenType = .debts
-        case "toCategories":
+        case "toCategories", "toLocalData":
             let vc = segue.destination as! CategoriesVC
+            vc.screenType = segue.identifier == "toLocalData" ? .localData : .categories
             vc.fromSettings = true
         case "toFiterVC":
             self.mainTableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
