@@ -329,8 +329,8 @@ struct SaveToDB {
             let data = toDataString != nil ? toDataString! : "&Nickname=\(appData.username)" + "&CategoryId=\(transaction.categoryID)" + "&Amount=\(transaction.value)" + "&Date=\(transaction.date)" + "&Comment=\(transaction.comment)"
             save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-NewTransaction.php", toDataString: data, error: { (error) in
                 if error {
-                    if let toDataString = toDataString {
-                        appData.unsendedData.append(["transactionNew": toDataString])
+                    if toDataString == nil {
+                        appData.unsendedData.append(["transactionNew": data])
                     }
                     
                 }
@@ -369,8 +369,8 @@ struct SaveToDB {
             let data = toDataString != nil ? toDataString! : "&Nickname=\(appData.username)" + "&Id=\(category.id)" + "&Name=\(category.name)" + "&Icon=\(category.icon)" + "&Color=\(category.color)" + "&Purpose=\(pupose)" + amount + dueDate
             save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/new-NewCategory.php", toDataString: data, error: { (error) in
                 if error {
-                    if let toDataString = toDataString {
-                        appData.unsendedData.append(["categoryNew": toDataString])
+                    if toDataString == nil {
+                        appData.unsendedData.append(["categoryNew": data])
                     }
                     
                 }
@@ -535,8 +535,8 @@ struct DeleteFromDB {
             let data = toDataString != nil ? toDataString! : "&Nickname=\(appData.username)" + "&Id=\(category.id)" + "&Name=\(category.name)" + "&Icon=\(category.icon)" + "&Color=\(category.color)" + "&Purpose=\(pupose)" + amount + dueDate
             delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-NewCategory.php", toDataString: data, error: { (error) in
                 if error {
-                    if let toDataString = toDataString {
-                        appData.unsendedData.append(["deleteCategoryNew": toDataString])
+                    if toDataString == nil {
+                        appData.unsendedData.append(["deleteCategoryNew": data])
                     }
                     
                 }
@@ -552,34 +552,20 @@ struct DeleteFromDB {
     
     func newTransaction(_ transaction: TransactionsStruct, toDataString:String? = nil, completion: @escaping (Bool) -> ()) {
         if appData.username == "" {
-            var all = db.transactions
-            for i in 0..<all.count {
-                if all[i].categoryID == transaction.categoryID && all[i].comment == transaction.comment && all[i].date == transaction.date && all[i].value == transaction.value {
-                    all.remove(at: i)
-                }
-            }
-            db.transactions = all
+            db.deleteTransaction(transaction: transaction)
             completion(false)
         } else {
 
             let data = toDataString != nil ? toDataString! : "&Nickname=\(appData.username)" + "&CategoryId=\(transaction.categoryID)" + "&Amount=\(transaction.value)" + "&Date=\(transaction.date)" + "&Comment=\(transaction.comment)"
             delete(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/delete-NewTransaction.php", toDataString: data, error: { (error) in
                 if error {
-                    if let toDataString = toDataString {
-                        appData.unsendedData.append(["deleteTransactionNew": toDataString])
+                    if toDataString == nil {
+                        appData.unsendedData.append(["deleteTransactionNew": data])
                     }
                     
                 }
                 if toDataString == nil {
-                    let all = db.transactions
-                    var new:[TransactionsStruct] = []
-                    for i in 0..<all.count {
-                        if all[i].categoryID == transaction.categoryID && all[i].comment == transaction.comment && all[i].date == transaction.date && all[i].value == transaction.value {
-                        } else {
-                            new.append(all[i])
-                        }
-                    }
-                    db.transactions = new
+                    db.deleteTransaction(transaction: transaction)
                 }
                 
                 completion(error)

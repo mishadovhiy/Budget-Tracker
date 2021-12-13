@@ -58,15 +58,19 @@ class HistoryVC: SuperViewController {
         print(selectedPurposeH, "selectedPurposeselectedPurposeH didlo")
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
                 NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        if !allowEditing {
+        
+        if allowEditing {
          //   DispatchQueue.main.async {
-                self.addTransButton.alpha = 0
-           // }
-        } else {
+
             addTransButton.layer.shadowColor = UIColor.black.cgColor
             addTransButton.layer.shadowOpacity = 0.15
             addTransButton.layer.shadowOffset = .zero
             addTransButton.layer.shadowRadius = 10
+            if mainType == .db  {
+                self.addTransButton.alpha = 1
+            }
+
+           // }
         }
         transactionAdded = false
         historyDataStruct = historyDataStruct.sorted{ $0.dateFromString < $1.dateFromString }
@@ -79,7 +83,7 @@ class HistoryVC: SuperViewController {
             self.addTransButton.layer.cornerRadius = self.addTransButton.layer.frame.width / 2
             //self.addTransButton.layer.masksToBounds = true
      //   }
-        if screenType == .db {
+        if mainType == .db {
             getDebtData()
         }
         
@@ -87,13 +91,11 @@ class HistoryVC: SuperViewController {
         //here exp
         
     }
-    @IBOutlet weak var trashButton: UIButton!
+
     
-    @IBAction func trashPressed(_ sender: UIButton) {
-    }
-    var screenType: ScreenType = .db
+    var mainType: HistDataType = .db
     
-    enum ScreenType {
+    enum HistDataType {
         case localData
         case allData
         case unsaved//when transfar data from
@@ -758,8 +760,29 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
 
         if indexPath.section == 1 {
             let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
+                switch self.mainType {
+                case .localData, .allData:
+                    if let cat = self.selectedCategory {
+                        self.db.deleteTransaction(transaction: self.historyDataStruct[indexPath.row], local: true)
+                        self.historyDataStruct = self.db.transactions(for: cat, local: true)
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
+                    }
+                    
+                case .db:
+                    let delete = DeleteFromDB()
+                    delete.newTransaction(self.historyDataStruct[indexPath.row]) { _ in
+                        self.historyDataStruct.remove(at: indexPath.row)
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
+                    }
+                default :
+                    break
+                }
                 
-                let mainFrame = view.frame
+                /*let mainFrame = view.frame
                 let ai = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: mainFrame.width, height: mainFrame.height))
                 ai.style = .gray
                 view.addSubview(ai)
@@ -809,11 +832,11 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                     }
-                }
+                }*/
                 
             }
             deleteAction.backgroundColor = K.Colors.negative
-            return historyDataStruct.count == 0 ? nil : UISwipeActionsConfiguration(actions: allowEditing ? [deleteAction] : [])
+            return historyDataStruct.count == 0 ? nil : UISwipeActionsConfiguration(actions: allowEditing && mainType != .unsaved ? [deleteAction] : [])
         } else {
             //check if debts has total amount
             return nil
@@ -838,42 +861,46 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
     }*/
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         DispatchQueue.main.async {
             self.tableView.deselectRow(at: indexPath, animated: true)
         }
-        if indexPath.section == 2 {
-            DispatchQueue.main.async {
-                if self.selectedCategory?.purpose != .debt {
-                    return
+        if mainType  == .db {
+            if indexPath.section == 2 {
+                DispatchQueue.main.async {
+                    if self.selectedCategory?.purpose != .debt {
+                        return
+                    }
+                    if self.selectedCategory?.amountToPay ?? 0.0 != 0.0 && !self.calendarAmountPressed.1 {
+                        let isPressed = self.calendarAmountPressed.1 ? false : true
+                        print(isPressed, "isPressedisPressedisPressed")
+                        self.calendarAmountPressed = (false, isPressed)
+                        tableView.reloadData()
+                    } else {
+                        self.calendarAmountPressed = (false,false)
+                        tableView.reloadData()
+                    }
                 }
-                if self.selectedCategory?.amountToPay ?? 0.0 != 0.0 && !self.calendarAmountPressed.1 {
-                    let isPressed = self.calendarAmountPressed.1 ? false : true
-                    print(isPressed, "isPressedisPressedisPressed")
-                    self.calendarAmountPressed = (false, isPressed)
-                    tableView.reloadData()
-                } else {
-                    self.calendarAmountPressed = (false,false)
-                    tableView.reloadData()
-                }
-            }
-        } else {
-            if indexPath.section == 0 {
-                if self.selectedCategory?.dueDate != nil && !self.calendarAmountPressed.0 {
-                    let isPressed = calendarAmountPressed.0 ? false : true
-                    print(isPressed, "isPressedisPressedisPressed")
-                    calendarAmountPressed = (isPressed, false)
-                    tableView.reloadData()
+            } else {
+                if indexPath.section == 0 {
+                    if self.selectedCategory?.dueDate != nil && !self.calendarAmountPressed.0 {
+                        let isPressed = calendarAmountPressed.0 ? false : true
+                        print(isPressed, "isPressedisPressedisPressed")
+                        calendarAmountPressed = (isPressed, false)
+                        tableView.reloadData()
+                    } else {
+                        calendarAmountPressed = (false,false)
+                        tableView.reloadData()
+                    }
                 } else {
                     calendarAmountPressed = (false,false)
                     tableView.reloadData()
                 }
-            } else {
-                calendarAmountPressed = (false,false)
-                tableView.reloadData()
+                
             }
-            
         }
+        
+        
+        
         
     }
     
@@ -905,10 +932,14 @@ extension HistoryVC: TransitionVCProtocol {
         if value != "" && category != "" && date != "" {
                     let save = SaveToDB()
                     save.newTransaction(new) { error in
-                        self.selectedCategory = self.db.category(category)
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
+                        if let category = self.selectedCategory {
+                            self.historyDataStruct = self.db.transactions(for: category)
+                            DispatchQueue.main.async {
+                                self.tableView.reloadData()
+                            }
                         }
+
+                        
                     }
 
                 }

@@ -73,33 +73,65 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         set {
             _categories = newValue
             var resultDict: [String:[ScreenCategory]] = [:]
-
+            //load transactions (depending on what screen type)
             print("newValue::", newValue.count)
+            
+
+            
             for i in 0..<newValue.count {
                 let purpose = newValue[i].purpose
                 let strPurpose = purposeToString(purpose)
                 var data = resultDict[strPurpose] ?? []
-                data.append(ScreenCategory(category: newValue[i]))
+                //set transactions and dont set in
+                
+
+                var transactions:[TransactionsStruct] {
+                    if self.screenType != .localData {
+                        return db.transactions(for: newValue[i])
+                    } else {
+                        var all: [TransactionsStruct] {
+                            if let transfaring = transfaringCategories  {
+                                return transfaring.transactions
+                            } else {
+                                return db.localTransactions
+                            }
+                        }
+                        var transResult:[TransactionsStruct] = []
+                        for t in 0..<all.count {
+                            if "\(newValue[i].id)" == all[t].categoryID {
+                                transResult.append(all[t])
+                            }
+                        }
+                        return transResult
+                        
+                        
+                    }
+                     //?  : (transfaringCategories != nil ? (transfaringCategories?.transactions ?? []) : )
+                }
+                
+                data.append(ScreenCategory(category: newValue[i], transactions: transactions))
                 resultDict.updateValue(data, forKey: strPurpose)
                 
             }
 
             
+            
+            
             switch self.screenType {
             case .categories:
                 self.tableData = [
-                    ScreenDataStruct(title: K.expense, data: resultDict[purposeToString(.expense)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .expense))),
-                    ScreenDataStruct(title: K.income, data: resultDict[purposeToString(.income)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .income)))
+                    ScreenDataStruct(title: K.expense, data: resultDict[purposeToString(.expense)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .expense), transactions: [])),
+                    ScreenDataStruct(title: K.income, data: resultDict[purposeToString(.income)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .income), transactions: []))
                 ]
             case .debts:
                 self.tableData = [
-                    ScreenDataStruct(title: "", data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .debt))),
+                    ScreenDataStruct(title: "", data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .debt), transactions: [])),
                 ]
             case .localData:
                 self.tableData = [
-                ScreenDataStruct(title: K.expense, data: resultDict[purposeToString(.expense)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .expense))),
-                ScreenDataStruct(title: K.income, data: resultDict[purposeToString(.income)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .income))),
-                ScreenDataStruct(title: K.income, data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .debt)))
+                    ScreenDataStruct(title: K.expense, data: resultDict[purposeToString(.expense)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .expense), transactions: [])),
+                    ScreenDataStruct(title: K.expense, data: resultDict[purposeToString(.income)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .income), transactions: [])),
+                    ScreenDataStruct(title: purposeToString(.debt), data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .debt), transactions: []))
                 ]
             }
             DispatchQueue.main.async {
@@ -314,8 +346,16 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         }
     }
 
+    var appeareDidCall = false
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
+        if appeareDidCall {
+            categories = _categories
+        } else {
+            appeareDidCall = true
+        }
+        
         if transactionAdded {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
@@ -400,11 +440,11 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
     var historyDataStruct: [TransactionsStruct] = []
     var selectedCategory: NewCategories?
-    func toHistory(category: NewCategories) {
-        let localData = transfaringCategories?.transactions ?? []//or ud local
-        historyDataStruct = screenType != .localData ? db.transactions(for: category) : localData
+    func toHistory(index: IndexPath) {
+       // let localData = transfaringCategories?.transactions ?? []//or ud local
+        historyDataStruct = tableData[index.section].data[index.row].transactions //screenType != .localData ? db.transactions(for: category) : localData
         
-        selectedCategory = category
+        selectedCategory = tableData[index.section].data[index.row].category
         DispatchQueue.main.async {
             self.tableView.reloadData()
             self.performSegue(withIdentifier: "toHistory", sender: self)
@@ -433,8 +473,8 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             vc.historyDataStruct = historyDataStruct
             vc.selectedCategory = selectedCategory
             vc.fromCategories = true
-            vc.allowEditing = screenType != .localData ? (selectedCategory?.purpose == .debt ? true : false) : false
-            vc.screenType = screenType != .localData ? .db : transfaringCategories == nil ? .localData : .unsaved
+            vc.allowEditing = screenType != .localData ? (selectedCategory?.purpose == .debt ? true : false) : (transfaringCategories == nil ? true : false)
+            vc.mainType = screenType != .localData ? .db : transfaringCategories == nil ? .localData : .unsaved
         case "toDebts":
             if segue.identifier == "toDebts" {
                 let vc = segue.destination as! DebtsVC
@@ -584,7 +624,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 if cell.categoryNameLabel.isHidden != hideTitle {
                     cell.categoryNameLabel.isHidden = hideTitle
                 }
-                cell.qntLabel.text = "\(category.category.transactions.count)"
+                cell.qntLabel.text = "\(category.transactions.count)"
                 cell.iconimage.image = category.editing == nil ? iconNamed(category.category.icon) : iconNamed(category.editing?.icon)
                 cell.iconimage.tintColor = category.editing == nil ? colorNamed(category.category.color) : colorNamed(category.editing?.color)
                 cell.categoryNameLabel.text = category.category.name
@@ -626,6 +666,15 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         }
     }
 
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        if section == 0 || section == 1 {
+            return 0
+        } else {
+            return 60
+        }
+    }
+    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 || section == 1 {
             return 0
@@ -739,7 +788,8 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 self.navigationController?.popViewController(animated: true)
             } else {
                 if tableData[dataIndex.section].data[dataIndex.row].editing == nil {
-                    toHistory(category: tableData[dataIndex.section].data[dataIndex.row].category)
+                    toHistory(index: dataIndex)
+                    //(category: tableData[dataIndex.section].data[dataIndex.row].category)
                 }
             }
             
@@ -809,6 +859,7 @@ extension CategoriesVC {
     
     struct ScreenCategory {
         var category:NewCategories
+        var transactions: [TransactionsStruct]
         var proLocked: Bool = false
         var showDisclosure:Bool = true
         var editing:NewCategories? = nil
@@ -907,7 +958,7 @@ class categoriesVCcell: UITableViewCell {
             self.newCategoryTF.layer.cornerRadius = 6
         }
         var category:CategoriesVC.ScreenCategory {
-            let defaultCategory = CategoriesVC.ScreenCategory(category: NewCategories(id: -2, name: "-", icon: "", color: "", purpose: CategoriesVC.shared?.screenType == .debts ? .debt : .expense))
+            let defaultCategory = CategoriesVC.ScreenCategory(category: NewCategories(id: -2, name: "-", icon: "", color: "", purpose: CategoriesVC.shared?.screenType == .debts ? .debt : .expense), transactions: [])
             if let index = index {
                 return CategoriesVC.shared?.tableData[index.section].data[index.row] ?? defaultCategory
             } else {
@@ -1064,6 +1115,12 @@ class LocalDataActionCell: UITableViewCell {
         
         let deleteGesture = UITapGestureRecognizer(target: self, action: #selector(deletePress(_:)))
         self.deletePressed.addGestureRecognizer(deleteGesture)
+    }
+    
+    override func draw(_ rect: CGRect) {
+        self.saveLocallyView.layer.cornerRadius = 6
+        self.sendPressed.layer.cornerRadius = 6
+        self.deletePressed.layer.cornerRadius = 6
     }
     
     @objc func saveLocallyPress(_ sender: UITapGestureRecognizer) {

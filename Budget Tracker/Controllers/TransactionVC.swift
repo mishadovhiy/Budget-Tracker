@@ -166,13 +166,15 @@ class TransitionVC: SuperViewController {
         }
     }
     
+    let db = DataBase()
     func getEditingdata() {
         if editingCategory != "" {
+            selectedCategory = db.category(editingCategory)
             print(selectedPurpose, "selectedPurpose")
             purposeSwitcher.selectedSegmentIndex = selectedPurpose != nil ? selectedPurpose! : 0
             purposeSwitched(purposeSwitcher)
             DispatchQueue.main.async {
-                self.categoryTextField.text = self.editingCategory
+                self.categoryTextField.text = self.selectedCategory?.name ?? "-"//self.editingCategory
             }
             
         }
