@@ -833,7 +833,101 @@ class ViewController: SuperViewController {
    // var didloadCalled = false
     var sendSavedData = false
     //here
+    var startedSendingUnsended = false
+    var highesLoadedCatID: Int?
     func sendUnsaved() {
+        //breaek when error
+        let unsended = appData.unsendedData
+        if unsended.count > 0 {
+            if let first = unsended.first {
+                startedSendingUnsended = true
+                updateDataLabels(reloadAndAnimate: false)
+                if self._filterText != "Sending" {
+                    DispatchQueue.main.async {
+                        self.filterText = "Sending"
+                    }
+                }
+                
+                let save = SaveToDB()
+                let delete = DeleteFromDB()
+                if let addTransaction = db.transactionFrom(first["transactionNew"] ?? [:]) {
+                    save.newTransaction(addTransaction, saveLocally: false) { error in
+                        //
+                        if !error {
+                            appData.unsendedData.removeFirst()
+                            self.sendUnsaved()
+                        }
+                    }
+                } else {
+                    if let deleteTransaction = db.transactionFrom(first["deleteTransactionNew"] ?? [:]) {
+                        delete.newTransaction(deleteTransaction, saveLocally: false) { error in
+                            if !error {
+                                appData.unsendedData.removeFirst()
+                                self.sendUnsaved()
+                            }
+                        }
+                    } else {
+                        if let addCategory = db.categoryFrom(first["categoryNew"] ?? [:]) {
+                            if let highest = highesLoadedCatID {
+                                var cat = addCategory
+                                cat.id = highest
+                                save.newCategories(cat, saveLocally: false) { error in
+                                    if !error {
+                                        appData.unsendedData.removeFirst()
+                                        self.sendUnsaved()
+                                    }
+                                }
+                            } else {
+                                let load = LoadFromDB()
+                                load.newCategories { loadedCategories, error in
+                                    if error == .none {
+                                        let allCatSorted = loadedCategories.sorted{ $0.id > $1.id }
+                                        let highest = allCatSorted.first?.id ?? 0
+                                        self.highesLoadedCatID = highest
+                                        
+                                        for i in 0..<unsended.count {
+                                            if let newTrans = unsended[i]["transactionNew"] {
+                                                if let trans = self.db.transactionFrom(newTrans) {
+                                                    if trans.categoryID == "\(addCategory.id)" {
+                                                        var newTransaction = trans
+                                                        newTransaction.categoryID = "\(highest)"
+                                                        appData.unsendedData[i]["transactionNew"] = self.db.transactionToDict(newTransaction)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        //
+                                        self.sendUnsaved()
+                                    }
+                                }
+                                
+                            }
+                        } else {
+                            if let deleteCategory = db.categoryFrom(first["deleteCategoryNew"] ?? [:]) {
+                                delete.CategoriesNew(category: deleteCategory, saveLocally: true) { error in
+                                    if !error {
+                                        appData.unsendedData.removeFirst()
+                                        self.sendUnsaved()
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            if startedSendingUnsended {
+                startedSendingUnsended = false
+                downloadFromDB()
+            } else {
+                //send local data
+            }
+            
+        }
+
+    }
+    
+   /* func sendUnsaved() {
         let dataCount = appData.unsendedData.count
         
         print(dataCount, "dataCountdataCountdataCountdataCountdataCountdataCount")
@@ -1096,7 +1190,7 @@ class ViewController: SuperViewController {
         }
         
         
-    }
+    }*/
     
     
     var allData: [[TransactionsStruct]] = []

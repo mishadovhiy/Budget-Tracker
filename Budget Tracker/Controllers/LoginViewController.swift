@@ -218,14 +218,14 @@ class LoginViewController: SuperViewController {
                     let toDataStringMian = "&Nickname=\(dbData[0])" + "&Email=\(newEmail)" + "&Password=\(dbData[2])" + "&Registration_Date=\(dbData[3])" + "&ProVersion=\(dbData[4])" + "&trialDate=\(dbData[5])"
                     save.Users(toDataString: toDataStringMian ) { (error) in
                         if error {
-                            appData.unsendedData.append(["saveUser": toDataStringMian])
+                    //showError        appData.unsendedData.append(["saveUser": toDataStringMian])
                         }
                         let delete = DeleteFromDB()
                         let dataStringDelete = "&Nickname=\(dbData[0])" + "&Email=\(dbData[1])" + "&Password=\(dbData[2])" + "&Registration_Date=\(dbData[3])" + "&ProVersion=\(dbData[4])" + "&trialDate=\(dbData[5])"
                         print(toDataStringMian)
                         delete.User(toDataString: dataStringDelete) { (errorr) in
                             if errorr {
-                                appData.unsendedData.append(["deleteUser": dataStringDelete])
+                                //showError       appData.unsendedData.append(["deleteUser": dataStringDelete])
                             }
                             DispatchQueue.main.async {
                                 self.dismiss(animated: true) {
@@ -443,14 +443,14 @@ class LoginViewController: SuperViewController {
                     let toDataStringMian = "&Nickname=\(userData[0])" + "&Email=\(userData[1])" + "&Password=\(newPassword)" + "&Registration_Date=\(userData[3])" + "&ProVersion=\(userData[4])" + "&trialDate=\(userData[5])"
                     save.Users(toDataString: toDataStringMian ) { (error) in
                         if error {
-                            appData.unsendedData.append(["saveUser": toDataStringMian])
+                            //showError      appData.unsendedData.append(["saveUser": toDataStringMian])
                         }
                         let delete = DeleteFromDB()
                         let dataStringDelete = "&Nickname=\(userData[0])" + "&Email=\(userData[1])" + "&Password=\(userData[2])" + "&Registration_Date=\(userData[3])" + "&ProVersion=\(userData[4])" + "&trialDate=\(userData[5])"
                         print(dataStringDelete)
                         delete.User(toDataString: dataStringDelete) { (errorr) in
                             if errorr {
-                                appData.unsendedData.append(["deleteUser": dataStringDelete])
+                                //showError            appData.unsendedData.append(["deleteUser": dataStringDelete])
                             }
                             appData.password = newPassword
                             KeychainService.updatePassword(service: "BudgetTrackerApp", account: userData[0], data: newPassword)

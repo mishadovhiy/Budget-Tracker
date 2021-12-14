@@ -748,13 +748,13 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
 
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
             //self.tableActionActivityIndicator.startAnimating()
-            self.deteteCategory(at: indexPath)
+            self.deteteCategory(at: IndexPath(row: indexPath.row, section: indexPath.section - 2))
         }
         deleteAction.backgroundColor = K.Colors.negative
         
         let editAction = UIContextualAction(style: .destructive, title: "Edit") {  (contextualAction, view, boolValue) in
             //self.tableActionActivityIndicator.startAnimating()
-            self.tableData[indexPath.section].data[indexPath.row].editing = self.tableData[indexPath.section].data[indexPath.row].category
+            self.tableData[indexPath.section - 2].data[indexPath.row].editing = self.tableData[indexPath.section - 2].data[indexPath.row].category
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }

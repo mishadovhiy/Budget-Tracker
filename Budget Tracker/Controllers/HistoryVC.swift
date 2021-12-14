@@ -37,6 +37,9 @@ class HistoryVC: SuperViewController {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
                 self.tableView.scrollToRow(at: IndexPath(row: 0, section: 2), at: .bottom, animated: true)
+                self.ai.fastHide { _ in
+                    
+                }
             }
         }
         
@@ -388,7 +391,9 @@ class HistoryVC: SuperViewController {
         center?.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
 
             DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "toCalendar", sender: self)
+                self.ai.fastHide { _ in
+                    self.performSegue(withIdentifier: "toCalendar", sender: self)
+                }
             }
         }
     }

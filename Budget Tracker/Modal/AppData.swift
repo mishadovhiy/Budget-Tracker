@@ -112,11 +112,11 @@ class AppData {
         }
     }
 
-    var unsendedData:[[String: String]] {
+    var unsendedData:[[String: [String:Any]]] {
         //0 - type (delete transaction)
         //1 - toDataString
         get {
-            return defaults.value(forKey: "unsendedData") as? [[String: String]] ?? []
+            return defaults.value(forKey: "unsendedData") as? [[String: [String:Any]]] ?? []
         }
         set(value){
             defaults.set(value, forKey: "unsendedData")
@@ -646,7 +646,7 @@ extension TransactionsStruct {
 
 struct TransactionsStruct {
     let value: String
-    let categoryID: String
+    var categoryID: String
     let date: String
     let comment: String
     

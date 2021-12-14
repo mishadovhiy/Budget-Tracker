@@ -287,7 +287,7 @@ class DebtsVC: SuperViewController {
             let save = SaveToDB()
             save.Debts(toDataString: toDataString) { (error) in
                 if error {//add in mainVC test
-                    appData.unsendedData.append(["debt": toDataString])
+                    //showError      appData.unsendedData.append(["debt": toDataString])
                 }
                 var allDebts = Array(appData.getDebts())
                 allDebts.append(DebtsStruct(name: title, amountToPay: "", dueDate: ""))
@@ -496,7 +496,7 @@ extension DebtsVC: UITableViewDelegate, UITableViewDataSource {
                             print(tods, "todstodstods")
                             delete.Debts(toDataString: tods) { (error) in
                                 if error {
-                                    appData.unsendedData.append(["deleteDebt": tods])
+                                    //showError                   appData.unsendedData.append(["deleteDebt": tods])
                                 }
                                 self.getDataFromLocal()
                             }

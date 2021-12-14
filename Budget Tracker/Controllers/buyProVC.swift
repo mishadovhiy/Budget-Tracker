@@ -255,14 +255,14 @@ class BuyProVC: SuperViewController {//ЗАПИСЫВАТЬ ДЕЛЕГАТЫ И�
         print(dataStringSave)
         save.Users(toDataString: dataStringSave ) { (error) in
             if error {
-                appData.unsendedData.append(["saveUser": dataStringSave])
+                //showError       appData.unsendedData.append(["saveUser": dataStringSave])
             }
             let delete = DeleteFromDB()
             let dataStringDelete = toDataStringMian + "&ProVersion=0" + "&trialDate="
             print(dataStringDelete)
             delete.User(toDataString: dataStringDelete) { (errorr) in
                 if errorr {
-                    appData.unsendedData.append(["deleteUser": dataStringDelete])
+                    //showError    appData.unsendedData.append(["deleteUser": dataStringDelete])
                 }
                 DispatchQueue.main.async {
                     appData.proTrial = true
@@ -416,14 +416,14 @@ extension BuyProVC: SKPaymentTransactionObserver {
                     print(dataStringSave)
                     save.Users(toDataString: dataStringSave ) { (error) in
                         if error {
-                            appData.unsendedData.append(["saveUser": dataStringSave])
+                            //showError            appData.unsendedData.append(["saveUser": dataStringSave])
                         }
                         let delete = DeleteFromDB()
                         let dataStringDelete = toDataStringMian + "&ProVersion=0" + "&trialDate=\(self.userData.3)"
                         print(dataStringDelete)
                         delete.User(toDataString: dataStringDelete) { (errorr) in
                             if errorr {
-                                appData.unsendedData.append(["deleteUser": dataStringDelete])
+                                //showError        appData.unsendedData.append(["deleteUser": dataStringDelete])
                             }
                             DispatchQueue.main.async {
                                 self.showPurchasedIndicator()
