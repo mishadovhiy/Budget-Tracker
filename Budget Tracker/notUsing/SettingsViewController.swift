@@ -10,7 +10,7 @@ import UIKit
 var categoriesDebtsCount = (0,0)
 var safeArTopHeight: CGFloat = 0.0
 protocol SettingsViewControllerProtocol {
-    func closeSettings(sendSavedData:Bool, needFiltering: Bool)
+    func closeSettings(sendSavedDataa:Bool, needFiltering: Bool)
 }
 
 class SettingsViewController: SuperViewController {
@@ -269,7 +269,7 @@ class SettingsViewController: SuperViewController {
             //fatalError()
             print("transactionAddedtransactionAddedtransactionAdded", transactionAdded)
             let needFiltering = transactionAdded
-            delegate?.closeSettings(sendSavedData: sendLocalDataPressed, needFiltering: needFiltering)
+            delegate?.closeSettings(sendSavedDataa: sendLocalDataPressed, needFiltering: needFiltering)
             transactionAdded = false
         } else {
             
@@ -469,7 +469,7 @@ class SettingsVCCell: UITableViewCell {
 extension SettingsViewController: UnsendedDataVCProtocol {
     func quiteUnsendedData(deletePressed: Bool, sendPressed: Bool) {
         if !deletePressed && !sendPressed {
-            delegate?.closeSettings(sendSavedData: false, needFiltering: false)
+            delegate?.closeSettings(sendSavedDataa: false, needFiltering: false)
         } else {
             if deletePressed {
                 print("seletePressed")

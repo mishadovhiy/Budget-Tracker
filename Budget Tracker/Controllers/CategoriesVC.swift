@@ -523,7 +523,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
     @IBOutlet weak var iconsContainer: UIView!
     
-    let tableCorners:CGFloat = 10
+    let tableCorners:CGFloat = 15
     
     var screenDescription: String = ""
     
@@ -588,17 +588,25 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 }
 
                 let deleteAction = {
+                    needDownloadOnMainAppeare = true
                     self.db.localCategories = []
                     self.db.localTransactions = []
                     DispatchQueue.main.async {
                         self.navigationController?.popToRootViewController(animated: true)
                     }
                 }
-                
+                let sendAll = {
+                    needDownloadOnMainAppeare = true
+                    sendSavedData = true
+                    DispatchQueue.main.async {
+                        self.navigationController?.popToRootViewController(animated: true)
+                    }
+                }
                 
                 
                 cell.saveAction = saveToLocal
                 cell.deleteAction = deleteAction
+                cell.sendAction = sendAll
                 return cell
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent, for: indexPath) as! categoriesVCcell
@@ -654,7 +662,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         helperView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         helperView.backgroundColor = K.Colors.secondaryBackground//darkAppearence ? .black : .white
         view.backgroundColor = self.view.backgroundColor
-        let label = UILabel(frame: CGRect(x: 10, y: 15, width: mainFrame.width - 40, height: 20))
+        let label = UILabel(frame: CGRect(x: 10, y: tableCorners, width: mainFrame.width - 40, height: 20))
         label.text = tableData[section - 2].title
         label.textColor = K.Colors.balanceV
         label.font = .systemFont(ofSize: 14, weight: .medium)
@@ -671,7 +679,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         if section == 0 || section == 1 {
             return 0
         } else {
-            return 60
+            return screenType != .localData ? 60 : 20
         }
     }
     

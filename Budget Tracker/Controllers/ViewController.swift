@@ -9,11 +9,14 @@
 import UIKit
 
 var appData = AppData()
-var statisticBrain = StatisticBrain()
-var sumAllCategories: [String: Double] = [:]
-var allSelectedTransactionsData: [TransactionsStruct] = []
-var expenseLabelPressed = true
-var selectedPeroud = ""
+var statisticBrain = StatisticBrain()//?
+var sumAllCategories: [String: Double] = [:]//?
+var allSelectedTransactionsData: [TransactionsStruct] = []//for statistic
+var expenseLabelPressed = true//make only in vc
+var selectedPeroud = ""//try to ud
+var sendSavedData = false
+
+var needDownloadOnMainAppeare = false
 
 class ViewController: SuperViewController {
     @IBOutlet weak var sideTableView: UITableView!
@@ -97,11 +100,11 @@ class ViewController: SuperViewController {
 
                 
                 
-                if self.sendSavedData {
+            //    if self.sendSavedData {
                     if appData.username != "" {
                         self.sendUnsaved()
                     }
-                }
+             //   }
                 print(self.newTransaction, "self.newTransactionself.newTransactionself.newTransaction")
                 if let new = self.newTransaction {
              //       self.mainTableView.backgroundColor = UIColor(named: "darkTableColor")
@@ -173,38 +176,39 @@ class ViewController: SuperViewController {
         _categoriesHolder.removeAll()
         _debtsHolder.removeAll()
         lastSelectedDate = nil
-        
-        let unsend = appData.unsendedData
+        DispatchQueue.main.async {
+            self.filterText = "Downloading"
+        }
+        let load = LoadFromDB()
+        load.newCategories { categoryes, error in
+            if error == .none {
+                self.highesLoadedCatID = ((categoryes.sorted{ $0.id > $1.id }).first?.id ?? 0) + 1
+                load.newTransactions { loadedData, error in
+                    self.tableData = loadedData
+                    self.checkPurchase()
+                    self.prepareFilterOptions()
+                    self.filter()
+                }
+            } else {
+                self.prepareFilterOptions()
+                self.filter()
+                if showError {
+                    DispatchQueue.main.async {
+                        self.message.showMessage(text: "Error", type: .internetError)
+                    }
+                }
+
+            }
+        }
+       /* let unsend = appData.unsendedData
         undendedCount = unsend.count
         if unsend.count > 0 {
             if appData.username != "" {
                 self.sendUnsaved()
             }
         } else {
-            DispatchQueue.main.async {
-                self.filterText = "Downloading"
-            }
-            let load = LoadFromDB()
-            load.newCategories { categoryes, error in
-                if error == .none {
-                    load.newTransactions { loadedData, error in
-                        self.tableData = loadedData
-                        self.checkPurchase()
-                        self.prepareFilterOptions()
-                        self.filter()
-                    }
-                } else {
-                    self.prepareFilterOptions()
-                    self.filter()
-                    if showError {
-                        DispatchQueue.main.async {
-                            self.message.showMessage(text: "Error", type: .internetError)
-                        }
-                    }
-
-                }
-            }
-        }
+            
+        }*/
 
 
     }
@@ -263,8 +267,43 @@ class ViewController: SuperViewController {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
        notificationReceiver(notification: notification)
     }
-    
-    
+    var subviewsLoaded = false
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        if !subviewsLoaded {
+            subviewsLoaded = true
+            self.addTransactionWhenEmptyButton.layer.cornerRadius = 5
+            self.addTransactionWhenEmptyButton.layer.masksToBounds = true
+            self.noDataView.translatesAutoresizingMaskIntoConstraints = true
+            self.noDataView.layer.masksToBounds = true
+            self.noDataView.layer.cornerRadius = self.tableCorners
+            self.noDataView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+            self.darkBackgroundUnderTable.layer.masksToBounds = true
+            self.darkBackgroundUnderTable.layer.cornerRadius = self.tableCorners
+            self.darkBackgroundUnderTable.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+            self.darkBackgroundUnderTable.translatesAutoresizingMaskIntoConstraints = true
+            self.addTransitionButton.layer.cornerRadius = self.addTransitionButton.layer.frame.width / 2
+            self.view.addSubview(self.filterHelperView)
+            self.shadow(for: self.filterHelperView)
+            self.filterView.superview?.layer.masksToBounds = true
+            self.filterView.superview?.translatesAutoresizingMaskIntoConstraints = true
+            self.filterView.translatesAutoresizingMaskIntoConstraints = true
+            self.calculationSView.translatesAutoresizingMaskIntoConstraints = true
+            let image = UIImage(named: "plusIcon")
+            let button = UIButton(frame: CGRect(x: 0, y: 10, width: 20, height: 20))
+            button.layer.masksToBounds = true
+            button.layer.cornerRadius = button.layer.frame.width / 2
+            button.setImage(image, for: .normal)
+            self.refreshSubview.addSubview(button)
+            let superWidth = self.view.frame.width
+            self.refreshSubview.frame = CGRect(x: superWidth / 2 - 10, y: 0, width: 20, height: 20)
+            self.refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
+            self.refreshSubview.alpha = 0
+            self.refreshControl.addSubview(self.refreshSubview)
+           // self.refreshControl.backgroundColor = .red//K.Colors.background
+            self.mainTableView.addSubview(self.refreshControl)
+        }
+    }
     
     func updateUI() {
      //   addTransitionButton.translatesAutoresizingMaskIntoConstraints = true
@@ -277,66 +316,14 @@ class ViewController: SuperViewController {
             self.unsendedDataLabel.superview?.superview?.isHidden = true
             self.enableLocalDataPress = false
             self.dataFromValueLabel.superview?.superview?.isHidden = true
-           // for button in self.lightCornerButtons {
-            self.addTransactionWhenEmptyButton.layer.cornerRadius = 5
-            self.addTransactionWhenEmptyButton.layer.masksToBounds = true
-          //  }
-           // self.darkBackgroundUnderTable
-            //self.noDataView.frame = CGRect(x: 0, y: self.view.frame.height, width: self.view.frame.width, height: self.view.frame.height / 2)
-            //self.noDataView.isHidden = true
-        //    self.noDataView.layer.zPosition = CGFloat(Float.greatestFiniteMagnitude)
-            self.noDataView.translatesAutoresizingMaskIntoConstraints = true
-            self.noDataView.layer.masksToBounds = true
-            self.noDataView.layer.cornerRadius = self.tableCorners
-            self.noDataView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-            self.darkBackgroundUnderTable.layer.masksToBounds = true
-            self.darkBackgroundUnderTable.layer.cornerRadius = self.tableCorners
-            self.darkBackgroundUnderTable.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-            self.darkBackgroundUnderTable.translatesAutoresizingMaskIntoConstraints = true
-            self.addTransitionButton.layer.cornerRadius = self.addTransitionButton.layer.frame.width / 2
-        //    self.addTransitionButton.isHidden = true
-          //  self.addTransitionButton.alpha = 1
-          //  let tableFrame = self.mainTableView.frame
-          //  let TransFrame = self.addTransitionButton.frame
+
             
-          //  self.addTransFrame = CGRect(x: tableFrame.width - TransFrame.width, y: tableFrame.minY, width: TransFrame.width, height: TransFrame.height)
-          //  print(self.addTransFrame, "self.addTransitionButton.frame", tableFrame.minY)
-            self.view.addSubview(self.filterHelperView)
-            self.shadow(for: self.filterHelperView)
-            /*self.filterHelperView.layer.shadowColor = UIColor.black.cgColor
-            self.filterHelperView.layer.shadowOpacity = 0.3
-            self.filterHelperView.layer.shadowOffset = .zero
-            self.filterHelperView.layer.shadowRadius = 10
-            self.filterHelperView.layer.cornerRadius = 9
-            self.filterHelperView.backgroundColor = K.Colors.secondaryBackground //K.Colors.pink*/
-            self.filterView.superview?.layer.masksToBounds = true
-            self.filterView.superview?.translatesAutoresizingMaskIntoConstraints = true
-            self.filterView.translatesAutoresizingMaskIntoConstraints = true
-            self.calculationSView.translatesAutoresizingMaskIntoConstraints = true
             self.filterAndCalcFrameHolder.0 = self.filterView.frame
             self.filterAndCalcFrameHolder.1 = self.calculationSView.frame
             
             let superframe = self.calculationSView.superview?.frame ?? .zero
             let calcFrame = self.calculationSView.frame
             self.calculationSView.frame = CGRect(x: -superframe.height, y: calcFrame.minY, width: calcFrame.width, height: calcFrame.height)
-            
-            self.refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
-            let superWidth = self.view.frame.width
-            self.refreshSubview.frame = CGRect(x: superWidth / 2 - 10, y: 0, width: 20, height: 20)
-            print(self.refreshSubview.frame, "ijhyghujijnhj")
-            let image = UIImage(named: "plusIcon")
-            let button = UIButton(frame: CGRect(x: 0, y: 10, width: 20, height: 20))
-            button.layer.masksToBounds = true
-            button.layer.cornerRadius = button.layer.frame.width / 2
-            button.setImage(image, for: .normal)
-            self.refreshSubview.addSubview(button)
-           // self.refreshSubview.backgroundColor = K.Colors.background
-            self.refreshSubview.alpha = 0
-            self.refreshControl.addSubview(self.refreshSubview)
-           // self.refreshControl.backgroundColor = .red//K.Colors.background
-            self.mainTableView.addSubview(self.refreshControl)
-            
-            
         }
 
         if appData.defaults.value(forKey: "firstLaunch") as? Bool ?? true {
@@ -807,10 +794,14 @@ class ViewController: SuperViewController {
         center?.getDeliveredNotifications { notifications in
             //add notif array that came when app was launched (i have to hendel it by myself)
             DispatchQueue.main.async {
-                UIApplication.shared.applicationIconBadgeNumber = notifications.count
+                UIApplication.shared.applicationIconBadgeNumber = notifications.count //+ showed and undeen locally
             }
         }
 
+        if needDownloadOnMainAppeare {
+            needDownloadOnMainAppeare = false
+            self.downloadFromDB()
+        }
         let safeTop = self.view.safeAreaInsets.top
         self.safeArreaHelperView?.alpha = 0
         if !safeArreaHelperViewAdded {
@@ -831,12 +822,20 @@ class ViewController: SuperViewController {
     
     
    // var didloadCalled = false
-    var sendSavedData = false
+    
     //here
     var startedSendingUnsended = false
     var highesLoadedCatID: Int?
     func sendUnsaved() {
         //breaek when error
+        let errorAction = {
+            self.startedSendingUnsended = false
+            if sendSavedData {
+                sendSavedData = false
+                //show message error, try again later
+            }
+            self.filter()
+        }
         let unsended = appData.unsendedData
         if unsended.count > 0 {
             if let first = unsended.first {
@@ -850,12 +849,13 @@ class ViewController: SuperViewController {
                 
                 let save = SaveToDB()
                 let delete = DeleteFromDB()
-                if let addTransaction = db.transactionFrom(first["transactionNew"] ?? [:]) {
+                /*if let addTransaction = db.transactionFrom(first["transactionNew"] ?? [:]) {
                     save.newTransaction(addTransaction, saveLocally: false) { error in
-                        //
                         if !error {
                             appData.unsendedData.removeFirst()
                             self.sendUnsaved()
+                        } else {
+                            errorAction()
                         }
                     }
                 } else {
@@ -864,17 +864,33 @@ class ViewController: SuperViewController {
                             if !error {
                                 appData.unsendedData.removeFirst()
                                 self.sendUnsaved()
+                            }else {
+                                errorAction()
                             }
                         }
-                    } else {
+                    } else {*/
                         if let addCategory = db.categoryFrom(first["categoryNew"] ?? [:]) {
                             if let highest = highesLoadedCatID {
                                 var cat = addCategory
                                 cat.id = highest
                                 save.newCategories(cat, saveLocally: false) { error in
                                     if !error {
+                                        self.highesLoadedCatID! += 1
+                                        for i in 0..<unsended.count {
+                                            if let newTrans = unsended[i]["transactionNew"] {
+                                                if let trans = self.db.transactionFrom(newTrans) {
+                                                    if trans.categoryID == "\(cat.id)" {
+                                                        var newTransaction = trans
+                                                        newTransaction.categoryID = "\(highest)"
+                                                        appData.unsendedData[i]["transactionNew"] = self.db.transactionToDict(newTransaction)
+                                                    }
+                                                }
+                                            }
+                                        }
                                         appData.unsendedData.removeFirst()
                                         self.sendUnsaved()
+                                    } else {
+                                        errorAction()
                                     }
                                 }
                             } else {
@@ -885,22 +901,12 @@ class ViewController: SuperViewController {
                                         let highest = allCatSorted.first?.id ?? 0
                                         self.highesLoadedCatID = highest
                                         
-                                        for i in 0..<unsended.count {
-                                            if let newTrans = unsended[i]["transactionNew"] {
-                                                if let trans = self.db.transactionFrom(newTrans) {
-                                                    if trans.categoryID == "\(addCategory.id)" {
-                                                        var newTransaction = trans
-                                                        newTransaction.categoryID = "\(highest)"
-                                                        appData.unsendedData[i]["transactionNew"] = self.db.transactionToDict(newTransaction)
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        //
+                                        
                                         self.sendUnsaved()
+                                    } else {
+                                        errorAction()
                                     }
                                 }
-                                
                             }
                         } else {
                             if let deleteCategory = db.categoryFrom(first["deleteCategoryNew"] ?? [:]) {
@@ -908,12 +914,36 @@ class ViewController: SuperViewController {
                                     if !error {
                                         appData.unsendedData.removeFirst()
                                         self.sendUnsaved()
+                                    } else {
+                                        errorAction()
+                                    }
+                                }
+                            } else {
+                                if let addTransaction = db.transactionFrom(first["transactionNew"] ?? [:]) {
+                                    save.newTransaction(addTransaction, saveLocally: false) { error in
+                                        if !error {
+                                            appData.unsendedData.removeFirst()
+                                            self.sendUnsaved()
+                                        } else {
+                                            errorAction()
+                                        }
+                                    }
+                                } else {
+                                    if let deleteTransaction = db.transactionFrom(first["deleteTransactionNew"] ?? [:]) {
+                                        delete.newTransaction(deleteTransaction, saveLocally: false) { error in
+                                            if !error {
+                                                appData.unsendedData.removeFirst()
+                                                self.sendUnsaved()
+                                            }else {
+                                                errorAction()
+                                            }
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                }
+                    /*}
+                }*/
             }
         } else {
             if startedSendingUnsended {
@@ -921,6 +951,78 @@ class ViewController: SuperViewController {
                 downloadFromDB()
             } else {
                 //send local data
+                if sendSavedData {
+                    //update labels
+                    updateDataLabels(reloadAndAnimate: false)
+                    if self._filterText != "Sending" {
+                        DispatchQueue.main.async {
+                            self.filterText = "Sending"
+                        }
+                    }
+                    let save = SaveToDB()
+                    if let category = db.localCategories.first {
+                        if let highest = highesLoadedCatID {
+                            var cat = category
+                            cat.id = highest
+                            save.newCategories(cat) { error in
+                                
+                                if !error {
+                                    self.highesLoadedCatID! += 1
+                                    self.db.localCategories.removeFirst()//deleteCategory(id: "\(category.id)", local: true)
+                                    let localTransactions = self.db.localTransactions
+                                    
+                          //          var newCategory = category
+                          //          newCategory.id = highest
+                                    
+                             //       self.db.deleteCategory(id: "\(category.id)", local: true)
+                            //        self.db.localCategories.append(newCategory)
+                                    
+                                    for i in 0..<localTransactions.count {
+                                        
+                                        if localTransactions[i].categoryID == "\(category.id)" {
+                                            var newTransaction = localTransactions[i]
+                                            newTransaction.categoryID = "\(cat.id)"
+
+                                            self.db.deleteTransaction(transaction: localTransactions[i], local: true)
+                                            self.db.transactions.append(newTransaction)
+                                        }
+                                        
+                                    }
+                                    self.sendUnsaved()
+                                } else {
+                                    errorAction()
+                                }
+                            }
+                        } else {
+                            let load = LoadFromDB()
+                            load.newCategories { loadedCategories, error in
+                                if error == .none {
+                                    let allCatSorted = loadedCategories.sorted{ $0.id > $1.id }
+                                    let highest = allCatSorted.first?.id ?? 0
+                                    self.highesLoadedCatID = highest
+                                    
+                                    self.sendUnsaved()
+                                } else {
+                                    errorAction()
+                                }
+                            }
+                        }
+                    } else {
+                        if let transaction = db.localTransactions.first {
+                            save.newTransaction(transaction) { error in
+                                if !error {
+                                    self.db.localTransactions.removeFirst()
+                                    self.sendUnsaved()
+                                } else {
+                                    errorAction()
+                                }
+                            }
+                        } else {
+                            sendSavedData = false
+                            downloadFromDB()
+                        }
+                    }
+                }
             }
             
         }
@@ -2125,14 +2227,14 @@ extension ViewController: UnsendedDataVCProtocol {
 }
 
 extension ViewController: SettingsViewControllerProtocol {
-    func closeSettings(sendSavedData: Bool, needFiltering: Bool) {
+    func closeSettings(sendSavedDataa: Bool, needFiltering: Bool) {
         calculateLabels()
         self.animateCellWillAppear = false
         Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (_) in
             self.animateCellWillAppear = true
         }
         if sendSavedData {
-            self.sendSavedData = true
+            sendSavedData = true
             forseSendUnsendedData = true
             if appData.username != "" {
                 self.sendUnsaved()

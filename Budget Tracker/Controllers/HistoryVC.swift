@@ -36,7 +36,7 @@ class HistoryVC: SuperViewController {
             self.amountToPayEditing = true
             DispatchQueue.main.async {
                 self.tableView.reloadData()
-                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 2), at: .bottom, animated: true)
+               // self.tableView.scrollToRow(at: IndexPath(row: 0, section: 2), at: .bottom, animated: true)
                 self.ai.fastHide { _ in
                     
                 }

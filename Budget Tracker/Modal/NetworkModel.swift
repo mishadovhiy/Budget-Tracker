@@ -497,12 +497,15 @@ struct DeleteFromDB {
         })
     }
     
-    func updateLocalCategory(category: NewCategories) {
+    func deleteCategory(category: NewCategories) {
         let all = db.categories
         var new: [NewCategories] = []
+        var deleted = false
         for i in 0..<all.count {
-            if all[i].id != category.id {
+            if all[i].id != category.id || deleted {
                 new.append(all[i])
+            } else {
+                deleted = true
             }
         }
         db.categories = new
@@ -512,7 +515,7 @@ struct DeleteFromDB {
     
     func CategoriesNew(category: NewCategories, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {
         if appData.username == "" {
-            updateLocalCategory(category: category)
+            deleteCategory(category: category)
             completion(false)
         } else {
             let pupose = purposeToString(category.purpose)
@@ -541,7 +544,7 @@ struct DeleteFromDB {
                     
                 }
                 if saveLocally {
-                    updateLocalCategory(category: category)
+                    deleteCategory(category: category)
                 }
                 
                 completion(error)
