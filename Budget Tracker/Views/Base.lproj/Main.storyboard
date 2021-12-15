@@ -1072,14 +1072,14 @@
                                                                             <rect key="frame" x="0.0" y="0.0" width="272.33333333333331" height="30"/>
                                                                             <subviews>
                                                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="New category" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ue0-e9-Woe">
-                                                                                    <rect key="frame" x="0.0" y="0.0" width="191.33333333333334" height="30"/>
+                                                                                    <rect key="frame" x="0.0" y="0.0" width="181.33333333333334" height="30"/>
                                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                     <color key="textColor" name="CategoryColor"/>
                                                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                                                 </textField>
                                                                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="oLb-gV-vE3">
-                                                                                    <rect key="frame" x="191.33333333333334" y="0.0" width="81.000000000000028" height="30"/>
+                                                                                    <rect key="frame" x="181.33333333333334" y="0.0" width="91.000000000000028" height="30"/>
                                                                                     <subviews>
                                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yG8-rV-0Py">
                                                                                             <rect key="frame" x="0.0" y="0.0" width="35" height="30"/>
@@ -1112,6 +1112,13 @@
                                                                                                 <action selector="sendPressed:" destination="Ugt-jI-QpQ" eventType="touchUpInside" id="hbU-o0-V7i"/>
                                                                                             </connections>
                                                                                         </button>
+                                                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="89g-ww-aNS">
+                                                                                            <rect key="frame" x="85.999999999999972" y="0.0" width="5" height="30"/>
+                                                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                                            <constraints>
+                                                                                                <constraint firstAttribute="width" constant="5" id="tJY-9P-ntn"/>
+                                                                                            </constraints>
+                                                                                        </view>
                                                                                     </subviews>
                                                                                 </stackView>
                                                                             </subviews>

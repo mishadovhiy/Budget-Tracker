@@ -130,7 +130,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             case .localData:
                 self.tableData = [
                     ScreenDataStruct(title: K.expense, data: resultDict[purposeToString(.expense)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .expense), transactions: [])),
-                    ScreenDataStruct(title: K.expense, data: resultDict[purposeToString(.income)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .income), transactions: [])),
+                    ScreenDataStruct(title: K.income, data: resultDict[purposeToString(.income)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .income), transactions: [])),
                     ScreenDataStruct(title: purposeToString(.debt), data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .debt), transactions: []))
                 ]
             }
@@ -662,7 +662,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         helperView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         helperView.backgroundColor = K.Colors.secondaryBackground//darkAppearence ? .black : .white
         view.backgroundColor = self.view.backgroundColor
-        let label = UILabel(frame: CGRect(x: 10, y: tableCorners, width: mainFrame.width - 40, height: 20))
+        let label = UILabel(frame: CGRect(x: tableCorners, y: 15, width: mainFrame.width - 40, height: 20))
         label.text = tableData[section - 2].title
         label.textColor = K.Colors.balanceV
         label.font = .systemFont(ofSize: 14, weight: .medium)
@@ -673,13 +673,17 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         return view
         }
     }
-
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+    }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if section == 0 || section == 1 {
             return 0
         } else {
-            return screenType != .localData ? 60 : 20
+            return screenType != .localData ? 60 : (tableCorners + 5)
         }
     }
     
