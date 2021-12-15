@@ -66,7 +66,7 @@ class TransitionVC: SuperViewController {
         super.viewWillDisappear(true)
         print(donePressed, "donePressed")
         if !donePressed {
-            self.delegate?.quiteTransactionVC(reload: true)
+            self.delegate?.quiteTransactionVC(reload: editingDate == "" ? false : true)
         }
     }
 

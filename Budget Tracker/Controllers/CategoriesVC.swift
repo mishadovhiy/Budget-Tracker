@@ -264,17 +264,20 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             if let editing = self.editingTF {
                 editing.endEditing(true)
             }
-            
         }
-       /* if showingIcons {
+        if showingIcons {
             toggleIcons(show: false, animated: true)
-        }*/
+        }
+        
     }
     
     var defaultButtonInset: CGFloat = 0
     var tableContentOf:UIEdgeInsets = UIEdgeInsets.zero
     @objc func keyboardWillHide(_ notification: Notification) {
-          self.view.removeGestureRecognizer(viewTap)
+        if !showingIcons {
+            self.tableView.removeGestureRecognizer(viewTap)
+        }
+          
         DispatchQueue.main.async {
             if !self.showingIcons {
                 self.tableView.contentInset.bottom = self.defaultButtonInset
@@ -288,7 +291,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     var keyHeight: CGFloat = 0.0
     @objc func keyboardWillShow(_ notification: Notification) {
         toggleIcons(show: false, animated: true)
-        self.view.addGestureRecognizer(viewTap)
+        self.tableView.addGestureRecognizer(viewTap)
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
@@ -310,23 +313,28 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     var showingIcons = false
     func toggleIcons(show:Bool, animated: Bool) {
         showingIcons = show
-        
+        if show {
+            self.tableView.addGestureRecognizer(viewTap)
+        } else {
+            if editingTF == nil {
+                self.tableView.removeGestureRecognizer(viewTap)
+            }
+        }
         DispatchQueue.main.async {
             let containerHeight = self.iconsContainer.layer.frame.height
             if show  {
-              //  self.view.addGestureRecognizer(self.viewTap)
                 self.editingTF?.endEditing(true)
-                self.kayboardAppeared(containerHeight)
             } else {
                 if self.editingTF == nil {
-             //       self.view.removeGestureRecognizer(self.viewTap)
                     self.tableView.contentInset.bottom = self.defaultButtonInset
                 }
             }
             UIView.animate(withDuration: animated ? 0.3 : 0) {
                 self.iconsContainer.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, show ? 0 : containerHeight + (appData.safeArea.0 + appData.safeArea.1 + 50), 0)
             } completion: { _ in
-                
+                if show {
+                    self.kayboardAppeared(containerHeight)
+                }
             }
 
         }

@@ -127,7 +127,7 @@ class IconsVC: UIViewController {
         if !sbviesLoaded {
             sbviesLoaded = true
             collectionView.layer.cornerRadius = 10
-            collectionView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+          //  collectionView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
             title = "Set icon"
             
             collectionView.register(CollectionIconsHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: collectionHeaderID)
