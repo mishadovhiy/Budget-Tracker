@@ -60,11 +60,11 @@ class LoginViewController: SuperViewController {
     @IBOutlet var titleLabels: [UILabel]!
     
     var canUseThisName: Bool = true
-    enum screenType {
+    enum screenTypee {
         case createAccount
         case singIn
     }
-    var selectedScreen: screenType = .createAccount
+    var selectedScreen: screenTypee = .createAccount
     var fromPro = false
     
    
@@ -1207,7 +1207,7 @@ class LoginViewController: SuperViewController {
         }
     }
     
-    func toggleScreen(options: screenType, animation: TimeInterval = 0.6) {
+    func toggleScreen(options: screenTypee, animation: TimeInterval = 0.6) {
         
         let bounds = UIScreen.main.bounds
         let height = bounds.height
@@ -1285,8 +1285,10 @@ class LoginViewController: SuperViewController {
             
             if keyboardHeight > 1.0 {
                 if let index = selectedTextfield {
-                    let selectedTextfieldd = textfields[index]
-                    let dif = self.view.frame.height - CGFloat(keyboardHeight) - (selectedTextfieldd.superview?.frame.maxY ?? 0)
+                    let selectedTextfieldd = selectedScreen == .createAccount ? logIn : createAcount
+                    //textfields[index]
+                    print(selectedTextfieldd?.frame.maxY ?? "____________________________________ERROR")
+                    let dif = self.view.frame.height - CGFloat(keyboardHeight) - ((selectedTextfieldd?.frame.maxY ?? 0) + 5)
                     if dif < 20 {
 
                         

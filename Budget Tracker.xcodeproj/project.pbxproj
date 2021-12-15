@@ -221,8 +221,8 @@
 		8DBA7E6723F031F200D8214C /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				8DBA7E5523F0316F00D8214C /* Main.storyboard */,
 				8B4E086026544AD2006E42DA /* LogIn.storyboard */,
+				8DBA7E5523F0316F00D8214C /* Main.storyboard */,
 			);
 			path = Views;
 			sourceTree = "<group>";
