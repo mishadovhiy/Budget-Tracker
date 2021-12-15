@@ -19,6 +19,9 @@ class IconsVC: UIViewController {
     
     var iconsData:[IconsData] {
         get {
+            if screenType == .colorsOnly {
+                return []
+            }
             let animals = IconsData(sectionName: "animals", data: [
                 IconsData.Icon(name: "airplane.departure"),
                 IconsData.Icon(name: "airplane"),
@@ -119,17 +122,33 @@ class IconsVC: UIViewController {
     let colorViewSize = 40
     
   
+    var sbviesLoaded = false
+    override func viewWillLayoutSubviews() {
+        if !sbviesLoaded {
+            sbviesLoaded = true
+            collectionView.layer.cornerRadius = 10
+            collectionView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+            title = "Set icon"
+            
+            collectionView.register(CollectionIconsHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: collectionHeaderID)
+            if screenType != .colorsOnly {
+                self.view.backgroundColor = K.Colors.sectionBackground
+            }
+        }
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.layer.cornerRadius = 10
-        collectionView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        title = "Set icon"
         
-        collectionView.register(CollectionIconsHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: collectionHeaderID)
 
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
     }
     
 
@@ -153,8 +172,8 @@ extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        let colorsSection = (screenType == .all || screenType == .colorsOnly) ? colors.count : 0
-        let iconsSection = (screenType == .all || screenType == .iconsOnly) ? (section == 1 ? iconsData[section - 1].data.count : 0) : 0
+        let colorsSection = colors.count//(screenType == .all || screenType == .colorsOnly) ? colors.count : 0
+        let iconsSection = section == 0 ? 0 : iconsData[section - 1].data.count//(screenType == .all || screenType == .iconsOnly) ? (section == 1 ? iconsData[section - 1].data.count : 0) : 0
         
         return section == 0 ? colorsSection : iconsSection
     }
