@@ -13,94 +13,18 @@ protocol IconsVCDelegate {
     func selected(img:String, color:String)
 }
 
+
 class IconsVC: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     var delegate:IconsVCDelegate?
-    
-    var iconsData:[IconsData] {
-        get {
-            if screenType == .colorsOnly {
-                return []
-            }
-            let animals = IconsData(sectionName: "animals", data: [
-                IconsData.Icon(name: "airplane.departure"),
-                IconsData.Icon(name: "airplane"),
-                IconsData.Icon(name: "alarm.fill"),
-                IconsData.Icon(name: "align.horizontal.center.fill"),
-                IconsData.Icon(name: "align.vertical.bottom.fill"),
-                IconsData.Icon(name: "ant.fill"),
-                IconsData.Icon(name: "atom"),
-                IconsData.Icon(name: "bag.circle.fill"),
-            ])
-            let bank = IconsData(sectionName: "bank", data: [
-                IconsData.Icon(name: "bag.fill"),
-                IconsData.Icon(name: "bag"),
-                IconsData.Icon(name: "bandage.fill"),
-                IconsData.Icon(name: "banknote.fill"),
-                IconsData.Icon(name: "battery.25"),
-                IconsData.Icon(name: "battery.50"),
-                IconsData.Icon(name: "battery.75"),
-                IconsData.Icon(name: "battery.100"),
-                IconsData.Icon(name: "bed.double.fill"),
-                IconsData.Icon(name: "bell.badge.fill"),
-                IconsData.Icon(name: "bell.badge"),
-                IconsData.Icon(name: "bell.fill"),
-                IconsData.Icon(name: "binoculars.fill"),
-                IconsData.Icon(name: "bolt.horizontal.fill"),
-                IconsData.Icon(name: "bolt.square.fill"),
-                IconsData.Icon(name: "books.vertical.fill"),
-            ])
-            let briefcase = IconsData(sectionName: "briefcase", data: [
-                IconsData.Icon(name: "briefcase.fill"),
-                IconsData.Icon(name: "bubble.left.and.bubble.right.fill"),
-                IconsData.Icon(name: "bubble.left.fill"),
-                IconsData.Icon(name: "building.2.fill"),
-                IconsData.Icon(name: "building.columns.circle.fill-1"),
-                IconsData.Icon(name: "building.columns.circle.fill"),
-                IconsData.Icon(name: "building.columns.fill"),
-                IconsData.Icon(name: "burn"),
-                IconsData.Icon(name: "bus.fill"),
-                IconsData.Icon(name: "bus"),
-                IconsData.Icon(name: "camera.fill"),
-                IconsData.Icon(name: "camera.viewfinder"),
-                IconsData.Icon(name: "candybarphone"),
-                IconsData.Icon(name: "captions.bubble.fill"),
-                IconsData.Icon(name: "car.fill"),
-                IconsData.Icon(name: "cart.circle.fill"),
-                
-                IconsData.Icon(name: "cart.fill"),
-                IconsData.Icon(name: "cart"),
-                IconsData.Icon(name: "checkerboard.rectangle"),
-                IconsData.Icon(name: "checkmark"),
-                IconsData.Icon(name: "chevron.left.forwardslash.chevron.right"),
-                IconsData.Icon(name: "chevron.up.circle"),
-                IconsData.Icon(name: "clock.fill"),
-                IconsData.Icon(name: "cloud.bolt.fill"),
-                
-                IconsData.Icon(name: "cloud.bolt.rain.fill"),
-                IconsData.Icon(name: "cloud.rain.fill"),
-                IconsData.Icon(name: "cloud.snow.fill"),
-                IconsData.Icon(name: "comb.fill"),
-                IconsData.Icon(name: "cpu.fill"),
-                IconsData.Icon(name: "cpu"),
-                IconsData.Icon(name: "creditcard.fill"),
-                IconsData.Icon(name: "crown.fill")
-            ])
-            
-            return [
-                animals,
-                bank,
-                briefcase,
-                bank,
-                animals,
-                bank,
-                bank,
-                bank,
-                bank
-                
-            ]
+    let icons = Icons()
+    lazy var iconsData:[Icons.IconsData] = {
+        if screenType == .colorsOnly {
+            return []
+        } else {
+            return icons.icons
         }
-    }
+    }()
 
     var screenType:ScreenType = .all
     enum ScreenType {
@@ -152,14 +76,7 @@ class IconsVC: UIViewController {
     }
     
 
-    struct IconsData {
-        let sectionName: String
-        let data:[Icon]
-
-        struct Icon {
-            let name: String
-        }
-    }
+    
     
     let collectionHeaderID = "MyHeaderFooterClass"
 }
@@ -215,7 +132,7 @@ extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
             let index = IndexPath(row: indexPath.row, section: indexPath.section - 1)
             let data = iconsData[index.section].data[index.row]
            // cell.backgroundColor = index == selectedIconIndex ? K.Colors.secondaryBackground : .clear
-            cell.mainImage.image = UIImage(named: data.name)
+            cell.mainImage.image = UIImage(named: data)
             
             let selectedColor = colorNamed(coloresStrTemporary[selectedColorId])
             cell.mainImage.tintColor = index == selectedIconIndex ? selectedColor :  K.Colors.balanceT
@@ -229,12 +146,12 @@ extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
         if indexPath.section == 0 {
             selectedColorId = indexPath.row
     
-            delegate?.selected(img: selectedIconIndex == nil ? "" : iconsData[selectedIconIndex!.section].data[selectedIconIndex!.row].name, color: coloresStrTemporary[indexPath.row])
+            delegate?.selected(img: selectedIconIndex == nil ? "" : iconsData[selectedIconIndex!.section].data[selectedIconIndex!.row], color: coloresStrTemporary[indexPath.row])
             collectionView.reloadData()
         } else {
             selectedIconIndex = IndexPath(row: indexPath.row, section: indexPath.section - 1)
             collectionView.reloadData()
-            delegate?.selected(img: iconsData[selectedIconIndex!.section].data[selectedIconIndex!.row].name, color: coloresStrTemporary[selectedColorId])
+            delegate?.selected(img: iconsData[selectedIconIndex!.section].data[selectedIconIndex!.row], color: coloresStrTemporary[selectedColorId])
             
         }
 

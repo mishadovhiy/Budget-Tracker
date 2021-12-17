@@ -374,23 +374,23 @@
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="TableViewCell" id="Yoe-FZ-wge" customClass="mainVCcell" customModule="Budget_Tracker" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="154.66666984558105" width="408" height="131.33332824707031"/>
+                                                <rect key="frame" x="0.0" y="154.66666984558105" width="408" height="131.66667175292969"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Yoe-FZ-wge" id="rhd-hO-2oH" userLabel="Cell View">
-                                                    <rect key="frame" x="0.0" y="0.0" width="408" height="131.33332824707031"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="408" height="131.66667175292969"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TsM-0N-KX6">
-                                                            <rect key="frame" x="0.0" y="0.0" width="408" height="131.33333333333334"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="408" height="131.66666666666666"/>
                                                             <subviews>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="gRC-oS-8Jh">
-                                                                    <rect key="frame" x="5" y="11.999999999999993" width="388" height="107.33333333333331"/>
+                                                                    <rect key="frame" x="5" y="12.000000000000007" width="388" height="107.66666666666669"/>
                                                                     <subviews>
                                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x0F-qd-jVS">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="35" height="107.33333333333333"/>
+                                                                            <rect key="frame" x="0.0" y="0.0" width="35" height="107.66666666666667"/>
                                                                             <subviews>
                                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HYZ-Uz-Asi">
-                                                                                    <rect key="frame" x="0.0" y="43.666666666666664" width="35" height="20"/>
+                                                                                    <rect key="frame" x="0.0" y="44" width="35" height="20"/>
                                                                                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                     <constraints>
                                                                                         <constraint firstAttribute="height" constant="20" id="TbQ-td-L4g"/>
@@ -406,7 +406,7 @@
                                                                             </constraints>
                                                                         </view>
                                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="MZV-uu-Z6n">
-                                                                            <rect key="frame" x="37" y="0.0" width="249" height="107.33333333333333"/>
+                                                                            <rect key="frame" x="37" y="0.0" width="249" height="107.66666666666667"/>
                                                                             <subviews>
                                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AJm-FA-Anu">
                                                                                     <rect key="frame" x="0.0" y="0.0" width="249" height="21"/>
@@ -436,7 +436,7 @@
                                                                                     </constraints>
                                                                                 </view>
                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fJn-PP-aQ1">
-                                                                                    <rect key="frame" x="0.0" y="22.999999999999993" width="249" height="84.333333333333314"/>
+                                                                                    <rect key="frame" x="0.0" y="23.000000000000007" width="249" height="84.666666666666686"/>
                                                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                                                     <color key="textColor" name="balanceTitleColor"/>
                                                                                     <nil key="highlightedColor"/>
@@ -444,7 +444,7 @@
                                                                             </subviews>
                                                                         </stackView>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="3" translatesAutoresizingMaskIntoConstraints="NO" id="jAj-JP-rqH">
-                                                                            <rect key="frame" x="288" y="0.0" width="100" height="107.33333333333333"/>
+                                                                            <rect key="frame" x="288" y="0.0" width="100" height="107.66666666666667"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="width" constant="100" id="yrc-8r-r6X"/>
                                                                             </constraints>
@@ -484,7 +484,7 @@
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="mainFooterCell" id="YbM-kx-EJN" customClass="mainFooterCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="285.99999809265137" width="408" height="53"/>
+                                                <rect key="frame" x="0.0" y="286.33334159851074" width="408" height="53"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="YbM-kx-EJN" id="gz3-vh-s1H">
                                                     <rect key="frame" x="0.0" y="0.0" width="408" height="53"/>
@@ -1231,10 +1231,10 @@
                                 </prototypes>
                             </tableView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="56v-i7-otg">
-                                <rect key="frame" x="0.0" y="384" width="428" height="380"/>
+                                <rect key="frame" x="0.0" y="364" width="428" height="400"/>
                                 <color key="backgroundColor" name="SecondaryBacroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="380" id="x0e-ki-C50"/>
+                                    <constraint firstAttribute="height" constant="400" id="x0e-ki-C50"/>
                                 </constraints>
                                 <connections>
                                     <segue destination="h1L-PQ-b3Z" kind="embed" identifier="selectIcon" id="U95-ph-p6h"/>
@@ -1270,28 +1270,29 @@
             <objects>
                 <viewController storyboardIdentifier="IconsVC" id="h1L-PQ-b3Z" customClass="IconsVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Nwp-Nb-GTI">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="380"/>
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="400"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Arh-nB-5Oe">
-                                <rect key="frame" x="5" y="5" width="418" height="370"/>
+                                <rect key="frame" x="5" y="5" width="418" height="390"/>
                                 <color key="backgroundColor" name="PrimaryBackgroundColor"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="8cc-4e-emd">
-                                    <size key="itemSize" width="50" height="50"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="8cc-4e-emd">
+                                    <size key="itemSize" width="40" height="40"/>
+                                    <size key="estimatedItemSize" width="40" height="40"/>
                                     <size key="headerReferenceSize" width="50" height="50"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="IconsVCColorCell" id="6pl-bl-DGK" customClass="IconsVCColorCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="10" y="50" width="40" height="40"/>
+                                        <rect key="frame" x="10" y="50" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="MKA-a3-5LS">
-                                            <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="WGi-am-kE7">
+                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jC3-N8-Zdg">
-                                                    <rect key="frame" x="10" y="10" width="20" height="20"/>
+                                                    <rect key="frame" x="10" y="10" width="30" height="30"/>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="20" id="YI6-Az-Kdg"/>
@@ -1301,24 +1302,25 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="bottom" secondItem="jC3-N8-Zdg" secondAttribute="bottom" constant="10" id="CBn-Uj-uMQ"/>
-                                                <constraint firstItem="jC3-N8-Zdg" firstAttribute="top" secondItem="MKA-a3-5LS" secondAttribute="top" constant="10" id="Lao-5X-9zA"/>
+                                                <constraint firstItem="jC3-N8-Zdg" firstAttribute="top" secondItem="WGi-am-kE7" secondAttribute="top" constant="10" id="Lao-5X-9zA"/>
                                                 <constraint firstAttribute="trailing" secondItem="jC3-N8-Zdg" secondAttribute="trailing" constant="10" id="MQd-C5-5G5"/>
-                                                <constraint firstItem="jC3-N8-Zdg" firstAttribute="leading" secondItem="MKA-a3-5LS" secondAttribute="leading" constant="10" id="YQg-Wa-43d"/>
+                                                <constraint firstItem="jC3-N8-Zdg" firstAttribute="leading" secondItem="WGi-am-kE7" secondAttribute="leading" constant="10" id="YQg-Wa-43d"/>
                                             </constraints>
                                         </collectionViewCellContentView>
+                                        <size key="customSize" width="50" height="50"/>
                                         <connections>
                                             <outlet property="colorView" destination="jC3-N8-Zdg" id="5Dx-Zq-V7o"/>
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="IconsVCCell" id="e6Z-0d-CL2" customClass="IconsVCCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="60" y="52.666666666666664" width="35" height="35"/>
+                                        <rect key="frame" x="70" y="55" width="40" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="kGW-fl-2x2">
-                                            <rect key="frame" x="0.0" y="0.0" width="35" height="35"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="X0H-sa-Rso">
+                                            <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mUq-DN-7go">
-                                                    <rect key="frame" x="5" y="5" width="25" height="25"/>
+                                                    <rect key="frame" x="7.6666666666666679" y="7.6666666666666679" width="25.000000000000004" height="25.000000000000004"/>
                                                     <color key="tintColor" name="balanceTitleColor"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="25" id="80D-gc-haV"/>
@@ -1327,13 +1329,12 @@
                                                 </imageView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="mUq-DN-7go" firstAttribute="leading" secondItem="kGW-fl-2x2" secondAttribute="leading" constant="5" id="8YZ-pz-zoC"/>
-                                                <constraint firstAttribute="trailing" secondItem="mUq-DN-7go" secondAttribute="trailing" constant="5" id="MDy-MZ-5AK"/>
-                                                <constraint firstItem="mUq-DN-7go" firstAttribute="top" secondItem="kGW-fl-2x2" secondAttribute="top" constant="5" id="Nqq-Za-x9z"/>
-                                                <constraint firstAttribute="bottom" secondItem="mUq-DN-7go" secondAttribute="bottom" constant="5" id="r6c-lk-VkP"/>
+                                                <constraint firstItem="mUq-DN-7go" firstAttribute="centerX" secondItem="X0H-sa-Rso" secondAttribute="centerX" id="cR9-uP-oba"/>
+                                                <constraint firstItem="mUq-DN-7go" firstAttribute="centerY" secondItem="X0H-sa-Rso" secondAttribute="centerY" id="fal-YS-CMM"/>
                                             </constraints>
                                         </collectionViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <size key="customSize" width="40" height="40"/>
                                         <connections>
                                             <outlet property="mainImage" destination="mUq-DN-7go" id="Lbs-oV-yJz"/>
                                         </connections>

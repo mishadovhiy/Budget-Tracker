@@ -43,9 +43,8 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         let statistic = [
             CellData(name: "Statistic", value: "", segue: "toStatisticVC", image: "chart.pie.fill")
         ]
-        let support = [
-            CellData(name: "Support", value: "", segue: "toSupportVC", image: "")
-        ]
+        let support = CellData(name: "Support", value: "", segue: "toSupportVC", image: "")
+        
         //toSupportVC
         //chart.pie.fill - statistic
         let emptySec = TableData(section: [CellData(name: "", value: "", segue: "", image: "")], title: "", hidden: false)
@@ -53,7 +52,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         
         
         return [
-            TableData(section: [accpuntCell, settingsCell], title: "", hidden: false),
+            TableData(section: [accpuntCell, support], title: "", hidden: false),
             emptySec,
             TableData(section: categories, title: "", hidden: false),
             emptySec,
