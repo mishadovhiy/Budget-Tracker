@@ -191,6 +191,16 @@ class DataBase {
         
     }
     
+    var totalTransactionBalance: Int {
+        var result = 0
+        let all = UserDefaults.standard.value(forKey: "transactionsData") as? [[String:Any]] ?? []
+        for i in 0..<all.count {
+            if let value = all[i]["Amount"] as? String {
+                result += (Int(Double(value) ?? 0.0))
+            }
+        }
+        return result
+    }
     
     var transactions:[TransactionsStruct] {
         get {

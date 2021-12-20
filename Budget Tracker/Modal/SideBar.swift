@@ -88,9 +88,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
             return emptyCell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "SideBardCell", for: indexPath) as! SideBardCell
-            let selected = UIView(frame: .zero)
-            selected.backgroundColor = K.Colors.primaryBacground
-            cell.selectedBackgroundView = selected
+            
             cell.nameLabel.superview?.alpha = tableData[indexPath.section].section[indexPath.row].name == "" ? 0 : 1
             cell.nameLabel.text = tableData[indexPath.section].section[indexPath.row].name
             cell.valueLabel.text = tableData[indexPath.section].section[indexPath.row].value
@@ -136,5 +134,12 @@ class SideBardCell: UITableViewCell {
     @IBOutlet weak var optionIcon: UIImageView!
     @IBOutlet weak var valueLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
+    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        let selected = UIView(frame: .zero)
+        selected.backgroundColor = K.Colors.primaryBacground
+        self.selectedBackgroundView = selected
+    }
 }
 

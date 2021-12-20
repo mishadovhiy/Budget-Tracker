@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+//calculateLabels
 var appData = AppData()
 var statisticBrain = StatisticBrain()//?
 var sumAllCategories: [String: Double] = [:]//?
@@ -434,23 +434,32 @@ class ViewController: SuperViewController {
         let localCount = ((UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String:Any]] ?? []) + (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String:Any]] ?? [])).count
        // let prevName = UserDefaults.standard.value(forKey: "prevUserName") as? String ?? "previous account"
 
+        
+        let hideUnsended = unsendedCount == 0 ? true : false
+        let hideLocal = localCount == 0 ? true : false
+        
         DispatchQueue.main.async {
             self.unsendedDataLabel.text = "\(unsendedCount)"
             self.dataFromTitleLabel.text = "Local data:"//"Data from \(prevName == "" ? "previous account" : prevName):"
             self.dataFromValueLabel.text = "\(localCount)"
             if reloadAndAnimate {
                 UIView.animate(withDuration: noData ? 0.0 : 0.35) {
-                    self.unsendedDataLabel.superview?.superview?.isHidden = unsendedCount == 0 ? true : false
-                    self.enableLocalDataPress = localCount == 0 ? false : true
-                    self.dataFromValueLabel.superview?.superview?.isHidden = localCount == 0 ? true : false
-                } completion: { (_) in
-                    self.correctFrameBackground = CGRect(x: 0, y: self.bigCalcView.frame.maxY + 30, width: self.darkBackgroundUnderTable.frame.width, height: self.view.frame.height - self.bigCalcView.frame.maxY)
-                    UIView.animate(withDuration: 0.3) {
-                        self.darkBackgroundUnderTable.frame = self.correctFrameBackground
+                    if self.unsendedDataLabel.superview?.superview?.isHidden != hideUnsended {
+                        self.unsendedDataLabel.superview?.superview?.isHidden = hideUnsended
                     }
                     
+                    self.enableLocalDataPress = !hideLocal//localCount == 0 ? false : true
+                    if self.dataFromValueLabel.superview?.superview?.isHidden != hideLocal {
+                        self.dataFromValueLabel.superview?.superview?.isHidden = hideLocal
+                    } //localCount == 0 ? true : false
+                } /*completion: { (_) in
+                   /* self.correctFrameBackground = CGRect(x: 0, y: self.bigCalcView.frame.maxY + 30, width: self.darkBackgroundUnderTable.frame.width, height: self.view.frame.height - self.bigCalcView.frame.maxY)
+                    UIView.animate(withDuration: 0.3) {
+                        self.darkBackgroundUnderTable.frame = self.correctFrameBackground
+                    }*/
+                    
                     //self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
-                }
+                }*/
             }
         }
     }
@@ -1410,34 +1419,14 @@ class ViewController: SuperViewController {
             }
         }
         totalBalance = totalIncomes + totalExpenses
-        if totalBalance < Double(Int.max) {
-            DispatchQueue.main.async {
-                //self.balanceLabel.text = "\(Int(self.totalBalance))"
-                for label in self.balanceLabels {
-                    label.text = "\(Int(self.totalBalance))"
-                }
-            }
-        } else {
-            DispatchQueue.main.async {
-                //self.balanceLabel.text = "\(self.totalBalance)"
-                for label in self.balanceLabels {
-                    label.text = "\(self.totalBalance)"
-                }
-            }
-        }
-        if totalBalance < 0.0 {
-            DispatchQueue.main.async {
-                //self.balanceLabel.textColor = K.Colors.negative
-                for label in self.balanceLabels {
-                    label.textColor = K.Colors.negative
-                }
-            }
-        } else {
-            DispatchQueue.main.async {
-               // self.balanceLabel.textColor = K.Colors.balanceV
-                for label in self.balanceLabels {
-                    label.textColor = K.Colors.balanceV
-                }
+        let totalBalanceD = db.totalTransactionBalance
+        let total = "\(totalBalanceD)"
+        
+        DispatchQueue.main.async {
+            let labelsBalance = self.balanceLabels ?? []
+            for label in labelsBalance {
+                label.text = total
+                label.textColor = totalBalanceD < 0 ? K.Colors.negative : (totalBalanceD == 0 ? K.Colors.balanceV : K.Colors.category)
             }
         }
         
@@ -1491,7 +1480,8 @@ class ViewController: SuperViewController {
             }
         }
         
-        let hidePerioudBalance = (self.totalBalance == sumPeriodBalance || sumPeriodBalance == 0) ? true : false
+        let hidePerioudBalance = (Double(db.totalTransactionBalance) == sumPeriodBalance || sumPeriodBalance == 0) ? true : false
+        
         DispatchQueue.main.async {
             if self.perioudBalanceLabels.first?.superview?.isHidden ?? false != hidePerioudBalance {
                 UIView.animate(withDuration: noData ? 0.0 : 0.35) {

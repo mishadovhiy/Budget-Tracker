@@ -99,7 +99,9 @@ class StatisticVC: SuperViewController, CALayerDelegate {
         tableView.dataSource = self
         if expenseLabelPressed == true {
             segmentControll.selectedSegmentIndex = 0
-        } else { segmentControll.selectedSegmentIndex = 1 }
+        } else {
+            segmentControll.selectedSegmentIndex = 1
+        }
         allData = createTableData()
         getMaxSum()
         initPlot()
@@ -107,23 +109,66 @@ class StatisticVC: SuperViewController, CALayerDelegate {
             self.tableView.reloadData()
         }
     }
+    let db = DataBase()
     var maxValue = 0.0
     func createTableData() -> [GraphDataStruct] {
         maxValue = 0.0
         allData = []
-        if segmentControll.selectedSegmentIndex == 0 {
-            for (key, value) in sumAllCategories {
+        let data = Array(allSelectedTransactionsData)
+     //   if segmentControll.selectedSegmentIndex == 0 {
+            var resultDict: [String:[TransactionsStruct]] = [:]
+            for i in 0..<data.count {
+                var newTransactions = resultDict["\(data[i].categoryID)"] ?? []
+                newTransactions.append(data[i])
+                let intValue = Double(data[i].value) ?? 0
+                if expenseLabelPressed {
+                    maxValue = intValue < maxValue ? intValue : maxValue
+                } else {
+                    maxValue = intValue > maxValue ? intValue : maxValue
+                }
+                
+                resultDict.updateValue(newTransactions, forKey: "\(data[i].categoryID)")
+            }
+        var totalAmount = 0.0
+            for (key, value) in resultDict {
+                let transactions = resultDict[key] ?? []
+                
+                let category = db.category(key) ?? (NewCategories(id: -1, name: "Unknown", icon: "", color: "", purpose: .debt))
+                var value = 0.0
+                for n in 0..<transactions.count {
+                    value += (Double(transactions[n].value) ?? 0.0)
+                }
+                
+                if expenseLabelPressed {
+                    
+                    if category.purpose == .expense {
+                        allData.append(GraphDataStruct(category: category, transactions: transactions, value: value))
+                        totalAmount += value
+                    }
+                } else {
+                    
+                    if category.purpose != .expense {
+                        totalAmount += value
+                        allData.append(GraphDataStruct(category: category, transactions: transactions, value: value))
+                    }
+                }
+                
+            }
+            
+            
+        /*    for (key, value) in sumAllCategories {
                 if (sumAllCategories[key] ?? 0.0) < 0.0 {
                     maxValue = value < maxValue ? value : maxValue
                     allData.append(GraphDataStruct(category: key, value: value))
                 }
-            }
+            }*/
             DispatchQueue.main.async {
-                self.titleLabel.text = "Expenses for \(selectedPeroud)"
+                self.titleLabel.text = (expenseLabelPressed ? "Expenses" : "Incomes") + " " + "for \(selectedPeroud)"
+                self.totalLabel.text = "\(Int(totalAmount))"
             }
             ifNoData()
-            return allData.sorted(by: { $1.value > $0.value})
-        } else {
+        return allData.sorted(by: { expenseLabelPressed ? $1.value > $0.value : $1.value < $0.value})
+    /*    } else {
             for (key, value) in sumAllCategories {
                 if (sumAllCategories[key] ?? 0.0) > 0.0 {
                     maxValue = value > maxValue ? value : maxValue
@@ -135,7 +180,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
             }
             ifNoData()
             return allData.sorted(by: { $0.value > $1.value})
-        }
+        }*/
         
     }
     
@@ -153,11 +198,14 @@ class StatisticVC: SuperViewController, CALayerDelegate {
     }
     
     @IBAction func selectedSegment(_ sender: UISegmentedControl) {
+        expenseLabelPressed = sender.selectedSegmentIndex == 1 ? false : true
         allData = createTableData()
         sum = 0.0
         getMaxSum()
         initPlot()
+        
         DispatchQueue.main.async {
+            
             self.tableView.reloadData()
         }
         hideandShowGrapg()
@@ -182,7 +230,8 @@ class StatisticVC: SuperViewController, CALayerDelegate {
     var selectedIndexPathToHighlite: IndexPath?
     func toHistoryVC(indexPathRow: Int) {
         selectedIndexPathToHighlite = IndexPath(row: indexPathRow, section: 0)
-        historyDataStruct = []
+        historyDataStruct = allData[indexPathRow].transactions
+       /* historyDataStruct = []
         for i in 0..<dataFromMain.count {
             if allData[indexPathRow].category == dataFromMain[i].categoryID {
                 historyDataStruct.append(dataFromMain[i])
@@ -199,7 +248,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
         }
 
         print(historyDataStruct.count, "historyDataStructhistoryDataStructhistoryDataStructhistoryDataStruct")
-        selectedCategoryName = allData[indexPathRow].category
+        selectedCategoryName = allData[indexPathRow].category*/
         DispatchQueue.main.async {
             self.performSegue(withIdentifier: "toHistorySeque", sender: self)
         }
@@ -217,6 +266,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
         }
     }
     
+    @IBOutlet weak var totalLabel: UILabel!
     
     func initPlot() {
         hostView.allowPinchScaling = false
@@ -256,7 +306,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
         // 4 - Configure text style
         let textStyle = CPTMutableTextStyle()
         textStyle.textAlignment = .left
-        textStyle.fontSize = 15
+        textStyle.fontSize = 10
         textStyle.color = CPTColor(uiColor: K.Colors.category ?? UIColor.white)
         pieChart.labelTextStyle = textStyle
         
@@ -274,13 +324,6 @@ class StatisticVC: SuperViewController, CALayerDelegate {
         return (redComponent,greenComponent,blueComponent);
     }
     
-    func setupColorView(indexPath: Int) -> UIColor {
-        var n = indexPath
-        if indexPath == 0 { n = 100 }
-        let colorComponents = colorComponentsFrom(number: Int(String(n)) ?? 0, maxCount: Int(allData[0].value))
-        let result = UIColor(displayP3Red: CGFloat(colorComponents.0)/255, green: CGFloat(colorComponents.1)/255, blue: CGFloat(colorComponents.2)/255, alpha: 0.7)
-        return result
-    }
     
     var selectedIndexPath = 0
     @objc func deselectRow() {
@@ -301,23 +344,21 @@ extension StatisticVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.statisticCellIdent, for: indexPath) as! StatisticCell
         let data = allData[indexPath.row]
-        
-        if data.value > 0.0 {
-            cell.amountLabel.textColor = UIColor(named: "darkTableColor")
-        } else { cell.amountLabel.textColor = K.Colors.negative }
+        cell.amountLabel.textColor = data.value > 0.0 ? K.Colors.category : K.Colors.negative
+
         if data.value < Double(Int.max) {
             cell.amountLabel.text = "\(Int(data.value))"
         } else {
             cell.amountLabel.text = "\(data.value)"
         }
-        cell.categoryLabel.text = "\(data.category.capitalized)"
+        cell.categoryLabel.text = "\(data.category.name.capitalized)"
         cell.percentLabel.text = "\(String(format: "%.2f", getPercent(n: data.value)))%"
         let r = (100 * data.value / maxValue) / 100
         cell.progressBar.progress = Float(r)
-        let color = setupColorView(indexPath: indexPath.row)
+       // let color = colorNamed(allData[indexPath.row].category.color)//setupColorView(indexPath: indexPath.row)
        // cell.colorView.layer.cornerRadius = 3
        // cell.colorView.backgroundColor = color
-        cell.progressBar.tintColor = color
+        cell.progressBar.tintColor = colorNamed(allData[indexPath.row].category.color)
         return cell
         
     }
@@ -363,10 +404,14 @@ extension StatisticVC: CPTPieChartDataSource, CPTPieChartDelegate {
     
     func sliceFill(for pieChart: CPTPieChart, record idx: UInt) -> CPTFill? {
         
-        var n = idx
-        if idx == 0 { n = 100 }
-        let colorComponents = colorComponentsFrom(number: Int(String(n)) ?? 0, maxCount: Int(allData[0].value))
-        return CPTFill(color: CPTColor(componentRed: CGFloat(colorComponents.0)/255, green: CGFloat(colorComponents.1)/255, blue: CGFloat(colorComponents.2)/255, alpha: 0.7))
+       // var n = idx
+       // if idx == 0 { n = 100 }
+       // let colorComponents = colorComponentsFrom(number: Int(String(n)) ?? 0, maxCount: Int(allData[0].value))
+      //  return CPTFill(color: CPTColor(componentRed: CGFloat(colorComponents.0)/255, green: CGFloat(colorComponents.1)/255, blue: CGFloat(colorComponents.2)/255, alpha: 0.7))
+        let colorName = allData[Int(idx)].category.color
+        let cgColor = colorNamed(colorName).cgColor
+        let color = CPTColor(cgColor: cgColor)
+        return CPTFill(color: color)
     }
     
     func dataLabel(for plot: CPTPlot, record idx: UInt) -> CPTLayer? {
@@ -395,7 +440,8 @@ extension StatisticVC: CPTPieChartDataSource, CPTPieChartDelegate {
 }
 
 struct GraphDataStruct {
-    var category: String
+    var category: NewCategories
+    var transactions: [TransactionsStruct]
     var value: Double
 }
 

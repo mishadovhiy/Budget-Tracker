@@ -156,6 +156,13 @@ class StatisticCell: UITableViewCell {
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var amountLabel: UILabel!
     @IBOutlet weak var progressBar: UIProgressView!
+    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        let selected = UIView(frame: .zero)
+        selected.backgroundColor = K.Colors.secondaryBackground
+        self.selectedBackgroundView = selected
+    }
 }
 
 
