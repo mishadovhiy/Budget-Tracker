@@ -121,8 +121,7 @@ extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
         
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "IconsVCColorCell", for: indexPath) as! IconsVCColorCell
-            cell.layer.cornerRadius = 4
-            cell.colorView.layer.cornerRadius = cell.colorView.layer.frame.width / 2
+            
             cell.colorView.backgroundColor = colorNamed(coloresStrTemporary[indexPath.row])
             cell.backgroundColor = indexPath.row == selectedColorId ? K.Colors.secondaryBackground : .clear
             return cell
@@ -178,7 +177,15 @@ class IconsVCCell:UICollectionViewCell {
 
 class IconsVCColorCell:UICollectionViewCell {
     
+    
     @IBOutlet weak var colorView: UIView!
+    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        self.layer.cornerRadius = 4
+        colorView.layer.cornerRadius = colorView.layer.frame.width / 2
+    }
+    
 }
 
 

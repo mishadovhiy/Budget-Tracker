@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreGraphics
 
 class AppData {
 
@@ -573,8 +574,8 @@ class AppData {
             vccc.tableData = data
             vccc.dismissOnAction = dismissOnAction
             vccc.navigationController?.setNavigationBarHidden(true, animated: false)
-            
-            let contentHeight = (data.count) * 50//cell height ///sets in storyboars /tableViewRawHeight
+            let cellHeight = 45
+            let contentHeight = (data.count) * cellHeight
             let safeAt = appData.safeArea.1
             let safebt = appData.safeArea.0
             
@@ -594,6 +595,7 @@ class AppData {
             } else {
                 vccc.firstCellHeight = tableInButtom
             }
+            vccc.cellHeightCust = CGFloat.init(cellHeight)
             currentVC.present(vccc, animated: true)
         }
         

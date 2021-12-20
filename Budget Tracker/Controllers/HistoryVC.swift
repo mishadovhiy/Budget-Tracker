@@ -55,6 +55,8 @@ class HistoryVC: SuperViewController {
         appData.presentMoreVC(currentVC: self, data: moreData, dismissOnAction: true)
     }
     
+    @IBOutlet weak var totalPeriodLabel: UILabel!
+    @IBOutlet weak var totalLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -77,6 +79,7 @@ class HistoryVC: SuperViewController {
         }
         transactionAdded = false
         historyDataStruct = historyDataStruct.sorted{ $0.dateFromString < $1.dateFromString }
+        totalSumm = Int(totalSum())
         print(historyDataStruct.count, "didlocount")
         tableView.delegate = self
         tableView.dataSource = self
@@ -117,10 +120,10 @@ class HistoryVC: SuperViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-
+        UIApplication.shared.applicationIconBadgeNumber = 0
         if selectedCategory?.purpose == .debt {
       //      center.removePendingNotificationRequests(withIdentifiers: ["Debts\(debt.name)"])
-            center?.removeDeliveredNotifications(withIdentifiers: ["Debts\(self.selectedCategory?.name ?? "")"])
+            center?.removeDeliveredNotifications(withIdentifiers: ["Debts\(self.selectedCategory?.id ?? 0)"])
             center?.getDeliveredNotifications { notifications in
                 DispatchQueue.main.async {
                     UIApplication.shared.applicationIconBadgeNumber = notifications.count
@@ -154,8 +157,8 @@ class HistoryVC: SuperViewController {
         
         //if date > today
         let title = self.selectedCategory?.name ?? ""
-        let id = "Debts\(self.selectedCategory?.name ?? "")"
-        center?.removePendingNotificationRequests(withIdentifiers: ["Debts\(self.selectedCategory?.name ?? "")"])
+        let id = "Debts\(self.selectedCategory?.id ?? 0)"
+        center?.removePendingNotificationRequests(withIdentifiers: [id])
         center?.getNotificationSettings { (settings) in
             if settings.authorizationStatus != .authorized {
             // Notifications not allowed
@@ -281,8 +284,18 @@ class HistoryVC: SuperViewController {
                 
             }
         }
-    
-    
+    var _totalSumm: Int  = 0
+    var totalSumm: Int {
+        get {
+            return _totalSumm
+        }
+        set {
+            _totalSumm = newValue
+            DispatchQueue.main.async {
+                self.totalLabel.text = "\(newValue)"
+            }
+        }
+    }
     func totalSum() -> Double {
         var sum = 0.0
         for i in 0..<historyDataStruct.count {
@@ -615,7 +628,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             cell.removeAction = removeAction
             
             let dateComponent = selectedCategory?.dueDate
-            print(dateComponent, "dateComponentdateComponentdateComponent")
+        //    print(dateComponent, "dateComponentdateComponentdateComponent")
             let date = "\(makeTwo(n: dateComponent?.day ?? 0))"
             let month = "\(returnMonth(dateComponent?.month ?? 0)), \(dateComponent?.year ?? 0)"
            /* let expired = dateExpired(debt?.dueDate ?? "")
@@ -625,6 +638,9 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             cell.expiredDaysCount.text = "Expired:" + (expText == "" ? " recently" : "\(expText) ago")
             cell.expiredDaysCount.superview?.isHidden = expired ? ((debt?.dueDate == "" ? true : false)) : true
             print(expired, "expiredexpiredexpired")*/
+
+            cell.expiredStack.isHidden = dateExpired(dateComponent)
+            
             let defaultBackground = UIColor(red: 199/255, green: 197/255, blue: 197/255, alpha: 1)
             cell.imageBackgroundView.backgroundColor = defaultBackground//expired ? K.Colors.negative : defaultBackground
             cell.imageBackgroundView.layer.masksToBounds = true
@@ -770,6 +786,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                     if let cat = self.selectedCategory {
                         self.db.deleteTransaction(transaction: self.historyDataStruct[indexPath.row], local: true)
                         self.historyDataStruct = self.db.transactions(for: cat, local: true)
+                        self.totalSumm = Int(self.totalSum())
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
                         }
@@ -939,6 +956,7 @@ extension HistoryVC: TransitionVCProtocol {
                     save.newTransaction(new) { error in
                         if let category = self.selectedCategory {
                             self.historyDataStruct = self.db.transactions(for: category)
+                            self.totalSumm = Int(self.totalSum())
                             DispatchQueue.main.async {
                                 self.tableView.reloadData()
                             }
@@ -1007,10 +1025,6 @@ extension HistoryVC: TransitionVCProtocol {
     
     
 }
-
-
-
-
 
 extension HistoryVC: CalendarVCProtocol {
     
@@ -1097,6 +1111,7 @@ class DebtDescriptionCell: UITableViewCell {
     @IBOutlet weak var alertMonthLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var expiredDaysCount: UILabel!
+    @IBOutlet weak var expiredStack: UIStackView!
     
     var cellPressed = false
     var _expired = false
@@ -1169,8 +1184,8 @@ class HistoryCellTotal: UITableViewCell {
     @IBAction func donePressed(_ sender: Any) {//change
         DispatchQueue.main.async {
             DispatchQueue.main.async {
-                self.amountTF.text = self.restToPayyLabel.text
-                self.amountTF.placeholder = self.restToPayyLabel.text
+                self.amountTF.text = self.totalToPayLabel.text
+                self.amountTF.placeholder = self.totalToPayLabel.text
             }
             if let funcc = self.changeFunc {
                 funcc()

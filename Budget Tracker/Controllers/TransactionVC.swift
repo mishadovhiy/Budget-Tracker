@@ -353,14 +353,14 @@ class TransitionVC: SuperViewController {
                     if let cat = db.categoryFrom(cat) {
                         categoryTextField.placeholder = cat.name
                         selectedCategory = cat
-                        let allCats = Array(expenseArr)
+                     /*   let allCats = Array(expenseArr)
                         var found = false
                         for i in 0..<allCats.count {
                             if allCats[i] == cat.name {
                                 found = true
                             }
-                        }
-                        placeHolder = found == true ? cat.name : "\(expenseArr[appData.selectedExpense])"
+                        }*/
+                        placeHolder = cat.name//found == true ? cat.name : "\(expenseArr[appData.selectedExpense])"
                     }
                     
                 } else {

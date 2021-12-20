@@ -119,10 +119,18 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             
             switch self.screenType {
             case .categories:
-                self.tableData = [
+                var data = [
                     ScreenDataStruct(title: K.expense, data: resultDict[purposeToString(.expense)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .expense), transactions: [])),
                     ScreenDataStruct(title: K.income, data: resultDict[purposeToString(.income)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .income), transactions: []))
                 ]
+                if fromSettings {
+                    self.tableData = data
+                } else {
+                    data.append(ScreenDataStruct(title: purposeToString(.debt), data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .debt), transactions: [])))
+                    
+                    self.tableData = data
+                }
+                
             case .debts:
                 self.tableData = [
                     ScreenDataStruct(title: "", data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .debt), transactions: [])),
@@ -804,7 +812,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             let dataIndex = IndexPath(row: indexPath.row, section: indexPath.section - 2)
             
             if let delegate = delegate {
-                delegate.categorySelected(category: tableData[dataIndex.section].data[dataIndex.row].category, fromDebts: false, amount: 0)
+                delegate.categorySelected(category: tableData[dataIndex.section].data[dataIndex.row].category, fromDebts: tableData[dataIndex.section].data[dataIndex.row].category.purpose == .debt ? true : false, amount: 0)
                 self.navigationController?.popViewController(animated: true)
             } else {
                 if tableData[dataIndex.section].data[dataIndex.row].editing == nil {

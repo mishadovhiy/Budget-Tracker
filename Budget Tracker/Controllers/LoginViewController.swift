@@ -910,7 +910,7 @@ class LoginViewController: SuperViewController {
                         if prevUserName != nickname {
 
                             UserDefaults.standard.setValue(prevUserName, forKey: "prevUserName")
-                            let wasTrans = appData.getLocalTransactions
+                       /*     let wasTrans = appData.getLocalTransactions
                             let trans: [TransactionsStruct] = prevUserName == "" ? [] : wasTrans + appData.getTransactions
 
                             let wascats = appData.getCategories(key: K.Keys.localCategories)
@@ -920,19 +920,24 @@ class LoginViewController: SuperViewController {
                                 catResult.append(CategoriesStruct(name: cats[i].name, purpose: cats[i].purpose, count: cats[i].count))
 
                             }
-                            let wasDebts = prevUserName == "" ? [] : appData.getDebts() + appData.getDebts(key: K.Keys.localDebts)
+                            let wasDebts = prevUserName == "" ? [] : appData.getDebts() + appData.getDebts(key: K.Keys.localDebts)*/
                             
                             if prevUserName == "" {
-                                appData.saveDebts(wasDebts, key: K.Keys.localDebts)
-                                appData.saveCategories(catResult, key: K.Keys.localCategories)
-                                appData.saveTransations(trans, key: K.Keys.localTrancations)
+                               // appData.saveDebts(wasDebts, key: K.Keys.localDebts)
+                               // appData.saveCategories(catResult, key: K.Keys.localCategories)
+                               // appData.saveTransations(trans, key: K.Keys.localTrancations)
+                                let db = DataBase()
+                                db.localCategories = db.categories
+                                db.localTransactions = db.transactions
+                                
                             }
                             
 
-                            appData.fromLoginVCMessage = (trans.count + wasDebts.count + catResult.count) > 0 ? "Wellcome, \(appData.username), \nYour Data has been saved localy" : "Wellcome, \(appData.username)"
+                            appData.fromLoginVCMessage = "Wellcome, \(appData.username)"//(trans.count + wasDebts.count + catResult.count) > 0 ? "Wellcome, \(appData.username), \nYour Data has been saved localy" : "Wellcome, \(appData.username)"
                         }
                         needFullReload = true
                         lastSelectedDate = nil
+                        AppDelegate.shared?.center.removeAllPendingNotificationRequests()
                         _debtsHolder.removeAll()
                         _categoriesHolder.removeAll()
                         UserDefaults.standard.setValue(nil, forKey: "lastSelectedCategory")
@@ -1042,27 +1047,32 @@ class LoginViewController: SuperViewController {
                                     KeychainService.savePassword(service: "BudgetTrackerApp", account: name, data: password)
                                     appData.username = name
                                     appData.password = password
-                                    let wasTransactions: [TransactionsStruct] = prevUsere == "" ? [] : appData.getTransactions + appData.getLocalTransactions
+                              /*      let wasTransactions: [TransactionsStruct] = prevUsere == "" ? [] : appData.getTransactions + appData.getLocalTransactions
                                     
                                     let wasCats = appData.getCategories() + appData.getCategories(key: K.Keys.localCategories)
                                     var catResult: [CategoriesStruct] = prevUsere == "" ? [] : wasCats
                                     for i in 0..<wasCats.count {
                                         catResult.append(CategoriesStruct(name: wasCats[i].name, purpose: wasCats[i].purpose, count: wasCats[i].count))
 
-                                    }
+                                    }*/
 
                                     
-                                    let wasDebts = prevUsere == "" ? [] : appData.getDebts() + appData.getDebts(key: K.Keys.localDebts)
+                              //      let wasDebts = prevUsere == "" ? [] : appData.getDebts() + appData.getDebts(key: K.Keys.localDebts)
 
                                     if prevUsere == "" {
-                                        appData.saveTransations(wasTransactions, key: K.Keys.localTrancations)
-                                        appData.saveDebts(wasDebts, key: K.Keys.localDebts)
-                                        appData.saveCategories(catResult, key: K.Keys.localCategories)
+                                     //   appData.saveTransations(wasTransactions, key: K.Keys.localTrancations)
+                                     //   appData.saveDebts(wasDebts, key: K.Keys.localDebts)
+                                     //   appData.saveCategories(catResult, key: K.Keys.localCategories)
+                                        let db = DataBase()
+                                        db.localTransactions = db.transactions
+                                        db.localCategories = db.categories
                                     }
                                     
-                                    appData.fromLoginVCMessage = wasTransactions.count + catResult.count + wasDebts.count > 0 ? "Wellcome, \(appData.username), \nYour Data has been saved localy" : "Wellcome, \(appData.username)"
+                                    appData.fromLoginVCMessage = "Wellcome, \(appData.username)" //wasTransactions.count + catResult.count + wasDebts.count > 0 ? "Wellcome, \(appData.username), \nYour Data has been saved localy" : "Wellcome, \(appData.username)"
                                     needFullReload = true
                                     lastSelectedDate = nil
+                                    
+                                    AppDelegate.shared?.center.removeAllPendingNotificationRequests()
                                     _debtsHolder.removeAll()
                                     _categoriesHolder.removeAll()
                                     UserDefaults.standard.setValue(nil, forKey: "lastSelectedCategory")

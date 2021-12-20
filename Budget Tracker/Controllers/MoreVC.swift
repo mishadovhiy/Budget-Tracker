@@ -13,7 +13,7 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var tableView: UITableView!
     var dismissOnAction = false
     var dataHolder:[ScreenData] = []
-    
+    var cellHeightCust: CGFloat = 60
     var firstLaunch = true
     var firstCellHeight:CGFloat = 0
     var tableData:[ScreenData] {
@@ -174,7 +174,7 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         //firstCellHeight
         //tableView.frame.height - tableView.contentSize.height
-        return indexPath.section == 0 ? firstCellHeight : UITableView.automaticDimension
+        return indexPath.section == 0 ? firstCellHeight : cellHeightCust
     }
     
     

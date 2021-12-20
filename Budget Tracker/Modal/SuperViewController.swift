@@ -160,6 +160,47 @@ class SuperViewController: UIViewController {
         return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: startDate, to: Date())
     }
     
+    func dateExpired(_ dateComponents: DateComponents?) -> Bool {
+      //  dateComponents.
+        if let comp = dateComponents {
+            if let dateDate = NSCalendar.current.date(from: comp) {// dateComponents.date {
+                let difference = differenceFromNow(startDate: dateDate)
+                print(difference)
+                
+               /* var expired: Bool {
+                    if difference.year ?? 0 >= 0 {
+                        if difference.month ?? 0 >= 0 {
+                            if difference.day ?? 0 >= 0 {
+                                if difference.hour ?? 0 >= 0 {
+                                    if difference.minute ?? 0 >= 0 {
+                                        if difference.second ?? 0 >= 0 {
+                                            return true
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            return false
+                        }
+                    } else {
+                        return false
+                    }
+                }*/
+
+                let one = (difference.second ?? 0) + (difference.minute ?? 0) + (difference.hour ?? 0)
+                let expiredSeconds = one + (difference.day ?? 0) + (difference.month ?? 0) + (difference.year ?? 0)
+                
+                return expiredSeconds >= 0 ? false : true
+            } else {
+                return false
+            }
+        } else {
+            return false
+        }
+        
+        
+    }
+    
     func dateExpired(_ string: String) -> Bool {//      MODIFY TO USE ISO
         let dateDate = stringToDate(s: string, fullDate: true)//remove!
         let difference = differenceFromNow(startDate: dateDate)

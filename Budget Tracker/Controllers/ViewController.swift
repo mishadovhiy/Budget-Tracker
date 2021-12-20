@@ -791,17 +791,12 @@ class ViewController: SuperViewController {
         super.viewDidAppear(true)
         print("DIDAPPPP")
         sideTableView.reloadData()
-        center?.getDeliveredNotifications { notifications in
-            //add notif array that came when app was launched (i have to hendel it by myself)
-            DispatchQueue.main.async {
-                UIApplication.shared.applicationIconBadgeNumber = notifications.count //+ showed and undeen locally
-            }
-        }
 
         if needDownloadOnMainAppeare {
             needDownloadOnMainAppeare = false
             self.downloadFromDB()
         }
+
         let safeTop = self.view.safeAreaInsets.top
         self.safeArreaHelperView?.alpha = 0
         if !safeArreaHelperViewAdded {
@@ -1580,6 +1575,11 @@ class ViewController: SuperViewController {
         toggleSideBar(false, animated: true)
         print("prepare")
         selectedCell = nil
+        DispatchQueue.main.async {
+            if self.refreshControl.isRefreshing {
+                self.refreshControl.endRefreshing()
+            }
+        }
         switch segue.identifier {
         case "toDebts":
             print("k")
