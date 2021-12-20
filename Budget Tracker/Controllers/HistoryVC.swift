@@ -291,8 +291,15 @@ class HistoryVC: SuperViewController {
         }
         set {
             _totalSumm = newValue
+            let hideLabel = newValue == 0
             DispatchQueue.main.async {
                 self.totalLabel.text = "\(newValue)"
+                if self.totalLabel.superview?.isHidden != hideLabel {
+                    UIView.animate(withDuration: 0.3) {
+                        self.totalLabel.superview?.isHidden = hideLabel
+                    } 
+
+                }
             }
         }
     }
@@ -857,7 +864,8 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                 }*/
                 
             }
-            deleteAction.backgroundColor = K.Colors.negative
+            deleteAction.image = iconNamed("trash.red")
+            deleteAction.backgroundColor = K.Colors.primaryBacground
             return historyDataStruct.count == 0 ? nil : UISwipeActionsConfiguration(actions: allowEditing && mainType != .unsaved ? [deleteAction] : [])
         } else {
             //check if debts has total amount

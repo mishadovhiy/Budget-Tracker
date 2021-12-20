@@ -71,15 +71,16 @@ class ViewController: SuperViewController {
             selectedCell = nil
             let tableDataDataCount = self.tableData.count
             DispatchQueue.main.async {
-                UIView.animate(withDuration: 0.3) {
+            /**    UIView.animate(withDuration: 0.3) {
                     self.darkBackgroundUnderTable.frame = CGRect(x: 0, y: self.view.frame.height, width: self.view.frame.width, height: 0)
-                }
+                }*/
+                self.mainTableView.reloadData()
                 if self.refreshControl.isRefreshing {
                  //   self.refreshControl.backgroundColor = .clear
                     self.refreshControl.endRefreshing()
                 }
                 
-                self.mainTableView.reloadData()
+                
                 
                 self.mainTableView.alpha = tableDataDataCount == 0 ? 0 : 1
                 
@@ -106,10 +107,11 @@ class ViewController: SuperViewController {
                     }
              //   }
                 print(self.newTransaction, "self.newTransactionself.newTransactionself.newTransaction")
+              //  self.mainTableView.reloadData()
                 if let new = self.newTransaction {
              //       self.mainTableView.backgroundColor = UIColor(named: "darkTableColor")
                     self.newTransaction = nil
-                    for i in 0..<newValue.count {
+                    /**for i in 0..<newValue.count {
                         let date = "\(self.makeTwo(n: newValue[i].date.day ?? 0)).\(self.makeTwo(n: newValue[i].date.month ?? 0)).\(newValue[i].date.year ?? 0)"
                         print("date:", date )
                         if new.date == "\(date)" {
@@ -118,11 +120,11 @@ class ViewController: SuperViewController {
                                 {
                                     let cell = IndexPath(row: t, section: i+1)
                                     self.highliteCell = cell
-                                    self.mainTableView.scrollToRow(at: cell, at: .middle, animated: true)
+                                    self.mainTa bleView.scrollToRow(at: cell, at: .middle, animated: true)
                                 }
                             }
                         }
-                    }
+                    }*/
                     //here
                     self.compliteScrolling()
                 }
@@ -227,7 +229,7 @@ class ViewController: SuperViewController {
         if #available(iOS 15.0, *) {
             self.mainTableView.sectionHeaderTopPadding = 0
         }
-        self.mainTableView.layer.cornerRadius = 15
+      //  self.mainTableView.layer.cornerRadius = 15
        // mainTableView.isUserInteractionEnabled = false
      //   self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(bigCalcTaps(_:))))
         sideBar.load()
@@ -384,7 +386,7 @@ class ViewController: SuperViewController {
         
     }
     
-    
+    var firstLoaded = false
     func toggleNoData(show: Bool, text: String = "No Transactions", fromTop: Bool = false, appeareAnimation: Bool = true, addButtonHidden: Bool = false) {
         
         DispatchQueue.main.async {
@@ -400,7 +402,10 @@ class ViewController: SuperViewController {
                     //self.darkBackgroundUnderTable.frame = CGRect(x: 0, y: y, width: self.view.frame.width, height: self.view.frame.height)
                 } completion: { (_) in
                   //  self.calculateLabels(noData: true)
-                    self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
+                    if self.mainTableView.visibleCells.count > 1 {
+                        self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
+                    }
+                    
                 }
             } else {
                 UIView.animate(withDuration: 0.25) {
@@ -408,7 +413,9 @@ class ViewController: SuperViewController {
                 } completion: { (_) in
                     self.noDataView.isHidden = true
                    // self.calculateLabels(noData: false)
-                    self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
+                    if self.mainTableView.visibleCells.count > 1 {
+                        self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
+                    }
                 }
             }
         }
@@ -452,14 +459,17 @@ class ViewController: SuperViewController {
                     if self.dataFromValueLabel.superview?.superview?.isHidden != hideLocal {
                         self.dataFromValueLabel.superview?.superview?.isHidden = hideLocal
                     } //localCount == 0 ? true : false
-                } /*completion: { (_) in
+                } completion: { (_) in
                    /* self.correctFrameBackground = CGRect(x: 0, y: self.bigCalcView.frame.maxY + 30, width: self.darkBackgroundUnderTable.frame.width, height: self.view.frame.height - self.bigCalcView.frame.maxY)
                     UIView.animate(withDuration: 0.3) {
                         self.darkBackgroundUnderTable.frame = self.correctFrameBackground
                     }*/
                     
                     //self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
-                }*/
+                    self.mainTableView.reloadData()
+                }
+            } else {
+                self.mainTableView.reloadData()
             }
         }
     }
@@ -1428,6 +1438,7 @@ class ViewController: SuperViewController {
                 label.text = total
                 label.textColor = totalBalanceD < 0 ? K.Colors.negative : (totalBalanceD == 0 ? K.Colors.balanceV : K.Colors.category)
             }
+                // self.mainTableView.reloadData()
         }
         
         
@@ -1987,8 +1998,10 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 view.addSubview(self.tableActionActivityIndicator)
                 self.deleteFromDB(at: IndexPath(row: indexPath.row, section: indexPath.section - 1))
             }
-            editeAction.backgroundColor = K.Colors.yellow
-            deleteAction.backgroundColor = K.Colors.negative
+            editeAction.image = iconNamed("pencil.yellow")
+            deleteAction.image = iconNamed("trash.red")
+            editeAction.backgroundColor = K.Colors.primaryBacground
+            deleteAction.backgroundColor = K.Colors.primaryBacground
             return UISwipeActionsConfiguration(actions: newTableData[indexPath.section - 1].transactions.count != indexPath.row ? [editeAction, deleteAction] : [] )
                                                
                                                } else {

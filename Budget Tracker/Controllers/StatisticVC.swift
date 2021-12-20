@@ -231,6 +231,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
     func toHistoryVC(indexPathRow: Int) {
         selectedIndexPathToHighlite = IndexPath(row: indexPathRow, section: 0)
         historyDataStruct = allData[indexPathRow].transactions
+        selectedCategoryName = "\(allData[indexPathRow].category.id)"
        /* historyDataStruct = []
         for i in 0..<dataFromMain.count {
             if allData[indexPathRow].category == dataFromMain[i].categoryID {
@@ -249,6 +250,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
 
         print(historyDataStruct.count, "historyDataStructhistoryDataStructhistoryDataStructhistoryDataStruct")
         selectedCategoryName = allData[indexPathRow].category*/
+        
         DispatchQueue.main.async {
             self.performSegue(withIdentifier: "toHistorySeque", sender: self)
         }
@@ -300,16 +302,15 @@ class StatisticVC: SuperViewController, CALayerDelegate {
         // 3 - Configure border style
         let borderStyle = CPTMutableLineStyle()
         borderStyle.lineColor = CPTColor(uiColor: K.Colors.background ?? UIColor.white)
-        borderStyle.lineWidth = 1.5
+        borderStyle.lineWidth = 0.5
         pieChart.borderLineStyle = borderStyle
         
         // 4 - Configure text style
         let textStyle = CPTMutableTextStyle()
         textStyle.textAlignment = .left
         textStyle.fontSize = 10
-        textStyle.color = CPTColor(uiColor: K.Colors.category ?? UIColor.white)
+        textStyle.color = CPTColor(uiColor: .white)//K.Colors.category ?? UIColor.white)
         pieChart.labelTextStyle = textStyle
-        
         // 5 - Add chart to graph
         graph.add(pieChart)
     }
@@ -408,10 +409,13 @@ extension StatisticVC: CPTPieChartDataSource, CPTPieChartDelegate {
        // if idx == 0 { n = 100 }
        // let colorComponents = colorComponentsFrom(number: Int(String(n)) ?? 0, maxCount: Int(allData[0].value))
       //  return CPTFill(color: CPTColor(componentRed: CGFloat(colorComponents.0)/255, green: CGFloat(colorComponents.1)/255, blue: CGFloat(colorComponents.2)/255, alpha: 0.7))
-        let colorName = allData[Int(idx)].category.color
-        let cgColor = colorNamed(colorName).cgColor
-        let color = CPTColor(cgColor: cgColor)
-        return CPTFill(color: color)
+    //    let colorName = allData[Int(idx)].category.color
+        //let cgColor = colorNamed(colorName).cgColor
+  //      let color = CPTColor(uiColor: colorNamed(colorName))
+        //colorNamed(allData[Int(idx)].category.color)//CPTFill(color: color)
+        let color = colorNamed(allData[Int(idx)].category.color)
+        return CPTFill(color: CPTColor(uiColor: color))
+       
     }
     
     func dataLabel(for plot: CPTPlot, record idx: UInt) -> CPTLayer? {

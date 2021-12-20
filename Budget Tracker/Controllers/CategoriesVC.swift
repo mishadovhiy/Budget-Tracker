@@ -443,6 +443,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
 
 
+    
 
     func deteteCategory(at: IndexPath) {
         let delete = DeleteFromDB()
@@ -634,7 +635,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 cell.selectedBackgroundView = selected
                 let category = tableData[index.section].data[indexPath.row]
 
-                cell.accessoryType = category.editing != nil ? .none : .disclosureIndicator
+            //    cell.accessoryType = category.editing != nil ? .none : .disclosureIndicator
                 let hideEditing = category.editing != nil ? false : true
                 let hideQnt = !hideEditing
                 let hideTitle = !hideEditing
@@ -673,12 +674,12 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         } else {
         let mainFrame = tableView.frame
         let view = UIView(frame: CGRect(x: 0, y: 0, width: mainFrame.width, height: footerHeight))
-        let helperView = UIView(frame: CGRect(x: 0, y: 10, width:mainFrame.width, height: footerHeight - 10))
+        let helperView = UIView(frame: CGRect(x: 10, y: 10, width:mainFrame.width - 20, height: footerHeight - 10))
         helperView.layer.cornerRadius = tableCorners
         helperView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         helperView.backgroundColor = K.Colors.secondaryBackground//darkAppearence ? .black : .white
         view.backgroundColor = self.view.backgroundColor
-        let label = UILabel(frame: CGRect(x: tableCorners, y: 15, width: mainFrame.width - 40, height: 20))
+        let label = UILabel(frame: CGRect(x: tableCorners + 10, y: 15, width: mainFrame.width - 40, height: 20))
         label.text = tableData[section - 2].title
         label.textColor = K.Colors.balanceV
         label.font = .systemFont(ofSize: 14, weight: .medium)
@@ -778,17 +779,19 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             //self.tableActionActivityIndicator.startAnimating()
             self.deteteCategory(at: IndexPath(row: indexPath.row, section: indexPath.section - 2))
         }
-        deleteAction.backgroundColor = K.Colors.negative
         
         let editAction = UIContextualAction(style: .destructive, title: "Edit") {  (contextualAction, view, boolValue) in
             //self.tableActionActivityIndicator.startAnimating()
             self.tableData[indexPath.section - 2].data[indexPath.row].editing = self.tableData[indexPath.section - 2].data[indexPath.row].category
             DispatchQueue.main.async {
-                self.tableView.reloadData()
+                self.tableView.reloadRows(at: [indexPath], with: .left)
+               // self.tableView.reloadData()
             }
         }
-        editAction.backgroundColor = K.Colors.yellow
-        
+        editAction.image = iconNamed("pencil.yellow")
+        deleteAction.image = iconNamed("trash.red")
+        editAction.backgroundColor = K.Colors.primaryBacground
+        deleteAction.backgroundColor = K.Colors.primaryBacground
         
         
         if indexPath.section == 0 || indexPath.section == 1 {
@@ -797,9 +800,14 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             if screenType == .localData {
                 //delete cate from local
                 //
-                return transfaringCategories == nil ? UISwipeActionsConfiguration(actions: [deleteAction, editAction]) : nil
+                return transfaringCategories == nil ? UISwipeActionsConfiguration(actions: [editAction, deleteAction]) : nil
             } else {
-                return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
+                if self.tableData[indexPath.section - 2].data[indexPath.row].editing == nil {
+                    return UISwipeActionsConfiguration(actions: [editAction, deleteAction])
+                } else {
+                    return nil
+                }
+                
             }
             
             
