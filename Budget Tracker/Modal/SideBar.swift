@@ -26,7 +26,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
             return CellData(name: "Account", value: appData.username == "" ? "Log in" : appData.username, segue: accountSegue, image: "person.fill")
         }
         
-        var settingsCell = CellData(name: "Settings", value: "", segue: "toSettingsVC", image: "")
+        var settingsCell = CellData(name: "Settings", value: "", segue: "toSettingsVC", image: "gearshape.2.fill")
         
         
         

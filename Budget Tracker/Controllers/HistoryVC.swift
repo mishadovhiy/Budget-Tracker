@@ -552,21 +552,24 @@ extension HistoryVC:UITextFieldDelegate {
             
                 
                     let text = textField.text ?? ""
-                    if let _ = Int(text) {
-                        DispatchQueue.main.async {
-                            self.ai.show(title: "Sending") { _ in
-                                self.changeAmountToPay(enteredAmount: text) { (_) in
-                                    self.ai.fastHide { (_) in
-                                        self.amountToPayEditing = false
-                                        //DispatchQueue.main.async {
-                                            self.tableView.reloadData()
-                                        //}
-                                    }
-                                }
+            if let dob = Double(text) {
+                DispatchQueue.main.async {
+                    self.ai.show(title: "Sending") { _ in
+                        self.changeAmountToPay(enteredAmount: text) { (_) in
+                            self.ai.fastHide { (_) in
+                                self.amountToPayEditing = false
+                                //DispatchQueue.main.async {
+                                    self.tableView.reloadData()
+                                //}
                             }
                         }
-                        
                     }
+                }
+            }
+                    /*if let _ = Int(text) {
+                        
+                        
+                    }*/
                 
             
         default:
@@ -958,6 +961,7 @@ extension HistoryVC: TransitionVCProtocol {
     func addNewTransaction(value: String, category: String, date: String, comment: String) {
         toAddVC = false
         transactionAdded = true
+        needDownloadOnMainAppeare = true
         let new = TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)
         if value != "" && category != "" && date != "" {
                     let save = SaveToDB()

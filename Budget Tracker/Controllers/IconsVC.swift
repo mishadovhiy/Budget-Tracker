@@ -26,6 +26,10 @@ class IconsVC: UIViewController {
         }
     }()
 
+    static var shared:IconsVC?
+    var selectedIconName = ""
+    var selectedColorName = ""
+    
     var screenType:ScreenType = .all
     enum ScreenType {
         case all
@@ -65,6 +69,7 @@ class IconsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        IconsVC.shared = self
         collectionView.delegate = self
         collectionView.dataSource = self
         
@@ -123,18 +128,20 @@ extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "IconsVCColorCell", for: indexPath) as! IconsVCColorCell
             
             cell.colorView.backgroundColor = colorNamed(coloresStrTemporary[indexPath.row])
-            cell.backgroundColor = indexPath.row == selectedColorId ? K.Colors.secondaryBackground : .clear
+            //cell.backgroundColor = indexPath.row == selectedColorId ? K.Colors.secondaryBackground : .clear
+            cell.backgroundColor = coloresStrTemporary[indexPath.row] == selectedColorName ? K.Colors.secondaryBackground : .clear
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "IconsVCCell", for: indexPath) as! IconsVCCell
             cell.layer.cornerRadius = 4
             let index = IndexPath(row: indexPath.row, section: indexPath.section - 1)
-            let data = iconsData[index.section].data[index.row]
+            let iconName = iconsData[index.section].data[index.row]
            // cell.backgroundColor = index == selectedIconIndex ? K.Colors.secondaryBackground : .clear
-            cell.mainImage.image = UIImage(named: data)
+            cell.mainImage.image = UIImage(named: iconName)
             
             let selectedColor = colorNamed(coloresStrTemporary[selectedColorId])
-            cell.mainImage.tintColor = index == selectedIconIndex ? selectedColor :  K.Colors.balanceT
+            //cell.mainImage.tintColor = index == selectedIconIndex ? selectedColor :  K.Colors.balanceT
+            cell.mainImage.tintColor = iconName == selectedIconName ? selectedColor :  K.Colors.balanceT
             
             return cell
         }
@@ -145,13 +152,18 @@ extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
         if indexPath.section == 0 {
             selectedColorId = indexPath.row
     
-            delegate?.selected(img: selectedIconIndex == nil ? "" : iconsData[selectedIconIndex!.section].data[selectedIconIndex!.row], color: coloresStrTemporary[indexPath.row])
+            let imgName = selectedIconIndex == nil ? "" : iconsData[selectedIconIndex!.section].data[selectedIconIndex!.row]
+            let colorName = coloresStrTemporary[indexPath.row]
+            selectedColorName = colorName
+            delegate?.selected(img: imgName, color: colorName)
             collectionView.reloadData()
         } else {
             selectedIconIndex = IndexPath(row: indexPath.row, section: indexPath.section - 1)
+            let imgName = iconsData[selectedIconIndex!.section].data[selectedIconIndex!.row]
+            let colorName = coloresStrTemporary[selectedColorId]
+            selectedIconName = imgName
+            delegate?.selected(img: imgName, color: colorName)
             collectionView.reloadData()
-            delegate?.selected(img: iconsData[selectedIconIndex!.section].data[selectedIconIndex!.row], color: coloresStrTemporary[selectedColorId])
-            
         }
 
     }

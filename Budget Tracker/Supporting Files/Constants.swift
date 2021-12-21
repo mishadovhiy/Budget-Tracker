@@ -62,7 +62,7 @@ struct K {
         static let separetor = UIColor(named: "separetorColor")
         static let yellow = UIColor(named: "yellowColor")
         static let pink = UIColor(named: "pinkColor")
-        static let sectionBackground = UIColor(named: "sectionBackgroundColor")
+        
         static let loginColor = UIColor(named: "loginColor")
         static let notOnDBColor = UIColor(named: "notOnDBColor")
         static let darkTable = UIColor(named: "darkTableColor")
@@ -70,6 +70,7 @@ struct K {
         
         static let primaryBacground = UIColor(named: "PrimaryBackgroundColor") ?? .black
         static let secondaryBackground = UIColor(named: "SecondaryBacroundColor") ?? .black
+        static let sectionBackground = secondaryBackground
     }
 }
 

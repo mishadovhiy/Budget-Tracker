@@ -8,6 +8,7 @@
 
 import UIKit
 //calculateLabels
+//downloadFromDB
 var appData = AppData()
 var statisticBrain = StatisticBrain()//?
 var sumAllCategories: [String: Double] = [:]//?
@@ -175,6 +176,7 @@ class ViewController: SuperViewController {
         }
     }
     func downloadFromDB(showError: Bool = false) {
+        self.sendError = false
         _categoriesHolder.removeAll()
         _debtsHolder.removeAll()
         lastSelectedDate = nil
@@ -836,13 +838,17 @@ class ViewController: SuperViewController {
     
     
    // var didloadCalled = false
-    
+    var sendError = false
     //here
     var startedSendingUnsended = false
     var highesLoadedCatID: Int?
     func sendUnsaved() {
         //breaek when error
+        if self.sendError {
+            return
+        }
         let errorAction = {
+            self.sendError = true
             self.startedSendingUnsended = false
             if sendSavedData {
                 sendSavedData = false
@@ -1573,6 +1579,7 @@ class ViewController: SuperViewController {
     
     var filterHelperView = UIView(frame: .zero)
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        self.sendError = false
         toggleSideBar(false, animated: true)
         print("prepare")
         selectedCell = nil

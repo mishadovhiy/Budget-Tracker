@@ -7,7 +7,8 @@
 //
 
 import UIKit
-import CoreGraphics
+
+
 
 class AppData {
 
@@ -17,6 +18,8 @@ class AppData {
     
     var deptsData: [CategoriesStruct] = []
 
+    let lastSelected = LastSelected()
+    
     var proVersion: Bool {
         get{
             return defaults.value(forKey: "proVersion") as? Bool ?? false

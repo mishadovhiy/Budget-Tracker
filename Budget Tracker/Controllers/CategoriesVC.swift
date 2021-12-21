@@ -8,7 +8,11 @@
 
 import UIKit
 import AVFoundation
-
+/***
+ loadData
+ iconTapped
+ newCategoryPressed
+ */
 ///TODO:
 //no data cell
 var _categoriesHolder: [CategoriesStruct] = []
@@ -25,6 +29,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     var fromSettings = false
     var delegate: CategoriesVCProtocol?
 
+    let selectionBacground = UIColor(red: 32/255, green: 32/255, blue: 32/255, alpha: 1)
     static var shared:CategoriesVC?
     var _tableData:[ScreenDataStruct] = []
     var tableData:[ScreenDataStruct] {
@@ -34,15 +39,23 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         set {
             _tableData = newValue
             DispatchQueue.main.async {
-               // self.tableView.reloadData()
-               /* if self.refreshControl.isRefreshing {
-                    self.refreshControl.endRefreshing()
-                }
-                if self.ai.isShowing {
-                    self.ai.fastHide { _ in
-                        
+                if self.tableView.alpha != 1 {
+                //    self.tableView.transform =
+                //    self.tableView.alpha = 1
+                    if self.screenAI.isAnimating {
+                        self.screenAI.stopAnimating()
                     }
-                }*/
+                    if self.screenAI.isHidden != true {
+                        self.screenAI.isHidden = true
+                    }
+                    UIView.animate(withDuration: 0.30) {
+                        self.tableView.alpha = 1
+                       // self.tableView.transform =// to notmal
+                    } /*completion: { _ in
+                        
+                    }*/
+
+                }
                 
             }
         }
@@ -77,6 +90,13 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             print("newValue::", newValue.count)
             
 
+            var allTransactionsLocal:[TransactionsStruct] {
+                if let transfaring = transfaringCategories  {
+                    return transfaring.transactions
+                } else {
+                    return db.localTransactions
+                }
+            }
             
             for i in 0..<newValue.count {
                 let purpose = newValue[i].purpose
@@ -89,13 +109,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                     if self.screenType != .localData {
                         return db.transactions(for: newValue[i])
                     } else {
-                        var all: [TransactionsStruct] {
-                            if let transfaring = transfaringCategories  {
-                                return transfaring.transactions
-                            } else {
-                                return db.localTransactions
-                            }
-                        }
+                        let all = Array(allTransactionsLocal)
                         var transResult:[TransactionsStruct] = []
                         for t in 0..<all.count {
                             if "\(newValue[i].id)" == all[t].categoryID {
@@ -119,24 +133,53 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             
             switch self.screenType {
             case .categories:
+                var randomIcon: String {
+                    let ic = Icons()
+                    let data = ic.icons.first?.data ?? []
+                    return data[Int.random(in: 0..<data.count)]
+                }
+                let debtColor = appData.lastSelected.gett(setterType: .color, valueType: .debt) ?? "yellowColor"
+                let debtImg = appData.lastSelected.gett(setterType: .icon, valueType: .debt) ?? randomIcon
+                
+                let expenseColor = appData.lastSelected.gett(setterType: .color, valueType: .expense) ?? "yellowColor"
+                let expenseImg = appData.lastSelected.gett(setterType: .icon, valueType: .expense) ?? randomIcon
+                
+                let incomeColor = appData.lastSelected.gett(setterType: .color, valueType: .income) ?? "yellowColor"
+                let incomeImg = appData.lastSelected.gett(setterType: .icon, valueType: .income) ?? randomIcon
+                
                 var data = [
-                    ScreenDataStruct(title: K.expense, data: resultDict[purposeToString(.expense)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .expense), transactions: [])),
-                    ScreenDataStruct(title: K.income, data: resultDict[purposeToString(.income)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .income), transactions: []))
+                    ScreenDataStruct(title: K.expense, data: resultDict[purposeToString(.expense)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: expenseImg, color: expenseColor, purpose: .expense), transactions: [])),
+                    ScreenDataStruct(title: K.income, data: resultDict[purposeToString(.income)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: incomeImg, color: incomeColor, purpose: .income), transactions: []))
                 ]
                 if fromSettings {
                     self.tableData = data
                 } else {
-                    data.append(ScreenDataStruct(title: purposeToString(.debt), data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .debt), transactions: [])))
+                    data.append(ScreenDataStruct(title: purposeToString(.debt), data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: debtImg, color: debtColor, purpose: .debt), transactions: [])))
                     
                     self.tableData = data
                 }
                 
             case .debts:
+                var randomIcon: String {
+                    let ic = Icons()
+                    let data = ic.icons.first?.data ?? []
+                    return data[Int.random(in: 0..<data.count)]
+                }
+                let debtColor = appData.lastSelected.gett(setterType: .color, valueType: .debt) ?? "yellowColor"
+                let debtImg = appData.lastSelected.gett(setterType: .icon, valueType: .debt) ?? randomIcon
                 self.tableData = [
-                    ScreenDataStruct(title: "", data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .debt), transactions: [])),
+                    ScreenDataStruct(title: "", data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: debtImg, color: debtColor, purpose: .debt), transactions: [])),
                 ]
             case .localData:
+                var allTransactions: [TransactionsStruct] {
+                    if let transfaring = transfaringCategories  {
+                        return transfaring.transactions
+                    } else {
+                        return db.localTransactions
+                    }
+                }
                 self.tableData = [
+                    ScreenDataStruct(title: "", data: [ScreenCategory(category: NewCategories(id: -1, name: "All transaction", icon: "", color: "", purpose: .expense), transactions: allTransactions)], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .expense), transactions: [])),
                     ScreenDataStruct(title: K.expense, data: resultDict[purposeToString(.expense)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .expense), transactions: [])),
                     ScreenDataStruct(title: K.income, data: resultDict[purposeToString(.income)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .income), transactions: [])),
                     ScreenDataStruct(title: purposeToString(.debt), data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .debt), transactions: []))
@@ -144,7 +187,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             }
             DispatchQueue.main.async {
                 self.editingTF = nil
-                self.toggleIcons(show: false, animated: true)
+                self.toggleIcons(show: false, animated: true, category: nil)
                 self.editingTF?.endEditing(true)
                 self.tableView.reloadData()
                 if self.refreshControl.isRefreshing {
@@ -189,7 +232,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        toggleIcons(show: false, animated: false)
+        toggleIcons(show: false, animated: false, category: nil)
         
         var strTitle:String {
             switch screenType {
@@ -204,7 +247,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         title = strTitle
         CategoriesVC.shared = self
         updateUI()
-        loadData()
+        if !fromSettings {
+            categories = db.categories
+        }
         
         
     }
@@ -228,7 +273,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 self.tableData[section].newCategory.category.name = ""
                 self.tableData[section].data.append(newCategory)
                 if CategoriesVC.shared?.showingIcons ?? false {
-                    CategoriesVC.shared?.toggleIcons(show: false, animated: true)
+                    CategoriesVC.shared?.toggleIcons(show: false, animated: true, category: nil)
                 }
                 DispatchQueue.main.async {
                     self.ai.fastHide { _ in
@@ -243,23 +288,37 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         
     }
     
-    @objc func newCategoryPressed(_ sender: UITapGestureRecognizer) {
-        if let section = Int(sender.name ?? "") {
-            DispatchQueue.main.async {
-                UIImpactFeedbackGenerator().impactOccurred()
-                
+    func addCategoryPerform(section:Int) {
+        DispatchQueue.main.async {
+            UIImpactFeedbackGenerator().impactOccurred()
+            let category = self.tableData[section].newCategory
+            if category.category.name != "" {
                 self.ai.show { _ in
                     self.editingTF?.endEditing(true)
                     self.editingTF = nil
-                    let category = self.tableData[section].newCategory
                     self.saveNewCategory(section: section, category: category)
                 }
+            } else {
+                self.editingTF?.endEditing(true)
             }
             
         }
     }
     
-
+    @objc func newCategoryPressed(_ sender: UITapGestureRecognizer) {
+        if let double = Double(sender.name ?? "") {
+            let section = Int(double) //{
+                
+                addCategoryPerform(section: section)
+        }
+        
+            
+        //}
+    }
+    
+    //editingTfIndex.0 - row
+    //editingTfIndex.1 - section
+    var editingTfIndex: (Int?,Int?) = (nil,nil)
     
     var endAll = false
     
@@ -268,20 +327,14 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     }
     
     @objc func pressedToDismiss(_ sender: UITapGestureRecognizer) {
-        DispatchQueue.main.async {
-            if let editing = self.editingTF {
-                editing.endEditing(true)
-            }
-        }
-        if showingIcons {
-            toggleIcons(show: false, animated: true)
-        }
+        hideAll()
         
     }
     
     var defaultButtonInset: CGFloat = 0
     var tableContentOf:UIEdgeInsets = UIEdgeInsets.zero
     @objc func keyboardWillHide(_ notification: Notification) {
+        editingTfIndex = (nil,nil)
         if !showingIcons {
             self.tableView.removeGestureRecognizer(viewTap)
         }
@@ -298,7 +351,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
     var keyHeight: CGFloat = 0.0
     @objc func keyboardWillShow(_ notification: Notification) {
-        toggleIcons(show: false, animated: true)
+        toggleIcons(show: false, animated: true, category: nil)
         self.tableView.addGestureRecognizer(viewTap)
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
@@ -319,29 +372,40 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
 
     var showingIcons = false
-    func toggleIcons(show:Bool, animated: Bool) {
+    func toggleIcons(show:Bool, animated: Bool, category: NewCategories?) {
         showingIcons = show
         if show {
             self.tableView.addGestureRecognizer(viewTap)
         } else {
             if editingTF == nil {
+                self.selectingIconFor = (nil, nil)
+                self.tableView.reloadData()
                 self.tableView.removeGestureRecognizer(viewTap)
             }
         }
         DispatchQueue.main.async {
             let containerHeight = self.iconsContainer.layer.frame.height
             if show  {
+                self.editingTfIndex = (nil,nil)
                 self.editingTF?.endEditing(true)
+                self.editingTF = nil
             } else {
                 if self.editingTF == nil {
                     self.tableView.contentInset.bottom = self.defaultButtonInset
                 }
-            }
+            }//here
             UIView.animate(withDuration: animated ? 0.3 : 0) {
                 self.iconsContainer.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, show ? 0 : containerHeight + (appData.safeArea.0 + appData.safeArea.1 + 50), 0)
             } completion: { _ in
                 if show {
+                    IconsVC.shared?.selectedIconName = category?.icon ?? ""
+                    IconsVC.shared?.selectedColorName = category?.color ?? ""
+                    
                     self.kayboardAppeared(containerHeight)
+                    
+                    DispatchQueue.main.async {
+                        IconsVC.shared?.collectionView.reloadData()
+                    }
                 }
             }
 
@@ -370,6 +434,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             categories = _categories
         } else {
             appeareDidCall = true
+            loadData()
         }
         
         if transactionAdded {
@@ -417,16 +482,24 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
     @objc private func textfieldValueChanged(_ textField: UITextField) {//here
         DispatchQueue.main.async {
-            if let section = Int(textField.layer.name ?? "") {
-                print(textField.text ?? "", "tftftftfttftftftfttftftftft tf")
-                print(self.tableData[section].newCategory.category.name, "tftftftfttftftftfttftftftft name")
-                self.tableData[section].newCategory.category.name = textField.text ?? ""
-                self.tableView.reloadData()
-            }
+            let section = textField.tag// {
+               // let section = Int(double)
+                    print(textField.text ?? "", "tftftftfttftftftfttftftftft tf")
+                    print(self.tableData[section].newCategory.category.name, "tftftftfttftftftfttftftftft name")
+                    self.tableData[section].newCategory.category.name = textField.text ?? ""
+          //  }
+            
+            //    self.tableView.reloadData()
+            
             
         }
     }
 
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        let section = textField.tag
+        addCategoryPerform(section: section)
+        return true
+    }
     
     func addRefreshControll() {
         DispatchQueue.main.async {
@@ -436,13 +509,18 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     }
 
 
+    @IBOutlet weak var screenAI: UIActivityIndicatorView!
     
     @objc func refresh(sender:AnyObject) {
         loadData(showError: true)
     }
     
-
-
+    @IBOutlet weak var moreButton: UIButton!
+    
+    @IBAction func morePressed(_ sender: UIButton) {
+    }
+    @IBOutlet weak var searchBar: UISearchBar!
+    
     
 
     func deteteCategory(at: IndexPath) {
@@ -476,7 +554,17 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         }
         set {
             _selectingIconFor = newValue
-            toggleIcons(show: true, animated: true)
+            if newValue != (nil, nil) {
+                if let editIndex = newValue.0 {
+                    toggleIcons(show: true, animated: true, category: tableData[editIndex.section].data[editIndex.row].editing)
+                } else {
+                    if let section = newValue.1 {
+                        toggleIcons(show: true, animated: true, category: tableData[section].newCategory.category)
+                    }
+                }
+                
+            }
+            
         }
     }
     
@@ -505,6 +593,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         case "selectIcon":
             let vc = segue.destination as! IconsVC
             vc.delegate = self
+
         default:
             break
         }
@@ -516,23 +605,35 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
 
     @objc func iconTapped(_ sender: UITapGestureRecognizer) {
-        if let section = Int(sender.name ?? "") {
-            selectingIconFor.1 = section
+        if let dob = Double(sender.name ?? "") {
+            let section = Int(dob)// {
+                selectingIconFor.1 = section
+          //  }
         }
+        
         
     }
 
     
+    func hideAll() {
+        DispatchQueue.main.async {
+            if self.searchBar.isFirstResponder {
+                self.searchBar.endEditing(true)
+            }
+        }
+        if let editing = editingTF {
+            editingTF = nil
+            toggleIcons(show: false, animated: true, category: nil)
+            DispatchQueue.main.async {
+                editing.endEditing(true)
+                
+            }
+        }
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y < -60.0 {
-            if let editing = editingTF {
-                editingTF = nil
-                toggleIcons(show: false, animated: true)
-                DispatchQueue.main.async {
-                    editing.endEditing(true)
-                    
-                }
-            }
+            hideAll()
             
         }
         
@@ -577,6 +678,10 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             transfaringCategories = nil
             screenType = .localData
             loadData()
+            
+            DispatchQueue.main.async {
+                self.navigationController?.popToRootViewController(animated: true)
+            }
         }
         
     }
@@ -590,7 +695,6 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 let cell = tableView.dequeueReusableCell(withIdentifier: "LocalDataActionCell", for: indexPath) as! LocalDataActionCell
                 
                 cell.load()
-                
                 let hideDownload = transfaringCategories == nil ? true : false
                 
                 if cell.sendPressed.isHidden != !hideDownload {
@@ -630,11 +734,11 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 
                 let index = IndexPath(row: indexPath.row, section: indexPath.section - 2)
                 cell.lo(index: index, footer: nil)
-                let selected = UIView(frame: .zero)
-                selected.backgroundColor = K.Colors.primaryBacground
-                cell.selectedBackgroundView = selected
+
                 let category = tableData[index.section].data[indexPath.row]
 
+                
+                
             //    cell.accessoryType = category.editing != nil ? .none : .disclosureIndicator
                 let hideEditing = category.editing != nil ? false : true
                 let hideQnt = !hideEditing
@@ -649,6 +753,11 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 if cell.categoryNameLabel.isHidden != hideTitle {
                     cell.categoryNameLabel.isHidden = hideTitle
                 }
+                cell.footerBackground.backgroundColor = editingTfIndex.1 == index.row || selectingIconFor.0 == index ? selectionBacground : K.Colors.secondaryBackground
+                
+               // cell.newCategoryTF.tag = index.row
+                cell.newCategoryTF.layer.name = "cell\(index.row)"
+                
                 cell.qntLabel.text = "\(category.transactions.count)"
                 cell.iconimage.image = category.editing == nil ? iconNamed(category.category.icon) : iconNamed(category.editing?.icon)
                 cell.iconimage.tintColor = category.editing == nil ? colorNamed(category.category.color) : colorNamed(category.editing?.color)
@@ -724,6 +833,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             let sect = section - 2
         //show only footer
         let category = tableData[sect].newCategory.category
+            
         cell.lo(index: nil, footer: sect)
         cell.newCategoryTF.text = category.name
         cell.iconimage.image = iconNamed(category.icon)
@@ -740,6 +850,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         if cell.saveButton.isHidden != hideSave {
             cell.saveButton.isHidden = hideSave
         }*/
+            cell.buttonsSeparetor.alpha = 0
         cell.categoryNameLabel.isHidden = true
         if screenType != .localData {
             let savePressed = UITapGestureRecognizer(target: self, action: #selector(newCategoryPressed(_:)))
@@ -751,7 +862,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             cell.iconimage.addGestureRecognizer(iconPressed)
             cell.newCategoryTF.backgroundColor = cell.newCategoryTF == editingTF ? K.Colors.primaryBacground : .clear
             cell.newCategoryTF.delegate = self
-            cell.newCategoryTF.layer.name = "\(sect)"
+            cell.newCategoryTF.tag = sect
             cell.newCategoryTF.addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
         } else {
             cell.iconimage.isHidden = true
@@ -760,12 +871,14 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         }
         
 
+            cell.newCategoryTF.layer.name = "section\(section - 2)"
         let view = cell.contentView
         view.isUserInteractionEnabled = true
         //view.layer.cornerRadius = 6
        // view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         view.backgroundColor = K.Colors.primaryBacground// K.Colors.secondaryBackground
-        cell.footerBackground.backgroundColor = K.Colors.secondaryBackground
+   //     cell.footerBackground.backgroundColor = K.Colors.secondaryBackground
+            cell.footerBackground.backgroundColor = editingTfIndex.0 ?? -1 == section || selectingIconFor.1 == section ? selectionBacground : K.Colors.secondaryBackground
         cell.footerBackground.layer.cornerRadius = tableCorners
         cell.footerBackground.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         return view
@@ -863,8 +976,33 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         editingTF = textField
-        toggleIcons(show: false, animated: true)
+        toggleIcons(show: false, animated: true, category: nil)
         DispatchQueue.main.async {
+            let name = textField.layer.name ?? ""
+            
+            if name.contains("cell") {
+                let rowS = name.replacingOccurrences(of: "cell", with: "")
+                if let dob = Double(rowS) {
+                    let row = Int(dob)// {
+                        self.editingTfIndex = (nil, row)
+                    //  }
+                }
+                
+                
+            } else {
+                if name.contains("section") {
+                    let rowS = name.replacingOccurrences(of: "section", with: "")
+                    if let dob = Double(rowS) {
+                        let section = Int(dob)// {
+                        print(section)
+                        self.editingTfIndex = (section, nil)
+                    }
+
+                    
+                }
+            }
+
+            
             self.tableView.reloadData()
         }
     }
@@ -904,11 +1042,67 @@ extension CategoriesVC {
 
 
 extension categoriesVCcell:UITextFieldDelegate {
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        UIView.animate(withDuration: 0.2) {
+            self.footerBackground.backgroundColor = K.Colors.secondaryBackground
+        } completion: { _ in
+            
+        }
+
+    }
+    
     func textFieldDidBeginEditing(_ textField: UITextField) {
         CategoriesVC.shared?.editingTF = textField
        /* DispatchQueue.main.async {
             CategoriesVC.shared?.tableView.reloadData()
         }*/
+        CategoriesVC.shared?.editingTfIndex = (nil,nil)
+
+        let name = textField.layer.name ?? ""
+        if name.contains("cell") {
+            let rowS = name.replacingOccurrences(of: "cell", with: "")
+            let dobRo = Double(rowS) ?? 0.0
+           let row = Int(dobRo)// {
+                CategoriesVC.shared?.editingTfIndex = (nil, row)
+                DispatchQueue.main.async {
+                    UIView.animate(withDuration: 0.3) {
+                        self.footerBackground.backgroundColor = CategoriesVC.shared?.selectionBacground
+                    } completion: { _ in
+                      //  textField.becomeFirstResponder()
+                        if let selectingIconIndex = CategoriesVC.shared?.selectingIconFor.0 {
+                            if self.indexPath != selectingIconIndex {
+                                let reloadIndex = IndexPath(row: selectingIconIndex.row, section: selectingIconIndex.section + 2)
+                                CategoriesVC.shared?.selectingIconFor = (nil,nil)
+                                CategoriesVC.shared?.tableView.reloadRows(at: [reloadIndex], with: .automatic)
+                            }
+                        }
+                    }
+                    
+
+                }
+               // CategoriesVC.shared?.tableView.reloadData()
+          //  }
+            
+        } else {
+            if name.contains("section") {
+                let rowS = name.replacingOccurrences(of: "section", with: "")
+                let dobRo = Double(rowS) ?? 0.0
+                let section = Int(dobRo) //{
+                    CategoriesVC.shared?.editingTfIndex = (section, nil)
+                    DispatchQueue.main.async {
+                        UIView.animate(withDuration: 0.3) {
+                            self.footerBackground.backgroundColor = CategoriesVC.shared?.selectionBacground
+                        } completion: { _ in
+                            textField.becomeFirstResponder()
+                        }
+
+                    }
+                    //CategoriesVC.shared?.tableView.reloadData()
+           //     }
+                
+            }
+        }
         
     }
     
@@ -920,7 +1114,23 @@ extension categoriesVCcell:UITextFieldDelegate {
 
 extension CategoriesVC: IconsVCDelegate {
     func selected(img: String, color: String) {
+        
         if let selectingIndex = selectingIconFor.0 {
+            let cat = tableData[selectingIndex.section].data[selectingIndex.row].editing
+            var valType: LastSelected.SelectedTypeEnum {
+                switch cat?.purpose {
+                case .expense:
+                    return .expense
+                case .income:
+                    return .income
+                case .debt:
+                    return .debt
+                default:
+                    return .expense
+                }
+            }
+
+            
             if img != "" {
                 tableData[selectingIndex.section].data[selectingIndex.row].editing?.icon = img
             }
@@ -929,11 +1139,28 @@ extension CategoriesVC: IconsVCDelegate {
             }
             
         } else {
+            
             if let selectingFooter = selectingIconFor.1 {
+                let cat = tableData[selectingFooter].newCategory.category
+                var valType: LastSelected.SelectedTypeEnum {
+                    switch cat.purpose {
+                    case .expense:
+                        return .expense
+                    case .income:
+                        return .income
+                    case .debt:
+                        return .debt
+                    default:
+                        return .expense
+                    }
+                }
+
                 if img != "" {
+                    appData.lastSelected.sett(value: img, setterType: .icon, valueType: valType)
                     tableData[selectingFooter].newCategory.category.icon = img
                 }
                 if color != "" {
+                    appData.lastSelected.sett(value: color, setterType: .color, valueType: valType)
                     tableData[selectingFooter].newCategory.category.color = color
                 }
                 
@@ -966,33 +1193,34 @@ class categoriesVCcell: UITableViewCell {
     
     
     
-    @IBOutlet private weak var dueDateIcon: UIImageView! //1only set color when expired
+    @IBOutlet private weak var dueDateIcon: UIImageView!
     @IBOutlet private weak var dueDateLabel: UILabel!
     @IBOutlet weak var dueDateStack: UIStackView!
     @IBOutlet weak var payAmountLabel: UILabel!
     
+    @IBOutlet weak var buttonsSeparetor: UIView!
     
     @IBOutlet weak var editingStack: UIStackView!
     @IBOutlet weak var newCategoryTF: UITextField!
     
-    //here
     
-    var indexPath:IndexPath?
-    var footerSection: Int?
+    
+    private var indexPath:IndexPath?
+    private var footerSection: Int?
     
 
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
     
-    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        newCategoryTF.layer.cornerRadius = 6
+    }
     
     func lo(index:IndexPath?, footer: Int?) {
         indexPath = index
         footerSection = footer
-        
-        DispatchQueue.main.async {
-            self.newCategoryTF.layer.cornerRadius = 6
-        }
+
         var category:CategoriesVC.ScreenCategory {
             let defaultCategory = CategoriesVC.ScreenCategory(category: NewCategories(id: -2, name: "-", icon: "", color: "", purpose: CategoriesVC.shared?.screenType == .debts ? .debt : .expense), transactions: [])
             if let index = index {
@@ -1011,16 +1239,24 @@ class categoriesVCcell: UITableViewCell {
             self.newCategoryTF.delegate = self
             self.newCategoryTF.addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
             let iconPressed = UITapGestureRecognizer(target: self, action: #selector(self.iconPressed(_:)))//
-            self.iconimage.addGestureRecognizer(iconPressed)//
+            self.iconimage.addGestureRecognizer(iconPressed)
         }
         
     }
     
-    @objc func iconPressed(_ sender: UITapGestureRecognizer) {
+    @objc private func iconPressed(_ sender: UITapGestureRecognizer) {
         if let indexPath = indexPath {
             if let category = currentCategory {
                 if category.editing != nil {
                     CategoriesVC.shared?.selectingIconFor.0 = indexPath
+                    DispatchQueue.main.async {
+                        UIView.animate(withDuration: 0.3) {
+                            self.footerBackground.backgroundColor = CategoriesVC.shared?.selectionBacground
+                        } completion: { _ in
+                            CategoriesVC.shared?.tableView.reloadData()
+                        }
+
+                    }
                 }
             }
         }
@@ -1041,13 +1277,10 @@ class categoriesVCcell: UITableViewCell {
                 }
             }
         }
-        
-        
-        
     }
     
     
-    var currentCategory: CategoriesVC.ScreenCategory?
+    private var currentCategory: CategoriesVC.ScreenCategory?
     
     @IBAction private func cancelPressed(_ sender: UIButton) {
         cancelEditing()
@@ -1057,7 +1290,7 @@ class categoriesVCcell: UITableViewCell {
         if let index = indexPath {
             CategoriesVC.shared?.tableData[index.section].data[index.row].editing = nil
             DispatchQueue.main.async {
-                CategoriesVC.shared?.toggleIcons(show: false, animated: true)
+                CategoriesVC.shared?.toggleIcons(show: false, animated: true, category: nil)
                 CategoriesVC.shared?.editingTF?.endEditing(true)
                 CategoriesVC.shared?.editingTF = nil
                 CategoriesVC.shared?.tableView.reloadData()
@@ -1069,7 +1302,7 @@ class categoriesVCcell: UITableViewCell {
     }
     
     
-    let db = DataBase()
+    private let db = DataBase()
     
     
     
@@ -1088,7 +1321,7 @@ class categoriesVCcell: UITableViewCell {
                             CategoriesVC.shared?.tableData[index.section].data[index.row].category = editingValue
                             CategoriesVC.shared?.tableData[index.section].data[index.row].editing = nil
                             DispatchQueue.main.async {
-                                CategoriesVC.shared?.toggleIcons(show: false, animated: true)
+                                CategoriesVC.shared?.toggleIcons(show: false, animated: true, category: nil)
                                 CategoriesVC.shared?.editingTF?.endEditing(true)
                                 CategoriesVC.shared?.editingTF = nil
                                 CategoriesVC.shared?.tableView.reloadData()
@@ -1119,7 +1352,7 @@ class categoriesVCcell: UITableViewCell {
         }
         
         if CategoriesVC.shared?.showingIcons ?? false {
-            CategoriesVC.shared?.toggleIcons(show: false, animated: true)
+            CategoriesVC.shared?.toggleIcons(show: false, animated: true, category: nil)
         }
 
     }
@@ -1176,3 +1409,69 @@ class LocalDataActionCell: UITableViewCell {
     }
     
 }
+
+
+
+
+
+class NoCategoriesCell: UITableViewCell {
+    
+}
+
+
+
+/*
+extension CategoriesVC: UISearchBarDelegate {
+    
+    
+    func searchBarResultsListButtonClicked(_ searchBar: UISearchBar) {
+        DispatchQueue.main.async {
+            searchBar.endEditing(true)
+            self.tableView.reloadData()
+        }
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        if let data = allData {
+            shopsLocalSorted = data
+            DispatchQueue.main.async {
+                searchBar.endEditing(true)
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText == "" {
+            if let data = allData {
+                shopsLocalSorted = data
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+            
+        } else {
+            
+            if let data = allData {
+                var resultt:Array<Array<String>> = [];
+                for i in 0..<data.count {
+                    let name = data[i][0].uppercased()
+                    print(name, "name")
+                    let code = data[i][1].uppercased()
+                    print(code, "code")
+                    let text = searchText.uppercased()
+                    if code.contains(text) || name.contains(text) {
+                        resultt.append(data[i])
+                    }
+                }
+                shopsLocalSorted = resultt
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+        }
+    }
+    
+    
+}
+*/

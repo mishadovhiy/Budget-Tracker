@@ -338,51 +338,38 @@ class TransitionVC: SuperViewController {
     
     @IBAction func purposeSwitched(_ sender: UISegmentedControl) {
         var placeHolder = ""
+        if !fromDebts {
+            DispatchQueue.main.async {
+                self.categoryTextField.text = ""
+            }
+            let lastSelectedID = appData.lastSelected.gett(valueType: sender.selectedSegmentIndex == 0 ? .expense : .income)
+            if let cat = db.category(lastSelectedID ?? "") {
+                selectedCategory = cat
+                placeHolder = cat.name
+            } else {
+                let defCat = db.categories.first ?? NewCategories(id: -1, name: "Unknown", icon: "", color: "", purpose: sender.selectedSegmentIndex == 0 ? .expense : .income)
+                selectedCategory = defCat
+                placeHolder = defCat.name
+            }
+        }
         let index = sender.selectedSegmentIndex
         switch index {
         case 0:
             DispatchQueue.main.async {
                 self.minusPlusLabel.text = "-"
             }
-            if !fromDebts {
-                DispatchQueue.main.async {
-                    self.categoryTextField.text = ""
-                }
-                if let cat = UserDefaults.standard.value(forKey: "lastSelectedCategory") as? [String:Any] {
-                    let db = DataBase()
-                    if let cat = db.categoryFrom(cat) {
-                        categoryTextField.placeholder = cat.name
-                        selectedCategory = cat
-                     /*   let allCats = Array(expenseArr)
-                        var found = false
-                        for i in 0..<allCats.count {
-                            if allCats[i] == cat.name {
-                                found = true
-                            }
-                        }*/
-                        placeHolder = cat.name//found == true ? cat.name : "\(expenseArr[appData.selectedExpense])"
-                    }
-                    
-                } else {
-                    placeHolder = "\(expenseArr[appData.selectedExpense])"
-                }
-            }
+
             showPadPressed(showValueButton)
             
         case 1:
             DispatchQueue.main.async {
                 self.minusPlusLabel.text = "+"
             }
-            if !fromDebts {
-                DispatchQueue.main.async {
-                    self.categoryTextField.text = ""
-                }
-                placeHolder = "\(incomeArr[appData.selectedIncome])"
-            }
+
             showPadPressed(showValueButton)
             
         default:
-            placeHolder = expenseArr[appData.selectedExpense]
+            placeHolder = ""
         }
         
         DispatchQueue.main.async {
@@ -523,14 +510,20 @@ extension TransitionVC: CategoriesVCProtocol {
             if !fromDebts {
                 purposeSwitcher.selectedSegmentIndex = category.purpose == .expense ? 0 : 1
                 purposeSwitched(purposeSwitcher)
-                if category.purpose == .expense {
-                    let db = DataBase()
-                    UserDefaults.standard.setValue(db.categoryToDict(category), forKey: "lastSelectedCategory")
+                switch category.purpose {
+                case .expense:
+                    appData.lastSelected.sett(value: "\(category.id)", valueType: .expense)
+                case .income:
+                    appData.lastSelected.sett(value: "\(category.id)", valueType: .income)
+                case .debt:
+                    appData.lastSelected.sett(value: "\(category.id)", valueType: .debt)
+
                 }
             } else {
-                
+                appData.lastSelected.sett(value: "\(category.id)", valueType: .debt)
                 selectedCategory = category
                 DispatchQueue.main.async {
+                    
                     if self.pressedValue == "" || self.pressedValue == "0" {
                     }
                     self.valueLabel.text = "\(amount < 0 ? amount * (-1) : amount)"
