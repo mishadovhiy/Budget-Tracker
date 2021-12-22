@@ -24,12 +24,14 @@ class HistoryVC: SuperViewController {
     var selectedCategory: NewCategories?
     var fromCategories = false
     var allowEditing = true
-    
+    @IBAction func moreButtonPressed(_ sender: UIButton) {
+        showMoreVC()
+    }
     var amountToPayEditing = false
     
     @IBOutlet weak var moreButton: UIButton!
     
-    @IBAction func moreButtonPressed(_ sender: UIButton) {
+    func showMoreVC() {
         let appData = AppData()
         //get screen data
         let addAmountToPay = {
@@ -49,11 +51,13 @@ class HistoryVC: SuperViewController {
         }
         
         let moreData = [
-            MoreVC.ScreenData(name: "Add amount to pay", description: "", action: addAmountToPay),
-            MoreVC.ScreenData(name: "Add Due date", description: "", action: addDueDate),
+            MoreVC.ScreenData(name: "Add amount to pay", description: "", showAI:false, action: addAmountToPay),
+            MoreVC.ScreenData(name: "Add Due date", description: "", showAI:false, action: addDueDate),
         ]
-        appData.presentMoreVC(currentVC: self, data: moreData, dismissOnAction: true)
+        appData.presentMoreVC(currentVC: self, data: moreData)
     }
+    
+    
     
     @IBOutlet weak var totalPeriodLabel: UILabel!
     @IBOutlet weak var totalLabel: UILabel!

@@ -39,6 +39,12 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         set {
             _tableData = newValue
             DispatchQueue.main.async {
+                self.ai.fastHide { _ in
+                    
+                }
+                if self.refreshControl.isRefreshing {
+                    self.refreshControl.endRefreshing()
+                }
                 if self.tableView.alpha != 1 {
                 //    self.tableView.transform =
                 //    self.tableView.alpha = 1
@@ -123,12 +129,15 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                      //?  : (transfaringCategories != nil ? (transfaringCategories?.transactions ?? []) : )
                 }
                 
+                
+                
                 data.append(ScreenCategory(category: newValue[i], transactions: transactions))
-                resultDict.updateValue(data, forKey: strPurpose)
+                
+                let newD = sort(data) //data.sorted{ $0.category.id > $1.category.id }
+                resultDict.updateValue(newD, forKey: strPurpose)
                 
             }
 
-            
             
             
             switch self.screenType {
@@ -189,35 +198,111 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 self.editingTF = nil
                 self.toggleIcons(show: false, animated: true, category: nil)
                 self.editingTF?.endEditing(true)
-                self.tableView.reloadData()
-                if self.refreshControl.isRefreshing {
-                    self.refreshControl.endRefreshing()
-                }
-                if self.ai.isShowing {
-                    self.ai.fastHide { _ in
-                        
-                    }
-                }
+                
             }
             
         }
     }
 
+    
+    func sort(_ data: [ScreenCategory]) -> [ScreenCategory] {
+        switch sortOption {
+
+        case .id:
+            return data.sorted{ $0.category.id > $1.category.id }
+        case .name:
+            return data.sorted{ $0.category.name > $1.category.name }
+        case .transactionsCount:
+            return data.sorted{ $0.transactions.count > $1.transactions.count }
+        }
+    }
+    
+    
+    var sortOption: SortOption {
+        get {
+            let ud = UserDefaults.standard.value(forKey: "SortOption") as? String ?? ""
+            switch ud {
+            case "id":
+                return .id
+            case "name":
+                return .name
+            case "transactionsCount":
+                return .transactionsCount
+            default :
+                return .id
+            }
+            
+        }
+        set {
+            var new: String {
+                switch newValue {
+                case .id:
+                    return "id"
+                case .name:
+                    return "name"
+                case .transactionsCount:
+                    return "transactionsCount"
+                }
+            }
+            UserDefaults.standard.setValue(new, forKey: "SortOption")
+        }
+    }
+    
+    enum SortOption {
+        case id
+        case name
+        case transactionsCount
+    }
+    
+    
+    
+    func categoriesContains(_ searchText: String) -> [NewCategories] {
+        if searchText == "" {
+          //  if let data = allData {
+                return allCategoriesHolder
+           // }
+            
+        } else {
+            
+        //    if let data = allData {
+            let data = allCategoriesHolder
+                var resultt:[NewCategories] = []
+                for i in 0..<data.count {
+                    let name = data[i].name.uppercased()
+                    print(name, "name")
+                    let text = searchText.uppercased()
+                    if name.contains(text) {
+                        resultt.append(data[i])
+                    }
+                }
+                return resultt
+            //  }
+        }
+    }
+    var searchingText = ""
+    var allCategoriesHolder: [NewCategories] = []
     var transfaringCategories: LoginViewController.TransferingData?
-    func loadData(showError:Bool = false) {
+    func loadData(showError:Bool = false, loadFromUD: Bool = false) {
 
         if screenType != .localData {
-            let load = LoadFromDB()
-            load.newCategories { loadedData, error in
-                self.categories = loadedData
-                if error != .none {
-                    if showError {
-                        DispatchQueue.main.async {
-                            self.message.showMessage(text: error == .internet ? "No Interner" : "Error", type: .internetError)
+            if !loadFromUD {
+                let load = LoadFromDB()
+                load.newCategories { loadedData, error in
+                    self.allCategoriesHolder = loadedData
+                    self.categories = self.categoriesContains(self.searchingText)
+                    if error != .none {
+                        if showError {
+                            DispatchQueue.main.async {
+                                self.message.showMessage(text: error == .internet ? "No Interner" : "Error", type: .internetError)
+                            }
                         }
                     }
                 }
+            } else {
+                allCategoriesHolder = db.categories
+                categories = categoriesContains(searchingText)
             }
+            
         } else {
             if let transfare = transfaringCategories {
                 self.categories = transfare.categories
@@ -233,9 +318,14 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        CategoriesVC.shared = self
+        tableView.delegate = self
+        tableView.dataSource = self
+        searchBar.delegate = self
         DispatchQueue.init(label: "udLoad", qos: .userInteractive).async {
             self.loadData()
         }
+        
         toggleIcons(show: false, animated: false, category: nil)
         
         var strTitle:String {
@@ -249,7 +339,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             }
         }
         title = strTitle
-        CategoriesVC.shared = self
+        
         updateUI()
      //   if !fromSettings {
             
@@ -274,8 +364,14 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             newCategory.category.id = newID
             save.newCategories(newCategory.category) { error in
                 self.editingTF = nil
+                
+                self.loadData(loadFromUD: true)
+                
+                
+                
+             //   self.categories.append(newCategory.category)
                 self.tableData[section].newCategory.category.name = ""
-                self.tableData[section].data.append(newCategory)
+              //  self.tableData[section].data.append(newCategory)
                 if CategoriesVC.shared?.showingIcons ?? false {
                     CategoriesVC.shared?.toggleIcons(show: false, animated: true, category: nil)
                 }
@@ -297,7 +393,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             UIImpactFeedbackGenerator().impactOccurred()
             let category = self.tableData[section].newCategory
             if category.category.name != "" {
-                self.ai.show { _ in
+                self.ai.show(title:"Saving") { _ in
                     self.editingTF?.endEditing(true)
                     self.editingTF = nil
                     self.saveNewCategory(section: section, category: category)
@@ -339,6 +435,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     var tableContentOf:UIEdgeInsets = UIEdgeInsets.zero
     @objc func keyboardWillHide(_ notification: Notification) {
         editingTfIndex = (nil,nil)
+        selectingIconFor = (nil, nil)
         if !showingIcons {
             self.tableView.removeGestureRecognizer(viewTap)
         }
@@ -383,8 +480,8 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         if show {
             self.tableView.addGestureRecognizer(viewTap)
         } else {
+            self.selectingIconFor = (nil, nil)
             if editingTF == nil {
-                self.selectingIconFor = (nil, nil)
                 self.tableView.reloadData()
                 self.tableView.removeGestureRecognizer(viewTap)
             }
@@ -438,8 +535,11 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
+        searchBar.endEditing(true)
+        editingTF?.endEditing(true)
         if appeareDidCall {
             categories = _categories
+
         } else {
             appeareDidCall = true
             //loadData()
@@ -475,10 +575,10 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     var wasEdited = false
     func updateUI() {
     
-        tableView.delegate = self
-        tableView.dataSource = self
-
-        if appData.username != "" {
+        
+        
+        
+        if appData.username != "" && screenType != .localData {
             addRefreshControll()
         }
         
@@ -526,6 +626,31 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     @IBOutlet weak var moreButton: UIButton!
     
     @IBAction func morePressed(_ sender: UIButton) {
+        showMoreVC()
+    }
+    func showMoreVC() {
+        let appData = AppData()
+        //get screen data
+        let idAction = {
+            self.sortOption = .id
+            self.categories = self._categories
+        }
+        
+        let nameAction = {
+            self.sortOption = .name
+            self.categories = self._categories
+        }
+        let countAction = {
+            self.sortOption = .transactionsCount
+            self.categories = self._categories
+        }
+        
+        let moreData = [
+            MoreVC.ScreenData(name: "Id", description: "", showAI: true, selected: self.sortOption == .id, action: idAction),
+            MoreVC.ScreenData(name: "Name", description: "", showAI: true, selected: self.sortOption == .name, action: nameAction),
+            MoreVC.ScreenData(name: "Transactions count", description: "", showAI: true, selected: self.sortOption == .transactionsCount, action: countAction),
+        ]
+        appData.presentMoreVC(currentVC: self, data: moreData)
     }
     @IBOutlet weak var searchBar: UISearchBar!
     
@@ -1232,7 +1357,11 @@ class categoriesVCcell: UITableViewCell {
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        newCategoryTF.layer.cornerRadius = 6
+        
+       // newCategoryTF.layer.cornerRadius = 6
+       // newCategoryTF.setRightPaddingPoints(5)
+       // newCategoryTF.setLeftPaddingPoints(5)
+        
     }
     
     func lo(index:IndexPath?, footer: Int?) {
@@ -1259,7 +1388,9 @@ class categoriesVCcell: UITableViewCell {
             let iconPressed = UITapGestureRecognizer(target: self, action: #selector(self.iconPressed(_:)))//
             self.iconimage.addGestureRecognizer(iconPressed)
         }
+        let defPlaceHolder = "New Category"
         
+        newCategoryTF.attributedPlaceholder = NSAttributedString(string: index != nil ? (CategoriesVC.shared?.tableData[index!.section].data[index!.row].category.name ?? defPlaceHolder) : defPlaceHolder, attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
     }
     
     @objc private func iconPressed(_ sender: UITapGestureRecognizer) {
@@ -1301,7 +1432,20 @@ class categoriesVCcell: UITableViewCell {
     private var currentCategory: CategoriesVC.ScreenCategory?
     
     @IBAction private func cancelPressed(_ sender: UIButton) {
-        cancelEditing()
+        DispatchQueue.main.async {
+            UIImpactFeedbackGenerator().impactOccurred()
+            UIView.animate(withDuration: 0.18) {
+                self.editingStack.isHidden = true
+                self.editingStack.alpha = 0
+                self.qntLabel.superview?.isHidden = false
+                self.categoryNameLabel.isHidden = false
+            } completion: { _ in
+                self.cancelEditing()
+                self.editingStack.alpha = 1
+            }
+
+        }
+        
     }
     
     private func cancelEditing() {
@@ -1311,6 +1455,8 @@ class categoriesVCcell: UITableViewCell {
                 CategoriesVC.shared?.toggleIcons(show: false, animated: true, category: nil)
                 CategoriesVC.shared?.editingTF?.endEditing(true)
                 CategoriesVC.shared?.editingTF = nil
+                CategoriesVC.shared?.selectingIconFor = (nil, nil)
+                CategoriesVC.shared?.editingTfIndex = (nil, nil)
                 CategoriesVC.shared?.tableView.reloadData()
                 CategoriesVC.shared?.ai.fastHide { _ in
                     
@@ -1335,17 +1481,15 @@ class categoriesVCcell: UITableViewCell {
                     delete.CategoriesNew(category: category.category) { error in
                         let save = SaveToDB()
                         save.newCategories(editingValue) { error in
-                            //CategoriesVC.shared?.categories = self.db.categories
-                            CategoriesVC.shared?.tableData[index.section].data[index.row].category = editingValue
-                            CategoriesVC.shared?.tableData[index.section].data[index.row].editing = nil
+                            CategoriesVC.shared?.loadData(loadFromUD: true)
                             DispatchQueue.main.async {
                                 CategoriesVC.shared?.toggleIcons(show: false, animated: true, category: nil)
                                 CategoriesVC.shared?.editingTF?.endEditing(true)
                                 CategoriesVC.shared?.editingTF = nil
-                                CategoriesVC.shared?.tableView.reloadData()
-                                CategoriesVC.shared?.ai.fastHide(completionn: { _ in
-                                    UIImpactFeedbackGenerator().impactOccurred()
-                                })
+                              //  CategoriesVC.shared?.tableView.reloadData()
+                              //  CategoriesVC.shared?.ai.fastHide(completionn: { _ in
+                              //      UIImpactFeedbackGenerator().impactOccurred()
+                              //  })
                             }
                         }
                     }
@@ -1356,23 +1500,23 @@ class categoriesVCcell: UITableViewCell {
     }
     
     
+
+    
     @IBAction func sendPressed(_ sender: UIButton) {
-        
-        UIImpactFeedbackGenerator().impactOccurred()
-        CategoriesVC.shared?.ai.show { _ in
-            if let currentCategory = self.currentCategory {
-                if currentCategory.editing?.name != "" {
-                    self.saveCategory(currentCategory)
-                } else {
-                    self.cancelEditing()
+        DispatchQueue.main.async {
+            CategoriesVC.shared?.ai.show(title:"Saving") { _ in
+                if let currentCategory = self.currentCategory {
+                    if currentCategory.editing?.name != "" {
+                        self.saveCategory(currentCategory)
+                    } else {
+                        self.cancelEditing()
+                    }
+                }
+                if CategoriesVC.shared?.showingIcons ?? false {
+                    CategoriesVC.shared?.toggleIcons(show: false, animated: true, category: nil)
                 }
             }
         }
-        
-        if CategoriesVC.shared?.showingIcons ?? false {
-            CategoriesVC.shared?.toggleIcons(show: false, animated: true, category: nil)
-        }
-
     }
     
 }
@@ -1413,31 +1557,31 @@ class LocalDataActionCell: UITableViewCell {
     @objc func saveLocallyPress(_ sender: UITapGestureRecognizer) {
         needDownloadOnMainAppeare = true
         DispatchQueue.main.async {
-            AppDelegate.shared?.ai.show(completion: { _ in
+            AppDelegate.shared?.ai.show(title:"Saving") { _ in
                 if let action = self.saveAction {
                     action()
                 }
-            })
+            }
         }
         
     }
     @objc func sendPress(_ sender: UITapGestureRecognizer) {
         DispatchQueue.main.async {
-            AppDelegate.shared?.ai.show(completion: { _ in
+            AppDelegate.shared?.ai.show(title:"Preparing") { _ in
                 if let action = self.sendAction {
             action()
         }
-            })
+            }
                                         }
     }
     @objc func deletePress(_ sender: UITapGestureRecognizer) {
         DispatchQueue.main.async {
-            AppDelegate.shared?.ai.show(completion: { _ in
+            AppDelegate.shared?.ai.show(title:"Deleting") { _ in
         needDownloadOnMainAppeare = true
                 if let action = self.deleteAction {
             action()
         }
-            })
+            }
                                         }
     }
     
@@ -1453,11 +1597,12 @@ class NoCategoriesCell: UITableViewCell {
 
 
 
-/*
+
 extension CategoriesVC: UISearchBarDelegate {
     
     
     func searchBarResultsListButtonClicked(_ searchBar: UISearchBar) {
+        
         DispatchQueue.main.async {
             searchBar.endEditing(true)
             self.tableView.reloadData()
@@ -1465,46 +1610,21 @@ extension CategoriesVC: UISearchBarDelegate {
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        if let data = allData {
-            shopsLocalSorted = data
+        searchingText = ""
+      //  if let data = allData {
+            categories = allCategoriesHolder
             DispatchQueue.main.async {
                 searchBar.endEditing(true)
                 self.tableView.reloadData()
             }
-        }
+       // }
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText == "" {
-            if let data = allData {
-                shopsLocalSorted = data
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            }
-            
-        } else {
-            
-            if let data = allData {
-                var resultt:Array<Array<String>> = [];
-                for i in 0..<data.count {
-                    let name = data[i][0].uppercased()
-                    print(name, "name")
-                    let code = data[i][1].uppercased()
-                    print(code, "code")
-                    let text = searchText.uppercased()
-                    if code.contains(text) || name.contains(text) {
-                        resultt.append(data[i])
-                    }
-                }
-                shopsLocalSorted = resultt
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            }
-        }
+        searchingText = searchText
+        categories = categoriesContains(searchText)
     }
     
     
 }
-*/
+

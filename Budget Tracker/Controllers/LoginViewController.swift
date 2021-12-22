@@ -633,7 +633,7 @@ class LoginViewController: SuperViewController {
             MoreVC.ScreenData(name: "Change password", description: "", action: changePassword),
             MoreVC.ScreenData(name: "Forgot password", description: "", action: forgotPassword),
             MoreVC.ScreenData(name: "Transfare data", description: "", action: transfareData),
-            MoreVC.ScreenData(name: "Log out", description: "", distructive: true, action: logoutAction),
+            MoreVC.ScreenData(name: "Log out", description: "", distructive: true, showAI: false, action: logoutAction),
         ]
         
         let notUserLogged = [
@@ -642,7 +642,7 @@ class LoginViewController: SuperViewController {
             MoreVC.ScreenData(name: "Forgot password", description: "", action: forgotPassword),
         ]
         
-        appData.presentMoreVC(currentVC: self, data: appData.username == "" ? notUserLogged : loggedUserData, dismissOnAction: true)
+        appData.presentMoreVC(currentVC: self, data: appData.username == "" ? notUserLogged : loggedUserData)
 
     }
     

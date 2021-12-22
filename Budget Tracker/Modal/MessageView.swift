@@ -1,214 +1,183 @@
 //
-//  Alerts.swift
-//  Budget Tracker
+//  MessageView.swift
+//  Indicator&Message
 //
-//  Created by Misha Dovhiy on 10.02.2020.
-//  Copyright © 2020 Misha Dovhiy. All rights reserved.
+//  Created by Mikhailo Dovhyi on 28.08.2021.
 //
 
 import UIKit
+import AVFoundation
 
-class MessageView {
-    
-    let mainView: UIViewController
+class MessageView: UIView {
 
-    var subview: UIView?
-    var textLabel: UILabel?
-    var closeButton: UIButton?
+
+    @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private weak var descriptionLabel: UILabel!
+    @IBOutlet private weak var mainView: UIView!
+    @IBOutlet weak var mainImage: UIImageView!
     
-    enum MessageType {
-        case error
-        case succsess
-        case internetError
-    }
-    @objc func closeButtonPressed(_ sender: Any) {
+    @IBAction func closePressed(_ sender: Any) {
+        if !userCanClose {
+            return
+        }
         hideMessage()
-        if textLabel?.text == "Create account to use app across all your devices" {
-            UserDefaults.standard.setValue(true, forKey: "firstLaunchSettings")
+    }
+    
+    
+    override func draw(_ rect: CGRect) {
+        self.mainView.layer.shadowColor = UIColor.black.cgColor
+        self.mainView.layer.shadowOpacity = 0.3
+        self.mainView.layer.shadowOffset = .zero
+        self.mainView.layer.shadowRadius = 6
+        self.mainView.layer.cornerRadius = 6
+        let swipeTop = UISwipeGestureRecognizer(target: self, action: #selector(closeSwipe(_:)))
+        swipeTop.direction = .up
+        self.mainView.addGestureRecognizer(swipeTop)
+        self.translatesAutoresizingMaskIntoConstraints = true
+    }
+
+    @objc private func closeSwipe(_ sender: UISwipeGestureRecognizer) {
+        if !userCanClose {
+            return
+        }
+        hideMessage()
+    }
+    
+    var messageData: (String, String?, viewType, UIImage?, TimeInterval?)?
+    private var userCanClose = true
+    var isShowing = false
+    func show(title: String = (NSLocalizedString("Операцiя завершена", comment: "") + " " + NSLocalizedString("успiшно", comment: "") + "!"), description: String? = nil, type:viewType, customImage: UIImage? = nil, autohide: TimeInterval? = 7.0) {
+
+        
+        if isShowing {
+            let new = {
+                self.show(title: title, description: description, type: type, customImage: customImage, autohide: autohide)
+            }
+            self.unshowedMessages.append(new)
+            DispatchQueue.main.async {
+                self.unseenCounterLabel.text = "\(self.unshowedMessages.count)"
+            }
+
+            if let old = messageData {
+                if old.0 == title && old.1 == description && old.2 == type && old.3 == customImage && old.4 == autohide {
+                    hideMessage()
+                }
+            }
+            return
+        } else {
+            isShowing = true
+            messageData = (title, description, type, customImage, autohide)
+        
+       // AudioServicesPlaySystemSound(1007)
+        DispatchQueue.main.async {
+            let window = UIApplication.shared.keyWindow ?? UIWindow()
+            //self.frame = window.frame
+            window.addSubview(self)
+            self.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: 100)
+            let top = self.mainView.frame.maxY
+            print("message appeare from top:", top)
+            self.mainView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 500, 0)
+            
+            
+            
+            self.titleLabel.text = title
+            self.descriptionLabel.text = description
+            self.descriptionLabel.isHidden = description ?? "" == "" ? true : false
+            self.mainImage.isHidden = (type == .error || type == .succsess) ? false : true
+            switch type {
+            case .error:
+               // self.mainView.backgroundColor = self.errorColor
+                self.mainImage.image = self.errorImage
+            case .succsess:
+              //  self.mainView.backgroundColor = self.succsessColor
+                self.mainImage.image = self.succsessImage
+            case .standart:
+                break
+              //  self.mainView.backgroundColor = .white
+            }
+            self.alpha = 1
+            
+            UIView.animate(withDuration: 0.25) {
+                self.mainView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+            } completion: { _ in
+                
+                if let hideTimer = autohide {
+                    self.userCanClose = true
+                    self.startTimer(secs: hideTimer)
+                } else {
+                    self.userCanClose = false
+                }
+              /*  UIView.animate(withDuration: 0.20) {
+                    
+                } completion: { _ in
+                    if let hideTimer = autohide {
+                        self.userCanClose = true
+                        self.startTimer(secs: hideTimer)
+                    } else {
+                        self.userCanClose = false
+                    }
+                }*/
+            }
+
+        }
+        }
+        
+    }
+    
+    private var timer: Timer?
+    private func startTimer(secs: TimeInterval) {
+        timer = Timer.scheduledTimer(withTimeInterval: secs, repeats: false) { tim in
+            tim.invalidate()
+            self.hideMessage()
         }
     }
 
-    func hideMessage(duration: TimeInterval = 0.33) {
-        stopTimers()
-        if duration == 0 {
+    @IBOutlet weak var unseenCounterLabel: UILabel!
+    
+    func hideMessage(fast: Bool = false) {
+        timer?.invalidate()
+        if fast {
+            isShowing = false
             DispatchQueue.main.async {
-                self.closeButton?.alpha = 0
-                let width = (self.mainView.view.bounds.width < 500 ? self.mainView.view.bounds.width : 500) - 40
-                self.subview?.frame = CGRect(x: self.mainView.view.frame.width / 2 - width / 2, y: -80, width: width, height: 30)
-                self.textLabel?.alpha = 0
-                self.textLabel?.textColor = .black //K.Colors.background
-                self.subview?.backgroundColor = .black //K.Colors.category
-                self.subview?.alpha = 0
+                self.removeFromSuperview()
             }
+            
         } else {
             DispatchQueue.main.async {
-                self.closeButton?.alpha = 0
-                let width = (self.mainView.view.bounds.width < 500 ? self.mainView.view.bounds.width : 500) - 40
-                UIView.animate(withDuration: duration) {
-                    self.subview?.frame = CGRect(x: self.mainView.view.frame.width / 2 - width / 2, y: -80, width: width, height: 30)
-                    self.textLabel?.alpha = 0
-                    self.textLabel?.textColor = .black
-                    self.subview?.backgroundColor = .black
-                } completion: { (_) in
-                    self.subview?.alpha = 0
-                }
-
-            }
-        }
-        
-    }
-    
-    
-    private var timers = [Timer]()
-    func stopTimers() {
-        for i in 0..<timers.count {
-            timers[i].invalidate()
-        }
-    }
-    
-    func showMessage(text: String, type: MessageType, windowHeight: CGFloat = 50, autoHide: Bool = true, bottomAppearence: Bool = false) {
-        
-        let mainViewFrame = self.mainView.view.bounds
-        let width = (mainViewFrame.width < 500 ? mainViewFrame.width : 500) - 30
-
-        let x = mainViewFrame.width / 2 - width / 2
-
-
-        hideMessage(duration: 0)
-        DispatchQueue.main.async {
-            self.subview?.alpha = 1
-            self.textLabel?.text = text
-            self.textLabel?.textAlignment = .left
-
-            UIView.animate(withDuration: 0.4) {
-                self.subview?.frame = CGRect(x: x, y: self.mainView.view.safeAreaInsets.top + 5, width: width, height: windowHeight)
-                self.textLabel?.alpha = 1
-            }
-            UIView.animate(withDuration: 0.8) {
-                self.closeButton?.alpha = 1
-            }
-            self.textLabel?.frame = CGRect(x: 12, y: 0, width: width - 6 - 30, height: windowHeight)
-            self.closeButton?.frame = CGRect(x: (self.subview?.frame.width ?? 0) - 35, y: 0, width: 30, height: windowHeight)
-            self.closeButton?.alpha = 1
-        }
-        
-        
-        
-        switch type {
-        case .error:
-            DispatchQueue.main.async {
-                UIView.animate(withDuration: 0.4) {
-                    self.textLabel?.textColor = .black
-                    self.subview?.backgroundColor = UIColor(red: 224/255, green: 18/255, blue: 0/255, alpha: 0.90)
-                }
-
-                if autoHide {
-                    let timer = Timer.scheduledTimer(withTimeInterval: 7.0, repeats: false) { (action) in
-                        self.hideMessage()
+                UIView.animate(withDuration: 0.35) {
+                    self.mainView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -500, 0)
+                } completion: { _ in
+                    self.isShowing = false
+                    if let function = self.unshowedMessages.first as? () -> ()  {
+                        self.unshowedMessages.removeFirst()
+                        self.unseenCounterLabel.text = self.unshowedMessages.count == 0 ? "" : "\(self.unshowedMessages.count)"
+                        function()
+                    } else {
+                        self.removeFromSuperview()
                     }
-                    self.timers.append(timer)
+                    
                 }
-                
-                if bottomAppearence {
-                    let superframe = self.mainView.view.frame
-                    UIView.animate(withDuration: 0.3) {
-                        self.subview?.frame = CGRect(x: x, y: superframe.height - self.mainView.view.safeAreaInsets.bottom - windowHeight - 5, width: width, height: windowHeight)
-                    }
-                }
-            }
 
-        case .succsess:
-            DispatchQueue.main.async {
-                UIView.animate(withDuration: 0.4) {
-                    self.textLabel?.textColor = .black
-                    self.subview?.backgroundColor = UIColor(red: 194/255, green: 194/255, blue: 194/255, alpha: 0.9)//K.Colors.pink
-                }
-                if autoHide {
-                    let timer = Timer.scheduledTimer(withTimeInterval: 7.0, repeats: false) { (action) in
-                        self.hideMessage()
-                    }
-                    self.timers.append(timer)
-                }
-                if bottomAppearence {
-                    let superframe = self.mainView.view.frame
-                    UIView.animate(withDuration: 0.3) {
-                        self.subview?.frame = CGRect(x: x, y: superframe.height - self.mainView.view.safeAreaInsets.bottom - windowHeight - 5, width: width, height: windowHeight)
-                    }
-                }
             }
-            
-        case .internetError:
-            
-            DispatchQueue.main.async {
-                self.closeButton?.alpha = 0
-                UIView.animate(withDuration: 0.4) {
-                    self.textLabel?.textColor = .black
-                    self.subview?.backgroundColor = UIColor(red: 224/255, green: 18/255, blue: 0/255, alpha: 0.90)
-                }
-                let superframe = self.mainView.view.frame
-                UIView.animate(withDuration: 0.3) {
-                    self.subview?.frame = CGRect(x: x, y: superframe.height - self.mainView.view.safeAreaInsets.bottom - windowHeight - 5, width: width, height: windowHeight)
-                }
-                
-                if autoHide {
-                    let timer = Timer.scheduledTimer(withTimeInterval: 7.0, repeats: false) { (action) in
-                        self.hideMessage()
-                    }
-                    self.timers.append(timer)
-                }
-            }
-
         }
         
-        
-        
     }
     
-    private func initMessage() {
-
-        DispatchQueue.main.async {
-            self.mainView.view.addSubview(self.subview ?? UIView())
-            self.subview?.isUserInteractionEnabled = true
-            self.subview?.addSubview(self.closeButton ?? UIButton())
-            self.subview?.addSubview(self.textLabel ?? UILabel())
-            self.textLabel?.textAlignment = .left
-            self.textLabel?.numberOfLines = 0
-            self.textLabel?.font = UIFont.systemFont(ofSize: self.mainView.view.frame.width < 370 ? 14 : 17, weight: .semibold)
-            self.textLabel?.alpha = 0
-            self.subview?.layer.cornerRadius = 6
-            self.subview?.layer.shadowColor = UIColor.black.cgColor
-            self.subview?.layer.shadowOpacity = 0.4
-            self.subview?.layer.shadowOffset = .zero
-            self.subview?.layer.shadowRadius = 6
-            self.closeButton?.alpha = 0
-            self.closeButton?.setImage(UIImage(named: "closeNoBack"), for: .normal)
-            self.closeButton?.addTarget(self, action: #selector(self.closeButtonPressed(_:)), for: .allEvents)
-            self.subview?.frame = .zero
-            self.subview?.alpha = 0
-            let swipe = UISwipeGestureRecognizer(target: self, action: #selector(self.closeSwipped(_:)))
-            swipe.direction = .up
-            self.subview?.addGestureRecognizer(swipe)
-            
-        }
-        
-        print("message init")
+    private var unshowedMessages: [Any] = []
+    
+    
+    private var errorImage = UIImage(named: "warning")
+    private var succsessImage = UIImage(named: "success")
+    private var errorColor: UIColor = .red
+    private var succsessColor: UIColor = .green
+    
+    class func instanceFromNib() -> UIView {
+        return UINib(nibName: "Message", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! UIView
     }
     
-    @objc func closeSwipped(_ sender: UISwipeGestureRecognizer) {
-        hideMessage()
-
+    enum viewType {
+        case error
+        case succsess
+        case standart
     }
-    
-    init(_ mainView: UIViewController) {
-
-        self.mainView = mainView
-        
-        DispatchQueue.main.async {
-            self.closeButton = UIButton()
-            self.textLabel = UILabel()
-            self.subview = UIView()
-        }
-        initMessage()
-    }
-    
 }

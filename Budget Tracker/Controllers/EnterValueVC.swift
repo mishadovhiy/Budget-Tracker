@@ -35,12 +35,17 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
         }
     }
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         EnterValueVC.shared = self
         valueTextField.addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
         valueTextField.delegate = self
         updateScreen()
+        valueTextField.setRightPaddingPoints(5)
+        valueTextField.setLeftPaddingPoints(5)
+        valueTextField.attributedPlaceholder = NSAttributedString(string: self.screenData?.placeHolder ?? "Enter value", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
         
     }
     lazy var numberView: NumbersView = {
@@ -79,7 +84,7 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
                 
             }
             
-            self.valueTextField.placeholder = self.screenData?.placeHolder
+
             self.ai?.fastHide { _ in
                 
             }

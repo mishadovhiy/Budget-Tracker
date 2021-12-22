@@ -225,8 +225,8 @@ class SuperViewController: UIViewController {
         let description: String?
     }
     
-    lazy var message: MessageView = {
-        let message = MessageView(self)
+    lazy var message: OldMessageView = {
+        let message = OldMessageView(self)
         return message
     }()
     

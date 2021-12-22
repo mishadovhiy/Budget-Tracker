@@ -11,7 +11,6 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     
     @IBOutlet weak var tableView: UITableView!
-    var dismissOnAction = false
     var dataHolder:[ScreenData] = []
     var cellHeightCust: CGFloat = 60
     var firstLaunch = true
@@ -64,6 +63,8 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         let description: String
         var distructive: Bool = false
         var showTF:Bool = false
+        var showAI: Bool = true
+        var selected: Bool = false
         let action: (() -> ())?
     }
     
@@ -104,6 +105,7 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         if indexPath.section != 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "DataOptionCell", for: indexPath) as! DataOptionCell
+            cell.contentView.backgroundColor = tableData[indexPath.row].selected ? K.Colors.balanceT : K.Colors.pink
             cell.titleLabel.text = tableData[indexPath.row].name
             cell.titleLabel.textColor = tableData[indexPath.row].distructive ? .red : .black
             cell.descriptionLabel.text = tableData[indexPath.row].description
@@ -138,23 +140,24 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         } else {
             if indexPath.section == 1 {
                 if let function = tableData[indexPath.row].action {
-                    if dismissOnAction {
+                    if tableData[indexPath.row].showAI {
                         
                         AppDelegate.shared?.ai.show(completion: { _ in
                             DispatchQueue.main.async {
                                 self.dismiss(animated: true) {
-                                    if self.tableData[indexPath.row].distructive == true  {
-                                        AppDelegate.shared?.ai.fastHide(completionn: { _ in
-                                            function()
-                                        })
-                                    } else {
+                                    AppDelegate.shared?.ai.fastHide(completionn: { _ in
                                         function()
-                                    }
+                                    })
                                 }
                             }
                         })
                     } else {
-                        function()
+                        DispatchQueue.main.async {
+                            self.dismiss(animated: true) {
+                                function()
+                            }
+                        }
+                        
                     }
                     
                 }

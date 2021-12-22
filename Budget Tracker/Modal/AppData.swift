@@ -569,13 +569,12 @@ class AppData {
 
     
     
-    func presentMoreVC(currentVC: UIViewController, data: [MoreVC.ScreenData], dismissOnAction:Bool = false) {
+    func presentMoreVC(currentVC: UIViewController, data: [MoreVC.ScreenData]) {
         DispatchQueue.main.async {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let vccc = storyboard.instantiateViewController(withIdentifier: "MoreVC") as! MoreVC
             vccc.modalPresentationStyle = .overFullScreen //.overCurrentContext - cant swipe close
             vccc.tableData = data
-            vccc.dismissOnAction = dismissOnAction
             vccc.navigationController?.setNavigationBarHidden(true, animated: false)
             let cellHeight = 45
             let contentHeight = (data.count) * cellHeight
