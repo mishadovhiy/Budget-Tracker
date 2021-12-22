@@ -80,8 +80,7 @@ class ViewController: SuperViewController {
                  //   self.refreshControl.backgroundColor = .clear
                     self.refreshControl.endRefreshing()
                 }
-                
-                
+
                 
                 self.mainTableView.alpha = tableDataDataCount == 0 ? 0 : 1
                 
@@ -176,6 +175,7 @@ class ViewController: SuperViewController {
         }
     }
     func downloadFromDB(showError: Bool = false) {
+        self.editingTransaction = nil
         self.sendError = false
         _categoriesHolder.removeAll()
         _debtsHolder.removeAll()
@@ -252,6 +252,7 @@ class ViewController: SuperViewController {
                 self.mainContentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
                 self.mainContentViewHelpher.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
             } completion: { _ in
+                self.sideBar.getData()
                 if self.firstLod {
                     self.firstLod = false
                     self.sideBar.isHidden = false
@@ -811,8 +812,12 @@ class ViewController: SuperViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         print("DIDAPPPP")
-        sideTableView.reloadData()
 
+        if self.ai.isShowing {
+            self.ai.fastHide { _ in
+                
+            }
+        }
         if needDownloadOnMainAppeare {
             needDownloadOnMainAppeare = false
             self.downloadFromDB()
@@ -902,7 +907,11 @@ class ViewController: SuperViewController {
                                                     if trans.categoryID == "\(cat.id)" {
                                                         var newTransaction = trans
                                                         newTransaction.categoryID = "\(highest)"
-                                                        appData.unsendedData[i]["transactionNew"] = self.db.transactionToDict(newTransaction)
+                                                        var d = appData.unsendedData
+                                                        let newV = self.db.transactionToDict(newTransaction)
+                                                        d[i].updateValue(newV, forKey: "transactionNew")
+                                                        appData.unsendedData = d
+                                                       // appData.unsendedData[i]["transactionNew"] =
                                                     }
                                                 }
                                             }
@@ -930,7 +939,7 @@ class ViewController: SuperViewController {
                             }
                         } else {
                             if let deleteCategory = db.categoryFrom(first["deleteCategoryNew"] ?? [:]) {
-                                delete.CategoriesNew(category: deleteCategory, saveLocally: true) { error in
+                                delete.CategoriesNew(category: deleteCategory, saveLocally: false) { error in
                                     if !error {
                                         appData.unsendedData.removeFirst()
                                         self.sendUnsaved()
@@ -2160,6 +2169,7 @@ extension ViewController: TransitionVCProtocol {
         delete.newTransaction(was) { _ in
             let save = SaveToDB()
             save.newTransaction(transaction) { _ in
+                self.editingTransaction = nil
                 self.filter()
             }
         }
@@ -2181,6 +2191,7 @@ extension ViewController: TransitionVCProtocol {
             let save = SaveToDB()
             save.newTransaction(TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)) { error in
                 self.filter()
+                self.editingTransaction = nil
                 if !error {
                     self.forseSendUnsendedData = true
                     self.sendUnsaved()
@@ -2189,6 +2200,7 @@ extension ViewController: TransitionVCProtocol {
 
         } else {
             print("reloaddd")
+            self.editingTransaction = nil
             DispatchQueue.main.async {
                 if self.refreshControl.isRefreshing {
                     self.refreshControl.endRefreshing()
@@ -2199,7 +2211,7 @@ extension ViewController: TransitionVCProtocol {
     }
     
     func quiteTransactionVC(reload:Bool){
-
+        self.editingTransaction = nil
         if reload {
             print("trloaddd")
             filter()

@@ -10,7 +10,8 @@ import UIKit
 
 class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
     //toSettingsVC
-    var tableData:[TableData] {
+    
+    func getData(){
         let db = DataBase()
         let debts = db.debts.count
         let pro = appData.proVersion || appData.proTrial
@@ -48,25 +49,28 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         //toSupportVC
         //chart.pie.fill - statistic
         let emptySec = TableData(section: [CellData(name: "", value: "", segue: "", image: "")], title: "", hidden: false)
-        
-        
-        
-        return [
+        tableData = [
             TableData(section: [accpuntCell, support], title: "", hidden: false),
             emptySec,
             TableData(section: categories, title: "", hidden: false),
             emptySec,
             TableData(section: statistic, title: "", hidden: false),
         ]
+        DispatchQueue.main.async {
+            ViewController.shared?.sideTableView.reloadData()
+        }
+        
     }
+    
+    var tableData:[TableData] = []
 
     
     func load() {
         DispatchQueue.main.async {
             ViewController.shared?.sideTableView.delegate = self
             ViewController.shared?.sideTableView.dataSource = self
-            ViewController.shared?.sideTableView.reloadData()
         }
+        getData()
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

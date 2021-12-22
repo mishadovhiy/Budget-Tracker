@@ -48,7 +48,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                     if self.screenAI.isHidden != true {
                         self.screenAI.isHidden = true
                     }
-                    UIView.animate(withDuration: 0.30) {
+                    UIView.animate(withDuration: 0.2) {
                         self.tableView.alpha = 1
                        // self.tableView.transform =// to notmal
                     } /*completion: { _ in
@@ -232,6 +232,10 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        DispatchQueue.init(label: "udLoad", qos: .userInteractive).async {
+            self.loadData()
+        }
         toggleIcons(show: false, animated: false, category: nil)
         
         var strTitle:String {
@@ -247,9 +251,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         title = strTitle
         CategoriesVC.shared = self
         updateUI()
-        if !fromSettings {
-            categories = db.categories
-        }
+     //   if !fromSettings {
+            
+      //  }
         
         
     }
@@ -365,7 +369,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
     func kayboardAppeared(_ keyboardHeight:CGFloat) {
         DispatchQueue.main.async {
-            self.tableView.contentInset.bottom = keyboardHeight - appData.safeArea.1 - self.defaultButtonInset
+            let height:CGFloat = keyboardHeight - appData.safeArea.1 - self.defaultButtonInset
+            let cellEditing = (self.editingTF?.layer.name?.contains("cell") ?? false) || self.selectingIconFor.0 != nil
+            self.tableView.contentInset.bottom = height + (cellEditing ? (self.regFooterHeight * (-1)) : 0)
 
         }
     }
@@ -403,9 +409,11 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                     
                     self.kayboardAppeared(containerHeight)
                     
-                    DispatchQueue.main.async {
+                  //  DispatchQueue.main.async {
                         IconsVC.shared?.collectionView.reloadData()
-                    }
+                        IconsVC.shared?.scrollToSelected()
+               //     }
+                    
                 }
             }
 
@@ -434,7 +442,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             categories = _categories
         } else {
             appeareDidCall = true
-            loadData()
+            //loadData()
         }
         
         if transactionAdded {
@@ -629,6 +637,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 
             }
         }
+        if showingIcons {
+            toggleIcons(show: false, animated: true, category: nil)
+        }
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -679,9 +690,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             screenType = .localData
             loadData()
             
-            DispatchQueue.main.async {
+        //    DispatchQueue.main.async {
                 self.navigationController?.popToRootViewController(animated: true)
-            }
+          //  }
         }
         
     }
@@ -712,16 +723,16 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                     needDownloadOnMainAppeare = true
                     self.db.localCategories = []
                     self.db.localTransactions = []
-                    DispatchQueue.main.async {
+                //    DispatchQueue.main.async {
                         self.navigationController?.popToRootViewController(animated: true)
-                    }
+                  //  }
                 }
                 let sendAll = {
                     needDownloadOnMainAppeare = true
                     sendSavedData = true
-                    DispatchQueue.main.async {
+                //    DispatchQueue.main.async {
                         self.navigationController?.popToRootViewController(animated: true)
-                    }
+                  //  }
                 }
                 
                 
@@ -804,12 +815,12 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             self.tableView.reloadData()
         }
     }
-    
+    let regFooterHeight:CGFloat = 55
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if section == 0 || section == 1 {
             return 0
         } else {
-            return screenType != .localData ? 60 : (tableCorners + 5)
+            return screenType != .localData ? regFooterHeight : (tableCorners + 5)
         }
     }
     
@@ -892,6 +903,12 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             //self.tableActionActivityIndicator.startAnimating()
             self.deteteCategory(at: IndexPath(row: indexPath.row, section: indexPath.section - 2))
         }
+        let localDeleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
+            //self.tableActionActivityIndicator.startAnimating()
+            let id = self.tableData[indexPath.section - 2].data[indexPath.row].category.id
+            self.db.deleteCategory(id: "\(id)", local: true)
+            self.loadData()
+        }
         
         let editAction = UIContextualAction(style: .destructive, title: "Edit") {  (contextualAction, view, boolValue) in
             //self.tableActionActivityIndicator.startAnimating()
@@ -905,7 +922,8 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         deleteAction.image = iconNamed("trash.red")
         editAction.backgroundColor = K.Colors.primaryBacground
         deleteAction.backgroundColor = K.Colors.primaryBacground
-        
+        localDeleteAction.backgroundColor = K.Colors.primaryBacground
+        localDeleteAction.image = iconNamed("trash.red")
         
         if indexPath.section == 0 || indexPath.section == 1 {
             return nil
@@ -913,7 +931,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             if screenType == .localData {
                 //delete cate from local
                 //
-                return transfaringCategories == nil ? UISwipeActionsConfiguration(actions: [editAction, deleteAction]) : nil
+                return transfaringCategories == nil ? UISwipeActionsConfiguration(actions: [localDeleteAction]) : nil
             } else {
                 if self.tableData[indexPath.section - 2].data[indexPath.row].editing == nil {
                     return UISwipeActionsConfiguration(actions: [editAction, deleteAction])
@@ -1393,19 +1411,34 @@ class LocalDataActionCell: UITableViewCell {
     }
     
     @objc func saveLocallyPress(_ sender: UITapGestureRecognizer) {
-        if let action = saveAction {
-            action()
+        needDownloadOnMainAppeare = true
+        DispatchQueue.main.async {
+            AppDelegate.shared?.ai.show(completion: { _ in
+                if let action = self.saveAction {
+                    action()
+                }
+            })
         }
+        
     }
     @objc func sendPress(_ sender: UITapGestureRecognizer) {
-        if let action = sendAction {
+        DispatchQueue.main.async {
+            AppDelegate.shared?.ai.show(completion: { _ in
+                if let action = self.sendAction {
             action()
         }
+            })
+                                        }
     }
     @objc func deletePress(_ sender: UITapGestureRecognizer) {
-        if let action = deleteAction {
+        DispatchQueue.main.async {
+            AppDelegate.shared?.ai.show(completion: { _ in
+        needDownloadOnMainAppeare = true
+                if let action = self.deleteAction {
             action()
         }
+            })
+                                        }
     }
     
 }

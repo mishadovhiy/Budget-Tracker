@@ -66,6 +66,21 @@ class IconsVC: UIViewController {
         
     }
     
+    func scrollToSelected() {
+        let sections = Array(iconsData)
+        for s in 0..<sections.count {
+            let icons = sections[s].data
+            for i in 0..<icons.count {
+                if icons[i] == selectedIconName {
+                   // DispatchQueue.main.async {
+                        self.collectionView.scrollToItem(at: IndexPath(item: i, section: s + 1), at: .centeredVertically, animated: true)
+                  //  }
+                    return
+                }
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -139,7 +154,7 @@ extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
            // cell.backgroundColor = index == selectedIconIndex ? K.Colors.secondaryBackground : .clear
             cell.mainImage.image = UIImage(named: iconName)
             
-            let selectedColor = colorNamed(coloresStrTemporary[selectedColorId])
+            let selectedColor = colorNamed(selectedColorName)
             //cell.mainImage.tintColor = index == selectedIconIndex ? selectedColor :  K.Colors.balanceT
             cell.mainImage.tintColor = iconName == selectedIconName ? selectedColor :  K.Colors.balanceT
             
