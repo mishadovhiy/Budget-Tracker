@@ -33,10 +33,8 @@
 		8B7B63CC2655CAFB0067C434 /* SuperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7B63CB2655CAFB0067C434 /* SuperViewController.swift */; };
 		8B7D1AA1276CF203008942EC /* IconList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7D1AA0276CF203008942EC /* IconList.swift */; };
 		8B8D556125BB218400D7C6A7 /* UnsendedDataVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D556025BB218400D7C6A7 /* UnsendedDataVC.swift */; };
-		8B901F1C265F0A0100E0D2BB /* accountSettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B901F1B265F0A0100E0D2BB /* accountSettingsVC.swift */; };
 		8BD2E77C25B8622100D4DFBF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */; };
 		8BE60E5927726EA8007B7FB3 /* LastSelected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE60E5827726EA8007B7FB3 /* LastSelected.swift */; };
-		8BF011C225FD93670082F871 /* DebtsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF011C125FD93670082F871 /* DebtsVC.swift */; };
 		8BF63E8B276294F2002E8601 /* SelectUserVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF63E8A276294F2002E8601 /* SelectUserVC.swift */; };
 		8BF63E8D27629D14002E8601 /* SupportVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF63E8C27629D14002E8601 /* SupportVC.swift */; };
 		8BF63E8F2762C83F002E8601 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF63E8E2762C83F002E8601 /* SettingsVC.swift */; };
@@ -46,7 +44,6 @@
 		8D52066B24216A6200772CD5 /* HistoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D52066A24216A6200772CD5 /* HistoryVC.swift */; };
 		8D8B6C3C245023D0007260A0 /* FilterTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8B6C3B245023D0007260A0 /* FilterTVC.swift */; };
 		8D8B6C3E245023EC007260A0 /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8B6C3D245023EC007260A0 /* CalendarVC.swift */; };
-		8DB1A6FA24E19069002DE486 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB1A6F924E19069002DE486 /* SettingsViewController.swift */; };
 		8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */; };
 		8DBA7E5423F0316F00D8214C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5323F0316F00D8214C /* ViewController.swift */; };
 		8DBA7E5723F0316F00D8214C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5523F0316F00D8214C /* Main.storyboard */; };
@@ -103,10 +100,8 @@
 		8B7B63CB2655CAFB0067C434 /* SuperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperViewController.swift; sourceTree = "<group>"; };
 		8B7D1AA0276CF203008942EC /* IconList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconList.swift; sourceTree = "<group>"; };
 		8B8D556025BB218400D7C6A7 /* UnsendedDataVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsendedDataVC.swift; sourceTree = "<group>"; };
-		8B901F1B265F0A0100E0D2BB /* accountSettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = accountSettingsVC.swift; sourceTree = "<group>"; };
 		8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8BE60E5827726EA8007B7FB3 /* LastSelected.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastSelected.swift; sourceTree = "<group>"; };
-		8BF011C125FD93670082F871 /* DebtsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebtsVC.swift; sourceTree = "<group>"; };
 		8BF63E8A276294F2002E8601 /* SelectUserVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectUserVC.swift; sourceTree = "<group>"; };
 		8BF63E8C27629D14002E8601 /* SupportVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportVC.swift; sourceTree = "<group>"; };
 		8BF63E8E2762C83F002E8601 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
@@ -116,7 +111,6 @@
 		8D52066A24216A6200772CD5 /* HistoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryVC.swift; sourceTree = "<group>"; };
 		8D8B6C3B245023D0007260A0 /* FilterTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterTVC.swift; sourceTree = "<group>"; };
 		8D8B6C3D245023EC007260A0 /* CalendarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarVC.swift; sourceTree = "<group>"; };
-		8DB1A6F924E19069002DE486 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		8DBA7E4C23F0316F00D8214C /* Budget Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Budget Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8DBA7E5323F0316F00D8214C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -172,10 +166,7 @@
 		8B5CE1CF2720991B0092BBFB /* notUsing */ = {
 			isa = PBXGroup;
 			children = (
-				8BF011C125FD93670082F871 /* DebtsVC.swift */,
-				8DB1A6F924E19069002DE486 /* SettingsViewController.swift */,
 				8B2163A1274070BA003EDFE0 /* snippets.swift */,
-				8B901F1B265F0A0100E0D2BB /* accountSettingsVC.swift */,
 				8B324B682683118000E72275 /* NotificationsVC.swift */,
 				8B5BE4782648038F005B182C /* expectingPaymentsVC.swift */,
 				8B1FD85C270C4DE2004E225E /* splitVC.swift */,
@@ -413,7 +404,6 @@
 				8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */,
 				8B52DFEE27506B3400595A0C /* ColorView.swift in Sources */,
 				8B57837E275E6977007BA9EC /* SideBar.swift in Sources */,
-				8BF011C225FD93670082F871 /* DebtsVC.swift in Sources */,
 				8BF63E8B276294F2002E8601 /* SelectUserVC.swift in Sources */,
 				8DD89D8A23F1472E00273904 /* OldMessageView.swift in Sources */,
 				8DD89D8E23F1495300273904 /* TransactionVC.swift in Sources */,
@@ -429,13 +419,11 @@
 				8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */,
 				8BF63E8F2762C83F002E8601 /* SettingsVC.swift in Sources */,
 				8B2A4D72271439520085E0F0 /* MoreVC.swift in Sources */,
-				8DB1A6FA24E19069002DE486 /* SettingsViewController.swift in Sources */,
 				8B052E3D26EFD48E000BA66A /* IndicatorView.swift in Sources */,
 				8B7B63CC2655CAFB0067C434 /* SuperViewController.swift in Sources */,
 				8B324B692683118000E72275 /* NotificationsVC.swift in Sources */,
 				8B7D1AA1276CF203008942EC /* IconList.swift in Sources */,
 				8B52DFEA2750232D00595A0C /* NumbersView.swift in Sources */,
-				8B901F1C265F0A0100E0D2BB /* accountSettingsVC.swift in Sources */,
 				8DD89D8723F1471400273904 /* AppData.swift in Sources */,
 				8B8D556125BB218400D7C6A7 /* UnsendedDataVC.swift in Sources */,
 				8B52DFEC27504D2900595A0C /* IconsVC.swift in Sources */,

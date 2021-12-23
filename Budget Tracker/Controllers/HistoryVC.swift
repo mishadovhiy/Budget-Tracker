@@ -516,20 +516,7 @@ class HistoryVC: SuperViewController {
         
     }
     
-    func changeAmountToPayWithtextField() {
-        self.ai.showTextField(type: .amount, textFieldText: "\(self.selectedCategory?.amountToPay ?? 0.0)", title: "Amount to pay", description: "Enter how much is rest to pay") { (enteredAmount, _) in
-            
 
-            self.changeAmountToPay(enteredAmount: enteredAmount) { (_) in
-                self.ai.fastHide { (_) in
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    }
-                }
-            }
-            //here
-        }
-    }
 
     
     func removeAlert() {

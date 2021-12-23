@@ -270,8 +270,9 @@ class DataBase {
     }
     private func dictToCategories(all:[[String:Any]]) -> [NewCategories] {
         var result: [NewCategories] = []
-        for i in 0..<all.count {
-            if let new = categoryFrom(all[i]) {
+        let a = Array(all)
+        for i in 0..<a.count {
+            if let new = categoryFrom(a[i]) {
                 result.append(new)
             }
             

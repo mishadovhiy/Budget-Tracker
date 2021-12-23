@@ -45,7 +45,7 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
         updateScreen()
         valueTextField.setRightPaddingPoints(5)
         valueTextField.setLeftPaddingPoints(5)
-        valueTextField.attributedPlaceholder = NSAttributedString(string: self.screenData?.placeHolder ?? "Enter value", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
+        valueTextField.attributedPlaceholder = NSAttributedString(string: self.screenData?.placeHolder ?? "Enter value", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.textFieldPlaceholder])
         
     }
     lazy var numberView: NumbersView = {

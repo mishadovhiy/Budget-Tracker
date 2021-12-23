@@ -73,7 +73,6 @@ class LoginViewController: SuperViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        categoriesDebtsCount = (0,0)
 
         updateUI()
 
@@ -255,31 +254,7 @@ class LoginViewController: SuperViewController {
         
         EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Change email", title: "Enter your new email", placeHolder: "Email", nextAction: emailAction, screenType: .email))
         
-     /*   self.ai.showTextField(type: .email, error: error ? ("Enter valid email address","") : nil, title: "Enter your new email", description: nil, userData: userData) { (newEmail, _) in
-            
-         /*   self.ai.completeWithActions(buttonsTitles: ("Repeate", "Yes"), showCloseButton: true, leftButtonActon: { lef in
-                
-                self.dbChangeEmail(userData: userData, error: false)
-                
-            }, rightButtonActon: { rig in
-                
-                self.ai.show { _ in
-                    self.performChanageEmail(userData: userData, newEmail: newEmail)
-                }
-                
-            }, title: "Are you sure you wanna change email?", description: "Entered email: \(newEmail)", error: false)*/
-            let firstButton = IndicatorView.button(title: "Repeate", style: .standart, close: false) { _ in
-                self.dbChangeEmail(userData: userData, error: false)
-            }
-            let secondButton = IndicatorView.button(title: "Try again", style: .standart, close: false) { _ in
-                self.performChanageEmail(userData: userData, newEmail: newEmail)
-            }
-            DispatchQueue.main.async {
-                self.ai.completeWithActions(buttons: (firstButton, secondButton), title: "Are you sure you wanna change email?", descriptionText: "Entered email: \(newEmail)", type: .standard)
-            }
-            
-            
-        }*///NEWSCREEN
+
     }
     
     func checkRestoreCode(value: String, userData: (String, String), ifCorrect: restoreCodeAction) {
@@ -340,10 +315,7 @@ class LoginViewController: SuperViewController {
                                 } else {
                                     self.currectAnsware = code
                                     self.waitingType = .code
-                                    /*
-                                    self.ai.showTextField(type: .code, title: "Restoration code", description: "We have sent 4-digit resoration code on your email", userData: (("username",username),("emailToSend",emailToSend)), showSecondTF: true) { code, not in
-                                        self.checkRestoreCode(value: code, userData: (username, emailToSend), ifCorrect: toChange)
-                                    }*/
+    
                                     var taskNameTitle:String {
                                         switch toChange {
                                         case .changePassword:
@@ -721,11 +693,7 @@ class LoginViewController: SuperViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         switch segue.identifier {
-        case "toAccountSettings":
-          //  break
-            let vc = segue.destination as! accountSettingsVC
-            vc.tableTopMargin = self.view.frame.minY
-            vc.delegate = self
+
         case "toEnterValueVC":
             let vc = segue.destination as! EnterValueVC
             if let screenData = enterValueVCScreenData {
@@ -766,15 +734,10 @@ class LoginViewController: SuperViewController {
     
     func updateUI() {
         toggleScreen(options: .createAccount, animation: 0.0)
-        for i in 0..<textfields.count {
-            self.textfields[i].delegate = self
-            self.textfields[i].addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
-            self.textfields[i].layer.masksToBounds = true
-            self.textfields[i].layer.cornerRadius = 6
+        DispatchQueue.main.async {
             
-            textfields[i].setRightPaddingPoints(5)
-            textfields[i].setLeftPaddingPoints(5)
         }
+        
         
         let hideKeyboardGestureSwipe = UISwipeGestureRecognizer(target: self, action: #selector(hideKeyboardSwipped))
         hideKeyboardGestureSwipe.direction = .down
@@ -792,9 +755,26 @@ class LoginViewController: SuperViewController {
         self.logIn.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, self.view.frame.height * (-2), 0)
         
         
+        
     }
 
 
+    var sbvsLoaded = false
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        let tfs = Array(textfields)
+        for i in 0..<tfs.count {
+            tfs[i].delegate = self
+            tfs[i].addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
+            tfs[i].layer.masksToBounds = true
+            tfs[i].layer.cornerRadius = 6
+            
+            tfs[i].setRightPaddingPoints(5)
+            tfs[i].setLeftPaddingPoints(5)
+            
+            tfs[i].attributedPlaceholder = NSAttributedString(string: i + 1 < placeHolder.count ? placeHolder[i] : "", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.textFieldPlaceholder])
+        }
+    }
     
     override func viewDidDisappear(_ animated: Bool) {
         DispatchQueue.main.async {
@@ -938,7 +918,7 @@ class LoginViewController: SuperViewController {
                         needFullReload = true
                         lastSelectedDate = nil
                         AppDelegate.shared?.center.removeAllPendingNotificationRequests()
-                        _debtsHolder.removeAll()
+
                         _categoriesHolder.removeAll()
                         UserDefaults.standard.setValue(nil, forKey: "lastSelectedCategory")
                         if !appData.purchasedOnThisDevice {
@@ -1073,7 +1053,7 @@ class LoginViewController: SuperViewController {
                                     lastSelectedDate = nil
                                     
                                     AppDelegate.shared?.center.removeAllPendingNotificationRequests()
-                                    _debtsHolder.removeAll()
+
                                     _categoriesHolder.removeAll()
                                     UserDefaults.standard.setValue(nil, forKey: "lastSelectedCategory")
                                     if self.fromPro {
@@ -1160,7 +1140,7 @@ class LoginViewController: SuperViewController {
         if fromSettings {
             DispatchQueue.main.async {
                 let window = UIApplication.shared.keyWindow ?? UIWindow()
-                self.helperNavView?.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: safeArTopHeight)
+                self.helperNavView?.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: appData.safeArea.0)
                 window.addSubview(self.helperNavView ?? UIView())
                 self.message.hideMessage(duration: 0)
             }
@@ -1350,6 +1330,9 @@ class LoginViewController: SuperViewController {
     var selectedTextfield: Int?
     var textfields: [UITextField] {
         return [nicknameLabelCreate, emailLabel, passwordLabel, confirmPasswordLabel, nicknameLogLabel, passwordLogLabel]
+    }
+    var placeHolder: [String] {
+        return ["Create username", "Enter your email", "Create password", "Confirm password", "Username", "Password"]
     }
     
     var _enteredEmailUsers: [String] = []
@@ -1590,12 +1573,12 @@ extension UITextField {
 
 
 
-extension LoginViewController: accountSettingsVCDelegate {
+extension LoginViewController {
     func logout() {
         appData.username = ""
         appData.password = ""
         lastSelectedDate = nil
-        _debtsHolder.removeAll()
+        //_debtsHolder.removeAll()
         _categoriesHolder.removeAll()
         UserDefaults.standard.setValue(nil, forKey: "lastSelectedCategory")
         

@@ -118,7 +118,7 @@ class TransitionVC: SuperViewController {
         DispatchQueue.main.async {
             self.valueLabel.text = self.pressedValue
             self.dateTextField.attributedPlaceholder = NSAttributedString(string: lastSelectedDate ?? appData.stringDate(appData.objects.datePicker), attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
-            self.commentTextField.attributedPlaceholder = NSAttributedString(string: "Short comment", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
+            self.commentTextField.attributedPlaceholder = NSAttributedString(string: "Short comment", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.textFieldPlaceholder])
             self.purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white], for: .normal)
             self.purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "darkTableColor") ?? .black], for: .selected)
         }
@@ -168,8 +168,9 @@ class TransitionVC: SuperViewController {
     
     let db = DataBase()
     func getEditingdata() {
+        selectedCategory = db.category(editingCategory) ?? db.categories.first
         if editingCategory != "" {
-            selectedCategory = db.category(editingCategory)
+            
             print(selectedPurpose, "selectedPurpose")
             purposeSwitcher.selectedSegmentIndex = selectedPurpose != nil ? selectedPurpose! : 0
             purposeSwitched(purposeSwitcher)
@@ -373,7 +374,7 @@ class TransitionVC: SuperViewController {
         }
         
         DispatchQueue.main.async {
-            self.categoryTextField.attributedPlaceholder = NSAttributedString(string: placeHolder, attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
+            self.categoryTextField.attributedPlaceholder = NSAttributedString(string: placeHolder, attributes: [NSAttributedString.Key.foregroundColor: K.Colors.textFieldPlaceholder])
         }
     }
     

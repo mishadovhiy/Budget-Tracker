@@ -13,7 +13,7 @@ import UIKit
 class AppData {
 
     let defaults = UserDefaults.standard
-    var safeArea: (CGFloat, CGFloat) = (0.0, 0.0)
+    var safeArea: (CGFloat, CGFloat) = (0.0, 0.0)//0-bt  1-top
     var unshowedErrors = ""
     
     var deptsData: [CategoriesStruct] = []

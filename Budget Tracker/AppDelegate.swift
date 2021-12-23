@@ -37,7 +37,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
             UserDefaults.standard.setValue(today, forKey: "lastLaunching")
             lastSelectedDate = nil
             _categoriesHolder.removeAll()
-            _debtsHolder.removeAll()
         }
 
         

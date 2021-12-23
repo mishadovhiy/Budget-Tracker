@@ -178,7 +178,7 @@ class ViewController: SuperViewController {
         self.editingTransaction = nil
         self.sendError = false
         _categoriesHolder.removeAll()
-        _debtsHolder.removeAll()
+
         lastSelectedDate = nil
         DispatchQueue.main.async {
             self.filterText = "Downloading"
@@ -1646,12 +1646,7 @@ class ViewController: SuperViewController {
             }
             vc.delegate = self
             
-        case "toSettings", "toSettingsFullScreen":
-            let nav = segue.destination as! UINavigationController
-            let vc = nav.topViewController as! SettingsViewController
-            vc.delegate = self
-            vc.resetPassword = resetPassword
-            resetPassword = false
+
 
         case "toStatisticVC":
            // let nav = segue.destination as! UINavigationController
@@ -2248,33 +2243,6 @@ extension ViewController: UnsendedDataVCProtocol {
     
 }
 
-extension ViewController: SettingsViewControllerProtocol {
-    func closeSettings(sendSavedDataa: Bool, needFiltering: Bool) {
-        calculateLabels()
-        self.animateCellWillAppear = false
-        Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (_) in
-            self.animateCellWillAppear = true
-        }
-        if sendSavedData {
-            sendSavedData = true
-            forseSendUnsendedData = true
-            if appData.username != "" {
-                self.sendUnsaved()
-            }
-        } else {
-            print("hghjknhj")
-            if needFiltering {
-                print("ViewController needFiltering")
-                self.downloadFromDB()
-            } else {
-               // calculateLabels()
-            }
-            
-        }
-    }
-    
-    
-}
 
 
 

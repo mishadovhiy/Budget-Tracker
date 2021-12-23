@@ -68,6 +68,8 @@ struct K {
         static let darkTable = UIColor(named: "darkTableColor")
         
         
+        static let textFieldPlaceholder = balanceV ?? .white
+        
         static let primaryBacground = UIColor(named: "PrimaryBackgroundColor") ?? .black
         static let secondaryBackground = UIColor(named: "SecondaryBacroundColor") ?? .black
         static let sectionBackground = secondaryBackground

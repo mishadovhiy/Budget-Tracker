@@ -43,8 +43,8 @@ class IndicatorView: UIView {
         DispatchQueue.main.async {
            // self.alpha = 0
 
-            NotificationCenter.default.addObserver( self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-            NotificationCenter.default.addObserver( self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+     //       NotificationCenter.default.addObserver( self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+       //     NotificationCenter.default.addObserver( self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
             self.textFields = [self.textField, self.repeatePasswordTextField]
           //  self.setAllHidden()
             for textField in self.textFields {
@@ -474,146 +474,6 @@ class IndicatorView: UIView {
     private var vcActionOnTFHide: Any?
     private var textFieldMode: textType? = nil
     
-    func showTextField(type: textType, error: (String, String)? = nil, textFieldText: String = "", title: String, description: String? = nil, dontChangeText: Bool = false, userData: ((String, String), (String, String)?)? = nil, showSecondTF: Bool = false, whenHide: @escaping (String, String?) -> ()) {
-     //   setAllHidden()
-        if !hideIndicatorBlockDesibled {
-            print(hideIndicatorBlockDesibled)
-            return
-        }
-        
-        vcActionOnTFHide = whenHide
-        DispatchQueue.main.async {
-            let window = UIApplication.shared.keyWindow ?? UIWindow()
-            self.frame = window.frame
-            window.addSubview(self)
-            self.userDataStack.isHidden = true // test when need!!!
-            if !showSecondTF {
-                self.textField.text = ""
-            }
-            self.textField.superview?.superview?.superview?.isHidden = false
-            self.repeatePasswordTextField.isHidden = true
-            self.leftButton.superview?.superview?.isHidden = false
-            self.leftButton.superview?.isHidden = true
-            
-            if !dontChangeText {
-                self.titleLabel.text = title
-                self.descriptionLabel.text = description
-            }
-            var showUserStack: Bool = false
-            var needAdditionalButton = false
-            var enableAdditionalButton = false
-            self.textFieldMode = type
-            
-            switch type {
-            case .code:
-                enableAdditionalButton = false
-                self.textField.isSecureTextEntry = false
-                self.textField.keyboardType = .numberPad
-                needAdditionalButton = true
-                self.textField.attributedPlaceholder = NSAttributedString(string: "Enter code", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
-                showUserStack = true
-                if !dontChangeText {
-                    self.setCompletionTable(data: userData)
-                 /*   self.usernameLabel.text = userData?.0
-                    self.emailLabel.text = userData?.1*/
-                }
-                if description == nil || description == nil {
-                    self.descriptionLabel.isHidden = true
-                }
-                
-            case .nickname:
-                self.textField.isSecureTextEntry = false
-                self.textField.keyboardType = .default
-                self.textField.attributedPlaceholder = NSAttributedString(string: "Nickname", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
-            case .email:
-                if let descr = description {
-                    self.descriptionLabel.isHidden = false
-                    self.descriptionLabel.text = descr
-                }
-                
-                self.textField.isSecureTextEntry = false
-                self.textField.keyboardType = .emailAddress
-                self.textField.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
-            case .password:
-                showUserStack = true
-                self.textField.isSecureTextEntry = true
-                self.textField.keyboardType = .default
-                self.textField.attributedPlaceholder = NSAttributedString(string: "Password", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
-                self.repeatePasswordTextField.attributedPlaceholder = NSAttributedString(string: "Repeat password", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
-           //     self.usernameLabel.text = userData?.0
-           //     self.emailLabel.text = userData?.0
-                if !dontChangeText {
-          //          self.usernameLabel.text = userData?.0
-          //          self.emailLabel.text = userData?.1
-                }
-            case .amount:
-                enableAdditionalButton = true
-                self.textField.isSecureTextEntry = false
-                self.textField.keyboardType = .numberPad
-                needAdditionalButton = true
-                self.textField.attributedPlaceholder = NSAttributedString(string: "Enter amount", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
-                showUserStack = false
-                if !dontChangeText {
-          //          self.usernameLabel.text = userData?.0
-          //          self.emailLabel.text = userData?.1
-                }
-            }
-            
-            
-            self.checkIfShowing(title: title, isBlack: false) { _ in
-                print("strarrt")
-                UIView.animate(withDuration: 0.25) {
-                    
-                    self.leftButton.isHidden = true
-                    self.rightButton.isHidden = true
-                    if !dontChangeText && type != .email {
-                        self.descriptionLabel.isHidden = description == nil || description == nil ? true : false
-                    }
-                    
-                    self.backgroundView.backgroundColor = self.accentBackgroundColor
-                    self.backgroundHelper.backgroundColor = self.accentBackgroundColor
-                    self.aiSuperView.isHidden = true
-                    self.textField.isHidden = false
-                    self.userDataStack.isHidden = showUserStack ? false : true
-
-                //    self.closeButton.isHidden = false
-                     self.mainView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, self.moveMainOnTop * (-1), 0)
-                     if needAdditionalButton {
-                         self.additionalDoneButton.isHidden = false
-                         self.additionalDoneButton.isEnabled = enableAdditionalButton
-                     }
-                    if showSecondTF {
-                        self.repeatePasswordTextField.isHidden = false
-                    }
-                } completion: { (_) in
-                    self.ai.stopAnimating()
-                    if !showSecondTF {
-                        self.textField.becomeFirstResponder()
-                    } else {
-                        self.repeatePasswordTextField.becomeFirstResponder()
-                    }
-                    if textFieldText != "" {
-                        self.textField.text = textFieldText
-                    }
-                    /*UIView.animate(withDuration: 0.25) {
-                        self.closeButton.isHidden = false
-                        self.mainView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, self.moveMainOnTop * (-1), 0)
-                        if needAdditionalButton {
-                            self.additionalDoneButton.isHidden = false
-                            self.additionalDoneButton.isEnabled = enableAdditionalButton
-                        }
-                    } completion: { (_) in*/
-                        if error != nil {
-                            UIImpactFeedbackGenerator().impactOccurred()
-                        }
-                    //}
-
-                }
-            }
-        }
-    }
-    
-    
     private func checkIfShowing(title: String, isBlack: Bool, showed: @escaping (Bool) -> ()) {
         if !isShowing {
             print("NOT SHOWINGG")
@@ -853,8 +713,7 @@ class IndicatorView: UIView {
                 self.imageView.superview?.isHidden = true
             }
             
-            self.textField.text = ""
-            self.repeatePasswordTextField.text = ""
+
           ///not using  self.textField.endEditing(true)
         //not using    self.repeatePasswordTextField.endEditing(true)
         }
@@ -899,7 +758,7 @@ class IndicatorView: UIView {
         
     }*/
     
-    @objc func keyboardWillShow(_ notification: Notification) {
+   /* @objc func keyboardWillShow(_ notification: Notification) {
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
@@ -936,7 +795,7 @@ class IndicatorView: UIView {
     }
     
     
-    
+    */
     
     
 }

@@ -82,6 +82,16 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
     var screenType: ScreenType = .categories
     
+    func screenTypeToString(_ type:ScreenType) -> String {
+        switch type {
+        case .categories:
+            return "Categories"
+        case .debts:
+            return "Debts"
+        case .localData:
+            return "LocalData"
+        }
+    }
     
     
     var _categories:[NewCategories] = []
@@ -213,15 +223,16 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         case .name:
             return data.sorted{ $0.category.name > $1.category.name }
         case .transactionsCount:
-            return data.sorted{ $0.transactions.count > $1.transactions.count }
+            let nameSort = data.sorted{ $0.category.name > $1.category.name }
+            return nameSort.sorted{ $0.transactions.count > $1.transactions.count }
         }
     }
     
-    
+    //screen type to string
     var sortOption: SortOption {
         get {
-            let ud = UserDefaults.standard.value(forKey: "SortOption") as? String ?? ""
-            switch ud {
+            let ud = UserDefaults.standard.value(forKey: "SortOption") as? [String:String] ?? [:]
+            switch ud[screenTypeToString(screenType)] {
             case "id":
                 return .id
             case "name":
@@ -234,7 +245,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             
         }
         set {
-            var new: String {
+            var newString: String {
                 switch newValue {
                 case .id:
                     return "id"
@@ -244,7 +255,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                     return "transactionsCount"
                 }
             }
-            UserDefaults.standard.setValue(new, forKey: "SortOption")
+            var ud = UserDefaults.standard.value(forKey: "SortOption") as? [String:String] ?? [:]
+            ud.updateValue(newString, forKey: screenTypeToString(screenType))
+            UserDefaults.standard.setValue(ud, forKey: "SortOption")
         }
     }
     
@@ -323,7 +336,15 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         tableView.dataSource = self
         searchBar.delegate = self
         DispatchQueue.init(label: "udLoad", qos: .userInteractive).async {
-            self.loadData()
+            if !self.fromSettings {
+           //     if self.screenType != .localData {
+                    self.categories = self.db.categories
+           //     }
+            } else {
+                self.loadData()
+            }
+            
+            
         }
         
         toggleIcons(show: false, animated: false, category: nil)
@@ -365,19 +386,22 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             save.newCategories(newCategory.category) { error in
                 self.editingTF = nil
                 
-                self.loadData(loadFromUD: true)
-                
-                
+           //     self.loadData(loadFromUD: true)
+              //  self.tableData[section].data.inse
+             //   self.categories.insert(newCategory.category, at: 0)
+             //   CategoriesVC.shared?.tableData[index.section].data[index.row].category = editingValue
                 
              //   self.categories.append(newCategory.category)
+                self.tableData[section].data.insert(newCategory, at: 0)
                 self.tableData[section].newCategory.category.name = ""
               //  self.tableData[section].data.append(newCategory)
                 if CategoriesVC.shared?.showingIcons ?? false {
                     CategoriesVC.shared?.toggleIcons(show: false, animated: true, category: nil)
                 }
                 DispatchQueue.main.async {
+                    UIImpactFeedbackGenerator().impactOccurred()
                     self.ai.fastHide { _ in
-                        UIImpactFeedbackGenerator().impactOccurred()
+                        
                     }
                     
                     
@@ -537,6 +561,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         super.viewDidAppear(true)
         searchBar.endEditing(true)
         editingTF?.endEditing(true)
+        if !self.fromSettings {
+            loadData()
+        }
         if appeareDidCall {
             categories = _categories
 
@@ -713,16 +740,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             vc.fromCategories = true
             vc.allowEditing = screenType != .localData ? (selectedCategory?.purpose == .debt ? true : false) : (transfaringCategories == nil ? true : false)
             vc.mainType = screenType != .localData ? .db : transfaringCategories == nil ? .localData : .unsaved
-        case "toDebts":
-            if segue.identifier == "toDebts" {
-                let vc = segue.destination as! DebtsVC
-      //          vc.debts = debts
-                if !fromSettings {
-                    vc.delegate = self
-                 //   vc.darkAppearence = self.darkAppearence
-                    vc.safeAreaButton = appData.safeArea.1//safeAreaButton
-                }
-            }
+
         case "selectIcon":
             let vc = segue.destination as! IconsVC
             vc.delegate = self
@@ -1026,13 +1044,22 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
 
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
             //self.tableActionActivityIndicator.startAnimating()
-            self.deteteCategory(at: IndexPath(row: indexPath.row, section: indexPath.section - 2))
+            DispatchQueue.main.async {
+                self.ai.show(title: "Deleting") { _ in
+                    self.deteteCategory(at: IndexPath(row: indexPath.row, section: indexPath.section - 2))
+                }
+            }
         }
         let localDeleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
             //self.tableActionActivityIndicator.startAnimating()
-            let id = self.tableData[indexPath.section - 2].data[indexPath.row].category.id
-            self.db.deleteCategory(id: "\(id)", local: true)
-            self.loadData()
+            DispatchQueue.main.async {
+                self.ai.show(title: "Deleting") { _ in
+                    let id = self.tableData[indexPath.section - 2].data[indexPath.row].category.id
+                    self.db.deleteCategory(id: "\(id)", local: true)
+                    self.loadData()
+                }
+            }
+            
         }
         
         let editAction = UIContextualAction(style: .destructive, title: "Edit") {  (contextualAction, view, boolValue) in
@@ -1154,15 +1181,6 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
 
 
 
-
-
-extension CategoriesVC: DebtsVCProtocol {
-    func catDebtSelected(name: String, amount: Int) {
-
-    }
-    
-    
-}
 
 
 
@@ -1390,7 +1408,7 @@ class categoriesVCcell: UITableViewCell {
         }
         let defPlaceHolder = "New Category"
         
-        newCategoryTF.attributedPlaceholder = NSAttributedString(string: index != nil ? (CategoriesVC.shared?.tableData[index!.section].data[index!.row].category.name ?? defPlaceHolder) : defPlaceHolder, attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
+        newCategoryTF.attributedPlaceholder = NSAttributedString(string: index != nil ? (CategoriesVC.shared?.tableData[index!.section].data[index!.row].category.name ?? defPlaceHolder) : defPlaceHolder, attributes: [NSAttributedString.Key.foregroundColor: K.Colors.textFieldPlaceholder])
     }
     
     @objc private func iconPressed(_ sender: UITapGestureRecognizer) {
@@ -1481,15 +1499,17 @@ class categoriesVCcell: UITableViewCell {
                     delete.CategoriesNew(category: category.category) { error in
                         let save = SaveToDB()
                         save.newCategories(editingValue) { error in
-                            CategoriesVC.shared?.loadData(loadFromUD: true)
+                            //CategoriesVC.shared?.loadData(loadFromUD: true)
+                            CategoriesVC.shared?.tableData[index.section].data[index.row].editing = nil
+                            CategoriesVC.shared?.tableData[index.section].data[index.row].category = editingValue
                             DispatchQueue.main.async {
                                 CategoriesVC.shared?.toggleIcons(show: false, animated: true, category: nil)
                                 CategoriesVC.shared?.editingTF?.endEditing(true)
                                 CategoriesVC.shared?.editingTF = nil
-                              //  CategoriesVC.shared?.tableView.reloadData()
-                              //  CategoriesVC.shared?.ai.fastHide(completionn: { _ in
+                                CategoriesVC.shared?.tableView.reloadData()
+                                CategoriesVC.shared?.ai.fastHide(completionn: { _ in
                               //      UIImpactFeedbackGenerator().impactOccurred()
-                              //  })
+                                })
                             }
                         }
                     }
