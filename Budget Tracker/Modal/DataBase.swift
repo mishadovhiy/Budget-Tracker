@@ -173,10 +173,12 @@ class DataBase {
     func deleteTransaction(transaction:TransactionsStruct, local: Bool = false) {
         let all = Array(UserDefaults.standard.value(forKey: !local ? "transactionsData" : K.Keys.localTrancations) as? [[String:Any]] ?? [])
         var new:[TransactionsStruct] = []
+        var found = false
         for i in 0..<all.count {
             if let trans = transactionFrom(all[i]) {
-                if trans.categoryID == transaction.categoryID && trans.comment == transaction.comment && trans.date == transaction.date && trans.value == transaction.value {
+                if trans.categoryID == transaction.categoryID && trans.comment == transaction.comment && trans.date == transaction.date && trans.value == transaction.value && !found {
                     print("found!!!!")
+                    found = true
                 } else {
                     new.append(trans)
                 }

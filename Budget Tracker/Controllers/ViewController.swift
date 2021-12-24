@@ -9,6 +9,7 @@
 import UIKit
 //calculateLabels
 //downloadFromDB
+//sendUnsaved
 var appData = AppData()
 var statisticBrain = StatisticBrain()//?
 var sumAllCategories: [String: Double] = [:]//?
@@ -874,26 +875,7 @@ class ViewController: SuperViewController {
                 
                 let save = SaveToDB()
                 let delete = DeleteFromDB()
-                /*if let addTransaction = db.transactionFrom(first["transactionNew"] ?? [:]) {
-                    save.newTransaction(addTransaction, saveLocally: false) { error in
-                        if !error {
-                            appData.unsendedData.removeFirst()
-                            self.sendUnsaved()
-                        } else {
-                            errorAction()
-                        }
-                    }
-                } else {
-                    if let deleteTransaction = db.transactionFrom(first["deleteTransactionNew"] ?? [:]) {
-                        delete.newTransaction(deleteTransaction, saveLocally: false) { error in
-                            if !error {
-                                appData.unsendedData.removeFirst()
-                                self.sendUnsaved()
-                            }else {
-                                errorAction()
-                            }
-                        }
-                    } else {*/
+
                         if let addCategory = db.categoryFrom(first["categoryNew"] ?? [:]) {
                             if let highest = highesLoadedCatID {
                                 var cat = addCategory
@@ -971,8 +953,7 @@ class ViewController: SuperViewController {
                                 }
                             }
                         }
-                    /*}
-                }*/
+
             }
         } else {
             if startedSendingUnsended {
@@ -1013,7 +994,7 @@ class ViewController: SuperViewController {
                                             newTransaction.categoryID = "\(cat.id)"
 
                                             self.db.deleteTransaction(transaction: localTransactions[i], local: true)
-                                            self.db.transactions.append(newTransaction)
+                                            self.db.localTransactions.append(newTransaction)
                                         }
                                         
                                     }
@@ -2172,7 +2153,7 @@ extension ViewController: TransitionVCProtocol {
     
     func addNewTransaction(value: String, category: String, date: String, comment: String) {
         let new = TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)
-        self.newTransaction = new
+        self.newTransaction = new//
         editingTransaction = nil
         self.animateCellWillAppear = false
         Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (_) in

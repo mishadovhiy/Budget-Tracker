@@ -592,7 +592,7 @@ struct DeleteFromDB {
         needDownloadOnMainAppeare = true
         //send
         dataString = dataString + toDataString
-                
+             print(dataString, "dataStringdataStringdataString delete")
         let dataD = dataString.data(using: .utf8)
         do {
             let uploadJob = URLSession.shared.uploadTask(with: request, from: dataD) { data, response, errr in

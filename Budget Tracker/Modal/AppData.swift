@@ -651,7 +651,7 @@ extension TransactionsStruct {
 struct TransactionsStruct {
     let value: String
     var categoryID: String
-    let date: String
+    var date: String
     let comment: String
     
     var category:NewCategories {

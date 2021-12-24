@@ -508,8 +508,10 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         } else {
             self.selectingIconFor = (nil, nil)
             if editingTF == nil {
-                self.tableView.reloadData()
-                self.tableView.removeGestureRecognizer(viewTap)
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                    self.tableView.removeGestureRecognizer(self.viewTap)
+                }
             }
         }
         DispatchQueue.main.async {
@@ -856,7 +858,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if indexPath.section == 0 {
-            return UITableViewCell()
+            return UITableViewCell()//page descriptiion
         } else {
             if indexPath.section == 1 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "LocalDataActionCell", for: indexPath) as! LocalDataActionCell

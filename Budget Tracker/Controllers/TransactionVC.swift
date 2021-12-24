@@ -255,7 +255,7 @@ class TransitionVC: SuperViewController {
             UIImpactFeedbackGenerator().impactOccurred()
             self.dismiss(animated: true) {
                 if self.editingDate != "" {
-                    self.delegate?.editTransaction(TransactionsStruct(value: value, categoryID: category, date: date, comment: comment), was: TransactionsStruct(value: "\(self.editingValue)", categoryID: self.editingCategory, date: self.editingDate, comment: self.editingComment))
+                    self.delegate?.editTransaction(TransactionsStruct(value: value, categoryID: category, date: date, comment: comment), was: TransactionsStruct(value: "\(Int(self.editingValue))", categoryID: self.editingCategory, date: self.editingDate, comment: self.editingComment))
                 } else {
                     self.delegate?.addNewTransaction(value: value, category: category, date: date, comment: comment)
                 }
@@ -270,7 +270,7 @@ class TransitionVC: SuperViewController {
     }
     
 
-    
+    var displeyingTransaction = TransactionsStruct(value: "0", categoryID: "", date: "", comment: "")
     
     @IBAction func donePressed(_ sender: UIButton) {
      //   selectedCategory
@@ -278,7 +278,8 @@ class TransitionVC: SuperViewController {
             DispatchQueue.main.async {
                 if self.valueLabel.text != "0" {
                     let selectedSeg = self.purposeSwitcher.selectedSegmentIndex
-                    let value = selectedSeg == 0 ? "\((Double(self.valueLabel.text ?? "") ?? 0.0) * (-1))" : self.valueLabel.text ?? ""
+                    let intValue = (Double(self.valueLabel.text ?? "") ?? 0.0) * (-1)
+                    let value = selectedSeg == 0 ? "\(Int(intValue))" : self.valueLabel.text ?? ""
                    // let category = self.categoryTextField.text ?? self.categoryTextField.placeholder!
                     let date = self.dateTextField.text ?? self.dateTextField.placeholder!
                     let comment = self.commentTextField.text ?? ""
@@ -497,6 +498,7 @@ extension TransitionVC: CalendarVCProtocol {
             self.dateTextField.text = date
         }
         lastSelectedDate = date
+        displeyingTransaction.date = date
     }
     
     

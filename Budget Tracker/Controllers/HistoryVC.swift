@@ -12,12 +12,8 @@ import UserNotifications
 
 var transactionAdded = false
 
-///TODO:
-// if from debts - first section (dif beckground, cornerRadios) - add/edit time (2 cells: date, amount to pay)
-
-
 class HistoryVC: SuperViewController {
-  //  private var amountToPayTFTag = 9
+
     @IBOutlet weak var addTransButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
     var historyDataStruct: [TransactionsStruct] = []
@@ -226,42 +222,7 @@ class HistoryVC: SuperViewController {
                 }
             }
             
-          /*newCat  let debts = Array(appData.debts)
-            print(debts, "debtsdebtsdebts")
-            for i in 0..<debts.count {
-                if selectedCategoryName == debts[i].name {
-                    self.debt = DebtsStruct(name: debts[i].name, amountToPay: debts[i].amountToPay, dueDate: debts[i].dueDate)
-                    break
-                }
-            }
 
-            if let name = self.debt?.name {
-                DispatchQueue.main.async {
-                    if self.moreButton.isHidden != false {
-                        self.moreButton.isHidden = false
-                    }
-                }
-                if debt?.dueDate != "" {
-                 /*   let expired = dateExpired(debt?.dueDate ?? "")
-                    if expired {
-                        let id = "Debts\(name)"
-                     //   self.center.removePendingNotificationRequests(withIdentifiers: [id])
-                    }*/
-                }
-                
-          /*      center.getPendingNotificationRequests { (requests) in
-                    DispatchQueue.main.async {
-                        UIApplication.shared.applicationIconBadgeNumber = requests.count
-                    }
-                    for i in 0..<requests.count {
-                        print(requests[i], "requestsrequestsrequests")
-                    }
-                }*/
-                
-            }*/
-            
-            
-      //  }
     }
     
 
@@ -383,33 +344,7 @@ class HistoryVC: SuperViewController {
         
     }
             
-                /*let saveToDs = "&Nickname=\(appData.username)" + "&name=\(self.debt?.name ?? "")" + "&amountToPay=\(self.debt?.amountToPay ?? "")" + "&dueDate=\(fullDate)"
-                save.Debts(toDataString: saveToDs) { (error) in
-                    self.selectedCategory?.dueDate = fullDate
-                    print(self.selectedCategory?.dueDate, "self.debt?.dueDateself.debt?.dueDate")
-                    if error {
-                        appData.unsendedData.append(["debt": saveToDs])
-                    }
-                    
-                    var dataToSafe = loadedData
-                    for i in 0..<dataToSafe.count {
-                        if dataToSafe[i].name == self.debt?.name {
-                            dataToSafe[i].dueDate = fullDate
-                            break
-                        }
-                    }
-                    appData.saveDebts(dataToSafe)
-                    self.ai.fastHide { (_) in
-                        
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
-                        }
-                    }
-                    
-                }*/
-            
-        //}
-    
+
     
     func tocalendatPressed() {
         
@@ -424,10 +359,7 @@ class HistoryVC: SuperViewController {
     }
     
     func dbLoadRemoveBeforeUpdate(completion: @escaping ([NewCategories], Bool) -> ()) {
-        //self.loadingIndicator.show(title: "Updating data", appeareAnimation: true)
-       // self.loadingIndicator?.show(title: "", appeareAnimation: true) { (_) in
-        
-        
+
         
             let load = LoadFromDB()
         
@@ -443,42 +375,7 @@ class HistoryVC: SuperViewController {
             
         }
         
-        
-           /* load.Debts { (loadedDebts, error) in
-                if error == "" {
-                    let username = appData.username
-
-                    var debtsResult: [DebtsStruct] = []
-                    for i in 0..<loadedDebts.count {
-                        let name = loadedDebts[i][1]
-                        let amountToPay = loadedDebts[i][2]
-                        let dueDate = loadedDebts[i][3]
-                        debtsResult.append(DebtsStruct(name: name, amountToPay: amountToPay, dueDate: dueDate))
-                        if name == self.debt?.name {
-                            self.debt?.amountToPay = amountToPay
-                            self.debt?.dueDate = dueDate
-                        }
-                    }
-                    appData.saveDebts(debtsResult)
-                    
-                    let delete = DeleteFromDB()
-                    let deleteTods = "&Nickname=\(username)" + "&name=\(self.debt?.name ?? "")" + "&amountToPay=\(self.debt?.amountToPay ?? "")" + "&dueDate=\(self.debt?.dueDate ?? "")"
-                    delete.Debts(toDataString: deleteTods) { (error) in
-                        if error {
-                            appData.unsendedData.append(["deleteDebt": deleteTods])
-                        }
-                        completion(debtsResult, true)
-                    }
-                    
-                } else {
-                /*    self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
-                        self.loadingIndicator.hideIndicator(fast: true) { (_) in
-                        }
-                    }, title: "No internet", description: "Enable to edit debts data in offline mode, come back later when you will be connected to the internet", error: true)*/
-                }
-                
-            }*/
-       // }
+    
         
     }
     
@@ -493,25 +390,7 @@ class HistoryVC: SuperViewController {
                     self.selectedCategory = newCategory
                     completion(nil)
                 }
-                /*let save = SaveToDB()
-                let saveToDs = "&Nickname=\(appData.username)" + "&name=\(self.debt?.name ?? "")" + "&amountToPay=\(enteredAmount)" + "&dueDate=\(self.debt?.dueDate ?? "")"
-                
-                save.Debts(toDataString: saveToDs) { (error) in
-                    if error {
-                        appData.unsendedData.append(["debt": saveToDs])
-                    }
-                    
-                    var dataToSafe = loadedData
-                    for i in 0..<dataToSafe.count {
-                        if dataToSafe[i].name == self.debt?.name {
-                            dataToSafe[i].amountToPay = enteredAmount
-                            break
-                        }
-                    }
-                    appData.saveDebts(dataToSafe)
-                    completion(nil)
-                    
-                }*/
+
             }
         }
         
@@ -724,82 +603,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             }
             return cell
             }
-        /*case 2:
-            let cell = tableView.dequeueReusableCell(withIdentifier: K.historyCellTotalIdent) as! HistoryCellTotal
-           // cell.valueLabel.font = .systemFont(ofSize: debt?.amountToPay == "" ? 21 : 15, weight: debt?.amountToPay == "" ? .medium : .regular)
-            
-            
-            let removeAmountAction = {
-                self.removeAmountToPay()
-            }
-            
-            cell.deleteFunc = removeAmountAction
-            
-            let changeFunc = {
-                self.amountToPayEditing = true
-                self.calendarAmountPressed = (false,false)
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            }
-            
-            cell.changeFunc = changeFunc
-            
-            let hideTF = amountToPayEditing ? false : true
-            if hideTF != cell.amountTF.isHidden {
-                cell.amountTF.isHidden = hideTF
-                
-            }
-            
-            
-            
-            
-            
-            if amountToPayEditing {
-                cell.amountTF.tag = amountToPayTFTag
-                cell.amountTF.delegate = self
-                cell.amountTF.becomeFirstResponder()
-            }
-            
-            
-            
-            let hideButtons = calendarAmountPressed.1 ? (amountToPayEditing ? true : (selectedCategory?.amountToPay == nil ? true : false)) : true
-            if cell.changeButton.superview?.isHidden ?? true != hideButtons {
-                cell.changeButton.superview?.isHidden = hideButtons
-            }
-            let hasTotalSum = selectedCategory?.amountToPay == nil || selectedCategory?.amountToPay ?? 0.0 == 0.0 ? false : true
-            let totalSumm = totalSum()
-            cell.valueLabel.text = (totalSumm < Double(Int.max) ? "\(Int(totalSumm))" : "\(totalSumm)")
-            
-            cell.totalToPayLabel.text = "\(selectedCategory?.amountToPay)"
-            let rest = (selectedCategory?.amountToPay ?? 0.0) - totalSumm
-            cell.restToPayyLabel.text = (rest < Double(Int.max) ? "\(Int(rest))" : "\(rest)") //+ (rest > 0.0 ? " Complited" : "") //"\(rest)"
-            cell.totalToPayLabel.superview?.isHidden = hasTotalSum ? false : true
-            cell.restToPayyLabel.superview?.isHidden = hasTotalSum ? false : true
-            cell.restToPayyLabel.superview?.superview?.isHidden = hasTotalSum ? false : true
-            if fromCategories {
-                cell.perioudLabel.isHidden = true
-            } else {
-                cell.perioudLabel.text = selectedPeroud
-            }
-            if selectedCategory?.purpose != .debt {
-              //  cell.noRestToPay.isHidden = true
-                cell.totalToPayLabel.isHidden = true
-            } else {
-               // cell.noRestToPay.layer.masksToBounds = true
-              //  cell.noRestToPay.layer.cornerRadius = 4
-                if selectedCategory?.amountToPay ?? 0.0 == 0.0 {
-             //       cell.noRestToPay.isHidden = false
-                    cell.totalToPayLabel.isHidden = true
-                } else {
-               //     cell.noRestToPay.isHidden = true
-                    cell.totalToPayLabel.isHidden = false
-                    cell.totalToPayLabel.text = "\(selectedCategory?.amountToPay ?? 0.0)"
-                }
-            }
-            
-            cell.contentView.alpha = indexPath.row == 0 ? 1 : 0
-            return cell*/
+
         default:
             return UITableViewCell()
         }
@@ -828,7 +632,8 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                 case .localData, .allData:
                     if let cat = self.selectedCategory {
                         self.db.deleteTransaction(transaction: self.historyDataStruct[indexPath.row], local: true)
-                        self.historyDataStruct = self.db.transactions(for: cat, local: true)
+                        self.historyDataStruct.remove(at: indexPath.row)
+                       //here self.historyDataStruct = self.db.transactions(for: cat, local: true)
                         self.totalSumm = Int(self.totalSum())
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
@@ -846,58 +651,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                 default :
                     break
                 }
-                
-                /*let mainFrame = view.frame
-                let ai = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: mainFrame.width, height: mainFrame.height))
-                ai.style = .gray
-                view.addSubview(ai)
-                ai.startAnimating()
-                
-                let transactions = Array(appData.getTransactions)
-                var result: [TransactionsStruct] = []
-                var newTableData: [TransactionsStruct] = []
-                var found = false
-                for i in 0..<transactions.count {
-                    if !found {
-                        if transactions[i].comment == self.historyDataStruct[indexPath.row].comment && transactions[i].date == self.historyDataStruct[indexPath.row].date && transactions[i].value == self.historyDataStruct[indexPath.row].value && transactions[i].categoryID == self.historyDataStruct[indexPath.row].categoryID{
-                            found = true
-                        } else {
-                            result.append(transactions[i])
-                            if transactions[i].categoryID == self.historyDataStruct[indexPath.row].categoryID {
-                                newTableData.append(transactions[i])
-                            }
-                        }
-                    } else {
-                        result.append(transactions[i])
-                        if transactions[i].categoryID == self.historyDataStruct[indexPath.row].categoryID {
-                            newTableData.append(transactions[i])
-                        }
-                    }
-                }
-                
-                if appData.username != "" {
-                    let toDataString = "&Nickname=\(appData.username)" + "&Category=\(self.historyDataStruct[indexPath.row].categoryID)" + "&Date=\(self.historyDataStruct[indexPath.row].date)" + "&Value=\(self.historyDataStruct[indexPath.row].value)" + "&Comment=\(self.historyDataStruct[indexPath.row].comment)"
-                    let delete = DeleteFromDB()
-                    delete.Transactions(toDataString: toDataString, completion: { (error) in
-                        if error {
-                            appData.unsendedData.append(["deleteTransaction": toDataString])
-                        }
-                        transactionAdded = true
-                        appData.saveTransations(result)
-                        self.historyDataStruct.remove(at: indexPath.row)
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
-                        }
 
-                    })
-                } else {
-                    transactionAdded = true
-                    appData.saveTransations(result)
-                    self.historyDataStruct.remove(at: indexPath.row)
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    }
-                }*/
                 
             }
             deleteAction.image = iconNamed("trash.red")
@@ -909,22 +663,6 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
         } 
     }
 
-    
-    
-   /* func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if let i = newItem {
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-           // DispatchQueue.main.async {
-                self.tableView.beginUpdates()
-                self.tableView.selectRow(at: i, animated: true, scrollPosition: .middle)
-                Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (_) in
-                    self.tableView.deselectRow(at: i, animated: true)
-                    self.newItem = nil
-                    self.tableView.endUpdates()
-                }
-            }
-        }
-    }*/
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         DispatchQueue.main.async {
@@ -1011,59 +749,7 @@ extension HistoryVC: TransitionVCProtocol {
                     }
 
                 }
-       /* let new = TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)
-        print(new, "newnewnewnew")
-        
-        if value != "" && category != "" && date != "" {
-            
-            if appData.username != "" {
-                let toDataString = "&Nickname=\(appData.username)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
-                let save = SaveToDB()
-                save.Transactions(toDataString: toDataString) { (error) in
-                    if error {
-                        let neew: String = "&Nickname=\(appData.username)" + "&Category=\(category)" + "&Date=\(date)" + "&Value=\(value)" + "&Comment=\(comment)"
-                        appData.unsendedData.append(["transaction": neew])
-                    }
-                    
-                    var trans = appData.getTransactions
-                    trans.append(new)
-                    appData.saveTransations(trans)
-                    
-                    self.historyDataStruct.append(TransactionsStruct(value: value, categoryID: category, date: date, comment: comment))
-                    self.historyDataStruct = self.historyDataStruct.sorted{ $0.dateFromString < $1.dateFromString }
-                    
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    }
-                    var indexPath: IndexPath?
-                    for i in 0..<self.historyDataStruct.count {
-                        if self.historyDataStruct[i].categoryID == new.categoryID && self.historyDataStruct[i].comment == new.comment && self.historyDataStruct[i].date == new.date && self.historyDataStruct[i].value == new.value {
-                            indexPath = IndexPath(row: i, section: 1)
-                            break
-                        }
-                    }
-                    if let i = indexPath {
-                        DispatchQueue.main.async {
-                            self.tableView.selectRow(at: i, animated: true, scrollPosition: .middle)
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                            self.tableView.deselectRow(at: i, animated: true)
-                        }
-                    }
-                }
-            } else {
-                var trans = appData.getTransactions
-                trans.append(new)
-                appData.saveTransations(trans)
-                
-                self.historyDataStruct.append(TransactionsStruct(value: value, categoryID: category, date: date, comment: comment))
-                self.historyDataStruct = self.historyDataStruct.sorted{ $0.dateFromString < $1.dateFromString }
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-                
-            }
-        }*/
+
     }
     
     
@@ -1204,49 +890,6 @@ class DebtDescriptionCell: UITableViewCell {
     
 
 }
-
-
-class HistoryCellTotal: UITableViewCell {
-    
-    @IBOutlet weak var totalToPayLabel: UILabel!
-    @IBOutlet weak var noRestToPay: UIButton!
-    @IBOutlet weak var valueLabel: UILabel!
-    @IBOutlet weak var perioudLabel: UILabel!
-    @IBOutlet weak var restToPayyLabel: UILabel!
-    
-    @IBOutlet weak var amountTF: UITextField!
-    @IBOutlet weak var doneButton: UIButton!
-    @IBOutlet weak var changeButton: UIButton!
-    
-    private let ai = AppDelegate.shared?.ai ?? IndicatorView.instanceFromNib() as! IndicatorView
-    
-    @IBAction func changePressed(_ sender: Any) {
-        DispatchQueue.main.async {
-            self.ai.show(title: "Wait") { _ in
-                if let funcc = self.deleteFunc {
-                    funcc()
-                }
-            }
-        }
-        
-    }
-    @IBAction func donePressed(_ sender: Any) {//change
-        DispatchQueue.main.async {
-            DispatchQueue.main.async {
-                self.amountTF.text = self.totalToPayLabel.text
-                self.amountTF.placeholder = self.totalToPayLabel.text
-            }
-            if let funcc = self.changeFunc {
-                funcc()
-            }
-        }
-    }
-    var changeFunc: (() -> ())?
-    var deleteFunc:(() -> ())?
-}
-
-
-
 
 
 
