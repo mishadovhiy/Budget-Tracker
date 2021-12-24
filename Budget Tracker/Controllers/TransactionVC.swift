@@ -83,9 +83,11 @@ class TransitionVC: SuperViewController {
             let vc = segue.destination as! CalendarVC
             vc.delegate = self
       //      vc.darkAppearence = true
-            if let date = dateTextField.text {
-                vc.selectedFrom = date
+            if dateChanged {
+                vc.selectedFrom = displeyingTransaction.date
             }
+            
+
             
         case "toCategories":
             let vc = segue.destination as! CategoriesVC
@@ -98,29 +100,45 @@ class TransitionVC: SuperViewController {
         }
     }
     
+    var defaultDate:String {
+        return lastSelectedDate ?? appData.stringDate(appData.objects.datePicker)
+    }
+    var dateChanged = false
+    var sbvsloded = false
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        if !sbvsloded {
+            dateTextField.inputView = UIView(frame: .zero)//appData.objects.datePicker
+            dateTextField.isUserInteractionEnabled = false
+            dateTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(datePressed)))
+            commentTextField.addTarget(self, action: #selector(commentCount), for: .editingChanged)
+            categoryTextField.isUserInteractionEnabled = false
+            categoryTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(categoryPressed)))
+            self.dateTextField.attributedPlaceholder = NSAttributedString(string: defaultDate, attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
+            self.commentTextField.attributedPlaceholder = NSAttributedString(string: "Short comment", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.textFieldPlaceholder])
+            self.purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white], for: .normal)
+            self.purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "darkTableColor") ?? .black], for: .selected)
+            if #available(iOS 13.4, *) {
+                appData.objects.datePicker.preferredDatePickerStyle = .wheels
+            }
+            
+        }
+    }
+    
+    
     func updateUI() {
         
         appendPurposes()
         delegates(fields: [categoryTextField, dateTextField, commentTextField])
         appData.objects.datePicker.datePickerMode = .date
-        if #available(iOS 13.4, *) {
-            appData.objects.datePicker.preferredDatePickerStyle = .wheels
-        }
-        dateTextField.inputView = UIView(frame: .zero)//appData.objects.datePicker
-        dateTextField.isUserInteractionEnabled = false
-        dateTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(datePressed)))
-
         pressedValue = "0"
-        commentTextField.smartInsertDeleteType = UITextSmartInsertDeleteType.no
-        commentTextField.addTarget(self, action: #selector(commentCount), for: .editingChanged)
-        categoryTextField.isUserInteractionEnabled = false
-        categoryTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(categoryPressed)))
+        
+
+        
+        
         DispatchQueue.main.async {
             self.valueLabel.text = self.pressedValue
-            self.dateTextField.attributedPlaceholder = NSAttributedString(string: lastSelectedDate ?? appData.stringDate(appData.objects.datePicker), attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
-            self.commentTextField.attributedPlaceholder = NSAttributedString(string: "Short comment", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.textFieldPlaceholder])
-            self.purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white], for: .normal)
-            self.purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "darkTableColor") ?? .black], for: .selected)
+            
         }
     
     }
@@ -148,20 +166,22 @@ class TransitionVC: SuperViewController {
     
     @objc func commentCount() {
         
-        commentCountLabel.text = "\(30 - (commentTextField.text?.count ?? 0))"
-        if commentTextField.text?.count == 30 {
-            commentCountLabel.textColor = K.Colors.negative
-            UIImpactFeedbackGenerator().impactOccurred()
-        } else {
-            commentCountLabel.textColor = K.Colors.balanceT
-        }
-        if commentTextField.text?.count == 0 {
-            UIView.animate(withDuration: 0.2) {
-                self.commentCountLabel.alpha = 0
+        DispatchQueue.main.async {
+            self.commentCountLabel.text = "\(30 - (self.commentTextField.text?.count ?? 0))"
+            if self.commentTextField.text?.count == 30 {
+                self.commentCountLabel.textColor = K.Colors.negative
+                UIImpactFeedbackGenerator().impactOccurred()
+            } else {
+                self.commentCountLabel.textColor = K.Colors.balanceT
             }
-        } else {
-            UIView.animate(withDuration: 0.2) {
-                self.commentCountLabel.alpha = 1
+            if self.commentTextField.text?.count == 0 {
+                UIView.animate(withDuration: 0.2) {
+                    self.commentCountLabel.alpha = 0
+                }
+            } else {
+                UIView.animate(withDuration: 0.2) {
+                    self.commentCountLabel.alpha = 1
+                }
             }
         }
     }
@@ -180,6 +200,8 @@ class TransitionVC: SuperViewController {
             
         }
         if editingDate != "" {
+            self.dateChanged = true
+            displeyingTransaction.date = editingDate
             if editingValue > 0.0 {
                 editingValueAmount(segment: 1, multiply: 1)
             } else {
@@ -210,6 +232,7 @@ class TransitionVC: SuperViewController {
                 }
             }
         } else {
+            displeyingTransaction.date = defaultDate
             if #available(iOS 13.0, *) {
                 self.isModalInPresentation = false
             }
@@ -274,6 +297,8 @@ class TransitionVC: SuperViewController {
     
     @IBAction func donePressed(_ sender: UIButton) {
      //   selectedCategory
+        let newDate = self.displeyingTransaction.date == "" ? defaultDate : self.displeyingTransaction.date
+        
         if let category = selectedCategory {
             DispatchQueue.main.async {
                 if self.valueLabel.text != "0" {
@@ -281,10 +306,10 @@ class TransitionVC: SuperViewController {
                     let intValue = (Double(self.valueLabel.text ?? "") ?? 0.0) * (-1)
                     let value = selectedSeg == 0 ? "\(Int(intValue))" : self.valueLabel.text ?? ""
                    // let category = self.categoryTextField.text ?? self.categoryTextField.placeholder!
-                    let date = self.dateTextField.text ?? self.dateTextField.placeholder!
                     let comment = self.commentTextField.text ?? ""
                     //category: category == "" ? self.categoryTextField.placeholder ?? (selectedSeg == 0 ? self.expenseArr[appData.selectedExpense] : self.incomeArr[appData.selectedIncome]) : category
-                    self.addNew(value: value, category: "\(category.id)", date: date == "" ? self.dateTextField.placeholder ?? appData.stringDate(appData.objects.datePicker) : date, comment: comment)
+                    
+                    self.addNew(value: value, category: "\(category.id)", date: newDate, comment: comment)
                 } else {
                     self.errorSaving()
                 }
@@ -494,6 +519,7 @@ class CustomTextField: UITextField {
 
 extension TransitionVC: CalendarVCProtocol {
     func dateSelected(date: String, time: DateComponents?) {
+        dateChanged = true
         DispatchQueue.main.async {
             self.dateTextField.text = date
         }

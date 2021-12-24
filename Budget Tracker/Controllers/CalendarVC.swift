@@ -223,7 +223,7 @@ class CalendarVC: SuperViewController {
         view.addGestureRecognizer(swipeRight)
         appData.styles.cornerRadius(buttons: [startButton, endButton])
         
-        
+        print(selectedFrom, "selectedFromselectedFromselectedFromselectedFrom")
         year = appData.filter.getYearFromString(s: selectedFrom == "" ? today : selectedFrom)
         month = appData.filter.getMonthFromString(s: selectedFrom == "" ? today : selectedFrom)
         getDays()

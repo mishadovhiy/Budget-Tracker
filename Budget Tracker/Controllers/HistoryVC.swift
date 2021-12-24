@@ -269,10 +269,17 @@ class HistoryVC: SuperViewController {
             }
         }
     }
+    var totalExpenses = 0.0
     func totalSum() -> Double {
         var sum = 0.0
-        for i in 0..<historyDataStruct.count {
-            sum += Double(historyDataStruct[i].value) ?? 1.0
+        totalExpenses = 0
+        let data = historyDataStruct
+        for i in 0..<data.count {
+            let value = Double(data[i].value) ?? 0
+            sum += value
+            if value < 0 {
+                totalExpenses += value
+            }
         }
 
         return sum
@@ -329,7 +336,7 @@ class HistoryVC: SuperViewController {
             self.dbLoadRemoveBeforeUpdate { (loadedData, _) in
                 let save = SaveToDB()
                 var newCategory = category
-                newCategory.dueDate = newDate
+                newCategory.dueDate = fullDate == "" ? nil : newDate
                 save.newCategories(newCategory) { _ in
                     self.selectedCategory = newCategory
                     DispatchQueue.main.async {
@@ -406,23 +413,10 @@ class HistoryVC: SuperViewController {
     
     var calendarAmountPressed = (false, false)
     
-}
-
-
-
-
-
-extension HistoryVC:UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        DispatchQueue.main.async {
-            textField.endEditing(true)
-            
-        }
-     //   switch textField.tag {
-       // case amountToPayTFTag:
-            
-                
-        let text = textField.text ?? ""
+    
+    
+    func sendAmountToPay(_ text: String) {
+    
         print(text, "texttexttexttexttext")
         if let _ = Double(text) {
                 DispatchQueue.main.async {
@@ -438,19 +432,15 @@ extension HistoryVC:UITextFieldDelegate {
                     }
                 }
             }
-                    /*if let _ = Int(text) {
-                        
-                        
-                    }*/
-                
-            
-     //   default:
-       //     break
-       // }
-        
-        return true
     }
+    
 }
+
+
+
+
+
+
 
 
 
@@ -460,8 +450,8 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
         switch section {
-        case 0: return selectedCategory?.purpose != .debt ? 0 : 1
-        case 1: return selectedCategory?.amountToPay != nil || amountToPayEditing ? 1 : 0
+        case 1: return selectedCategory?.purpose != .debt ? 0 : 1
+        case 0: return selectedCategory?.amountToPay != nil || amountToPayEditing ? 1 : 0
         case 2: return historyDataStruct.count == 0 ? 1 : historyDataStruct.count
         default:
             return 0
@@ -479,6 +469,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                         let id = "Debts\(self.selectedCategory?.name ?? "")"
                         self.center?.removePendingNotificationRequests(withIdentifiers: [id])
                         DispatchQueue.main.async {
+                            self.tableView.reloadData()
                             self.ai.fastHide(completionn: { _ in
                                 
                             })
@@ -489,25 +480,27 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         switch indexPath.section {
-        case 0:
+        case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "DebtDescriptionCell", for: indexPath) as! DebtDescriptionCell
             cell.cellPressed = calendarAmountPressed.0
 
 
-            
-            cell.changeButton.superview?.isHidden = calendarAmountPressed.0 ? false : true
+            let hideBut = calendarAmountPressed.0 ? false : true
+            if cell.changeButton.superview?.isHidden != hideBut {
+                cell.changeButton.superview?.isHidden = hideBut
+            }
             
 
-            let changeAction = {
+            let removeActio = {
                 self.tocalendatPressed()
             }
-            let removeAction = {
+            let changeActio = {
                 self.removeDueDate()
             }
-            cell.changeAction = changeAction
+            cell.changeAction = changeActio
             
 
-            cell.removeAction = removeAction
+            cell.removeAction = removeActio
             
             let dateComponent = selectedCategory?.dueDate
         //    print(dateComponent, "dateComponentdateComponentdateComponent")
@@ -540,14 +533,14 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
           //  cell.mainView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(toCalendarPressed(_:))))
             
             return cell
-        case 1:
+        case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "AmountToPayCell") as! AmountToPayCell
     
             let amToPay = Int(selectedCategory?.amountToPay ?? 0.0)
             
-            let progress = amToPay == 0 ? 0 : Double(totalSumm) / (selectedCategory?.amountToPay ?? 0.0)
+            let progress = amToPay == 0 ? 0 : (totalExpenses * -1) / (selectedCategory?.amountToPay ?? 0.0)
             print(progress)
-            let hideButtons = calendarAmountPressed.1 ? (amountToPayEditing ? true : (selectedCategory?.amountToPay == nil ? true : false)) : true
+       //     let hideButtons = calendarAmountPressed.1 ? (amountToPayEditing ? true : (selectedCategory?.amountToPay == nil ? true : false)) : true
             
             let removeAmountAction = {
                 self.removeAmountToPay()
@@ -558,25 +551,25 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             let changeFunc = {
      //           cell.amountToPayTextField.tag = self.amountToPayTFTag
                 self.amountToPayEditing = true
-                self.calendarAmountPressed = (false,false)
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
+              //  self.calendarAmountPressed = (false,false)
+
             }
-            
+           // if self.amountToPayEditing {
+                cell.setAmountEditing(self.amountToPayEditing)
+           // }
             cell.changeFunc = changeFunc
-            
-            cell.amountToPayTextField.delegate = self
-            
-            cell.totalLabel.text = "\(totalSumm)"
-            cell.restAmountLabel.text = "\(amToPay - totalSumm)"
+            cell.isEdit = amountToPayEditing
+          //  cell.amountToPayTextField.delegate = self
+            let tEx = Int(totalExpenses)
+            cell.totalLabel.text = "\(tEx * (-1))"
+            cell.restAmountLabel.text = "\(amToPay + tEx)"
             cell.amountToPayLabel.text = "\(amToPay)"
             cell.progressBar.progress = Float(progress)
             cell.progressBar.progressTintColor = colorNamed(selectedCategory?.color)
             cell.progressBar.isHidden = amToPay == 0
-            cell.amountToPayTextField.isHidden = !amountToPayEditing
-            cell.amountToPayLabel.isHidden = amountToPayEditing
-            cell.editingStack.isHidden = hideButtons
+      //      cell.amountToPayTextField.isHidden = !amountToPayEditing
+  //          cell.amountToPayLabel.isHidden = amountToPayEditing
+           // cell.editingStack.isHidden = !(calendarAmountPressed.0 ?? false)
             return cell
             
             
@@ -644,6 +637,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                     let delete = DeleteFromDB()
                     delete.newTransaction(self.historyDataStruct[indexPath.row]) { _ in
                         self.historyDataStruct.remove(at: indexPath.row)
+                        self.totalSumm = Int(self.totalSum())
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
                         }
@@ -665,12 +659,15 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        DispatchQueue.main.async {
-            self.tableView.deselectRow(at: indexPath, animated: true)
+        if indexPath.section != 0 {
+            DispatchQueue.main.async {
+                self.tableView.deselectRow(at: indexPath, animated: true)
+            }
         }
+        
         if mainType  == .db {
-            if indexPath.section == 1 {
-                DispatchQueue.main.async {
+            if indexPath.section == 0 {
+               /* DispatchQueue.main.async {
                     if self.selectedCategory?.purpose != .debt {
                         return
                     }
@@ -683,9 +680,9 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                         self.calendarAmountPressed = (false,false)
                         tableView.reloadData()
                     }
-                }
+                }*/
             } else {
-                if indexPath.section == 0 {
+                if indexPath.section == 1 {
                     if self.selectedCategory?.dueDate != nil && !self.calendarAmountPressed.0 {
                         let isPressed = calendarAmountPressed.0 ? false : true
                         print(isPressed, "isPressedisPressedisPressed")
@@ -709,7 +706,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let ifDueDate = indexPath.section == 0 ? (self.selectedCategory?.dueDate == nil ? 0 : UITableView.automaticDimension) : UITableView.automaticDimension
+        let ifDueDate = indexPath.section == 1 ? (self.selectedCategory?.dueDate == nil ? 0 : UITableView.automaticDimension) : UITableView.automaticDimension
         
         
         let dueViewHeight:CGFloat = self.selectedCategory?.dueDate == nil ? 70 : 150
@@ -863,7 +860,7 @@ class DebtDescriptionCell: UITableViewCell {
     var removeAction:(() -> ())?
     @IBAction func changeDatePressed(_ sender: Any) {//remove
         DispatchQueue.main.async {
-            self.ai.show(title: "Wait") { _ in
+            self.ai.show() { _ in
                 if let funcc = self.removeAction {
                     funcc()
                 }
@@ -893,7 +890,25 @@ class DebtDescriptionCell: UITableViewCell {
 
 
 
+extension AmountToPayCell:UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        DispatchQueue.main.async {
+            textField.endEditing(true)
+            let text = textField.text ?? ""
+            HistoryVC.shared?.sendAmountToPay(text)
+        }
 
+        return true
+    }
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        HistoryVC.shared?.amountToPayEditing = true
+        isEdit = true
+        showEdit(true, hideStack: false) { _ in
+            
+        }
+        
+    }
+}
 class AmountToPayCell: UITableViewCell {
     @IBOutlet weak var progressBar: UIProgressView!
     
@@ -905,42 +920,168 @@ class AmountToPayCell: UITableViewCell {
     @IBOutlet weak var amountToPayTextField: UITextField!
     @IBOutlet weak var changeButton: UIButton!
     
-    var changeFunc: (() -> ())?
+    
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        let amPress = HistoryVC.shared?.calendarAmountPressed.1 ?? false
+        print(amPress, "amPressamPressamPressamPress")
+        if amPress {
+            if !isEdit {
+                if let touch = touches.first {
+                    DispatchQueue.main.async {
+                        if touch.view != self.changeButton || touch.view != self.deleteButton {
+                            UIView.animate(withDuration: 0.3) {
+                                self.editingStack.isHidden = true
+                            } completion: { _ in
+                                HistoryVC.shared?.calendarAmountPressed = (false, false)
+                            }
+                        }
+                    }
+                }
+            }
+            
+            
+        } else {
+      //      DispatchQueue.main.async {
+                
+                UIView.animate(withDuration: 0.3) {
+                    self.editingStack.isHidden = false
+                } completion: { _ in
+                    HistoryVC.shared?.calendarAmountPressed.1 = true
+                }
+
+           // }
+            
+        }
+    }
+    
+    var changeFunc:(() -> ())?
     var deleteFunc:(() -> ())?
     
-    @IBAction func changePressed(_ sender: UIButton) {
-        if let funcc = changeFunc {
+    var _isEdit = false
+    var isEdit:Bool {
+        get {
+            return _isEdit
+        }
+        set {
+            _isEdit = newValue
+            print(newValue, "newValuenewValuenewValuenewValuenewValuenewValuenewValue")
+            let deleteIcon = newValue ? "xmark.circle" : "trash"
+            let changeIcon = newValue ? "paperplane.fill" : "pencil"
+            
+            DispatchQueue.main.async {
+                
+                self.deleteButton.setImage(iconNamed(deleteIcon), for: .normal)
+                self.changeButton.setImage(iconNamed(changeIcon), for: .normal)
+               
+            }
+        }
+    }
+    
+    func setAmountEditing(_ editing:Bool) {
+        DispatchQueue.main.async {
+            if self.editingStack.isHidden != editing ? false : true {
+                self.editingStack.isHidden = editing ? false : true
+            }
+            
+            if self.amountToPayLabel.isHidden != editing ? true : false {
+                self.amountToPayLabel.isHidden = editing ? true : false
+            }
+            if self.amountToPayTextField.isHidden != editing ? false : true {
+                self.amountToPayTextField.isHidden = editing ? false : true
+            }
+        }
+    }
+    
+    private func showEdit(_ value:Bool, hideStack:Bool , completionn: @escaping (Bool) -> ()) {
+        let hideLabel = value ? true : false
+        let hideTF = value ? false : true
+        let hideStackk = value ? false : (hideStack)
+        DispatchQueue.main.async {
             UIView.animate(withDuration: 0.3) {
-                if self.editingStack.isHidden != true {
-                    self.editingStack.isHidden = true
+                if self.editingStack.isHidden != hideStackk {
+                    self.editingStack.isHidden = hideStackk
                 }
-                if self.amountToPayLabel.isHidden != true {
-                    self.amountToPayLabel.isHidden = true
+                
+                if self.amountToPayLabel.isHidden != hideLabel {
+                    self.amountToPayLabel.isHidden = hideLabel
                 }
-                if self.amountToPayTextField.isHidden != false {
-                    self.amountToPayTextField.isHidden = false
+                if self.amountToPayTextField.isHidden != hideTF {
+                    self.amountToPayTextField.isHidden = hideTF
                 }
             } completion: { _ in
-                funcc()
+                completionn(true)
+            }
+        }
+    }
+
+    
+    @IBAction func changePressed(_ sender: UIButton) {
+        if isEdit {
+            DispatchQueue.main.async {
+                HistoryVC.shared?.ai.show(title: "Sending", completion: { _ in
+                    self.isEdit = false
+                    self.showEdit(false, hideStack: true) { _ in
+                        let text = self.amountToPayTextField.text ?? ""
+                        HistoryVC.shared?.sendAmountToPay(text)
+                    }
+                })
+            }
+        } else {
+            self.isEdit = true
+            showEdit(true, hideStack: false) { _ in
+                
                 DispatchQueue.main.async {
                     self.amountToPayTextField.becomeFirstResponder()
                 }
+                if !self.isEdit {
+                    if let funcc = self.changeFunc {
+                        funcc()
+                    }
+                }
             }
-
+            
         }
+        
     }
     
     @IBOutlet weak var deleteButton: UIButton!
     @IBAction func deletePressed(_ sender: UIButton) {
-        if let funcc = changeFunc {
-            funcc()
+
+        let new = !isEdit
+        if !isEdit {
+            if let funcc = deleteFunc {
+                DispatchQueue.main.async {
+                HistoryVC.shared?.ai.show(title: "Deleting", completion: { _ in
+                    self.showEdit(new, hideStack: true) { _ in
+                            funcc()
+                        
+                    }
+                })
+                }
+            }
+            
+        } else {
+            self.isEdit = false
+            self.showEdit(false, hideStack: true) { _ in
+                
+                HistoryVC.shared?.calendarAmountPressed = (false,false)
+                HistoryVC.shared?.amountToPayEditing = false
+                DispatchQueue.main.async {
+                    self.amountToPayTextField.endEditing(true)
+                }
+            }
         }
+        
     }
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         deleteButton.layer.cornerRadius = deleteButton.layer.frame.width / 2
         changeButton.layer.cornerRadius = changeButton.layer.frame.width / 2
+        
+        amountToPayTextField.delegate = self
     }
     
     
