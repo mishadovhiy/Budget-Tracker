@@ -539,6 +539,7 @@ class LoginViewController: SuperViewController {
     @IBOutlet weak var moreButton: UIButton!
     var aai:UIActivityIndicatorView?
     @IBAction func moreButtonPressed(_ sender: UIButton) {//morepressed
+        hideKeyboard()
         let appData = AppData()
         //get screen data
         let addAmountToPay = {
@@ -691,7 +692,6 @@ class LoginViewController: SuperViewController {
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
         switch segue.identifier {
 
         case "toEnterValueVC":
@@ -772,7 +772,7 @@ class LoginViewController: SuperViewController {
             tfs[i].setRightPaddingPoints(5)
             tfs[i].setLeftPaddingPoints(5)
             
-            tfs[i].attributedPlaceholder = NSAttributedString(string: i + 1 < placeHolder.count ? placeHolder[i] : "", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.textFieldPlaceholder])
+            tfs[i].attributedPlaceholder = NSAttributedString(string: i < placeHolder.count ? placeHolder[i] : "", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.textFieldPlaceholder])
         }
     }
     

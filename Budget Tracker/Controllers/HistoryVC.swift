@@ -17,7 +17,7 @@ var transactionAdded = false
 
 
 class HistoryVC: SuperViewController {
-    private var amountToPayTFTag = 9
+  //  private var amountToPayTFTag = 9
     @IBOutlet weak var addTransButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
     var historyDataStruct: [TransactionsStruct] = []
@@ -58,12 +58,13 @@ class HistoryVC: SuperViewController {
     }
     
     
-    
+    static var shared: HistoryVC?
     @IBOutlet weak var totalPeriodLabel: UILabel!
     @IBOutlet weak var totalLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        HistoryVC.shared = self
         print(selectedPurposeH, "selectedPurposeselectedPurposeH didlo")
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
                 NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
@@ -538,12 +539,13 @@ extension HistoryVC:UITextFieldDelegate {
             textField.endEditing(true)
             
         }
-        switch textField.tag {
-        case amountToPayTFTag:
+     //   switch textField.tag {
+       // case amountToPayTFTag:
             
                 
-                    let text = textField.text ?? ""
-            if let dob = Double(text) {
+        let text = textField.text ?? ""
+        print(text, "texttexttexttexttext")
+        if let _ = Double(text) {
                 DispatchQueue.main.async {
                     self.ai.show(title: "Sending") { _ in
                         self.changeAmountToPay(enteredAmount: text) { (_) in
@@ -563,9 +565,9 @@ extension HistoryVC:UITextFieldDelegate {
                     }*/
                 
             
-        default:
-            break
-        }
+     //   default:
+       //     break
+       // }
         
         return true
     }
@@ -580,8 +582,8 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
 
         switch section {
         case 0: return selectedCategory?.purpose != .debt ? 0 : 1
-        case 1: return historyDataStruct.count == 0 ? 1 : historyDataStruct.count
-        case 2: return 1
+        case 1: return selectedCategory?.amountToPay != nil || amountToPayEditing ? 1 : 0
+        case 2: return historyDataStruct.count == 0 ? 1 : historyDataStruct.count
         default:
             return 0
         }
@@ -660,6 +662,46 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             
             return cell
         case 1:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "AmountToPayCell") as! AmountToPayCell
+    
+            let amToPay = Int(selectedCategory?.amountToPay ?? 0.0)
+            
+            let progress = amToPay == 0 ? 0 : Double(totalSumm) / (selectedCategory?.amountToPay ?? 0.0)
+            print(progress)
+            let hideButtons = calendarAmountPressed.1 ? (amountToPayEditing ? true : (selectedCategory?.amountToPay == nil ? true : false)) : true
+            
+            let removeAmountAction = {
+                self.removeAmountToPay()
+            }
+            
+            cell.deleteFunc = removeAmountAction
+            
+            let changeFunc = {
+     //           cell.amountToPayTextField.tag = self.amountToPayTFTag
+                self.amountToPayEditing = true
+                self.calendarAmountPressed = (false,false)
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+            
+            cell.changeFunc = changeFunc
+            
+            cell.amountToPayTextField.delegate = self
+            
+            cell.totalLabel.text = "\(totalSumm)"
+            cell.restAmountLabel.text = "\(amToPay - totalSumm)"
+            cell.amountToPayLabel.text = "\(amToPay)"
+            cell.progressBar.progress = Float(progress)
+            cell.progressBar.progressTintColor = colorNamed(selectedCategory?.color)
+            cell.progressBar.isHidden = amToPay == 0
+            cell.amountToPayTextField.isHidden = !amountToPayEditing
+            cell.amountToPayLabel.isHidden = amountToPayEditing
+            cell.editingStack.isHidden = hideButtons
+            return cell
+            
+            
+        case 2:
             if historyDataStruct.count == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "EmptyCell") as! EmptyCell
                 cell.selectionStyle = .none
@@ -682,7 +724,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             }
             return cell
             }
-        case 2:
+        /*case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: K.historyCellTotalIdent) as! HistoryCellTotal
            // cell.valueLabel.font = .systemFont(ofSize: debt?.amountToPay == "" ? 21 : 15, weight: debt?.amountToPay == "" ? .medium : .regular)
             
@@ -757,7 +799,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             }
             
             cell.contentView.alpha = indexPath.row == 0 ? 1 : 0
-            return cell
+            return cell*/
         default:
             return UITableViewCell()
         }
@@ -780,7 +822,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
 
-        if indexPath.section == 1 {
+        if indexPath.section == 2 {
             let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
                 switch self.mainType {
                 case .localData, .allData:
@@ -889,7 +931,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             self.tableView.deselectRow(at: indexPath, animated: true)
         }
         if mainType  == .db {
-            if indexPath.section == 2 {
+            if indexPath.section == 1 {
                 DispatchQueue.main.async {
                     if self.selectedCategory?.purpose != .debt {
                         return
@@ -935,7 +977,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
         let dueViewHeight:CGFloat = self.selectedCategory?.dueDate == nil ? 70 : 150
         let heightWhenNoData = tableView.frame.height - (appData.safeArea.1 + appData.safeArea.0 + dueViewHeight)
         
-        return indexPath.section == 1 ? (historyDataStruct.count == 0 ? heightWhenNoData : UITableView.automaticDimension) : ifDueDate
+        return indexPath.section == 2 ? (historyDataStruct.count == 0 ? heightWhenNoData : UITableView.automaticDimension) : ifDueDate
     }
     
 }
@@ -1147,7 +1189,11 @@ class DebtDescriptionCell: UITableViewCell {
     @IBOutlet weak var changeButton: UIButton!
     @IBOutlet weak var doneButton: UIButton!
     
-    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        changeButton.layer.cornerRadius = changeButton.layer.frame.width / 2
+        doneButton.layer.cornerRadius = doneButton.layer.frame.width / 2
+    }
     
     var changeAction:(() -> ())?
     @IBAction func doneDatePressed(_ sender: Any) {//change
@@ -1197,4 +1243,64 @@ class HistoryCellTotal: UITableViewCell {
     }
     var changeFunc: (() -> ())?
     var deleteFunc:(() -> ())?
+}
+
+
+
+
+
+
+
+class AmountToPayCell: UITableViewCell {
+    @IBOutlet weak var progressBar: UIProgressView!
+    
+    @IBOutlet weak var editingStack: UIStackView!
+    @IBOutlet weak var totalLabel: UILabel!
+    @IBOutlet weak var restAmountLabel: UILabel!
+    @IBOutlet weak var amountToPayLabel: UILabel!
+    
+    @IBOutlet weak var amountToPayTextField: UITextField!
+    @IBOutlet weak var changeButton: UIButton!
+    
+    var changeFunc: (() -> ())?
+    var deleteFunc:(() -> ())?
+    
+    @IBAction func changePressed(_ sender: UIButton) {
+        if let funcc = changeFunc {
+            UIView.animate(withDuration: 0.3) {
+                if self.editingStack.isHidden != true {
+                    self.editingStack.isHidden = true
+                }
+                if self.amountToPayLabel.isHidden != true {
+                    self.amountToPayLabel.isHidden = true
+                }
+                if self.amountToPayTextField.isHidden != false {
+                    self.amountToPayTextField.isHidden = false
+                }
+            } completion: { _ in
+                funcc()
+                DispatchQueue.main.async {
+                    self.amountToPayTextField.becomeFirstResponder()
+                }
+            }
+
+        }
+    }
+    
+    @IBOutlet weak var deleteButton: UIButton!
+    @IBAction func deletePressed(_ sender: UIButton) {
+        if let funcc = changeFunc {
+            funcc()
+        }
+    }
+    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        deleteButton.layer.cornerRadius = deleteButton.layer.frame.width / 2
+        changeButton.layer.cornerRadius = changeButton.layer.frame.width / 2
+    }
+    
+    
+    
+    
 }

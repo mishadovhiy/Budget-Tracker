@@ -42,6 +42,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 self.ai.fastHide { _ in
                     
                 }
+              //  self.tableView.reloadData()
                 if self.refreshControl.isRefreshing {
                     self.refreshControl.endRefreshing()
                 }
@@ -54,6 +55,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                     if self.screenAI.isHidden != true {
                         self.screenAI.isHidden = true
                     }
+                    self.moreButton.isEnabled = true
                     UIView.animate(withDuration: 0.2) {
                         self.tableView.alpha = 1
                        // self.tableView.transform =// to notmal
@@ -208,7 +210,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 self.editingTF = nil
                 self.toggleIcons(show: false, animated: true, category: nil)
                 self.editingTF?.endEditing(true)
-                
+                self.tableView.reloadData()
             }
             
         }
@@ -466,7 +468,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
           
         DispatchQueue.main.async {
             if !self.showingIcons {
-                self.tableView.contentInset.bottom = self.defaultButtonInset
+                self.tableView.contentInset.bottom = 0//self.defaultButtonInset
             }
             self.editingTF = nil
             self.tableView.reloadData()
@@ -518,7 +520,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 self.editingTF = nil
             } else {
                 if self.editingTF == nil {
-                    self.tableView.contentInset.bottom = self.defaultButtonInset
+                    self.tableView.contentInset.bottom = 0// self.defaultButtonInset
                 }
             }//here
             UIView.animate(withDuration: animated ? 0.3 : 0) {
@@ -656,20 +658,31 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         showMoreVC()
     }
     func showMoreVC() {
+        DispatchQueue.main.async {
+            if let editing = self.editingTF {
+                self.editingTF = nil
+                editing.endEditing(true)
+            }
+        }
+        toggleIcons(show: false, animated: true, category: nil)
+        
         let appData = AppData()
         //get screen data
         let idAction = {
             self.sortOption = .id
             self.categories = self._categories
+
         }
         
         let nameAction = {
             self.sortOption = .name
             self.categories = self._categories
+
         }
         let countAction = {
             self.sortOption = .transactionsCount
             self.categories = self._categories
+
         }
         
         let moreData = [
@@ -958,7 +971,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             self.tableView.reloadData()
         }
     }
-    let regFooterHeight:CGFloat = 55
+    let regFooterHeight:CGFloat = 50
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if section == 0 || section == 1 {
             return 0
@@ -987,7 +1000,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             let sect = section - 2
         //show only footer
         let category = tableData[sect].newCategory.category
-            
+            cell.footerHelperBottomView.isHidden = false
         cell.lo(index: nil, footer: sect)
         cell.newCategoryTF.text = category.name
         cell.iconimage.image = iconNamed(category.icon)
@@ -1520,7 +1533,8 @@ class categoriesVCcell: UITableViewCell {
     }
     
     
-
+    @IBOutlet weak var footerHelperBottomView: UIView!
+    
     
     @IBAction func sendPressed(_ sender: UIButton) {
         DispatchQueue.main.async {

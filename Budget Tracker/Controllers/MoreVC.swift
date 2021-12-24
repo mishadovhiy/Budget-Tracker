@@ -145,9 +145,9 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                         AppDelegate.shared?.ai.show(completion: { _ in
                             DispatchQueue.main.async {
                                 self.dismiss(animated: true) {
-                                    AppDelegate.shared?.ai.fastHide(completionn: { _ in
+                                   // AppDelegate.shared?.ai.fastHide(completionn: { _ in
                                         function()
-                                    })
+                                 //   })
                                 }
                             }
                         })

@@ -30,9 +30,12 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if self.screenData?.screenType != .code {
-            valueTextField.becomeFirstResponder()
+        self.ai?.fastHide { _ in
+            if self.screenData?.screenType != .code {
+                self.valueTextField.becomeFirstResponder()
+            }
         }
+        
     }
     
     
@@ -43,9 +46,7 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
         valueTextField.addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
         valueTextField.delegate = self
         updateScreen()
-        valueTextField.setRightPaddingPoints(5)
-        valueTextField.setLeftPaddingPoints(5)
-        valueTextField.attributedPlaceholder = NSAttributedString(string: self.screenData?.placeHolder ?? "Enter value", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.textFieldPlaceholder])
+        
         
     }
     lazy var numberView: NumbersView = {
@@ -53,11 +54,20 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
         return newView
     }()
     
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        valueTextField.setRightPaddingPoints(5)
+        valueTextField.setLeftPaddingPoints(5)
+        valueTextField.attributedPlaceholder = NSAttributedString(string: self.screenData?.placeHolder ?? "Enter value", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.textFieldPlaceholder])
+        valueTextField.layer.cornerRadius = 6
+    }
+    
     private func updateScreen() {
         let hideTF = self.screenData?.screenType == .code ? true : false
         let hideCode = !hideTF
         DispatchQueue.main.async {
-            self.valueTextField.layer.cornerRadius = 6
+            
             self.title = self.screenData?.taskName
             self.mainTitleLabel.text = self.screenData?.title
             self.descriptionLabel.text = self.screenData?.subTitle
@@ -85,9 +95,7 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
             }
             
 
-            self.ai?.fastHide { _ in
-                
-            }
+            
         }
     }
     
@@ -155,14 +163,14 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
     let ai = AppDelegate.shared?.ai
     public func showSelfVC(data: EnterValueVCScreenData) {
         DispatchQueue.main.async {
-          //  var vcs = self.navigationController?.viewControllers ?? []
-           // vcs.removeLast()
+            var vcs = self.navigationController?.viewControllers ?? []
+            vcs.removeLast()
             let storyboard = UIStoryboard(name: "LogIn", bundle: nil)
             let vccc = storyboard.instantiateViewController(withIdentifier: "EnterValueVC") as! EnterValueVC
             vccc.screenData = data
-          //  vcs.append(vccc)
-          //  self.navigationController?.setViewControllers(vcs, animated: true)
-            self.navigationController?.pushViewController(vccc, animated: true)
+            vcs.append(vccc)
+            self.navigationController?.setViewControllers(vcs, animated: true)
+          //  self.navigationController?.pushViewController(vccc, animated: true)
         }
     }
     
