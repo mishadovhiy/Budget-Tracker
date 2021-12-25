@@ -28,6 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
         center.delegate = self
         AppDelegate.shared = self
         window?.backgroundColor = K.Colors.primaryBacground
@@ -45,7 +46,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         
         return true
     }
+    
+    func applicationWillResignActive(_ application: UIApplication) {
+        //
+    }
+    func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
+        print(#function)
+    }
+    var becameActive = false
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        print(#function)
+        if !becameActive {
+            becameActive = true
+        } else {
+            needDownloadOnMainAppeare = true
+        }
+        
+    }
+    func applicationWillTerminate(_ application: UIApplication) {
+        print(#function)
+    }
 
+    
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate {

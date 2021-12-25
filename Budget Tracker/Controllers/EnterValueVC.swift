@@ -31,9 +31,9 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.ai?.fastHide { _ in
-            if self.screenData?.screenType != .code {
+           // if self.screenData?.screenType != .code {
                 self.valueTextField.becomeFirstResponder()
-            }
+           // }
         }
         
     }
@@ -49,10 +49,7 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
         
         
     }
-    lazy var numberView: NumbersView = {
-        let newView = NumbersView.instanceFromNib() as! NumbersView
-        return newView
-    }()
+
     
     
     override func viewWillLayoutSubviews() {
@@ -74,23 +71,27 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
             self.userTableStack.isHidden = self.screenData?.descriptionTable == nil ? true : false
             self.emailLabel.text = self.screenData?.descriptionTable?.0?.1
             self.userNameLabel.text = self.screenData?.descriptionTable?.1?.1
-            if self.valueTextField.isHidden != hideTF {
+      /*      if self.valueTextField.isHidden != hideTF {
                 self.valueTextField.isHidden = hideTF
-            }
+            }*/
             
-            if self.codeLabel.isHidden != hideCode {
+       /*     if self.codeLabel.isHidden != hideCode {
                 self.codeLabel.isHidden = hideCode
-            }
+            }*/
 
             if !hideCode {
                 self.numberView.delegate = self
+                self.numberView.frame = CGRect(x: 0, y: 0, width: 320, height: 400)
+                self.valueTextField.inputView = self.numberView
+                self.numberView.limit = 4
+                /*self.numberView.delegate = self
                 let size = self.numberView.viewSize
-                let centerPosition =
+              //  let centerPosition =
                 self.numberView.frame = CGRect(x: (self.view.frame.width / 2) - (size.width / 2), y: self.view.frame.height - size.height, width: size.width, height: size.height)
                
                 self.view.addSubview(self.numberView)
                 
-                self.kayboardAppeared(self.numberView.frame.height)
+                self.kayboardAppeared(self.numberView.frame.height)*/
                 
             }
             
@@ -98,7 +99,10 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
             
         }
     }
-    
+    lazy var numberView: NumbersView = {
+        let newView = NumbersView.instanceFromNib() as! NumbersView
+        return newView
+    }()
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
     }
     
@@ -197,14 +201,8 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
         }
         set {
             _enteringValue = newValue
-            if screenData?.screenType == .code {
-                DispatchQueue.main.async {
-                    self.codeLabel.text = newValue
-                }
-            } else {
-                DispatchQueue.main.async {
-                    self.valueTextField.text = newValue
-                }
+            DispatchQueue.main.async {
+                self.valueTextField.text = newValue
             }
         }
     }

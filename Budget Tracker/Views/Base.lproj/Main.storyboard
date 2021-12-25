@@ -2195,7 +2195,7 @@
                                                             <color key="textColor" name="CategoryColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <textField hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="c6k-VO-jDH">
+                                                        <textField hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="c6k-VO-jDH" customClass="NumbersTF" customModule="Budget_Tracker" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="42.333333333333336" width="86" height="0.0"/>
                                                             <color key="backgroundColor" name="SecondaryBacroundColor"/>
                                                             <color key="textColor" name="CategoryColor"/>
@@ -2238,7 +2238,7 @@
                                                         </label>
                                                     </subviews>
                                                 </stackView>
-                                                <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="HFp-oZ-7QB">
+                                                <stackView opaque="NO" alpha="0.0" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="HFp-oZ-7QB">
                                                     <rect key="frame" x="30" y="13.666666666666664" width="110" height="45"/>
                                                     <subviews>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FW8-0G-7Gd">
@@ -2289,7 +2289,7 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="amountToPayLabel" destination="ork-up-8wy" id="6dh-vG-wuH"/>
-                                            <outlet property="amountToPayTextField" destination="c6k-VO-jDH" id="GPs-f2-qLY"/>
+                                            <outlet property="amountToPayTextField" destination="c6k-VO-jDH" id="RKz-IR-0vH"/>
                                             <outlet property="changeButton" destination="dKD-na-Qxv" id="yRM-7G-fgq"/>
                                             <outlet property="deleteButton" destination="FW8-0G-7Gd" id="RkX-gR-qtu"/>
                                             <outlet property="editingStack" destination="HFp-oZ-7QB" id="tQ2-Fg-0Uj"/>

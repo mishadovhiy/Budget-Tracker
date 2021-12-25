@@ -555,7 +555,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
 
             }
            // if self.amountToPayEditing {
-                cell.setAmountEditing(self.amountToPayEditing)
+            cell.editingStack.alpha = calendarAmountPressed.1 ?? false ? 1 : 0
            // }
             cell.changeFunc = changeFunc
             cell.isEdit = amountToPayEditing
@@ -917,7 +917,8 @@ class AmountToPayCell: UITableViewCell {
     @IBOutlet weak var restAmountLabel: UILabel!
     @IBOutlet weak var amountToPayLabel: UILabel!
     
-    @IBOutlet weak var amountToPayTextField: UITextField!
+    @IBOutlet weak var amountToPayTextField: NumbersTF!
+    //@IBOutlet weak var amountToPayTextField: UITextField!
     @IBOutlet weak var changeButton: UIButton!
     
     
@@ -932,9 +933,10 @@ class AmountToPayCell: UITableViewCell {
                     DispatchQueue.main.async {
                         if touch.view != self.changeButton || touch.view != self.deleteButton {
                             UIView.animate(withDuration: 0.3) {
-                                self.editingStack.isHidden = true
+                                self.editingStack.alpha = 0
                             } completion: { _ in
                                 HistoryVC.shared?.calendarAmountPressed = (false, false)
+                                HistoryVC.shared?.tableView.reloadData()
                             }
                         }
                     }
@@ -943,15 +945,16 @@ class AmountToPayCell: UITableViewCell {
             
             
         } else {
-      //      DispatchQueue.main.async {
+            DispatchQueue.main.async {
                 
-                UIView.animate(withDuration: 0.3) {
-                    self.editingStack.isHidden = false
+                UIView.animate(withDuration: 0.12) {
+                    self.editingStack.alpha = 1
                 } completion: { _ in
                     HistoryVC.shared?.calendarAmountPressed.1 = true
+                    HistoryVC.shared?.tableView.reloadData()
                 }
 
-           // }
+            }
             
         }
     }
@@ -971,6 +974,14 @@ class AmountToPayCell: UITableViewCell {
             let changeIcon = newValue ? "paperplane.fill" : "pencil"
             
             DispatchQueue.main.async {
+                if newValue {
+                    if self.amountToPayTextField.isHidden != false {
+                        self.amountToPayTextField.isHidden = false
+                    }
+                    if self.amountToPayLabel.isHidden != true {
+                        self.amountToPayLabel.isHidden = true
+                    }
+                }
                 
                 self.deleteButton.setImage(iconNamed(deleteIcon), for: .normal)
                 self.changeButton.setImage(iconNamed(changeIcon), for: .normal)
@@ -981,8 +992,8 @@ class AmountToPayCell: UITableViewCell {
     
     func setAmountEditing(_ editing:Bool) {
         DispatchQueue.main.async {
-            if self.editingStack.isHidden != editing ? false : true {
-                self.editingStack.isHidden = editing ? false : true
+            if self.editingStack.alpha != (editing ? 1 : 0) {
+                self.editingStack.alpha = editing ? 1 : 0
             }
             
             if self.amountToPayLabel.isHidden != editing ? true : false {
@@ -997,11 +1008,10 @@ class AmountToPayCell: UITableViewCell {
     private func showEdit(_ value:Bool, hideStack:Bool , completionn: @escaping (Bool) -> ()) {
         let hideLabel = value ? true : false
         let hideTF = value ? false : true
-        let hideStackk = value ? false : (hideStack)
         DispatchQueue.main.async {
             UIView.animate(withDuration: 0.3) {
-                if self.editingStack.isHidden != hideStackk {
-                    self.editingStack.isHidden = hideStackk
+                if self.editingStack.alpha != (hideStack ? 0 : 1) {
+                    self.editingStack.alpha = hideStack ? 0 : 1
                 }
                 
                 if self.amountToPayLabel.isHidden != hideLabel {

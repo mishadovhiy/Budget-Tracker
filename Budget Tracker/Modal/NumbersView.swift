@@ -32,7 +32,7 @@ class NumbersView: UIView {
     }
     var delegate:NumbersViewProtocol?
     
-    
+    var limit: Int?
     @IBOutlet private weak var mainView: UIView!
     
     var viewSize:CGSize {

@@ -225,7 +225,7 @@ class ViewController: SuperViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
+        //needDownloadOnMainAppeare = false
         
         ViewController.shared = self
         updateUI()
