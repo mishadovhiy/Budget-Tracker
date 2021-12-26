@@ -499,7 +499,7 @@ class LoginViewController: SuperViewController {
     }
     
     func forgotPasswordTapped() {
-        DispatchQueue.main.async {
+     //   DispatchQueue.main.async {
             self.ai.show { (_) in
                 let load = LoadFromDB()
                 load.Users { (users, error) in
@@ -531,7 +531,7 @@ class LoginViewController: SuperViewController {
                 }
                 
             }
-        }
+   //     }
     }
     
     
@@ -744,9 +744,9 @@ class LoginViewController: SuperViewController {
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
-        let usernameHolder = UserDefaults.standard.value(forKey: "UsernameHolder") as? String
+        //let usernameHolder = UserDefaults.standard.value(forKey: "UsernameHolder") as? String
         DispatchQueue.main.async {
-            self.nicknameLogLabel.text = usernameHolder != nil ? usernameHolder! :  appData.username
+            self.nicknameLogLabel.text = self.forceLoggedOutUser != "" ? self.forceLoggedOutUser :  appData.username
             self.passwordLogLabel.text = appData.username == "" ? "" : appData.password
             self.view.isUserInteractionEnabled = true
             self.view.addGestureRecognizer(hideKeyboardGestureSwipe)
@@ -822,7 +822,7 @@ class LoginViewController: SuperViewController {
                             if !name.contains("@") {
                                 self.logIn(nickname: name, password: password, loadedData: loadedData)
                             } else {
-                                self.checkUsers(for: name) { _ in
+                                self.checkUsers(for: name, password: password) { _ in
                                     
                                 }
                             }
@@ -1158,7 +1158,7 @@ class LoginViewController: SuperViewController {
         }
         return userExists
     }
-    
+    var forceLoggedOutUser = ""
     var obthervValues = false
     func showWrongFields() {
     //test if working
@@ -1372,31 +1372,48 @@ class LoginViewController: SuperViewController {
 extension LoginViewController: UITextFieldDelegate {
     
     
-    func checkUsers(for email: String, completion: @escaping (Bool) -> ()) {
+    func checkUsers(for email: String, password:String, completion: @escaping (Bool) -> ()) {
       //  DispatchQueue.main.async {
         //    self.ai.show { _ in
         
                 self.enteredEmailUsers.removeAll()
                 var resultUsers: [String] = []
                 self.loadUsers { users in
-                    for i in 0..<users.count {
-                        if users[i][1] == email {
-                            resultUsers.append(users[i][0])
-                        }
-                    }
                     
-                    self.enteredEmailUsers = resultUsers
-                    let found = resultUsers.count == 0 ? false : true
-                    completion(found)
-                    if found {
+                    //check password for email
+                    var passwordCurrect = false
+                    var found = false
+                    for n in 0..<users.count {
+                        if email == users[n][1] {
+                            found = true
+                            if password == users[n][2] {
+                                passwordCurrect = true
+                                break
+                            }
+                            
+                        }
+                        
+                    }
+                    if passwordCurrect {
+                        for i in 0..<users.count {
+                            if users[i][1] == email {
+                                resultUsers.append(users[i][0])
+                            }
+                        }
+                        self.enteredEmailUsers = resultUsers
+                        completion(found)
                         DispatchQueue.main.async {
                             self.performSegue(withIdentifier: "toSelectUserVC", sender: self)
                         }
                     } else {
+                        let text = !found ? "Email not found!" : "Wrong password"
                         DispatchQueue.main.async {
-                            self.showAlert(title: "Email not found!", error: true)
+                            self.showAlert(title: text, error: true)
                         }
                     }
+
+                    
+                    
                 }
          //   }
       //  }
@@ -1485,18 +1502,7 @@ extension LoginViewController: UITextFieldDelegate {
             if let nick = textField.text {
                 if nick != "" {
                     
-                    if nick.contains("@") {
-                        DispatchQueue.main.async {
-                            textField.endEditing(true)
-                            self.ai.show { _ in
-                                self.checkUsers(for: nick) { found in
-                                }
-                            }
-                        }
-                        
-                    } else {
-                        keyChainPassword(nick: nick)
-                    }
+                    keyChainPassword(nick: nick)
                     
                     
                 } else {

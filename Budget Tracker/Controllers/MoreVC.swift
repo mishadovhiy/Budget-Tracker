@@ -92,7 +92,7 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     
-    
+    var cellBackground = UIColor(red: 32/255, green: 32/255, blue: 32/255, alpha: 1)//darker seconadrybacground
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
@@ -105,9 +105,10 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         if indexPath.section != 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "DataOptionCell", for: indexPath) as! DataOptionCell
-            cell.contentView.backgroundColor = tableData[indexPath.row].selected ? K.Colors.balanceT : K.Colors.pink
+            let selected = tableData[indexPath.row].selected
+            cell.contentView.backgroundColor = selected ? K.Colors.yellow : cellBackground
             cell.titleLabel.text = tableData[indexPath.row].name
-            cell.titleLabel.textColor = tableData[indexPath.row].distructive ? .red : .black
+            cell.titleLabel.textColor = tableData[indexPath.row].distructive ? .red : K.Colors.category
             cell.descriptionLabel.text = tableData[indexPath.row].description
             return cell
         } else {

@@ -402,9 +402,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 }
                 DispatchQueue.main.async {
                     UIImpactFeedbackGenerator().impactOccurred()
-                    self.ai.fastHide { _ in
+          //          self.ai.fastHide { _ in
                         
-                    }
+          //          }
                     
                     
                     self.tableView.reloadData()
@@ -415,20 +415,30 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     }
     
     func addCategoryPerform(section:Int) {
-        DispatchQueue.main.async {
+       // DispatchQueue.main.async {
             UIImpactFeedbackGenerator().impactOccurred()
             let category = self.tableData[section].newCategory
             if category.category.name != "" {
                 self.ai.show(title:"Saving") { _ in
-                    self.editingTF?.endEditing(true)
-                    self.editingTF = nil
+                    DispatchQueue.main.async {
+                        if let editTF = self.editingTF {
+                            self.editingTF = nil
+                            editTF.endEditing(true)
+                        }
+                    }
+                    
                     self.saveNewCategory(section: section, category: category)
                 }
             } else {
-                self.editingTF?.endEditing(true)
+                DispatchQueue.main.async {
+                    if let editTF = self.editingTF {
+                        self.editingTF = nil
+                        editTF.endEditing(true)
+                    }
+                }
             }
             
-        }
+      //  }
     }
     
     @objc func newCategoryPressed(_ sender: UITapGestureRecognizer) {
@@ -518,8 +528,12 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             let containerHeight = self.iconsContainer.layer.frame.height
             if show  {
                 self.editingTfIndex = (nil,nil)
-                self.editingTF?.endEditing(true)
-                self.editingTF = nil
+             //   DispatchQueue.main.async {
+                    if let editTF = self.editingTF {
+                        self.editingTF = nil
+                        editTF.endEditing(true)
+                    }
+            //    }
             } else {
                 if self.editingTF == nil {
                     self.tableView.contentInset.bottom = 0// self.defaultButtonInset
@@ -564,7 +578,12 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         searchBar.endEditing(true)
-        editingTF?.endEditing(true)
+       // DispatchQueue.main.async {
+            if let editTF = self.editingTF {
+                self.editingTF = nil
+                editTF.endEditing(true)
+            }
+    //    }
         if !self.fromSettings {
             loadData()
         }
@@ -1059,21 +1078,21 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
 
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
             //self.tableActionActivityIndicator.startAnimating()
-            DispatchQueue.main.async {
+          //  DispatchQueue.main.async {
                 self.ai.show(title: "Deleting") { _ in
                     self.deteteCategory(at: IndexPath(row: indexPath.row, section: indexPath.section - 2))
                 }
-            }
+          //  }
         }
         let localDeleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
             //self.tableActionActivityIndicator.startAnimating()
-            DispatchQueue.main.async {
+          //  DispatchQueue.main.async {
                 self.ai.show(title: "Deleting") { _ in
                     let id = self.tableData[indexPath.section - 2].data[indexPath.row].category.id
                     self.db.deleteCategory(id: "\(id)", local: true)
                     self.loadData()
                 }
-            }
+          //  }
             
         }
         
@@ -1539,7 +1558,7 @@ class categoriesVCcell: UITableViewCell {
     
     
     @IBAction func sendPressed(_ sender: UIButton) {
-        DispatchQueue.main.async {
+       // DispatchQueue.main.async {
             CategoriesVC.shared?.ai.show(title:"Saving") { _ in
                 if let currentCategory = self.currentCategory {
                     if currentCategory.editing?.name != "" {
@@ -1552,7 +1571,7 @@ class categoriesVCcell: UITableViewCell {
                     CategoriesVC.shared?.toggleIcons(show: false, animated: true, category: nil)
                 }
             }
-        }
+      //  }
     }
     
 }

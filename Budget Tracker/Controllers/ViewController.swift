@@ -60,15 +60,15 @@ class ViewController: SuperViewController {
         }
         set {
             _TableData = newValue
-            var datacountText = ""
-            if appData.username != "" {
+           // var datacountText = ""
+            /*if appData.username != "" {
                 let lastDownloadDate = UserDefaults.standard.value(forKey: "LastLoadDataDate") as? Date ?? Date()
                 let component = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: lastDownloadDate)
                 let date = "\(appData.returnMonth(component.month ?? 0)) \(self.makeTwo(n: component.day ?? 0)), \(component.year ?? 0)"
                 //let undendeddCount = self.undendedCount == 0 ? "" : "Data pending to resend: \(self.undendedCount)"
                 let lastLaunxText = "Updated: \(date) at: \(self.makeTwo(n: component.hour ?? 0)):\(self.makeTwo(n: component.minute ?? 0)):\(self.makeTwo(n: component.second ?? 0))"
                 datacountText = "Data count: \(self.tableData.count)\("\n\(lastLaunxText)")"
-            }
+            }*/
             dataTaskCount = nil
             selectedCell = nil
             let tableDataDataCount = self.tableData.count
@@ -83,13 +83,13 @@ class ViewController: SuperViewController {
                 }
 
                 
-                self.mainTableView.alpha = tableDataDataCount == 0 ? 0 : 1
+               // self.mainTableView.alpha = 1//tableDataDataCount == 0 ? 0 : 1
                 
                 self.calculateLabels(noData: tableDataDataCount == 0 ? true : false)
-                if tableDataDataCount == 0 {
-                    self.toggleNoData(show: true, text: (UserDefaults.standard.value(forKey: "transactionsData") as? [[String]])?.count ?? 0 == 0 ? "Add your first transaction" : "No transactions\nfor selected period")
-                } else {
-                    self.toggleNoData(show: false, addButtonHidden: true)
+
+                self.toggleNoData(show: false, addButtonHidden: true)
+                if self.mainTableView.visibleCells.count > 1 {
+                    self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
                 }
                 self.filterText = "Filter: \(selectedPeroud)"
                 self.calculationSView.alpha = 0
@@ -554,8 +554,9 @@ class ViewController: SuperViewController {
                             
                             if loadedData[i][2] != appData.password {
                         
-                                UserDefaults.standard.setValue(appData.username, forKey: "UsernameHolder")
-                                appData.username = ""
+                                self.forceLoggedOutUser = appData.username
+                               // UserDefaults.standard.setValue(appData.username, forKey: "UsernameHolder")
+                              //  appData.username = ""
                                 if #available(iOS 13.0, *) {
                                     
                                     DispatchQueue.main.async {
@@ -577,6 +578,7 @@ class ViewController: SuperViewController {
             }
        // }
     }
+    var forceLoggedOutUser = ""
     var resetPassword = false
     func checkProTrial() {
         //debts did lo if trial - check pro trial
@@ -879,7 +881,7 @@ class ViewController: SuperViewController {
                         if let addCategory = db.categoryFrom(first["categoryNew"] ?? [:]) {
                             if let highest = highesLoadedCatID {
                                 var cat = addCategory
-                                cat.id = highest
+                                cat.id = (highest + 1)
                                 save.newCategories(cat, saveLocally: false) { error in
                                     if !error {
                                         self.highesLoadedCatID! += 1
@@ -978,15 +980,9 @@ class ViewController: SuperViewController {
                                 
                                 if !error {
                                     self.highesLoadedCatID! += 1
-                                    self.db.localCategories.removeFirst()//deleteCategory(id: "\(category.id)", local: true)
+                                    self.db.localCategories.removeFirst()
                                     let localTransactions = self.db.localTransactions
-                                    
-                          //          var newCategory = category
-                          //          newCategory.id = highest
-                                    
-                             //       self.db.deleteCategory(id: "\(category.id)", local: true)
-                            //        self.db.localCategories.append(newCategory)
-                                    
+
                                     for i in 0..<localTransactions.count {
                                         
                                         if localTransactions[i].categoryID == "\(category.id)" {
@@ -1599,9 +1595,9 @@ class ViewController: SuperViewController {
                 let filterFrame = self.filterView.frame//self.filterAndCalcFrameHolder.0
                 let superFilter = self.filterView.superview?.frame ?? .zero
                 let helperFrame = self.mainContentViewHelpher.frame
-                let vcFrame = CGRect(x: filterFrame.minX + superFilter.minX, y: filterFrame.minY + superFilter.minY + helperFrame.height, width: filterFrame.width, height: filterFrame.width)
+                let vcFrame = CGRect(x: filterFrame.minX + superFilter.minX, y: filterFrame.minY + superFilter.minY + helperFrame.height, width: filterFrame.width - 10, height: filterFrame.width)
                 vc?.frame = vcFrame
-                self.filterHelperView.frame = CGRect(x: filterFrame.minX + superFilter.minX, y: vcFrame.minY, width: vcFrame.width, height: vcFrame.height)
+                self.filterHelperView.frame = CGRect(x: filterFrame.minX + superFilter.minX, y: vcFrame.minY, width: vcFrame.width - 10, height: vcFrame.height)
                 self.filterHelperView.alpha = 0
                 Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { (_) in
                     UIView.animate(withDuration: 0.6) {
@@ -1636,12 +1632,18 @@ class ViewController: SuperViewController {
         case "toSingIn":
             let nav = segue.destination as! UINavigationController
             let vc = nav.topViewController as! LoginViewController
+            appData.username = ""
+            appData.password = ""
+            vc.forceLoggedOutUser = forceLoggedOutUser
+            
             vc.messagesFromOtherScreen = "Your password has been changed"
         default: return
         }
  
     }
 
+    
+    
     @IBOutlet weak var expencesStack: UIStackView!
     @IBOutlet weak var perioudBalanceView: UIStackView!
 
@@ -1902,12 +1904,12 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             return 1
             
         } else {
-            return newTableData[section - 1].transactions.count + 1
+            return newTableData.count == 0 ? 1 : newTableData[section - 1].transactions.count + 1
         }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1 + newTableData.count
+        return 1 + (newTableData.count == 0 ? 1 : newTableData.count)
     }
   /*  func sectionIndexTitles(for tableView: UITableView) -> [String]? {
         var titles: [String] = ["."]
@@ -1929,24 +1931,30 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             /////send
             return calculationCell ?? UITableViewCell()
         } else {
-            if newTableData[indexPath.section - 1].transactions.count == indexPath.row {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "mainFooterCell") as! mainFooterCell
-                cell.totalLabel.text = "\(newTableData[indexPath.section - 1].amount)"
-                cell.cornerView.layer.cornerRadius = 15
-                cell.cornerView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
-                cell.separatorInset.left = tableView.frame.width / 2
-                cell.separatorInset.right = tableView.frame.width / 2
+            if newTableData.count == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "mainVCemptyCell", for: indexPath) as! mainVCemptyCell
                 return cell
             } else {
-                let transactionsCell = tableView.dequeueReusableCell(withIdentifier: K.mainCellIdent, for: indexPath) as! mainVCcell
-                transactionsCell.isUserInteractionEnabled = true
-                transactionsCell.contentView.isUserInteractionEnabled = true
-                print("row:", indexPath.row)
-                print("count:", newTableData[indexPath.section - 1].transactions.count)
-                let data = newTableData[indexPath.section - 1].transactions[indexPath.row]
-                transactionsCell.setupCell(data, i: indexPath.row, tableData: tableData, selectedCell: selectedCell, indexPath: indexPath)
-                return transactionsCell
+                if newTableData[indexPath.section - 1].transactions.count == indexPath.row {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "mainFooterCell") as! mainFooterCell
+                    cell.totalLabel.text = "\(newTableData[indexPath.section - 1].amount)"
+                    cell.cornerView.layer.cornerRadius = 15
+                    cell.cornerView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+                    cell.separatorInset.left = tableView.frame.width / 2
+                    cell.separatorInset.right = tableView.frame.width / 2
+                    return cell
+                } else {
+                    let transactionsCell = tableView.dequeueReusableCell(withIdentifier: K.mainCellIdent, for: indexPath) as! mainVCcell
+                    transactionsCell.isUserInteractionEnabled = true
+                    transactionsCell.contentView.isUserInteractionEnabled = true
+                    print("row:", indexPath.row)
+                    print("count:", newTableData[indexPath.section - 1].transactions.count)
+                    let data = newTableData[indexPath.section - 1].transactions[indexPath.row]
+                    transactionsCell.setupCell(data, i: indexPath.row, tableData: tableData, selectedCell: selectedCell, indexPath: indexPath)
+                    return transactionsCell
+                }
             }
+            
             
         }
 
@@ -1955,7 +1963,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("selected")
-        if indexPath.section != 0 {
+        if indexPath.section != 0 && newTableData.count != 0 {
             if newTableData[indexPath.section-1].transactions.count != indexPath.row {
                 if newTableData[indexPath.section-1].transactions[indexPath.row].comment != "" {
                     let previusSelected = selectedCell
@@ -2006,7 +2014,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section > 0 {
+        if section != 0 && newTableData.count != 0 {
             return "\(newTableData[section - 1].date)"
         } else {
             return nil
@@ -2014,19 +2022,26 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "mainHeaderCell") as! mainHeaderCell
+        if newTableData.count == 0 || section == 0 {
+            return UIView.init(frame: .zero)
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "mainHeaderCell") as! mainHeaderCell
+            
+            cell.dateLabel.text = "\(makeTwo(n: newTableData[section - 1].date.day ?? 0))"
+            cell.monthLabel.text = "\(returnMonth(newTableData[section - 1].date.month ?? 0)),\n\(newTableData[section - 1].date.year ?? 0)"
+            cell.yearLabel.text = "\(newTableData[section - 1].date.year ?? 0)"
+            let v = cell.contentView
+            cell.mainView.layer.cornerRadius = 15
+            cell.mainView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+            v.backgroundColor = self.view.backgroundColor
+            return v
+        }
         
-        cell.dateLabel.text = "\(makeTwo(n: newTableData[section - 1].date.day ?? 0))"
-        cell.monthLabel.text = "\(returnMonth(newTableData[section - 1].date.month ?? 0)),\n\(newTableData[section - 1].date.year ?? 0)"
-        cell.yearLabel.text = "\(newTableData[section - 1].date.year ?? 0)"
-        cell.mainView.layer.cornerRadius = 15
-        cell.mainView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        return cell.contentView
 
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section > 0 {
+        if section != 0 || newTableData.count != 0 {
             return 60
         } else {
             return 0
@@ -2073,10 +2088,18 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let bigFr = bigCalcView.layer.frame.height
         if indexPath.section == 0 && indexPath.row == 0 {
-            return bigCalcView.layer.frame.height + 20
+            print(bigFr, "bigFrbigFrbigFrbigFr")
+            return bigFr - 55
         } else {
-            return UITableView.automaticDimension
+            if newTableData.count == 0 && indexPath.section == 1{
+                
+                return 450
+            } else {
+                return UITableView.automaticDimension
+            }
+            
             //tableView.cellForRow(at: indexPath)?.layer.frame.height ?? 0
         }
     }
@@ -2241,4 +2264,9 @@ class mainFooterCell: UITableViewCell {
     
     @IBOutlet weak var cornerView: UIView!
     @IBOutlet weak var totalLabel: UILabel!
+}
+
+
+class mainVCemptyCell: UITableViewCell {
+    
 }

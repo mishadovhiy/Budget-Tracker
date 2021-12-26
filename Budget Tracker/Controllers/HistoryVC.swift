@@ -419,18 +419,20 @@ class HistoryVC: SuperViewController {
     
         print(text, "texttexttexttexttext")
         if let _ = Double(text) {
-                DispatchQueue.main.async {
+             //   DispatchQueue.main.async {
                     self.ai.show(title: "Sending") { _ in
                         self.changeAmountToPay(enteredAmount: text) { (_) in
                             self.ai.fastHide { (_) in
                                 self.amountToPayEditing = false
                                 //DispatchQueue.main.async {
+                                DispatchQueue.main.async {
                                     self.tableView.reloadData()
+                                }
                                 //}
                             }
                         }
                     }
-                }
+            //    }
             }
     }
     
@@ -770,7 +772,7 @@ extension HistoryVC: CalendarVCProtocol {
     
     
     func dateSelected(date: String, time: DateComponents?) {
-        DispatchQueue.main.async {
+     //   DispatchQueue.main.async {
             self.ai.show { (_) in
 
                 //check if has am pm
@@ -812,7 +814,7 @@ extension HistoryVC: CalendarVCProtocol {
                 
             }
             
-        }
+     //   }
     }
     
     
@@ -859,13 +861,13 @@ class DebtDescriptionCell: UITableViewCell {
     
     var removeAction:(() -> ())?
     @IBAction func changeDatePressed(_ sender: Any) {//remove
-        DispatchQueue.main.async {
+     //   DispatchQueue.main.async {
             self.ai.show() { _ in
                 if let funcc = self.removeAction {
                     funcc()
                 }
             }
-        }
+     //   }
         
 
     }
@@ -1029,7 +1031,7 @@ class AmountToPayCell: UITableViewCell {
     
     @IBAction func changePressed(_ sender: UIButton) {
         if isEdit {
-            DispatchQueue.main.async {
+          //  DispatchQueue.main.async {
                 HistoryVC.shared?.ai.show(title: "Sending", completion: { _ in
                     self.isEdit = false
                     self.showEdit(false, hideStack: true) { _ in
@@ -1037,7 +1039,7 @@ class AmountToPayCell: UITableViewCell {
                         HistoryVC.shared?.sendAmountToPay(text)
                     }
                 })
-            }
+            //   }
         } else {
             self.isEdit = true
             showEdit(true, hideStack: false) { _ in
@@ -1062,14 +1064,14 @@ class AmountToPayCell: UITableViewCell {
         let new = !isEdit
         if !isEdit {
             if let funcc = deleteFunc {
-                DispatchQueue.main.async {
+            //    DispatchQueue.main.async {
                 HistoryVC.shared?.ai.show(title: "Deleting", completion: { _ in
                     self.showEdit(new, hideStack: true) { _ in
                             funcc()
                         
                     }
                 })
-                }
+            //    }
             }
             
         } else {

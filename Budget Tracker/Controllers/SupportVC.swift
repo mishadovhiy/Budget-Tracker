@@ -126,6 +126,7 @@ class SupportVC: UIViewController, UITextViewDelegate {
         
         DispatchQueue.main.async {
             self.textView.endEditing(true)
+        }
             AppDelegate.shared?.ai.show { _ in
                 if let mesag = self.message.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
                     self.sendCode(title: "btUserSupportRequest", head: "SupportVC", body: mesag) { error in
@@ -145,7 +146,7 @@ class SupportVC: UIViewController, UITextViewDelegate {
                     }
                 }
             }
-        }
+   //     }
         
     }
 

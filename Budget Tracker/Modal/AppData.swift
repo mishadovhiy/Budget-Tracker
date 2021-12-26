@@ -576,7 +576,7 @@ class AppData {
             vccc.modalPresentationStyle = .overFullScreen //.overCurrentContext - cant swipe close
             vccc.tableData = data
             vccc.navigationController?.setNavigationBarHidden(true, animated: false)
-            let cellHeight = 45
+            let cellHeight = 50
             let contentHeight = (data.count) * cellHeight
             let safeAt = appData.safeArea.1
             let safebt = appData.safeArea.0
@@ -586,7 +586,7 @@ class AppData {
             let window = UIApplication.shared.keyWindow ?? UIWindow()
             let screenHeight = window.frame.height//currentVC.view.frame.height
             print(safeAt, "safebtsafebt")
-            let additionalMargin:CGFloat = safeAt > 0 ? 25 : 40
+            let additionalMargin:CGFloat = safeAt > 0 ? 45 : 40
             let tableInButtom = (screenHeight - (safeAt + safebt + additionalMargin)) - (CGFloat(contentHeight))
             //2
             print(tableInButtom, "sectionHeight")
