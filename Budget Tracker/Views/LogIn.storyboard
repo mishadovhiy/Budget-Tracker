@@ -1369,11 +1369,12 @@
                     </view>
                     <navigationItem key="navigationItem" title="Support message" largeTitleDisplayMode="always" id="kQx-Kz-bzJ">
                         <barButtonItem key="rightBarButtonItem" style="plain" id="QjM-Ah-2OA">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="EPo-FY-C8b">
-                                <rect key="frame" x="302" y="6.5" width="92" height="31"/>
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="EPo-FY-C8b">
+                                <rect key="frame" x="302" y="6.5" width="18" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" name="yellowColor"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" title="Send"/>
+                                <state key="normal" image="paperplane.fill"/>
                                 <connections>
                                     <action selector="sendPressed:" destination="jK4-6n-PTZ" eventType="touchUpInside" id="bC2-uq-AkD"/>
                                 </connections>
@@ -1398,6 +1399,7 @@
         <image name="cancel" width="30" height="30"/>
         <image name="ellipsis" catalog="system" width="128" height="37"/>
         <image name="lightTrash" width="25" height="29"/>
+        <image name="paperplane.fill" width="18" height="18"/>
         <image name="person.3.sequence.fill" width="33" height="15"/>
         <namedColor name="CategoryColor">
             <color red="0.86699998378753662" green="0.86699998378753662" blue="0.86699998378753662" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

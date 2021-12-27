@@ -80,8 +80,9 @@ class StatisticVC: SuperViewController, CALayerDelegate {
     }
     
     func getMaxSum() {
-        for i in 0..<allData.count {
-            sum += allData[i].value
+        let all = allData
+        for i in 0..<all.count {
+            sum += all[i].value
         }
     }
     
@@ -122,9 +123,15 @@ class StatisticVC: SuperViewController, CALayerDelegate {
                 newTransactions.append(data[i])
                 let intValue = Double(data[i].value) ?? 0
                 if expenseLabelPressed {
-                    maxValue = intValue < maxValue ? intValue : maxValue
+                    if intValue < 0 {
+                        maxValue = intValue < maxValue ? intValue : maxValue
+                    }
+                    
                 } else {
-                    maxValue = intValue > maxValue ? intValue : maxValue
+                    if intValue > 0 {
+                        maxValue = intValue > maxValue ? intValue : maxValue
+                    }
+                    
                 }
                 
                 resultDict.updateValue(newTransactions, forKey: "\(data[i].categoryID)")
@@ -141,46 +148,34 @@ class StatisticVC: SuperViewController, CALayerDelegate {
                 
                 if expenseLabelPressed {
                     
-                    if category.purpose == .expense {
-                        allData.append(GraphDataStruct(category: category, transactions: transactions, value: value))
-                        totalAmount += value
+                    if category.purpose != .income {
+                        if value < 0 {
+                            allData.append(GraphDataStruct(category: category, transactions: transactions, value: value))
+                            totalAmount += value
+                        }
+                        
                     }
                 } else {
                     
                     if category.purpose != .expense {
-                        totalAmount += value
-                        allData.append(GraphDataStruct(category: category, transactions: transactions, value: value))
+                        if value > 0 {
+                            totalAmount += value
+                            allData.append(GraphDataStruct(category: category, transactions: transactions, value: value))
+                        }
+                        
                     }
                 }
                 
             }
             
-            
-        /*    for (key, value) in sumAllCategories {
-                if (sumAllCategories[key] ?? 0.0) < 0.0 {
-                    maxValue = value < maxValue ? value : maxValue
-                    allData.append(GraphDataStruct(category: key, value: value))
-                }
-            }*/
+
             DispatchQueue.main.async {
                 self.titleLabel.text = (expenseLabelPressed ? "Expenses" : "Incomes") + " " + "for \(selectedPeroud)"
                 self.totalLabel.text = "\(Int(totalAmount))"
             }
             ifNoData()
         return allData.sorted(by: { expenseLabelPressed ? $1.value > $0.value : $1.value < $0.value})
-    /*    } else {
-            for (key, value) in sumAllCategories {
-                if (sumAllCategories[key] ?? 0.0) > 0.0 {
-                    maxValue = value > maxValue ? value : maxValue
-                    allData.append(GraphDataStruct(category: key, value: value))
-                }
-            }
-            DispatchQueue.main.async {
-                self.titleLabel.text = "Incomes for \(selectedPeroud)"
-            }
-            ifNoData()
-            return allData.sorted(by: { $0.value > $1.value})
-        }*/
+
         
     }
     
@@ -315,15 +310,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
         graph.add(pieChart)
     }
     
-    func colorComponentsFrom(number:Int,maxCount:Int) -> (Int,Int,Int){
-        let maxColor = Double(0xFFFFFF - 0x222222);
-        let ratio = maxColor / Double(maxCount);
-        let intColor = lround(ratio * Double(number)) ;
-        let redComponent =      ((intColor & 0xFFAFAF) >> (2*8)) & 0x22;
-        let greenComponent =    ((intColor & 0xAFFFAF) >> (1*8)) & 0x22;
-        let blueComponent =     ((intColor & 0x9B9BFF) >> (0*8)) & 0xff;
-        return (redComponent,greenComponent,blueComponent);
-    }
+
     
     
     var selectedIndexPath = 0
@@ -404,15 +391,6 @@ extension StatisticVC: CPTPieChartDataSource, CPTPieChartDelegate {
     }
     
     func sliceFill(for pieChart: CPTPieChart, record idx: UInt) -> CPTFill? {
-        
-       // var n = idx
-       // if idx == 0 { n = 100 }
-       // let colorComponents = colorComponentsFrom(number: Int(String(n)) ?? 0, maxCount: Int(allData[0].value))
-      //  return CPTFill(color: CPTColor(componentRed: CGFloat(colorComponents.0)/255, green: CGFloat(colorComponents.1)/255, blue: CGFloat(colorComponents.2)/255, alpha: 0.7))
-    //    let colorName = allData[Int(idx)].category.color
-        //let cgColor = colorNamed(colorName).cgColor
-  //      let color = CPTColor(uiColor: colorNamed(colorName))
-        //colorNamed(allData[Int(idx)].category.color)//CPTFill(color: color)
         let color = colorNamed(allData[Int(idx)].category.color)
         return CPTFill(color: CPTColor(uiColor: color))
        

@@ -67,7 +67,7 @@ class MessageView: UIView {
         } else {
             isShowing = true
             messageData = (title, description, type, customImage, autohide)
-        let hideDescription = description ?? "" == ""
+            let hideDescription = type == .internetError ? false : description ?? "" == ""
             let hideImage = type == .standart
        // AudioServicesPlaySystemSound(1007)
         DispatchQueue.main.async {
@@ -81,8 +81,8 @@ class MessageView: UIView {
             
             
             
-            self.titleLabel.text = title
-            self.descriptionLabel.text = description
+            self.titleLabel.text = type == .internetError ? "Internet error" : title
+            self.descriptionLabel.text = type == .internetError ? "Try again later" : description
             if self.descriptionLabel.isHidden != hideDescription {
                 self.descriptionLabel.isHidden = hideDescription
             }
@@ -91,15 +91,12 @@ class MessageView: UIView {
                 self.mainImage.isHidden = hideImage
             } 
             switch type {
-            case .error:
-               // self.mainView.backgroundColor = self.errorColor
+            case .error, .internetError:
                 self.mainImage.image = self.errorImage
             case .succsess:
-              //  self.mainView.backgroundColor = self.succsessColor
                 self.mainImage.image = self.succsessImage
             case .standart:
                 break
-              //  self.mainView.backgroundColor = .white
             }
             self.alpha = 1
             
@@ -176,5 +173,6 @@ class MessageView: UIView {
         case error
         case succsess
         case standart
+        case internetError
     }
 }

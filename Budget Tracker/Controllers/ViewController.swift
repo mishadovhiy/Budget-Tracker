@@ -199,7 +199,8 @@ class ViewController: SuperViewController {
                 self.filter()
                 if showError {
                     DispatchQueue.main.async {
-                        self.message.showMessage(text: "Error", type: .internetError)
+                     //   newMessage.show(type: .internetError)
+                        self.newMessage.show(type: .internetError)
                     }
                 }
 
@@ -1350,7 +1351,7 @@ class ViewController: SuperViewController {
         if appData.username != "" {
             if refreshData {
                 if appData.username != "" {
-                    self.downloadFromDB()
+                    self.downloadFromDB(showError: true)
                 } else {
                     self.filter()
                 }
@@ -1675,11 +1676,7 @@ class ViewController: SuperViewController {
         }
     }
     //homeVCWithSegue
-    
-    lazy var newMessage: MessageView = {
-        let newView = AppDelegate.shared?.message ?? (MessageView.instanceFromNib() as! MessageView)
-        return newView
-    }()
+
     //from filter //quitFilterTVC // K.quitFilterTVC
     @IBAction func unwindToFilter(segue: UIStoryboardSegue) {
         print("FROM FILTER")

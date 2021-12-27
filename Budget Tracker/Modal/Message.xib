@@ -16,7 +16,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GFq-Jy-slj">
-                    <rect key="frame" x="47" y="44" width="320" height="35"/>
+                    <rect key="frame" x="20" y="44" width="67" height="35"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bKU-Nn-Cd1">
                             <rect key="frame" x="5" y="2" width="0.0" height="0.0"/>
@@ -32,16 +32,16 @@
                             </constraints>
                         </imageView>
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="jW7-Lt-Dyn">
-                            <rect key="frame" x="37" y="5" width="278" height="25"/>
+                            <rect key="frame" x="37" y="5" width="15" height="25"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Wrong email" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QDj-92-gdY">
-                                    <rect key="frame" x="0.0" y="0.0" width="278" height="25"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="W" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QDj-92-gdY">
+                                    <rect key="frame" x="0.0" y="0.0" width="15" height="25"/>
                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                     <color key="textColor" name="CategoryColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter valid email" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="360" translatesAutoresizingMaskIntoConstraints="NO" id="wF6-av-3t2">
-                                    <rect key="frame" x="0.0" y="0.0" width="278" height="0.0"/>
+                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="l" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="360" translatesAutoresizingMaskIntoConstraints="NO" id="wF6-av-3t2">
+                                    <rect key="frame" x="0.0" y="0.0" width="15" height="0.0"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                     <color key="textColor" name="balanceTitleColor"/>
                                     <nil key="highlightedColor"/>
@@ -56,8 +56,8 @@
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="35" id="EGe-My-koP"/>
                         <constraint firstItem="jW7-Lt-Dyn" firstAttribute="top" secondItem="GFq-Jy-slj" secondAttribute="top" constant="5" id="GAs-1T-JYG"/>
                         <constraint firstAttribute="bottom" secondItem="jW7-Lt-Dyn" secondAttribute="bottom" constant="5" id="NDi-PX-FpA"/>
-                        <constraint firstAttribute="trailing" secondItem="jW7-Lt-Dyn" secondAttribute="trailing" constant="5" id="OUC-lb-hTF"/>
-                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="320" id="S3E-N7-pD1"/>
+                        <constraint firstAttribute="trailing" secondItem="jW7-Lt-Dyn" secondAttribute="trailing" constant="15" id="OUC-lb-hTF"/>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="305" id="S3E-N7-pD1"/>
                         <constraint firstItem="bKU-Nn-Cd1" firstAttribute="leading" secondItem="GFq-Jy-slj" secondAttribute="leading" constant="5" id="Z1o-fA-WPK"/>
                         <constraint firstItem="bKU-Nn-Cd1" firstAttribute="top" secondItem="GFq-Jy-slj" secondAttribute="top" constant="2" id="gi1-Xt-BSw"/>
                         <constraint firstItem="dTo-at-aOv" firstAttribute="leading" secondItem="GFq-Jy-slj" secondAttribute="leading" constant="10" id="iu7-oY-YcP"/>
@@ -67,10 +67,8 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="GFq-Jy-slj" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" priority="750" constant="5" id="0fC-UM-JT1"/>
+                <constraint firstItem="GFq-Jy-slj" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" priority="750" constant="20" id="0fC-UM-JT1"/>
                 <constraint firstItem="GFq-Jy-slj" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="8yB-P9-1Js"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="GFq-Jy-slj" secondAttribute="trailing" priority="750" constant="5" id="FXZ-rG-V98"/>
-                <constraint firstItem="GFq-Jy-slj" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="KZa-MV-kN2"/>
             </constraints>
             <connections>
                 <outlet property="descriptionLabel" destination="wF6-av-3t2" id="GG5-bh-DYJ"/>
@@ -88,7 +86,7 @@
             <color red="0.86699998378753662" green="0.86699998378753662" blue="0.86699998378753662" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="SecondaryBacroundColor2">
-            <color red="0.12549019607843137" green="0.12549019607843137" blue="0.12549019607843137" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.125" green="0.125" blue="0.125" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="balanceTitleColor">
             <color red="0.57999998331069946" green="0.57599997520446777" blue="0.57599997520446777" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

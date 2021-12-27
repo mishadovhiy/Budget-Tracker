@@ -292,11 +292,7 @@ class LoginViewController: SuperViewController {
     var selectedScreen: screenTypee = .createAccount
     var fromPro = false
     
-   
-    lazy var newMessage: MessageView = {
-        let newView = AppDelegate.shared?.message ?? (MessageView.instanceFromNib() as! MessageView)
-        return newView
-    }()
+
     var messagesFromOtherScreen = ""
     
     override func viewDidLoad() {

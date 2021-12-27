@@ -295,6 +295,8 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             //  }
         }
     }
+    
+   
     var searchingText = ""
     var allCategoriesHolder: [NewCategories] = []
     var transfaringCategories: LoginViewController.TransferingData?
@@ -309,7 +311,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                     if error != .none {
                         if showError {
                             DispatchQueue.main.async {
-                                self.message.showMessage(text: error == .internet ? "No Interner" : "Error", type: .internetError)
+                                self.newMessage.show(type: .internetError)
                             }
                         }
                     }

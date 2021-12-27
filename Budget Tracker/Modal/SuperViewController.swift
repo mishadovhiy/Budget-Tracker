@@ -11,7 +11,10 @@ import UserNotifications
 
 class SuperViewController: UIViewController {
 
-
+    lazy var newMessage: MessageView = {
+        let newView = AppDelegate.shared?.message ?? (MessageView.instanceFromNib() as! MessageView)
+        return newView
+    }()
     lazy var ai: IndicatorView = {
         let newView = AppDelegate.shared?.ai ?? IndicatorView.instanceFromNib() as! IndicatorView
         return newView

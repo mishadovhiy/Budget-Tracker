@@ -237,7 +237,7 @@ class IndicatorView: UIView {
                 }
                 
                 switch newValue {
-                case .error:
+                case .error, .internetError:
                     UIView.animate(withDuration: 0.3) {
                         self.imageView.image = UIImage(named: "warning")
                         self.mainView.layer.shadowOpacity = 0.9
@@ -322,6 +322,7 @@ class IndicatorView: UIView {
     let errorFont = UIFont.systemFont(ofSize: 32, weight: .bold)
     enum ViewType {
         case error
+        case internetError
         case succsess
         case standard
         case standardError
@@ -377,7 +378,7 @@ class IndicatorView: UIView {
         return
     }
 
-        let hideDescription = (descriptionText == nil || descriptionText == "") ? true : false
+        let hideDescription = type == .internetError ? false : ((descriptionText == nil || descriptionText == "") ? true : false)
         let hideDecriptionTable = descriptionTable == nil ? true : false
         let hideTextSuperview = descriptionTable == nil ? true : false
        // setAllHidden()
@@ -425,11 +426,8 @@ class IndicatorView: UIView {
             if buttons.1 != nil{
                 self.rightButton.setTitle(buttons.1?.title ?? "Cancel", for: .normal)
             }
-            self.titleLabel.text = title
-            print("title:", title ?? "-", " deescription: ", descriptionText, #function)
-
-            
-            self.descriptionLabel.text = descriptionText
+            self.titleLabel.text = type == .internetError ? "Internet error" : title
+            self.descriptionLabel.text = type == .internetError ? "Try again later" : descriptionText
                 UIView.animate(withDuration: 0.20) {
                     if self.titleLabel.isHidden != false {
                         self.titleLabel.isHidden = false
