@@ -1667,7 +1667,7 @@ class ViewController: SuperViewController {
             if appData.fromLoginVCMessage != "" {
                 print("appData.fromLoginVCMessage", appData.fromLoginVCMessage)
                 DispatchQueue.main.async {
-                    self.message.showMessage(text: appData.fromLoginVCMessage, type: .succsess, windowHeight: 45, bottomAppearence: true)
+                    self.newMessage.show(title:appData.fromLoginVCMessage, type: .succsess)
                     appData.fromLoginVCMessage = ""
                 }
             }
@@ -1675,7 +1675,10 @@ class ViewController: SuperViewController {
     }
     //homeVCWithSegue
     
-    
+    lazy var newMessage: MessageView = {
+        let newView = AppDelegate.shared?.message ?? (MessageView.instanceFromNib() as! MessageView)
+        return newView
+    }()
     //from filter //quitFilterTVC // K.quitFilterTVC
     @IBAction func unwindToFilter(segue: UIStoryboardSegue) {
         print("FROM FILTER")

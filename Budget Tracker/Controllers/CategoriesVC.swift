@@ -680,6 +680,10 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     }
     func showMoreVC() {
         DispatchQueue.main.async {
+            if self.searchBar.isFirstResponder {
+                self.searchBar.endEditing(true)
+            }
+            
             if let editing = self.editingTF {
                 self.editingTF = nil
                 editing.endEditing(true)

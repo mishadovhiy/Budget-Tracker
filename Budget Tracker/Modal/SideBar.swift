@@ -16,12 +16,9 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         let debts = db.debts.count
         let pro = appData.proVersion || appData.proTrial
         
-        
-        
-        
         var accpuntCell:CellData {
             var accountSegue:String {
-                let dataCount = (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String]] ?? []).count + (UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String]] ?? []).count + (UserDefaults.standard.value(forKey: K.Keys.localDebts) as? [[String]] ?? []).count
+           //     let dataCount = (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String]] ?? []).count + (UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String]] ?? []).count + (UserDefaults.standard.value(forKey: K.Keys.localDebts) as? [[String]] ?? []).count
                 return "toAccount"//dataCount > 0 ? "toSavedData" : "toAccount"
             }
             return CellData(name: "Account", value: appData.username == "" ? "Log in" : appData.username, segue: accountSegue, image: "person.fill")
@@ -108,8 +105,9 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("sd")
         if tableData[indexPath.section].section[indexPath.row].name != "" {
+            let segue = tableData[indexPath.section].section[indexPath.row].segue
             DispatchQueue.main.async {
-                ViewController.shared?.performSegue(withIdentifier: self.tableData[indexPath.section].section[indexPath.row].segue, sender: self)
+                ViewController.shared?.performSegue(withIdentifier: segue, sender: self)
             }
         }
         tableView.reloadData()

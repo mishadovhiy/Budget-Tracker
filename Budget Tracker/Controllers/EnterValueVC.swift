@@ -126,6 +126,8 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
     @objc func textfieldValueChanged(_ sender:UITextField) {
         DispatchQueue.main.async {
             self.enteringValue = sender.text ?? ""
+            
+            
         }
     }
     
@@ -203,6 +205,14 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
             _enteringValue = newValue
             DispatchQueue.main.async {
                 self.valueTextField.text = newValue
+                if self.screenData?.screenType == .code {
+                    if self.valueTextField.text?.count ?? 0 >= 4 {
+                        self.valueTextField.endEditing(true)
+                        if let function = self.screenData?.nextAction as? () -> () {
+                            function()
+                        }
+                    }
+                }
             }
         }
     }

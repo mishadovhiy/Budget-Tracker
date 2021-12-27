@@ -23,7 +23,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         return newView
     }()
     
-    
+    lazy var message: MessageView = {
+        let newView = MessageView.instanceFromNib() as! MessageView
+        return newView
+    }()
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {

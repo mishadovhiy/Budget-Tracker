@@ -72,6 +72,7 @@ struct K {
         
         static let primaryBacground = UIColor(named: "PrimaryBackgroundColor") ?? .black
         static let secondaryBackground = UIColor(named: "SecondaryBacroundColor") ?? .black
+        static let secondaryBackground2 = UIColor(named: "SecondaryBacroundColor2") ?? .black
         static let sectionBackground = secondaryBackground
     }
 }

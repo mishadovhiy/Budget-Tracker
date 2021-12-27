@@ -9,6 +9,8 @@
 import UIKit
 
 class IndicatorView: UIView {
+    private let accentBackgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.60)
+    private let normalBackgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.19)
     
     @IBOutlet weak var backgroundHelper: UIView!
     @IBOutlet weak var userDataStack: UIStackView!
@@ -60,13 +62,13 @@ class IndicatorView: UIView {
          //   self.closeButton.layer.zPosition = 100
             self.rightButton.layer.cornerRadius = 6
             self.leftButton.layer.cornerRadius = 6
-            self.mainView.layer.cornerRadius = 6
-            self.mainView.layer.shadowColor = UIColor.black.cgColor
-            self.mainView.layer.shadowOpacity = 0.3
-            self.mainView.layer.shadowOffset = .zero
-            self.mainView.layer.shadowRadius = 6
+            self.mainView.layer.cornerRadius = 9
+       //     self.mainView.layer.shadowColor = UIColor.black.cgColor
+       //     self.mainView.layer.shadowOpacity = 0.9
+       //     self.mainView.layer.shadowOffset = .zero
+       //     self.mainView.layer.shadowRadius = 6
 
-            self.mainView.layer.shadowPath = UIBezierPath(rect: self.mainView.bounds).cgPath
+          //  self.mainView.layer.shadowPath = UIBezierPath(rect: self.mainView.bounds).cgPath
            /* self.leftButton.layer.shadowPath = UIBezierPath(rect: self.leftButton.bounds).cgPath
             self.rightButton.layer.shadowPath = UIBezierPath(rect: self.rightButton.bounds).cgPath
             self.mainViewShadow.layer.shadowPath = UIBezierPath(rect: self.mainViewShadow.bounds).cgPath*/
@@ -343,21 +345,19 @@ class IndicatorView: UIView {
             self.emailLabel.text = data?.1?.1
         }
     }
-    
-    private let blueColor = K.Colors.yellow
-    private let lightBlueColor = UIColor(red: 163/255, green: 163/255, blue: 163/255, alpha: 1)
+
     private func setStyle(button: UIButton, style: ButtonType) {
         DispatchQueue.main.async {
             switch style {
             case .error:
-                button.backgroundColor = .red
-                button.setTitleColor(.white, for: .normal)
+                button.backgroundColor = K.Colors.negative
+             //   button.setTitleColor(.white, for: .normal)
             case .standart:
-                button.backgroundColor = self.lightBlueColor
-                button.setTitleColor(.black, for: .normal)
+                button.backgroundColor = K.Colors.primaryBacground
+           //     button.setTitleColor(.white, for: .normal)
             case .success:
-                button.backgroundColor = self.blueColor
-                button.setTitleColor(.white, for: .normal)
+                button.backgroundColor = K.Colors.yellow
+           //     button.setTitleColor(.white, for: .normal)
             }
         }
     }
@@ -450,19 +450,10 @@ class IndicatorView: UIView {
                         self.userDataStack.isHidden = hideDecriptionTable
                     }
                     
-                    if hideTextSuperview != self.textField.superview?.superview?.superview?.isHidden {
-                        self.textField.superview?.superview?.superview?.isHidden = hideTextSuperview
-                    }
                     
                     
                 } completion: { (_) in
-                    self.ai.stopAnimating()
-                    if showCloseButton {
-                      /*  UIView.animate(withDuration: 0.15) {
-                            self.closeButton.isHidden = false
-                        }*/
-                        
-                    }
+                  //  self.ai.stopAnimating()
                 }
             }
             
@@ -665,8 +656,7 @@ class IndicatorView: UIView {
         case password
         case amount
     }
-    private let accentBackgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.55)
-    private let normalBackgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.19)
+    
 
     class func instanceFromNib() -> UIView {
         return UINib(nibName: "IndicatorView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! UIView

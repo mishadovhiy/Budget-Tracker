@@ -8,7 +8,7 @@
 import UIKit
 
 class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    
+    var cellBackground = K.Colors.secondaryBackground2//UIColor(red: 32/255, green: 32/255, blue: 32/255, alpha: 1)//darker seconadrybacground
     
     @IBOutlet weak var tableView: UITableView!
     var dataHolder:[ScreenData] = []
@@ -92,7 +92,7 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     
-    var cellBackground = UIColor(red: 32/255, green: 32/255, blue: 32/255, alpha: 1)//darker seconadrybacground
+   
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
@@ -105,11 +105,12 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         
         if indexPath.section != 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "DataOptionCell", for: indexPath) as! DataOptionCell
-            let selected = tableData[indexPath.row].selected
-            cell.contentView.backgroundColor = selected ? K.Colors.yellow : cellBackground
-            cell.titleLabel.text = tableData[indexPath.row].name
-            cell.titleLabel.textColor = tableData[indexPath.row].distructive ? .red : K.Colors.category
-            cell.descriptionLabel.text = tableData[indexPath.row].description
+            let data = tableData[indexPath.row]
+            cell.contentView.backgroundColor = data.selected ? K.Colors.yellow : cellBackground
+            cell.titleLabel.text = data.name
+            cell.titleLabel.textColor = data.distructive ? .red : K.Colors.category
+            cell.descriptionLabel.text = data.description
+            cell.titleLabel.font = .systemFont(ofSize: 15, weight: data.distructive ? .semibold : .regular)
             return cell
         } else {
             if indexPath.section == 0 {

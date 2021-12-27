@@ -28,8 +28,8 @@ class MessageView: UIView {
         self.mainView.layer.shadowColor = UIColor.black.cgColor
         self.mainView.layer.shadowOpacity = 0.3
         self.mainView.layer.shadowOffset = .zero
-        self.mainView.layer.shadowRadius = 6
-        self.mainView.layer.cornerRadius = 6
+        self.mainView.layer.shadowRadius = 9
+        self.mainView.layer.cornerRadius = 9
         let swipeTop = UISwipeGestureRecognizer(target: self, action: #selector(closeSwipe(_:)))
         swipeTop.direction = .up
         self.mainView.addGestureRecognizer(swipeTop)
@@ -46,7 +46,7 @@ class MessageView: UIView {
     var messageData: (String, String?, viewType, UIImage?, TimeInterval?)?
     private var userCanClose = true
     var isShowing = false
-    func show(title: String = (NSLocalizedString("Операцiя завершена", comment: "") + " " + NSLocalizedString("успiшно", comment: "") + "!"), description: String? = nil, type:viewType, customImage: UIImage? = nil, autohide: TimeInterval? = 7.0) {
+    func show(title: String = "Succsess", description: String? = nil, type:viewType, customImage: UIImage? = nil, autohide: TimeInterval? = 7.0) {
 
         
         if isShowing {
@@ -67,7 +67,8 @@ class MessageView: UIView {
         } else {
             isShowing = true
             messageData = (title, description, type, customImage, autohide)
-        
+        let hideDescription = description ?? "" == ""
+            let hideImage = type == .standart
        // AudioServicesPlaySystemSound(1007)
         DispatchQueue.main.async {
             let window = UIApplication.shared.keyWindow ?? UIWindow()
@@ -82,8 +83,13 @@ class MessageView: UIView {
             
             self.titleLabel.text = title
             self.descriptionLabel.text = description
-            self.descriptionLabel.isHidden = description ?? "" == "" ? true : false
-            self.mainImage.isHidden = (type == .error || type == .succsess) ? false : true
+            if self.descriptionLabel.isHidden != hideDescription {
+                self.descriptionLabel.isHidden = hideDescription
+            }
+            
+            if self.mainImage.isHidden != hideImage {
+                self.mainImage.isHidden = hideImage
+            } 
             switch type {
             case .error:
                // self.mainView.backgroundColor = self.errorColor
@@ -107,16 +113,7 @@ class MessageView: UIView {
                 } else {
                     self.userCanClose = false
                 }
-              /*  UIView.animate(withDuration: 0.20) {
-                    
-                } completion: { _ in
-                    if let hideTimer = autohide {
-                        self.userCanClose = true
-                        self.startTimer(secs: hideTimer)
-                    } else {
-                        self.userCanClose = false
-                    }
-                }*/
+
             }
 
         }

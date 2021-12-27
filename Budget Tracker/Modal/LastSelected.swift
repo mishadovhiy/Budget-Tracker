@@ -61,7 +61,7 @@ class LastSelected {
         }
     }
 
-    private func resetAll() {
+    func resetAll() {
         UserDefaults.standard.setValue(nil, forKey: mainKey)
     }
     
