@@ -121,7 +121,7 @@ class HistoryVC: SuperViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        UIApplication.shared.applicationIconBadgeNumber = 0
+
         if selectedCategory?.purpose == .debt {
       //      center.removePendingNotificationRequests(withIdentifiers: ["Debts\(debt.name)"])
             center?.removeDeliveredNotifications(withIdentifiers: ["Debts\(self.selectedCategory?.id ?? 0)"])
