@@ -208,7 +208,8 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             }
             DispatchQueue.main.async {
                 self.editingTF = nil
-                self.toggleIcons(show: false, animated: true, category: nil)
+                self.selectingIconFor = (nil,nil)
+            //    self.t/oggleIcons(show: false, animated: true, category: nil)
                 self.editingTF?.endEditing(true)
                 self.tableView.reloadData()
             }
@@ -348,8 +349,8 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             
             
         }
-        
-        toggleIcons(show: false, animated: false, category: nil)
+        selectingIconFor = (nil,nil)
+        //t//oggleIcons(show: false, animated: false, category: nil)
         
         var strTitle:String {
             switch screenType {
@@ -397,9 +398,10 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 self.tableData[section].data.insert(newCategory, at: 0)
                 self.tableData[section].newCategory.category.name = ""
               //  self.tableData[section].data.append(newCategory)
-                if CategoriesVC.shared?.showingIcons ?? false {
-                    CategoriesVC.shared?.toggleIcons(show: false, animated: true, category: nil)
-                }
+                self.selectingIconFor = (nil,nil)
+           /*     if CategoriesVC.shared?.showingIcons ?? false {
+                    CategoriesVC.shared?.to/ggleIcons(show: false, animated: true, category: nil)
+                }*/
                 DispatchQueue.main.async {
                     UIImpactFeedbackGenerator().impactOccurred()
           //          self.ai.fastHide { _ in
@@ -488,7 +490,8 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
     var keyHeight: CGFloat = 0.0
     @objc func keyboardWillShow(_ notification: Notification) {
-        toggleIcons(show: false, animated: true, category: nil)
+        self.selectingIconFor = (nil,nil)
+        //t//oggleIcons(show: false, animated: true, category: nil)
         self.tableView.addGestureRecognizer(viewTap)
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
@@ -510,7 +513,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     }
     
 
-    var showingIcons = false
+    var showingIcons = true
     func toggleIcons(show:Bool, animated: Bool, category: NewCategories?) {
         showingIcons = show
         if show {
@@ -689,7 +692,8 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 editing.endEditing(true)
             }
         }
-        toggleIcons(show: false, animated: true, category: nil)
+        selectingIconFor = (nil,nil)
+       // t/oggleIcons(show: false, animated: true, category: nil)
         
         let appData = AppData()
         //get screen data
@@ -761,6 +765,10 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                     }
                 }
                 
+            } else {
+                if showingIcons {
+                    toggleIcons(show: false, animated: false, category: nil)
+                }
             }
             
         }
@@ -812,15 +820,13 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         }
         if let editing = editingTF {
             editingTF = nil
-            toggleIcons(show: false, animated: true, category: nil)
+        //    t/oggleIcons(show: false, animated: true, category: nil)
             DispatchQueue.main.async {
                 editing.endEditing(true)
                 
             }
         }
-        if showingIcons {
-            toggleIcons(show: false, animated: true, category: nil)
-        }
+        selectingIconFor = (nil,nil)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -1155,7 +1161,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             } else {
                 if let editing = editingTF {
                     editingTF = nil
-                    toggleIcons(show: false, animated: true)
+                    t/oggleIcons(show: false, animated: true)
                     editing.endEditing(true)
                 } else {
                     
@@ -1184,7 +1190,8 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         editingTF = textField
-        toggleIcons(show: false, animated: true, category: nil)
+        //t//oggleIcons(show: false, animated: true, category: nil)
+        selectingIconFor = (nil,nil)
         DispatchQueue.main.async {
             let name = textField.layer.name ?? ""
             
@@ -1508,7 +1515,7 @@ class categoriesVCcell: UITableViewCell {
         if let index = indexPath {
             CategoriesVC.shared?.tableData[index.section].data[index.row].editing = nil
             DispatchQueue.main.async {
-                CategoriesVC.shared?.toggleIcons(show: false, animated: true, category: nil)
+           //     CategoriesVC.shared?.t/oggleIcons(show: false, animated: true, category: nil)
                 CategoriesVC.shared?.editingTF?.endEditing(true)
                 CategoriesVC.shared?.editingTF = nil
                 CategoriesVC.shared?.selectingIconFor = (nil, nil)
@@ -1541,7 +1548,8 @@ class categoriesVCcell: UITableViewCell {
                             CategoriesVC.shared?.tableData[index.section].data[index.row].editing = nil
                             CategoriesVC.shared?.tableData[index.section].data[index.row].category = editingValue
                             DispatchQueue.main.async {
-                                CategoriesVC.shared?.toggleIcons(show: false, animated: true, category: nil)
+                                CategoriesVC.shared?.selectingIconFor = (nil,nil)
+                             //   CategoriesVC.shared?.t/oggleIcons(show: false, animated: true, category: nil)
                                 CategoriesVC.shared?.editingTF?.endEditing(true)
                                 CategoriesVC.shared?.editingTF = nil
                                 CategoriesVC.shared?.tableView.reloadData()
@@ -1571,9 +1579,10 @@ class categoriesVCcell: UITableViewCell {
                         self.cancelEditing()
                     }
                 }
-                if CategoriesVC.shared?.showingIcons ?? false {
-                    CategoriesVC.shared?.toggleIcons(show: false, animated: true, category: nil)
-                }
+                CategoriesVC.shared?.selectingIconFor = (nil,nil)
+              /*  if CategoriesVC.shared?.showingIcons ?? false {
+                    CategoriesVC.shared?.t/oggleIcons(show: false, animated: true, category: nil)
+                }*/
             }
       //  }
     }

@@ -881,16 +881,17 @@ class ViewController: SuperViewController {
                         if let addCategory = db.categoryFrom(first["categoryNew"] ?? [:]) {
                             if let highest = highesLoadedCatID {
                                 var cat = addCategory
-                                cat.id = (highest + 1)
+                                let newID = highest + 1
+                                cat.id = newID
                                 save.newCategories(cat, saveLocally: false) { error in
                                     if !error {
                                         self.highesLoadedCatID! += 1
                                         for i in 0..<unsended.count {
                                             if let newTrans = unsended[i]["transactionNew"] {
                                                 if let trans = self.db.transactionFrom(newTrans) {
-                                                    if trans.categoryID == "\(cat.id)" {
+                                                    if trans.categoryID == "\(addCategory.id)" {
                                                         var newTransaction = trans
-                                                        newTransaction.categoryID = "\(highest)"
+                                                        newTransaction.categoryID = "\(newID)"
                                                         var d = appData.unsendedData
                                                         let newV = self.db.transactionToDict(newTransaction)
                                                         d[i].updateValue(newV, forKey: "transactionNew")
@@ -975,7 +976,7 @@ class ViewController: SuperViewController {
                     if let category = db.localCategories.first {
                         if let highest = highesLoadedCatID {
                             var cat = category
-                            cat.id = highest
+                            cat.id = highest + 1
                             save.newCategories(cat) { error in
                                 
                                 if !error {
