@@ -523,6 +523,40 @@ class ViewController: SuperViewController {
 
     }
     
+    func emailFromLoadedDataPurch(_ data:[[String]]) {
+        //loadedData.append([name, email, password, registrationDate, pro, trialDate])
+        if !appData.purchasedOnThisDevice {
+            let currnt = appData.username
+            var emailOptional:String?
+            for i in 0..<data.count {
+                if data[i][0] == currnt {
+                    emailOptional = data[i][1]
+                }
+            }
+            if let email = emailOptional {
+                var dbPurch = false
+                for i in 0..<data.count {
+                    if !dbPurch {
+                        if data[i][1] == email {
+                            if data[i][4] == "1" {
+                                dbPurch = true
+                                break
+                            }
+                        }
+                    }
+                    
+                }
+                appData.proVersion = dbPurch
+                
+            }
+        }
+        
+        
+        
+
+    }
+    
+    
     func checkPurchase() {
      //   DispatchQueue.main.async {
             let nick = appData.username
@@ -532,14 +566,13 @@ class ViewController: SuperViewController {
             let load = LoadFromDB()
             load.Users { (loadedData, error) in
                 print(loadedData, "checkPurchase")
-                if error {
-                    
-                } else {
+                if !error {
+                    self.emailFromLoadedDataPurch(loadedData)
                     for i in 0..<loadedData.count {
                         if loadedData[i][0] == nick {
                             print("checkPurchase for", nick)
                             if !appData.purchasedOnThisDevice {
-                                appData.proVersion = loadedData[i][4] == "1" ? true : false
+                                
                                 
                                 print("checkPurchase appData.proVersion", appData.proVersion)
                                 if loadedData[i][5] != "" {
@@ -548,32 +581,31 @@ class ViewController: SuperViewController {
                                         self.checkProTrial()
                                     }
                                 }
-                            }
-                            
-                            print(loadedData[i][4], "loadedData[i][3]loadedData[i][3]")
-                            
-                            
-                            if loadedData[i][2] != appData.password {
-                        
-                                self.forceLoggedOutUser = appData.username
-                               // UserDefaults.standard.setValue(appData.username, forKey: "UsernameHolder")
-                              //  appData.username = ""
-                                if #available(iOS 13.0, *) {
-                                    
-                                    DispatchQueue.main.async {
-                                        self.performSegue(withIdentifier: "toSingIn", sender: self)
-                                    }
-                                } else {
-                                    self.resetPassword = true
-                                    DispatchQueue.main.async {
-                                        self.performSegue(withIdentifier: "toSettingsFullScreen", sender: self)
-                                    }
-                                }
                                 
+                                print(loadedData[i], "loadedData[i][3]loadedData[i][3]")
+                                
+                                
+                                if loadedData[i][2] != appData.password {
+                            
+                                    self.forceLoggedOutUser = appData.username
+                                    if #available(iOS 13.0, *) {
+                                        
+                                        DispatchQueue.main.async {
+                                            self.performSegue(withIdentifier: "toSingIn", sender: self)
+                                        }
+                                    } else {
+                                        self.resetPassword = true
+                                        DispatchQueue.main.async {
+                                            self.performSegue(withIdentifier: "toSettingsFullScreen", sender: self)
+                                        }
+                                    }
+                                    
+                                }
+                                break
                             }
-                            break
                         }
                     }
+                    
                 }
                 
             }
@@ -738,9 +770,7 @@ class ViewController: SuperViewController {
                                 matches += 1
                                 arr.append(new)
                             }
-                            
-                            
-                           // arr.append(TransactionsStruct(value: transactions[i][1], categoryID: transactions[i][2], date: transactions[i][3], comment: transactions[i][4]))
+
                         }
                     }
                 }
@@ -1037,270 +1067,7 @@ class ViewController: SuperViewController {
 
     }
     
-   /* func sendUnsaved() {
-        let dataCount = appData.unsendedData.count
-        
-        print(dataCount, "dataCountdataCountdataCountdataCountdataCountdataCount")
-        if forseSendUnsendedData {//wasSendingUnsended
-            updateDataLabels(reloadAndAnimate: false)
-            if dataCount > 0 {
-                self.animateCellWillAppear = false
-                let save = SaveToDB()
-                if let first = appData.unsendedData.first {
-                    if self._filterText != "Sending" {
-                        DispatchQueue.main.async {
-                            self.filterText = "Sending"
-                        }
-                    }
-                    print("SensUnsended:", first)
-                    if let transaction = first["transaction"] {
-                        print("SENDTRANS")
-                        save.Transactions(toDataString: transaction) { (error) in
-                            if error {
-                                self.forseSendUnsendedData = false
-                                self.filter()
-                                DispatchQueue.main.async {
-                                    self.message.showMessage(text: "Internet Error!", type: .internetError)
-                                }
-                            } else {
-                                appData.unsendedData.removeFirst()
-                                self.sendUnsaved()
-                            }
-                        }
-                    } else {
-                        if let category = first["category"] {
-                            print("SENDCATS")
-                            save.Categories(toDataString: category) { (error) in
-                                if error {
-                                    self.forseSendUnsendedData = false
-                                    self.filter()
-                                    DispatchQueue.main.async {
-                                        self.message.showMessage(text: "Internet Error!", type: .internetError)
-                                    }
-                                } else {
-                                    appData.unsendedData.removeFirst()
-
-                                    self.sendUnsaved()
-                                }
-                            }
-                        } else {
-                            let delete = DeleteFromDB()
-                            if let deleteTransaction = first["deleteTransaction"] {
-                                delete.Transactions(toDataString: deleteTransaction) { (error) in
-                                    print("deleteTransaction cateeeee", error)
-                                    if error {
-                                        self.forseSendUnsendedData = false
-                                        self.filter()
-                                        DispatchQueue.main.async {
-                                            self.message.showMessage(text: "Internet Error!", type: .internetError)
-                                        }
-                                    } else {
-                                        appData.unsendedData.removeFirst()
-                                        self.sendUnsaved()
-                                    }
-                                }
-                            } else {
-                                if let deleteTransaction = first["deleteCategory"] {
-                                    delete.Categories(toDataString: deleteTransaction) { (error) in
-                                        print("delete cateeeee", error)
-                                        if error {
-                                            self.forseSendUnsendedData = false
-                                            self.filter()
-                                            DispatchQueue.main.async {
-                                                self.message.showMessage(text: "Internet Error!", type: .internetError)
-                                            }
-                                        } else {
-                                            appData.unsendedData.removeFirst()
-
-                                            self.sendUnsaved()
-                                        }
-                                    }
-                                } else {
-                                    if let saveDebt = first["debt"] {
-                                        save.Debts(toDataString: saveDebt) { (error) in
-                                            if error {
-                                                self.forseSendUnsendedData = false
-                                                self.filter()
-                                                DispatchQueue.main.async {
-                                                    self.message.showMessage(text: "Internet Error!", type: .internetError)
-                                                }
-                                            } else {
-                                                appData.unsendedData.removeFirst()
-
-                                                self.sendUnsaved()
-                                            }
-                                        }
-                                    } else {
-                                        if let deleteDebt = first["deleteDebt"] {
-                                            delete.Debts(toDataString: deleteDebt) { (error) in
-                                                if error {
-                                                    self.forseSendUnsendedData = false
-                                                    self.filter()
-                                                    DispatchQueue.main.async {
-                                                        self.message.showMessage(text: "Internet Error!", type: .internetError)
-                                                    }
-                                                } else {
-                                                    appData.unsendedData.removeFirst()
-
-                                                    self.sendUnsaved()
-                                                }
-                                            }
-                                        } else {
-                                            if let saveUser = first["saveUser"] {
-                                                save.Users(toDataString: saveUser) { (error) in
-                                                    if error {
-                                                        self.forseSendUnsendedData = false
-                                                        self.filter()
-                                                        DispatchQueue.main.async {
-                                                            self.message.showMessage(text: "Internet Error!", type: .internetError)
-                                                        }
-                                                    } else {
-                                                        appData.unsendedData.removeFirst()
-
-                                                        self.sendUnsaved()
-                                                    }
-                                                }
-                                            } else {
-                                                if let deleteUser = first["deleteUser"] {
-                                                    delete.User(toDataString: deleteUser) { (error) in
-                                                        if error {
-                                                            self.forseSendUnsendedData = false
-                                                            self.filter()
-                                                            DispatchQueue.main.async {
-                                                                self.message.showMessage(text: "Internet Error!", type: .internetError)
-                                                            }
-                                                        } else {
-                                                            appData.unsendedData.removeFirst()
-
-                                                            self.sendUnsaved()
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                    
-                                }
-                            }
-                            
-                            
-                        }
-                        
-                    }
-                    
-                }
-            }
-            if dataCount == 0 {
-                if sendSavedData == true {
-                    if self._filterText != "Sending" {
-                        DispatchQueue.main.async {
-                            self.filterText = "Sending"
-                        }
-                    }
-                    
-                    self.animateCellWillAppear = false
-                    let save = SaveToDB()
-                    var newCategories = appData.getCategories(key: K.Keys.localCategories)
-                    print("sendUnsaved unsaved cats", newCategories.count)
-                    if let categoryy = newCategories.first {
-                        let toDataStringg = "&Nickname=\(appData.username)" + "&Title=\(categoryy.name)" + "&Purpose=\(categoryy.purpose)"
-                        save.Categories(toDataString: toDataStringg) { (error) in
-                            if error {
-                                self.filter()
-                                self.sendSavedData = false
-                                self.forseSendUnsendedData = false
-                                DispatchQueue.main.async {
-                                    self.message.showMessage(text: "Internet Error!", type: .internetError)
-                                }
-                                print("Error saving category")
-                            } else {
-                                print("cat: unsended sended")
-                                var allCats = appData.getCategories()
-                                allCats.append(categoryy)
-                                appData.saveCategories(allCats)
-                                newCategories.removeFirst()
-                                appData.saveCategories(newCategories, key: K.Keys.localCategories)
-
-                                self.sendUnsaved()
-                            }
-                        }
-                    }
-                    
-                    if newCategories.count == 0 {
-                        var trans = appData.getLocalTransactions
-                        print("saved trans count:", trans.count)
-                        if let tran = trans.first {
-                            let toDataString = "&Nickname=\(appData.username)" + "&Category=\(tran.categoryID)" + "&Date=\(tran.date)" + "&Value=\(tran.value)" + "&Comment=\(tran.comment)"
-                            save.Transactions(toDataString: toDataString) { (error) in
-                                if error {
-                                    self.filter()
-                                    self.forseSendUnsendedData = false
-                                    self.sendSavedData = false
-                                    DispatchQueue.main.async {
-                                        self.message.showMessage(text: "Internet Error!", type: .internetError)
-                                    }
-                                    print("Error saving category")
-                                } else {
-                                    trans.removeFirst()
-                                    appData.saveTransations(trans, key: K.Keys.localTrancations)
-                                    var alldata = appData.getTransactions
-                                    alldata.append(tran)
-                                    appData.saveTransations(alldata)
-
-                                    self.sendUnsaved()
-                                }
-                            }
-                        }
-                        
-                        if trans.count == 0 {
-                            var debts = appData.getDebts(key: K.Keys.localDebts)
-                            if let debt = debts.first {
-                                let todString = "&Nickname=\(appData.username)" + "&name=\(debt.name)" + "&amountToPay=\(debt.amountToPay)" + "&dueDate=\(debt.dueDate)"
-                                save.Debts(toDataString: todString) { (error) in
-                                    if error {
-                                        self.filter()
-                                        self.forseSendUnsendedData = false
-                                        self.sendSavedData = false
-                                        DispatchQueue.main.async {
-                                            self.message.showMessage(text: "Internet Error!", type: .internetError)
-                                        }
-                                    } else {
-                                        debts.removeFirst()
-                                        appData.saveDebts(debts, key: K.Keys.localDebts)
-                                        var resultDebts = appData.getDebts()
-                                        resultDebts.append(DebtsStruct(name: debt.name, amountToPay: debt.amountToPay, dueDate: debt.dueDate))
-                                        appData.saveDebts(resultDebts)
-
-                                        self.sendUnsaved()
-                                    }
-                                }
-                            } else {
-                                self.sendSavedData = false
-                                self.forseSendUnsendedData = false
-                                self.downloadFromDB()
-                                DispatchQueue.main.async {
-                                    UIImpactFeedbackGenerator().impactOccurred()
-                                }
-                               /* DispatchQueue.main.async {
-                                    self.message.showMessage(text: "Done!", type: .succsess, windowHeight: 40, bottomAppearence: true)
-                                }*/
-                            }
-                        }
-                    }
-                } else {
-                    //unsavedComplited
-                    self.filter()
-                    DispatchQueue.main.async {
-                        UIImpactFeedbackGenerator().impactOccurred()
-                    }
-                    
-                }
-                
-            }
-        }
-        
-        
-    }*/
+   
     
     
     var allData: [[TransactionsStruct]] = []
