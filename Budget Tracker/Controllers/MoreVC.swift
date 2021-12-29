@@ -65,6 +65,7 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         var showTF:Bool = false
         var showAI: Bool = true
         var selected: Bool = false
+        var pro: Bool = true
         let action: (() -> ())?
     }
     
@@ -111,6 +112,7 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             cell.titleLabel.textColor = data.distructive ? .red : K.Colors.category
             cell.descriptionLabel.text = data.description
             cell.titleLabel.font = .systemFont(ofSize: 15, weight: data.distructive ? .semibold : .regular)
+            cell.proView.isHidden = data.pro
             return cell
         } else {
             if indexPath.section == 0 {
@@ -130,9 +132,10 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
     
     
-    
+
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
         if indexPath.section == 0 {
             DispatchQueue.main.async {
                 self.dismiss(animated: true) {
@@ -141,6 +144,10 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
             }
         } else {
             if indexPath.section == 1 {
+                if !tableData[indexPath.row].pro {
+                    appData.presentBuyProVC(currentVC: self, selectedProduct: 1)
+                    tableView.deselectRow(at: indexPath, animated: true)
+                } else {
                 if let function = tableData[indexPath.row].action {
                     if tableData[indexPath.row].showAI {
                         
@@ -164,6 +171,7 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                     
                 }
             }
+        }
         }
     }
     
@@ -204,4 +212,9 @@ class DataOptionCell: UITableViewCell {
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var textField: UITextField!
     
+    @IBOutlet weak var proView: UIView!
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        proView.layer.cornerRadius = 6
+    }
 }

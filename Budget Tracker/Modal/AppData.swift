@@ -22,7 +22,7 @@ class AppData {
     
     var proVersion: Bool {
         get{
-            return defaults.value(forKey: "proVersion") as? Bool ?? false
+            return !purchasedOnThisDevice ? (defaults.value(forKey: "proVersion") as? Bool ?? false) : purchasedOnThisDevice
         }
         set(value){
             defaults.set(value, forKey: "proVersion")
@@ -538,7 +538,7 @@ class AppData {
     
     func createFirstData(completion: @escaping () -> ()) {
         
-        let transactions = [
+       /* let transactions = [
             TransactionsStruct(value: "5000", categoryID: "Freelance", date: "\(filter.getToday(filter.filterObjects.currentDate, dateformatter: "01.MM.yyyy"))", comment: ""),
             TransactionsStruct(value: "10000", categoryID: "Work", date: "\(filter.getToday(filter.filterObjects.currentDate, dateformatter: "01.01.yyyy"))", comment: ""),
             TransactionsStruct(value: "-100", categoryID: "Food", date: "\(filter.getToday(filter.filterObjects.currentDate, dateformatter: "01.MM.yyyy"))", comment: ""),
@@ -554,7 +554,7 @@ class AppData {
             CategoriesStruct(name: "Freelance", purpose: K.income, count: 0)
         ]
         saveTransations(transactions)
-        saveCategories(categories)
+        saveCategories(categories)*/
         completion()
     }
     
@@ -565,8 +565,14 @@ class AppData {
         ]
         return monthes[month] ?? "Jan"
     }
-    
-
+    func presentBuyProVC(currentVC: UIViewController, selectedProduct:Int) {
+        let storyboard = UIStoryboard(name: "LogIn", bundle: nil)
+        let vccc = storyboard.instantiateViewController(withIdentifier: "BuyProVC") as! BuyProVC
+        vccc.modalPresentationStyle = .formSheet
+        vccc.navigationController?.setNavigationBarHidden(true, animated: false)
+        vccc.selectedProduct = selectedProduct
+        currentVC.present(vccc, animated: true)
+    }
     
     
     func presentMoreVC(currentVC: UIViewController, data: [MoreVC.ScreenData]) {

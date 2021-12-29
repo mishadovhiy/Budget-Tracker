@@ -3215,18 +3215,41 @@
                                                         </stackView>
                                                     </subviews>
                                                 </stackView>
+                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hIS-QB-36b">
+                                                    <rect key="frame" x="336" y="12.333333333333336" width="40" height="20"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PRO" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="leV-7a-WDQ">
+                                                            <rect key="frame" x="2" y="0.0" width="36" height="20"/>
+                                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
+                                                            <color key="textColor" name="darkTableColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <color key="backgroundColor" name="yellowColor"/>
+                                                    <constraints>
+                                                        <constraint firstItem="leV-7a-WDQ" firstAttribute="top" secondItem="hIS-QB-36b" secondAttribute="top" id="1m4-1x-UZU"/>
+                                                        <constraint firstAttribute="width" constant="40" id="9WH-KF-tuS"/>
+                                                        <constraint firstAttribute="trailing" secondItem="leV-7a-WDQ" secondAttribute="trailing" constant="2" id="Ckc-6l-rms"/>
+                                                        <constraint firstAttribute="bottom" secondItem="leV-7a-WDQ" secondAttribute="bottom" id="GMm-IF-UTh"/>
+                                                        <constraint firstItem="leV-7a-WDQ" firstAttribute="leading" secondItem="hIS-QB-36b" secondAttribute="leading" constant="2" id="nQM-fc-hiB"/>
+                                                        <constraint firstAttribute="height" constant="20" id="zd2-zM-LWm"/>
+                                                    </constraints>
+                                                </view>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
+                                                <constraint firstItem="hIS-QB-36b" firstAttribute="centerY" secondItem="JTa-uf-fNi" secondAttribute="centerY" id="0MM-T8-2gK"/>
                                                 <constraint firstItem="JvK-vT-odU" firstAttribute="top" secondItem="JTa-uf-fNi" secondAttribute="top" constant="12" id="7RM-IE-apS"/>
                                                 <constraint firstAttribute="trailing" secondItem="JvK-vT-odU" secondAttribute="trailing" constant="12" id="EhL-ds-HTs"/>
                                                 <constraint firstItem="JvK-vT-odU" firstAttribute="leading" secondItem="JTa-uf-fNi" secondAttribute="leading" constant="12" id="MhY-0D-yja"/>
+                                                <constraint firstAttribute="trailing" secondItem="hIS-QB-36b" secondAttribute="trailing" constant="12" id="aH5-hu-T5d"/>
                                                 <constraint firstAttribute="bottom" secondItem="JvK-vT-odU" secondAttribute="bottom" constant="12" id="x3i-CU-42H"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
                                             <outlet property="descriptionLabel" destination="sdU-fb-GXc" id="cdd-QI-4Cc"/>
+                                            <outlet property="proView" destination="hIS-QB-36b" id="AjZ-kc-TBN"/>
                                             <outlet property="titleLabel" destination="PUz-jz-SfH" id="MfL-CH-Zul"/>
                                         </connections>
                                     </tableViewCell>
@@ -3491,8 +3514,8 @@ AAAAAAIBAAAAAAAAAGEAAAAAAAAAAAAAAAAAAChAA
         <image name="minus" width="12" height="19"/>
         <image name="paperplane.fill" width="18" height="18"/>
         <image name="pencil" width="14" height="14"/>
-        <image name="plus" width="14" height="14"/>
         <image name="plus" catalog="system" width="128" height="113"/>
+        <image name="plus" width="14" height="14"/>
         <image name="scroll" width="18" height="18"/>
         <image name="square.and.arrow.down" catalog="system" width="121" height="128"/>
         <image name="trash" width="16" height="19"/>

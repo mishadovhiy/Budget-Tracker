@@ -717,9 +717,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         }
         
         let moreData = [
-            MoreVC.ScreenData(name: "Id", description: "", showAI: true, selected: self.sortOption == .id, action: idAction),
-            MoreVC.ScreenData(name: "Name", description: "", showAI: true, selected: self.sortOption == .name, action: nameAction),
-            MoreVC.ScreenData(name: "Transactions count", description: "", showAI: true, selected: self.sortOption == .transactionsCount, action: countAction),
+            MoreVC.ScreenData(name: "Id", description: "", showAI: true, selected: self.sortOption == .id, pro: appData.proVersion || appData.proTrial, action: idAction),
+            MoreVC.ScreenData(name: "Name", description: "", showAI: true, selected: self.sortOption == .name, pro: appData.proVersion || appData.proTrial, action: nameAction),
+            MoreVC.ScreenData(name: "Transactions count", description: "", showAI: true, selected: self.sortOption == .transactionsCount, pro: appData.proVersion || appData.proTrial, action: countAction),
         ]
         appData.presentMoreVC(currentVC: self, data: moreData)
     }

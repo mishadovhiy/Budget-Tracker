@@ -32,9 +32,9 @@ class BuyProVC: SuperViewController {//ЗАПИСЫВАТЬ ДЕЛЕГАТЫ И�
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var pageControll: UIPageControl!
     var selectedProduct = 0
-    @IBOutlet weak var productTitleLabel: UILabel!
-    @IBOutlet weak var productDescriptionLabel: UILabel!
-    @IBOutlet weak var productImage: UIImageView!
+   // @IBOutlet weak var productTitleLabel: UILabel!
+  //  @IBOutlet weak var productDescriptionLabel: UILabel!
+   // @IBOutlet weak var productImage: UIImageView!
     @IBOutlet weak var buyProutton: UIButton!
     @IBOutlet weak var buyProView: UIView!
     @IBOutlet weak var purchasedIndicatorView: UIView!
@@ -66,13 +66,7 @@ class BuyProVC: SuperViewController {//ЗАПИСЫВАТЬ ДЕЛЕГАТЫ И�
             }
         }
         
-        
-        let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(self.productSwipped(_:)))
-        leftSwipe.direction = .left
-        let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(self.productSwipped(_:)))
-        rightSwipe.direction = .right
-        self.productTitleLabel.superview?.superview?.superview?.superview?.addGestureRecognizer(leftSwipe)
-        self.productTitleLabel.superview?.superview?.superview?.superview?.addGestureRecognizer(rightSwipe)
+
         
         DispatchQueue.main.async {
             self.buyProView.layer.cornerRadius = 10
@@ -89,17 +83,7 @@ class BuyProVC: SuperViewController {//ЗАПИСЫВАТЬ ДЕЛЕГАТЫ И�
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
        notificationReceiver(notification: notification)
     }
-    
-    @objc func productSwipped(_ sender: UISwipeGestureRecognizer) {
 
-        let leftSwipe = selectedProduct == (allProducts.count - 1) ? (allProducts.count - 1) : selectedProduct + 1
-        let rightSwipe = selectedProduct == 0 ? 0 : selectedProduct - 1
-        selectedProduct = sender.direction == .left ? leftSwipe : rightSwipe
-        DispatchQueue.main.async {
-            self.pageChanged(self.pageControll)
-        }
-        
-    }
     
     func showPurchasedIndicator() {
         if appData.proVersion {
@@ -145,12 +129,7 @@ class BuyProVC: SuperViewController {//ЗАПИСЫВАТЬ ДЕЛЕГАТЫ И�
     
     @IBAction func pageChanged(_ sender: UIPageControl) {
         //selectedProduct = sender.currentPage
-        sender.currentPage = selectedProduct
-        DispatchQueue.main.async {
-            self.productTitleLabel.text = self.allProducts[sender.currentPage].0
-            self.productDescriptionLabel.text = self.allProducts[sender.currentPage].1
-            self.productImage.image = UIImage(named: self.allProducts[sender.currentPage].2)
-        }
+        print(#function, sender.currentPage, "ghjcnhxuik")
     }
     
     

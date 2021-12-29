@@ -36,6 +36,8 @@
 		8B8D556125BB218400D7C6A7 /* UnsendedDataVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D556025BB218400D7C6A7 /* UnsendedDataVC.swift */; };
 		8BD2E77C25B8622100D4DFBF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */; };
 		8BE60E5927726EA8007B7FB3 /* LastSelected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE60E5827726EA8007B7FB3 /* LastSelected.swift */; };
+		8BF58D1D277C78B7005A7F38 /* ProViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF58D1C277C78B7005A7F38 /* ProViewVC.swift */; };
+		8BF58D1F277C793D005A7F38 /* BuyPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF58D1E277C793D005A7F38 /* BuyPageVC.swift */; };
 		8BF63E8B276294F2002E8601 /* SelectUserVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF63E8A276294F2002E8601 /* SelectUserVC.swift */; };
 		8BF63E8D27629D14002E8601 /* SupportVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF63E8C27629D14002E8601 /* SupportVC.swift */; };
 		8BF63E8F2762C83F002E8601 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF63E8E2762C83F002E8601 /* SettingsVC.swift */; };
@@ -104,6 +106,8 @@
 		8B8D556025BB218400D7C6A7 /* UnsendedDataVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsendedDataVC.swift; sourceTree = "<group>"; };
 		8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8BE60E5827726EA8007B7FB3 /* LastSelected.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastSelected.swift; sourceTree = "<group>"; };
+		8BF58D1C277C78B7005A7F38 /* ProViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProViewVC.swift; sourceTree = "<group>"; };
+		8BF58D1E277C793D005A7F38 /* BuyPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyPageVC.swift; sourceTree = "<group>"; };
 		8BF63E8A276294F2002E8601 /* SelectUserVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectUserVC.swift; sourceTree = "<group>"; };
 		8BF63E8C27629D14002E8601 /* SupportVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportVC.swift; sourceTree = "<group>"; };
 		8BF63E8E2762C83F002E8601 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
@@ -240,13 +244,15 @@
 				8D8B6C3D245023EC007260A0 /* CalendarVC.swift */,
 				8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */,
 				8B8D556025BB218400D7C6A7 /* UnsendedDataVC.swift */,
-				8B63312E260FD65200D9E117 /* buyProVC.swift */,
 				8B5F342B26FB2D97000DDCAF /* EnterValueVC.swift */,
 				8B2A4D71271439520085E0F0 /* MoreVC.swift */,
 				8B52DFEB27504D2900595A0C /* IconsVC.swift */,
 				8BF63E8A276294F2002E8601 /* SelectUserVC.swift */,
 				8BF63E8C27629D14002E8601 /* SupportVC.swift */,
 				8BF63E8E2762C83F002E8601 /* SettingsVC.swift */,
+				8B63312E260FD65200D9E117 /* buyProVC.swift */,
+				8BF58D1E277C793D005A7F38 /* BuyPageVC.swift */,
+				8BF58D1C277C78B7005A7F38 /* ProViewVC.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -409,6 +415,7 @@
 				8B57837E275E6977007BA9EC /* SideBar.swift in Sources */,
 				8BF63E8B276294F2002E8601 /* SelectUserVC.swift in Sources */,
 				8DD89D8A23F1472E00273904 /* OldMessageView.swift in Sources */,
+				8BF58D1D277C78B7005A7F38 /* ProViewVC.swift in Sources */,
 				8DD89D8E23F1495300273904 /* TransactionVC.swift in Sources */,
 				8D8B6C3E245023EC007260A0 /* CalendarVC.swift in Sources */,
 				8B1FD85D270C4DE2004E225E /* splitVC.swift in Sources */,
@@ -430,6 +437,7 @@
 				8DD89D8723F1471400273904 /* AppData.swift in Sources */,
 				8B8D556125BB218400D7C6A7 /* UnsendedDataVC.swift in Sources */,
 				8B52DFEC27504D2900595A0C /* IconsVC.swift in Sources */,
+				8BF58D1F277C793D005A7F38 /* BuyPageVC.swift in Sources */,
 				8D52066B24216A6200772CD5 /* HistoryVC.swift in Sources */,
 				8B5BE4792648038F005B182C /* expectingPaymentsVC.swift in Sources */,
 				8BF63E8D27629D14002E8601 /* SupportVC.swift in Sources */,

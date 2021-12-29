@@ -99,7 +99,7 @@ extension LoginViewController {
             MoreVC.ScreenData(name: "Change Email", description: userEmail, action: changeEmailAction),
             MoreVC.ScreenData(name: "Change password", description: "", action: changePassword),
             MoreVC.ScreenData(name: "Forgot password", description: "", action: forgotPassword),
-            MoreVC.ScreenData(name: "Transfare data", description: "", action: transfareData),
+            MoreVC.ScreenData(name: "Transfare data", description: "", pro: appData.proVersion || appData.proTrial, action: transfareData),
             MoreVC.ScreenData(name: "Log out", description: "", distructive: true, showAI: false, action: logoutAction),
         ]
         
@@ -1611,6 +1611,10 @@ extension UITextField {
 
 extension LoginViewController {
     func logout() {
+        if !appData.purchasedOnThisDevice {
+            appData.proVersion = false
+            appData.proTrial = false
+        }
         appData.username = ""
         appData.password = ""
         lastSelectedDate = nil
@@ -1623,6 +1627,9 @@ extension LoginViewController {
             self.passwordLabel.text = ""
             self.passwordLogLabel.text = ""
             self.nicknameLogLabel.text = ""
+            self.ai.fastHide { _ in
+                
+            }
         }
     }
     
