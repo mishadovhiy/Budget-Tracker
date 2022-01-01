@@ -162,19 +162,21 @@ class HistoryVC: SuperViewController {
         center?.removePendingNotificationRequests(withIdentifiers: [id])
         center?.getNotificationSettings { (settings) in
             if settings.authorizationStatus != .authorized {
-            // Notifications not allowed
+                DispatchQueue.main.async {
+                    self.newMessage.show(title:"Notifications disabled on your device", type: .error)
+                }
           }
         }
         
         
         let content = UNMutableNotificationContent()
         content.title = title//"Kirill"
-        content.body = "Due date is expiring today"
+        content.body = "Due date has expired"
         content.sound = UNNotificationSound.default
         content.badge = NSNumber(value: UIApplication.shared.applicationIconBadgeNumber + 1)
         
         content.categoryIdentifier = title
-        content.threadIdentifier = id
+        content.threadIdentifier = "\(self.selectedCategory?.id ?? 0)"
         var dateComponents = DateComponents()
         dateComponents.calendar = Calendar.current
         
@@ -195,11 +197,12 @@ class HistoryVC: SuperViewController {
         center?.add(request) { (error) in
             
             if error != nil {
+                DispatchQueue.main.async {
+                    self.newMessage.show(title:"Error adding notification", type: .error)
+                }
                 print("notif add error")
             } else {
                 print("no errorrs")
-               // var all = UserDefaults.standard.value(forKey: "notifications") as? [UNNotificationRequest] ?? []
-                //all.append(request)
                 completion(true)
 
             }
@@ -309,8 +312,9 @@ class HistoryVC: SuperViewController {
             vc.delegate = self
              let string = self.selectedCategory?.dueDate
             let stringDate = "\(self.makeTwo(n: string?.day ?? 0)).\(self.makeTwo(n: string?.month ?? 0)).\(string?.year ?? 0)"
+            let time = "\(self.makeTwo(n: string?.hour ?? 0)):\(self.makeTwo(n: string?.minute ?? 0)):\(self.makeTwo(n: string?.second ?? 0))"
             vc.selectedFrom = (string == nil) ? "" : stringDate
-            vc.datePickerDate = string != nil ? stringDate : ""
+            vc.datePickerDate = string != nil ? time : ""
             vc.vcHeaderData = headerData(title: "Create notification", description: "Get notification reminder on specific date")
             vc.needPressDone = true
             vc.canSelectOnlyOne = true
@@ -508,15 +512,8 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
         //    print(dateComponent, "dateComponentdateComponentdateComponent")
             let date = "\(makeTwo(n: dateComponent?.day ?? 0))"
             let month = "\(returnMonth(dateComponent?.month ?? 0)), \(dateComponent?.year ?? 0)"
-           /* let expired = dateExpired(debt?.dueDate ?? "")
-            cell.expired = expired
-            let diff = dateExpiredCount(startDate: debt?.dueDate ?? "")
-            let expText = expiredText(diff)
-            cell.expiredDaysCount.text = "Expired:" + (expText == "" ? " recently" : "\(expText) ago")
-            cell.expiredDaysCount.superview?.isHidden = expired ? ((debt?.dueDate == "" ? true : false)) : true
-            print(expired, "expiredexpiredexpired")*/
 
-            cell.expiredStack.isHidden = dateExpired(dateComponent)
+            cell.expiredStack.isHidden = !dateExpired(dateComponent)
             
             let defaultBackground = UIColor(red: 199/255, green: 197/255, blue: 197/255, alpha: 1)
             cell.imageBackgroundView.backgroundColor = defaultBackground//expired ? K.Colors.negative : defaultBackground
@@ -774,28 +771,36 @@ extension HistoryVC: CalendarVCProtocol {
     func dateSelected(date: String, time: DateComponents?) {
      //   DispatchQueue.main.async {
             self.ai.show { (_) in
-
-                //check if has am pm
-                //or save as isoDate without
+                let id = "Debts\(self.selectedCategory?.id ?? 0)"
+                self.center?.removePendingNotificationRequests(withIdentifiers: [id])
                 let fullDate = "\(date) \(self.makeTwo(n: time?.hour ?? 0)):\(self.makeTwo(n: time?.minute ?? 0)):\(self.makeTwo(n: time?.second ?? 0))"
                 print(fullDate, "fullDatefullDatefullDatefullDate")
                 if let dateComp = self.createDateComp(date: date, time: time) {
                     print(dateComp, "dateCompdateCompdateComp")
                     
                     if let isoFullString = dateCompToIso(isoComp: dateComp) {
-                        self.addLocalNotification(date: dateComp) { (added) in
-                            
-                            
-                            self.changeDueDate(fullDate: isoFullString)
-                            if !added {
-                                //todo: show message error
+                        if !self.dateExpired(dateComp) {
+                            self.addLocalNotification(date: dateComp) { (added) in
+                                self.changeDueDate(fullDate: isoFullString)
+                                if !added {
+                                    DispatchQueue.main.async {
+                                        self.newMessage.show(title:"Local notification not added", type: .error)
+                                    }
+                                }
                             }
-
+                          } else {
+                            self.changeDueDate(fullDate: isoFullString)
+                            DispatchQueue.main.async {
+                                self.newMessage.show(title:"Local notification not added", type: .error)
+                            }
                         }
+                        
                     } else {
                         print("error convering to comp from iso")
                         self.ai.fastHide { _ in
-                            
+                            DispatchQueue.main.async {
+                                self.newMessage.show(title:"Error adding Due Date", type: .error)
+                            }
                         }
                         
                     }
@@ -807,7 +812,9 @@ extension HistoryVC: CalendarVCProtocol {
                     //todo: show message error
                     print("error creating iso")
                     self.ai.fastHide { _ in
-                        
+                        DispatchQueue.main.async {
+                            self.newMessage.show(title:"Error adding Due Date", type: .error)
+                        }
                     }
                 }
                 

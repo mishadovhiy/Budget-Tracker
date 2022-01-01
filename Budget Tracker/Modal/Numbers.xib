@@ -16,7 +16,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VIb-k4-VQ1" userLabel="padView">
-                    <rect key="frame" x="0.0" y="562" width="414" height="300"/>
+                    <rect key="frame" x="0.0" y="596" width="414" height="300"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2jU-s1-Z9h" userLabel="backgroundView">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="300"/>
@@ -238,7 +238,7 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="VIb-k4-VQ1" secondAttribute="bottom" id="9bw-Mc-Tvv"/>
+                <constraint firstAttribute="bottom" secondItem="VIb-k4-VQ1" secondAttribute="bottom" id="Kgr-08-hro"/>
                 <constraint firstItem="VIb-k4-VQ1" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="P2O-fq-NUh"/>
                 <constraint firstAttribute="trailing" secondItem="VIb-k4-VQ1" secondAttribute="trailing" id="lTG-iv-KxD"/>
             </constraints>

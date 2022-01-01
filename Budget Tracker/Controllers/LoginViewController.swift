@@ -879,7 +879,7 @@ class LoginViewController: SuperViewController {
                                 self.logIn(nickname: name, password: password, loadedData: loadedData)
                             } else {
                                 self.checkUsers(for: name, password: password) { _ in
-                                    
+                                    self.actionButtonsEnabled = true
                                 }
                             }
                             
@@ -1183,7 +1183,6 @@ class LoginViewController: SuperViewController {
                 let window = UIApplication.shared.keyWindow ?? UIWindow()
                 self.helperNavView?.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: appData.safeArea.0)
                 window.addSubview(self.helperNavView ?? UIView())
-                self.message.hideMessage(duration: 0)
             }
         }
     }
@@ -1294,8 +1293,6 @@ class LoginViewController: SuperViewController {
             DispatchQueue.main.async {
                 self.newMessage.show(title: message, type: .error)
             }
-        } else {
-            message.hideMessage()
         }
         
     }

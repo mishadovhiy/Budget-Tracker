@@ -9,7 +9,7 @@
 import UIKit
 import StoreKit
 
-class BuyProVC: SuperViewController {//ЗАПИСЫВАТЬ ДЕЛЕГАТЫ ИЛИ ВЫЗЫВАТЬ ИЗ ЕП ДЕЛЕГАТА
+class BuyProVC: SuperViewController {
     
     func showAlert(title:String,text:String?, error: Bool, goHome: Bool = false) {
         
@@ -236,10 +236,12 @@ class BuyProVC: SuperViewController {//ЗАПИСЫВАТЬ ДЕЛЕГАТЫ И�
         delete.User(toDataString: toDataStringMian) { (errorr) in
             if errorr {
                 //showError    appData.unsendedData.append(["deleteUser": dataStringDelete])
+                self.showAlert(title: "Internet error", text: "Try again later", error: true)
             } else {
             save.Users(toDataString: dataStringSave ) { (error) in
                 if error {
                     //showError       appData.unsendedData.append(["saveUser": dataStringSave])
+                    self.showAlert(title: "Internet error", text: "Try again later", error: true)
                 } else {
                     DispatchQueue.main.async {
                         appData.proTrial = true
@@ -292,6 +294,7 @@ class BuyProVC: SuperViewController {//ЗАПИСЫВАТЬ ДЕЛЕГАТЫ И�
                                 SKPaymentQueue.default().add(payment)
                             } else {
                                 print("go to restrictions")
+                                self.showAlert(title: "Error", text: "Permission denied", error: true)
                             }
                         } else {
 
@@ -307,7 +310,8 @@ class BuyProVC: SuperViewController {//ЗАПИСЫВАТЬ ДЕЛЕГАТЫ И�
             }
         } else {
             DispatchQueue.main.async {
-                self.message.showMessage(text: "You have already purchased pro version", type: .succsess, windowHeight: 65)
+               // self.message.showMessage(text: "You have already purchased pro version", type: .succsess, windowHeight: 65)
+                self.newMessage.show(title: "You have already purchased pro version", type: .error)
             }
         }
         
@@ -328,6 +332,7 @@ class BuyProVC: SuperViewController {//ЗАПИСЫВАТЬ ДЕЛЕГАТЫ И�
             
         } else {
             print("go to restrictions")
+            self.showAlert(title: "Error", text: "Permission denied", error: true)
         }
     }
     
@@ -402,10 +407,12 @@ extension BuyProVC: SKPaymentTransactionObserver {
                     delete.User(toDataString: dataStringDelete) { (errorr) in
                         if errorr {
                             //showError        appData.unsendedData.append(["deleteUser": dataStringDelete])
+                            self.showAlert(title: "Internet error", text: "Try again later", error: true)
                         } else {
                             save.Users(toDataString: dataStringSave ) { (error) in
                                 if error {
                                     //showError            appData.unsendedData.append(["saveUser": dataStringSave])
+                                    self.showAlert(title: "Internet error", text: "Try again later", error: true)
                                 } else {
                                     DispatchQueue.main.async {
                                         self.showPurchasedIndicator()

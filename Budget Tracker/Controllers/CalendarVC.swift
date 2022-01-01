@@ -73,6 +73,7 @@ class CalendarVC: SuperViewController {
             timePicker.addTarget(self, action: #selector(dateSelected(_:)), for: .valueChanged)
             if datePickerDate != "" {
                 timePicker.date = stringToDate(s: pickerDate, fullDate: true)
+                timePicker.setValue(K.Colors.category, forKeyPath: "textColor")
             } else {
                 //default date from settings
                 //timePicker.date = stringToDate(s: pickerDate, dateFormat: K.fullDateFormat)

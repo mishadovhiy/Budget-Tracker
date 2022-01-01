@@ -188,7 +188,16 @@ class TransitionVC: SuperViewController {
     
     let db = DataBase()
     func getEditingdata() {
-        selectedCategory = db.category(editingCategory) ?? db.categories.first
+        var lastExpense: NewCategories {
+            let all = Array(db.categories)
+            for i in 0..<all.count {
+                if all[i].purpose == .expense {
+                    return all[i]
+                }
+            }
+            return NewCategories(id: -1, name: "Uncategorized", icon: "", color: "", purpose: .expense)
+        }
+        selectedCategory = db.category(editingCategory) ?? lastExpense
         if editingCategory != "" {
             
             print(selectedPurpose, "selectedPurpose")

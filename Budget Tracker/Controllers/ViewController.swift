@@ -136,11 +136,11 @@ class ViewController: SuperViewController {
                         self.performSegue(withIdentifier: "toFiterVC", sender: self)
                     }
                 } else {
-                    if let _ = filterAndGoToStatistic {
+                  /*  if let _ = filterAndGoToStatistic {
                         Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (_) in
                             self.performSegue(withIdentifier: "toStatisticVC", sender: self)
                         }
-                    }
+                    }*/
                 }
                 //self.refreshControl.backgroundColor = K.Colors.background
                /* if self.justLoaded {
@@ -175,14 +175,14 @@ class ViewController: SuperViewController {
             }
         }
     }
-    func downloadFromDB(showError: Bool = false) {
+    func downloadFromDB(showError: Bool = false, title: String = "Downloading") {
         self.editingTransaction = nil
         self.sendError = false
         _categoriesHolder.removeAll()
 
         lastSelectedDate = nil
         DispatchQueue.main.async {
-            self.filterText = "Downloading"
+            self.filterText = title
         }
         let load = LoadFromDB()
         load.newCategories { categoryes, error in
@@ -339,7 +339,9 @@ class ViewController: SuperViewController {
                 self.filter()
                 UserDefaults.standard.setValue(false, forKey: "firstLaunch")
                 DispatchQueue.main.async {
-                    self.message.showMessage(text: "Wellcome to Budget Tracker\nGet started by looking through demo data", type: .succsess, windowHeight: 80, bottomAppearence: self.view.frame.width < 500 ? true : false)
+                    self.newMessage.show(title: "Wellcome to Budget Tracker", description: "We have added demo data", type: .standart)
+                
+                    
                 }
             }
         }
@@ -635,14 +637,16 @@ class ViewController: SuperViewController {
                 appData.proTrial = false
                 UserDefaults.standard.setValue(false, forKey: "checkTrialDate")
                 DispatchQueue.main.async {
-                    self.message.showMessage(text: "Pro trial is over", type: .succsess, bottomAppearence: true)
+                    self.newMessage.show(title: "Pro trial is over", type: .standart)
+               //     self.message.showMessage(text: "Pro trial is over", type: .succsess, bottomAppearence: true)
                 }
             }
         } else {
             appData.proTrial = false
             UserDefaults.standard.setValue(false, forKey: "checkTrialDate")
             DispatchQueue.main.async {
-                self.message.showMessage(text: "Pro trial is over", type: .succsess, bottomAppearence: true)
+                self.newMessage.show(title: "Pro trial is over", type: .standart)
+                //self.message.showMessage(text: "Pro trial is over", type: .succsess, bottomAppearence: true)
             }
         }
     }
@@ -859,7 +863,7 @@ class ViewController: SuperViewController {
         }
         if needDownloadOnMainAppeare {
             needDownloadOnMainAppeare = false
-            self.downloadFromDB()
+            self.downloadFromDB(title: "Fetching")
         }
 
         let safeTop = self.view.safeAreaInsets.top
@@ -1441,7 +1445,7 @@ class ViewController: SuperViewController {
             if appData.fromLoginVCMessage != "" {
                 print("appData.fromLoginVCMessage", appData.fromLoginVCMessage)
                 DispatchQueue.main.async {
-                    self.newMessage.show(title:appData.fromLoginVCMessage, type: .succsess)
+                    self.newMessage.show(title:appData.fromLoginVCMessage, type: .standart)
                     appData.fromLoginVCMessage = ""
                 }
             }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate{
@@ -17,16 +18,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     
     let center = UNUserNotificationCenter.current()
     
-    
+    lazy var newMessage: MessageView = {
+        return MessageView.instanceFromNib() as! MessageView
+    }()
     lazy var ai: IndicatorView = {
         let newView = IndicatorView.instanceFromNib() as! IndicatorView
         return newView
     }()
     
-    lazy var message: MessageView = {
-        let newView = MessageView.instanceFromNib() as! MessageView
-        return newView
-    }()
+
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -94,28 +94,23 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                 if debtsError == "" {
                     appData.saveDebts(debtsResult)
                 }
-                var transactions:[TransactionsStruct] = []
-                let allTrans = Array(appData.getTransactions)
-                for i in 0..<allTrans.count{
-                    if allTrans[i].categoryID == notification.request.content.title {
-                        transactions.append(allTrans[i])
-                    }
-                }
-                DispatchQueue.main.async {
-                    self.ai.fastHide { (_) in
-                        self.showHistory(categpry: notification.request.content.title, transactions: transactions)
-                    }
-                }
+
+               // DispatchQueue.main.async {
+                 //   self.ai.fastHide { (_) in
+                        self.showHistory(categpry: notification.request.content.threadIdentifier)
+                //    }
+                //}
             }
         }
         DispatchQueue.main.async {
+            AudioServicesPlaySystemSound(1007)
             self.ai.completeWithActions(buttons: (okButton, showButton), title: notification.request.content.title, descriptionText: notification.request.content.body)
         }
 
     }
     
     
-    func showHistory(categpry: String, transactions: [TransactionsStruct]) {
+    func showHistory(categpry: String) {
         print("showHistory")
 
         let db = DataBase()
@@ -124,18 +119,32 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let vc = storyboard.instantiateViewController(withIdentifier: "HistoryVC") as! HistoryVC
                 let navController = UINavigationController(rootViewController: vc)
+                navController.navigationBar.tintColor = K.Colors.category
+                navController.navigationBar.barTintColor = K.Colors.category
+                navController.navigationBar.barStyle = .black
                 navController.modalPresentationStyle = .pageSheet
-                vc.historyDataStruct = transactions
+                vc.historyDataStruct = db.transactions(for: categoryy)
                 vc.selectedCategory = categoryy
                 vc.fromCategories = true
 
                 UIApplication.shared.windows.last?.rootViewController?.present(navController, animated: true, completion: {
-                    print("ok")
+                    DispatchQueue.main.async {
+                        self.ai.fastHide { (_) in
+                        }
+                    }
                 })
 
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.ai.fastHide { (_) in
+                    self.newMessage.show(title:"Category not found", type: .error)
+                }
             }
         }
         
         
     }
+    
+    
 }

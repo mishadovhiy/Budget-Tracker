@@ -51,7 +51,12 @@ class SelectUserVC: UIViewController, UITableViewDelegate, UITableViewDataSource
 
 class SelectUserVCCell: UITableViewCell {
     @IBOutlet weak var mainTitleLabel: UILabel!
-    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        let selected = UIView(frame: .zero)
+        selected.backgroundColor = K.Colors.primaryBacground
+        self.selectedBackgroundView = selected
+    }
 }
 
 

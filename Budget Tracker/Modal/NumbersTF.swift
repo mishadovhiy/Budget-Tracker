@@ -22,6 +22,7 @@ class NumbersTF: UITextField {
     override func willMove(toSuperview newSuperview: UIView?) {
         super.willMove(toSuperview: newSuperview)
         print(#function)
+        
     }
     
     override func didMoveToSuperview() {
@@ -37,9 +38,11 @@ class NumbersTF: UITextField {
         super.layoutSubviews()
         print(#function)
         self.numberView.delegate = self
-        self.numberView.frame = CGRect(x: 0, y: 0, width: 320, height: 400)
+        self.numberView.frame = CGRect(x: 0, y: 0, width: 320, height: 320)
         //CGRect(x: (self.view.frame.width / 2) - (size.width / 2), y: self.view.frame.height - size.height, width: size.width, height: size.height)
+     //   self.inputAccessoryView
         self.inputView = numberView
+        self.reloadInputViews()
         
     }
     var _enteringValue:String = ""

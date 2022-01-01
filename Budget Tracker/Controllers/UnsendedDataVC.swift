@@ -182,7 +182,8 @@ class UnsendedDataVC: SuperViewController {
         super.viewDidAppear(true)
         if messageText != "" {
             DispatchQueue.main.async {
-                self.message.showMessage(text: self.messageText, type: .error, windowHeight: 65, bottomAppearence: true)
+                self.newMessage.show(title:self.messageText, type: .standart)
+//                self.message.showMessage(text: self.messageText, type: .error, windowHeight: 65, bottomAppearence: true)
                 self.messageText = ""
             }
         }

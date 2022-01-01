@@ -35,33 +35,18 @@ class StatisticVC: SuperViewController, CALayerDelegate {
         super.viewDidAppear(true)
         deselectAllCells()
         if transactionAdded {
-            filterAndGoToStatistic = selectedIndexPathToHighlite
-            //self.dismiss(animated: true, completion: nil)
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "homeVC", sender: self)
-            }
+            needDownloadOnMainAppeare = true
+            updateUI()
+            
         }
        // segmentControll.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white], for: .normal)
        // segmentControll.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "darkTableColor") ?? .black], for: .selected)
         
         if appData.defaults.value(forKey: "StatisticVCFirstLaunch") as? Bool ?? false == false {
             appData.defaults.setValue(true, forKey: "StatisticVCFirstLaunch")
-            DispatchQueue.main.async {
-                self.message.showMessage(text: "Statistic for your transactions will be displayed here", type: .succsess, windowHeight: 80)
-            }
+
         }
-        
-        if let goIndex = filterAndGoToStatistic { // search by name
-            filterAndGoToStatistic = nil
-            if allData.count > goIndex.row {
-               /* DispatchQueue.main.async {
-                    self.tableView.scrollToRow(at: goIndex, at: .middle, animated: true)
-                }*/
-            } else {
-                //filterAndGoToStatistic = nil
-            }
-            
-        }
+
     }
     
     func deselectAllCells() {
@@ -184,9 +169,11 @@ class StatisticVC: SuperViewController, CALayerDelegate {
             DispatchQueue.main.async {
                 self.titleLabel.textAlignment = .center
                 self.titleLabel.text = "No " + (self.titleLabel.text ?? "Data")
+                self.titleLabel.alpha = 0.3
             }
         } else {
             DispatchQueue.main.async {
+                self.titleLabel.alpha = 1
                 self.titleLabel.textAlignment = .left
             }
         }
