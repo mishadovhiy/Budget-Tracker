@@ -547,6 +547,7 @@ class ViewController: SuperViewController {
                     
                 }
                 appData.proVersion = dbPurch
+                print("dbPurch:", dbPurch)
                 
             }
         }
@@ -568,21 +569,24 @@ class ViewController: SuperViewController {
                 print(loadedData, "checkPurchase")
                 if !error {
                     self.emailFromLoadedDataPurch(loadedData)
+                    
                     for i in 0..<loadedData.count {
                         if loadedData[i][0] == nick {
                             print("checkPurchase for", nick)
-                            if !appData.purchasedOnThisDevice {
-                                
-                                
+                            print(loadedData[i], "loadedData[i][3]loadedData[i][3]")
+                            appData.trialDate = loadedData[i][5]
+                            
+                            if !appData.purchasedOnThisDevice && !appData.proVersion {
                                 print("checkPurchase appData.proVersion", appData.proVersion)
-                                if loadedData[i][5] != "" {
-                                    if UserDefaults.standard.value(forKey: "checkTrialDate") as? Bool ?? true {
-                                        appData.trialDate = loadedData[i][5]
+                            
+                                if loadedData[i][5] != "" {//trial
+                               //     if UserDefaults.standard.value(forKey: "checkTrialDate") as? Bool ?? true {
+                                        
                                         self.checkProTrial()
-                                    }
+                             //       }
                                 }
+                            }
                                 
-                                print(loadedData[i], "loadedData[i][3]loadedData[i][3]")
                                 
                                 
                                 if loadedData[i][2] != appData.password {
@@ -604,7 +608,7 @@ class ViewController: SuperViewController {
                                 break
                             }
                         }
-                    }
+                    //}
                     
                 }
                 
@@ -616,6 +620,7 @@ class ViewController: SuperViewController {
     func checkProTrial() {
         //debts did lo if trial - check pro trial
         let wasStr = appData.trialDate
+        print(wasStr, "bvghujkmnjbhguijkсч wasStr")
         let todayStr = appData.filter.getToday(appData.filter.filterObjects.currentDate)
         let dates = (dateFrom(sting: wasStr), dateFrom(sting: todayStr))
         print(dates, "bvghujkmnjbhguijk")

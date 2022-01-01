@@ -921,8 +921,9 @@ class LoginViewController: SuperViewController {
         if userExists(name: nickname, loadedData: loadedData) {
             for i in 0..<loadedData.count {
                 if loadedData[i][DBusernameIndex] == nickname {
+                    print(loadedData[i], "loadedData[i]loadedData[i]loadedData[i]")
                     psswordFromDB = loadedData[i][DBpasswordIndex]
-                    
+                    print(psswordFromDB, "psswordFromDBpsswordFromDBpsswordFromDBpsswordFromDB")
                     if password != psswordFromDB {
                         self.actionButtonsEnabled = true
                         DispatchQueue.main.async {
@@ -975,7 +976,8 @@ class LoginViewController: SuperViewController {
                         needFullReload = true
                         lastSelectedDate = nil
                         AppDelegate.shared?.center.removeAllPendingNotificationRequests()
-
+                        UserDefaults.standard.setValue(true, forKey: "checkTrialDate")
+                        appData.proTrial = false
                         _categoriesHolder.removeAll()
                         UserDefaults.standard.setValue(nil, forKey: "lastSelectedCategory")
                         if !appData.purchasedOnThisDevice {
@@ -1019,7 +1021,9 @@ class LoginViewController: SuperViewController {
         DispatchQueue.main.async {
             UIImpactFeedbackGenerator().impactOccurred()
         }
+        UserDefaults.standard.setValue(true, forKey: "checkTrialDate")
         transactionAdded = true
+        appData.proTrial = false
         self.actionButtonsEnabled = true
 
         self.ai.show(title: "Creating an account") { (_) in

@@ -96,7 +96,7 @@ class MessageView: UIView {
             case .succsess:
                 self.mainImage.image = self.succsessImage
             case .standart:
-                break
+                self.mainImage.image = iconNamed("AppIcon")
             }
             self.alpha = 1
             

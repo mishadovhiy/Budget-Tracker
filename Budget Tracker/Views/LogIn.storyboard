@@ -276,8 +276,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="in9-wI-9lJ">
-                                <rect key="frame" x="20" y="340.5" width="374" height="161.5"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="35" translatesAutoresizingMaskIntoConstraints="NO" id="in9-wI-9lJ">
+                                <rect key="frame" x="20" y="335.5" width="374" height="171.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="wfW-zS-Z3i">
                                         <rect key="frame" x="71.5" y="0.0" width="231.5" height="49.5"/>
@@ -297,7 +297,7 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="jaN-fv-ezh">
-                                        <rect key="frame" x="47" y="74.5" width="280" height="87"/>
+                                        <rect key="frame" x="47" y="84.5" width="280" height="87"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="jc2-Ms-p9u">
                                                 <rect key="frame" x="0.0" y="0.0" width="280" height="37"/>
@@ -446,6 +446,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Qc-L7-jFd">
+                                <rect key="frame" x="354" y="0.0" width="60" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="GyP-fa-mBq"/>
+                                    <constraint firstAttribute="width" constant="60" id="HGV-U4-fKa"/>
+                                </constraints>
+                                <state key="normal" image="cancel"/>
+                                <connections>
+                                    <action selector="closePressed:" destination="kvJ-6b-N85" eventType="touchUpInside" id="TFU-mg-WjY"/>
+                                </connections>
+                            </button>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" hidesForSinglePage="YES" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="epx-o4-4WH">
                                 <rect key="frame" x="10" y="624" width="394" height="26"/>
                                 <connections>
@@ -586,17 +597,6 @@
                                     <constraint firstAttribute="bottom" secondItem="0eE-EE-uOy" secondAttribute="bottom" constant="10" id="vbr-5k-vIA"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Qc-L7-jFd">
-                                <rect key="frame" x="354" y="0.0" width="60" height="60"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="GyP-fa-mBq"/>
-                                    <constraint firstAttribute="width" constant="60" id="HGV-U4-fKa"/>
-                                </constraints>
-                                <state key="normal" image="cancel"/>
-                                <connections>
-                                    <action selector="closePressed:" destination="kvJ-6b-N85" eventType="touchUpInside" id="TFU-mg-WjY"/>
-                                </connections>
-                            </button>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MWo-Id-j5O">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="624"/>
                                 <connections>
@@ -1429,7 +1429,9 @@
         <!--Buy PageVC-->
         <scene sceneID="y3n-mO-hCO">
             <objects>
-                <pageViewController storyboardIdentifier="BuyPageVC" autoresizesArchivedViewToFullSize="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="hGQ-HN-1kF" customClass="BuyPageVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController"/>
+                <pageViewController storyboardIdentifier="BuyPageVC" autoresizesArchivedViewToFullSize="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="min" id="hGQ-HN-1kF" customClass="BuyPageVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
+                    <nil key="simulatedBottomBarMetrics"/>
+                </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="akG-xY-Ob5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="6045" y="122"/>
@@ -1507,6 +1509,7 @@
                     <view key="view" contentMode="scaleToFill" id="aQ9-Fu-QC2">
                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="e3G-Pp-Lhy"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                 </viewController>

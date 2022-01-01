@@ -475,8 +475,8 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     var tableContentOf:UIEdgeInsets = UIEdgeInsets.zero
     @objc func keyboardWillHide(_ notification: Notification) {
         editingTfIndex = (nil,nil)
-        selectingIconFor = (nil, nil)
         if !showingIcons {
+            selectingIconFor = (nil, nil)
             self.tableView.removeGestureRecognizer(viewTap)
         }
           
@@ -605,7 +605,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 self.tableView.reloadData()
             }
         }
-        
+        self.tableView.contentInset.bottom = 0
         
     }
     
@@ -715,7 +715,8 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             self.categories = self._categories
 
         }
-        
+     //   let proResult = appData.proVersion || appData.proTrial
+        print(appData.proTrial, "appData.proTrialappData.proTrialappData.proTrialappData.proTrial")
         let moreData = [
             MoreVC.ScreenData(name: "Id", description: "", showAI: true, selected: self.sortOption == .id, pro: appData.proVersion || appData.proTrial, action: idAction),
             MoreVC.ScreenData(name: "Name", description: "", showAI: true, selected: self.sortOption == .name, pro: appData.proVersion || appData.proTrial, action: nameAction),

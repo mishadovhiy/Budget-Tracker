@@ -232,25 +232,28 @@ class BuyProVC: SuperViewController {//ЗАПИСЫВАТЬ ДЕЛЕГАТЫ И�
         
         let dataStringSave = toDataStringMian + "&ProVersion=0" + "&trialDate=\(today)"
         print(dataStringSave)
-        save.Users(toDataString: dataStringSave ) { (error) in
-            if error {
-                //showError       appData.unsendedData.append(["saveUser": dataStringSave])
-            }
-            let delete = DeleteFromDB()
-            let dataStringDelete = toDataStringMian + "&ProVersion=0" + "&trialDate="
-            print(dataStringDelete)
-            delete.User(toDataString: dataStringDelete) { (errorr) in
-                if errorr {
-                    //showError    appData.unsendedData.append(["deleteUser": dataStringDelete])
-                }
-                DispatchQueue.main.async {
-                    appData.proTrial = true
-                    appData.trialDate = today
-                    self.showAlert(title: "Success", text: "Trial has been started successfully", error: false, goHome: true)
+        let delete = DeleteFromDB()
+        delete.User(toDataString: toDataStringMian) { (errorr) in
+            if errorr {
+                //showError    appData.unsendedData.append(["deleteUser": dataStringDelete])
+            } else {
+            save.Users(toDataString: dataStringSave ) { (error) in
+                if error {
+                    //showError       appData.unsendedData.append(["saveUser": dataStringSave])
+                } else {
+                    DispatchQueue.main.async {
+                        appData.proTrial = true
+                        appData.trialDate = today
+                        self.showAlert(title: "Success", text: "Trial has been started successfully", error: false, goHome: true)
 
+                    }
                 }
+                
             }
+            }
+            
         }
+        
     }
     
 
@@ -393,30 +396,28 @@ extension BuyProVC: SKPaymentTransactionObserver {
                     
                     let dataStringSave = toDataStringMian + "&ProVersion=1" + "&trialDate=\(self.userData.3)"
                     print(dataStringSave)
-                    save.Users(toDataString: dataStringSave ) { (error) in
-                        if error {
-                            //showError            appData.unsendedData.append(["saveUser": dataStringSave])
-                        }
-                        let delete = DeleteFromDB()
-                        let dataStringDelete = toDataStringMian + "&ProVersion=0" + "&trialDate=\(self.userData.3)"
-                        print(dataStringDelete)
-                        delete.User(toDataString: dataStringDelete) { (errorr) in
-                            if errorr {
-                                //showError        appData.unsendedData.append(["deleteUser": dataStringDelete])
-                            }
-                            DispatchQueue.main.async {
-                                self.showPurchasedIndicator()
-                                self.showAlert(title: "Success", text: "Pro features available across all your devices", error: false, goHome: true)
-                          /*      self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "Start"), rightButtonActon: { (_) in
-                                    self.loadingIndicator.hideIndicator(fast: true) { (co) in
-                                        Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { (_) in
-                                            self.performSegue(withIdentifier: "homeVC", sender: self)
-                                        }
+                    let delete = DeleteFromDB()
+                    let dataStringDelete = toDataStringMian
+                    print(dataStringDelete)
+                    delete.User(toDataString: dataStringDelete) { (errorr) in
+                        if errorr {
+                            //showError        appData.unsendedData.append(["deleteUser": dataStringDelete])
+                        } else {
+                            save.Users(toDataString: dataStringSave ) { (error) in
+                                if error {
+                                    //showError            appData.unsendedData.append(["saveUser": dataStringSave])
+                                } else {
+                                    DispatchQueue.main.async {
+                                        self.showPurchasedIndicator()
+                                        self.showAlert(title: "Success", text: "Pro features available across all your devices", error: false, goHome: true)
                                     }
-                                }, title: "Success", description: "Pro features available across all your devices")*/
+                                }
+                                
                             }
                         }
+                        
                     }
+                    
                     
                 }
                 

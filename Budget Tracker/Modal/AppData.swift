@@ -22,7 +22,9 @@ class AppData {
     
     var proVersion: Bool {
         get{
-            return !purchasedOnThisDevice ? (defaults.value(forKey: "proVersion") as? Bool ?? false) : purchasedOnThisDevice
+            let result = !purchasedOnThisDevice ? (defaults.value(forKey: "proVersion") as? Bool ?? false) : purchasedOnThisDevice
+            print(result, "resultresultresultresultresult")
+            return result
         }
         set(value){
             defaults.set(value, forKey: "proVersion")

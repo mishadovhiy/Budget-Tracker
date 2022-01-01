@@ -555,10 +555,10 @@ extension TransitionVC: CategoriesVCProtocol {
                     
                     if self.pressedValue == "" || self.pressedValue == "0" {
                     }
-                    self.valueLabel.text = "\(amount < 0 ? amount * (-1) : amount)"
-                    self.minusPlusLabel.alpha = 1
-                    self.purposeSwitcher.selectedSegmentIndex = amount * (-1) < 0 ? 0 : 1
-                    self.purposeSwitched(self.purposeSwitcher)
+                   // self.valueLabel.text = "\(amount < 0 ? amount * (-1) : amount)"
+                 //   self.minusPlusLabel.alpha = 1
+                   // self.purposeSwitcher.selectedSegmentIndex = amount * (-1) < 0 ? 0 : 1
+                  //  self.purposeSwitched(self.purposeSwitcher)
                     
                     let selectedSeg = self.purposeSwitcher.selectedSegmentIndex
                     let value = selectedSeg == 0 ? "\(Double(self.valueLabel.text ?? "") ?? 0.0)" : self.valueLabel.text ?? ""
