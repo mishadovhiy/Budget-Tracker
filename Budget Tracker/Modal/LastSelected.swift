@@ -9,11 +9,12 @@
 import UIKit
 
 class LastSelected {
-
+    private let mainKey = "lastSelected"
+    
     private var dict: [String:String] {
         return UserDefaults.standard.value(forKey: "lastSelected") as? [String:String] ?? [:]
     }
-    private let mainKey = "lastSelected"
+    
 
     func sett(value: String, setterType: SettingTypeEnum = .SelectedTypeEnum, valueType: SelectedTypeEnum) {
         let key = settingTypeToString(setterType) + typeToString(valueType)

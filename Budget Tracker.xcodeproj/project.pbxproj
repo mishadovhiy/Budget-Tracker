@@ -260,8 +260,8 @@
 			children = (
 				8B7B63CB2655CAFB0067C434 /* SuperViewController.swift */,
 				8DD89D8623F1471400273904 /* AppData.swift */,
-				8B4728BB27533A470078BD34 /* DataBase.swift */,
 				8D36724124D315BC00CE90A9 /* NetworkModel.swift */,
+				8B4728BB27533A470078BD34 /* DataBase.swift */,
 				8D5206662421695200772CD5 /* StatisticBrain.swift */,
 				8B35DA6525C6F124008A8719 /* Keychain.swift */,
 				8DD89D8223F1468E00273904 /* mainVCcell.swift */,

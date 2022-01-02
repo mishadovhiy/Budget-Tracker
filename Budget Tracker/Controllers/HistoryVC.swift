@@ -124,12 +124,10 @@ class HistoryVC: SuperViewController {
 
         if selectedCategory?.purpose == .debt {
       //      center.removePendingNotificationRequests(withIdentifiers: ["Debts\(debt.name)"])
-            center?.removeDeliveredNotifications(withIdentifiers: ["Debts\(self.selectedCategory?.id ?? 0)"])
-            center?.getDeliveredNotifications { notifications in
-                DispatchQueue.main.async {
-                    UIApplication.shared.applicationIconBadgeNumber = notifications.count
-                }
+            if let cat = self.selectedCategory {
+                AppDelegate.shared?.removeNotification(id: "Debts\(cat.id )")
             }
+            
         }
         
        
@@ -162,9 +160,7 @@ class HistoryVC: SuperViewController {
         center?.removePendingNotificationRequests(withIdentifiers: [id])
         center?.getNotificationSettings { (settings) in
             if settings.authorizationStatus != .authorized {
-                DispatchQueue.main.async {
-                    self.newMessage.show(title:"Notifications disabled on your device", type: .error)
-                }
+                completion(false)
           }
         }
         
@@ -197,9 +193,7 @@ class HistoryVC: SuperViewController {
         center?.add(request) { (error) in
             
             if error != nil {
-                DispatchQueue.main.async {
-                    self.newMessage.show(title:"Error adding notification", type: .error)
-                }
+                completion(false)
                 print("notif add error")
             } else {
                 print("no errorrs")

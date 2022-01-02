@@ -863,6 +863,7 @@ class LoginViewController: SuperViewController {
         print("LOGINPRESSED")
         transactionAdded = true
         actionButtonsEnabled = false
+        
         DispatchQueue.main.async {
             UIImpactFeedbackGenerator().impactOccurred()
         }
@@ -942,28 +943,14 @@ class LoginViewController: SuperViewController {
                             KeychainService.savePassword(service: "BudgetTrackerApp", account: nickname, data: password)
                         }
                         let prevUserName = appData.username
-                        self.actionButtonsEnabled = true
+                        
                         appData.username = nickname
                         appData.password = password
                         if prevUserName != nickname {
-
+                            userChanged()
                             UserDefaults.standard.setValue(prevUserName, forKey: "prevUserName")
-                       /*     let wasTrans = appData.getLocalTransactions
-                            let trans: [TransactionsStruct] = prevUserName == "" ? [] : wasTrans + appData.getTransactions
 
-                            let wascats = appData.getCategories(key: K.Keys.localCategories)
-                            let cats = wascats + appData.getCategories()
-                            var catResult: [CategoriesStruct] = prevUserName == "" ? [] : cats
-                            for i in 0..<cats.count {
-                                catResult.append(CategoriesStruct(name: cats[i].name, purpose: cats[i].purpose, count: cats[i].count))
-
-                            }
-                            let wasDebts = prevUserName == "" ? [] : appData.getDebts() + appData.getDebts(key: K.Keys.localDebts)*/
-                            
                             if prevUserName == "" {
-                               // appData.saveDebts(wasDebts, key: K.Keys.localDebts)
-                               // appData.saveCategories(catResult, key: K.Keys.localCategories)
-                               // appData.saveTransations(trans, key: K.Keys.localTrancations)
                                 let db = DataBase()
                                 db.localCategories = db.categories
                                 db.localTransactions = db.transactions
@@ -971,15 +958,10 @@ class LoginViewController: SuperViewController {
                             }
                             
 
-                            appData.fromLoginVCMessage = "Wellcome, \(appData.username)"//(trans.count + wasDebts.count + catResult.count) > 0 ? "Wellcome, \(appData.username), \nYour Data has been saved localy" : "Wellcome, \(appData.username)"
+                            appData.fromLoginVCMessage = "Wellcome, \(appData.username)"
                         }
-                        needFullReload = true
-                        lastSelectedDate = nil
-                        AppDelegate.shared?.center.removeAllPendingNotificationRequests()
-                        UserDefaults.standard.setValue(true, forKey: "checkTrialDate")
-                        appData.proTrial = false
-                        _categoriesHolder.removeAll()
-                        UserDefaults.standard.setValue(nil, forKey: "lastSelectedCategory")
+                        
+                        
                         if !appData.purchasedOnThisDevice {
                             appData.proVersion = loadedData[i][4] == "1" ? true : appData.proVersion
                         }
@@ -1017,14 +999,27 @@ class LoginViewController: SuperViewController {
     }
 
     
+    func userChanged() {
+        actionButtonsEnabled = true
+        needFullReload = true
+        lastSelectedDate = nil
+        AppDelegate.shared?.center.removeAllPendingNotificationRequests()
+        AppDelegate.shared?.center.removeAllDeliveredNotifications()
+        appData.deliveredNotificationIDs = []
+        UserDefaults.standard.setValue(nil, forKey: "lastSelected")
+        UserDefaults.standard.setValue(true, forKey: "checkTrialDate")
+        appData.proTrial = false
+        _categoriesHolder.removeAll()
+    }
+    
+    
+    
+    
     @IBAction func createAccountPressed(_ sender: Any) {
         DispatchQueue.main.async {
             UIImpactFeedbackGenerator().impactOccurred()
         }
-        UserDefaults.standard.setValue(true, forKey: "checkTrialDate")
-        transactionAdded = true
-        appData.proTrial = false
-        self.actionButtonsEnabled = true
+
 
         self.ai.show(title: "Creating an account") { (_) in
             self.hideKeyboard()
@@ -1090,13 +1085,7 @@ class LoginViewController: SuperViewController {
                                     }
                                     
                                     appData.fromLoginVCMessage = "Wellcome, \(appData.username)"
-                                    needFullReload = true
-                                    lastSelectedDate = nil
-                                    
-                                    AppDelegate.shared?.center.removeAllPendingNotificationRequests()
-
-                                    _categoriesHolder.removeAll()
-                                    UserDefaults.standard.setValue(nil, forKey: "lastSelectedCategory")
+                                    self.userChanged()
                                     if self.fromPro {
                                         DispatchQueue.main.async {
                                             self.ai.fastHide { _ in

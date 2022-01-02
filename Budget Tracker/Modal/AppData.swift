@@ -59,8 +59,22 @@ class AppData {
     }
     
     
-    
-    
+    var deliveredNotificationIDs: [String] {
+        get {
+            let result = UserDefaults.standard.value(forKey: "deliveredNotificationIDs") as? [String]
+            print(result ?? ["-"], "deliveredNotificationIDs")
+            return result ?? []
+        }
+        set {
+            UserDefaults.standard.setValue(newValue, forKey: "deliveredNotificationIDs")
+            AppDelegate.shared?.center.getDeliveredNotifications { notifications in
+                DispatchQueue.main.async {
+                    UIApplication.shared.applicationIconBadgeNumber = notifications.count + newValue.count
+                }
+            }
+        }
+    }
+
     
     
     

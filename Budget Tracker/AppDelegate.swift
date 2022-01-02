@@ -69,42 +69,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     func applicationWillTerminate(_ application: UIApplication) {
         print(#function)
     }
-
     
+    func removeNotification(id:String) {
+        center.removeDeliveredNotifications(withIdentifiers: [id])
+        let deliveredHolder = appData.deliveredNotificationIDs
+        var newNotif:[String] = []
+        for i in 0..<deliveredHolder.count {
+            if deliveredHolder[i] != id {
+                newNotif.append(deliveredHolder[i])
+            }
+        }
+        appData.deliveredNotificationIDs = newNotif
+    }
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        let categpryID = notification.request.content.threadIdentifier
+        let notificationText = notification.request.content.body
+        let catName = notification.request.content.title
+        appData.deliveredNotificationIDs.append(notification.request.identifier)
         
-        
-        let okButton = IndicatorView.button(title: "OK", style: .standart, close: true) { _ in
-            
-        }
-        
+        let okButton = IndicatorView.button(title: "OK", style: .standart, close: true) { _ in }
         let showButton = IndicatorView.button(title: "Show", style: .success, close: false) { _ in
             let load = LoadFromDB()
-            load.Debts { (loadedDebts, debtsError) in
-                var debtsResult: [DebtsStruct] = []
-                for i in 0..<loadedDebts.count {
-                    let name = loadedDebts[i][1]
-                    let amountToPay = loadedDebts[i][2]
-                    let dueDate = loadedDebts[i][3]
-                    debtsResult.append(DebtsStruct(name: name, amountToPay: amountToPay, dueDate: dueDate))
-                }
-                if debtsError == "" {
-                    appData.saveDebts(debtsResult)
-                }
-
-               // DispatchQueue.main.async {
-                 //   self.ai.fastHide { (_) in
-                        self.showHistory(categpry: notification.request.content.threadIdentifier)
-                //    }
-                //}
+            load.Categories { loadedData, error in
+                self.showHistory(categpry: categpryID)
             }
         }
         DispatchQueue.main.async {
             AudioServicesPlaySystemSound(1007)
-            self.ai.completeWithActions(buttons: (okButton, showButton), title: notification.request.content.title, descriptionText: notification.request.content.body)
+            self.ai.completeWithActions(buttons: (showButton, okButton), title: notificationText, descriptionText: "For category: \(catName)")
         }
 
     }

@@ -145,7 +145,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 
                 data.append(ScreenCategory(category: newValue[i], transactions: transactions))
                 
-                let newD = sort(data) //data.sorted{ $0.category.id > $1.category.id }
+                let newD = sort(data)
                 resultDict.updateValue(newD, forKey: strPurpose)
                 
             }
@@ -272,7 +272,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
     
     
-    func categoriesContains(_ searchText: String) -> [NewCategories] {
+    func categoriesContains(_ searchText: String, fromHolder: Bool = true) -> [NewCategories] {
         if searchText == "" {
           //  if let data = allData {
                 return allCategoriesHolder
@@ -281,7 +281,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         } else {
             
         //    if let data = allData {
-            let data = allCategoriesHolder
+            let data = fromHolder ? allCategoriesHolder : _categories
                 var resultt:[NewCategories] = []
                 for i in 0..<data.count {
                     let name = data[i].name.uppercased()
@@ -340,7 +340,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         tableView.delegate = self
         tableView.dataSource = self
         searchBar.delegate = self
-        DispatchQueue.init(label: "udLoad", qos: .userInteractive).async {
+        DispatchQueue.init(label: "dbLoad", qos: .userInteractive).async {
             if !self.fromSettings {
            //     if self.screenType != .localData {
                     self.categories = self.db.categories
@@ -579,7 +579,16 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     }
 
     var appeareDidCall = false
-    
+    var unseenIDs:[String] = []
+    func containsINUnseen(id:String) -> Bool {
+        let all = Array(unseenIDs)
+        for i in 0..<all.count {
+            if all[i] == "Debts\(id)" {
+                return true
+            }
+        }
+        return false
+    }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         searchBar.endEditing(true)
@@ -593,11 +602,29 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             loadData()
         }
         if appeareDidCall {
-            categories = _categories
-
+            if screenType == .categories || screenType == .debts {
+                DispatchQueue.init(label: "udLoad", qos: .userInteractive).async {
+                    self.loadNotifications { _ in
+                        self.categories = self.categoriesContains(self.searchingText, fromHolder: false)
+                    }
+                }
+            } else {
+                DispatchQueue.init(label: "udLoad", qos: .userInteractive).async {
+                    self.categories = self.categoriesContains(self.searchingText, fromHolder: false)
+                }
+            }
         } else {
             appeareDidCall = true
-            //loadData()
+            if screenType == .categories || screenType == .debts {
+                DispatchQueue.init(label: "udLoad", qos: .userInteractive).async {
+                    self.loadNotifications { _ in
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
+                    }
+                }
+            }
+            
         }
         
         if transactionAdded {
@@ -609,7 +636,18 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         
     }
     
-    
+    func loadNotifications(completion: @escaping (Bool) -> ()) {
+        AppDelegate.shared?.center.getDeliveredNotifications(completionHandler: { nitof in
+            var newIDs:[String] = []
+            for i in 0..<nitof.count {
+                let requestID = nitof[i].request.identifier
+                newIDs.append(requestID)
+            }
+            newIDs += appData.deliveredNotificationIDs
+            self.unseenIDs = newIDs
+            completion(true)
+        })
+    }
     
     override func viewDidDisappear(_ animated: Bool) {
         if !toHistory {
@@ -938,7 +976,8 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
 
                 let category = tableData[index.section].data[indexPath.row]
 
-                
+                let hideUnseenIndicator = containsINUnseen(id: "\(category.category.id)") ? false : true
+                cell.unseenIndicatorView.isHidden = hideUnseenIndicator
                 
             //    cell.accessoryType = category.editing != nil ? .none : .disclosureIndicator
                 let hideEditing = category.editing != nil ? false : true
@@ -954,6 +993,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 if cell.categoryNameLabel.isHidden != hideTitle {
                     cell.categoryNameLabel.isHidden = hideTitle
                 }
+                
                 cell.footerBackground.backgroundColor = editingTfIndex.1 == index.row || selectingIconFor.0 == index ? selectionBacground : K.Colors.secondaryBackground
                 
                // cell.newCategoryTF.tag = index.row
@@ -966,7 +1006,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 cell.newCategoryTF.backgroundColor = cell.newCategoryTF == editingTF ? K.Colors.primaryBacground : .clear
                 cell.newCategoryTF.text = category.editing?.name ?? category.category.name
                 //
-                cell.lo(index: index, footer: nil)
+
                 /*if endAll {
                     cell.newCategoryTF.endEditing(true)
                 }*/
@@ -1421,9 +1461,10 @@ class categoriesVCcell: UITableViewCell {
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
     
+    @IBOutlet weak var unseenIndicatorView: UIView!
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        
+        unseenIndicatorView.layer.cornerRadius = 4
        // newCategoryTF.layer.cornerRadius = 6
        // newCategoryTF.setRightPaddingPoints(5)
        // newCategoryTF.setLeftPaddingPoints(5)
