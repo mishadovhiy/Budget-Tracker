@@ -77,7 +77,37 @@ class AppData {
 
     
     
-    
+    func emailFromLoadedDataPurch(_ data:[[String]]) -> String? {
+        //get user email
+        //loadedData.append([name, email, password, registrationDate, pro, trialDate])
+        if !appData.purchasedOnThisDevice {
+            let currnt = appData.username
+            var emailOptional:String?
+            for i in 0..<data.count {
+                if data[i][0] == currnt {
+                    emailOptional = data[i][1]
+                }
+            }
+            if let email = emailOptional {
+                var dbPurch = false
+                for i in 0..<data.count {
+                    if !dbPurch {
+                        if data[i][1] == email {
+                            if data[i][4] == "1" {
+                                dbPurch = true
+                                break
+                            }
+                        }
+                    }
+                }
+                appData.proVersion = dbPurch
+                print("dbPurch:", dbPurch)
+                return email
+            }
+            
+        }
+        return nil
+    }
     
     
     var username: String {

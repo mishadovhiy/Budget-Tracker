@@ -525,39 +525,7 @@ class ViewController: SuperViewController {
 
     }
     
-    func emailFromLoadedDataPurch(_ data:[[String]]) {
-        //loadedData.append([name, email, password, registrationDate, pro, trialDate])
-        if !appData.purchasedOnThisDevice {
-            let currnt = appData.username
-            var emailOptional:String?
-            for i in 0..<data.count {
-                if data[i][0] == currnt {
-                    emailOptional = data[i][1]
-                }
-            }
-            if let email = emailOptional {
-                var dbPurch = false
-                for i in 0..<data.count {
-                    if !dbPurch {
-                        if data[i][1] == email {
-                            if data[i][4] == "1" {
-                                dbPurch = true
-                                break
-                            }
-                        }
-                    }
-                    
-                }
-                appData.proVersion = dbPurch
-                print("dbPurch:", dbPurch)
-                
-            }
-        }
-        
-        
-        
-
-    }
+    
     
     
     func checkPurchase() {
@@ -570,7 +538,7 @@ class ViewController: SuperViewController {
             load.Users { (loadedData, error) in
                 print(loadedData, "checkPurchase")
                 if !error {
-                    self.emailFromLoadedDataPurch(loadedData)
+                    let _ = appData.emailFromLoadedDataPurch(loadedData)
                     
                     for i in 0..<loadedData.count {
                         if loadedData[i][0] == nick {
@@ -581,11 +549,8 @@ class ViewController: SuperViewController {
                             if !appData.purchasedOnThisDevice && !appData.proVersion {
                                 print("checkPurchase appData.proVersion", appData.proVersion)
                             
-                                if loadedData[i][5] != "" {//trial
-                               //     if UserDefaults.standard.value(forKey: "checkTrialDate") as? Bool ?? true {
-                                        
-                                        self.checkProTrial()
-                             //       }
+                                if loadedData[i][5] != "" {
+                                    self.checkProTrial()
                                 }
                             }
                                 

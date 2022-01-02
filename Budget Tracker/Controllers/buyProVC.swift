@@ -160,12 +160,11 @@ class BuyProVC: SuperViewController {
                     let load = LoadFromDB()
                     load.Users { (loadedData, error) in
                         if error {
-
                             self.showAlert(title: "Internet error", text: "Try again later", error: true)
                         } else {
-                            let nik = appData.username
+                            let email = appData.emailFromLoadedDataPurch(loadedData) //appData.username
                             for i in 0..<loadedData.count {
-                                if loadedData[i][0] == nik {
+                                if loadedData[i][1] == email {
                                     if loadedData[i][5] != "" {
 
                                         self.showAlert(title: "Access denied", text: "You have already tried trial version", error: true)
@@ -193,7 +192,7 @@ class BuyProVC: SuperViewController {
                 }
                 
                 DispatchQueue.main.async {
-                    self.ai.completeWithActions(buttons: (firstButton, secondButton), title: "Would you like to sign in?", descriptionText: "Sign in to try trial across all your devices", type: .standard)
+                    self.ai.completeWithActions(buttons: (firstButton, secondButton), title: "Sign in required", type: .standard)
                 }
             }
         }
