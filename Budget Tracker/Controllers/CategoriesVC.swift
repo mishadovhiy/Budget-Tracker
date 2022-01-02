@@ -273,7 +273,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     func categoriesContains(_ searchText: String, fromHolder: Bool = true) -> [NewCategories] {
         if searchText == "" {
           //  if let data = allData {
-                return allCategoriesHolder
+                return fromHolder ? allCategoriesHolder : _categories
            // }
             
         } else {
@@ -388,14 +388,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             newCategory.category.id = newID
             save.newCategories(newCategory.category) { error in
                 self.editingTF = nil
-                
-           //     self.loadData(loadFromUD: true)
-              //  self.tableData[section].data.inse
-             //   self.categories.insert(newCategory.category, at: 0)
-             //   CategoriesVC.shared?.tableData[index.section].data[index.row].category = editingValue
-                
-             //   self.categories.append(newCategory.category)
+
                 self.tableData[section].data.insert(newCategory, at: 0)
+                self._categories.insert(newCategory.category, at: 0)
                 self.tableData[section].newCategory.category.name = ""
               //  self.tableData[section].data.append(newCategory)
                 self.selectingIconFor = (nil,nil)
@@ -768,6 +763,11 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         let delete = DeleteFromDB()
         delete.CategoriesNew(category: tableData[at.section].data[at.row].category) { _ in
             self.categories = self.db.categories
+            self.searchingText = ""
+            DispatchQueue.main.async {
+                self.searchBar.endEditing(true)
+                self.searchBar.text = ""
+            }
         }
     }
 
