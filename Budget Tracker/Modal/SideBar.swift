@@ -38,20 +38,24 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
             categories.append(CellData(name: "local Data", value: "\(localCount)", segue: "toLocalData", image: ""))
         }
         
-        let statistic = [
-            CellData(name: "Statistic", value: "", segue: "toStatisticVC", image: "chart.pie.fill")
-        ]
+        let statistic = CellData(name: "Statistic", value: "", segue: "toStatisticVC", image: "chart.pie.fill")
         let support = CellData(name: "Support", value: "", segue: "toSupportVC", image: "")
-        
+        let trialDays = UserDefaults.standard.value(forKey: "trialToExpireDays") as? Int ?? 0
+        let trialCell = CellData(name: "Trail till", value: "\(7 - trialDays)", segue: "toProVC", image: "")
         //toSupportVC
         //chart.pie.fill - statistic
         let emptySec = TableData(section: [CellData(name: "", value: "", segue: "", image: "")], title: "", hidden: false)
+        
+        var accountSection:[CellData] {
+            return trialDays == 0 ? [accpuntCell, support] : [accpuntCell, support, trialCell]
+        }
+        
         tableData = [
-            TableData(section: [accpuntCell, support], title: "", hidden: false),
+            TableData(section: accountSection, title: "", hidden: false),
             emptySec,
             TableData(section: categories, title: "", hidden: false),
             emptySec,
-            TableData(section: statistic, title: "", hidden: false),
+            TableData(section: [statistic], title: "", hidden: false),
         ]
         DispatchQueue.main.async {
             ViewController.shared?.sideTableView.reloadData()

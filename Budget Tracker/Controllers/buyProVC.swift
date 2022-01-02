@@ -152,6 +152,7 @@ class BuyProVC: SuperViewController {
     }
     
     @IBAction func tryFreePressed(_ sender: UIButton) {
+        UserDefaults.standard.setValue(true, forKey: "trialPressed")
         if !appData.proVersion {
             if appData.username != "" {
 
@@ -181,20 +182,9 @@ class BuyProVC: SuperViewController {
                 }
                 
             } else {
-        /*        DispatchQueue.main.async {
-                    
-                    self.loadingIndicator.completeWithActions(buttonsTitles: ("No", "Sing in"), leftButtonActon: { (_) in
-                        self.trialWithoutAcoount()
-                    }, rightButtonActon: { (_) in
-                        DispatchQueue.main.async {
-                            self.performSegue(withIdentifier: "toSingIn", sender: self)
-                        }
-                        
-                    }, title: "Would you like to sign in?", description: "Sign in to try trial across all your devices")
-
-                }*/
-                let firstButton = IndicatorView.button(title: "No", style: .standart, close: true) { _ in
-                    self.trialWithoutAcoount()
+                //trial only if singed in
+                let firstButton = IndicatorView.button(title: "Close", style: .standart, close: true) { _ in
+                   // self.trialWithoutAcoount()
                 }
                 let secondButton = IndicatorView.button(title: "Sing in", style: .standart, close: true) { _ in
                     DispatchQueue.main.async {

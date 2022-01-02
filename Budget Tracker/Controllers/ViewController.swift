@@ -636,18 +636,22 @@ class ViewController: SuperViewController {
             } else {
                 appData.proTrial = false
                 UserDefaults.standard.setValue(false, forKey: "checkTrialDate")
-                DispatchQueue.main.async {
-                    self.newMessage.show(title: "Pro trial is over", type: .standart)
-               //     self.message.showMessage(text: "Pro trial is over", type: .succsess, bottomAppearence: true)
+                if (UserDefaults.standard.value(forKey: "trialPressed") as? Bool ?? false) {
+                    DispatchQueue.main.async {
+                        self.newMessage.show(title: "Pro trial is over", type: .standart)
+                    }
                 }
+                
             }
         } else {
             appData.proTrial = false
             UserDefaults.standard.setValue(false, forKey: "checkTrialDate")
-            DispatchQueue.main.async {
-                self.newMessage.show(title: "Pro trial is over", type: .standart)
-                //self.message.showMessage(text: "Pro trial is over", type: .succsess, bottomAppearence: true)
+            if (UserDefaults.standard.value(forKey: "trialPressed") as? Bool ?? false) {
+                DispatchQueue.main.async {
+                    self.newMessage.show(title: "Pro trial is over", type: .standart)
+                }
             }
+            
         }
     }
     
@@ -1739,7 +1743,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("selected")
         if indexPath.section != 0 && newTableData.count != 0 {
             if newTableData[indexPath.section-1].transactions.count != indexPath.row {
                 if newTableData[indexPath.section-1].transactions[indexPath.row].comment != "" {
@@ -1779,10 +1782,16 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             deleteAction.image = iconNamed("trash.red")
             editeAction.backgroundColor = K.Colors.primaryBacground
             deleteAction.backgroundColor = K.Colors.primaryBacground
-            return UISwipeActionsConfiguration(actions: newTableData[indexPath.section - 1].transactions.count != indexPath.row ? [editeAction, deleteAction] : [] )
+            if newTableData.count != 0 {
+                if newTableData[indexPath.section - 1].transactions.count != indexPath.row {
+                    return UISwipeActionsConfiguration(actions: [editeAction, deleteAction])
+                }
+            }
+            return nil
+
                                                
                                                } else {
-                return UISwipeActionsConfiguration(actions: [])
+                return nil
             }
         
         
@@ -1872,7 +1881,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         } else {
             if newTableData.count == 0 && indexPath.section == 1{
                 
-                return 450
+                return tableView.layer.frame.height - (bigFr + 30)
             } else {
                 return UITableView.automaticDimension
             }
@@ -2046,4 +2055,9 @@ class mainFooterCell: UITableViewCell {
 
 class mainVCemptyCell: UITableViewCell {
     
+    @IBOutlet weak var mainBackgroundView: UIView!
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        mainBackgroundView.layer.cornerRadius = 9//ViewController.shared?.tableCorners ?? 9
+    }
 }

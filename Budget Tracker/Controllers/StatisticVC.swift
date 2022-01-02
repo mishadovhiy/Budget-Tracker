@@ -169,7 +169,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
             DispatchQueue.main.async {
                 self.titleLabel.textAlignment = .center
                 self.titleLabel.text = "No " + (self.titleLabel.text ?? "Data")
-                self.titleLabel.alpha = 0.3
+                self.titleLabel.alpha = 0.1
             }
         } else {
             DispatchQueue.main.async {
@@ -247,6 +247,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
             vc.selectedCategory = db.category(selectedCategoryName)
             vc.selectedPurposeH = segmentControll.selectedSegmentIndex
             vc.fromCategories = fromDebts
+            vc.allowEditing = false
         }
     }
     

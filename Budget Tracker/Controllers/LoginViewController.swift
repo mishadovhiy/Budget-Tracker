@@ -9,34 +9,21 @@
 import UIKit
 var needFullReload = false
 
-//on login or create an account if account not in a list - append to "loggedInUsers"
-
-//forgot password - if show (if from settings and if nick == "")
-//change password - if nick != ""
-//log out - if nick != ""
-
-
-
-/*login pressed:
- if email
- load users
- if password == data[i]["password"]
- go to select user vc and when selected:
- add to login tf and login pressed
- 
- //remove check email on return, check only when login pressed
-*/
-
-
-/*
- r o o l s
- 
- save to local data:
- - when singIn/logIn and username == ""
- 
- */
-
 extension LoginViewController {
+    func userChanged() {
+        actionButtonsEnabled = true
+        needFullReload = true
+        lastSelectedDate = nil
+        AppDelegate.shared?.center.removeAllPendingNotificationRequests()
+        AppDelegate.shared?.center.removeAllDeliveredNotifications()
+        appData.deliveredNotificationIDs = []
+        UserDefaults.standard.setValue(nil, forKey: "lastSelected")
+        UserDefaults.standard.setValue(true, forKey: "checkTrialDate")
+        UserDefaults.standard.setValue(false, forKey: "trialPressed")
+        UserDefaults.standard.setValue(nil, forKey: "trialToExpireDays")
+        appData.proTrial = false
+        _categoriesHolder.removeAll()
+    }
     @IBAction func moreButtonPressed(_ sender: UIButton) {//morepressed
         wrongCodeCount = 0
         hideKeyboard()
@@ -999,18 +986,7 @@ class LoginViewController: SuperViewController {
     }
 
     
-    func userChanged() {
-        actionButtonsEnabled = true
-        needFullReload = true
-        lastSelectedDate = nil
-        AppDelegate.shared?.center.removeAllPendingNotificationRequests()
-        AppDelegate.shared?.center.removeAllDeliveredNotifications()
-        appData.deliveredNotificationIDs = []
-        UserDefaults.standard.setValue(nil, forKey: "lastSelected")
-        UserDefaults.standard.setValue(true, forKey: "checkTrialDate")
-        appData.proTrial = false
-        _categoriesHolder.removeAll()
-    }
+    
     
     
     
