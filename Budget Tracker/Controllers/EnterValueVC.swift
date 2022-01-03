@@ -8,11 +8,6 @@
 
 import UIKit
 
-
-//EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Change password", title: "Repeate password", placeHolder: "Password", nextAction: repeatPasAction, screenType: .password))
-
-//self.enterValueVCScreenData = EnterValueVCScreenData(taskName: "Transfare data", title: "Enter username or email", subTitle: nil, placeHolder: "Username or email", nextAction: nextAction, screenType: .email)
-
 var count = 0
 class EnterValueVC:UIViewController, UITextFieldDelegate {
     
@@ -31,9 +26,7 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.ai?.fastHide { _ in
-           // if self.screenData?.screenType != .code {
-                self.valueTextField.becomeFirstResponder()
-           // }
+            self.valueTextField.becomeFirstResponder()
         }
         
     }

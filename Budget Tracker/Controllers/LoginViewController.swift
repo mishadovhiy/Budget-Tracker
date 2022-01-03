@@ -1022,7 +1022,8 @@ class LoginViewController: SuperViewController {
             let regDate = appData.filter.getToday(appData.filter.filterObjects.currentDate)
             if password == self.confirmPasswordLabel.text ?? "" {
                 if name != "" && !name.contains("@") && email != "" && password != "" {
-                    if self.userExists(name: name, loadedData: loadedData) == false  {
+                    let emailLimitOp = self.canAddForEmail(email, loadedData: loadedData)
+                    if !self.userExists(name: name, loadedData: loadedData) || emailLimitOp == nil {
                         self.actionButtonsEnabled = true
                         if !email.contains("@") || !email.contains(".") {
                             self.obthervValues = true
@@ -1081,14 +1082,25 @@ class LoginViewController: SuperViewController {
                             }
                         }
                     } else {
-                        self.actionButtonsEnabled = true
-                        DispatchQueue.main.async {
-                            self.newMessage.show(title: "Username '\(name)' already exists", type: .error)
-                            self.ai.hideIndicator(fast: true) { (_) in
-                                
-                                
+                        self.ai.hideIndicator(fast: true) { (_) in
+                        }
+                        if let emailLimit = emailLimitOp {
+                            if emailLimit == .totalError {
+                                self.newMessage.show(title: "You have reached the maximum amount of usernames", type: .error)
+                            } else {
+                                appData.presentBuyProVC(currentVC: self, selectedProduct: 2)
+                                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                                    self.newMessage.show(title: "You have reached the maximum amount of usernames", description: "Update to Pro to create new username", type: .standart)
+                                }
+                            }
+                            
+                        } else {
+                            self.actionButtonsEnabled = true
+                            DispatchQueue.main.async {
+                                self.newMessage.show(title: "Username '\(name)' already exists", type: .error)
                             }
                         }
+                        
                     }
                 
                 } else {
@@ -1096,22 +1108,22 @@ class LoginViewController: SuperViewController {
                     self.obthervValues = true
                     self.showWrongFields()
 
-                    DispatchQueue.main.async {
+                  //  DispatchQueue.main.async {
                         self.newMessage.show(title: "All fields are required", type: .error)
                         self.ai.hideIndicator(fast: true) { (_) in
                             
                         }
-                    }
+                 //   }
                   
                 }
             } else {
                 self.actionButtonsEnabled = true
-                DispatchQueue.main.async {
+         //       DispatchQueue.main.async {
                     self.newMessage.show(title: "Passwords not match", type: .error)
                     self.ai.hideIndicator(fast: true) { (_) in
                         
                     }
-                }
+              //  }
             }
         }
     }
@@ -1163,6 +1175,22 @@ class LoginViewController: SuperViewController {
         }
         return userExists
     }
+    func canAddForEmail(_ email: String, loadedData: [[String]]) -> EmailLimit? {
+        var count = 0
+        let maxCount = appData.proVersion ? 15 : 3
+        for i in 0..<loadedData.count {
+            if loadedData[i][1] == email {
+                count += 1
+            }
+        }
+        
+        return maxCount >= count ? nil : (count >= 4 ? .canUpdate : .totalError)
+    }
+    enum EmailLimit {
+    case totalError
+        case canUpdate
+    }
+    
     var forceLoggedOutUser = ""
     var obthervValues = false
     func showWrongFields() {

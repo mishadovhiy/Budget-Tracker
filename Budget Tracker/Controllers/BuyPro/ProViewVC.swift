@@ -10,13 +10,14 @@ import UIKit
 
 class ProViewVC: UIViewController {
 
+    @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var mainImage: UIImageView!
     @IBOutlet weak var mainDescriptionLabel: UILabel!
     @IBOutlet weak var mainTitleLabel: UILabel!
     var _data: BuyPageVC.PageStruct?
     var data: BuyPageVC.PageStruct {
         get {
-            return _data ?? BuyPageVC.PageStruct(title: "-", description: "-")
+            return _data ?? BuyPageVC.PageStruct(title: "-", description: "", imgName: "")
         }
         set {
             _data = newValue
@@ -33,6 +34,7 @@ class ProViewVC: UIViewController {
         super.viewDidAppear(animated)
         self.mainTitleLabel.text = data.title
         self.mainDescriptionLabel.text = data.description
+        self.mainImage.image = iconNamed(data.imgName)
     }
     override func viewDidLoad() {
         super.viewDidLoad()

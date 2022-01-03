@@ -45,7 +45,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
 
         
         print(today, "didFinishLaunchingWithOptions")
-        
+        center.getDeliveredNotifications { notifications in
+            DispatchQueue.main.async {
+                UIApplication.shared.applicationIconBadgeNumber = notifications.count + appData.deliveredNotificationIDs.count
+            }
+        }
         
         return true
     }

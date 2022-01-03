@@ -30,18 +30,18 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         
         
         var categories = [
-            CellData(name: "Categories", value: "\(db.categories.count - debts)", segue: "toCategories", image: ""),
-            CellData(name: "Debts", value: "\(debts)", segue: "toDebts", image: "", pro: pro)
+            CellData(name: "Categories", value: "\(db.categories.count - debts)", segue: "toCategories", image: "folder.fill"),
+            CellData(name: "Debts", value: "\(debts)", segue: "toDebts", image: "rectangle.3.group.fill", pro: pro)
         ]
         let localCount = ((UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String:Any]] ?? []) + (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String:Any]] ?? [])).count
         if localCount > 0 {
-            categories.append(CellData(name: "local Data", value: "\(localCount)", segue: "toLocalData", image: ""))
+            categories.append(CellData(name: "local Data", value: "\(localCount)", segue: "toLocalData", image: "tray.fill"))
         }
         
         let statistic = CellData(name: "Statistic", value: "", segue: "toStatisticVC", image: "chart.pie.fill")
-        let support = CellData(name: "Support", value: "", segue: "toSupportVC", image: "")
+        let support = CellData(name: "Support", value: "", segue: "toSupportVC", image: "support.fill")
         let trialDays = UserDefaults.standard.value(forKey: "trialToExpireDays") as? Int ?? 0
-        let trialCell = CellData(name: "Trail till", value: "\(7 - trialDays)", segue: "toProVC", image: "")
+        let trialCell = CellData(name: "Trail till", value: "\(7 - trialDays)", segue: "toProVC", image: "clock.fill")
         //toSupportVC
         //chart.pie.fill - statistic
         let emptySec = TableData(section: [CellData(name: "", value: "", segue: "", image: "")], title: "", hidden: false)

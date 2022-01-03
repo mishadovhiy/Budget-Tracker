@@ -167,6 +167,16 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		8B4D33BB27825F6D00B83D8A /* BuyPro */ = {
+			isa = PBXGroup;
+			children = (
+				8B63312E260FD65200D9E117 /* buyProVC.swift */,
+				8BF58D1E277C793D005A7F38 /* BuyPageVC.swift */,
+				8BF58D1C277C78B7005A7F38 /* ProViewVC.swift */,
+			);
+			path = BuyPro;
+			sourceTree = "<group>";
+		};
 		8B5CE1CF2720991B0092BBFB /* notUsing */ = {
 			isa = PBXGroup;
 			children = (
@@ -248,9 +258,7 @@
 				8BF63E8A276294F2002E8601 /* SelectUserVC.swift */,
 				8BF63E8C27629D14002E8601 /* SupportVC.swift */,
 				8BF63E8E2762C83F002E8601 /* SettingsVC.swift */,
-				8B63312E260FD65200D9E117 /* buyProVC.swift */,
-				8BF58D1E277C793D005A7F38 /* BuyPageVC.swift */,
-				8BF58D1C277C78B7005A7F38 /* ProViewVC.swift */,
+				8B4D33BB27825F6D00B83D8A /* BuyPro */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";

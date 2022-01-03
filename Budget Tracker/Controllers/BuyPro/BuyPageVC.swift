@@ -11,9 +11,9 @@ import UIKit
 class BuyPageVC: UIPageViewController {
 
     var pages: [PageStruct] = [
-        PageStruct(title: "Transfare data", description: "some description"),
-        PageStruct(title: "Due date reminder for debts", description: "set notification reminder for specific date"),
-        PageStruct(title: "Data base storage increes", description: "create up to: 15 data base usernames per email"),
+        PageStruct(title: "Reminders for debts", description: "Set notification reminders", imgName: "addReminder.pro"),
+        PageStruct(title: "Transfer data", description: "Transfer transactions and categories between accounts", imgName: "transfareDataIcon.pro"),
+        PageStruct(title: "App storage increes", description: "Create up to 15 accounts for email\n\nStores data about categories usage", imgName: "dbStorage.pro"),
     ]
     
     
@@ -65,6 +65,7 @@ extension BuyPageVC {
     struct PageStruct {
         let title: String
         let description: String
+        let imgName: String
     }
 }
 

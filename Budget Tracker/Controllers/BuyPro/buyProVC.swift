@@ -39,11 +39,7 @@ class BuyProVC: SuperViewController {
     @IBOutlet weak var buyProView: UIView!
     @IBOutlet weak var purchasedIndicatorView: UIView!
     
-    //title, description, imageName
-    let allProducts:[(String, String, String)] = [
-        ("Debts", "Track how much people own you", "purchaseDebts"),
-        ("Transfer data", "Transfer data from previous account", "purchaseTransferData")
-    ]
+
     
     var requestProd = SKProductsRequest()
     var proVProduct: SKProduct?
@@ -58,7 +54,6 @@ class BuyProVC: SuperViewController {
             self.purchasedIndicatorView.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
             self.purchasedIndicatorView.layer.cornerRadius = 4
         }
-        pageControll.numberOfPages = allProducts.count
         pageChanged(pageControll)
         if let price = UserDefaults.standard.value(forKey: "productPrice") {
             DispatchQueue.main.async {
