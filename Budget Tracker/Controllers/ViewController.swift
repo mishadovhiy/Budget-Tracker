@@ -527,7 +527,6 @@ class ViewController: SuperViewController {
     
     
     
-    
     func checkPurchase() {
      //   DispatchQueue.main.async {
             let nick = appData.username

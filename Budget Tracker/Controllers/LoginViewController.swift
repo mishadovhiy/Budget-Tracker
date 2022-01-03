@@ -1023,7 +1023,7 @@ class LoginViewController: SuperViewController {
             if password == self.confirmPasswordLabel.text ?? "" {
                 if name != "" && !name.contains("@") && email != "" && password != "" {
                     let emailLimitOp = self.canAddForEmail(email, loadedData: loadedData)
-                    if !self.userExists(name: name, loadedData: loadedData) || emailLimitOp == nil {
+                    if !self.userExists(name: name, loadedData: loadedData) && emailLimitOp == nil {
                         self.actionButtonsEnabled = true
                         if !email.contains("@") || !email.contains(".") {
                             self.obthervValues = true
@@ -1184,7 +1184,7 @@ class LoginViewController: SuperViewController {
             }
         }
         
-        return maxCount >= count ? nil : (count >= 4 ? .canUpdate : .totalError)
+        return maxCount > count ? nil : (!appData.proVersion ? .canUpdate : .totalError)
     }
     enum EmailLimit {
     case totalError
