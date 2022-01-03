@@ -10,6 +10,7 @@ import UIKit
 
 class mainVCcell: UITableViewCell {
     
+    @IBOutlet weak var mainBackgroundView: UIView!
     @IBOutlet weak var categoryImage: UIImageView!
     @IBOutlet weak var commentImage: UIImageView!
     // @IBOutlet weak var bigDate: UILabel!
@@ -19,6 +20,40 @@ class mainVCcell: UITableViewCell {
  //   @IBOutlet weak var sectionView: UIView!
     @IBOutlet weak var commentLabel: UILabel!
     let db = DataBase()
+
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+      /*  let cellPan = UIPanGestureRecognizer(target: self, action: #selector(cellSwipePan(_:)))
+        self.contentView.addGestureRecognizer(cellPan)
+        self.mainBackgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)*/
+    }
+    var beginScrollPosition:CGFloat = 0
+    @objc func cellSwipePan(_ sender: UIPanGestureRecognizer) {
+        let finger = sender.location(in: self.contentView)
+        if sender.state == .began {
+            beginScrollPosition = finger.x
+        }
+        if sender.state == .began || sender.state == .changed {
+            print("began")
+            let newPosition = finger.x - beginScrollPosition
+            self.mainBackgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, newPosition, 0, 0)
+        } else {
+            if sender.state == .ended {
+                toggleCellActions(show: finger.x < beginScrollPosition ? true : false, animated: true)
+            }
+        }
+    }
+    
+    var showingActions = false
+    func toggleCellActions(show: Bool, animated: Bool) {
+        showingActions = show
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: animated ? 0.3 : 0) {
+                self.mainBackgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? -100 : 0, 0, 0)
+            } completion: { _ in
+            }
+        }
+    }
     
     func setupCell(_ data: TransactionsStruct, i: Int, tableData: [TransactionsStruct], selectedCell: IndexPath?, indexPath: IndexPath) {
         if (Double(data.value) ?? 0.0) > 0 {
@@ -27,11 +62,8 @@ class mainVCcell: UITableViewCell {
         } else {
             valueLabel.textColor = K.Colors.category
         }
-        
-        
-        
-        
-        commentLabel.isHidden = true
+
+       // commentLabel.isHidden = true
         
         let value = String(format:"%.0f", Double(data.value) ?? 0.0)
         valueLabel.text = Double(data.value) ?? 0.0 > 0.0 ? "+\(value)" : value
@@ -43,12 +75,13 @@ class mainVCcell: UITableViewCell {
         categoryLabel.text = category?.name ?? "Unknown category"
         commentLabel.text = data.comment
         commentImage.alpha = data.comment == "" ? 0 : 1
-        if selectedCell != nil {
+        commentLabel.isHidden = data.comment == "" ? true : false
+     /*   if selectedCell != nil {
             if selectedCell == indexPath && commentLabel.text != "" {
                 commentLabel.isHidden = false
                 commentImage.alpha = 0
             }
-        }
+        }*/
 
         
     }

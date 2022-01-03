@@ -118,8 +118,6 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 let purpose = newValue[i].purpose
                 let strPurpose = purposeToString(purpose)
                 var data = resultDict[strPurpose] ?? []
-                //set transactions and dont set in
-                
 
                 var transactions:[TransactionsStruct] {
                     if self.screenType != .localData {
@@ -133,23 +131,17 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                             }
                         }
                         return transResult
-                        
-                        
+
                     }
-                     //?  : (transfaringCategories != nil ? (transfaringCategories?.transactions ?? []) : )
+
                 }
-                
-                
-                
+
                 data.append(ScreenCategory(category: newValue[i], transactions: transactions))
                 
                 let newD = sort(data)
                 resultDict.updateValue(newD, forKey: strPurpose)
-                
             }
 
-            
-            
             switch self.screenType {
             case .categories:
                 var randomIcon: String {
@@ -166,17 +158,18 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 let incomeColor = appData.lastSelected.gett(setterType: .color, valueType: .income) ?? "yellowColor"
                 let incomeImg = appData.lastSelected.gett(setterType: .icon, valueType: .income) ?? randomIcon
                 
-                var data = [
+                self.tableData = [
                     ScreenDataStruct(title: K.expense, data: resultDict[purposeToString(.expense)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: expenseImg, color: expenseColor, purpose: .expense), transactions: [])),
-                    ScreenDataStruct(title: K.income, data: resultDict[purposeToString(.income)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: incomeImg, color: incomeColor, purpose: .income), transactions: []))
+                    ScreenDataStruct(title: K.income, data: resultDict[purposeToString(.income)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: incomeImg, color: incomeColor, purpose: .income), transactions: [])),
+                    ScreenDataStruct(title: purposeToString(.debt), data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: debtImg, color: debtColor, purpose: .debt), transactions: []))
                 ]
-                if fromSettings {
+              /*  if fromSettings {
                     self.tableData = data
                 } else {
-                    data.append(ScreenDataStruct(title: purposeToString(.debt), data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: debtImg, color: debtColor, purpose: .debt), transactions: [])))
+                    data.append()
                     
                     self.tableData = data
-                }
+                }*/
                 
             case .debts:
                 var randomIcon: String {
@@ -321,10 +314,14 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             
         } else {
             if let transfare = transfaringCategories {
-                self.categories = transfare.categories
+              //  self.categories = transfare.categories
+                allCategoriesHolder = transfare.categories
+                categories = categoriesContains(searchingText)
             } else {
                 //ud
-                self.categories = db.localCategories
+                allCategoriesHolder = db.localCategories
+                categories = categoriesContains(searchingText)
+             //   self.categories = db.localCategories
             }
         }
         
@@ -598,7 +595,8 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             if screenType == .categories || screenType == .debts {
                 DispatchQueue.init(label: "udLoad", qos: .userInteractive).async {
                     self.loadNotifications { _ in
-                        self.categories = self.categoriesContains(self.searchingText, fromHolder: false)
+                       // self.categories = self.categoriesContains(self.searchingText, fromHolder: false)
+                        self.loadData(loadFromUD: true)
                     }
                 }
             } else {

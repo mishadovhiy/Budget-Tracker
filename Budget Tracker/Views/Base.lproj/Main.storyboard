@@ -497,6 +497,7 @@
                                                     <outlet property="categoryLabel" destination="KBi-xy-FRp" id="cOl-fy-4Ri"/>
                                                     <outlet property="commentImage" destination="Cg2-pf-wBM" id="COj-5k-PyD"/>
                                                     <outlet property="commentLabel" destination="fJn-PP-aQ1" id="Lf7-Mi-qPJ"/>
+                                                    <outlet property="mainBackgroundView" destination="TsM-0N-KX6" id="DyF-Xe-GXc"/>
                                                     <outlet property="valueLabel" destination="jAj-JP-rqH" id="bxW-Bq-kUJ"/>
                                                 </connections>
                                             </tableViewCell>
@@ -877,7 +878,7 @@
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" name="PrimaryBackgroundColor"/>
+                        <color key="backgroundColor" name="SecondaryBacroundColor"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Aut-cX-vhd" secondAttribute="trailing" constant="50" id="3wV-OH-fwr"/>
                             <constraint firstItem="Aut-cX-vhd" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="AVr-PA-I2G"/>
@@ -1539,13 +1540,15 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ydl-Nt-YBv" userLabel="cancelButton">
-                                <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
+                                <rect key="frame" x="10" y="10" width="40" height="40"/>
+                                <color key="backgroundColor" name="SecondaryBacroundColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="QfJ-Sy-RuP"/>
-                                    <constraint firstAttribute="width" constant="60" id="oeW-ij-yYp"/>
+                                    <constraint firstAttribute="height" constant="40" id="QfJ-Sy-RuP"/>
+                                    <constraint firstAttribute="width" constant="40" id="oeW-ij-yYp"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <state key="normal" image="cancel">
+                                <color key="tintColor" name="CategoryColor"/>
+                                <state key="normal" image="xmark.circle">
                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="24"/>
                                 </state>
                                 <connections>
@@ -1553,7 +1556,7 @@
                                 </connections>
                             </button>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="V5Z-aw-ROj">
-                                <rect key="frame" x="135.66666666666666" y="15" width="156.99999999999997" height="31"/>
+                                <rect key="frame" x="211" y="15" width="157" height="31"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="CwW-zj-BUZ"/>
                                 </constraints>
@@ -1953,22 +1956,37 @@
                                     <constraint firstAttribute="bottom" secondItem="dtl-DA-9aX" secondAttribute="bottom" id="m3b-Yt-6eK"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2np-os-Y0H">
+                                <rect key="frame" x="65" y="10" width="40" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="40" id="7i8-iy-Pxi"/>
+                                    <constraint firstAttribute="height" constant="40" id="C7Q-y1-RQ8"/>
+                                </constraints>
+                                <color key="tintColor" name="negativeColor"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="trash.fill"/>
+                                <connections>
+                                    <action selector="trashPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="3fb-xj-RLg"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="MVK-VU-f07"/>
                         <color key="backgroundColor" name="PrimaryBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="ydl-Nt-YBv" firstAttribute="top" secondItem="MVK-VU-f07" secondAttribute="top" id="2zy-J9-pPj"/>
+                            <constraint firstItem="ydl-Nt-YBv" firstAttribute="top" secondItem="MVK-VU-f07" secondAttribute="top" constant="10" id="2zy-J9-pPj"/>
                             <constraint firstItem="3iV-TP-Myd" firstAttribute="top" secondItem="0o7-y6-JW8" secondAttribute="bottom" priority="750" constant="20" id="3d3-gJ-WjO"/>
                             <constraint firstItem="MVK-VU-f07" firstAttribute="bottom" secondItem="3iV-TP-Myd" secondAttribute="bottom" id="BJM-My-4Pi"/>
+                            <constraint firstItem="2np-os-Y0H" firstAttribute="top" secondItem="MVK-VU-f07" secondAttribute="top" constant="10" id="Diq-Y8-fCq"/>
                             <constraint firstItem="V5Z-aw-ROj" firstAttribute="top" secondItem="MVK-VU-f07" secondAttribute="top" constant="15" id="K6n-NS-wfR"/>
                             <constraint firstItem="0o7-y6-JW8" firstAttribute="leading" secondItem="MVK-VU-f07" secondAttribute="leading" constant="15" id="ZVr-kj-h2Y"/>
                             <constraint firstItem="MVK-VU-f07" firstAttribute="trailing" secondItem="3iV-TP-Myd" secondAttribute="trailing" id="ZVs-Z6-uYQ"/>
-                            <constraint firstItem="V5Z-aw-ROj" firstAttribute="centerX" secondItem="405-H3-8an" secondAttribute="centerX" id="bdH-we-SoP"/>
                             <constraint firstItem="0o7-y6-JW8" firstAttribute="top" secondItem="V5Z-aw-ROj" secondAttribute="bottom" constant="35" id="ftZ-Bq-Sax"/>
+                            <constraint firstItem="2np-os-Y0H" firstAttribute="leading" secondItem="ydl-Nt-YBv" secondAttribute="trailing" constant="15" id="hfN-4P-0Cb"/>
                             <constraint firstItem="c9d-cL-RPP" firstAttribute="top" secondItem="MVK-VU-f07" secondAttribute="top" id="lVo-Qd-z0i"/>
-                            <constraint firstItem="ydl-Nt-YBv" firstAttribute="leading" secondItem="MVK-VU-f07" secondAttribute="leading" id="mhQ-TT-h9S"/>
+                            <constraint firstItem="ydl-Nt-YBv" firstAttribute="leading" secondItem="MVK-VU-f07" secondAttribute="leading" constant="10" id="mhQ-TT-h9S"/>
                             <constraint firstItem="MVK-VU-f07" firstAttribute="trailing" secondItem="c9d-cL-RPP" secondAttribute="trailing" id="myY-IB-nw8"/>
                             <constraint firstItem="MVK-VU-f07" firstAttribute="trailing" secondItem="0o7-y6-JW8" secondAttribute="trailing" constant="15" id="nGd-zN-57v"/>
+                            <constraint firstItem="c9d-cL-RPP" firstAttribute="leading" secondItem="V5Z-aw-ROj" secondAttribute="trailing" id="p5v-RJ-EuY"/>
                             <constraint firstItem="3iV-TP-Myd" firstAttribute="leading" secondItem="MVK-VU-f07" secondAttribute="leading" id="pzc-xn-O38"/>
                         </constraints>
                     </view>
@@ -1977,6 +1995,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="categoryTextField" destination="kTT-Sl-tfE" id="JSs-X6-9Pz"/>
+                        <outlet property="closeButton" destination="ydl-Nt-YBv" id="niB-eC-XpW"/>
                         <outlet property="commentCountLabel" destination="caA-os-alH" id="Wvb-44-y3d"/>
                         <outlet property="commentTextField" destination="JSf-II-z0v" id="A7D-ZM-W6W"/>
                         <outlet property="dateTextField" destination="wMS-Hp-6gJ" id="lrX-BK-eQT"/>
@@ -1984,6 +2003,7 @@
                         <outlet property="numbarPadView" destination="3iV-TP-Myd" id="USu-TZ-E32"/>
                         <outlet property="purposeSwitcher" destination="V5Z-aw-ROj" id="aaQ-dK-QwU"/>
                         <outlet property="showValueButton" destination="XVk-PX-Zyj" id="YzY-bQ-S0O"/>
+                        <outlet property="trashButton" destination="2np-os-Y0H" id="2K0-WK-Khm"/>
                         <outlet property="valueLabel" destination="qzi-1W-Nei" id="WlM-rJ-uNN"/>
                         <segue destination="hoT-B4-HCQ" kind="unwind" identifier="quitTransitionVC" unwindAction="unwindToViewControllerAWithSegue:" id="qbN-N1-wpB"/>
                         <segue destination="5n4-P6-pnR" kind="show" identifier="toCalendar" id="rIb-KG-K0i"/>
@@ -1993,7 +2013,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kbk-wB-y5m" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="hoT-B4-HCQ" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1559" y="-476"/>
+            <point key="canvasLocation" x="1558.8785046728972" y="-476.24190064794817"/>
         </scene>
         <!--  -->
         <scene sceneID="9XH-Gu-7p3">
@@ -2768,7 +2788,7 @@
             <objects>
                 <viewController storyboardIdentifier="CalendarVC" id="5n4-P6-pnR" customClass="CalendarVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="67i-SE-sWB">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="872"/>
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="838"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ur5-R3-sfZ">
@@ -2827,7 +2847,7 @@
                                 </constraints>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rmd-nB-JWC">
-                                <rect key="frame" x="59" y="168.33333333333337" width="310" height="260"/>
+                                <rect key="frame" x="59" y="168.33333333333331" width="310" height="260"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="310" id="cus-cS-kD5"/>
@@ -3019,17 +3039,17 @@
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="InH-AG-csp" userLabel="timeViewStack View">
-                                <rect key="frame" x="61.666666666666657" y="428.33333333333326" width="305" height="443.66666666666674"/>
+                                <rect key="frame" x="61.666666666666657" y="428.33333333333337" width="305" height="409.66666666666663"/>
                                 <subviews>
                                     <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="h2d-GY-FrE">
-                                        <rect key="frame" x="0.0" y="0.0" width="305" height="443.66666666666669"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="305" height="409.66666666666669"/>
                                         <color key="tintColor" name="CategoryColor"/>
                                     </datePicker>
                                 </subviews>
                                 <color key="tintColor" name="CategoryColor"/>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="XFt-LS-Qbp">
-                                <rect key="frame" x="20" y="783" width="388" height="35"/>
+                                <rect key="frame" x="20" y="749" width="388" height="35"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j8N-A3-4Wm">
                                         <rect key="frame" x="0.0" y="0.0" width="100" height="35"/>
@@ -3350,11 +3370,11 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="aJl-S5-eUb"/>
-        <segue reference="HlC-bb-GVq"/>
+        <segue reference="rIb-KG-K0i"/>
         <segue reference="Lvn-mS-peb"/>
         <segue reference="Ega-tn-GzY"/>
         <segue reference="U95-ph-p6h"/>
-        <segue reference="v2X-Of-iEX"/>
+        <segue reference="N0q-Op-l1q"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="airplane" width="19" height="17"/>
@@ -3548,11 +3568,12 @@ AAAAAAIBAAAAAAAAAGEAAAAAAAAAAAAAAAAAAChAA
         <image name="minus" width="12" height="19"/>
         <image name="paperplane.fill" width="18" height="18"/>
         <image name="pencil" width="14" height="14"/>
-        <image name="plus" width="14" height="14"/>
         <image name="plus" catalog="system" width="128" height="113"/>
+        <image name="plus" width="14" height="14"/>
         <image name="scroll" width="18" height="18"/>
         <image name="square.and.arrow.down" catalog="system" width="121" height="128"/>
         <image name="trash" width="16" height="19"/>
+        <image name="trash.fill" width="16" height="19"/>
         <image name="unknown" width="20" height="16"/>
         <image name="xmark.circle" width="9" height="9"/>
         <namedColor name="CategoryColor">

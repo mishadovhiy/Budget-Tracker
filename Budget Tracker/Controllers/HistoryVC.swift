@@ -711,6 +711,10 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension HistoryVC: TransitionVCProtocol {
+    func deletePressed() {
+        //not usng
+    }
+    
     func editTransaction(_ transaction: TransactionsStruct, was: TransactionsStruct) {
         //not using
     }

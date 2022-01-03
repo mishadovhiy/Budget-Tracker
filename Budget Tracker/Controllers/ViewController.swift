@@ -218,16 +218,37 @@ class ViewController: SuperViewController {
 
 
     }
+    var sidescrolling = false
+    var wasShowingSideBar = false
     
-    
-    
+    @objc func sideBarPinched(_ sender: UIPanGestureRecognizer) {
+        let finger = sender.location(in: self.view)
+        if sender.state == .began {
+            sidescrolling = finger.x < 80
+            wasShowingSideBar = sideBarShowing
+        }
+        if sidescrolling || sideBarShowing {
+            if sender.state == .began || sender.state == .changed {
+                print("began")
+                self.mainContentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, finger.x, 0, 0)
+                self.mainContentViewHelpher.layer.transform = CATransform3DTranslate(CATransform3DIdentity, finger.x, 0, 0)
+            } else {
+                if sender.state == .ended {
+                    let toHide:CGFloat = wasShowingSideBar ? 200 : 80
+                    toggleSideBar(finger.x > toHide ? true : false, animated: true)
+                }
+            }
+        }
+        
+    }
     
     static var shared: ViewController?
     override func viewDidLoad() {
         super.viewDidLoad()
 
         //needDownloadOnMainAppeare = false
-        
+        let sideBarPinch = UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:)))
+        mainContentView.addGestureRecognizer(sideBarPinch)
         ViewController.shared = self
         updateUI()
         if #available(iOS 15.0, *) {
@@ -244,6 +265,11 @@ class ViewController: SuperViewController {
     @IBOutlet weak var mainContentView: UIView!
     var sideBarShowing = false
     var firstLod = true
+    
+    @objc func mainContentTap(_ sender: UITapGestureRecognizer) {
+        toggleSideBar(false, animated: true)
+    }
+    
     func toggleSideBar(_ show: Bool, animated:Bool) {
         sideBarShowing = show
         DispatchQueue.main.async {
@@ -259,6 +285,13 @@ class ViewController: SuperViewController {
                     self.firstLod = false
                     self.sideBar.isHidden = false
                     self.menuButton.isEnabled = true
+                    let gesture = UITapGestureRecognizer(target: self, action: #selector( self.mainContentTap(_:)))
+
+                    if show {
+                        self.mainTableView.addGestureRecognizer(gesture)
+                    } else {
+                        self.mainTableView.removeGestureRecognizer(gesture)
+                    }
                 }
             }
 
@@ -1478,9 +1511,6 @@ class ViewController: SuperViewController {
     }
 
     var lastWhiteBackheight = 0
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print(touches.first, "ghjnbguk")
-    }
     
     func compliteScrolling() {
         if mainTableView.contentOffset.y < self.bigCalcView.frame.height {
@@ -1507,6 +1537,10 @@ class ViewController: SuperViewController {
     
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if sideBarShowing {
+            toggleSideBar(false, animated: true)
+            return
+        }
         let finger = scrollView.panGestureRecognizer.location(in: self.view)
         refreshData = finger.x > self.view.frame.width / 2 ? false : true
         self.refreshControl.tintColor = self.refreshData ? K.Colors.pink : .clear
@@ -1670,10 +1704,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         
         if indexPath.section == 0 {
             let calculationCell = tableView.dequeueReusableCell(withIdentifier: "calcCell") as? calcCell
-          //  calculationCell?.isUserInteractionEnabled = false
-          //  calculationCell?.contentView.isUserInteractionEnabled = false
-            ///add touches in class
-            /////send
             return calculationCell ?? UITableViewCell()
         } else {
             if newTableData.count == 0 {
@@ -1709,7 +1739,11 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section != 0 && newTableData.count != 0 {
             if newTableData[indexPath.section-1].transactions.count != indexPath.row {
-                if newTableData[indexPath.section-1].transactions[indexPath.row].comment != "" {
+                self.editingTransaction = self.newTableData[indexPath.section - 1].transactions[indexPath.row]
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "goToEditVC", sender: self)
+                }
+               /* if newTableData[indexPath.section-1].transactions[indexPath.row].comment != "" {
                     let previusSelected = selectedCell
                     if selectedCell == indexPath {
                         selectedCell = nil
@@ -1719,7 +1753,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                     DispatchQueue.main.async {
                         self.mainTableView.reloadRows(at: previusSelected != nil ? [indexPath, previusSelected ?? indexPath] : [indexPath], with: .middle)
                     }
-                }
+                }*/
             }
             
         }
@@ -1729,8 +1763,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
         if indexPath.section != 0 {
             let editeAction = UIContextualAction(style: .destructive, title: "Edit") {  (contextualAction, view, boolValue) in
-               // self.editRow(at: IndexPath(row: indexPath.row, section: indexPath.section - 1)) -- its perform saving,
-                // go to trans vc indeed
                 self.editingTransaction = self.newTableData[indexPath.section - 1].transactions[indexPath.row]
                 DispatchQueue.main.async {
                     self.performSegue(withIdentifier: "goToEditVC", sender: self)
@@ -1783,7 +1815,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             let v = cell.contentView
             cell.mainView.layer.cornerRadius = 15
             cell.mainView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-            v.backgroundColor = self.view.backgroundColor
+            v.backgroundColor = K.Colors.primaryBacground
             return v
         }
         
@@ -1823,7 +1855,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                     self.mainTableView.layer.cornerRadius = self.tableCorners
                     self.mainTableView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
                     self.addTransitionButton.isHidden = false*/
-                    self.mainTableView.backgroundColor = self.view.backgroundColor
+                    self.mainTableView.backgroundColor = K.Colors.primaryBacground
                     UIView.animate(withDuration: self.animateCellWillAppear ? 0.2 : 0) {
                         let superframe = self.filterView.superview?.frame ?? .zero
                         let selfFrame = self.filterView.frame
@@ -1913,6 +1945,21 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
 }
 
 extension ViewController: TransitionVCProtocol {
+    func deletePressed() {
+        if let editing = editingTransaction {
+            editingTransaction = nil
+            selectedCell = nil
+            let delete = DeleteFromDB()
+            delete.newTransaction(editing) { _ in
+                self.filter()
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.newMessage.show(title:"Error deleting transaction", description: "Try again", type: .error)
+            }
+        }
+    }
+    
     func editTransaction(_ transaction: TransactionsStruct, was: TransactionsStruct) {
         let delete = DeleteFromDB()
         delete.newTransaction(was) { _ in

@@ -18,9 +18,22 @@ protocol TransitionVCProtocol {
     func addNewTransaction(value: String, category: String, date: String, comment: String)
     func editTransaction(_ transaction:TransactionsStruct, was:TransactionsStruct)
     func quiteTransactionVC(reload:Bool)
+    func deletePressed()
 }
 
 class TransitionVC: SuperViewController {
+
+    @IBAction func trashPressed(_ sender: UIButton) {
+        donePressed = true
+        DispatchQueue.main.async {
+            self.dismiss(animated: true) {
+                self.delegate?.deletePressed()
+            }
+        }
+        
+    }
+    @IBOutlet weak var trashButton: UIButton!
+    @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var dateTextField: CustomTextField!
     @IBOutlet weak var categoryTextField: CustomTextField!
     @IBOutlet weak var purposeSwitcher: UISegmentedControl!
@@ -59,18 +72,12 @@ class TransitionVC: SuperViewController {
         
         
     }
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-       notificationReceiver(notification: notification)
-    }
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(true)
-        print(donePressed, "donePressed")
-        if !donePressed {
-            self.delegate?.quiteTransactionVC(reload: editingDate == "" ? false : true)
-        }
-    }
 
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(true, animated: true)
@@ -108,7 +115,8 @@ class TransitionVC: SuperViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         if !sbvsloded {
-            dateTextField.inputView = UIView(frame: .zero)//appData.objects.datePicker
+            closeButton.layer.cornerRadius = 5
+            dateTextField.inputView = UIView(frame: .zero)
             dateTextField.isUserInteractionEnabled = false
             dateTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(datePressed)))
             commentTextField.addTarget(self, action: #selector(commentCount), for: .editingChanged)
@@ -132,10 +140,7 @@ class TransitionVC: SuperViewController {
         delegates(fields: [categoryTextField, dateTextField, commentTextField])
         appData.objects.datePicker.datePickerMode = .date
         pressedValue = "0"
-        
 
-        
-        
         DispatchQueue.main.async {
             self.valueLabel.text = self.pressedValue
             
@@ -209,6 +214,7 @@ class TransitionVC: SuperViewController {
             
         }
         if editingDate != "" {
+            //here
             self.dateChanged = true
             displeyingTransaction.date = editingDate
             if editingValue > 0.0 {
@@ -216,9 +222,9 @@ class TransitionVC: SuperViewController {
             } else {
                 editingValueAmount(segment: 0, multiply: -1)
             }
-            if #available(iOS 13.0, *) {
+          /*  if #available(iOS 13.0, *) {//desable close
                 self.isModalInPresentation = true
-            }
+            }*/
             minusPlusLabel.alpha = 1
             let db = DataBase()
             let category = db.category(self.editingCategory)
@@ -239,6 +245,7 @@ class TransitionVC: SuperViewController {
                         self.commentCountLabel.alpha = 1
                     }
                 }
+                self.trashButton.isHidden = false
             }
         } else {
             displeyingTransaction.date = defaultDate
