@@ -220,18 +220,25 @@ class ViewController: SuperViewController {
     }
     var sidescrolling = false
     var wasShowingSideBar = false
-    
+    var beginScrollPosition:CGFloat = 0
     @objc func sideBarPinched(_ sender: UIPanGestureRecognizer) {
         let finger = sender.location(in: self.view)
         if sender.state == .began {
             sidescrolling = finger.x < 80
             wasShowingSideBar = sideBarShowing
+          //  beginScrollPosition = sideBarShowing ? sideBar.layer.frame.width : finger.x
         }
         if sidescrolling || sideBarShowing {
             if sender.state == .began || sender.state == .changed {
                 print("began")
-                self.mainContentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, finger.x, 0, 0)
-                self.mainContentViewHelpher.layer.transform = CATransform3DTranslate(CATransform3DIdentity, finger.x, 0, 0)
+                let newPosition = finger.x //- beginScrollPosition
+                UIView.animate(withDuration: 0.05) {
+                    self.mainContentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, newPosition, 0, 0)
+                    self.mainContentViewHelpher.layer.transform = CATransform3DTranslate(CATransform3DIdentity, newPosition, 0, 0)
+                } completion: { _ in
+                    
+                }
+
             } else {
                 if sender.state == .ended {
                     let toHide:CGFloat = wasShowingSideBar ? 200 : 80
@@ -274,7 +281,7 @@ class ViewController: SuperViewController {
         sideBarShowing = show
         DispatchQueue.main.async {
             let frame = self.sideBar.layer.frame
-            UIView.animate(withDuration: animated ? 0.3 : 0) {
+            UIView.animate(withDuration: animated ? 0.35 : 0) {
                 //self.sideBar.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width * (-1) : frame.width * (-1), 0, 0)
                 //self.view.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? 0 : frame.width * (-1), 0, 0)
                 self.mainContentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
