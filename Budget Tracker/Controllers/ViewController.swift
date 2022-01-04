@@ -60,15 +60,7 @@ class ViewController: SuperViewController {
         }
         set {
             _TableData = newValue
-           // var datacountText = ""
-            /*if appData.username != "" {
-                let lastDownloadDate = UserDefaults.standard.value(forKey: "LastLoadDataDate") as? Date ?? Date()
-                let component = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: lastDownloadDate)
-                let date = "\(appData.returnMonth(component.month ?? 0)) \(self.makeTwo(n: component.day ?? 0)), \(component.year ?? 0)"
-                //let undendeddCount = self.undendedCount == 0 ? "" : "Data pending to resend: \(self.undendedCount)"
-                let lastLaunxText = "Updated: \(date) at: \(self.makeTwo(n: component.hour ?? 0)):\(self.makeTwo(n: component.minute ?? 0)):\(self.makeTwo(n: component.second ?? 0))"
-                datacountText = "Data count: \(self.tableData.count)\("\n\(lastLaunxText)")"
-            }*/
+
             dataTaskCount = nil
             selectedCell = nil
             let tableDataDataCount = self.tableData.count
@@ -132,49 +124,67 @@ class ViewController: SuperViewController {
 
                 if self.openFiler {
                     self.openFiler = false
-                    Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (_) in
+                    //Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (_) in
                         self.performSegue(withIdentifier: "toFiterVC", sender: self)
-                    }
-                } else {
-                  /*  if let _ = filterAndGoToStatistic {
-                        Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (_) in
-                            self.performSegue(withIdentifier: "toStatisticVC", sender: self)
-                        }
-                    }*/
+                    //}
                 }
-                //self.refreshControl.backgroundColor = K.Colors.background
-               /* if self.justLoaded {
-                    self.justLoaded = false
-                    let save = SaveToDB()
-                    save.sendCode(toDataString: "emailTo=hi@dovhiy.com&Nickname=\(appData.username)&resetCode=1233") { (error) in
-                        if error {
-                            print("bvghjnb errorsendingcode str:")
-                        } else {
-                            print("bvghjnb DONN")
-                        }
-                    }
-                }*/
-                
-              //  if !appData.purchasedOnThisDevice {
- /*                   if self.justLoaded {
-                        self.justLoaded = false
-                        if !appData.proVersion {
-                            self.checkPurchase()
-                        }
-                    }*/
-              //  }
-                
-               /* if self.justLoaded {
-                    self.justLoaded = false
-                    self.checkPurchase()
-                }*/
-                
-               /* if appData.proTrial {
-                    self.checkProTrial()
-                }*/
+                self.checkOldData()
             }
         }
     }
+    
+    
+    
+    func checkOldData() {
+        if appData.unsendedData.count == 0 {
+            let categories = appData.getCategories()
+            let transactions = appData.getTransactions
+            if categories.count + transactions.count > 0 {
+
+                var categorizedTransactions: [String:[TransactionsStruct]] = [:]
+                
+                for i in 0..<transactions.count {
+                    let name = transactions[i].categoryID
+                    var transForKey = categorizedTransactions[name]
+                    transForKey?.append(transactions[i])
+                    categorizedTransactions.updateValue(transForKey ?? [], forKey: name)
+                }
+                print(categorizedTransactions, "ghjkmnbhjkmbhjk")
+                var ids = 0
+                var newTransactions:[TransactionsStruct] = []
+                var newCategories:[NewCategories] = []
+                for key in categorizedTransactions {
+
+                    if let transs = categorizedTransactions[key.key] {
+                        ids += 1
+                        var balance = 0.0
+                        for n in 0..<transs.count {
+                            let value = transs[n].value
+                            balance += (Double(value) ?? 0)
+                            let newTransaction = TransactionsStruct(value: value, categoryID: "\(ids)", date: transs[n].date, comment: transs[n].comment)
+                            appData.unsendedData.append(["transactionNew": db.transactionToDict(newTransaction)])
+                            newTransactions.append(newTransaction)
+                        }
+                        let newCategory = NewCategories(id: ids, name: key.key, icon: "", color: appData.randomColorName, purpose: balance > 0 ? .income : .expense)
+                        appData.unsendedData.append(["categoryNew": db.categoryToDict(newCategory)])
+                        newCategories.append(newCategory)
+                    }
+                }
+                UserDefaults.standard.setValue(nil, forKey: "transactionsData")
+                UserDefaults.standard.setValue(nil, forKey: "categoriesData")
+                //downloadFromDB()
+                filter()
+                print(newTransactions, "traaans")
+
+                print("")
+                print(newCategories, "caaats")
+
+            }
+        }
+        
+    }
+
+    
     func downloadFromDB(showError: Bool = false, title: String = "Downloading") {
         self.editingTransaction = nil
         self.sendError = false
@@ -206,15 +216,6 @@ class ViewController: SuperViewController {
 
             }
         }
-       /* let unsend = appData.unsendedData
-        undendedCount = unsend.count
-        if unsend.count > 0 {
-            if appData.username != "" {
-                self.sendUnsaved()
-            }
-        } else {
-            
-        }*/
 
 
     }
@@ -310,10 +311,7 @@ class ViewController: SuperViewController {
     
     @IBOutlet weak var menuButton: UIButton!
     
-    
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-       notificationReceiver(notification: notification)
-    }
+
     var subviewsLoaded = false
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
@@ -778,7 +776,7 @@ class ViewController: SuperViewController {
             arr.removeAll()
             var matches = 0
             let days = Array(daysBetween)
-            let transactions = UserDefaults.standard.value(forKey: "transactionsData") as? [[String:Any]] ?? []
+            let transactions = UserDefaults.standard.value(forKey: db.transactionsKey) as? [[String:Any]] ?? []
             for number in 0..<days.count {
                 for i in 0..<transactions.count {
                     if days.count > number {
@@ -899,7 +897,6 @@ class ViewController: SuperViewController {
     var startedSendingUnsended = false
     var highesLoadedCatID: Int?
     func sendUnsaved() {
-        //breaek when error
         if self.sendError {
             return
         }
@@ -933,23 +930,23 @@ class ViewController: SuperViewController {
                                 cat.id = newID
                                 save.newCategories(cat, saveLocally: false) { error in
                                     if !error {
+                                        appData.unsendedData.removeFirst()
                                         self.highesLoadedCatID! += 1
+                                        var newTransactions: [[String:Any]] = []
                                         for i in 0..<unsended.count {
-                                            if let newTrans = unsended[i]["transactionNew"] {
-                                                if let trans = self.db.transactionFrom(newTrans) {
-                                                    if trans.categoryID == "\(addCategory.id)" {
-                                                        var newTransaction = trans
-                                                        newTransaction.categoryID = "\(newID)"
-                                                        var d = appData.unsendedData
-                                                        let newV = self.db.transactionToDict(newTransaction)
-                                                        d[i].updateValue(newV, forKey: "transactionNew")
-                                                        appData.unsendedData = d
-                                                       // appData.unsendedData[i]["transactionNew"] =
-                                                    }
+                                            if let trans = self.db.transactionFrom(unsended[i]["transactionNew"]) {
+                                                if trans.categoryID == "\(addCategory.id)" {
+                                                    var newTransaction = trans
+                                                    newTransaction.categoryID = "\(newID)"
+                                                    newTransactions.append(self.db.transactionToDict(newTransaction))
+                                                    self.deleteUnsendedTransactions(id: "\(addCategory.id)")
                                                 }
                                             }
                                         }
-                                        appData.unsendedData.removeFirst()
+                                        
+                                        for i in 0..<newTransactions.count {
+                                            appData.unsendedData.append(["transactionNew":newTransactions[i]])
+                                        }
                                         self.sendUnsaved()
                                     } else {
                                         errorAction()
@@ -1031,17 +1028,13 @@ class ViewController: SuperViewController {
                                     self.highesLoadedCatID! += 1
                                     self.db.localCategories.removeFirst()
                                     let localTransactions = self.db.localTransactions
-
                                     for i in 0..<localTransactions.count {
-                                        
                                         if localTransactions[i].categoryID == "\(category.id)" {
                                             var newTransaction = localTransactions[i]
                                             newTransaction.categoryID = "\(cat.id)"
-
                                             self.db.deleteTransaction(transaction: localTransactions[i], local: true)
                                             self.db.localTransactions.append(newTransaction)
                                         }
-                                        
                                     }
                                     self.sendUnsaved()
                                 } else {
@@ -1084,7 +1077,62 @@ class ViewController: SuperViewController {
 
     }
     
-   
+    func deleteUnsendedTransactions(id: String) {
+        let all = appData.unsendedData
+        var resultt:[[String : [String : Any]]] = []
+        for i in 0..<all.count {
+            if let transaction = db.transactionFrom(all[i]["transactionNew"]) {
+                if transaction.categoryID != id {
+                    resultt.append(all[i])
+                }
+            } else {
+                resultt.append(all[i])
+            }
+        }
+        appData.unsendedData = resultt
+    }
+    var added = false
+    func testTransactions() {
+        if added {
+            return
+        }
+        let transactionsth = [//transactionNew
+            TransactionsStruct(value: "-200", categoryID: "1", date: "04.05.2022", comment: "harcoded"),
+            TransactionsStruct(value: "10", categoryID: "4", date: "04.05.2022", comment: "harcoded"),
+            TransactionsStruct(value: "-200", categoryID: "1", date: "04.05.2022", comment: "harcoded"),
+            TransactionsStruct(value: "30", categoryID: "4", date: "04.05.2022", comment: "harcoded"),
+            TransactionsStruct(value: "300", categoryID: "2", date: "04.05.2022", comment: "harcoded"),
+            TransactionsStruct(value: "-4", categoryID: "1", date: "04.05.2022", comment: "harcoded"),
+            TransactionsStruct(value: "-890", categoryID: "3", date: "04.05.2022", comment: "harcoded"),
+            TransactionsStruct(value: "-290", categoryID: "1", date: "04.05.2022", comment: "harcoded"),
+            TransactionsStruct(value: "160", categoryID: "2", date: "04.05.2022", comment: "harcoded"),
+            TransactionsStruct(value: "-20", categoryID: "3", date: "04.05.2022", comment: "harcoded"),
+            TransactionsStruct(value: "-870", categoryID: "1", date: "04.05.2022", comment: "harcoded"),
+            TransactionsStruct(value: "-254", categoryID: "3", date: "04.05.2022", comment: "harcoded"),
+            TransactionsStruct(value: "-299", categoryID: "1", date: "04.05.2022", comment: "harcoded"),
+            TransactionsStruct(value: "-277", categoryID: "1", date: "04.05.2022", comment: "harcoded")
+        ]
+        
+        let categories = [//categoryNew
+            NewCategories(id: 1, name: "еда_test", icon: "", color: "", purpose: .expense),
+            NewCategories(id: 2, name: "работка_test", icon: "", color: "", purpose: .income),
+            NewCategories(id: 3, name: "проезд_test", icon: "", color: "", purpose: .expense),
+            NewCategories(id: 4, name: "шла_test", icon: "", color: "", purpose: .debt),
+        ]
+        var newUnsended:[[String : [String : Any]]] = []
+        for i in 0..<categories.count {
+            let newCategory = db.categoryToDict(categories[i])
+            newUnsended.append(["categoryNew":newCategory])
+        }
+        for i in 0..<transactionsth.count {
+            let newCategory = db.transactionToDict(transactionsth[i])
+            newUnsended.append(["transactionNew":newCategory])
+        }
+        appData.unsendedData = newUnsended
+        added = true
+        filter()
+    }
+    
     
     
     var allData: [[TransactionsStruct]] = []

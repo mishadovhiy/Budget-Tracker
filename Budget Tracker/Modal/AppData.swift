@@ -181,7 +181,7 @@ class AppData {
     
     //savedTransactions
     //unsavedTransactions 
-    func saveTransations(_ data: [TransactionsStruct], key: String = "transactionsData") {
+    func saveTransations(_ data: [TransactionsStruct], key: String = "transactionsData") {//delete
         var dict: [[String]] = []
         for i in 0..<data.count {
             let nickname = username
@@ -248,7 +248,7 @@ class AppData {
     }
     
 
-    var getTransactions: [TransactionsStruct] {
+    var getTransactions: [TransactionsStruct] {//
         get{
             let localData = Array(defaults.value(forKey: "transactionsData") as? [[String]] ?? [])
             var results: [TransactionsStruct] = []
@@ -300,7 +300,7 @@ class AppData {
     
     //"savedCategories" -- from prev acc
     //"unsavedCategories" -- when no internet
-    func getCategories(key: String = "categoriesData") -> [CategoriesStruct] {
+    func getCategories(key: String = "categoriesData") -> [CategoriesStruct] {//
         let localData = defaults.value(forKey: key) as? [[String]] ?? []
         var results: [CategoriesStruct] = []
        // let trans = Array(transactions)
@@ -323,8 +323,13 @@ class AppData {
     var selectedIncome = 0
     
 
-    
-    
+    let categoryColors = [
+        "yellowColor", "PinkColor", "GreenColor", "OrangeColor", "RedColor", "BlueColor"
+    ]
+    var randomColorName: String {
+        let data = categoryColors
+        return data[Int.random(in: 0..<data.count)]
+    }
     
     func stringDate(_ sender: UIDatePicker) -> String {
         
@@ -721,70 +726,6 @@ struct CategoriesStruct {
 }
 
 
-
-
-/*
-//"savedCategories" -- from prev acc
-//"unsavedCategories" -- when no internet
-func saveCategoriesNew(_ data: [CategoriesStruct], key: String = "categoriesData") {
-    var dict: [[String]] = []
-    for i in 0..<data.count {
-        let nickname = username
-        let name = data[i].name
-        let purpose = data[i].purpose
-        dict.append([nickname, name, purpose])
-    }
-    print("categories saved to user defaults, count: \(dict.count), \(dict), key:", key)
-    defaults.set(dict, forKey: key)
-}
-
-//"savedCategories" -- from prev acc
-//"unsavedCategories" -- when no internet
-func getCategoriesNew(key: String = "categoriesData") -> [CategoriesStruct] {
-    let localData = defaults.value(forKey: key) as? [[String]] ?? []
-    var results: [CategoriesStruct] = []
-   // let trans = Array(transactions)
-    let trans = UserDefaults.standard.value(forKey: "transactionsData") as? [[String]] ?? []
-    for i in 0..<localData.count {
-        let name = localData[i][1]
-        let purpose = localData[i][2]
-        var count = 0
-        for t in 0..<trans.count {
-            if trans[t][2] == name {
-                count += 1
-            }
-        }
-        results.append(CategoriesStruct(name: name, purpose: purpose, count: count))
-    }
-    return results
-}
-*/
-
-
-
-
-/*class NewCategories {
-    let id: Int
-    let name: String
-    let purpose: CategoryPurpose
-    var dueDate: DateComponents? = nil
-    var amountToPay: Double? = nil
-    
-    var count: Int {
-        get {
-            return 0
-        }
-    }
-    
-    init(id:Int, name:String, purpose: CategoryPurpose, dueDate:DateComponents, amountToPay:Double) {
-        self.id = id
-        self.name = name
-        self.purpose = purpose
-        self.dueDate = dueDate
-        self.amountToPay = amountToPay
-    }
-    
-}*/
 enum CategoryPurpose {
     case expense
     case income

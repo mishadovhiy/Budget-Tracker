@@ -44,15 +44,15 @@ class DataBase {
     }
     
     
-    func transactionFrom(_ dict:[String:Any]) -> TransactionsStruct? {
-        if let id = dict["CategoryId"] as? String {
-            print("bhjsdbhf", id)
-            let amount = dict["Amount"] as? String ?? ""
-            let date = dict["Date"] as? String ?? ""
-            let comment = dict["Comment"] as? String ?? ""
-            
-            
-            return TransactionsStruct(value: amount, categoryID: id, date: date, comment: comment)
+    func transactionFrom(_ dictt:[String:Any]?) -> TransactionsStruct? {
+        if let dict = dictt {
+            if let id = dict["CategoryId"] as? String {
+                print("bhjsdbhf", id)
+                let amount = dict["Amount"] as? String ?? ""
+                let date = dict["Date"] as? String ?? ""
+                let comment = dict["Comment"] as? String ?? ""
+                return TransactionsStruct(value: amount, categoryID: id, date: date, comment: comment)
+            }
         }
         return nil
     }
@@ -152,11 +152,11 @@ class DataBase {
     
     
     
-    
+    let transactionsKey = "transactionsDataNew"
     
     func transactions(for category:NewCategories, local: Bool = false) -> [TransactionsStruct] {
         
-        let trans = UserDefaults.standard.value(forKey: !local ? "transactionsData" : K.Keys.localTrancations) as? [[String:Any]] ?? []
+        let trans = UserDefaults.standard.value(forKey: !local ? transactionsKey : K.Keys.localTrancations) as? [[String:Any]] ?? []
         var result:[TransactionsStruct] = []
         for t in 0..<trans.count {
             if (trans[t]["CategoryId"] as? String ?? "") == "\(category.id)" {
@@ -171,7 +171,7 @@ class DataBase {
     
     
     func deleteTransaction(transaction:TransactionsStruct, local: Bool = false) {
-        let all = Array(UserDefaults.standard.value(forKey: !local ? "transactionsData" : K.Keys.localTrancations) as? [[String:Any]] ?? [])
+        let all = Array(UserDefaults.standard.value(forKey: !local ? transactionsKey : K.Keys.localTrancations) as? [[String:Any]] ?? [])
         var new:[TransactionsStruct] = []
         var found = false
         for i in 0..<all.count {
@@ -195,7 +195,7 @@ class DataBase {
     
     var totalTransactionBalance: Int {
         var result = 0
-        let all = UserDefaults.standard.value(forKey: "transactionsData") as? [[String:Any]] ?? []
+        let all = UserDefaults.standard.value(forKey: transactionsKey) as? [[String:Any]] ?? []
         for i in 0..<all.count {
             if let value = all[i]["Amount"] as? String {
                 result += (Int(Double(value) ?? 0.0))
@@ -206,13 +206,13 @@ class DataBase {
     
     var transactions:[TransactionsStruct] {
         get {
-            let all = UserDefaults.standard.value(forKey: "transactionsData") as? [[String:Any]] ?? []
+            let all = UserDefaults.standard.value(forKey: transactionsKey) as? [[String:Any]] ?? []
             let result = dictToTransactions(all: all)
             return result
         }
         set {
             let result = transactionsToDict(newValue: newValue)
-            UserDefaults.standard.setValue(result, forKey: "transactionsData")
+            UserDefaults.standard.setValue(result, forKey: transactionsKey)
         }
     }
     var localTransactions:[TransactionsStruct] {

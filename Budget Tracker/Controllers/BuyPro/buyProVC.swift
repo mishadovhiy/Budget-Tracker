@@ -366,6 +366,39 @@ extension BuyProVC: SKPaymentTransactionObserver {
         }*/
     }
 
+    func dbSavePurchase() {
+        let save = SaveToDB()
+        let toDataStringMian = "&Nickname=\(appData.username)" + "&Email=\(self.userData.0)" + "&Password=\(self.userData.1)" + "&Registration_Date=\(self.userData.2)"
+        
+        let dataStringSave = toDataStringMian + "&ProVersion=1" + "&trialDate=\(self.userData.3)"
+        print(dataStringSave)
+        let delete = DeleteFromDB()
+        let dataStringDelete = toDataStringMian
+        print(dataStringDelete)
+        delete.User(toDataString: dataStringDelete) { (errorr) in
+            if errorr {
+                self.showAlert(title: "Internet error", text: "Try again later", error: true)
+            } else {
+                save.Users(toDataString: dataStringSave ) { (error) in
+                    if error {
+                        self.showAlert(title: "Internet error", text: "Try again later", error: true)
+                    } else {
+                        self.scsPurchaseShow()
+                    }
+                    
+                }
+            }
+            
+        }
+    }
+    
+    func scsPurchaseShow() {
+        DispatchQueue.main.async {
+            self.showPurchasedIndicator()
+            self.showAlert(title: "Success", text: "Pro features available across all your devices", error: false, goHome: true)
+        }
+    }
+    
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         for transaction in transactions {
             switch transaction.transactionState {
@@ -378,40 +411,13 @@ extension BuyProVC: SKPaymentTransactionObserver {
                 SKPaymentQueue.default().remove(self)
                 appData.proVersion = true
                 appData.purchasedOnThisDevice = true
-
-                DispatchQueue.init(label: "DB").async {
-                    let save = SaveToDB()
-                    let toDataStringMian = "&Nickname=\(appData.username)" + "&Email=\(self.userData.0)" + "&Password=\(self.userData.1)" + "&Registration_Date=\(self.userData.2)"
-                    
-                    let dataStringSave = toDataStringMian + "&ProVersion=1" + "&trialDate=\(self.userData.3)"
-                    print(dataStringSave)
-                    let delete = DeleteFromDB()
-                    let dataStringDelete = toDataStringMian
-                    print(dataStringDelete)
-                    delete.User(toDataString: dataStringDelete) { (errorr) in
-                        if errorr {
-                            //showError        appData.unsendedData.append(["deleteUser": dataStringDelete])
-                            self.showAlert(title: "Internet error", text: "Try again later", error: true)
-                        } else {
-                            save.Users(toDataString: dataStringSave ) { (error) in
-                                if error {
-                                    //showError            appData.unsendedData.append(["saveUser": dataStringSave])
-                                    self.showAlert(title: "Internet error", text: "Try again later", error: true)
-                                } else {
-                                    DispatchQueue.main.async {
-                                        self.showPurchasedIndicator()
-                                        self.showAlert(title: "Success", text: "Pro features available across all your devices", error: false, goHome: true)
-                                    }
-                                }
-                                
-                            }
-                        }
-                        
+                if transaction.transactionState == .purchased {
+                    DispatchQueue.init(label: "DB").async {
+                        self.dbSavePurchase()
                     }
-                    
-                    
+                } else {
+                    scsPurchaseShow()
                 }
-                
                 break
             case .failed, .deferred:
                 print("paymentQueue pur ERROR")

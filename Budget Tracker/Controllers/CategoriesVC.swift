@@ -149,14 +149,14 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                     let data = ic.icons.first?.data ?? []
                     return data[Int.random(in: 0..<data.count)]
                 }
-                let debtColor = appData.lastSelected.gett(setterType: .color, valueType: .debt) ?? "yellowColor"
-                let debtImg = appData.lastSelected.gett(setterType: .icon, valueType: .debt) ?? randomIcon
+                let debtColor = appData.lastSelected.gett(setterType: .color, valueType: .debt) ?? appData.randomColorName
+                let debtImg = appData.lastSelected.gett(setterType: .icon, valueType: .debt) ?? ""
                 
-                let expenseColor = appData.lastSelected.gett(setterType: .color, valueType: .expense) ?? "yellowColor"
-                let expenseImg = appData.lastSelected.gett(setterType: .icon, valueType: .expense) ?? randomIcon
+                let expenseColor = appData.lastSelected.gett(setterType: .color, valueType: .expense) ?? appData.randomColorName
+                let expenseImg = appData.lastSelected.gett(setterType: .icon, valueType: .expense) ?? ""
                 
-                let incomeColor = appData.lastSelected.gett(setterType: .color, valueType: .income) ?? "yellowColor"
-                let incomeImg = appData.lastSelected.gett(setterType: .icon, valueType: .income) ?? randomIcon
+                let incomeColor = appData.lastSelected.gett(setterType: .color, valueType: .income) ?? appData.randomColorName
+                let incomeImg = appData.lastSelected.gett(setterType: .icon, valueType: .income) ?? ""
                 
                 self.tableData = [
                     ScreenDataStruct(title: K.expense, data: resultDict[purposeToString(.expense)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: expenseImg, color: expenseColor, purpose: .expense), transactions: [])),
@@ -983,7 +983,8 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                     let hideEditing = category.editing != nil ? false : true
                     let hideQnt = !hideEditing
                     let hideTitle = !hideEditing
-
+                    let hidedueDate = category.category.dueDate == nil
+                    
                     if cell.editingStack.isHidden != hideEditing {
                         cell.editingStack.isHidden = hideEditing
                     }
@@ -993,10 +994,18 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                     if cell.categoryNameLabel.isHidden != hideTitle {
                         cell.categoryNameLabel.isHidden = hideTitle
                     }
-                    
+                    if cell.dueDateStack.isHidden != hidedueDate {
+                        cell.dueDateStack.isHidden = hidedueDate
+                    }
                     cell.footerBackground.backgroundColor = editingTfIndex.1 == index.row || selectingIconFor.0 == index ? selectionBacground : K.Colors.secondaryBackground
 
                     cell.newCategoryTF.layer.name = "cell\(index.row)"
+                    let dueDate = category.category.dueDate
+                   let stringDate = "\(self.makeTwo(n: dueDate?.day ?? 0)).\(self.makeTwo(n: dueDate?.month ?? 0)).\(dueDate?.year ?? 0)"
+                    cell.dueDateLabel.text = stringDate
+                    let expired = dateExpired(dueDate)
+                    cell.dueDateIcon.tintColor = expired ? K.Colors.negative : K.Colors.category
+                    cell.dueDateLabel.textColor = expired ? K.Colors.negative : K.Colors.balanceT
                     
                     cell.qntLabel.text = "\(category.transactions.count)"
                     cell.iconimage.image = category.editing == nil ? iconNamed(category.category.icon) : iconNamed(category.editing?.icon)
@@ -1421,8 +1430,8 @@ class categoriesVCcell: UITableViewCell {
     
     
     
-    @IBOutlet private weak var dueDateIcon: UIImageView!
-    @IBOutlet private weak var dueDateLabel: UILabel!
+    @IBOutlet weak var dueDateIcon: UIImageView!
+    @IBOutlet weak var dueDateLabel: UILabel!
     @IBOutlet weak var dueDateStack: UIStackView!
     @IBOutlet weak var payAmountLabel: UILabel!
     

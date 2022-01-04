@@ -40,9 +40,7 @@ class IconsVC: UIViewController {
     let colors:[UIColor] = [
         .yellow, .systemPink, .green, .orange, .red, .blue
     ]
-    let coloresStrTemporary = [
-        "yellowColor", "PinkColor", "GreenColor", "OrangeColor", "RedColor", "BlueColor"
-    ]
+    let coloresStrTemporary = appData.categoryColors
     
     var selectedColorId:Int = 0
     var selectedIconIndex:IndexPath?
