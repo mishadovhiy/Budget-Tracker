@@ -26,6 +26,7 @@ extension LoginViewController {
     }
     @IBAction func moreButtonPressed(_ sender: UIButton) {//morepressed
         wrongCodeCount = 0
+        forgotPasswordUsername = ""
         hideKeyboard()
         let appData = AppData()
         //get screen data
@@ -57,8 +58,9 @@ extension LoginViewController {
                         if !found {
                             self.showAlert(title: "User not found", text: nil, error: true)
                         } else {
-                            appData.username = newValue
-                            appData.password = ""
+                           // appData.username = newValue
+                           // appData.password = ""
+                            self.forgotPasswordUsername = newValue
                             self.sendRestorationCode(toChange: .changePassword)
                         }
                         
@@ -309,7 +311,7 @@ class LoginViewController: SuperViewController {
             }
         }
     }
-    
+    var forgotPasswordUsername = ""
     var userEmail = ""
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
@@ -359,7 +361,10 @@ class LoginViewController: SuperViewController {
                     self.showAlert(title: "Wrong password!", text: nil, error: true)
                     EnterValueVC.shared?.clearAll(animated: true)
                 } else {
-                    self.cangePasswordDB(username: appData.username, newPassword: new)
+
+                    let newUser = self.forgotPasswordUsername == "" ? appData.username : self.forgotPasswordUsername
+                    appData.username = newUser
+                    self.cangePasswordDB(username: newUser, newPassword: new)
                 }
             }
             EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Change password", title: "Repeat password", placeHolder: "Password", nextAction: repeatPasAction, screenType: .password))
@@ -474,7 +479,8 @@ class LoginViewController: SuperViewController {
     
     func sendRestorationCode(toChange: restoreCodeAction) {
 
-        let username = foundUsername != nil ? foundUsername! : appData.username
+        let userHolder = appData.username == "" ? forgotPasswordUsername : appData.username
+        let username = foundUsername != nil ? foundUsername! : userHolder
         if username != "" {
             self.currectAnsware = ""
 
@@ -630,6 +636,7 @@ class LoginViewController: SuperViewController {
                                     self.showAlert(title: "Internet error", text: "Try again later", error: true, goToLogin: true)
                                 }
                             } else {
+                                appData.username = userData[0]
                                 appData.password = newPassword
                                 KeychainService.updatePassword(service: "BudgetTrackerApp", account: userData[0], data: newPassword)
                                 EnterValueVC.shared?.closeVC(closeMessage: "Your password has been changed")
@@ -937,25 +944,28 @@ class LoginViewController: SuperViewController {
                             userChanged()
                             UserDefaults.standard.setValue(prevUserName, forKey: "prevUserName")
 
-                            if prevUserName == "" {
+                            if prevUserName == "" && forceLoggedOutUser == "" {
                                 let db = DataBase()
                                 db.localCategories = db.categories
                                 db.localTransactions = db.transactions
                                 
                             }
                             
-
-                            appData.fromLoginVCMessage = "Wellcome, \(appData.username)"
+                            if forceLoggedOutUser == "" {
+                                appData.fromLoginVCMessage = "Wellcome, \(appData.username)"
+                            }
+                            
                         }
                         
                         
                         if !appData.purchasedOnThisDevice {
                             appData.proVersion = loadedData[i][4] == "1" ? true : appData.proVersion
                         }
-                        if fromPro {
+                        if fromPro || self.forceLoggedOutUser != "" {
                             DispatchQueue.main.async {
-                                self.ai.fastHide { _ in
-                                    self.dismiss(animated: true, completion: nil)
+                                self.dismiss(animated: true) {
+                                    self.ai.fastHide { _ in
+                                    }
                                 }
                             }
                         } else {
@@ -1033,8 +1043,6 @@ class LoginViewController: SuperViewController {
                             let firstButton = IndicatorView.button(title: "Try again", style: .standart, close: true) { _ in
                                 self.emailLabel.becomeFirstResponder()
                             }
-
-                                            
                             DispatchQueue.main.async {
                                 self.ai.completeWithActions(buttons: (firstButton, nil), title: "Enter valid email address", descriptionText: "With correct email address you could restore your password in the future", type: .error)
                             }
@@ -1054,20 +1062,25 @@ class LoginViewController: SuperViewController {
                                     appData.username = name
                                     appData.password = password
 
-                                    if prevUsere == "" {
-
+                                    if prevUsere == "" && self.forceLoggedOutUser == "" {
                                         let db = DataBase()
                                         db.localTransactions = db.transactions
                                         db.localCategories = db.categories
                                     }
+                                    if self.forceLoggedOutUser == "" {
+                                        appData.fromLoginVCMessage = "Wellcome, \(appData.username)"
+                                    }
                                     
-                                    appData.fromLoginVCMessage = "Wellcome, \(appData.username)"
                                     self.userChanged()
-                                    if self.fromPro {
+                                    if self.fromPro || self.forceLoggedOutUser != "" {
                                         DispatchQueue.main.async {
-                                            self.ai.fastHide { _ in
-                                                self.dismiss(animated: true, completion: nil)
-                                            }
+                                            
+
+                                                self.dismiss(animated: true) {
+                                                    self.ai.fastHide { _ in
+                                                    }
+                                                }
+
                                         }
                                     } else {
                                         DispatchQueue.main.async {
@@ -1363,7 +1376,7 @@ class LoginViewController: SuperViewController {
         return [nicknameLabelCreate, emailLabel, passwordLabel, confirmPasswordLabel, nicknameLogLabel, passwordLogLabel]
     }
     var placeHolder: [String] {
-        return ["Create username", "Enter your email", "Create password", "Confirm password", "Username", "Password"]
+        return ["Create username", "Enter your email", "Create password", "Confirm password", "Username or email", "Password"]
     }
     
     var _enteredEmailUsers: [String] = []

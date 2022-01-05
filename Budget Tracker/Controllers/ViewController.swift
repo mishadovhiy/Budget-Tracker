@@ -304,6 +304,7 @@ class ViewController: SuperViewController {
                     } else {
                         self.mainTableView.removeGestureRecognizer(gesture)
                     }
+                    self.mainTableView.reloadData()
                 }
             }
 

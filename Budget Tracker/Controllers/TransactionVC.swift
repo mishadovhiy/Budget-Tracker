@@ -116,6 +116,8 @@ class TransitionVC: SuperViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         if !sbvsloded {
+           // segmentControll.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.bala, for: .normal)
+           // purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.category ?? .white], for: .selected)
             closeButton.layer.cornerRadius = 5
             doneButton.layer.cornerRadius = 5
             dateTextField.inputView = UIView(frame: .zero)
@@ -380,7 +382,11 @@ class TransitionVC: SuperViewController {
             }
         }
     }
-    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    //    purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.category ?? .white], for: .selected)
+     //   purposeSwitcher.tintColor = K.Colors.category
+    }
     @IBAction func purposeSwitched(_ sender: UISegmentedControl) {
         var placeHolder = ""
         if !fromDebts {

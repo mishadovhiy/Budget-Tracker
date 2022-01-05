@@ -419,13 +419,13 @@ extension BuyProVC: SKPaymentTransactionObserver {
                 SKPaymentQueue.default().remove(self)
                 appData.proVersion = true
                 appData.purchasedOnThisDevice = true
-                if transaction.transactionState == .purchased {
+                //if transaction.transactionState == .purchased {
                     DispatchQueue.init(label: "DB").async {
                         self.dbSavePurchase()
                     }
-                } else {
+           /*     } else {
                     scsPurchaseShow()
-                }
+                }*/
                 break
             case .failed, .deferred:
                 print("paymentQueue pur ERROR")

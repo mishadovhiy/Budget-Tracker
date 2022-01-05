@@ -1528,7 +1528,7 @@
         <!--    -->
         <scene sceneID="VOY-fg-Vsf">
             <objects>
-                <viewController storyboardIdentifier="TransitionVC" id="o1K-SN-bUx" customClass="TransitionVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TransitionVC" interfaceStyle="dark" id="o1K-SN-bUx" customClass="TransitionVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="405-H3-8an">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="786"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -3218,15 +3218,13 @@
         <!--Navigation Controller-->
         <scene sceneID="Jwx-Ci-wHe">
             <objects>
-                <navigationController storyboardIdentifier="transactionsVCNav" automaticallyAdjustsScrollViewInsets="NO" id="84E-gG-7XB" customClass="NavigationController" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="transactionsVCNav" automaticallyAdjustsScrollViewInsets="NO" interfaceStyle="dark" id="84E-gG-7XB" customClass="NavigationController" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="3cL-kn-iw3"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" largeTitles="YES" id="DoX-Gq-L35">
                         <rect key="frame" x="0.0" y="44" width="428" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" name="PrimaryBackgroundColor"/>
-                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="barTintColor" name="PrimaryBackgroundColor"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </textAttributes>
@@ -3369,7 +3367,7 @@
                         <rect key="frame" x="0.0" y="44" width="428" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" name="PrimaryBackgroundColor"/>
-                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" name="CategoryColor"/>
                         <color key="barTintColor" name="PrimaryBackgroundColor"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
