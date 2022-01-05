@@ -110,12 +110,14 @@ class TransitionVC: SuperViewController {
     var defaultDate:String {
         return lastSelectedDate ?? appData.stringDate(appData.objects.datePicker)
     }
+    @IBOutlet weak var doneButton: UIButton!
     var dateChanged = false
     var sbvsloded = false
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         if !sbvsloded {
             closeButton.layer.cornerRadius = 5
+            doneButton.layer.cornerRadius = 5
             dateTextField.inputView = UIView(frame: .zero)
             dateTextField.isUserInteractionEnabled = false
             dateTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(datePressed)))

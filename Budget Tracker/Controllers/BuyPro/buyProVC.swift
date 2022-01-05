@@ -44,6 +44,14 @@ class BuyProVC: SuperViewController {
     var requestProd = SKProductsRequest()
     var proVProduct: SKProduct?
     
+    var sbsloaded = false
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        if !sbsloaded {
+            sbsloaded = true
+            closeButton.layer.cornerRadius = 5
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
 

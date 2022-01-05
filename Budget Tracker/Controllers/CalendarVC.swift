@@ -52,6 +52,7 @@ class CalendarVC: SuperViewController {
     @objc func dateSelected(_ sender: UIDatePicker) {
         print(sender.date)
     }
+    @IBOutlet weak var closeButton: UIButton!
     
     var datePickerDate: String?
     override func viewDidLoad() {
@@ -59,7 +60,8 @@ class CalendarVC: SuperViewController {
         /*DispatchQueue.main.async {
             self.reminderTimeLabel.isHidden = true
         }*/
-
+        doneButton.layer.cornerRadius = 5
+        closeButton.layer.cornerRadius = 5
         let height = self.view.frame.height
         startButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, height + self.startButton.layer.frame.height, 0)
         endButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, height + self.endButton.layer.frame.height, 0)

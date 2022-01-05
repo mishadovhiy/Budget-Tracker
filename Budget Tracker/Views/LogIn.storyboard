@@ -593,12 +593,16 @@
                                 </connections>
                             </containerView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Qc-L7-jFd">
-                                <rect key="frame" x="354" y="0.0" width="60" height="60"/>
+                                <rect key="frame" x="364" y="10" width="40" height="40"/>
+                                <color key="backgroundColor" red="0.18000000720000001" green="0.18000000720000001" blue="0.18000000720000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="GyP-fa-mBq"/>
-                                    <constraint firstAttribute="width" constant="60" id="HGV-U4-fKa"/>
+                                    <constraint firstAttribute="height" constant="40" id="GyP-fa-mBq"/>
+                                    <constraint firstAttribute="width" constant="40" id="HGV-U4-fKa"/>
                                 </constraints>
-                                <state key="normal" image="cancel"/>
+                                <color key="tintColor" name="CategoryColor"/>
+                                <state key="normal" image="xmark.circle">
+                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="15"/>
+                                </state>
                                 <connections>
                                     <action selector="closePressed:" destination="kvJ-6b-N85" eventType="touchUpInside" id="TFU-mg-WjY"/>
                                 </connections>
@@ -612,8 +616,8 @@
                             <constraint firstItem="epx-o4-4WH" firstAttribute="leading" secondItem="lG4-BG-AhO" secondAttribute="leading" constant="10" id="Azm-zP-sR8"/>
                             <constraint firstItem="Hqm-2b-6Ca" firstAttribute="top" secondItem="epx-o4-4WH" secondAttribute="bottom" constant="10" id="CDE-6u-Bt3"/>
                             <constraint firstItem="xHS-Su-KKU" firstAttribute="trailing" secondItem="lG4-BG-AhO" secondAttribute="trailing" priority="750" id="Dpn-hs-1Vd"/>
-                            <constraint firstItem="lG4-BG-AhO" firstAttribute="trailing" secondItem="1Qc-L7-jFd" secondAttribute="trailing" id="FsX-GR-ijB"/>
-                            <constraint firstItem="1Qc-L7-jFd" firstAttribute="top" secondItem="lG4-BG-AhO" secondAttribute="top" id="JTV-GE-QJk"/>
+                            <constraint firstItem="lG4-BG-AhO" firstAttribute="trailing" secondItem="1Qc-L7-jFd" secondAttribute="trailing" constant="10" id="FsX-GR-ijB"/>
+                            <constraint firstItem="1Qc-L7-jFd" firstAttribute="top" secondItem="lG4-BG-AhO" secondAttribute="top" constant="10" id="JTV-GE-QJk"/>
                             <constraint firstItem="Hqm-2b-6Ca" firstAttribute="leading" secondItem="lG4-BG-AhO" secondAttribute="leading" priority="750" constant="5" id="M5x-rR-Mcq"/>
                             <constraint firstItem="epx-o4-4WH" firstAttribute="top" secondItem="MWo-Id-j5O" secondAttribute="bottom" id="Qbh-gP-97T"/>
                             <constraint firstItem="MWo-Id-j5O" firstAttribute="top" secondItem="RDr-oq-czX" secondAttribute="top" id="X8T-Od-bkW"/>
@@ -1533,6 +1537,7 @@
         <image name="paperplane.fill" width="18" height="18"/>
         <image name="person.3.sequence.fill" width="33" height="15"/>
         <image name="purchaseBackground0" width="323" height="137"/>
+        <image name="xmark.circle" width="17" height="17"/>
         <namedColor name="CategoryColor">
             <color red="0.86699998378753662" green="0.86699998378753662" blue="0.86699998378753662" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

@@ -1089,6 +1089,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         if cell.qntLabel.superview?.isHidden ?? false != true {
             cell.qntLabel.superview?.isHidden = true
         }
+            if cell.unseenIndicatorView.isHidden != true {
+                cell.unseenIndicatorView.isHidden = true
+            }
         cell.cancelButton.isHidden = true
         
        /* print(category.name, "namenamenamenamenamename")

@@ -274,6 +274,9 @@ class ViewController: SuperViewController {
     var sideBarShowing = false
     var firstLod = true
     
+    @IBAction func addTransactionPressed(_ sender: Any) {
+        toAddTransaction()
+    }
     @objc func mainContentTap(_ sender: UITapGestureRecognizer) {
         toggleSideBar(false, animated: true)
     }
@@ -287,6 +290,7 @@ class ViewController: SuperViewController {
                 //self.view.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? 0 : frame.width * (-1), 0, 0)
                 self.mainContentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
                 self.mainContentViewHelpher.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
+
             } completion: { _ in
                 self.sideBar.getData()
                 if self.firstLod {
@@ -334,9 +338,10 @@ class ViewController: SuperViewController {
             self.filterView.superview?.translatesAutoresizingMaskIntoConstraints = true
             self.filterView.translatesAutoresizingMaskIntoConstraints = true
             self.calculationSView.translatesAutoresizingMaskIntoConstraints = true
-            let image = UIImage(named: "plusIcon")
+            let image = UIImage(named: "plusSymbol")
             let button = UIButton(frame: CGRect(x: 0, y: 10, width: 20, height: 20))
             button.layer.masksToBounds = true
+            button.tintColor = K.Colors.balanceV
             button.layer.cornerRadius = button.layer.frame.width / 2
             button.setImage(image, for: .normal)
             self.refreshSubview.addSubview(button)
@@ -906,6 +911,9 @@ class ViewController: SuperViewController {
             if sendSavedData {
                 sendSavedData = false
                 //show message error, try again later
+                DispatchQueue.main.async {
+                    self.newMessage.show(title:"Error sending data", description: "Try again later", type: .error)
+                }
             }
             self.filter()
         }
@@ -922,7 +930,6 @@ class ViewController: SuperViewController {
                 
                 let save = SaveToDB()
                 let delete = DeleteFromDB()
-
                         if let addCategory = db.categoryFrom(first["categoryNew"] ?? [:]) {
                             if let highest = highesLoadedCatID {
                                 var cat = addCategory
@@ -1188,15 +1195,11 @@ class ViewController: SuperViewController {
                     self.filter()
                 }
             } else {
-                DispatchQueue.main.async {
-                    self.performSegue(withIdentifier: "goToEditVC", sender: self)
-                }
+                toAddTransaction()
                 
             }
         } else {
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "goToEditVC", sender: self)
-            }
+            toAddTransaction()
         }
         
         
@@ -1664,12 +1667,15 @@ class ViewController: SuperViewController {
     }
 
 
-    @IBAction func addTransactionPressed(_ sender: UIButton) {
+    @IBAction func addTransactionPressedd(_ sender: UIButton) {
+        toAddTransaction()
+    }
+    func toAddTransaction() {
+        editingTransaction = nil
         DispatchQueue.main.async {
             self.performSegue(withIdentifier: "goToEditVC", sender: self)
         }
     }
-    
     
     
     @objc func addTransButtonPressed(_ sender: UIButton) {
