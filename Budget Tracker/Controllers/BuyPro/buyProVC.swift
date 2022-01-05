@@ -52,9 +52,10 @@ class BuyProVC: SuperViewController {
             closeButton.layer.cornerRadius = 5
         }
     }
+    static var shared: BuyProVC?
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        BuyProVC.shared = self
         DispatchQueue.main.async {
             if appData.proVersion || appData.proTrial || appData.trialDate != "" {
                 self.tryFree.alpha = 0

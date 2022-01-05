@@ -98,7 +98,7 @@ extension LoginViewController {
             MoreVC.ScreenData(name: "Forgot password", description: "", action: forgotPassword),
         ]
         
-        appData.presentMoreVC(currentVC: self, data: appData.username == "" ? notUserLogged : loggedUserData)
+        appData.presentMoreVC(currentVC: self, data: appData.username == "" ? notUserLogged : loggedUserData, proIndex: 1)
 
     }
     

@@ -1842,7 +1842,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             deleteAction.backgroundColor = K.Colors.primaryBacground
             if newTableData.count != 0 {
                 if newTableData[indexPath.section - 1].transactions.count != indexPath.row {
-                    return UISwipeActionsConfiguration(actions: [editeAction, deleteAction])
+                    return nil//UISwipeActionsConfiguration(actions: [editeAction, deleteAction])
                 }
             }
             return nil

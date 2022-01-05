@@ -751,7 +751,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             MoreVC.ScreenData(name: "Name", description: "", showAI: true, selected: self.sortOption == .name, action: nameAction),
             MoreVC.ScreenData(name: "Most used", description: "", showAI: true, selected: self.sortOption == .transactionsCount, pro: appData.proVersion || appData.proTrial, action: countAction),
         ]
-        appData.presentMoreVC(currentVC: self, data: moreData)
+        appData.presentMoreVC(currentVC: self, data: moreData, proIndex: 2)
     }
     @IBOutlet weak var searchBar: UISearchBar!
     

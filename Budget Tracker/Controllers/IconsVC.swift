@@ -124,6 +124,7 @@ extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
             
         default:
             assert(false, "Unexpected element kind")
+            return UICollectionReusableView.init(frame: .zero)
         }
     }
     

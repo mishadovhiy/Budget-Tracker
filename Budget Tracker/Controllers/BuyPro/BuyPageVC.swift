@@ -27,7 +27,6 @@ class BuyPageVC: UIPageViewController {
         dataSource = self
         delegate = self
     }
-    var selectedNum = 1
     
     func createVCS() {
         
@@ -44,8 +43,8 @@ class BuyPageVC: UIPageViewController {
         DispatchQueue.main.async {
             if let firstPage = self.tableData.first {
                 self.setViewControllers([firstPage], direction: .forward, animated: true) { _ in
-                    if self.selectedNum != 0 {
-                        self.setViewControllers([self.tableData[self.selectedNum]], direction: .forward, animated: true) { _ in
+                    if BuyProVC.shared?.selectedProduct ?? 0 != 0 {
+                        self.setViewControllers([self.tableData[BuyProVC.shared?.selectedProduct ?? 0]], direction: .forward, animated: true) { _ in
                             
                         }
                     }

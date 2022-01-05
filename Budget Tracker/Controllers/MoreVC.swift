@@ -133,7 +133,7 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     
 
-    
+    var selectedProIndex = 0
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
         if indexPath.section == 0 {
@@ -145,7 +145,7 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         } else {
             if indexPath.section == 1 {
                 if !tableData[indexPath.row].pro {
-                    appData.presentBuyProVC(currentVC: self, selectedProduct: 1)
+                    appData.presentBuyProVC(currentVC: self, selectedProduct: selectedProIndex)
                     tableView.deselectRow(at: indexPath, animated: true)
                 } else {
                 if let function = tableData[indexPath.row].action {

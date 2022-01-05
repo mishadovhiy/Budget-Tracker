@@ -384,7 +384,7 @@ class TransitionVC: SuperViewController {
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-    //    purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.category ?? .white], for: .selected)
+
      //   purposeSwitcher.tintColor = K.Colors.category
     }
     @IBAction func purposeSwitched(_ sender: UISegmentedControl) {

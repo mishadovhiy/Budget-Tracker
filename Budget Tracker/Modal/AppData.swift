@@ -626,7 +626,7 @@ class AppData {
     }
     
     
-    func presentMoreVC(currentVC: UIViewController, data: [MoreVC.ScreenData]) {
+    func presentMoreVC(currentVC: UIViewController, data: [MoreVC.ScreenData], proIndex: Int = 0) {
         DispatchQueue.main.async {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let vccc = storyboard.instantiateViewController(withIdentifier: "MoreVC") as! MoreVC
@@ -654,6 +654,7 @@ class AppData {
             } else {
                 vccc.firstCellHeight = tableInButtom
             }
+            vccc.selectedProIndex = proIndex
             vccc.cellHeightCust = CGFloat.init(cellHeight)
             currentVC.present(vccc, animated: true)
         }

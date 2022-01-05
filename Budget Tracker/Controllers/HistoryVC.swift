@@ -50,7 +50,7 @@ class HistoryVC: SuperViewController {
             MoreVC.ScreenData(name: "Add amount to pay", description: "", showAI:false, action: addAmountToPay),
             MoreVC.ScreenData(name: "Add Due date", description: "", showAI:false, pro: appData.proVersion || appData.proTrial, action: addDueDate),
         ]
-        appData.presentMoreVC(currentVC: self, data: moreData)
+        appData.presentMoreVC(currentVC: self, data: moreData, proIndex: 0)
     }
     
     

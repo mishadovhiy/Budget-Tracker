@@ -27,10 +27,10 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         var settingsCell = CellData(name: "Settings", value: "", segue: "toSettingsVC", image: "gearshape.2.fill")
         
         
-        
+        let catsCo = UserDefaults.standard.value(forKey: "categoriesDataNew") as? [[String:Any]] ?? []
         
         var categories = [
-            CellData(name: "Categories", value: "\(db.categories.count - debts)", segue: "toCategories", image: "folder.fill"),
+            CellData(name: "Categories", value: "\(catsCo.count)", segue: "toCategories", image: "folder.fill"),
         //    CellData(name: "Debts", value: "\(debts)", segue: "toDebts", image: "rectangle.3.group.fill", pro: pro)
         ]
         let localCount = ((UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String:Any]] ?? []) + (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String:Any]] ?? [])).count
