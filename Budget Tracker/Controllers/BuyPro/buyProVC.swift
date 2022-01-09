@@ -278,6 +278,7 @@ class BuyProVC: SuperViewController {
                             }
                             print("buyPressed")
                             guard let myProduct = self.proVProduct else {
+                                self.showAlert(title: "Error", text: "Permission denied", error: true)
                                 return
                             }
                             if SKPaymentQueue.canMakePayments() {

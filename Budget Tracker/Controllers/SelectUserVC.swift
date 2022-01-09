@@ -40,10 +40,14 @@ class SelectUserVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         DispatchQueue.main.async {
-            self.navigationController?.popViewController(animated: true)
-           // self.dismiss(animated: true) {
-                self.delegate?.selected(user: self.users[indexPath.row])
-            //}
+            self.delegate?.selected(user: self.users[indexPath.row])
+            if let nav = self.navigationController {
+                nav.popViewController(animated: true)
+            } else {
+                self.dismiss(animated: true) {
+                    
+                }
+            }
         }
     }
 

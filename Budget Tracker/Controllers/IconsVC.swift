@@ -107,7 +107,7 @@ extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        let colorsSection = colors.count//(screenType == .all || screenType == .colorsOnly) ? colors.count : 0
+        let colorsSection = coloresStrTemporary.count//(screenType == .all || screenType == .colorsOnly) ? colors.count : 0
         let iconsSection = section == 0 ? 0 : iconsData[section - 1].data.count//(screenType == .all || screenType == .iconsOnly) ? (section == 1 ? iconsData[section - 1].data.count : 0) : 0
         
         return section == 0 ? colorsSection : iconsSection

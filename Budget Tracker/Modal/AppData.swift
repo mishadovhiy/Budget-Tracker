@@ -324,7 +324,7 @@ class AppData {
     
 
     let categoryColors = [
-        "yellowColor", "PinkColor", "GreenColor", "OrangeColor", "RedColor", "BlueColor"
+        "BlueColor", "BlueColor2", "BlueColor3", "GreenColor", "GreenColor-2", "yellowColor2", "OrangeColor", "OrangeColor-1", "pinkColor2", "PinkColor", "PinkColor-1", "RedColor"
     ]
     var randomColorName: String {
         let data = categoryColors
@@ -798,8 +798,9 @@ func dateCompToIso(isoComp: DateComponents) -> String? {
 
 func iconNamed(_ name: String?) -> UIImage {
     print("iconNamed:", name ?? "-")
-    let namee = name ?? "unknown"
-    let resultName = namee != "" ? namee : "unknown"
+    let def = "photo.fill"
+    let namee = name ?? def
+    let resultName = namee != "" ? namee : def
     
     return UIImage(named: resultName)!
 }
