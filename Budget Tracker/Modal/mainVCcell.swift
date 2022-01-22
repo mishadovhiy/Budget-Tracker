@@ -9,7 +9,6 @@
 import UIKit
 
 class mainVCcell: UITableViewCell {
-    
     @IBOutlet weak var mainBackgroundView: UIView!
     @IBOutlet weak var categoryImage: UIImageView!
     @IBOutlet weak var commentImage: UIImageView!

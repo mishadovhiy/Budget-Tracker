@@ -58,6 +58,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         //
     }
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
+        let button = IndicatorView.button(title: "ok", style: .error, close: true) { _ in
+            
+        }
+        DispatchQueue.main.async {
+            self.ai.completeWithActions(buttons: (button, nil), title:"Memory warning!")
+        }
         print(#function)
     }
     var becameActive = false

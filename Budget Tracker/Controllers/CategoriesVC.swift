@@ -842,6 +842,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         if let dob = Double(sender.name ?? "") {
             let section = Int(dob)// {
                 selectingIconFor.1 = section
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
           //  }
         }
         
@@ -850,7 +853,21 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
 
     
     func hideAll() {
+        toggleIcons(show: false, animated: true, category: nil)
         DispatchQueue.main.async {
+             if self.searchBar.isFirstResponder {
+                 self.searchBar.endEditing(true)
+             }
+            if let editing = self.editingTF {
+                self.editingTF = nil
+            //    t/oggleIcons(show: false, animated: true, category: nil)
+                DispatchQueue.main.async {
+                    editing.endEditing(true)
+                    
+                }
+            }
+         }
+       /* DispatchQueue.main.async {
             if self.searchBar.isFirstResponder {
                 self.searchBar.endEditing(true)
             }
@@ -863,7 +880,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 
             }
         }
-        selectingIconFor = (nil,nil)
+        selectingIconFor = (nil,nil)*/
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -891,7 +908,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             if section == 1 {
                 return screenType == .localData ? 1 : 0
             } else {
-                return tableData[section - 2].data.count == 0 ? 1 : tableData[section - 2].data.count
+                return tableData[section - sectionsBeforeData].data.count == 0 ? 1 : tableData[section - 2].data.count
             }
         }
         
@@ -901,7 +918,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         if section == 0 || section == 1 {
             return nil
         } else {
-            return tableData[section - 2].title
+            return tableData[section - sectionsBeforeData].title
         }
         
     }
@@ -972,7 +989,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 } else {
                     let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent, for: indexPath) as! categoriesVCcell
                     
-                    let index = IndexPath(row: indexPath.row, section: indexPath.section - 2)
+                    let index = IndexPath(row: indexPath.row, section: indexPath.section - sectionsBeforeData)
                     cell.lo(index: index, footer: nil)
 
                     let category = tableData[index.section].data[indexPath.row]
@@ -997,7 +1014,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                     if cell.dueDateStack.isHidden != hidedueDate {
                         cell.dueDateStack.isHidden = hidedueDate
                     }
-                    cell.footerBackground.backgroundColor = editingTfIndex.1 == index.row || selectingIconFor.0 == index ? selectionBacground : K.Colors.secondaryBackground
+                    print(selectingIconFor.0)
+                    let isEditing = (editingTF == cell.newCategoryTF) || (selectingIconFor.0 == index)
+                    cell.footerBackground.backgroundColor = isEditing ? selectionBacground : K.Colors.secondaryBackground
 
                     cell.newCategoryTF.layer.name = "cell\(index.row)"
                     let dueDate = category.category.dueDate
@@ -1011,7 +1030,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                     cell.iconimage.image = category.editing == nil ? iconNamed(category.category.icon) : iconNamed(category.editing?.icon)
                     cell.iconimage.tintColor = category.editing == nil ? colorNamed(category.category.color) : colorNamed(category.editing?.color)
                     cell.categoryNameLabel.text = category.category.name
-                    cell.newCategoryTF.backgroundColor = cell.newCategoryTF == editingTF ? K.Colors.primaryBacground : .clear
+                  //  cell.newCategoryTF.backgroundColor = cell.newCategoryTF == editingTF ? K.Colors.primaryBacground : .clear
                     cell.newCategoryTF.text = category.editing?.name ?? category.category.name
                     return cell
                 }
@@ -1035,13 +1054,13 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         helperView.backgroundColor = K.Colors.secondaryBackground//darkAppearence ? .black : .white
         view.backgroundColor = self.view.backgroundColor
         let label = UILabel(frame: CGRect(x: tableCorners + 10, y: 15, width: mainFrame.width - 40, height: 20))
-        label.text = tableData[section - 2].title
+        label.text = tableData[section - sectionsBeforeData].title
         label.textColor = K.Colors.balanceV
         label.font = .systemFont(ofSize: 14, weight: .medium)
         view.addSubview(helperView)
         view.addSubview(label)
 
-        label.text = tableData[section - 2].title ?? ""
+        label.text = tableData[section - sectionsBeforeData].title ?? ""
         return view
         }
     }
@@ -1076,7 +1095,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent) as! categoriesVCcell
         /*let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell") as! CategoryCell
 */
-            let sect = section - 2
+            let sect = section - sectionsBeforeData
         //show only footer
         let category = tableData[sect].newCategory.category
             cell.footerHelperBottomView.isHidden = false
@@ -1120,14 +1139,17 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         }
         
 
-            cell.newCategoryTF.layer.name = "section\(section - 2)"
+            cell.newCategoryTF.layer.name = "section\(section - sectionsBeforeData)"
         let view = cell.contentView
         view.isUserInteractionEnabled = true
         //view.layer.cornerRadius = 6
        // view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-        view.backgroundColor = K.Colors.primaryBacground// K.Colors.secondaryBackground
-   //     cell.footerBackground.backgroundColor = K.Colors.secondaryBackground
-            cell.footerBackground.backgroundColor = editingTfIndex.0 ?? -1 == section || selectingIconFor.1 == section ? selectionBacground : K.Colors.secondaryBackground
+            let editingtfection = editingTfIndex.0 ?? -1
+            print(editingtfection, "editingtfectioneditingtfectioneditingtfectioneditingtfection")
+            let isSelected = editingtfection == sect || selectingIconFor.1 == sect
+            print(isSelected, "isSelectedisSelectedisSelectedisSelected")
+            view.backgroundColor = K.Colors.primaryBacground
+        cell.footerBackground.backgroundColor = isSelected ? selectionBacground : K.Colors.secondaryBackground
         cell.footerBackground.layer.cornerRadius = tableCorners
         cell.footerBackground.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         return view
@@ -1141,7 +1163,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             //self.tableActionActivityIndicator.startAnimating()
           //  DispatchQueue.main.async {
                 self.ai.show(title: "Deleting") { _ in
-                    self.deteteCategory(at: IndexPath(row: indexPath.row, section: indexPath.section - 2))
+                    self.deteteCategory(at: IndexPath(row: indexPath.row, section: indexPath.section - self.sectionsBeforeData))
                 }
           //  }
         }
@@ -1149,7 +1171,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             //self.tableActionActivityIndicator.startAnimating()
           //  DispatchQueue.main.async {
                 self.ai.show(title: "Deleting") { _ in
-                    let id = self.tableData[indexPath.section - 2].data[indexPath.row].category.id
+                    let id = self.tableData[indexPath.section - self.sectionsBeforeData].data[indexPath.row].category.id
                     self.db.deleteCategory(id: "\(id)", local: true)
                     self.loadData()
                 }
@@ -1159,7 +1181,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         
         let editAction = UIContextualAction(style: .destructive, title: "Edit") {  (contextualAction, view, boolValue) in
             //self.tableActionActivityIndicator.startAnimating()
-            self.tableData[indexPath.section - 2].data[indexPath.row].editing = self.tableData[indexPath.section - 2].data[indexPath.row].category
+            self.tableData[indexPath.section - self.sectionsBeforeData].data[indexPath.row].editing = self.tableData[indexPath.section - self.sectionsBeforeData].data[indexPath.row].category
             DispatchQueue.main.async {
                 self.tableView.reloadRows(at: [indexPath], with: .left)
                // self.tableView.reloadData()
@@ -1225,7 +1247,11 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     func textFieldDidBeginEditing(_ textField: UITextField) {
         editingTF = textField
         //t//oggleIcons(show: false, animated: true, category: nil)
-        selectingIconFor = (nil,nil)
+     //   selectingIconFor = (nil,nil)
+        if showingIcons {
+            toggleIcons(show: false, animated: true, category: nil)
+        }
+        
         DispatchQueue.main.async {
             let name = textField.layer.name ?? ""
             
@@ -1245,6 +1271,10 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                         let section = Int(dob)// {
                         print(section)
                         self.editingTfIndex = (section, nil)
+                       // let set = IndexSet(integer: section + self.sectionsBeforeData)
+                  //      DispatchQueue.main.async {
+                          //  self.tableView.reloadSections(set, with: .automatic)
+                     //   }
                     }
 
                     
@@ -1297,13 +1327,14 @@ extension categoriesVCcell:UITextFieldDelegate {
        /* DispatchQueue.main.async {
             CategoriesVC.shared?.tableView.reloadData()
         }*/
-        CategoriesVC.shared?.editingTfIndex = (nil,nil)
+      //  CategoriesVC.shared?.editingTfIndex = (nil,nil)
 
         let name = textField.layer.name ?? ""
         if name.contains("cell") {
             let rowS = name.replacingOccurrences(of: "cell", with: "")
             let dobRo = Double(rowS) ?? 0.0
            let row = Int(dobRo)// {
+            let prevRow = CategoriesVC.shared?.editingTfIndex.1
                 CategoriesVC.shared?.editingTfIndex = (nil, row)
                 DispatchQueue.main.async {
                     UIView.animate(withDuration: 0.3) {
@@ -1316,6 +1347,8 @@ extension categoriesVCcell:UITextFieldDelegate {
                                 CategoriesVC.shared?.selectingIconFor = (nil,nil)
                                 CategoriesVC.shared?.tableView.reloadRows(at: [reloadIndex], with: .automatic)
                             }
+                        } else {
+                            CategoriesVC.shared?.selectingIconFor = (nil, nil)
                         }
                     }
                     
@@ -1343,6 +1376,7 @@ extension categoriesVCcell:UITextFieldDelegate {
                 
             }
         }
+
         
     }
     
