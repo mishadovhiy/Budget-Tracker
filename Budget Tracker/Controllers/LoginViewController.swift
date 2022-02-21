@@ -812,18 +812,32 @@ class LoginViewController: SuperViewController {
     var sbvsLoaded = false
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        let tfs = Array(textfields)
-        for i in 0..<tfs.count {
-            tfs[i].delegate = self
-            tfs[i].addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
-            tfs[i].layer.masksToBounds = true
-            tfs[i].layer.cornerRadius = 6
+        
+        if !sbvsLoaded {
+            sbvsLoaded = true
+            DispatchQueue.main.async {
+                if #available(iOS 13.0, *) {
+                    
+                } else {
+                    self.moreButton.setTitle("more", for: .normal)
+                }
+                
+                let tfs = Array(self.textfields)
+                for i in 0..<tfs.count {
+                    tfs[i].delegate = self
+                    tfs[i].addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
+                    tfs[i].layer.masksToBounds = true
+                    tfs[i].layer.cornerRadius = 6
+                    
+                    tfs[i].setRightPaddingPoints(5)
+                    tfs[i].setLeftPaddingPoints(5)
+                    
+                    tfs[i].attributedPlaceholder = NSAttributedString(string: i < self.placeHolder.count ? self.placeHolder[i] : "", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.textFieldPlaceholder])
+                }
+            }
             
-            tfs[i].setRightPaddingPoints(5)
-            tfs[i].setLeftPaddingPoints(5)
-            
-            tfs[i].attributedPlaceholder = NSAttributedString(string: i < placeHolder.count ? placeHolder[i] : "", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.textFieldPlaceholder])
         }
+        
     }
     
     override func viewDidDisappear(_ animated: Bool) {

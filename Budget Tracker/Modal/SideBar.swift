@@ -66,6 +66,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
     var tableData:[TableData] = []
 
     
+    
     func load() {
         DispatchQueue.main.async {
             ViewController.shared?.sideTableView.delegate = self
@@ -97,7 +98,9 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
             cell.nameLabel.superview?.alpha = tableData[indexPath.section].section[indexPath.row].name == "" ? 0 : 1
             cell.nameLabel.text = tableData[indexPath.section].section[indexPath.row].name
             cell.valueLabel.text = tableData[indexPath.section].section[indexPath.row].value
-            cell.optionIcon.image = iconNamed(tableData[indexPath.section].section[indexPath.row].image)
+            if #available(iOS 13.0, *) {
+                cell.optionIcon.image = iconNamed(tableData[indexPath.section].section[indexPath.row].image)
+            }
             return cell
         }
         
@@ -146,6 +149,11 @@ class SideBardCell: UITableViewCell {
         let selected = UIView(frame: .zero)
         selected.backgroundColor = K.Colors.primaryBacground
         self.selectedBackgroundView = selected
+        if #available(iOS 13.0, *) {
+            
+        } else {
+            optionIcon.isHidden = true
+        }
     }
 }
 

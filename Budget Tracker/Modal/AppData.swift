@@ -801,8 +801,12 @@ func iconNamed(_ name: String?) -> UIImage {
     let def = "photo.fill"
     let namee = name ?? def
     let resultName = namee != "" ? namee : def
+    if #available(iOS 13.0, *) {
+        return UIImage(named: resultName) ?? UIImage(named: def)!
+    } else {
+        return UIImage(named: "warning")!
+    }
     
-    return UIImage(named: resultName)!
 }
 
 func colorNamed(_ name: String?) -> UIColor {

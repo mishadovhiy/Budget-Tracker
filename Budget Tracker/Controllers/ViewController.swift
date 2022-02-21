@@ -286,8 +286,6 @@ class ViewController: SuperViewController {
         DispatchQueue.main.async {
             let frame = self.sideBar.layer.frame
             UIView.animate(withDuration: animated ? 0.35 : 0) {
-                //self.sideBar.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width * (-1) : frame.width * (-1), 0, 0)
-                //self.view.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? 0 : frame.width * (-1), 0, 0)
                 self.mainContentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
                 self.mainContentViewHelpher.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
 
@@ -333,6 +331,11 @@ class ViewController: SuperViewController {
             self.darkBackgroundUnderTable.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
             self.darkBackgroundUnderTable.translatesAutoresizingMaskIntoConstraints = true
             self.addTransitionButton.layer.cornerRadius = self.addTransitionButton.layer.frame.width / 2
+            if #available(iOS 13.0, *) {
+            } else {
+                self.addTransitionButton.setTitle("+", for: .normal)
+                self.menuButton.setTitle("menu", for: .normal)
+            }
             self.view.addSubview(self.filterHelperView)
             self.shadow(for: self.filterHelperView)
             self.filterView.superview?.layer.masksToBounds = true

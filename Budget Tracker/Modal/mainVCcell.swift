@@ -20,12 +20,7 @@ class mainVCcell: UITableViewCell {
     @IBOutlet weak var commentLabel: UILabel!
     let db = DataBase()
 
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-      /*  let cellPan = UIPanGestureRecognizer(target: self, action: #selector(cellSwipePan(_:)))
-        self.contentView.addGestureRecognizer(cellPan)
-        self.mainBackgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)*/
-    }
+
     var beginScrollPosition:CGFloat = 0
     @objc func cellSwipePan(_ sender: UIPanGestureRecognizer) {
         let finger = sender.location(in: self.contentView)
@@ -53,7 +48,7 @@ class mainVCcell: UITableViewCell {
             }
         }
     }
-    
+
     func setupCell(_ data: TransactionsStruct, i: Int, tableData: [TransactionsStruct], selectedCell: IndexPath?, indexPath: IndexPath) {
         if (Double(data.value) ?? 0.0) > 0 {
             valueLabel.textColor = K.Colors.yellow
@@ -68,8 +63,12 @@ class mainVCcell: UITableViewCell {
         valueLabel.text = Double(data.value) ?? 0.0 > 0.0 ? "+\(value)" : value
         let category = db.category(data.categoryID)
         print(category, "vghjnvgujnbhj")
+        if #available(iOS 13.0, *) {
+            categoryImage.image = iconNamed(category?.icon)
+        } else {
+            categoryImage.isHidden = true
+        }
         
-        categoryImage.image = iconNamed(category?.icon)
         categoryImage.tintColor = colorNamed(category?.color)
         categoryLabel.text = category?.name ?? "Unknown category"
         commentLabel.text = data.comment

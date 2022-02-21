@@ -57,6 +57,20 @@ class HistoryVC: SuperViewController {
     static var shared: HistoryVC?
     @IBOutlet weak var totalPeriodLabel: UILabel!
     @IBOutlet weak var totalLabel: UILabel!
+    var svsloaded = false
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        if !svsloaded {
+            svsloaded = true
+            if #available(iOS 13.0, *) {
+                
+            } else {
+                self.moreButton.setTitle("more", for: .normal)
+            }
+        }
+        
+        
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
 

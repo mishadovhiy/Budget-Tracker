@@ -1032,6 +1032,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                     cell.categoryNameLabel.text = category.category.name
                   //  cell.newCategoryTF.backgroundColor = cell.newCategoryTF == editingTF ? K.Colors.primaryBacground : .clear
                     cell.newCategoryTF.text = category.editing?.name ?? category.category.name
+                    
                     return cell
                 }
 
@@ -1101,7 +1102,12 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             cell.footerHelperBottomView.isHidden = false
         cell.lo(index: nil, footer: sect)
         cell.newCategoryTF.text = category.name
-        cell.iconimage.image = iconNamed(category.icon)
+            if #available(iOS 13.0, *) {
+                cell.iconimage.image = iconNamed(category.icon)
+            } else {
+                cell.iconimage.isHidden = true
+            }
+        
         cell.iconimage.tintColor = colorNamed(category.color)
         cell.editingStack.isHidden = false
         cell.dueDateStack.isHidden = true
@@ -1487,8 +1493,18 @@ class categoriesVCcell: UITableViewCell {
     @IBOutlet weak var saveButton: UIButton!
     
     @IBOutlet weak var unseenIndicatorView: UIView!
+    
+    var drawed = false
     override func draw(_ rect: CGRect) {
         super.draw(rect)
+        if !drawed {
+            drawed = true
+            if #available(iOS 13.0, *) {
+                
+            } else {
+                iconimage.isHidden = true
+            }
+        }
         unseenIndicatorView.layer.cornerRadius = 4
        // newCategoryTF.layer.cornerRadius = 6
        // newCategoryTF.setRightPaddingPoints(5)
@@ -1517,8 +1533,11 @@ class categoriesVCcell: UITableViewCell {
         if index != nil {
             self.newCategoryTF.delegate = self
             self.newCategoryTF.addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
-            let iconPressed = UITapGestureRecognizer(target: self, action: #selector(self.iconPressed(_:)))//
-            self.iconimage.addGestureRecognizer(iconPressed)
+            if #available(iOS 13.0, *) {
+                let iconPressed = UITapGestureRecognizer(target: self, action: #selector(self.iconPressed(_:)))//
+                self.iconimage.addGestureRecognizer(iconPressed)
+            }
+            
         }
         let defPlaceHolder = "New Category"
         

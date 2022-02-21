@@ -30,7 +30,20 @@ class SupportVC: UIViewController, UITextViewDelegate {
         self.view.addGestureRecognizer(swipe)
         self.view.addGestureRecognizer(closePress)
     }
-    
+    var svslded = false
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        if !svslded {
+            svslded = true
+            if #available(iOS 13.0, *) {
+                
+            } else {
+                DispatchQueue.main.async {
+                    self.sendButton.setTitle("send", for: .normal)
+                }
+            }
+        }
+    }
     override func viewDidAppear(_ animated: Bool) {
         textView.becomeFirstResponder()
     }
@@ -135,6 +148,7 @@ class SupportVC: UIViewController, UITextViewDelegate {
                             
                         }
                         DispatchQueue.main.async {
+                            self.navigationController?.popToRootViewController(animated: true)
                             AppDelegate.shared?.ai.completeWithActions(buttons: (okButton, nil), title: error ? "Error loading data" : "Thank you", descriptionText: error ? "Try later" : "Your message has been sent", type: error ? .error : .succsess)
                             
                             if !error {
