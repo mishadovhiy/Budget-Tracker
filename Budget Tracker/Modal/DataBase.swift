@@ -26,10 +26,7 @@ struct NewCategories {
 }
 
 class DataBase {
-    
-    
 
-    
     func category(_ id: String, local: Bool = false) -> NewCategories? {
         //localCategories
         let data = UserDefaults.standard.value(forKey: !local ? categoriesKey : K.Keys.localCategories) as? [[String:Any]] ?? []

@@ -773,7 +773,7 @@ class ViewController: SuperViewController {
         
         print("performFiltering called")
         if all == true {
-            let db = DataBase()
+            //let db = DataBase()
             tableData = db.transactions
             allSelectedTransactionsData = tableData
             return allSelectedTransactionsData
@@ -1366,7 +1366,9 @@ class ViewController: SuperViewController {
             UserDefaults.standard.setValue(newValue, forKey: "filterOptions")
         }
     }
-    let db = DataBase()
+    lazy var db:DataBase = {
+        return DataBase()
+    }()
     func prepareFilterOptions(_ data:[TransactionsStruct]? = nil) {
         let dat = data == nil ? Array(db.transactions) : data!
         let arr = Array(dat.sorted{ $0.dateFromString > $1.dateFromString })

@@ -103,7 +103,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         let okButton = IndicatorView.button(title: "OK", style: .standart, close: true) { _ in }
         let showButton = IndicatorView.button(title: "Show", style: .success, close: false) { _ in
             let load = LoadFromDB()
-            load.Categories { loadedData, error in
+            load.newCategories { categories, error in
                 self.showHistory(categpry: categpryID)
             }
         }

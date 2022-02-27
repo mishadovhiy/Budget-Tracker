@@ -13,24 +13,16 @@ import Cocoa
 #endif
 import Security
 
-let kSecClassValue = NSString(format: kSecClass)
-let kSecAttrAccountValue = NSString(format: kSecAttrAccount)
-let kSecValueDataValue = NSString(format: kSecValueData)
-let kSecClassGenericPasswordValue = NSString(format: kSecClassGenericPassword)
-let kSecAttrServiceValue = NSString(format: kSecAttrService)
-let kSecMatchLimitValue = NSString(format: kSecMatchLimit)
-let kSecReturnDataValue = NSString(format: kSecReturnData)
-let kSecMatchLimitOneValue = NSString(format: kSecMatchLimitOne)
-
 public class KeychainService: NSObject {
+    
     
     class func updatePassword(service: String, account:String, data: String) {
         if let dataFromString: Data = data.data(using: String.Encoding.utf8, allowLossyConversion: false) {
             
             // Instantiate a new default keychain query
-            let keychainQuery: NSMutableDictionary = NSMutableDictionary(objects: [kSecClassGenericPasswordValue, service, account], forKeys: [kSecClassValue, kSecAttrServiceValue, kSecAttrAccountValue])
+            let keychainQuery: NSMutableDictionary = NSMutableDictionary(objects: [KeychainServiceKeys.kSecClassGenericPasswordValue, service, account], forKeys: [KeychainServiceKeys.kSecClassValue, KeychainServiceKeys.kSecAttrServiceValue, KeychainServiceKeys.kSecAttrAccountValue])
             
-            let status = SecItemUpdate(keychainQuery as CFDictionary, [kSecValueDataValue:dataFromString] as CFDictionary)
+            let status = SecItemUpdate(keychainQuery as CFDictionary, [KeychainServiceKeys.kSecValueDataValue:dataFromString] as CFDictionary)
             
             if (status != errSecSuccess) {
                 if let err = SecCopyErrorMessageString(status, nil) {
@@ -44,7 +36,7 @@ public class KeychainService: NSObject {
     class func removePassword(service: String, account:String) {
         
         // Instantiate a new default keychain query
-        let keychainQuery: NSMutableDictionary = NSMutableDictionary(objects: [kSecClassGenericPasswordValue, service, account, kCFBooleanTrue], forKeys: [kSecClassValue, kSecAttrServiceValue, kSecAttrAccountValue, kSecReturnDataValue])
+        let keychainQuery: NSMutableDictionary = NSMutableDictionary(objects: [KeychainServiceKeys.kSecClassGenericPasswordValue, service, account, kCFBooleanTrue], forKeys: [KeychainServiceKeys.kSecClassValue, KeychainServiceKeys.kSecAttrServiceValue, KeychainServiceKeys.kSecAttrAccountValue, KeychainServiceKeys.kSecReturnDataValue])
         
         // Delete any existing items
         let status = SecItemDelete(keychainQuery as CFDictionary)
@@ -61,7 +53,7 @@ public class KeychainService: NSObject {
         if let dataFromString = data.data(using: String.Encoding.utf8, allowLossyConversion: false) {
             
             // Instantiate a new default keychain query
-            let keychainQuery: NSMutableDictionary = NSMutableDictionary(objects: [kSecClassGenericPasswordValue, service, account, dataFromString], forKeys: [kSecClassValue, kSecAttrServiceValue, kSecAttrAccountValue, kSecValueDataValue])
+            let keychainQuery: NSMutableDictionary = NSMutableDictionary(objects: [KeychainServiceKeys.kSecClassGenericPasswordValue, service, account, dataFromString], forKeys: [KeychainServiceKeys.kSecClassValue, KeychainServiceKeys.kSecAttrServiceValue, KeychainServiceKeys.kSecAttrAccountValue, KeychainServiceKeys.kSecValueDataValue])
             
             // Add the new keychain item
             let status = SecItemAdd(keychainQuery as CFDictionary, nil)
@@ -78,7 +70,7 @@ public class KeychainService: NSObject {
         // Instantiate a new default keychain query
         // Tell the query to return a result
         // Limit our results to one item
-        let keychainQuery: NSMutableDictionary = NSMutableDictionary(objects: [kSecClassGenericPasswordValue, service, account, kCFBooleanTrue, kSecMatchLimitOneValue], forKeys: [kSecClassValue, kSecAttrServiceValue, kSecAttrAccountValue, kSecReturnDataValue, kSecMatchLimitValue])
+        let keychainQuery: NSMutableDictionary = NSMutableDictionary(objects: [KeychainServiceKeys.kSecClassGenericPasswordValue, service, account, kCFBooleanTrue, KeychainServiceKeys.kSecMatchLimitOneValue], forKeys: [KeychainServiceKeys.kSecClassValue, KeychainServiceKeys.kSecAttrServiceValue, KeychainServiceKeys.kSecAttrAccountValue, KeychainServiceKeys.kSecReturnDataValue, KeychainServiceKeys.kSecMatchLimitValue])
         
         var dataTypeRef :AnyObject?
         
@@ -97,4 +89,15 @@ public class KeychainService: NSObject {
         return contentsOfKeychain
     }
     
+}
+
+public struct KeychainServiceKeys {
+    static let kSecClassValue = NSString(format: kSecClass)
+    static let kSecAttrAccountValue = NSString(format: kSecAttrAccount)
+    static let kSecValueDataValue = NSString(format: kSecValueData)
+    static let kSecClassGenericPasswordValue = NSString(format: kSecClassGenericPassword)
+    static let kSecAttrServiceValue = NSString(format: kSecAttrService)
+    static let kSecMatchLimitValue = NSString(format: kSecMatchLimit)
+    static let kSecReturnDataValue = NSString(format: kSecReturnData)
+    static let kSecMatchLimitOneValue = NSString(format: kSecMatchLimitOne)
 }

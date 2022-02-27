@@ -18,8 +18,8 @@ class mainVCcell: UITableViewCell {
  //   @IBOutlet weak var dailyTotalLabel: UILabel!
  //   @IBOutlet weak var sectionView: UIView!
     @IBOutlet weak var commentLabel: UILabel!
-    let db = DataBase()
-
+    //let db = DataBase()
+    
 
     var beginScrollPosition:CGFloat = 0
     @objc func cellSwipePan(_ sender: UIPanGestureRecognizer) {
@@ -61,7 +61,7 @@ class mainVCcell: UITableViewCell {
         
         let value = String(format:"%.0f", Double(data.value) ?? 0.0)
         valueLabel.text = Double(data.value) ?? 0.0 > 0.0 ? "+\(value)" : value
-        let category = db.category(data.categoryID)
+        let category = ViewController.shared?.db.category(data.categoryID)
         print(category, "vghjnvgujnbhj")
         if #available(iOS 13.0, *) {
             categoryImage.image = iconNamed(category?.icon)
