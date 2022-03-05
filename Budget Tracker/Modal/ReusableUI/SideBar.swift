@@ -47,7 +47,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         let emptySec = TableData(section: [CellData(name: "", value: "", segue: "", image: "")], title: "", hidden: false)
         
         var accountSection:[CellData] {
-            return trialDays == 0 ? [accpuntCell, support] : [accpuntCell, support, trialCell]
+            return trialDays == 0 ? [accpuntCell, settingsCell] : [accpuntCell, settingsCell, trialCell]
         }
         
         tableData = [

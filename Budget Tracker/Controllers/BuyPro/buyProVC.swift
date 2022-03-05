@@ -161,8 +161,8 @@ class BuyProVC: SuperViewController {
             if appData.username != "" {
 
                 self.ai.show { (_) in
-                    let load = LoadFromDB()
-                    load.Users { (loadedData, error) in
+                 //   let load = LoadFromDB()
+                    LoadFromDB.shared.Users { (loadedData, error) in
                         if error {
                             self.showAlert(title: "Internet error", text: "Try again later", error: true)
                         } else {
@@ -220,7 +220,7 @@ class BuyProVC: SuperViewController {
     
     func performTrial() {
         let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
-        let save = SaveToDB()
+       // let save = SaveToDB()
         let toDataStringMian = "&Nickname=\(appData.username)" + "&Email=\(self.userData.0)" + "&Password=\(self.userData.1)" + "&Registration_Date=\(self.userData.2)"
         
         let dataStringSave = toDataStringMian + "&ProVersion=0" + "&trialDate=\(today)"
@@ -231,7 +231,7 @@ class BuyProVC: SuperViewController {
                 //showError    appData.unsendedData.append(["deleteUser": dataStringDelete])
                 self.showAlert(title: "Internet error", text: "Try again later", error: true)
             } else {
-            save.Users(toDataString: dataStringSave ) { (error) in
+                SaveToDB.shared.Users(toDataString: dataStringSave ) { (error) in
                 if error {
                     //showError       appData.unsendedData.append(["saveUser": dataStringSave])
                     self.showAlert(title: "Internet error", text: "Try again later", error: true)
@@ -267,8 +267,8 @@ class BuyProVC: SuperViewController {
                     self.loadingIndicator.show()
                 }*/
                 self.ai.show { (_) in
-                    let load = LoadFromDB()
-                    load.Users { (loadedData, error) in
+                //    let load = LoadFromDB()
+                    LoadFromDB.shared.Users { (loadedData, error) in
                         if !error {
                             for i in 0..<loadedData.count {
                                 if loadedData[i][0] == nick {
@@ -377,7 +377,7 @@ extension BuyProVC: SKPaymentTransactionObserver {
     }
 
     func dbSavePurchase() {
-        let save = SaveToDB()
+       // let save = SaveToDB()
         let toDataStringMian = "&Nickname=\(appData.username)" + "&Email=\(self.userData.0)" + "&Password=\(self.userData.1)" + "&Registration_Date=\(self.userData.2)"
         
         let dataStringSave = toDataStringMian + "&ProVersion=1" + "&trialDate=\(self.userData.3)"
@@ -389,7 +389,7 @@ extension BuyProVC: SKPaymentTransactionObserver {
             if errorr {
                 self.showAlert(title: "Internet error", text: "Try again later", error: true)
             } else {
-                save.Users(toDataString: dataStringSave ) { (error) in
+                SaveToDB.shared.Users(toDataString: dataStringSave ) { (error) in
                     if error {
                         self.showAlert(title: "Internet error", text: "Try again later", error: true)
                     } else {

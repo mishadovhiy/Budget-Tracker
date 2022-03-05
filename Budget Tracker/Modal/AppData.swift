@@ -12,6 +12,27 @@ import UIKit
 
 class AppData {
 
+    static var linkColor: String {
+        set {
+            
+            UserDefaults.standard.setValue(newValue, forKey: "SelectedTintColor")
+            let color = colorNamed(newValue)
+            DispatchQueue.main.async {
+                let window = UIApplication.shared.keyWindow ?? UIWindow()
+                window.tintColor = color
+            }
+        }
+        get {
+            return UserDefaults.standard.value(forKey: "SelectedTintColor") as? String ?? "Yellow"
+            /*if let color = UserDefaults.standard.value(forKey: "SelectedTintColor") as? [Int] {
+                let colors:(CGFloat,CGFloat,CGFloat)=(CGFloat(color[0]),CGFloat(color[1]),CGFloat(color[2]))
+                return UIColor(red: colors.0/255, green: colors.1/255, blue: colors.2/255, alpha: 1)
+            } else {
+                return UIColor(red: 45/255, green: 129/255, blue: 245/255, alpha: 1)
+            }*/
+        }
+    }
+    
     let defaults = UserDefaults.standard
     var safeArea: (CGFloat, CGFloat) = (0.0, 0.0)//0-bt  1-top
     var unshowedErrors = ""
@@ -669,13 +690,16 @@ class AppData {
 
 
 extension UIViewController {
-    func shadow(for view:UIView, color: UIColor = K.Colors.secondaryBackground) {
+    func shadow(for view:UIView, opasity: Float = 0.4, radius:CGFloat? = 9, color: UIColor = K.Colors.secondaryBackground) {
         DispatchQueue.main.async {
             view.layer.shadowColor = UIColor.black.cgColor
-            view.layer.shadowOpacity = 0.4
+            view.layer.shadowOpacity = opasity
             view.layer.shadowOffset = .zero
             view.layer.shadowRadius = 12
-            view.layer.cornerRadius = 9
+            if let radius = radius {
+                view.layer.cornerRadius = radius
+            }
+            
             view.backgroundColor = color
         }
     }

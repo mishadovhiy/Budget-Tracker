@@ -106,8 +106,8 @@ extension LoginViewController {
     func forgotPasswordTapped() {
      //   DispatchQueue.main.async {
             self.ai.show { (_) in
-                let load = LoadFromDB()
-                load.Users { (users, error) in
+             //   let load = LoadFromDB()
+                LoadFromDB.shared.Users { (users, error) in
                     if error {
                         DispatchQueue.main.async {
                             self.showAlert(title: "Internet error", text: "Try again later", error: true, goToLogin: true)
@@ -146,8 +146,8 @@ extension LoginViewController {
     
     func changeEmailTapped() {
         ai.show { (_) in
-            let load = LoadFromDB()
-            load.Users { (users, error) in
+         //   let load = LoadFromDB()
+            LoadFromDB.shared.Users { (users, error) in
                 if error {
                     DispatchQueue.main.async {
                         self.showAlert(title: "Internet error", text: "Try again later", error: true, goToLogin: true)
@@ -199,11 +199,11 @@ extension LoginViewController {
                             
                             
                             
-                            self.load.newTransactions(otherUser: enteredUser) { loadedTransactions, errorTransactions in
+                            LoadFromDB.shared.newTransactions(otherUser: enteredUser) { loadedTransactions, errorTransactions in
                                 if errorTransactions == .none {
                                     //loadTransactionsCategories
                                     
-                                    self.load.newCategories(otherUser: enteredUser) { loaedCategories, categoriesError in
+                                    LoadFromDB.shared.newCategories(otherUser: enteredUser) { loaedCategories, categoriesError in
                                         if categoriesError == .none {
                                             
                                             self.transferingData = TransferingData(nickname: enteredUser, categories: loaedCategories, transactions: loadedTransactions)
@@ -319,8 +319,8 @@ class LoginViewController: SuperViewController {
     }
     
     func loadUsers(completion:@escaping ([[String]]) -> ()) {
-        let load = LoadFromDB()
-        load.Users { (users, error) in
+      //  let load = LoadFromDB()
+        LoadFromDB.shared.Users { (users, error) in
             if !error {
                 completion(users)
             } else {
@@ -374,8 +374,8 @@ class LoginViewController: SuperViewController {
     
     func loadUserData(username: String, completion: @escaping ([String]?) -> ()){
         
-        let load = LoadFromDB()
-        load.Users { (loadedData, error) in
+  //      let load = LoadFromDB()
+        LoadFromDB.shared.Users { (loadedData, error) in
             if error {
                 DispatchQueue.main.async {
                     self.showAlert(title: "Internet error", text: "Try again later", error: true, goToLogin: true)
@@ -402,9 +402,9 @@ class LoginViewController: SuperViewController {
         } else {
             self.loadUserData(username: userData.0) { (loadedData) in
                 if let dbData = loadedData {
-                    let save = SaveToDB()
+                    //let save = SaveToDB()
                     let toDataStringMian = "&Nickname=\(dbData[0])" + "&Email=\(newEmail)" + "&Password=\(dbData[2])" + "&Registration_Date=\(dbData[3])" + "&ProVersion=\(dbData[4])" + "&trialDate=\(dbData[5])"
-                    save.Users(toDataString: toDataStringMian ) { (error) in
+                    SaveToDB.shared.Users(toDataString: toDataStringMian ) { (error) in
                         if error {
                             DispatchQueue.main.async {
                                 self.showAlert(title: "Internet error", text: "Try again later", error: true, goToLogin: true)
@@ -488,8 +488,8 @@ class LoginViewController: SuperViewController {
             self.ai.show(title: nil, appeareAnimation: true) { _ in
                 DispatchQueue.init(label: "getEmail").async {
                     
-                    let load = LoadFromDB()
-                    load.Users { (loadedData, error) in
+                   // let load = LoadFromDB()
+                    LoadFromDB.shared.Users { (loadedData, error) in
                         if error {
 
                             DispatchQueue.main.async {
@@ -506,8 +506,8 @@ class LoginViewController: SuperViewController {
                             
                             let code = "\(Int.random(in: 0...9))\(Int.random(in: 0...9))\(Int.random(in: 0...9))\(Int.random(in: 0...9))"
                             print("RESTORATION CODE:", code)
-                            let save = SaveToDB()
-                            save.sendCode(toDataString: "emailTo=\(emailToSend)&Nickname=\(username)&resetCode=\(code)") { (codeError) in
+                            //let save = SaveToDB()
+                            SaveToDB.shared.sendCode(toDataString: "emailTo=\(emailToSend)&Nickname=\(username)&resetCode=\(code)") { (codeError) in
                                 if codeError {
                                     DispatchQueue.main.async {
                                         self.showAlert(title: "Internet error", text: "Try again later", error: true, goToLogin: true)
@@ -568,8 +568,8 @@ class LoginViewController: SuperViewController {
                     self.ai.show(title: nil) { _ in
                         let enteredUsername = EnterValueVC.shared?.enteringValue ?? ""
                         
-                        let load = LoadFromDB()
-                        load.Users { (users, error) in
+                    //    let load = LoadFromDB()
+                        LoadFromDB.shared.Users { (users, error) in
                             
                             for i in 0..<users.count {
                                 if enteredUsername == users[i][0] {
@@ -605,8 +605,8 @@ class LoginViewController: SuperViewController {
     }
     func cangePasswordDB(username: String, newPassword: String) {
         DispatchQueue.init(label: "DB").async {
-            let load = LoadFromDB()
-            load.Users { (loadedData, error) in
+           // let load = LoadFromDB()
+            LoadFromDB.shared.Users { (loadedData, error) in
                 if error {
                     DispatchQueue.main.async {
                         self.showAlert(title: "Internet error", text: "Try again later", error: true, goToLogin: true)
@@ -619,9 +619,9 @@ class LoginViewController: SuperViewController {
                             break
                         }
                     }
-                    let save = SaveToDB()
+                    //let save = SaveToDB()
                     let toDataStringMian = "&Nickname=\(userData[0])" + "&Email=\(userData[1])" + "&Password=\(newPassword)" + "&Registration_Date=\(userData[3])" + "&ProVersion=\(userData[4])" + "&trialDate=\(userData[5])"
-                    save.Users(toDataString: toDataStringMian ) { (error) in
+                    SaveToDB.shared.Users(toDataString: toDataStringMian ) { (error) in
                         if error {
                             DispatchQueue.main.async {
                                 self.showAlert(title: "Internet error", text: "Try again later", error: true, goToLogin: true)
@@ -680,8 +680,8 @@ class LoginViewController: SuperViewController {
         let username = appData.username
         if username != "" {
             self.ai.show { (_) in
-                let load = LoadFromDB()
-                load.Users { (allUsers, error) in
+            //    let load = LoadFromDB()
+                LoadFromDB.shared.Users { (allUsers, error) in
                     if !error {
                         var userData: [String] = []
                         for i in 0..<allUsers.count {
@@ -866,7 +866,7 @@ class LoginViewController: SuperViewController {
         }
     }
     
-    let load = LoadFromDB()
+   // let load = LoadFromDB()
     @IBAction func logInPressed(_ sender: UIButton) {
         print("LOGINPRESSED")
         transactionAdded = true
@@ -878,7 +878,7 @@ class LoginViewController: SuperViewController {
 
         self.ai.show(title: "Logging in") { (_) in
             self.hideKeyboard()
-            self.load.Users { (loadedData, Error) in
+            LoadFromDB.shared.Users { (loadedData, Error) in
                 if !Error {
                     DispatchQueue.main.async {
                         let name = self.nicknameLogLabel.text ?? ""
@@ -1023,7 +1023,7 @@ class LoginViewController: SuperViewController {
 
         self.ai.show(title: "Creating an account") { (_) in
             self.hideKeyboard()
-            self.load.Users { (loadedData, Error) in
+            LoadFromDB.shared.Users { (loadedData, Error) in
                 if !Error {
                     self.createAccoun(loadedData: loadedData)
                 } else {
@@ -1062,9 +1062,9 @@ class LoginViewController: SuperViewController {
                             }
 
                         } else {
-                            let save = SaveToDB()
+                           // let save = SaveToDB()
                             let toDataString = "&Nickname=\(name)" + "&Email=\(email)" + "&Password=\(password)" + "&Registration_Date=\(regDate)"
-                            save.Users(toDataString: toDataString) { (error) in
+                            SaveToDB.shared.Users(toDataString: toDataString) { (error) in
                                 if error {
                                     DispatchQueue.main.async {
                                         self.showAlert(title: "Internet error", text: "Try again later", error: true, goToLogin: true)

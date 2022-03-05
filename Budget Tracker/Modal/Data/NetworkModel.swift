@@ -14,6 +14,7 @@ import UIKit
 
 struct LoadFromDB {
 
+    static var shared = LoadFromDB()
     private func load(urlPath: String, completion: @escaping (NSArray, error?) -> ()) {
 
         let url: URL = URL(string: urlPath)!
@@ -200,6 +201,8 @@ struct SaveToDB {
         case non
     }
 
+    static var shared = SaveToDB()
+    
     func newTransaction(_ transaction: TransactionsStruct, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {
         if appData.username == "" {
             db.transactions.append(transaction)
@@ -351,7 +354,7 @@ struct SaveToDB {
 
 struct DeleteFromDB {
     let db = DataBase()
-
+    static var shared = DeleteFromDB()
     
     func User(toDataString: String, completion: @escaping (Bool) -> ()) {
         delete(dbFileURL: Keys.dbURL + "delete-user.php", toDataString: toDataString, error: { (error) in

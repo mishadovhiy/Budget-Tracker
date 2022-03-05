@@ -30,6 +30,15 @@ class SettingsVC: UIViewController {
         ]
     }
     
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        tableView.layer.shadowColor = UIColor.black.cgColor
+        tableView.layer.shadowOpacity = 0.1
+        tableView.layer.shadowOffset = .zero
+        tableView.layer.shadowRadius = 12
+        tableView.layer.cornerRadius = 9
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -62,7 +71,7 @@ class SettingsVC: UIViewController {
 
 extension SettingsVC: IconsVCDelegate {
     func selected(img: String, color: String) {
-        UserDefaults.standard.setValue(color, forKey: "PrimaryColor")
+        AppData.linkColor = color
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
@@ -111,6 +120,10 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource {
             standartData.action()
         }
     }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
+    }
 }
 
 extension SettingsVC {
@@ -154,10 +167,8 @@ extension SettingsVC {
             }
         }
         
-        let selectedColor = UserDefaults.standard.value(forKey: "PrimaryColor") as? String ?? "Default"
-        
         return [
-            StandartCell(title: "Primary color", description: selectedColor, action: colorAction),
+            StandartCell(title: "Primary color", description: AppData.linkColor, action: colorAction),
             StandartCell(title: "Language", action: languageAction)
         ]
     }

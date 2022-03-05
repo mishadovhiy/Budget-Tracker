@@ -346,10 +346,10 @@ class HistoryVC: SuperViewController {
         if let category = selectedCategory {
             let newDate = stringToCompIso(s: fullDate)
             self.dbLoadRemoveBeforeUpdate { (loadedData, _) in
-                let save = SaveToDB()
+              //  let save = SaveToDB()
                 var newCategory = category
                 newCategory.dueDate = fullDate == "" ? nil : newDate
-                save.newCategories(newCategory) { _ in
+                SaveToDB.shared.newCategories(newCategory) { _ in
                     self.selectedCategory = newCategory
                     DispatchQueue.main.async {
                         self.ai.fastHide { (_) in
@@ -380,9 +380,9 @@ class HistoryVC: SuperViewController {
     func dbLoadRemoveBeforeUpdate(completion: @escaping ([NewCategories], Bool) -> ()) {
 
         
-            let load = LoadFromDB()
+         //   let load = LoadFromDB()
         
-        load.newCategories { data, error in
+        LoadFromDB.shared.newCategories { data, error in
             if let id = self.selectedCategory?.id {
                 if let category = self.db.category("\(id)") {
                     let delete = DeleteFromDB()
@@ -402,10 +402,10 @@ class HistoryVC: SuperViewController {
         
         if let category = selectedCategory {
             self.dbLoadRemoveBeforeUpdate { (loadedData, _) in
-                let save = SaveToDB()
+               // let save = SaveToDB()
                 var newCategory = category
                 newCategory.amountToPay = Double(enteredAmount)
-                save.newCategories(newCategory) { _ in
+                SaveToDB.shared.newCategories(newCategory) { _ in
                     self.selectedCategory = newCategory
                     completion(nil)
                 }
@@ -743,8 +743,8 @@ extension HistoryVC: TransitionVCProtocol {
         needDownloadOnMainAppeare = true
         let new = TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)
         if value != "" && category != "" && date != "" {
-                    let save = SaveToDB()
-                    save.newTransaction(new) { error in
+                  //  let save = SaveToDB()
+            SaveToDB.shared.newTransaction(new) { error in
                         if let category = self.selectedCategory {
                             self.historyDataStruct = self.db.transactions(for: category)
                             self.totalSumm = Int(self.totalSum())

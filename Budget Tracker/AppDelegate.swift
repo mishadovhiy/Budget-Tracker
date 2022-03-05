@@ -31,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        
+        window?.tintColor = colorNamed(AppData.linkColor)
         center.delegate = self
         AppDelegate.shared = self
         window?.backgroundColor = K.Colors.primaryBacground
@@ -102,8 +102,8 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         
         let okButton = IndicatorView.button(title: "OK", style: .standart, close: true) { _ in }
         let showButton = IndicatorView.button(title: "Show", style: .success, close: false) { _ in
-            let load = LoadFromDB()
-            load.newCategories { categories, error in
+          //  let load = LoadFromDB()
+            LoadFromDB.shared.newCategories { categories, error in
                 self.showHistory(categpry: categpryID)
             }
         }

@@ -1573,7 +1573,6 @@
                                     <segment title="Expenses"/>
                                     <segment title="Income"/>
                                 </segments>
-                                <color key="tintColor" name="yellowColor"/>
                                 <color key="selectedSegmentTintColor" name="yellowColor"/>
                                 <connections>
                                     <action selector="purposeSwitched:" destination="o1K-SN-bUx" eventType="valueChanged" id="9EA-eU-QL0"/>
@@ -1797,7 +1796,6 @@
                                                                     <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JJR-Nl-rYc">
                                                                         <rect key="frame" x="306" y="0.0" width="102" height="75"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                        <color key="tintColor" name="yellowColor"/>
                                                                         <state key="normal" image="minus">
                                                                             <color key="titleColor" name="yellowColor"/>
                                                                         </state>
@@ -3072,7 +3070,7 @@
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j8N-A3-4Wm">
                                         <rect key="frame" x="0.0" y="0.0" width="100" height="35"/>
-                                        <color key="backgroundColor" name="yellowColor"/>
+                                        <color key="backgroundColor" systemColor="tintColor"/>
                                         <constraints>
                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="WJ4-40-L5m"/>
                                         </constraints>
@@ -3086,7 +3084,7 @@
                                     </button>
                                     <button opaque="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JQu-2B-c5Z">
                                         <rect key="frame" x="105" y="0.0" width="283" height="35"/>
-                                        <color key="backgroundColor" name="yellowColor"/>
+                                        <color key="backgroundColor" systemColor="tintColor"/>
                                         <constraints>
                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="Jgz-2X-0tP"/>
                                         </constraints>
@@ -3392,10 +3390,11 @@
         <segue reference="161-Ie-baa"/>
         <segue reference="rIb-KG-K0i"/>
         <segue reference="Lvn-mS-peb"/>
-        <segue reference="Ega-tn-GzY"/>
+        <segue reference="6Wq-Fx-QbE"/>
         <segue reference="U95-ph-p6h"/>
-        <segue reference="9VA-wc-3tg"/>
+        <segue reference="N0q-Op-l1q"/>
     </inferredMetricsTieBreakers>
+    <color key="tintColor" name="yellowColor"/>
     <resources>
         <image name="airplane" width="19" height="17"/>
         <image name="bell.fill" width="16" height="18"/>
@@ -3635,6 +3634,9 @@ AAAAAAIBAAAAAAAAAGEAAAAAAAAAAAAAAAAAAChAA
         </systemColor>
         <systemColor name="systemRedColor">
             <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="tintColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

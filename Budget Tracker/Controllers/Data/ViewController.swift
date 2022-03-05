@@ -49,6 +49,32 @@ class ViewController: SuperViewController {
     
     @IBOutlet weak var bigCalcView: UIView!
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        //needDownloadOnMainAppeare = false
+        let sideBarPinch = UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:)))
+        mainContentView.addGestureRecognizer(sideBarPinch)
+        ViewController.shared = self
+        updateUI()
+        if #available(iOS 15.0, *) {
+            self.mainTableView.sectionHeaderTopPadding = 0
+        }
+      //  self.mainTableView.layer.cornerRadius = 15
+       // mainTableView.isUserInteractionEnabled = false
+     //   self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(bigCalcTaps(_:))))
+        sideBar.load()
+
+        
+        toggleSideBar(false, animated: false)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+
+    }
+    
     
     var correctFrameBackground:CGRect = .zero
     var refreshControl = UIRefreshControl()
@@ -194,11 +220,11 @@ class ViewController: SuperViewController {
         DispatchQueue.main.async {
             self.filterText = title
         }
-        let load = LoadFromDB()
-        load.newCategories { categoryes, error in
+     //   let load = LoadFromDB()
+        LoadFromDB.shared.newCategories { categoryes, error in
             if error == .none {
                 self.highesLoadedCatID = ((categoryes.sorted{ $0.id > $1.id }).first?.id ?? 0) + 1
-                load.newTransactions { loadedData, error in
+                LoadFromDB.shared.newTransactions { loadedData, error in
                     self.tableData = loadedData
                     self.checkPurchase()
                     self.prepareFilterOptions()
@@ -251,23 +277,7 @@ class ViewController: SuperViewController {
     }
     
     static var shared: ViewController?
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        //needDownloadOnMainAppeare = false
-        let sideBarPinch = UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:)))
-        mainContentView.addGestureRecognizer(sideBarPinch)
-        ViewController.shared = self
-        updateUI()
-        if #available(iOS 15.0, *) {
-            self.mainTableView.sectionHeaderTopPadding = 0
-        }
-      //  self.mainTableView.layer.cornerRadius = 15
-       // mainTableView.isUserInteractionEnabled = false
-     //   self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(bigCalcTaps(_:))))
-        sideBar.load()
-        toggleSideBar(false, animated: false)
-    }
+    
     
     @IBOutlet weak var mainContentViewHelpher: UIView!
     @IBOutlet weak var mainContentView: UIView!
@@ -354,7 +364,6 @@ class ViewController: SuperViewController {
             self.refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
             self.refreshSubview.alpha = 0
             self.refreshControl.addSubview(self.refreshSubview)
-           // self.refreshControl.backgroundColor = .red//K.Colors.background
             self.mainTableView.addSubview(self.refreshControl)
         }
     }
@@ -580,8 +589,8 @@ class ViewController: SuperViewController {
         if nick == "" {
             return
         }
-            let load = LoadFromDB()
-            load.Users { (loadedData, error) in
+          //  let load = LoadFromDB()
+        LoadFromDB.shared.Users { (loadedData, error) in
                 print(loadedData, "checkPurchase")
                 if !error {
                     let _ = appData.emailFromLoadedDataPurch(loadedData)
@@ -869,8 +878,6 @@ class ViewController: SuperViewController {
     let center = AppDelegate.shared?.center
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        print("DIDAPPPP")
-
         if self.ai.isShowing {
             self.ai.fastHide { _ in
                 
@@ -932,14 +939,14 @@ class ViewController: SuperViewController {
                     }
                 }
                 
-                let save = SaveToDB()
+               // let save = SaveToDB()
                 let delete = DeleteFromDB()
                         if let addCategory = db.categoryFrom(first["categoryNew"] ?? [:]) {
                             if let highest = highesLoadedCatID {
                                 var cat = addCategory
                                 let newID = highest + 1
                                 cat.id = newID
-                                save.newCategories(cat, saveLocally: false) { error in
+                                SaveToDB.shared.newCategories(cat, saveLocally: false) { error in
                                     if !error {
                                         appData.unsendedData.removeFirst()
                                         self.highesLoadedCatID! += 1
@@ -964,8 +971,8 @@ class ViewController: SuperViewController {
                                     }
                                 }
                             } else {
-                                let load = LoadFromDB()
-                                load.newCategories { loadedCategories, error in
+                              //  let load = LoadFromDB()
+                                LoadFromDB.shared.newCategories { loadedCategories, error in
                                     if error == .none {
                                         let allCatSorted = loadedCategories.sorted{ $0.id > $1.id }
                                         let highest = allCatSorted.first?.id ?? 0
@@ -990,7 +997,7 @@ class ViewController: SuperViewController {
                                 }
                             } else {
                                 if let addTransaction = db.transactionFrom(first["transactionNew"] ?? [:]) {
-                                    save.newTransaction(addTransaction, saveLocally: false) { error in
+                                    SaveToDB.shared.newTransaction(addTransaction, saveLocally: false) { error in
                                         if !error {
                                             appData.unsendedData.removeFirst()
                                             self.sendUnsaved()
@@ -1053,8 +1060,8 @@ class ViewController: SuperViewController {
                                 }
                             }
                         } else {
-                            let load = LoadFromDB()
-                            load.newCategories { loadedCategories, error in
+                        //    let load = LoadFromDB()
+                            LoadFromDB.shared.newCategories { loadedCategories, error in
                                 if error == .none {
                                     let allCatSorted = loadedCategories.sorted{ $0.id > $1.id }
                                     let highest = allCatSorted.first?.id ?? 0
@@ -2030,8 +2037,8 @@ extension ViewController: TransitionVCProtocol {
     func editTransaction(_ transaction: TransactionsStruct, was: TransactionsStruct) {
         let delete = DeleteFromDB()
         delete.newTransaction(was) { _ in
-            let save = SaveToDB()
-            save.newTransaction(transaction) { _ in
+           // let save = SaveToDB()
+            SaveToDB.shared.newTransaction(transaction) { _ in
                 self.editingTransaction = nil
                 self.filter()
             }
@@ -2051,8 +2058,8 @@ extension ViewController: TransitionVCProtocol {
             DispatchQueue.main.async {
                 self.filterText = "Adding"
             }
-            let save = SaveToDB()
-            save.newTransaction(TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)) { error in
+            //let save = SaveToDB()
+            SaveToDB.shared.newTransaction(TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)) { error in
                 self.filter()
                 self.editingTransaction = nil
                 if !error {

@@ -60,7 +60,7 @@ struct K {
         static let category = UIColor(named: "CategoryColor")
         static let negative = UIColor(named: "negativeColor")
         static let separetor = UIColor(named: "separetorColor")
-        static let yellow = UIColor(named: "yellowColor")
+        static let yellow = UIColor(named: AppData.linkColor)//UIColor(named: "yellowColor")
         static let pink = UIColor(named: "pinkColor")
         
         static let loginColor = UIColor(named: "loginColor")

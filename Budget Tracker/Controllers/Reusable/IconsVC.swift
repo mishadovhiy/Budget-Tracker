@@ -54,7 +54,7 @@ class IconsVC: UIViewController {
             sbviesLoaded = true
             collectionView.layer.cornerRadius = 10
           //  collectionView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-            title = "Set icon"
+            
             
             collectionView.register(CollectionIconsHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: collectionHeaderID)
             if screenType != .colorsOnly {
@@ -85,7 +85,7 @@ class IconsVC: UIViewController {
         IconsVC.shared = self
         collectionView.delegate = self
         collectionView.dataSource = self
-        
+        title = screenType == .colorsOnly ? "Set primary color" : "Set icon"
 
     }
     

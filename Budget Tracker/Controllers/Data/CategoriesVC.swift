@@ -177,7 +177,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                     let data = ic.icons.first?.data ?? []
                     return data[Int.random(in: 0..<data.count)]
                 }
-                let debtColor = appData.lastSelected.gett(setterType: .color, valueType: .debt) ?? "yellowColor"
+                let debtColor = appData.lastSelected.gett(setterType: .color, valueType: .debt) ?? AppData.linkColor
                 let debtImg = appData.lastSelected.gett(setterType: .icon, valueType: .debt) ?? randomIcon
                 self.tableData = [
                     ScreenDataStruct(title: "", data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: debtImg, color: debtColor, purpose: .debt), transactions: [])),
@@ -295,8 +295,8 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
 
         if screenType != .localData {
             if !loadFromUD {
-                let load = LoadFromDB()
-                load.newCategories { loadedData, error in
+               // let load = LoadFromDB()
+                LoadFromDB.shared.newCategories { loadedData, error in
                     self.allCategoriesHolder = loadedData
                     self.categories = self.categoriesContains(self.searchingText)
                     if error != .none {
@@ -373,17 +373,17 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     let db = DataBase()
     func saveNewCategory(section: Int, category: ScreenCategory) {
         
-        let load = LoadFromDB()
-        load.newCategories { loadedData, error in
+       // let load = LoadFromDB()
+        LoadFromDB.shared.newCategories { loadedData, error in
             var newCategory = category
-            let save = SaveToDB()
+           // let save = SaveToDB()
             let all = loadedData.sorted{ $0.id > $1.id }
             let newID = (all.first?.id ?? 0) + 1
             
             print("new:", newCategory.category.name)
             print("new id:", newID)
             newCategory.category.id = newID
-            save.newCategories(newCategory.category) { error in
+            SaveToDB.shared.newCategories(newCategory.category) { error in
                 self.editingTF = nil
 
                 self.tableData[section].data.insert(newCategory, at: 0)
@@ -1630,8 +1630,8 @@ class categoriesVCcell: UITableViewCell {
                 if let editingValue = category.editing {
                     let delete = DeleteFromDB()
                     delete.CategoriesNew(category: category.category) { error in
-                        let save = SaveToDB()
-                        save.newCategories(editingValue) { error in
+                       // let save = SaveToDB()
+                        SaveToDB.shared.newCategories(editingValue) { error in
                             //CategoriesVC.shared?.loadData(loadFromUD: true)
                             CategoriesVC.shared?.tableData[index.section].data[index.row].editing = nil
                             CategoriesVC.shared?.tableData[index.section].data[index.row].category = editingValue
