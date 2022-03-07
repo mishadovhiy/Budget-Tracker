@@ -69,11 +69,6 @@ class ViewController: SuperViewController {
         toggleSideBar(false, animated: false)
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-
-    }
     
     
     var correctFrameBackground:CGRect = .zero
@@ -1887,6 +1882,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             cell.monthLabel.text = "\(returnMonth(newTableData[section - 1].date.month ?? 0)),\n\(newTableData[section - 1].date.year ?? 0)"
             cell.yearLabel.text = "\(newTableData[section - 1].date.year ?? 0)"
             let v = cell.contentView
+            cell.dateLabel.textColor = K.Colors.link
             cell.mainView.layer.cornerRadius = 15
             cell.mainView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
             v.backgroundColor = K.Colors.primaryBacground

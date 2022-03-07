@@ -51,7 +51,7 @@ class mainVCcell: UITableViewCell {
 
     func setupCell(_ data: TransactionsStruct, i: Int, tableData: [TransactionsStruct], selectedCell: IndexPath?, indexPath: IndexPath) {
         if (Double(data.value) ?? 0.0) > 0 {
-            valueLabel.textColor = K.Colors.yellow
+            valueLabel.textColor = K.Colors.link
 
         } else {
             valueLabel.textColor = K.Colors.category

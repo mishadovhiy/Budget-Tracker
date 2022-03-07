@@ -524,7 +524,7 @@ class CalendarVC: SuperViewController {
     func cellBackground(cell: CVCell) {
         DispatchQueue.main.async {
             if self.selectedTo == cell.cellTypeLabel.text || self.selectedFrom == cell.cellTypeLabel.text {
-                cell.backgroundCell.backgroundColor = K.Colors.yellow
+                cell.backgroundCell.backgroundColor = K.Colors.link
                 cell.dayLabel.textColor = UIColor.white
             }else {
                 let viewColor = self.view.backgroundColor
@@ -779,7 +779,7 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
 
         DispatchQueue.main.async {
             if self.selectedTo == "\(dayCell).\(monthCell).\(yearCell)" || self.selectedFrom == "\(dayCell).\(monthCell).\(yearCell)" {//|| self.containdInBetween(date: "\(dayCell).\(monthCell).\(yearCell)")
-                cell.backgroundCell.backgroundColor = K.Colors.yellow
+                cell.backgroundCell.backgroundColor = K.Colors.link
                 cell.dayLabel.textColor = K.Colors.category//self.darkAppearence ? K.Colors.category : UIColor(named: "darkTableColor")
             }else {
                 cell.backgroundCell.backgroundColor = self.view.backgroundColor //self.darkAppearence ? UIColor(named: "darkTableColor") : K.Colors.background

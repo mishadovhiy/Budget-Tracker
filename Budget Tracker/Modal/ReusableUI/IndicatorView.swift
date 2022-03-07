@@ -357,7 +357,7 @@ class IndicatorView: UIView {
                 button.backgroundColor = K.Colors.primaryBacground
            //     button.setTitleColor(.white, for: .normal)
             case .success:
-                button.backgroundColor = K.Colors.yellow
+                button.backgroundColor = K.Colors.link
            //     button.setTitleColor(.white, for: .normal)
             }
         }

@@ -107,7 +107,7 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         if indexPath.section != 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "DataOptionCell", for: indexPath) as! DataOptionCell
             let data = tableData[indexPath.row]
-            cell.contentView.backgroundColor = data.selected ? K.Colors.yellow : cellBackground
+            cell.contentView.backgroundColor = data.selected ? K.Colors.link : cellBackground
             cell.titleLabel.text = data.name
             cell.titleLabel.textColor = data.distructive ? .red : K.Colors.category
             cell.descriptionLabel.text = data.description

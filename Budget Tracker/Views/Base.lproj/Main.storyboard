@@ -969,11 +969,11 @@
             <objects>
                 <viewController storyboardIdentifier="CategoriesVC" id="cP3-cv-3dE" customClass="CategoriesVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="m5f-dV-6zU">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="786"/>
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="872"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" alpha="0.0" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="black" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="60" translatesAutoresizingMaskIntoConstraints="NO" id="kTa-v1-Lr8">
-                                <rect key="frame" x="0.0" y="0.0" width="428" height="752"/>
+                                <rect key="frame" x="0.0" y="0.0" width="428" height="838"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="separatorColor" name="darkSeparetor"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -1366,11 +1366,11 @@
                                 </prototypes>
                             </tableView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="UzW-vR-Z71">
-                                <rect key="frame" x="204" y="383" width="20" height="20"/>
+                                <rect key="frame" x="204" y="426" width="20" height="20"/>
                                 <color key="color" name="CategoryColor"/>
                             </activityIndicatorView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="56v-i7-otg">
-                                <rect key="frame" x="0.0" y="386" width="428" height="400"/>
+                                <rect key="frame" x="0.0" y="472" width="428" height="400"/>
                                 <color key="backgroundColor" name="SecondaryBacroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="400" id="x0e-ki-C50"/>
@@ -1398,7 +1398,7 @@
                         <nil key="title"/>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="YNw-pl-3cq">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="qT6-jw-Pe1">
-                                <rect key="frame" x="280" y="0.0" width="128" height="44"/>
+                                <rect key="frame" x="280" y="6" width="128" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="tintColor" name="yellowColor"/>
@@ -1528,14 +1528,14 @@
         <!--    -->
         <scene sceneID="VOY-fg-Vsf">
             <objects>
-                <viewController storyboardIdentifier="TransitionVC" interfaceStyle="dark" id="o1K-SN-bUx" customClass="TransitionVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TransitionVC" id="o1K-SN-bUx" customClass="TransitionVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="405-H3-8an">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="786"/>
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="764"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c9d-cL-RPP" userLabel="doneButton">
                                 <rect key="frame" x="378" y="10" width="40" height="40"/>
-                                <color key="backgroundColor" name="yellowColor"/>
+                                <color key="backgroundColor" systemColor="tintColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="3MZ-bu-ooF"/>
                                     <constraint firstAttribute="width" constant="40" id="k54-eE-tS5"/>
@@ -1579,7 +1579,7 @@
                                 </connections>
                             </segmentedControl>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0o7-y6-JW8">
-                                <rect key="frame" x="15" y="80" width="398" height="352"/>
+                                <rect key="frame" x="15" y="80" width="398" height="364"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="17f-0J-k9a" userLabel="valueView">
                                         <rect key="frame" x="0.0" y="0.0" width="398" height="60"/>
@@ -1622,7 +1622,7 @@
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V1P-Cy-4Mn">
-                                        <rect key="frame" x="0.0" y="202" width="398" height="150"/>
+                                        <rect key="frame" x="0.0" y="202" width="398" height="162"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -1746,7 +1746,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3iV-TP-Myd" userLabel="padView">
-                                <rect key="frame" x="0.0" y="452" width="428" height="300"/>
+                                <rect key="frame" x="0.0" y="464" width="428" height="300"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dtl-DA-9aX" userLabel="backgroundView">
                                         <rect key="frame" x="0.0" y="0.0" width="428" height="300"/>
@@ -1796,8 +1796,10 @@
                                                                     <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JJR-Nl-rYc">
                                                                         <rect key="frame" x="306" y="0.0" width="102" height="75"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                        <state key="normal" image="minus">
-                                                                            <color key="titleColor" name="yellowColor"/>
+                                                                        <state key="normal" image="chevron.backward" catalog="system">
+                                                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font">
+                                                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
+                                                                            </preferredSymbolConfiguration>
                                                                         </state>
                                                                         <connections>
                                                                             <action selector="erasePressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="ZyX-Pf-wo9"/>
@@ -1841,12 +1843,11 @@
                                                                             <action selector="numberPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="k34-vH-mPK"/>
                                                                         </connections>
                                                                     </button>
-                                                                    <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1vj-92-UOQ">
+                                                                    <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1vj-92-UOQ">
                                                                         <rect key="frame" x="306" y="0.0" width="102" height="75"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                        <state key="normal" image="cIcon">
-                                                                            <color key="titleColor" name="yellowColor"/>
-                                                                        </state>
+                                                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
+                                                                        <state key="normal" title="C"/>
                                                                         <connections>
                                                                             <action selector="erasePressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="wa3-U1-3PC"/>
                                                                         </connections>
@@ -2011,6 +2012,8 @@
                         <outlet property="minusPlusLabel" destination="A3t-7s-5P5" id="lCe-W0-1K1"/>
                         <outlet property="numbarPadView" destination="3iV-TP-Myd" id="USu-TZ-E32"/>
                         <outlet property="purposeSwitcher" destination="V5Z-aw-ROj" id="aaQ-dK-QwU"/>
+                        <outlet property="removeAllButton" destination="1vj-92-UOQ" id="TUh-xZ-6jC"/>
+                        <outlet property="removeLastButton" destination="JJR-Nl-rYc" id="yuP-fW-1n4"/>
                         <outlet property="showValueButton" destination="XVk-PX-Zyj" id="YzY-bQ-S0O"/>
                         <outlet property="trashButton" destination="2np-os-Y0H" id="2K0-WK-Khm"/>
                         <outlet property="valueLabel" destination="qzi-1W-Nei" id="WlM-rJ-uNN"/>
@@ -2240,11 +2243,11 @@
             <objects>
                 <viewController storyboardIdentifier="HistoryVC" id="Zmr-vi-AsB" customClass="HistoryVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4Hr-9J-3zH">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="786"/>
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="872"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nMe-Ik-tvJ">
-                                <rect key="frame" x="0.0" y="0.0" width="428" height="786"/>
+                                <rect key="frame" x="0.0" y="0.0" width="428" height="872"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="scrollIndicatorInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="50"/>
                                 <color key="separatorColor" red="0.83499997854232788" green="0.83499997854232788" blue="0.83499997854232788" alpha="0.10000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2337,7 +2340,6 @@
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dKD-na-Qxv">
                                                             <rect key="frame" x="65" y="0.0" width="45" height="45"/>
                                                             <color key="backgroundColor" name="SecondaryBacroundColor"/>
-                                                            <color key="tintColor" name="yellowColor"/>
                                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             <state key="normal" image="pencil"/>
                                                             <connections>
@@ -2469,7 +2471,6 @@
                                                             <constraints>
                                                                 <constraint firstAttribute="width" secondItem="pK6-4E-O38" secondAttribute="height" multiplier="1:1" id="o9X-dZ-Eda"/>
                                                             </constraints>
-                                                            <color key="tintColor" name="yellowColor"/>
                                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             <state key="normal" image="pencil"/>
                                                             <connections>
@@ -2605,11 +2606,11 @@
                                 </prototypes>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4la-rP-xjs">
-                                <rect key="frame" x="0.0" y="707" width="428" height="45"/>
+                                <rect key="frame" x="0.0" y="793" width="428" height="45"/>
                                 <subviews>
                                     <button opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gIt-0L-4IJ">
                                         <rect key="frame" x="15" y="0.0" width="40" height="40"/>
-                                        <color key="backgroundColor" name="yellowColor"/>
+                                        <color key="backgroundColor" systemColor="tintColor"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="40" id="muB-94-Jhp"/>
                                             <constraint firstAttribute="height" constant="40" id="zmb-Pi-ndc"/>
@@ -2680,7 +2681,7 @@
                     <navigationItem key="navigationItem" title="Transaction history" largeTitleDisplayMode="always" id="t0m-OR-deg">
                         <barButtonItem key="rightBarButtonItem" style="plain" id="7S3-LV-V92">
                             <button key="customView" hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="dSw-Y8-OrZ">
-                                <rect key="frame" x="313" y="5" width="95" height="34.333333333333336"/>
+                                <rect key="frame" x="313" y="11" width="95" height="34.333333333333336"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="tintColor" name="CategoryColor"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -2797,7 +2798,7 @@
             <objects>
                 <viewController storyboardIdentifier="CalendarVC" id="5n4-P6-pnR" customClass="CalendarVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="67i-SE-sWB">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="838"/>
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="872"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ur5-R3-sfZ">
@@ -2810,9 +2811,7 @@
                                             <constraint firstAttribute="width" constant="60" id="odz-fE-TuR"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                        <state key="normal" title="◀︎">
-                                            <color key="titleColor" name="yellowColor"/>
-                                        </state>
+                                        <state key="normal" title="◀︎"/>
                                         <connections>
                                             <action selector="changeMonthPressed:" destination="5n4-P6-pnR" eventType="touchUpInside" id="UFa-dG-q6P"/>
                                         </connections>
@@ -2824,9 +2823,7 @@
                                             <constraint firstAttribute="width" constant="60" id="mHQ-Oj-pHx"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                        <state key="normal" title="▶︎">
-                                            <color key="titleColor" name="yellowColor"/>
-                                        </state>
+                                        <state key="normal" title="▶︎"/>
                                         <connections>
                                             <action selector="changeMonthPressed:" destination="5n4-P6-pnR" eventType="touchUpInside" id="Wly-Uy-MCI"/>
                                         </connections>
@@ -2959,7 +2956,7 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TGK-Ax-n0d">
                                         <rect key="frame" x="378" y="10" width="40" height="40"/>
-                                        <color key="backgroundColor" name="yellowColor"/>
+                                        <color key="backgroundColor" systemColor="tintColor"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="40" id="Gq0-8B-tPe"/>
                                             <constraint firstAttribute="height" constant="40" id="fHb-8H-WqJ"/>
@@ -3056,17 +3053,17 @@
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="InH-AG-csp" userLabel="timeViewStack View">
-                                <rect key="frame" x="61.666666666666657" y="418.33333333333326" width="305" height="419.66666666666674"/>
+                                <rect key="frame" x="61.666666666666657" y="418.33333333333326" width="305" height="453.66666666666674"/>
                                 <subviews>
                                     <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="h2d-GY-FrE">
-                                        <rect key="frame" x="0.0" y="0.0" width="305" height="419.66666666666669"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="305" height="453.66666666666669"/>
                                         <color key="tintColor" name="CategoryColor"/>
                                     </datePicker>
                                 </subviews>
                                 <color key="tintColor" name="CategoryColor"/>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="XFt-LS-Qbp">
-                                <rect key="frame" x="20" y="749" width="388" height="35"/>
+                                <rect key="frame" x="20" y="783" width="388" height="35"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j8N-A3-4Wm">
                                         <rect key="frame" x="0.0" y="0.0" width="100" height="35"/>
@@ -3220,7 +3217,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="3cL-kn-iw3"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" largeTitles="YES" id="DoX-Gq-L35">
-                        <rect key="frame" x="0.0" y="44" width="428" height="96"/>
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="108"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" name="PrimaryBackgroundColor"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -3297,7 +3294,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
-                                                    <color key="backgroundColor" name="yellowColor"/>
+                                                    <color key="backgroundColor" systemColor="tintColor"/>
                                                     <constraints>
                                                         <constraint firstItem="leV-7a-WDQ" firstAttribute="top" secondItem="hIS-QB-36b" secondAttribute="top" id="1m4-1x-UZU"/>
                                                         <constraint firstAttribute="width" constant="40" id="9WH-KF-tuS"/>
@@ -3387,18 +3384,17 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="161-Ie-baa"/>
+        <segue reference="IMh-Gb-0ws"/>
         <segue reference="rIb-KG-K0i"/>
         <segue reference="Lvn-mS-peb"/>
-        <segue reference="6Wq-Fx-QbE"/>
+        <segue reference="Ega-tn-GzY"/>
         <segue reference="U95-ph-p6h"/>
         <segue reference="N0q-Op-l1q"/>
     </inferredMetricsTieBreakers>
-    <color key="tintColor" name="yellowColor"/>
     <resources>
         <image name="airplane" width="19" height="17"/>
         <image name="bell.fill" width="16" height="18"/>
-        <image name="cIcon" width="12" height="19"/>
+        <image name="chevron.backward" catalog="system" width="96" height="128"/>
         <image name="done" width="15" height="14"/>
         <image name="ellipsis" width="16" height="4"/>
         <image name="imageView:Kpf-Vl-IUu:image" width="19" height="17">
@@ -3582,7 +3578,6 @@ AAAAAAIBAAAAAAAAAGEAAAAAAAAAAAAAAAAAAChAA
 </mutableData>
         </image>
         <image name="line.3.horizontal" width="17" height="9"/>
-        <image name="minus" width="12" height="19"/>
         <image name="paperplane.fill" width="18" height="18"/>
         <image name="pencil" width="14" height="14"/>
         <image name="plus" catalog="system" width="128" height="113"/>

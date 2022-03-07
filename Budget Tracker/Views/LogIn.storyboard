@@ -15,7 +15,7 @@
             <objects>
                 <viewController storyboardIdentifier="LoginViewController" id="sFP-r5-fKW" customClass="LoginViewController" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4dJ-R2-Goj">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nzU-3z-m92">
@@ -31,7 +31,7 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="6S5-eJ-q0c">
-                                <rect key="frame" x="67" y="248.5" width="280" height="345"/>
+                                <rect key="frame" x="67" y="231.5" width="280" height="345"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Create an account" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="gLA-7i-pp5">
                                         <rect key="frame" x="0.0" y="0.0" width="280" height="45"/>
@@ -74,9 +74,7 @@
                                         <rect key="frame" x="0.0" y="300" width="280" height="45"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                         <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="10" maxY="0.0"/>
-                                        <state key="normal" title="Create">
-                                            <color key="titleColor" name="yellowColor"/>
-                                        </state>
+                                        <state key="normal" title="Create"/>
                                         <connections>
                                             <action selector="createAccountPressed:" destination="sFP-r5-fKW" eventType="touchUpInside" id="ugO-aO-yNJ"/>
                                         </connections>
@@ -87,7 +85,7 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="qqi-mE-aXa">
-                                <rect key="frame" x="67" y="308.5" width="280" height="225"/>
+                                <rect key="frame" x="67" y="291.5" width="280" height="225"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T3U-LH-Rgs">
                                         <rect key="frame" x="0.0" y="0.0" width="280" height="45"/>
@@ -142,11 +140,8 @@
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z9u-BA-sZD">
                                         <rect key="frame" x="0.0" y="180" width="280" height="45"/>
-                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                         <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="10" maxY="0.0"/>
-                                        <state key="normal" title="Log in">
-                                            <color key="titleColor" name="yellowColor"/>
-                                        </state>
+                                        <state key="normal" title="Log in"/>
                                         <connections>
                                             <action selector="logInPressed:" destination="sFP-r5-fKW" eventType="touchUpInside" id="1UQ-Id-FTV"/>
                                         </connections>
@@ -157,7 +152,7 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="zbq-j9-D0g">
-                                <rect key="frame" x="10" y="750" width="394" height="48"/>
+                                <rect key="frame" x="10" y="716" width="394" height="48"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don't have an cccount?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HIX-a1-kyd">
                                         <rect key="frame" x="0.0" y="0.0" width="394" height="18"/>
@@ -203,7 +198,6 @@
                                 <rect key="frame" x="334" y="7" width="60" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <color key="tintColor" name="yellowColor"/>
                                 <state key="normal" image="ellipsis" catalog="system">
                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="25"/>
                                 </state>
@@ -273,11 +267,11 @@
             <objects>
                 <viewController storyboardIdentifier="EnterValueVC" id="g3f-NZ-v6H" customClass="EnterValueVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WCz-zX-LTb">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="35" translatesAutoresizingMaskIntoConstraints="NO" id="in9-wI-9lJ">
-                                <rect key="frame" x="20" y="335.5" width="374" height="171.5"/>
+                                <rect key="frame" x="20" y="318.5" width="374" height="171.5"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="wfW-zS-Z3i">
                                         <rect key="frame" x="71.5" y="0.0" width="231.5" height="49.5"/>
@@ -383,7 +377,6 @@
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="HpS-9h-MF7">
                                 <rect key="frame" x="302" y="5" width="92" height="34.5"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="tintColor" name="yellowColor"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Next"/>
                                 <connections>
@@ -1298,11 +1291,11 @@
             <objects>
                 <viewController id="kne-Xe-qMY" customClass="SelectUserVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Sm2-bc-4ZW">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="grt-Yf-BXz">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="separatorColor" name="balanceValueColor"/>
                                 <inset key="separatorInset" minX="5" minY="0.0" maxX="5" maxY="0.0"/>
@@ -1389,7 +1382,6 @@
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="EPo-FY-C8b">
                                 <rect key="frame" x="302" y="6.5" width="18" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="tintColor" name="yellowColor"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" image="paperplane.fill"/>
                                 <connections>
@@ -1528,9 +1520,8 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="jP6-jS-NGM"/>
-        <segue reference="v5h-7J-ubq"/>
+        <segue reference="B8J-lo-erp"/>
     </inferredMetricsTieBreakers>
-    <color key="tintColor" name="yellowColor"/>
     <resources>
         <image name="cancel" width="30" height="30"/>
         <image name="dbStorage.pro" width="143" height="111"/>

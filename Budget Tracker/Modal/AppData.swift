@@ -14,7 +14,6 @@ class AppData {
 
     static var linkColor: String {
         set {
-            
             UserDefaults.standard.setValue(newValue, forKey: "SelectedTintColor")
             let color = colorNamed(newValue)
             DispatchQueue.main.async {
@@ -24,12 +23,6 @@ class AppData {
         }
         get {
             return UserDefaults.standard.value(forKey: "SelectedTintColor") as? String ?? "Yellow"
-            /*if let color = UserDefaults.standard.value(forKey: "SelectedTintColor") as? [Int] {
-                let colors:(CGFloat,CGFloat,CGFloat)=(CGFloat(color[0]),CGFloat(color[1]),CGFloat(color[2]))
-                return UIColor(red: colors.0/255, green: colors.1/255, blue: colors.2/255, alpha: 1)
-            } else {
-                return UIColor(red: 45/255, green: 129/255, blue: 245/255, alpha: 1)
-            }*/
         }
     }
     
@@ -345,7 +338,7 @@ class AppData {
     
 
     let categoryColors = [
-        "BlueColor", "BlueColor2", "BlueColor3", "GreenColor", "GreenColor-2", "yellowColor2", "OrangeColor", "OrangeColor-1", "pinkColor2", "PinkColor", "PinkColor-1", "RedColor"
+        "BlueColor", "BlueColor2", "BlueColor3", "GreenColor", "GreenColor-2", "yellowColor2", "OrangeColor", "OrangeColor-1", "pinkColor2", "PinkColor", "PinkColor-1", "RedColor", "yellowColor"
     ]
     var randomColorName: String {
         let data = categoryColors
@@ -835,10 +828,26 @@ func iconNamed(_ name: String?) -> UIImage {
 
 func colorNamed(_ name: String?) -> UIColor {
     print("colorNamed:", name ?? "-")
-    let defaultCo = K.Colors.yellow ?? .red
+    let defaultCo = K.Colors.link ?? .red
     if name ?? "" != "" {
         return UIColor(named: name ?? "") ?? defaultCo
     } else {
         return defaultCo
+    }
+}
+
+
+
+extension UISegmentedControl {
+    open override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        self.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white], for: .normal)
+        self.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
+        
+        if #available(iOS 13.0, *) {
+            self.selectedSegmentTintColor = K.Colors.link
+        } else {
+            self.tintColor = K.Colors.link
+        }
     }
 }

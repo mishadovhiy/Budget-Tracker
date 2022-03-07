@@ -23,6 +23,8 @@ protocol TransitionVCProtocol {
 
 class TransitionVC: SuperViewController {
 
+    @IBOutlet weak var removeLastButton: UIButton!
+    @IBOutlet weak var removeAllButton: UIButton!
     @IBAction func trashPressed(_ sender: UIButton) {
         donePressed = true
         DispatchQueue.main.async {
@@ -116,6 +118,13 @@ class TransitionVC: SuperViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         if !sbvsloded {
+            doneButton.backgroundColor = K.Colors.link
+            if #available(iOS 13.0, *) {
+                
+            } else {
+                removeLastButton.setTitle("<", for: .normal)
+            }
+            
            // segmentControll.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.bala, for: .normal)
            // purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.category ?? .white], for: .selected)
             closeButton.layer.cornerRadius = 5
@@ -128,8 +137,6 @@ class TransitionVC: SuperViewController {
             categoryTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(categoryPressed)))
             self.dateTextField.attributedPlaceholder = NSAttributedString(string: defaultDate, attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
             self.commentTextField.attributedPlaceholder = NSAttributedString(string: "Short comment", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.textFieldPlaceholder])
-            self.purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white], for: .normal)
-            self.purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "darkTableColor") ?? .black], for: .selected)
             if #available(iOS 13.4, *) {
                 appData.objects.datePicker.preferredDatePickerStyle = .wheels
             }

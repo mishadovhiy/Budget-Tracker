@@ -55,6 +55,7 @@ class SettingsVC: UIViewController {
         case "toColors":
             let vc = segue.destination as! IconsVC
             vc.delegate = self
+            vc.selectedColorName = AppData.linkColor
             vc.screenType = .colorsOnly
         default:
             break
@@ -176,8 +177,12 @@ extension SettingsVC {
     func privacySection() -> [Any] {
         print("privacySection")
         let passcodeOn = UserDefaults.standard.value(forKey: "PasscodeON") as? Bool ?? false
+        
         return [
             TriggerCell(title: "Passcode", isOn: passcodeOn, action: { isON in
+                //if on - go to create passcode vc
+                //reapre passcode
+                //if settend - set switch on else - -asscode on = off and reload data
                 print("passcode isON:", isON)
                 UserDefaults.standard.setValue(isON, forKey: "PasscodeON")
                 DispatchQueue.main.async {

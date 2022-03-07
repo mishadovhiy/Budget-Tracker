@@ -85,7 +85,7 @@ class IconsVC: UIViewController {
         IconsVC.shared = self
         collectionView.delegate = self
         collectionView.dataSource = self
-        title = screenType == .colorsOnly ? "Set primary color" : "Set icon"
+        title = screenType == .colorsOnly ? "Primary color" : "Set icon"
 
     }
     
@@ -97,6 +97,7 @@ class IconsVC: UIViewController {
     
     
     let collectionHeaderID = "MyHeaderFooterClass"
+    
 }
 
 extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -156,7 +157,6 @@ extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
             let selectedColor = colorNamed(selectedColorName)
             //cell.mainImage.tintColor = index == selectedIconIndex ? selectedColor :  K.Colors.balanceT
             cell.mainImage.tintColor = iconName == selectedIconName ? selectedColor :  K.Colors.balanceT
-            
             return cell
         }
         

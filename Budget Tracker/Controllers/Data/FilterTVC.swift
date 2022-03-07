@@ -317,7 +317,7 @@ extension FilterTVC: UITableViewDelegate, UITableViewDataSource {
             cell.layer.masksToBounds = true
             cell.layer.cornerRadius = 6
            // cell.titleLabel.textColor = K.Colors.category
-            cell.backgroundColor = K.Colors.yellow//UIColor(named: "darkTableColor") //K.Colors.yellow
+            cell.backgroundColor = K.Colors.link//UIColor(named: "darkTableColor") //K.Colors.yellow
         } else {
             cell.backgroundColor = .clear
             //cell.titleLabel.textColor = K.Colors.yellow//UIColor(named: "darkTableColor")
@@ -326,7 +326,7 @@ extension FilterTVC: UITableViewDelegate, UITableViewDataSource {
             if data == "Custom" {
                 cell.layer.masksToBounds = true
                 cell.layer.cornerRadius = 6
-                cell.backgroundColor = K.Colors.yellow//UIColor(named: "darkTableColor")
+                cell.backgroundColor = K.Colors.link//UIColor(named: "darkTableColor")
                // cell.titleLabel.textColor = K.Colors.category
             }
         }
