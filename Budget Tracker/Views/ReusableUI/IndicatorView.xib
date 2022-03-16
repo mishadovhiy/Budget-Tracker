@@ -118,10 +118,10 @@
                                             <rect key="frame" x="0.0" y="0.0" width="270" height="40"/>
                                             <subviews>
                                                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iwr-2O-mt6">
-                                                    <rect key="frame" x="0.0" y="0.0" width="270" height="85"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="270" height="0.0"/>
                                                     <subviews>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="qi1-z2-9zd">
-                                                            <rect key="frame" x="0.0" y="0.0" width="270" height="85"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="270" height="0.0"/>
                                                             <subviews>
                                                                 <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="IaV-71-xpy">
                                                                     <rect key="frame" x="0.0" y="0.0" width="270" height="53"/>
@@ -175,35 +175,10 @@
                                                                     </subviews>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </stackView>
-                                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="q6W-k7-YoR">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="270" height="85"/>
-                                                                    <subviews>
-                                                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Type something" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sK8-QF-XBG">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="270" height="40"/>
-                                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            <constraints>
-                                                                                <constraint firstAttribute="height" constant="40" id="HZa-LJ-wDU"/>
-                                                                            </constraints>
-                                                                            <color key="textColor" name="CategoryColor"/>
-                                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
-                                                                            <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" returnKeyType="send" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
-                                                                        </textField>
-                                                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Type something" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SaF-cM-inS">
-                                                                            <rect key="frame" x="0.0" y="45" width="270" height="40"/>
-                                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            <constraints>
-                                                                                <constraint firstAttribute="height" constant="40" id="jTV-ni-X88"/>
-                                                                            </constraints>
-                                                                            <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="18"/>
-                                                                            <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" returnKeyType="send" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
-                                                                        </textField>
-                                                                    </subviews>
-                                                                </stackView>
                                                             </subviews>
                                                         </stackView>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Vx-zq-xq6">
-                                                            <rect key="frame" x="230" y="45" width="40" height="40"/>
+                                                            <rect key="frame" x="230" y="-40" width="40" height="40"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="40" id="6KC-Mx-3LT"/>
                                                                 <constraint firstAttribute="width" constant="40" id="UFh-jX-lkB"/>
@@ -212,9 +187,6 @@
                                                             <state key="normal" image="checkmark.circle.fill" catalog="system">
                                                                 <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="20"/>
                                                             </state>
-                                                            <connections>
-                                                                <action selector="additionalDoneButtonPressed:" destination="N3p-ca-Qfb" eventType="touchUpInside" id="Zhh-RX-bDT"/>
-                                                            </connections>
                                                         </button>
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -308,7 +280,6 @@
             </constraints>
             <connections>
                 <outlet property="actionsStack" destination="9To-eX-LEi" id="tel-dj-rcn"/>
-                <outlet property="additionalDoneButton" destination="4Vx-zq-xq6" id="gpC-2P-5NU"/>
                 <outlet property="ai" destination="kpX-r2-oU0" id="IMH-61-UTK"/>
                 <outlet property="aiSuperView" destination="L0v-0o-H6Y" id="S0S-yz-yMm"/>
                 <outlet property="backgroundHelper" destination="Mkl-58-amQ" id="mYQ-Bi-ckZ"/>
@@ -318,12 +289,10 @@
                 <outlet property="imageView" destination="5GW-ta-ZP6" id="j7q-Bz-Qm5"/>
                 <outlet property="leftButton" destination="Vxe-5r-ts2" id="e6e-Lx-XXe"/>
                 <outlet property="mainView" destination="Nqa-Ge-IxV" id="xCm-VH-Jfz"/>
-                <outlet property="repeatePasswordTextField" destination="SaF-cM-inS" id="F23-4U-0br"/>
                 <outlet property="rightButton" destination="C9g-jg-U4g" id="xrh-gR-aEf"/>
                 <outlet property="tableFirstTitle" destination="PNU-Qx-hwc" id="jCc-0T-tX9"/>
                 <outlet property="tableSecondTitle" destination="Hbh-9m-fVK" id="PvT-Gf-pch"/>
                 <outlet property="tableSeparetor" destination="uXl-EX-QEs" id="ME7-nt-Xyn"/>
-                <outlet property="textField" destination="sK8-QF-XBG" id="cu8-7e-vat"/>
                 <outlet property="titleLabel" destination="5hj-pt-lRW" id="Ty0-Y1-gqs"/>
                 <outlet property="userDataStack" destination="IaV-71-xpy" id="tEb-NB-0zZ"/>
                 <outlet property="usernameLabel" destination="fAs-vf-WKS" id="jZL-CR-OEq"/>

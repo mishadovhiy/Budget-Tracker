@@ -11,6 +11,8 @@
 		8B052E3D26EFD48E000BA66A /* IndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B052E3C26EFD48E000BA66A /* IndicatorView.swift */; };
 		8B052E3F26EFD4A0000BA66A /* IndicatorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B052E3E26EFD4A0000BA66A /* IndicatorView.xib */; };
 		8B1FD85D270C4DE2004E225E /* splitVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1FD85C270C4DE2004E225E /* splitVC.swift */; };
+		8B20751027D9A78100CF2172 /* PascodeLockView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B20750F27D9A78100CF2172 /* PascodeLockView.xib */; };
+		8B20751227D9A7AF00CF2172 /* PascodeLockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B20751127D9A7AF00CF2172 /* PascodeLockView.swift */; };
 		8B2163A2274070BA003EDFE0 /* snippets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2163A1274070BA003EDFE0 /* snippets.swift */; };
 		8B2A4D72271439520085E0F0 /* MoreVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2A4D71271439520085E0F0 /* MoreVC.swift */; };
 		8B324B692683118000E72275 /* NotificationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B324B682683118000E72275 /* NotificationsVC.swift */; };
@@ -34,7 +36,9 @@
 		8B7B63CC2655CAFB0067C434 /* SuperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7B63CB2655CAFB0067C434 /* SuperViewController.swift */; };
 		8B7D1AA1276CF203008942EC /* IconList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7D1AA0276CF203008942EC /* IconList.swift */; };
 		8B8D556125BB218400D7C6A7 /* UnsendedDataVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D556025BB218400D7C6A7 /* UnsendedDataVC.swift */; };
+		8B9ABDC627DA8FCF0002C2CE /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9ABDC527DA8FCF0002C2CE /* UITextField.swift */; };
 		8BAA72B527CB7D41005298B6 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BAA72B427CB7D41005298B6 /* Keys.swift */; };
+		8BC8525027E28D0F00C5A3A4 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC8524F27E28D0F00C5A3A4 /* UserSettings.swift */; };
 		8BD2E77C25B8622100D4DFBF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */; };
 		8BE60E5927726EA8007B7FB3 /* LastSelected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE60E5827726EA8007B7FB3 /* LastSelected.swift */; };
 		8BF58D1D277C78B7005A7F38 /* ProViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF58D1C277C78B7005A7F38 /* ProViewVC.swift */; };
@@ -81,6 +85,8 @@
 		8B052E3C26EFD48E000BA66A /* IndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndicatorView.swift; sourceTree = "<group>"; };
 		8B052E3E26EFD4A0000BA66A /* IndicatorView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IndicatorView.xib; sourceTree = "<group>"; };
 		8B1FD85C270C4DE2004E225E /* splitVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = splitVC.swift; sourceTree = "<group>"; };
+		8B20750F27D9A78100CF2172 /* PascodeLockView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PascodeLockView.xib; sourceTree = "<group>"; };
+		8B20751127D9A7AF00CF2172 /* PascodeLockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PascodeLockView.swift; sourceTree = "<group>"; };
 		8B2163A1274070BA003EDFE0 /* snippets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = snippets.swift; sourceTree = "<group>"; };
 		8B2A4D71271439520085E0F0 /* MoreVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreVC.swift; sourceTree = "<group>"; };
 		8B324B682683118000E72275 /* NotificationsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsVC.swift; sourceTree = "<group>"; };
@@ -104,7 +110,9 @@
 		8B7B63CB2655CAFB0067C434 /* SuperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperViewController.swift; sourceTree = "<group>"; };
 		8B7D1AA0276CF203008942EC /* IconList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconList.swift; sourceTree = "<group>"; };
 		8B8D556025BB218400D7C6A7 /* UnsendedDataVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsendedDataVC.swift; sourceTree = "<group>"; };
+		8B9ABDC527DA8FCF0002C2CE /* UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
 		8BAA72B427CB7D41005298B6 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
+		8BC8524F27E28D0F00C5A3A4 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8BE60E5827726EA8007B7FB3 /* LastSelected.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastSelected.swift; sourceTree = "<group>"; };
 		8BF58D1C277C78B7005A7F38 /* ProViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProViewVC.swift; sourceTree = "<group>"; };
@@ -176,6 +184,7 @@
 				8B4728BB27533A470078BD34 /* DataBase.swift */,
 				8B35DA6525C6F124008A8719 /* Keychain.swift */,
 				8BE60E5827726EA8007B7FB3 /* LastSelected.swift */,
+				8BC8524F27E28D0F00C5A3A4 /* UserSettings.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -202,6 +211,22 @@
 			path = notUsing;
 			sourceTree = "<group>";
 		};
+		8B9ABDC327DA8F890002C2CE /* Mics */ = {
+			isa = PBXGroup;
+			children = (
+				8B9ABDC427DA8FB50002C2CE /* Extensions */,
+			);
+			path = Mics;
+			sourceTree = "<group>";
+		};
+		8B9ABDC427DA8FB50002C2CE /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				8B9ABDC527DA8FCF0002C2CE /* UITextField.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		8BC1B23927D31331002C1E38 /* ReusableUI */ = {
 			isa = PBXGroup;
 			children = (
@@ -209,6 +234,7 @@
 				8B52DFE72750231000595A0C /* Numbers.xib */,
 				8B52DFEF27506B4B00595A0C /* ColorView.xib */,
 				8B47F92E2773B90D00FD96AA /* Message.xib */,
+				8B20750F27D9A78100CF2172 /* PascodeLockView.xib */,
 			);
 			path = ReusableUI;
 			sourceTree = "<group>";
@@ -222,6 +248,7 @@
 				8B52DFED27506B3400595A0C /* ColorView.swift */,
 				8B47F92C2773B90300FD96AA /* MessageView.swift */,
 				8B42FCDC2776805800013E4B /* NumbersTF.swift */,
+				8B20751127D9A7AF00CF2172 /* PascodeLockView.swift */,
 			);
 			path = ReusableUI;
 			sourceTree = "<group>";
@@ -285,6 +312,7 @@
 			children = (
 				8DECAFBF2460461C0041B734 /* Budget Tracker.entitlements */,
 				8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */,
+				8B9ABDC327DA8F890002C2CE /* Mics */,
 				8DD89D8823F1471900273904 /* Modal */,
 				8DBA7E6823F031F900D8214C /* Controllers */,
 				8DBA7E6723F031F200D8214C /* Views */,
@@ -402,6 +430,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B52DFF027506B4B00595A0C /* ColorView.xib in Resources */,
+				8B20751027D9A78100CF2172 /* PascodeLockView.xib in Resources */,
 				8B47F92F2773B90D00FD96AA /* Message.xib in Resources */,
 				8B4E086126544AD2006E42DA /* LogIn.storyboard in Resources */,
 				8DBA7E5F23F0317100D8214C /* LaunchScreen.storyboard in Resources */,
@@ -461,6 +490,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BC8525027E28D0F00C5A3A4 /* UserSettings.swift in Sources */,
 				8B4728BC27533A470078BD34 /* DataBase.swift in Sources */,
 				8DD89D8323F1468E00273904 /* mainVCcell.swift in Sources */,
 				8B63312F260FD65200D9E117 /* buyProVC.swift in Sources */,
@@ -484,6 +514,8 @@
 				8B2163A2274070BA003EDFE0 /* snippets.swift in Sources */,
 				8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */,
 				8BF63E8F2762C83F002E8601 /* SettingsVC.swift in Sources */,
+				8B9ABDC627DA8FCF0002C2CE /* UITextField.swift in Sources */,
+				8B20751227D9A7AF00CF2172 /* PascodeLockView.swift in Sources */,
 				8B2A4D72271439520085E0F0 /* MoreVC.swift in Sources */,
 				8B052E3D26EFD48E000BA66A /* IndicatorView.swift in Sources */,
 				8B7B63CC2655CAFB0067C434 /* SuperViewController.swift in Sources */,

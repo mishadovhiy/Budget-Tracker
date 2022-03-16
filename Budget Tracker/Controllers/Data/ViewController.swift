@@ -324,7 +324,20 @@ class ViewController: SuperViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         if !subviewsLoaded {
+            
             subviewsLoaded = true
+            toggleNoData(show: true, text: "Loading", fromTop: true, appeareAnimation: false, addButtonHidden: true)
+            self.unsendedDataLabel.superview?.superview?.isHidden = true
+                        
+            self.dataFromValueLabel.superview?.superview?.isHidden = true
+
+                        
+            self.filterAndCalcFrameHolder.0 = self.filterView.frame
+            self.filterAndCalcFrameHolder.1 = self.calculationSView.frame
+                        
+                        let superframe = self.calculationSView.superview?.frame ?? .zero
+                        let calcFrame = self.calculationSView.frame
+                        self.calculationSView.frame = CGRect(x: -superframe.height, y: calcFrame.minY, width: calcFrame.width, height: calcFrame.height)
             self.addTransactionWhenEmptyButton.layer.cornerRadius = 5
             self.addTransactionWhenEmptyButton.layer.masksToBounds = true
             self.noDataView.translatesAutoresizingMaskIntoConstraints = true
@@ -363,26 +376,18 @@ class ViewController: SuperViewController {
         }
     }
     
+    var layaled = false
+
+    
     func updateUI() {
      //   addTransitionButton.translatesAutoresizingMaskIntoConstraints = true
   //      self.mainTableView.backgroundColor = K.Colors.background
-        toggleNoData(show: true, text: "Loading", fromTop: true, appeareAnimation: false, addButtonHidden: true)
+
         downloadFromDB()
         self.mainTableView.delegate = self
         self.mainTableView.dataSource = self
-        DispatchQueue.main.async {
-            self.unsendedDataLabel.superview?.superview?.isHidden = true
-            self.enableLocalDataPress = false
-            self.dataFromValueLabel.superview?.superview?.isHidden = true
+        self.enableLocalDataPress = false
 
-            
-            self.filterAndCalcFrameHolder.0 = self.filterView.frame
-            self.filterAndCalcFrameHolder.1 = self.calculationSView.frame
-            
-            let superframe = self.calculationSView.superview?.frame ?? .zero
-            let calcFrame = self.calculationSView.frame
-            self.calculationSView.frame = CGRect(x: -superframe.height, y: calcFrame.minY, width: calcFrame.width, height: calcFrame.height)
-        }
 
         if appData.defaults.value(forKey: "firstLaunch") as? Bool ?? true {
             appData.createFirstData {
@@ -873,9 +878,35 @@ class ViewController: SuperViewController {
     let center = AppDelegate.shared?.center
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        if self.ai.isShowing {
-            self.ai.fastHide { _ in
+        
+      /*  let testIcon = addTransitionButton.currentImage
+        print(testIcon?.description, "imageeeee")
+        
+        let form = testIcon?.imageRendererFormat
+        print(form, "formformformform")
+        
+        testIcon?.loadData(withTypeIdentifier: ., forItemProviderCompletionHandler: { data, error in
+            if let data = testIcon?.cgImage?.dataProvider?.data{
                 
+                let string = String(data: Data(, encoding:.utf8)
+                print(string, "stringstringstringstring")
+                if let currentColor = string?.slice(from: "fill=\"#", to: "\"") {
+                    print(currentColor, "currentColor")
+                    let resultString = string?.replacingOccurrences(of: "fill=\"#" + currentColor + "\"", with: "fill=\"#5BB7F6\"")
+                    
+                    print("RESULTT", resultString)
+                }
+            }
+        })
+        
+        */
+        
+        
+        DispatchQueue.main.async {
+            if self.ai.isShowing {
+                self.ai.fastHide { _ in
+                    
+                }
             }
         }
         if needDownloadOnMainAppeare {
@@ -1882,7 +1913,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             cell.monthLabel.text = "\(returnMonth(newTableData[section - 1].date.month ?? 0)),\n\(newTableData[section - 1].date.year ?? 0)"
             cell.yearLabel.text = "\(newTableData[section - 1].date.year ?? 0)"
             let v = cell.contentView
-            cell.dateLabel.textColor = K.Colors.link
             cell.mainView.layer.cornerRadius = 15
             cell.mainView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
             v.backgroundColor = K.Colors.primaryBacground

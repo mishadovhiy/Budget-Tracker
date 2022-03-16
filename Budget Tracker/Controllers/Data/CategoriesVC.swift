@@ -27,6 +27,49 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     var fromSettings = false
     var delegate: CategoriesVCProtocol?
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        CategoriesVC.shared = self
+        tableView.delegate = self
+        tableView.dataSource = self
+        searchBar.delegate = self
+        DispatchQueue.init(label: "dbLoad", qos: .userInteractive).async {
+            if !self.fromSettings {
+           //     if self.screenType != .localData {
+                    self.categories = self.db.categories
+           //     }
+            } else {
+                self.loadData()
+            }
+            
+            
+        }
+        selectingIconFor = (nil,nil)
+        //t//oggleIcons(show: false, animated: false, category: nil)
+        
+        var strTitle:String {
+            switch screenType {
+            case .localData:
+                return "Local data"
+            case .categories:
+                return "Categories"
+            case .debts:
+                return "Debts"
+            }
+        }
+        title = strTitle
+        
+        updateUI()
+     //   if !fromSettings {
+            
+      //  }
+        
+        
+    }
+    
+    
+    
     let selectionBacground = UIColor(red: 32/255, green: 32/255, blue: 32/255, alpha: 1)
     static var shared:CategoriesVC?
     var _tableData:[ScreenDataStruct] = []
@@ -328,46 +371,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     }
     
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        CategoriesVC.shared = self
-        tableView.delegate = self
-        tableView.dataSource = self
-        searchBar.delegate = self
-        DispatchQueue.init(label: "dbLoad", qos: .userInteractive).async {
-            if !self.fromSettings {
-           //     if self.screenType != .localData {
-                    self.categories = self.db.categories
-           //     }
-            } else {
-                self.loadData()
-            }
-            
-            
-        }
-        selectingIconFor = (nil,nil)
-        //t//oggleIcons(show: false, animated: false, category: nil)
-        
-        var strTitle:String {
-            switch screenType {
-            case .localData:
-                return "Local data"
-            case .categories:
-                return "Categories"
-            case .debts:
-                return "Debts"
-            }
-        }
-        title = strTitle
-        
-        updateUI()
-     //   if !fromSettings {
-            
-      //  }
-        
-        
-    }
+    
     
     
     let db = DataBase()
@@ -1027,7 +1031,10 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                     cell.dueDateLabel.textColor = expired ? K.Colors.negative : K.Colors.balanceT
                     
                     cell.qntLabel.text = "\(category.transactions.count)"
-                    cell.iconimage.image = category.editing == nil ? iconNamed(category.category.icon) : iconNamed(category.editing?.icon)
+                    if #available(iOS 13.0, *) {
+                        cell.iconimage.image = category.editing == nil ? iconNamed(category.category.icon) : iconNamed(category.editing?.icon)
+                    }
+                    
                     cell.iconimage.tintColor = category.editing == nil ? colorNamed(category.category.color) : colorNamed(category.editing?.color)
                     cell.categoryNameLabel.text = category.category.name
                   //  cell.newCategoryTF.backgroundColor = cell.newCategoryTF == editingTF ? K.Colors.primaryBacground : .clear

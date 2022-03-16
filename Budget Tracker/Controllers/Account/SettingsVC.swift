@@ -176,17 +176,15 @@ extension SettingsVC {
     
     func privacySection() -> [Any] {
         print("privacySection")
-        let passcodeOn = UserDefaults.standard.value(forKey: "PasscodeON") as? Bool ?? false
+        let passcodeOn = UserSettings.Security.password != ""
         
         return [
             TriggerCell(title: "Passcode", isOn: passcodeOn, action: { isON in
-                //if on - go to create passcode vc
-                //reapre passcode
-                //if settend - set switch on else - -asscode on = off and reload data
-                print("passcode isON:", isON)
-                UserDefaults.standard.setValue(isON, forKey: "PasscodeON")
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
+                if !isON {
+                    UserSettings.Security.password = ""
+                } else {
+                    //ask to create password
+                    UserSettings.Security.password = "5511"
                 }
             })
         ]

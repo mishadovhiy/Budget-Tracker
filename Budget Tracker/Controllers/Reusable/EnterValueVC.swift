@@ -170,6 +170,7 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
             vcs.append(vccc)
             self.navigationController?.setViewControllers(vcs, animated: true)
           //  self.navigationController?.pushViewController(vccc, animated: true)
+           // let test = UINavigationController(rootViewController: <#T##UIViewController#>)
         }
     }
     

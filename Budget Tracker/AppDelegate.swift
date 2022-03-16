@@ -26,6 +26,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         return newView
     }()
     
+    lazy var passcodeLock: PascodeLockView = {
+        let newView = PascodeLockView.instanceFromNib() as! PascodeLockView
+        return newView
+    }()
+    
 
     
     
@@ -49,6 +54,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
             DispatchQueue.main.async {
                 UIApplication.shared.applicationIconBadgeNumber = notifications.count + appData.deliveredNotificationIDs.count
             }
+        }
+        
+        if UserSettings.Security.password != "" {
+            passcodeLock.present()
         }
         
         return true
