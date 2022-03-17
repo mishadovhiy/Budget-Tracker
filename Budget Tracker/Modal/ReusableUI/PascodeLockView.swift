@@ -38,6 +38,7 @@ class PascodeLockView: UIView, UITextFieldDelegate {
         presenting = true
         DispatchQueue.main.async {
             let window = UIApplication.shared.keyWindow ?? UIWindow()
+            self.frame = window.frame
             self.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, window.frame.height + 100, 0)
             window.addSubview(self)
             UIView.animate(withDuration: 0.8) {
@@ -60,6 +61,7 @@ class PascodeLockView: UIView, UITextFieldDelegate {
                 if let action = self.enteredAction {
                     action()
                 }
+                self.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
                 self.removeFromSuperview()
             }
 
