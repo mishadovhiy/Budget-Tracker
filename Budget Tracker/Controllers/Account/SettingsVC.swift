@@ -15,11 +15,6 @@ class SettingsVC: SuperViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
-    lazy var ai: IndicatorView = {
-        let newView = AppDelegate.shared?.ai ?? IndicatorView.instanceFromNib() as! IndicatorView
-        return newView
-    }()
-    
     var tableData:[TableData]  = []
     
     func loadData() {
