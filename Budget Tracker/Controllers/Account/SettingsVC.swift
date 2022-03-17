@@ -11,7 +11,7 @@ import UIKit
 
 // перенести сюда суппорт
 
-class SettingsVC: UIViewController {
+class SettingsVC: SuperViewController {
 
     @IBOutlet weak var tableView: UITableView!
     

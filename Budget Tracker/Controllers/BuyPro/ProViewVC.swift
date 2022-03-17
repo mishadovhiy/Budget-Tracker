@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ProViewVC: UIViewController {
+class ProViewVC: SuperViewController {
 
     @IBOutlet weak var backgroundImage: UIImageView!
     @IBOutlet weak var mainImage: UIImageView!

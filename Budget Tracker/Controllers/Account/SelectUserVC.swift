@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SelectUserVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class SelectUserVC: SuperViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
     

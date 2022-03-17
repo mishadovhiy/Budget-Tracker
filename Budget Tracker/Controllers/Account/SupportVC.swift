@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SupportVC: UIViewController, UITextViewDelegate {
+class SupportVC: SuperViewController, UITextViewDelegate {
 
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var sendButton: UIButton!

@@ -59,14 +59,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         return true
     }
     
+    var delegate:AppDelegateProtocol?
+    
     func applicationWillResignActive(_ application: UIApplication) {
         if UserSettings.Security.password != "" {
             passcodeLock.present()
-            //present lock loader
-            
-            //did become active
+            delegate?.resighnActive()
         }
-        //
     }
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
         let button = IndicatorView.button(title: "ok", style: .error, close: true) { _ in
@@ -82,6 +81,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         print(#function)
         if !becameActive {
             becameActive = true
+            if UserSettings.Security.password != "" {
+                passcodeLock.present()
+            }
         } else {
             needDownloadOnMainAppeare = true
         }
@@ -163,4 +165,9 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     }
     
     
+}
+
+
+protocol AppDelegateProtocol {
+    func resighnActive()
 }

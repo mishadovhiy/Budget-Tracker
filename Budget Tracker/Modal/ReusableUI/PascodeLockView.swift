@@ -8,26 +8,36 @@
 
 import UIKit
 
-class PascodeLockView: UIView {
+class PascodeLockView: UIView, UITextFieldDelegate {
 
     //for app delegate only
     
     @IBOutlet private weak var textField: UITextField!
     @IBOutlet private weak var primaryStack: UIStackView!
-    @IBOutlet weak var topStack: UIStackView!
+    @IBOutlet private weak var topStack: UIStackView!
     
-    @IBOutlet weak var appIcon: UIImageView!
-    @IBOutlet weak var numbersStack: UIView!
-    @IBOutlet weak var primaryTitleLabel: UILabel!
+    @IBOutlet private weak var appIcon: UIImageView!
+    @IBOutlet private weak var numbersStack: UIView!
+    @IBOutlet private weak var primaryTitleLabel: UILabel!
     
-    var enteredAction:(()->())?
+    private var enteredAction:(()->())?
+    
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        self.textField.delegate = self
+        
+    }
+    
     
     public func present(passcodeEntered:(()->())? = nil) {
         enteredAction = passcodeEntered
         enteredValue = ""
+        if presenting {
+            return
+        }
+        presenting = true
         DispatchQueue.main.async {
             let window = UIApplication.shared.keyWindow ?? UIWindow()
-         //   self.frame = window.frame
             self.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, window.frame.height + 100, 0)
             window.addSubview(self)
             UIView.animate(withDuration: 0.8) {
@@ -38,9 +48,10 @@ class PascodeLockView: UIView {
 
         }
     }
+    private var presenting = false
     
-    
-    func hide() {
+    private func hide() {
+        presenting = false
         DispatchQueue.main.async {
             let window = UIApplication.shared.keyWindow ?? UIWindow()
             UIView.animate(withDuration: 0.3) {
@@ -54,14 +65,9 @@ class PascodeLockView: UIView {
 
         }
     }
-    
-    override func draw(_ rect: CGRect) {
-        
-    }
-    
 
-    var _enteredValue:String?
-    var enteredValue:String? {
+    private var _enteredValue:String?
+    private var enteredValue:String? {
         get { return _enteredValue }
         set {
             _enteredValue = newValue
@@ -74,7 +80,7 @@ class PascodeLockView: UIView {
         }
     }
     
-    func checkPasscode(_ newValue:String) {
+    private func checkPasscode(_ newValue:String) {
         if newValue == UserSettings.Security.password {
             hide()
         } else {
@@ -82,6 +88,7 @@ class PascodeLockView: UIView {
             enteredValue = ""
         }
     }
+    
     
     
     

@@ -9,7 +9,11 @@
 import UIKit
 import UserNotifications
 
-class SuperViewController: UIViewController {
+class SuperViewController: UIViewController, AppDelegateProtocol {
+    func resighnActive() {
+        self.view.endEditing(true)
+    }
+    
 
     lazy var newMessage: MessageView = {
         let newView = AppDelegate.shared?.newMessage ?? (MessageView.instanceFromNib() as! MessageView)
@@ -48,6 +52,7 @@ class SuperViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         definesPresentationContext = true
+        AppDelegate.shared?.delegate = self
       /*  let window = UIApplication.shared.keyWindow ?? UIWindow()
         let indd = IndicatorView.instanceFromNib() as! IndicatorView
         indd.tag = 23450
@@ -65,13 +70,11 @@ class SuperViewController: UIViewController {
         
     }
     
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(true)
-        
-
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.view.endEditing(true)
     }
-    
+
     
     func makeTwo(n: Int) -> String {
         if n < 10 {
