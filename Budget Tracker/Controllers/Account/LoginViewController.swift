@@ -833,16 +833,20 @@ class LoginViewController: SuperViewController {
                     tfs[i].layer.masksToBounds = true
                     tfs[i].layer.cornerRadius = 6
                     
-                    tfs[i].setRightPaddingPoints(5)
-                    tfs[i].setLeftPaddingPoints(5)
-                    
-                    tfs[i].attributedPlaceholder = NSAttributedString(string: i < self.placeHolder.count ? self.placeHolder[i] : "", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.textFieldPlaceholder])
+                    tfs[i].setPaddings(5)
+                    tfs[i].placeholder = self.placeHolder[i]
+                    tfs[i].setPlaceHolderColor(K.Colors.textFieldPlaceholder)
+                    tfs[i].tag = i
+                    self.textFieldToID.updateValue("\(i)", forKey: tfs[i].accessibilityIdentifier ?? "")
                 }
             }
             
         }
         
     }
+    
+    var textFieldToID:[String:String] = [:]
+    
     
     override func viewDidDisappear(_ animated: Bool) {
         DispatchQueue.main.async {
@@ -1331,20 +1335,22 @@ class LoginViewController: SuperViewController {
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {
+
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
             
             if keyboardHeight > 1.0 {
-                if let index = selectedTextfield {
-                    let selectedTextfieldd = selectedScreen == .createAccount ? logIn : createAcount
+             //   if let index = selectedTextfield {
+                DispatchQueue.main.async {
+                    let selectedTextfieldd = self.selectedScreen == .createAccount ? self.logIn : self.createAcount
                     //textfields[index]
                     print(selectedTextfieldd?.frame.maxY ?? "____________________________________ERROR")
                     let dif = self.view.frame.height - CGFloat(keyboardHeight) - ((selectedTextfieldd?.frame.maxY ?? 0) + 5)
                     if dif < 20 {
 
                         
-                        DispatchQueue.main.async {
+                        
                             UIView.animate(withDuration: 0.3) {
                                 //self.view.layer.frame = CGRect(x: 0, y: dif - 20, width: self.view.layer.frame.width, height: self.view.layer.frame.height)
                                 //self.view.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, dif - 20, 0)
@@ -1359,16 +1365,17 @@ class LoginViewController: SuperViewController {
                             }
                         }
                     }
-                }
+             //   }
             }
         }
+        
     }
-       
+
     @objc func keyboardWillHide(_ notification: Notification) {
     //    if self.view.layer.frame.minY != 0 {
+
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.3) {
-                    //self.view.layer.frame = CGRect(x: 0, y: 0 + (self.navigationController?.navigationBar.frame.height ?? 0), width: self.view.layer.frame.width, height: self.view.layer.frame.height + (self.navigationController?.navigationBar.frame.height ?? 0))
 
                     if self.selectedScreen == .createAccount {
                         self.logIn.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
@@ -1382,14 +1389,19 @@ class LoginViewController: SuperViewController {
     //    }
     }
        
+    
+    var textFieldValuesDict:[String:String] = [:]
+    
     @objc func textfieldValueChanged(_ textField: UITextField) {
          //  message.hideMessage()
+        
+        textFieldValuesDict.updateValue(textField.text ?? "", forKey: textField.accessibilityIdentifier ?? "")
+        print(textFieldValuesDict)
            if obthervValues {
                showWrongFields()
            }
     }
 
-    var selectedTextfield: Int?
     var textfields: [UITextField] {
         return [nicknameLabelCreate, emailLabel, passwordLabel, confirmPasswordLabel, nicknameLogLabel, passwordLogLabel]
     }
@@ -1497,112 +1509,73 @@ extension LoginViewController: UITextFieldDelegate {
         }
     }
     
+    func validateEmail(_ email:String) -> Bool {
+        return !email.contains("@") || !email.contains(".") ? false : true
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        switch textField {
-        case nicknameLabelCreate:
-            if textField.text != "" && !(textField.text?.contains("@") ?? true) {
+    //    DispatchQueue.main.async {
+        let labelID = textField.accessibilityIdentifier ?? ""
+        let emptyError = {
+            DispatchQueue.main.async {
+                self.newMessage.show(title:"All fields are required", type: .error)
+            }
+        }
+        if let text = textFieldValuesDict[labelID] {
+            if text != "" {
+                var goNext:(()->())?
                 
-                DispatchQueue.main.async {
-                    self.emailLabel.becomeFirstResponder()
-                }
-            } else {
-                DispatchQueue.main.async {
-                    self.newMessage.show(title: "Invalid username", type: .error)
-                }
-            }
-            
-        case emailLabel:
-            if !(self.emailLabel.text ?? "").contains("@") || !(self.emailLabel.text ?? "").contains(".") {
-                DispatchQueue.main.async {
-                    self.newMessage.show(title: "Enter valid email", type: .error)
-                }
-            } else {
-                DispatchQueue.main.async {
-                    self.passwordLabel.becomeFirstResponder()
-                }
-            }
-        case passwordLabel:
-            if textField.text != "" {
-                DispatchQueue.main.async {
-                    self.confirmPasswordLabel.becomeFirstResponder()
-                }
-            } else {
-                DispatchQueue.main.async {
-                    self.newMessage.show(title: "Invalid password", type: .error)
-                }
-            }
-        case confirmPasswordLabel:
-            if let text = textField.text {
-                if text != "" {
-                    if text == passwordLabel.text {
-                        self.createAccountPressed(createAccButton!)
+                switch labelID {
+                case "create.password.repeate":
+                    if text == (textFieldValuesDict["create.password"] ?? "") {
+                        self.createAccountPressed(self.createAccButton!)
                     } else {
                         DispatchQueue.main.async {
                             self.newMessage.show(title: "Passwords not match", type: .error)
-                        
                         }
                     }
-                } else {
+                    goNext = nil
+                case "log.password":
                     DispatchQueue.main.async {
-                        self.newMessage.show(title: "Repeat password", type: .error)
-                    
+                        self.logInPressed(self.logInButton)
                     }
+                    goNext = nil
+                default:
+                    goNext = {
+                        DispatchQueue.main.async {
+                            self.textfields[textField.tag + 1].becomeFirstResponder()
+                        }
+                    }
+                    
                 }
-            } else {
-                DispatchQueue.main.async {
-                    self.newMessage.show(title: "Repeat password", type: .error)
                 
-                }
-            }
-            
-        case nicknameLogLabel:
-            enteredEmailUsers.removeAll()
-            if let nick = textField.text {
-                if nick != "" {
-                    
-                    keyChainPassword(nick: nick)
-                    
-                    
-                } else {
-                    DispatchQueue.main.async {
-                        self.newMessage.show(title: "Enter username", type: .error)
+                if labelID.contains("email") {
+                    if !self.validateEmail(text) {
+                        goNext = nil
+                        DispatchQueue.main.async {
+                            self.newMessage.show(title: "Enter valid email", type: .error)
+                            return
+                        }
                     }
                 }
-            } else {
-                DispatchQueue.main.async {
-                    self.newMessage.show(title: "Enter username", type: .error)
+                if labelID.contains("log.user") {
+                    self.enteredEmailUsers.removeAll()
+                    self.keyChainPassword(nick: text)
                 }
-            }
-            
-            
-        case passwordLogLabel:
-            if textField.text != "" {
-                logInPressed(logInButton)
-            } else {
-                DispatchQueue.main.async {
-                    self.newMessage.show(title: "Enter password!", type: .error)
+                if let next = goNext {
+                    next()
                 }
+                
+            } else {
+                emptyError()
             }
-        default:
-            textField.endEditing(true)
+        } else {
+            emptyError()
         }
 
         return true
     }
     
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        switch textField {
-        case nicknameLabelCreate: selectedTextfield = 0
-        case emailLabel: selectedTextfield = 1
-        case passwordLabel: selectedTextfield = 2
-        case confirmPasswordLabel: selectedTextfield = 3
-            
-        case nicknameLogLabel: selectedTextfield = 4
-        case passwordLogLabel: selectedTextfield = 5
-        default:
-            textField.endEditing(true)
-        }
-    }
     
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         enteredEmailUsers.removeAll()

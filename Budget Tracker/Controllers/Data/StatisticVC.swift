@@ -100,7 +100,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
     func createTableData() -> [GraphDataStruct] {
         maxValue = 0.0
         allData = []
-        let data = Array(allSelectedTransactionsData)
+        let data = Array(ViewController.shared?.tableData ?? [])
      //   if segmentControll.selectedSegmentIndex == 0 {
             var resultDict: [String:[TransactionsStruct]] = [:]
             for i in 0..<data.count {

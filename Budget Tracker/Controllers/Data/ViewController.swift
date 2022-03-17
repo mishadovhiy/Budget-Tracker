@@ -13,7 +13,6 @@ import UIKit
 var appData = AppData()
 var statisticBrain = StatisticBrain()//?
 var sumAllCategories: [String: Double] = [:]//?
-var allSelectedTransactionsData: [TransactionsStruct] = []//for statistic
 var expenseLabelPressed = true//make only in vc
 var selectedPeroud = ""//try to ud
 var sendSavedData = false
@@ -237,9 +236,11 @@ class ViewController: SuperViewController {
 
             }
         }
-
-
     }
+    
+    
+    
+    
     var sidescrolling = false
     var wasShowingSideBar = false
     var beginScrollPosition:CGFloat = 0
@@ -783,15 +784,23 @@ class ViewController: SuperViewController {
         print("performFiltering called")
         if all == true {
             //let db = DataBase()
-            tableData = db.transactions
-            allSelectedTransactionsData = tableData
-            return allSelectedTransactionsData
+            let transactions = UserDefaults.standard.value(forKey: db.transactionsKey) as? [[String:Any]] ?? []
+            var arr:[TransactionsStruct] = []
+            for i in 0..<transactions.count {
+                if let new = db.transactionFrom(transactions[i]) {
+                    if new.category.purpose != .debt {
+                        arr.append(new)
+                    }
+                    
+                }
+            }
+            tableData = arr
+            return arr
 
         } else {
             print("performFiltering: appending transactions data")
             print("daysBetween count: \(daysBetween.count), appData.transactions: \(appData.getTransactions.count)")
-            var arr = tableData
-            arr.removeAll()
+            var arr:[TransactionsStruct] = []
             var matches = 0
             let days = Array(daysBetween)
             let transactions = UserDefaults.standard.value(forKey: db.transactionsKey) as? [[String:Any]] ?? []
@@ -799,9 +808,13 @@ class ViewController: SuperViewController {
                 for i in 0..<transactions.count {
                     if days.count > number {
                         if days[number] == (transactions[i]["Date"] as? String ?? "") {
+                            
                             if let new = db.transactionFrom(transactions[i]) {
-                                matches += 1
-                                arr.append(new)
+                                if new.category.purpose != .debt {
+                                    matches += 1
+                                    arr.append(new)
+                                }
+                                
                             }
 
                         }
@@ -809,7 +822,6 @@ class ViewController: SuperViewController {
                 }
             }
             self.tableData = arr
-            allSelectedTransactionsData = arr
             return arr
             
         }

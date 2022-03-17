@@ -68,6 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         }
     }
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
+        
         let button = IndicatorView.button(title: "ok", style: .error, close: true) { _ in
             
         }
