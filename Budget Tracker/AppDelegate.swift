@@ -60,11 +60,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }
     
     var delegate:AppDelegateProtocol?
+    private var backgroundEnterDate:Date?
     
     func applicationWillResignActive(_ application: UIApplication) {
         if UserSettings.Security.password != "" {
-            passcodeLock.present()
-            delegate?.resighnActive()
+            backgroundEnterDate = Date();
         }
     }
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
@@ -82,11 +82,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         print(#function)
         if !becameActive {
             becameActive = true
-            if UserSettings.Security.password != "" {
-                passcodeLock.present()
-            }
         } else {
             needDownloadOnMainAppeare = true
+        }
+        if UserSettings.Security.password != "" {
+            guard let logoutDate = backgroundEnterDate else{
+                passcodeLock.present()
+                return;
+            }
+            let now = Date()
+            let ti = now.timeIntervalSince(logoutDate)
+            if ti > Double(30) {
+                passcodeLock.present()
+            }
         }
         
     }

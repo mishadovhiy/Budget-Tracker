@@ -31,7 +31,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         
         var categories = [
             CellData(name: "Categories", value: "\(catsCo.count)", segue: "toCategories", image: "folder.fill"),
-        //    CellData(name: "Debts", value: "\(debts)", segue: "toDebts", image: "rectangle.3.group.fill", pro: pro)
+            CellData(name: "Debts", value: "\(debts)", segue: "toDebts", image: "rectangle.3.group.fill", pro: pro)
         ]
         let localCount = ((UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String:Any]] ?? []) + (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String:Any]] ?? [])).count
         if localCount > 0 {

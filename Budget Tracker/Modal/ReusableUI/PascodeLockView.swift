@@ -11,6 +11,8 @@ import UIKit
 class PascodeLockView: UIView, UITextFieldDelegate {
 
     //for app delegate only
+    let backgroundCol = UIColor(red: 38/255, green: 38/255, blue: 38/255, alpha: 0.95)
+    
     
     @IBOutlet private weak var textField: UITextField!
     @IBOutlet private weak var primaryStack: UIStackView!
@@ -39,13 +41,20 @@ class PascodeLockView: UIView, UITextFieldDelegate {
         DispatchQueue.main.async {
             let window = UIApplication.shared.keyWindow ?? UIWindow()
             self.frame = window.frame
-            self.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, window.frame.height + 100, 0)
+            
+            self.primaryStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, window.frame.height + 100, 0)
+            
             window.addSubview(self)
-            UIView.animate(withDuration: 0.8) {
-                self.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+            self.backgroundColor = .clear
+            AppDelegate.shared?.delegate?.resighnActive()
+            UIView.animate(withDuration: 0.5) {
+                self.backgroundColor = self.backgroundCol
+                self.primaryStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
             } completion: { _ in
-                
+
             }
+
+            
 
         }
     }
@@ -56,12 +65,12 @@ class PascodeLockView: UIView, UITextFieldDelegate {
         DispatchQueue.main.async {
             let window = UIApplication.shared.keyWindow ?? UIWindow()
             UIView.animate(withDuration: 0.3) {
-                self.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, window.frame.height + 100, 0)
+                self.backgroundColor = .clear
+                self.primaryStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, window.frame.height + 100, 0)
             } completion: { _ in
                 if let action = self.enteredAction {
                     action()
                 }
-                self.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
                 self.removeFromSuperview()
             }
 

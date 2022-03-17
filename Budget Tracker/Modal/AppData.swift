@@ -340,6 +340,11 @@ class AppData {
     let categoryColors = [
         "BlueColor", "BlueColor2", "BlueColor3", "GreenColor", "GreenColor-2", "yellowColor2", "OrangeColor", "OrangeColor-1", "pinkColor2", "PinkColor", "PinkColor-1", "RedColor", "yellowColor"
     ]
+    
+    let screenColors = [
+        "BlueColor", "BlueColor2", "BlueColor3", "GreenColor", "GreenColor-2", "yellowColor2", "OrangeColor", "OrangeColor-1", "pinkColor2", "PinkColor", "PinkColor-1", "RedColor", "yellowColor"
+    ]
+    
     var randomColorName: String {
         let data = categoryColors
         return data[Int.random(in: 0..<data.count)]

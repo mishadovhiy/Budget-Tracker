@@ -37,7 +37,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         DispatchQueue.init(label: "dbLoad", qos: .userInteractive).async {
             if !self.fromSettings {
            //     if self.screenType != .localData {
-                    self.categories = self.db.categories
+                self.categories = self.db.categories
            //     }
             } else {
                 self.loadData()
@@ -147,7 +147,6 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             var resultDict: [String:[ScreenCategory]] = [:]
             //load transactions (depending on what screen type)
             print("newValue::", newValue.count)
-            
 
             var allTransactionsLocal:[TransactionsStruct] {
                 if let transfaring = transfaringCategories  {
@@ -201,18 +200,18 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 let incomeColor = appData.lastSelected.gett(setterType: .color, valueType: .income) ?? appData.randomColorName
                 let incomeImg = appData.lastSelected.gett(setterType: .icon, valueType: .income) ?? ""
                 
-                self.tableData = [
+                var resultData:[ScreenDataStruct] = []
+                resultData = [
                     ScreenDataStruct(title: K.expense, data: resultDict[purposeToString(.expense)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: expenseImg, color: expenseColor, purpose: .expense), transactions: [])),
-                    ScreenDataStruct(title: K.income, data: resultDict[purposeToString(.income)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: incomeImg, color: incomeColor, purpose: .income), transactions: [])),
-                    ScreenDataStruct(title: purposeToString(.debt), data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: debtImg, color: debtColor, purpose: .debt), transactions: []))
+                    ScreenDataStruct(title: K.income, data: resultDict[purposeToString(.income)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: incomeImg, color: incomeColor, purpose: .income), transactions: []))
                 ]
-              /*  if fromSettings {
-                    self.tableData = data
+                if fromSettings {
+                    self.tableData = resultData
                 } else {
-                    data.append()
+                    resultData.append(ScreenDataStruct(title:purposeToString(.debt), data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: debtImg, color: debtColor, purpose: .debt), transactions: [])))
                     
-                    self.tableData = data
-                }*/
+                    self.tableData = resultData
+                }
                 
             case .debts:
                 var randomIcon: String {
@@ -331,6 +330,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     }
     
    
+
     var searchingText = ""
     var allCategoriesHolder: [NewCategories] = []
     var transfaringCategories: LoginViewController.TransferingData?

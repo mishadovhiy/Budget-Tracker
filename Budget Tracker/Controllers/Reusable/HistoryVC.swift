@@ -61,6 +61,7 @@ class HistoryVC: SuperViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         if !svsloaded {
+            addTransButton.backgroundColor = K.Colors.link
             svsloaded = true
             if #available(iOS 13.0, *) {
                 

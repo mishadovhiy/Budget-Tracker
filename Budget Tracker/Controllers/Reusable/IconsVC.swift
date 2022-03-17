@@ -37,10 +37,9 @@ class IconsVC: UIViewController {
         case colorsOnly
     }
     
-    let colors:[UIColor] = [
-        .yellow, .systemPink, .green, .orange, .red, .blue
-    ]
-    let coloresStrTemporary = appData.categoryColors
+    lazy var coloresStrTemporary:[String] = {
+        return screenType == .colorsOnly ? appData.screenColors : appData.categoryColors
+    }()
     
     var selectedColorId:Int = 0
     var selectedIconIndex:IndexPath?
