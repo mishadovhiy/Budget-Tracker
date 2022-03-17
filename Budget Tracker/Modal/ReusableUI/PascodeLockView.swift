@@ -20,10 +20,14 @@ class PascodeLockView: UIView {
     @IBOutlet weak var numbersStack: UIView!
     @IBOutlet weak var primaryTitleLabel: UILabel!
     
-    public func present() {
+    var enteredAction:(()->())?
+    
+    public func present(passcodeEntered:(()->())? = nil) {
+        enteredAction = passcodeEntered
+        enteredValue = ""
         DispatchQueue.main.async {
             let window = UIApplication.shared.keyWindow ?? UIWindow()
-            self.frame = window.frame
+         //   self.frame = window.frame
             self.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, window.frame.height + 100, 0)
             window.addSubview(self)
             UIView.animate(withDuration: 0.8) {
@@ -42,6 +46,9 @@ class PascodeLockView: UIView {
             UIView.animate(withDuration: 0.3) {
                 self.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, window.frame.height + 100, 0)
             } completion: { _ in
+                if let action = self.enteredAction {
+                    action()
+                }
                 self.removeFromSuperview()
             }
 
@@ -59,16 +66,20 @@ class PascodeLockView: UIView {
         set {
             _enteredValue = newValue
             if newValue?.count ?? 0 == 4 {
-                //login try
-                //if login failed - new value = 0
-                if newValue == UserSettings.Security.password {
-                    //close
-                    hide()
-                }
+                checkPasscode(newValue ?? "")
             }
             DispatchQueue.main.async {
                 self.textField.text = newValue
             }
+        }
+    }
+    
+    func checkPasscode(_ newValue:String) {
+        if newValue == UserSettings.Security.password {
+            hide()
+        } else {
+            AppDelegate.shared?.newMessage.show(title: "Wrong code!", type: .error)
+            enteredValue = ""
         }
     }
     

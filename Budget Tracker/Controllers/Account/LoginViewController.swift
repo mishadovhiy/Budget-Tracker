@@ -44,13 +44,13 @@ extension LoginViewController {
                 
                     
                 
-                let nextAction = {
+                let nextAction: (String) -> () = { (newvalue2) in
                     self.ai.show { _ in
-                    let newValue = EnterValueVC.shared?.enteringValue ?? ""
+                   
                     self.loadUsers { users in
                         var found = false
                         for i in 0..<users.count {
-                            if users[i][0] == newValue {
+                            if users[i][0] == newvalue2 {
                                 found = true
                             }
                         }
@@ -60,7 +60,7 @@ extension LoginViewController {
                         } else {
                            // appData.username = newValue
                            // appData.password = ""
-                            self.forgotPasswordUsername = newValue
+                            self.forgotPasswordUsername = newvalue2
                             self.sendRestorationCode(toChange: .changePassword)
                         }
                         
@@ -68,7 +68,8 @@ extension LoginViewController {
                     }
                 }
                 
-                self.enterValueVCScreenData = EnterValueVCScreenData(taskName: "Forgot password", title: "Enter your username", placeHolder: "Username", nextAction: nextAction, screenType: .password)
+                let toEdit = EnterValueVC.EnterValueVCScreenData(taskName: "Forgot password", title: "Enter your username", placeHolder: "Username", nextAction: nextAction, screenType: .password)
+                self.toEnterValue(data: toEdit)
             }
             
         }
@@ -179,8 +180,8 @@ extension LoginViewController {
     }
 
     func transfereData() {
-        let chechUsername = {
-            let enteredUser = EnterValueVC.shared?.enteringValue ?? ""
+        let chechUsername: (String) -> () = { (enteredUsss) in
+            let enteredUser = enteredUsss
             var dbPassword = ""
             self.loadUsers { users in
                 var found = false
@@ -192,8 +193,8 @@ extension LoginViewController {
                 }
                 
                 if found {
-                    let checkPassword = {
-                        let enteredPassword = EnterValueVC.shared?.enteringValue ?? ""
+                    let checkPassword: (String) -> () = { (newPass) in
+                        let enteredPassword = newPass
                         if enteredPassword == dbPassword {
                             
                             
@@ -235,7 +236,9 @@ extension LoginViewController {
                         }
                     }
                     
-                    EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Transfer data", title: "Enter password", placeHolder: "Password", nextAction: checkPassword, screenType: .password))
+
+                    let screenData = EnterValueVC.EnterValueVCScreenData(taskName: "Transfer data", title: "Enter password", placeHolder: "Password", nextAction: checkPassword, screenType: .password)
+                    self.toEnterValue(data: screenData)
                 } else {
                     DispatchQueue.main.async {
                         self.newMessage.show(title: "User not found", description: "'\(enteredUser)'", type: .error)
@@ -244,7 +247,8 @@ extension LoginViewController {
             }
         }
 
-        self.enterValueVCScreenData = EnterValueVCScreenData(taskName: "Transfer data", title: "Enter username or email", subTitle: nil, placeHolder: "Username or email", nextAction: chechUsername, screenType: .email)
+        let screenData = EnterValueVC.EnterValueVCScreenData(taskName: "Transfer data", title: "Enter username or email", subTitle: nil, placeHolder: "Username or email", nextAction: chechUsername, screenType: .email)
+        toEnterValue(data: screenData)
     }
 }
 
@@ -349,17 +353,12 @@ class LoginViewController: SuperViewController {
     
     func dbChangePassword(userData: (String, String)) {
 
-        
-        let repeateActionn = {
-            
-            let fromPrev = EnterValueVC.shared?.enteringValue ?? ""
-            
-            let repeatPasAction = {
-                
-                let new = EnterValueVC.shared?.enteringValue ?? ""
+        let repeateActionn: (String) -> () = { (fromPrev) in
+
+            let repeatPasAction: (String) -> () = { (new) in
                 if fromPrev != new {
                     self.showAlert(title: "Wrong password!", text: nil, error: true)
-                    EnterValueVC.shared?.clearAll(animated: true)
+                   // EnterValueVC.shared?.clearAll(animated: true)
                 } else {
 
                     let newUser = self.forgotPasswordUsername == "" ? appData.username : self.forgotPasswordUsername
@@ -367,9 +366,12 @@ class LoginViewController: SuperViewController {
                     self.cangePasswordDB(username: newUser, newPassword: new)
                 }
             }
-            EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Change password", title: "Repeat password", placeHolder: "Password", nextAction: repeatPasAction, screenType: .password))
+            let screenDataRep = EnterValueVC.EnterValueVCScreenData(taskName: "Change password", title: "Repeat password", placeHolder: "Password", nextAction: repeatPasAction, screenType: .password)
+            self.toEnterValue(data: screenDataRep)
         }
-        EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Change password", title: "Create new password", placeHolder: "Password", nextAction: repeateActionn, screenType: .password))
+        let screenData = EnterValueVC.EnterValueVCScreenData(taskName: "Change password", title: "Create new password", placeHolder: "Password", nextAction: repeateActionn, screenType: .password)
+        toEnterValue(data: screenData)
+        
     }
     
     func loadUserData(username: String, completion: @escaping ([String]?) -> ()){
@@ -431,8 +433,9 @@ class LoginViewController: SuperViewController {
     }
     func dbChangeEmail(userData: (String, String), error: Bool = false) {
         
-        let emailAction = {
-            let newEmail = EnterValueVC.shared?.enteringValue ?? ""
+        let emailAction: (String) -> () = { (newEmail) in
+      
+          
             if !(newEmail).contains("@") || !(newEmail).contains(".") {
                 self.newMessage.show(title: "Enter valid email", type: .error)
             } else {
@@ -443,7 +446,8 @@ class LoginViewController: SuperViewController {
             
         }
         
-        EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Change email", title: "Enter your new email", placeHolder: "Email", nextAction: emailAction, screenType: .email))
+        let screenData = EnterValueVC.EnterValueVCScreenData(taskName: "Change email", title: "Enter your new email", placeHolder: "Email", nextAction: emailAction, screenType: .email)
+        toEnterValue(data: screenData)
         
 
     }
@@ -527,11 +531,11 @@ class LoginViewController: SuperViewController {
                                     
                                     let userData = (("Email",emailToSend),("Username",username))
                                     
-                                    let nextAction = {
-                                        if EnterValueVC.shared?.enteringValue.count ?? 0 == 4 {
+                                    let nextAction: (String) -> () = { (newVal) in
+                                        if newVal.count == 4 {
                                             self.ai.show(title: nil) { _ in
                                                 
-                                                self.checkRestoreCode(value: EnterValueVC.shared?.enteringValue ?? "", userData: (username, emailToSend), ifCorrect: toChange)
+                                                self.checkRestoreCode(value: newVal, userData: (username, emailToSend), ifCorrect: toChange)
                                             }
                                         } else {
                                             self.showAlert(title: "Wrong code!", text: "Enter 4 digits\n we have sent you", error: true)
@@ -548,8 +552,8 @@ class LoginViewController: SuperViewController {
                                         
                                     }
                                     
-                                    self.enterValueVCScreenData = EnterValueVCScreenData(taskName: taskNameTitle, title: "Restoration code", subTitle: "We have sent 4-digit resoration code on your email", placeHolder: "Code", nextAction: nextAction, screenType: .code, descriptionTable: userData)
-                                    
+                                    let screenData = EnterValueVC.EnterValueVCScreenData(taskName: taskNameTitle, title: "Restoration code", subTitle: "We have sent 4-digit resoration code on your email", placeHolder: "Code", nextAction: nextAction, screenType: .code, descriptionTable: userData)
+                                    self.toEnterValue(data: screenData)
                                     
                                 }
                             }
@@ -563,16 +567,14 @@ class LoginViewController: SuperViewController {
             
         } else {
 
-            let nextAction = {
+            let nextAction: (String) -> () = { (newvalue) in
                 if appData.username != "" {
                     self.ai.show(title: nil) { _ in
-                        let enteredUsername = EnterValueVC.shared?.enteringValue ?? ""
-                        
                     //    let load = LoadFromDB()
                         LoadFromDB.shared.Users { (users, error) in
                             
                             for i in 0..<users.count {
-                                if enteredUsername == users[i][0] {
+                                if newvalue == users[i][0] {
                                     self.sendRestorationCode(toChange: toChange)
                                 }
                             }
@@ -584,25 +586,30 @@ class LoginViewController: SuperViewController {
                 
             }
             
-            enterValueVCScreenData = EnterValueVCScreenData(taskName: "Forgot password", title: "Enter your username", subTitle: "You will receive restoration code", placeHolder: "Username", nextAction: nextAction, screenType: .password)
+            let screenData = EnterValueVC.EnterValueVCScreenData(taskName: "Forgot password", title: "Enter your username", subTitle: "You will receive restoration code", placeHolder: "Username", nextAction: nextAction, screenType: .password)
+            toEnterValue(data: screenData)
 
         }
     }
     
     
-    var _enterValueVCScreenData:EnterValueVCScreenData?
-    var enterValueVCScreenData: EnterValueVCScreenData? {
-        get {
-            return _enterValueVCScreenData
-        }
-        set {
-            print(newValue?.title ?? "-")
-            _enterValueVCScreenData = newValue
+    func toEnterValue(data:EnterValueVC.EnterValueVCScreenData?) {
+        if let data = data {
             DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "toEnterValueVC", sender: self)
+                if let nav = self.navigationController {
+                    EnterValueVC.shared.presentScreen(in: nav, with: data, defaultValue:nil)
+                    
+                }
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.navigationController?.popToViewController(self, animated: true)
             }
         }
     }
+    
+    
+    
     func cangePasswordDB(username: String, newPassword: String) {
         DispatchQueue.init(label: "DB").async {
            // let load = LoadFromDB()
@@ -639,7 +646,9 @@ class LoginViewController: SuperViewController {
                                 appData.username = userData[0]
                                 appData.password = newPassword
                                 KeychainService.updatePassword(service: "BudgetTrackerApp", account: userData[0], data: newPassword)
-                                EnterValueVC.shared?.closeVC(closeMessage: "Your password has been changed")
+                                //EnterValueVC.shared?.closeVC(closeMessage: "Your password has been changed")
+                                self.toEnterValue(data: nil)
+                                self.showAlert(title:"Your password has been changed", error: false)
                             }
                             
                         }
@@ -655,20 +664,21 @@ class LoginViewController: SuperViewController {
         if password != dbPassword {
             showAlert(title: "Wrong password!", error: true)
         } else {
-            let repeateActionn = {
-                let fromPrev = EnterValueVC.shared?.enteringValue ?? ""
-                let repeatPasAction = {
-                    let new = EnterValueVC.shared?.enteringValue ?? ""
+            let repeateActionn: (String) -> () = { (fromPrev) in
+            
+                let repeatPasAction: (String) -> () = { (new) in
                     if fromPrev != new {
                         self.showAlert(title: "Passwords not much!", text: nil, error: true)
-                        EnterValueVC.shared?.clearAll(animated: true)
+                  //      EnterValueVC.shared?.clearAll(animated: true)
                     } else {
                         self.cangePasswordDB(username: appData.username, newPassword: new)
                     }
                 }
-                EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Change password", title: "Repeat password", placeHolder: "Password", nextAction: repeatPasAction, screenType: .password))
+                let screenDataRep = EnterValueVC.EnterValueVCScreenData(taskName: "Change password", title: "Repeat password", placeHolder: "Password", nextAction: repeatPasAction, screenType: .password)
+                self.toEnterValue(data: screenDataRep)
             }
-            EnterValueVC.shared?.showSelfVC(data: EnterValueVCScreenData(taskName: "Change password", title: "Create your new password", placeHolder: "Password", nextAction: repeateActionn, screenType: .password))
+            let screenData = EnterValueVC.EnterValueVCScreenData(taskName: "Change password", title: "Create your new password", placeHolder: "Password", nextAction: repeateActionn, screenType: .password)
+            toEnterValue(data: screenData)
         }
         
 
@@ -694,14 +704,14 @@ class LoginViewController: SuperViewController {
                         //DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
 
                         
-                        let nextAction = {
-                            let new = EnterValueVC.shared?.enteringValue ?? ""
+                        let nextAction: (String) -> () = { (new) in
                             self.checkChangeOldPassword(new, dbPassword: userData[2], email: userData[1])
                         }
                         
                         let userrData:((String, String)?, (String, String)?)? = (("Email:", userData[1]),("Nickname:",userData[0]))
                         
-                        self.enterValueVCScreenData = EnterValueVCScreenData(taskName: "Change password", title: "Enter your old password", subTitle: nil, placeHolder: "Old password", nextAction: nextAction, screenType: .password, descriptionTable: userrData)
+                        let screenData = EnterValueVC.EnterValueVCScreenData(taskName: "Change password", title: "Enter your old password", subTitle: nil, placeHolder: "Old password", nextAction: nextAction, screenType: .password, descriptionTable: userrData)
+                        self.toEnterValue(data: screenData)
                        // }
                         
                     } else {
@@ -737,13 +747,7 @@ class LoginViewController: SuperViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
-
-        case "toEnterValueVC":
-            let vc = segue.destination as! EnterValueVC
-            if let screenData = enterValueVCScreenData {
-                vc.screenData = screenData
-                
-            }
+            
         case "toSelectUserVC":
             let vc = segue.destination as! SelectUserVC
             vc.delegate = self
@@ -775,7 +779,7 @@ class LoginViewController: SuperViewController {
         
         DispatchQueue.main.async {
             
-            EnterValueVC.shared?.valueTextField.endEditing(true)
+       //     EnterValueVC.shared?.valueTextField.endEditing(true)
             self.ai.completeWithActions(buttons: (okButton, nil), title: resultTitle, descriptionText: text, type: error ? .error : .standard)
         }
 

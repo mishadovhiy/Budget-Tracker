@@ -20,14 +20,17 @@ class SettingsVC: UIViewController {
         return newView
     }()
     
-    var tableData:[TableData] {
-        
-        
-        return [
+    var tableData:[TableData]  = []
+    
+    func loadData() {
+        tableData = [
             TableData(sectionTitle: "Appearence", cells: appearenceSection()),
             TableData(sectionTitle: "Privacy", cells: privacySection()),
             TableData(sectionTitle: "", cells: otherSection())
         ]
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
     
     override func viewWillLayoutSubviews() {
@@ -46,6 +49,7 @@ class SettingsVC: UIViewController {
         title = "Settings"
         tableView.delegate = self
         tableView.dataSource = self
+        loadData()
     }
     
 
@@ -67,15 +71,29 @@ class SettingsVC: UIViewController {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
+    
+    
+    func toEnterValue(data:EnterValueVC.EnterValueVCScreenData?) {
+        if let data = data {
+            DispatchQueue.main.async {
+                if let nav = self.navigationController {
+                    EnterValueVC.shared.presentScreen(in: nav, with: data, defaultValue:nil)
+                    
+                }
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.navigationController?.popToViewController(self, animated: true)
+            }
+        }
+    }
 }
 
 
 extension SettingsVC: IconsVCDelegate {
     func selected(img: String, color: String) {
         AppData.linkColor = color
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
+        self.loadData()
     }
     
     
@@ -177,17 +195,25 @@ extension SettingsVC {
     func privacySection() -> [Any] {
         print("privacySection")
         let passcodeOn = UserSettings.Security.password != ""
-        
-        return [
-            TriggerCell(title: "Passcode", isOn: passcodeOn, action: { isON in
-                if !isON {
-                    UserSettings.Security.password = ""
-                } else {
-                    //ask to create password
-                    UserSettings.Security.password = "5511"
+        let passcodeSwitched:(Bool) -> () = { (newValue) in
+            self.passcodeSitched(isON: newValue)
+        }
+        let passcodeCell:TriggerCell = TriggerCell(title: "Passcode", isOn: passcodeOn, action: passcodeSwitched)
+        if passcodeOn {
+            let changePasscodeAction:() -> () = {
+                self.getUserPasscode {
+                    self.createPassword { newValue in
+                        UserSettings.Security.password = newValue
+                        self.loadData()
+                    }
                 }
-            })
-        ]
+            }
+            let changePasscodeCell = StandartCell(title: "Change passcode", action: changePasscodeAction)
+            return [passcodeCell, changePasscodeCell]
+        } else {
+            return [passcodeCell]
+        }
+        
     }
     
     
@@ -199,6 +225,57 @@ extension SettingsVC {
                 }
             })
         ]
+    }
+}
+
+
+extension SettingsVC {
+    //create password
+    
+    func passcodeSitched(isON:Bool) {
+        if !isON {
+            if UserSettings.Security.password != "" {
+                self.getUserPasscode {
+                    UserSettings.Security.password = ""
+                    self.loadData()
+                }
+            }
+            loadData()
+            
+        } else {
+            loadData()
+            self.createPassword { newValue in
+                UserSettings.Security.password = newValue
+                self.loadData()
+            }
+            
+        }
+    }
+    
+    func getUserPasscode(completion:@escaping() -> ()) {
+        AppDelegate.shared?.passcodeLock.present(passcodeEntered: completion)
+    }
+    
+    
+    func createPassword(completion: @escaping(String) -> ()) {
+        
+        let nextAction:(String) -> () = { (newValue) in
+            let repeateAction:(String) -> () = { (repeatedPascode) in
+                if newValue == repeatedPascode {
+                    AppDelegate.shared?.newMessage.show(title: "Passcode has been setted", type: .succsess)
+                    self.toEnterValue(data: nil)
+                    completion(newValue)
+                } else {
+                    AppDelegate.shared?.newMessage.show(title: "Passcodes don't much", type: .error)
+                }
+            }
+            let passcodeSecondEntered = EnterValueVC.EnterValueVCScreenData(taskName: "Create Passcode", title: "Repeate Passcode", placeHolder: "Passcode", nextAction: repeateAction, screenType: .code)
+            self.toEnterValue(data: passcodeSecondEntered)
+            
+        }
+        
+        let screenData = EnterValueVC.EnterValueVCScreenData(taskName: "Create Passcode", title: "Create Passcode", placeHolder: "Passcode", nextAction: nextAction, screenType: .code)
+        toEnterValue(data: screenData)
     }
 }
 

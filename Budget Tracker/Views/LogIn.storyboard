@@ -389,9 +389,11 @@
                         <outlet property="codeLabel" destination="3Sp-Ie-glJ" id="O4l-Vo-UQ9"/>
                         <outlet property="descriptionLabel" destination="XwQ-Ks-MsB" id="5AA-yP-tIy"/>
                         <outlet property="emailLabel" destination="dSu-JP-Rhd" id="cnh-PC-K3g"/>
+                        <outlet property="emailTitleLabel" destination="6jg-eq-c8e" id="zlW-Zf-PxB"/>
                         <outlet property="mainStack" destination="in9-wI-9lJ" id="Ciz-pK-dK9"/>
                         <outlet property="mainTitleLabel" destination="RLQ-PF-Scy" id="lrD-jK-70d"/>
                         <outlet property="userNameLabel" destination="HU8-tg-hem" id="Ktv-pF-TYy"/>
+                        <outlet property="userNameTitleLabel" destination="ALJ-1L-lgb" id="hlc-fs-ZEn"/>
                         <outlet property="userTableStack" destination="jc2-Ms-p9u" id="e1U-YR-Ldu"/>
                         <outlet property="valueTextField" destination="Fpy-Gr-wBy" id="X3Q-hm-egt"/>
                     </connections>

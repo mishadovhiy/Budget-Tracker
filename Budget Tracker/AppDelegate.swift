@@ -56,14 +56,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
             }
         }
         
-        if UserSettings.Security.password != "" {
-            passcodeLock.present()
-        }
-        
         return true
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
+        if UserSettings.Security.password != "" {
+            passcodeLock.present()
+            //present lock loader
+            
+            //did become active
+        }
         //
     }
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {

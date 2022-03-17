@@ -35,8 +35,8 @@
 		8B633135260FE7FF00D9E117 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B633134260FE7FF00D9E117 /* AuthenticationServices.framework */; };
 		8B7B63CC2655CAFB0067C434 /* SuperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7B63CB2655CAFB0067C434 /* SuperViewController.swift */; };
 		8B7D1AA1276CF203008942EC /* IconList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7D1AA0276CF203008942EC /* IconList.swift */; };
+		8B82A04127E2BDBD0011EC80 /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82A04027E2BDBD0011EC80 /* UITextField.swift */; };
 		8B8D556125BB218400D7C6A7 /* UnsendedDataVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D556025BB218400D7C6A7 /* UnsendedDataVC.swift */; };
-		8B9ABDC627DA8FCF0002C2CE /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9ABDC527DA8FCF0002C2CE /* UITextField.swift */; };
 		8BAA72B527CB7D41005298B6 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BAA72B427CB7D41005298B6 /* Keys.swift */; };
 		8BC8525027E28D0F00C5A3A4 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC8524F27E28D0F00C5A3A4 /* UserSettings.swift */; };
 		8BD2E77C25B8622100D4DFBF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */; };
@@ -109,8 +109,8 @@
 		8B633134260FE7FF00D9E117 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		8B7B63CB2655CAFB0067C434 /* SuperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperViewController.swift; sourceTree = "<group>"; };
 		8B7D1AA0276CF203008942EC /* IconList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconList.swift; sourceTree = "<group>"; };
+		8B82A04027E2BDBD0011EC80 /* UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
 		8B8D556025BB218400D7C6A7 /* UnsendedDataVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsendedDataVC.swift; sourceTree = "<group>"; };
-		8B9ABDC527DA8FCF0002C2CE /* UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
 		8BAA72B427CB7D41005298B6 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		8BC8524F27E28D0F00C5A3A4 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -211,18 +211,10 @@
 			path = notUsing;
 			sourceTree = "<group>";
 		};
-		8B9ABDC327DA8F890002C2CE /* Mics */ = {
+		8B82A04227E2BDCD0011EC80 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				8B9ABDC427DA8FB50002C2CE /* Extensions */,
-			);
-			path = Mics;
-			sourceTree = "<group>";
-		};
-		8B9ABDC427DA8FB50002C2CE /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				8B9ABDC527DA8FCF0002C2CE /* UITextField.swift */,
+				8B82A04027E2BDBD0011EC80 /* UITextField.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -312,12 +304,11 @@
 			children = (
 				8DECAFBF2460461C0041B734 /* Budget Tracker.entitlements */,
 				8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */,
-				8B9ABDC327DA8F890002C2CE /* Mics */,
 				8DD89D8823F1471900273904 /* Modal */,
 				8DBA7E6823F031F900D8214C /* Controllers */,
 				8DBA7E6723F031F200D8214C /* Views */,
-				8B5CE1CF2720991B0092BBFB /* notUsing */,
 				8DBA7E6623F031E600D8214C /* Supporting Files */,
+				8B5CE1CF2720991B0092BBFB /* notUsing */,
 				8DBA7E6023F0317100D8214C /* Info.plist */,
 			);
 			path = "Budget Tracker";
@@ -331,6 +322,7 @@
 				8DBA7E5D23F0317100D8214C /* LaunchScreen.storyboard */,
 				8BAA72B427CB7D41005298B6 /* Keys.swift */,
 				8DD89D8B23F1485700273904 /* Constants.swift */,
+				8B82A04227E2BDCD0011EC80 /* Extensions */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -493,6 +485,7 @@
 				8BC8525027E28D0F00C5A3A4 /* UserSettings.swift in Sources */,
 				8B4728BC27533A470078BD34 /* DataBase.swift in Sources */,
 				8DD89D8323F1468E00273904 /* mainVCcell.swift in Sources */,
+				8B82A04127E2BDBD0011EC80 /* UITextField.swift in Sources */,
 				8B63312F260FD65200D9E117 /* buyProVC.swift in Sources */,
 				8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */,
 				8B47F92D2773B90300FD96AA /* MessageView.swift in Sources */,
@@ -514,7 +507,6 @@
 				8B2163A2274070BA003EDFE0 /* snippets.swift in Sources */,
 				8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */,
 				8BF63E8F2762C83F002E8601 /* SettingsVC.swift in Sources */,
-				8B9ABDC627DA8FCF0002C2CE /* UITextField.swift in Sources */,
 				8B20751227D9A7AF00CF2172 /* PascodeLockView.swift in Sources */,
 				8B2A4D72271439520085E0F0 /* MoreVC.swift in Sources */,
 				8B052E3D26EFD48E000BA66A /* IndicatorView.swift in Sources */,
