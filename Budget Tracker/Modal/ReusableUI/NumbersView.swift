@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreGraphics
+import AVFoundation
 
 protocol NumbersViewProtocol {
     func valuePressed(n:Int?, remove: NumbersView.SymbolType?)
@@ -53,6 +54,9 @@ class NumbersView: UIView {
     @IBOutlet private weak var cancelButton: UIButton!
     @IBAction private func numberPressed(_ sender: UIButton) {
         if let number = Int(sender.currentTitle ?? "") {
+            DispatchQueue.main.async {
+                AudioServicesPlaySystemSound(1104)
+            }
             delegate?.valuePressed(n: number, remove: nil)
         }
     }
@@ -60,8 +64,14 @@ class NumbersView: UIView {
     @IBAction func symbolPressed(_ sender: UIButton) {
         switch sender.tag {
         case 0:
+            DispatchQueue.main.async {
+                AudioServicesPlaySystemSound(1155)
+            }
             delegate?.valuePressed(n: nil, remove: .removeLast)
         case 1:
+            DispatchQueue.main.async {
+                AudioServicesPlaySystemSound(1155)
+            }
             delegate?.valuePressed(n: nil, remove: .removeAll)
         
         default:

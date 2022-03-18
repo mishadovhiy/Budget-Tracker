@@ -36,6 +36,12 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
         
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.ai.fastHide { _ in
+            self.valueTextField.becomeFirstResponder()
+        }
+    }
 
     lazy var ai = AppDelegate.shared!.ai
     
@@ -85,7 +91,7 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
     
     
     private func updateScreen() {
-
+        print(#function, "\ndata: ", self.screenData)
         DispatchQueue.main.async {
             
             self.title = self.screenData?.taskName
@@ -114,12 +120,12 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
                 self.numberView.limit = 4
 
             }
-            self.ai.fastHide { _ in
-                self.valueTextField.becomeFirstResponder()
-            }
+        
             
         }
     }
+    
+    
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
     }

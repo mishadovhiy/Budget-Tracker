@@ -144,8 +144,10 @@ class PascodeLockView: UIView, UITextFieldDelegate {
     
     @IBAction private func numberPressed(_ sender: UIButton) {
         DispatchQueue.main.async {
+            
             if let numString = sender.title(for: .normal) {
                 if let _ = Int(numString) {
+                    AudioServicesPlaySystemSound(1104)
                     self.enteredValue = (self.enteredValue ?? "") + numString
                 }
                 
@@ -158,6 +160,7 @@ class PascodeLockView: UIView, UITextFieldDelegate {
     @IBOutlet private weak var removeLastButton: UIButton!
     @IBAction private func removeLastPressed(_ sender: UIButton) {
         if self.enteredValue ?? "" != "" {
+            AudioServicesPlaySystemSound(1155)
             self.enteredValue?.removeLast()
         }
     }
