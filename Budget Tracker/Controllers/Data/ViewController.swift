@@ -51,12 +51,6 @@ class ViewController: SuperViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let next:(String)->() = { (newVal) in
-            
-        }
-        let data = EnterValueVC.EnterValueVCScreenData(taskName: "Change password", title: "Enter your old password", subTitle: nil, placeHolder: "Old password", nextAction: next, screenType: .password, descriptionTable: (("Email:", "hi@dovhiy.com"), ("Nickname:", "mi sha")))
-        EnterValueVC.shared.presentScreen(in: self.navigationController!, with: data)
-        
         //needDownloadOnMainAppeare = false
         let sideBarPinch = UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:)))
         mainContentView.addGestureRecognizer(sideBarPinch)
