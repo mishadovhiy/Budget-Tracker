@@ -41,7 +41,7 @@ class SettingsVC: SuperViewController {
         super.viewDidLoad()
 
 
-        title = "Settings"
+        title = "Settings".localize
         tableView.delegate = self
         tableView.dataSource = self
         loadData()
@@ -119,6 +119,11 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource {
             if let standartData = tableData[indexPath.section].cells[indexPath.row] as? StandartCell {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "StandartSettingsCell", for: indexPath) as! StandartSettingsCell
                 cell.nameLabel.text = standartData.title + (standartData.description == "" ? "" : (": " + standartData.description))
+                cell.colorView.isHidden = standartData.colorNamed == "" ? true : false
+                if standartData.colorNamed != "" {
+                    cell.colorView.backgroundColor = colorNamed(standartData.colorNamed)
+                }
+                
                 return cell
             } else {
                 return UITableViewCell()
@@ -148,7 +153,9 @@ extension SettingsVC {
 
     struct StandartCell {
         let title: String
+        
         var description:String = ""
+        var colorNamed:String = ""
         let action: () -> ()
     }
     
@@ -182,7 +189,7 @@ extension SettingsVC {
         }
         
         return [
-            StandartCell(title: "Primary color", description: AppData.linkColor, action: colorAction),
+            StandartCell(title: "Primary color", description: "", colorNamed:  AppData.linkColor, action: colorAction),
             StandartCell(title: "Language", action: languageAction)
         ]
     }
@@ -281,6 +288,7 @@ extension SettingsVC {
 
 class StandartSettingsCell: UITableViewCell {
     
+    @IBOutlet weak var colorView: View!
     @IBOutlet weak var nameLabel: UILabel!
 }
 

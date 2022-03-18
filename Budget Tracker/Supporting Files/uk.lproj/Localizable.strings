@@ -1,0 +1,15 @@
+/* 
+  Localizable.strings
+  Budget Tracker
+
+  Created by Mikhailo Dovhyi on 18.03.2022.
+  Copyright © 2022 Misha Dovhiy. All rights reserved.
+*/
+
+"Categories" = "Категорії";
+"All Time" = "Весь час";
+"Today" = "Сьогодні";
+"Yesterday" = "Вчора";
+"Custom" = "Обрати";
+"Settings" = "Налаштування";
+

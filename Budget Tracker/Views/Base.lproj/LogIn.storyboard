@@ -707,33 +707,49 @@
                                             <outlet property="valueSwitcher" destination="SFb-cG-rRM" id="Umc-q9-bxs"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="StandartSettingsCell" id="CwN-ET-zjM" customClass="StandartSettingsCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="20" y="99.5" width="374" height="42.5"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="StandartSettingsCell" rowHeight="50" id="CwN-ET-zjM" customClass="StandartSettingsCell" customModule="Budget_Tracker" customModuleProvider="target">
+                                        <rect key="frame" x="20" y="99.5" width="374" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="CwN-ET-zjM" id="9mF-VD-4Ef">
-                                            <rect key="frame" x="0.0" y="0.0" width="345.5" height="42.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="345.5" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TEQ-1x-qYI">
-                                                    <rect key="frame" x="15" y="10" width="320.5" height="22.5"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22" id="Pga-Bu-sBz"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                    <color key="textColor" name="CategoryColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
+                                                <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ZrY-Tj-jSV">
+                                                    <rect key="frame" x="15" y="10" width="327.5" height="30"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TEQ-1x-qYI">
+                                                            <rect key="frame" x="0.0" y="6" width="311.5" height="18"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                            <color key="textColor" name="CategoryColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n8k-go-PEX" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
+                                                            <rect key="frame" x="311.5" y="7" width="16" height="16"/>
+                                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="16" id="oF2-wU-SFF"/>
+                                                                <constraint firstAttribute="width" secondItem="n8k-go-PEX" secondAttribute="height" multiplier="1:1" id="zz3-iv-8Os"/>
+                                                            </constraints>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                    <real key="value" value="8"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </view>
+                                                    </subviews>
+                                                </stackView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
-                                                <constraint firstItem="TEQ-1x-qYI" firstAttribute="leading" secondItem="9mF-VD-4Ef" secondAttribute="leading" constant="15" id="1P0-DF-SJ7"/>
-                                                <constraint firstItem="TEQ-1x-qYI" firstAttribute="top" secondItem="9mF-VD-4Ef" secondAttribute="top" constant="10" id="GdW-zW-bx2"/>
-                                                <constraint firstAttribute="bottom" secondItem="TEQ-1x-qYI" secondAttribute="bottom" constant="10" id="VMx-qN-A4L"/>
-                                                <constraint firstAttribute="trailing" secondItem="TEQ-1x-qYI" secondAttribute="trailing" constant="10" id="Vii-oX-UTA"/>
+                                                <constraint firstItem="ZrY-Tj-jSV" firstAttribute="leading" secondItem="9mF-VD-4Ef" secondAttribute="leading" constant="15" id="Dnb-CN-7kk"/>
+                                                <constraint firstAttribute="trailing" secondItem="ZrY-Tj-jSV" secondAttribute="trailing" constant="3" id="TJm-5s-mEg"/>
+                                                <constraint firstAttribute="bottom" secondItem="ZrY-Tj-jSV" secondAttribute="bottom" constant="10" id="j2Z-lb-4Ge"/>
+                                                <constraint firstItem="ZrY-Tj-jSV" firstAttribute="top" secondItem="9mF-VD-4Ef" secondAttribute="top" constant="10" id="upo-mw-T52"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" name="SecondaryBacroundColor"/>
                                         <connections>
+                                            <outlet property="colorView" destination="n8k-go-PEX" id="RJs-ok-gou"/>
                                             <outlet property="nameLabel" destination="TEQ-1x-qYI" id="Mio-Ac-De9"/>
                                         </connections>
                                     </tableViewCell>

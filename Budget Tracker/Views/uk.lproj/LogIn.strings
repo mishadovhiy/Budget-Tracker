@@ -1,0 +1,162 @@
+
+/* Class = "UIButton"; normalTitle = "Buy Pro"; ObjectID = "0eE-EE-uOy"; */
+"0eE-EE-uOy.normalTitle" = "Buy Pro";
+
+/* Class = "UILabel"; text = "- - - -"; ObjectID = "3Sp-Ie-glJ"; */
+"3Sp-Ie-glJ.text" = "- - - -";
+
+/* Class = "UILabel"; text = "Email:"; ObjectID = "6jg-eq-c8e"; */
+"6jg-eq-c8e.text" = "Email:";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "7Iu-fg-deN"; */
+"7Iu-fg-deN.text" = "Label";
+
+/* Class = "UILabel"; text = "-"; ObjectID = "7bS-jl-yHi"; */
+"7bS-jl-yHi.text" = "-";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "A1I-BD-jUz"; */
+"A1I-BD-jUz.text" = "Label";
+
+/* Class = "UILabel"; text = "User:"; ObjectID = "ALJ-1L-lgb"; */
+"ALJ-1L-lgb.text" = "User:";
+
+/* Class = "UIButton"; normalTitle = "Delete (0)"; ObjectID = "ARD-k9-eAv"; */
+"ARD-k9-eAv.normalTitle" = "Delete (0)";
+
+/* Class = "UITextField"; placeholder = "Choose a nickname"; ObjectID = "AgY-cd-By3"; */
+"AgY-cd-By3.placeholder" = "Choose a nickname";
+
+/* Class = "UIButton"; normalTitle = "Create"; ObjectID = "BR7-eH-6Pc"; */
+"BR7-eH-6Pc.normalTitle" = "Create";
+
+/* Class = "UILabel"; text = "Log in"; ObjectID = "D9o-OF-iWv"; */
+"D9o-OF-iWv.text" = "Log in";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "E0Y-K5-BWC"; */
+"E0Y-K5-BWC.text" = "Label";
+
+/* Class = "UITextField"; placeholder = "code"; ObjectID = "Fpy-Gr-wBy"; */
+"Fpy-Gr-wBy.placeholder" = "code";
+
+/* Class = "UIButton"; normalTitle = "Free Trial"; ObjectID = "GX0-5m-kFZ"; */
+"GX0-5m-kFZ.normalTitle" = "Free Trial";
+
+/* Class = "UILabel"; text = "Don't have an cccount?"; ObjectID = "HIX-a1-kyd"; */
+"HIX-a1-kyd.text" = "Don't have an cccount?";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "HU8-tg-hem"; */
+"HU8-tg-hem.text" = "Label";
+
+/* Class = "UIButton"; configuration.title = "Next"; ObjectID = "HpS-9h-MF7"; */
+"HpS-9h-MF7.configuration.title" = "Next";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "HpS-9h-MF7"; */
+"HpS-9h-MF7.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "IaJ-EK-c3u"; */
+"IaJ-EK-c3u.text" = "Label";
+
+/* Class = "UILabel"; text = "We have detected repeated data from your previous account"; ObjectID = "Jcp-MI-zxB"; */
+"Jcp-MI-zxB.text" = "We have detected repeated data from your previous account";
+
+/* Class = "UILabel"; text = "Purchased"; ObjectID = "KM9-E0-LBj"; */
+"KM9-E0-LBj.text" = "Purchased";
+
+/* Class = "UILabel"; text = "Data from "; ObjectID = "KaW-sA-9Pa"; */
+"KaW-sA-9Pa.text" = "Data from ";
+
+/* Class = "UIButton"; normalTitle = "Select"; ObjectID = "Le2-9Q-dQ1"; */
+"Le2-9Q-dQ1.normalTitle" = "Select";
+
+/* Class = "UILabel"; text = "Enter code"; ObjectID = "RLQ-PF-Scy"; */
+"RLQ-PF-Scy.text" = "Enter code";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "S0o-2y-TVL"; */
+"S0o-2y-TVL.text" = "Label";
+
+/* Class = "UITextField"; placeholder = "Nickname"; ObjectID = "SIz-Iw-uxg"; */
+"SIz-Iw-uxg.placeholder" = "Nickname";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "TEQ-1x-qYI"; */
+"TEQ-1x-qYI.text" = "Label";
+
+/* Class = "UIButton"; normalTitle = "Delete all"; ObjectID = "Taf-h3-CWy"; */
+"Taf-h3-CWy.normalTitle" = "Delete all";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "Teh-aO-0cJ"; */
+"Teh-aO-0cJ.placeholder" = "Password";
+
+/* Class = "UIButton"; normalTitle = "Create"; ObjectID = "V5P-sG-aNp"; */
+"V5P-sG-aNp.normalTitle" = "Create";
+
+/* Class = "UILabel"; text = "s"; ObjectID = "VGc-eW-qFz"; */
+"VGc-eW-qFz.text" = "s";
+
+/* Class = "UILabel"; text = "Data from"; ObjectID = "WUI-Th-R0b"; */
+"WUI-Th-R0b.text" = "Data from";
+
+/* Class = "UILabel"; text = "Enter code we have send you on email"; ObjectID = "XwQ-Ks-MsB"; */
+"XwQ-Ks-MsB.text" = "Enter code we have send you on email";
+
+/* Class = "UILabel"; text = "Repeated data"; ObjectID = "Zoh-3z-KT0"; */
+"Zoh-3z-KT0.text" = "Repeated data";
+
+/* Class = "UIButton"; normalTitle = "Save all"; ObjectID = "bri-ih-GV2"; */
+"bri-ih-GV2.normalTitle" = "Save all";
+
+/* Class = "UILabel"; text = "-"; ObjectID = "cYD-ag-n0T"; */
+"cYD-ag-n0T.text" = "-";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "dSu-JP-Rhd"; */
+"dSu-JP-Rhd.text" = "Label";
+
+/* Class = "UILabel"; text = "Create an account"; ObjectID = "gLA-7i-pp5"; */
+"gLA-7i-pp5.text" = "Create an account";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "gXP-Ku-Aoq"; */
+"gXP-Ku-Aoq.text" = "Label";
+
+/* Class = "UITextField"; placeholder = "Enter your email"; ObjectID = "gag-gr-8tT"; */
+"gag-gr-8tT.placeholder" = "Enter your email";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "gzz-Jm-AtH"; */
+"gzz-Jm-AtH.text" = "Label";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "hYQ-W7-a2h"; */
+"hYQ-W7-a2h.text" = "Label";
+
+/* Class = "UILabel"; text = "PRO"; ObjectID = "jZB-nM-epq"; */
+"jZB-nM-epq.text" = "PRO";
+
+/* Class = "UINavigationItem"; title = "Support message"; ObjectID = "kQx-Kz-bzJ"; */
+"kQx-Kz-bzJ.title" = "Support message";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "kSe-Uz-gDg"; */
+"kSe-Uz-gDg.text" = "Label";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "l8S-BL-OMs"; */
+"l8S-BL-OMs.text" = "Label";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "l9y-tI-tRR"; */
+"l9y-tI-tRR.text" = "Label";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "lhb-j5-aDz"; */
+"lhb-j5-aDz.text" = "Label";
+
+/* Class = "UILabel"; text = "Price"; ObjectID = "mGf-Yr-mD9"; */
+"mGf-Yr-mD9.text" = "Price";
+
+/* Class = "UINavigationItem"; title = "Forgot password"; ObjectID = "nHH-wE-NmQ"; */
+"nHH-wE-NmQ.title" = "Forgot password";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "npv-KG-uXv"; */
+"npv-KG-uXv.placeholder" = "Password";
+
+/* Class = "UIButton"; normalTitle = "Restore purchase"; ObjectID = "oVB-D9-t7E"; */
+"oVB-D9-t7E.normalTitle" = "Restore purchase";
+
+/* Class = "UITextField"; placeholder = "Confirm password"; ObjectID = "pu2-Hv-iJ4"; */
+"pu2-Hv-iJ4.placeholder" = "Confirm password";
+
+/* Class = "UIButton"; normalTitle = "Log in"; ObjectID = "z9u-BA-sZD"; */
+"z9u-BA-sZD.normalTitle" = "Log in";

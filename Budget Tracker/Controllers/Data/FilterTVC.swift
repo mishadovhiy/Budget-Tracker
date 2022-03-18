@@ -13,7 +13,7 @@ class FilterTVC: SuperViewController {
     var months: [String] = []
     var years: [String] = []
     var sectionsCount = 3
-    var buttonTitle = ["All Time", "This Month", "Today", "Yesterday", "Custom"]
+    var buttonTitle = ["All Time".localize, NSLocalizedString("This Month", comment: ""), "Today".localize, "Yesterday".localize, "Custom".localize]
     
     @IBOutlet weak var tableview: UITableView!
     
