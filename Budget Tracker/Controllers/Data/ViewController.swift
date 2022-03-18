@@ -103,7 +103,7 @@ class ViewController: SuperViewController {
                 if self.mainTableView.visibleCells.count > 1 {
                     self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
                 }
-                self.filterText = "Filter: \(selectedPeroud)"
+                self.filterText = "Filter".localize + ": " + selectedPeroud
                 self.calculationSView.alpha = 0
                 UIView.animate(withDuration: 0.8) {
                     self.calculationSView.alpha = 1
@@ -205,7 +205,7 @@ class ViewController: SuperViewController {
     }
 
     
-    func downloadFromDB(showError: Bool = false, title: String = "Downloading") {
+    func downloadFromDB(showError: Bool = false, title: String = "Downloading".localize) {
         self.editingTransaction = nil
         self.sendError = false
         _categoriesHolder.removeAll()
@@ -327,7 +327,7 @@ class ViewController: SuperViewController {
         if !subviewsLoaded {
             
             subviewsLoaded = true
-            toggleNoData(show: true, text: "Loading", fromTop: true, appeareAnimation: false, addButtonHidden: true)
+            toggleNoData(show: true, text: "Loading".localize, fromTop: true, appeareAnimation: false, addButtonHidden: true)
             self.unsendedDataLabel.superview?.superview?.isHidden = true
                         
             self.dataFromValueLabel.superview?.superview?.isHidden = true
@@ -353,7 +353,7 @@ class ViewController: SuperViewController {
             if #available(iOS 13.0, *) {
             } else {
                 self.addTransitionButton.setTitle("+", for: .normal)
-                self.menuButton.setTitle("menu", for: .normal)
+                self.menuButton.setTitle("⌘", for: .normal)
             }
             self.view.addSubview(self.filterHelperView)
             self.shadow(for: self.filterHelperView)
@@ -396,7 +396,7 @@ class ViewController: SuperViewController {
                 self.filter()
                 UserDefaults.standard.setValue(false, forKey: "firstLaunch")
                 DispatchQueue.main.async {
-                    self.newMessage.show(title: "Wellcome to Budget Tracker", description: "We have added demo data", type: .standart)
+                    self.newMessage.show(title: "Wellcome to Budget Tracker".localize, description: "Demo data has been created".localize, type: .standart)
                 
                     
                 }
@@ -451,7 +451,7 @@ class ViewController: SuperViewController {
     }
     
     var firstLoaded = false
-    func toggleNoData(show: Bool, text: String = "No Transactions", fromTop: Bool = false, appeareAnimation: Bool = true, addButtonHidden: Bool = false) {
+    func toggleNoData(show: Bool, text: String = "No Transactions".localize, fromTop: Bool = false, appeareAnimation: Bool = true, addButtonHidden: Bool = false) {
         
         DispatchQueue.main.async {
             
@@ -511,7 +511,7 @@ class ViewController: SuperViewController {
         
         DispatchQueue.main.async {
             self.unsendedDataLabel.text = "\(unsendedCount)"
-            self.dataFromTitleLabel.text = "Local data:"//"Data from \(prevName == "" ? "previous account" : prevName):"
+            self.dataFromTitleLabel.text = "Local data".localize + ":"//"Data from \(prevName == "" ? "previous account" : prevName):"
             self.dataFromValueLabel.text = "\(localCount)"
             if reloadAndAnimate {
                 UIView.animate(withDuration: noData ? 0.0 : 0.35) {
@@ -568,9 +568,9 @@ class ViewController: SuperViewController {
         print("filterCalled")
         dataTaskCount = (0,0)
         animateCellWillAppear = true
-        selectedPeroud = selectedPeroud != "" ? selectedPeroud : "This Month"
+        selectedPeroud = selectedPeroud != "" ? selectedPeroud : "This Month".localize
         DispatchQueue.main.async {
-            self.filterText = "Filtering"
+            self.filterText = "Filtering".localize
         }
         if !appData.filter.showAll {
             allDaysBetween()
@@ -659,7 +659,7 @@ class ViewController: SuperViewController {
                 UserDefaults.standard.setValue(false, forKey: "checkTrialDate")
                 if (UserDefaults.standard.value(forKey: "trialPressed") as? Bool ?? false) {
                     DispatchQueue.main.async {
-                        self.newMessage.show(title: "Pro trial is over", type: .standart)
+                        self.newMessage.show(title: "Pro trial is over".localize, type: .standart)
                     }
                 }
                 
@@ -669,7 +669,7 @@ class ViewController: SuperViewController {
             UserDefaults.standard.setValue(false, forKey: "checkTrialDate")
             if (UserDefaults.standard.value(forKey: "trialPressed") as? Bool ?? false) {
                 DispatchQueue.main.async {
-                    self.newMessage.show(title: "Pro trial is over", type: .standart)
+                    self.newMessage.show(title: "Pro trial is over".localize, type: .standart)
                 }
             }
             
@@ -829,7 +829,7 @@ class ViewController: SuperViewController {
     }
     
     
-    var _filterText: String = "Filter"
+    var _filterText: String = "Filter".localize
     var filterText: String{
         get {
             return _filterText
@@ -843,12 +843,12 @@ class ViewController: SuperViewController {
             for i in 0..<self.timers.count {
                 self.timers[i].invalidate()
             }
-            if newValue != "Filter: \(selectedPeroud)" {
+            if newValue != "Filter".localize + ": \(selectedPeroud)" {
                 let timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { (timer) in
-                    if self._filterText == "Filter: \(selectedPeroud)" {
+                    if self._filterText == ("Filter".localize + ": \(selectedPeroud)") {
                         timer.invalidate()
                         DispatchQueue.main.async {
-                            self.filterTextLabel.text = "Filter: \(selectedPeroud)"
+                            self.filterTextLabel.text = "Filter".localize + ": \(selectedPeroud)"
                         }
                         for i in 0..<self.timers.count {
                             self.timers[i].invalidate()
@@ -961,7 +961,7 @@ class ViewController: SuperViewController {
                 sendSavedData = false
                 //show message error, try again later
                 DispatchQueue.main.async {
-                    self.newMessage.show(title:"Error sending data", description: "Try again later", type: .error)
+                    self.newMessage.show(title:"Error sending data".localize, description: "Try again later".localize, type: .error)
                 }
             }
             self.filter()
@@ -971,9 +971,9 @@ class ViewController: SuperViewController {
             if let first = unsended.first {
                 startedSendingUnsended = true
                 updateDataLabels(reloadAndAnimate: false)
-                if self._filterText != "Sending" {
+                if self._filterText != "Sending".localize {
                     DispatchQueue.main.async {
-                        self.filterText = "Sending"
+                        self.filterText = "Sending".localize
                     }
                 }
                 
@@ -1068,7 +1068,7 @@ class ViewController: SuperViewController {
                 if sendSavedData {
                     //update labels
                     updateDataLabels(reloadAndAnimate: false)
-                    if self._filterText != "Sending" {
+                    if self._filterText != "Sending".localize {
                         DispatchQueue.main.async {
                             self.filterText = "Sending"
                         }
@@ -1148,48 +1148,7 @@ class ViewController: SuperViewController {
         appData.unsendedData = resultt
     }
     var added = false
-    func testTransactions() {
-        if added {
-            return
-        }
-        let transactionsth = [//transactionNew
-            TransactionsStruct(value: "-200", categoryID: "1", date: "04.05.2022", comment: "harcoded"),
-            TransactionsStruct(value: "10", categoryID: "4", date: "04.05.2022", comment: "harcoded"),
-            TransactionsStruct(value: "-200", categoryID: "1", date: "04.05.2022", comment: "harcoded"),
-            TransactionsStruct(value: "30", categoryID: "4", date: "04.05.2022", comment: "harcoded"),
-            TransactionsStruct(value: "300", categoryID: "2", date: "04.05.2022", comment: "harcoded"),
-            TransactionsStruct(value: "-4", categoryID: "1", date: "04.05.2022", comment: "harcoded"),
-            TransactionsStruct(value: "-890", categoryID: "3", date: "04.05.2022", comment: "harcoded"),
-            TransactionsStruct(value: "-290", categoryID: "1", date: "04.05.2022", comment: "harcoded"),
-            TransactionsStruct(value: "160", categoryID: "2", date: "04.05.2022", comment: "harcoded"),
-            TransactionsStruct(value: "-20", categoryID: "3", date: "04.05.2022", comment: "harcoded"),
-            TransactionsStruct(value: "-870", categoryID: "1", date: "04.05.2022", comment: "harcoded"),
-            TransactionsStruct(value: "-254", categoryID: "3", date: "04.05.2022", comment: "harcoded"),
-            TransactionsStruct(value: "-299", categoryID: "1", date: "04.05.2022", comment: "harcoded"),
-            TransactionsStruct(value: "-277", categoryID: "1", date: "04.05.2022", comment: "harcoded")
-        ]
-        
-        let categories = [//categoryNew
-            NewCategories(id: 1, name: "еда_test", icon: "", color: "", purpose: .expense),
-            NewCategories(id: 2, name: "работка_test", icon: "", color: "", purpose: .income),
-            NewCategories(id: 3, name: "проезд_test", icon: "", color: "", purpose: .expense),
-            NewCategories(id: 4, name: "шла_test", icon: "", color: "", purpose: .debt),
-        ]
-        var newUnsended:[[String : [String : Any]]] = []
-        for i in 0..<categories.count {
-            let newCategory = db.categoryToDict(categories[i])
-            newUnsended.append(["categoryNew":newCategory])
-        }
-        for i in 0..<transactionsth.count {
-            let newCategory = db.transactionToDict(transactionsth[i])
-            newUnsended.append(["transactionNew":newCategory])
-        }
-        appData.unsendedData = newUnsended
-        added = true
-        filter()
-    }
-    
-    
+
     
     var allData: [[TransactionsStruct]] = []
     
@@ -1524,7 +1483,7 @@ class ViewController: SuperViewController {
             appData.password = ""
             vc.forceLoggedOutUser = forceLoggedOutUser
             
-            vc.messagesFromOtherScreen = "Your password has been changed"
+            vc.messagesFromOtherScreen = "Your password has been changed".localize
         default: return
         }
  
@@ -1548,7 +1507,7 @@ class ViewController: SuperViewController {
             }
             if needFullReload {
                 needFullReload = false
-                self.toggleNoData(show: true, text: "Loading", fromTop: true, appeareAnimation: false, addButtonHidden: true)
+                self.toggleNoData(show: true, text: "Loading".localize, fromTop: true, appeareAnimation: false, addButtonHidden: true)
             }
             self.downloadFromDB()
             
@@ -1758,7 +1717,7 @@ class ViewController: SuperViewController {
                 self.filterTextLabel.alpha = 0.2
             }
         }
-        if self._filterText == "Filter: \(selectedPeroud)" {
+        if self._filterText == "Filter".localize + ": \(selectedPeroud)" {
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: "toFiterVC", sender: self)
             }
@@ -1874,13 +1833,13 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
     
         if indexPath.section != 0 {
-            let editeAction = UIContextualAction(style: .destructive, title: "Edit") {  (contextualAction, view, boolValue) in
+            let editeAction = UIContextualAction(style: .destructive, title: "Edit".localize) {  (contextualAction, view, boolValue) in
                 self.editingTransaction = self.newTableData[indexPath.section - 1].transactions[indexPath.row]
                 DispatchQueue.main.async {
                     self.performSegue(withIdentifier: "goToEditVC", sender: self)
                 }
             }
-            let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
+            let deleteAction = UIContextualAction(style: .destructive, title: "Delete".localize) {  (contextualAction, view, boolValue) in
                 self.tableActionActivityIndicator.startAnimating()
                 self.tableActionActivityIndicator.frame = CGRect(x: view.frame.width / 2 - 5, y: 0, width: 10, height: view.frame.height)
                 view.addSubview(self.tableActionActivityIndicator)
@@ -2067,7 +2026,7 @@ extension ViewController: TransitionVCProtocol {
             }
         } else {
             DispatchQueue.main.async {
-                self.newMessage.show(title:"Error deleting transaction", description: "Try again", type: .error)
+                self.newMessage.show(title:"Error deleting transaction".localize, description: "Try again".localize, type: .error)
             }
         }
     }
@@ -2094,7 +2053,7 @@ extension ViewController: TransitionVCProtocol {
 
         if value != "" && category != "" && date != "" {
             DispatchQueue.main.async {
-                self.filterText = "Adding"
+                self.filterText = "Adding".localize
             }
             //let save = SaveToDB()
             SaveToDB.shared.newTransaction(TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)) { error in

@@ -51,11 +51,11 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         var strTitle:String {
             switch screenType {
             case .localData:
-                return "Local data"
+                return "Local data".localize
             case .categories:
-                return "Categories"
+                return "Categories".localize
             case .debts:
-                return "Debts"
+                return "Debts".localize
             }
         }
         title = strTitle
@@ -233,7 +233,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                     }
                 }
                 self.tableData = [
-                    ScreenDataStruct(title: "", data: [ScreenCategory(category: NewCategories(id: -1, name: "All transaction", icon: "", color: "", purpose: .expense), transactions: allTransactions)], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .expense), transactions: [])),
+                    ScreenDataStruct(title: "", data: [ScreenCategory(category: NewCategories(id: -1, name: "All transaction".localize, icon: "", color: "", purpose: .expense), transactions: allTransactions)], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .expense), transactions: [])),
                     ScreenDataStruct(title: K.expense, data: resultDict[purposeToString(.expense)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .expense), transactions: [])),
                     ScreenDataStruct(title: K.income, data: resultDict[purposeToString(.income)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .income), transactions: [])),
                     ScreenDataStruct(title: purposeToString(.debt), data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .debt), transactions: []))
@@ -417,7 +417,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             UIImpactFeedbackGenerator().impactOccurred()
             let category = self.tableData[section].newCategory
             if category.category.name != "" {
-                self.ai.show(title:"Saving") { _ in
+                self.ai.show(title:"Saving".localize) { _ in
                     DispatchQueue.main.async {
                         if let editTF = self.editingTF {
                             self.editingTF = nil
@@ -751,9 +751,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
      //   let proResult = appData.proVersion || appData.proTrial
         print(appData.proTrial, "appData.proTrialappData.proTrialappData.proTrialappData.proTrial")
         let moreData = [
-            MoreVC.ScreenData(name: "Default", description: "", showAI: true, selected: self.sortOption == .id, action: idAction),
-            MoreVC.ScreenData(name: "Name", description: "", showAI: true, selected: self.sortOption == .name, action: nameAction),
-            MoreVC.ScreenData(name: "Most used", description: "", showAI: true, selected: self.sortOption == .transactionsCount, pro: appData.proVersion || appData.proTrial, action: countAction),
+            MoreVC.ScreenData(name: "Default".localize, description: "", showAI: true, selected: self.sortOption == .id, action: idAction),
+            MoreVC.ScreenData(name: "Name".localize, description: "", showAI: true, selected: self.sortOption == .name, action: nameAction),
+            MoreVC.ScreenData(name: "Most used".localize, description: "", showAI: true, selected: self.sortOption == .transactionsCount, pro: appData.proVersion || appData.proTrial, action: countAction),
         ]
         appData.presentMoreVC(currentVC: self, data: moreData, proIndex: 2)
     }
@@ -1172,18 +1172,18 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
 
-        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete".localize) {  (contextualAction, view, boolValue) in
             //self.tableActionActivityIndicator.startAnimating()
           //  DispatchQueue.main.async {
-                self.ai.show(title: "Deleting") { _ in
+            self.ai.show(title: "Deleting".localize) { _ in
                     self.deteteCategory(at: IndexPath(row: indexPath.row, section: indexPath.section - self.sectionsBeforeData))
                 }
           //  }
         }
-        let localDeleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
+        let localDeleteAction = UIContextualAction(style: .destructive, title: "Delete".localize) {  (contextualAction, view, boolValue) in
             //self.tableActionActivityIndicator.startAnimating()
           //  DispatchQueue.main.async {
-                self.ai.show(title: "Deleting") { _ in
+            self.ai.show(title: "Deleting".localize) { _ in
                     let id = self.tableData[indexPath.section - self.sectionsBeforeData].data[indexPath.row].category.id
                     self.db.deleteCategory(id: "\(id)", local: true)
                     self.loadData()
@@ -1192,7 +1192,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             
         }
         
-        let editAction = UIContextualAction(style: .destructive, title: "Edit") {  (contextualAction, view, boolValue) in
+        let editAction = UIContextualAction(style: .destructive, title: "Edit".localize) {  (contextualAction, view, boolValue) in
             //self.tableActionActivityIndicator.startAnimating()
             self.tableData[indexPath.section - self.sectionsBeforeData].data[indexPath.row].editing = self.tableData[indexPath.section - self.sectionsBeforeData].data[indexPath.row].category
             DispatchQueue.main.async {

@@ -294,7 +294,7 @@ class LoginViewController: SuperViewController {
         updateUI()
 
         DispatchQueue.main.async {
-            self.title = appData.username == "" ? "Sing In" : appData.username
+            self.title = appData.username == "" ? "Sign In".localize : appData.username
         }
         
         
@@ -767,7 +767,7 @@ class LoginViewController: SuperViewController {
 
     func showAlert(title:String? = nil,text:String? = nil, error: Bool, goToLogin: Bool = false) {
         
-        let resultTitle = title == nil ? (error ? "Error" : "Succsess!") : title!
+        let resultTitle = title == nil ? (error ? "Error".localize : "Success".localize) : title!
         
         let okButton = IndicatorView.button(title: "OK", style: .standart, close: true) { _ in
             if goToLogin {
@@ -823,7 +823,7 @@ class LoginViewController: SuperViewController {
                 if #available(iOS 13.0, *) {
                     
                 } else {
-                    self.moreButton.setTitle("more", for: .normal)
+                    self.moreButton.setTitle("● ● ●", for: .normal)
                 }
                 
                 let tfs = Array(self.textfields)
@@ -884,7 +884,7 @@ class LoginViewController: SuperViewController {
             UIImpactFeedbackGenerator().impactOccurred()
         }
 
-        self.ai.show(title: "Logging in") { (_) in
+        self.ai.show(title: "Logging in".localize) { (_) in
             self.hideKeyboard()
             LoadFromDB.shared.Users { (loadedData, Error) in
                 if !Error {
@@ -903,7 +903,7 @@ class LoginViewController: SuperViewController {
                         } else {
                             self.actionButtonsEnabled = true
                             DispatchQueue.main.async {
-                                self.newMessage.show(title: "All fields are required", type: .error)
+                                self.newMessage.show(title: "All fields are required".localize, type: .error)
                                 self.ai.hideIndicator(fast: true) { (_) in
                                     
                                 }
@@ -917,7 +917,7 @@ class LoginViewController: SuperViewController {
                     print("error!!!")
                     self.actionButtonsEnabled = true
                     DispatchQueue.main.async {
-                        self.showAlert(title: "Internet error", text: "Try again later", error: true, goToLogin: true)
+                        self.showAlert(title: "Internet error".localize, text: "Try again later", error: true, goToLogin: true)
                     }
                 }
             }
@@ -943,8 +943,9 @@ class LoginViewController: SuperViewController {
                     print(psswordFromDB, "psswordFromDBpsswordFromDBpsswordFromDBpsswordFromDB")
                     if password != psswordFromDB {
                         self.actionButtonsEnabled = true
+                        let messageTitle = "Wrong".localize + " " + "password".localize
                         DispatchQueue.main.async {
-                            self.newMessage.show(title: "Wrong password!", type: .error)
+                            self.newMessage.show(title: messageTitle, type: .error)
                             self.ai.fastHide { _ in
                                 
                             }
@@ -974,7 +975,7 @@ class LoginViewController: SuperViewController {
                             }
                             
                             if forceLoggedOutUser == "" {
-                                appData.fromLoginVCMessage = "Wellcome, \(appData.username)"
+                                appData.fromLoginVCMessage = "Wellcome".localize + ", \(appData.username)"
                             }
                             
                         }
@@ -1007,7 +1008,7 @@ class LoginViewController: SuperViewController {
             self.actionButtonsEnabled = true
             DispatchQueue.main.async {
                 DispatchQueue.main.async {
-                    self.newMessage.show(title: "User not found", type: .error)
+                    self.newMessage.show(title: "User not found".localize, type: .error)
                     self.ai.hideIndicator(fast: true) { (_) in
                         
                     }
@@ -1029,7 +1030,7 @@ class LoginViewController: SuperViewController {
         }
 
 
-        self.ai.show(title: "Creating an account") { (_) in
+        self.ai.show(title: "Creating".localize) { (_) in
             self.hideKeyboard()
             LoadFromDB.shared.Users { (loadedData, Error) in
                 if !Error {
@@ -1037,7 +1038,7 @@ class LoginViewController: SuperViewController {
                 } else {
                     self.actionButtonsEnabled = true
                     DispatchQueue.main.async {
-                        self.showAlert(title: "Internet error", text: "Try again later", error: true, goToLogin: true)
+                        self.showAlert(title: "Internet error".localize, text: "Try again later".localize, error: true, goToLogin: true)
                     }
                 }
             }
@@ -1066,7 +1067,7 @@ class LoginViewController: SuperViewController {
                                 self.emailLabel.becomeFirstResponder()
                             }
                             DispatchQueue.main.async {
-                                self.ai.completeWithActions(buttons: (firstButton, nil), title: "Enter valid email address", descriptionText: "With correct email address you could restore your password in the future", type: .error)
+                                self.ai.completeWithActions(buttons: (firstButton, nil), title: "Enter valid email address".localize, descriptionText: "With correct email address you could restore your password in the future".localize, type: .error)
                             }
 
                         } else {
@@ -1075,7 +1076,7 @@ class LoginViewController: SuperViewController {
                             SaveToDB.shared.Users(toDataString: toDataString) { (error) in
                                 if error {
                                     DispatchQueue.main.async {
-                                        self.showAlert(title: "Internet error", text: "Try again later", error: true, goToLogin: true)
+                                        self.showAlert(title: "Internet error".localize, text: "Try again later".localize, error: true, goToLogin: true)
                                     }
                                 } else {
                                     let prevUsere = appData.username
@@ -1090,7 +1091,7 @@ class LoginViewController: SuperViewController {
                                         db.localCategories = db.categories
                                     }
                                     if self.forceLoggedOutUser == "" {
-                                        appData.fromLoginVCMessage = "Wellcome, \(appData.username)"
+                                        appData.fromLoginVCMessage = "Wellcome".localize + ", \(appData.username)"
                                     }
                                     
                                     self.userChanged()
@@ -1121,18 +1122,18 @@ class LoginViewController: SuperViewController {
                         }
                         if let emailLimit = emailLimitOp {
                             if emailLimit == .totalError {
-                                self.newMessage.show(title: "You have reached the maximum amount of usernames", type: .error)
+                                self.newMessage.show(title: "You have reached the maximum amount of usernames".localize, type: .error)
                             } else {
                                 appData.presentBuyProVC(currentVC: self, selectedProduct: 2)
                                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                                    self.newMessage.show(title: "You have reached the maximum amount of usernames", description: "Update to Pro to create new username", type: .standart)
+                                    self.newMessage.show(title: "You have reached the maximum amount of usernames".localize, description: "Update to Pro".localize + " " + "to create new username".localize, type: .standart)
                                 }
                             }
                             
                         } else {
                             self.actionButtonsEnabled = true
                             DispatchQueue.main.async {
-                                self.newMessage.show(title: "Username '\(name)' already exists", type: .error)
+                                self.newMessage.show(title: "Username".localize + " '\(name)' " + "already exists".localize, type: .error)
                             }
                         }
                         
@@ -1144,7 +1145,7 @@ class LoginViewController: SuperViewController {
                     self.showWrongFields()
 
                   //  DispatchQueue.main.async {
-                        self.newMessage.show(title: "All fields are required", type: .error)
+                    self.newMessage.show(title: "All fields are required".localize, type: .error)
                         self.ai.hideIndicator(fast: true) { (_) in
                             
                         }
@@ -1154,7 +1155,7 @@ class LoginViewController: SuperViewController {
             } else {
                 self.actionButtonsEnabled = true
          //       DispatchQueue.main.async {
-                    self.newMessage.show(title: "Passwords not match", type: .error)
+                self.newMessage.show(title: "Passwords not match".localize, type: .error)
                     self.ai.hideIndicator(fast: true) { (_) in
                         
                     }
@@ -1286,8 +1287,8 @@ class LoginViewController: SuperViewController {
                 UIView.animate(withDuration: thirdAnimation) {
                     self.logIn.alpha = 1
                 }
-                self.createOrLogLabel.text = "Don't have an account?"
-                self.createOrLogButton.setTitle("Create", for: .normal)
+                self.createOrLogLabel.text = "Don't have an account".localize + "?"
+                self.createOrLogButton.setTitle("Create".localize, for: .normal)
             }
             createOrLogButton.tag = 0
             
@@ -1303,8 +1304,8 @@ class LoginViewController: SuperViewController {
                 UIView.animate(withDuration: thirdAnimation) {
                     self.createAcount.alpha = 1
                 }
-                self.createOrLogLabel.text = "Already have an account?"
-                self.createOrLogButton.setTitle("Log in", for: .normal)
+                self.createOrLogLabel.text = "Already have an account".localize + "?"
+                self.createOrLogButton.setTitle("Log in".localize, for: .normal)
             }
             createOrLogButton.tag = 1
         }
@@ -1406,7 +1407,7 @@ class LoginViewController: SuperViewController {
         return [nicknameLabelCreate, emailLabel, passwordLabel, confirmPasswordLabel, nicknameLogLabel, passwordLogLabel]
     }
     var placeHolder: [String] {
-        return ["Create username", "Enter your email", "Create password", "Confirm password", "Username or email", "Password"]
+        return ["Create username".localize, "Enter your email".localize, "Create password".localize, "Confirm password".localize, "Username or email".localize, "Password".localize]
     }
     
     var _enteredEmailUsers: [String] = []
@@ -1480,7 +1481,8 @@ extension LoginViewController: UITextFieldDelegate {
                             self.performSegue(withIdentifier: "toSelectUserVC", sender: self)
                         }
                     } else {
-                        let text = !found ? "Email not found!" : "Wrong password"
+                        let notFound = "Email not found".localize + "!"
+                        let text = !found ? notFound : "Wrong password".localize
                         DispatchQueue.main.async {
                             self.showAlert(title: text, error: true)
                         }
@@ -1518,7 +1520,7 @@ extension LoginViewController: UITextFieldDelegate {
         let labelID = textField.accessibilityIdentifier ?? ""
         let emptyError = {
             DispatchQueue.main.async {
-                self.newMessage.show(title:"All fields are required", type: .error)
+                self.newMessage.show(title:"All fields are required".localize, type: .error)
             }
         }
         if let text = textFieldValuesDict[labelID] {
@@ -1531,7 +1533,7 @@ extension LoginViewController: UITextFieldDelegate {
                         self.createAccountPressed(self.createAccButton!)
                     } else {
                         DispatchQueue.main.async {
-                            self.newMessage.show(title: "Passwords not match", type: .error)
+                            self.newMessage.show(title: "Passwords not match".localize, type: .error)
                         }
                     }
                     goNext = nil
@@ -1553,7 +1555,7 @@ extension LoginViewController: UITextFieldDelegate {
                     if !self.validateEmail(text) {
                         goNext = nil
                         DispatchQueue.main.async {
-                            self.newMessage.show(title: "Enter valid email", type: .error)
+                            self.newMessage.show(title: "Enter valid email".localize, type: .error)
                             return
                         }
                     }
@@ -1621,7 +1623,7 @@ extension LoginViewController {
         _categoriesHolder.removeAll()
 
         DispatchQueue.main.async {
-            self.title = "Sing in"
+            self.title = "Sign In".localize
             self.passwordLabel.text = ""
             self.passwordLogLabel.text = ""
             self.nicknameLogLabel.text = ""

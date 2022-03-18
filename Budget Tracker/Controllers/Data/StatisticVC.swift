@@ -125,7 +125,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
             for (key, value) in resultDict {
                 let transactions = resultDict[key] ?? []
                 
-                let category = db.category(key) ?? (NewCategories(id: -1, name: "Unknown", icon: "", color: "", purpose: .debt))
+                let category = db.category(key) ?? (NewCategories(id: -1, name: "Unknown".localize, icon: "", color: "", purpose: .debt))
                 var value = 0.0
                 for n in 0..<transactions.count {
                     value += (Double(transactions[n].value) ?? 0.0)
@@ -155,7 +155,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
             
 
             DispatchQueue.main.async {
-                self.titleLabel.text = (expenseLabelPressed ? "Expenses" : "Incomes") + " " + "for \(selectedPeroud)"
+                self.titleLabel.text = (expenseLabelPressed ? "Expenses".localize : "Incomes".localize) + " " + "for".localize + " " + selectedPeroud
                 self.totalLabel.text = "\(Int(totalAmount))"
             }
             ifNoData()
@@ -168,7 +168,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
         if allData.count == 0 {
             DispatchQueue.main.async {
                 self.titleLabel.textAlignment = .center
-                self.titleLabel.text = "No " + (self.titleLabel.text ?? "Data")
+                self.titleLabel.text = "No".localize + " " + (self.titleLabel.text ?? "Data".localize)
                 self.titleLabel.alpha = 0.1
             }
         } else {

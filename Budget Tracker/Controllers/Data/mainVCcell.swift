@@ -70,7 +70,7 @@ class mainVCcell: UITableViewCell {
         }
         
         categoryImage.tintColor = colorNamed(category?.color)
-        categoryLabel.text = category?.name ?? "Unknown category"
+        categoryLabel.text = category?.name ?? "Unknown category".localize
         commentLabel.text = data.comment
         commentImage.alpha = data.comment == "" ? 0 : 1
         commentLabel.isHidden = data.comment == "" ? true : false

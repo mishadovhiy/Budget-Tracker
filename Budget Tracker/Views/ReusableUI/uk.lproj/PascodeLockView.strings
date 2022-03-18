@@ -12,7 +12,7 @@
 "Hyx-6S-aVW.normalTitle" = "8";
 
 /* Class = "UILabel"; text = "Enter Passcode"; ObjectID = "Iam-YJ-BVU"; */
-"Iam-YJ-BVU.text" = "Enter Passcode";
+"Iam-YJ-BVU.text" = "Введіть пароль";
 
 /* Class = "UIButton"; normalTitle = "5"; ObjectID = "LfK-gh-lf5"; */
 "LfK-gh-lf5.normalTitle" = "5";

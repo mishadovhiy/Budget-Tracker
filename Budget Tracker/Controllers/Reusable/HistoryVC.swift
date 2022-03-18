@@ -47,8 +47,8 @@ class HistoryVC: SuperViewController {
         }
         
         let moreData = [
-            MoreVC.ScreenData(name: "Add amount to pay", description: "", showAI:false, action: addAmountToPay),
-            MoreVC.ScreenData(name: "Add Due date", description: "", showAI:false, pro: appData.proVersion || appData.proTrial, action: addDueDate),
+            MoreVC.ScreenData(name: "Amount to pay".localize, description: "", showAI:false, action: addAmountToPay),
+            MoreVC.ScreenData(name: "Due date".localize, description: "", showAI:false, pro: appData.proVersion || appData.proTrial, action: addDueDate),
         ]
         appData.presentMoreVC(currentVC: self, data: moreData, proIndex: 0)
     }
@@ -66,7 +66,7 @@ class HistoryVC: SuperViewController {
             if #available(iOS 13.0, *) {
                 
             } else {
-                self.moreButton.setTitle("more", for: .normal)
+                self.moreButton.setTitle("• • •", for: .normal)
             }
         }
         
@@ -182,7 +182,7 @@ class HistoryVC: SuperViewController {
         
         let content = UNMutableNotificationContent()
         content.title = title//"Kirill"
-        content.body = "Due date has expired"
+        content.body = "Due date has expired".localize
         content.sound = UNNotificationSound.default
         content.badge = NSNumber(value: UIApplication.shared.applicationIconBadgeNumber + 1)
         
@@ -209,9 +209,7 @@ class HistoryVC: SuperViewController {
             
             if error != nil {
                 completion(false)
-                print("notif add error")
             } else {
-                print("no errorrs")
                 completion(true)
 
             }
@@ -324,7 +322,7 @@ class HistoryVC: SuperViewController {
             let time = "\(self.makeTwo(n: string?.hour ?? 0)):\(self.makeTwo(n: string?.minute ?? 0)):\(self.makeTwo(n: string?.second ?? 0))"
             vc.selectedFrom = (string == nil) ? "" : stringDate
             vc.datePickerDate = string != nil ? time : ""
-            vc.vcHeaderData = headerData(title: "Create notification", description: "Get notification reminder on specific date")
+            vc.vcHeaderData = headerData(title: "Create".localize + " " + "notification".localize, description: "Get notification reminder on specific date".localize)
             vc.needPressDone = true
             vc.canSelectOnlyOne = true
             //headerData
@@ -433,7 +431,7 @@ class HistoryVC: SuperViewController {
         print(text, "texttexttexttexttext")
         if let _ = Double(text) {
              //   DispatchQueue.main.async {
-                    self.ai.show(title: "Sending") { _ in
+            self.ai.show(title: "Sending".localize) { _ in
                         self.changeAmountToPay(enteredAmount: text) { (_) in
                             self.ai.fastHide { (_) in
                                 self.amountToPayEditing = false
@@ -528,8 +526,8 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             cell.imageBackgroundView.backgroundColor = defaultBackground//expired ? K.Colors.negative : defaultBackground
             cell.imageBackgroundView.layer.masksToBounds = true
             cell.imageBackgroundView.layer.cornerRadius = cell.imageBackgroundView.layer.frame.width / 2
-            cell.alertDateLabel.text = selectedCategory?.dueDate != nil ? date : "Due date"
-            cell.alertMonthLabel.text = selectedCategory?.dueDate != nil ? month : "Unset"
+            cell.alertDateLabel.text = selectedCategory?.dueDate != nil ? date : "Due date".localize
+            cell.alertMonthLabel.text = selectedCategory?.dueDate != nil ? month : "Unset".localize
             cell.timeLabel.backgroundColor = defaultBackground
             cell.timeLabel.layer.cornerRadius = 4
             cell.timeLabel.layer.masksToBounds = true
@@ -797,22 +795,22 @@ extension HistoryVC: CalendarVCProtocol {
                                 self.changeDueDate(fullDate: isoFullString)
                                 if !added {
                                     DispatchQueue.main.async {
-                                        self.newMessage.show(title:"Local notification not added", type: .error)
+                                        self.newMessage.show(title:"Local notification not added".localize, type: .error)
                                     }
                                 }
                             }
                           } else {
                             self.changeDueDate(fullDate: isoFullString)
                             DispatchQueue.main.async {
-                                self.newMessage.show(title:"Local notification not added", type: .error)
+                                self.newMessage.show(title:"Local notification not added".localize, type: .error)
                             }
                         }
                         
                     } else {
-                        print("error convering to comp from iso")
+                        let errorText = "Error".localize + " " + "adding".localize + " " + "Due date".localize
                         self.ai.fastHide { _ in
                             DispatchQueue.main.async {
-                                self.newMessage.show(title:"Error adding Due Date", type: .error)
+                                self.newMessage.show(title: errorText, type: .error)
                             }
                         }
                         
@@ -822,11 +820,10 @@ extension HistoryVC: CalendarVCProtocol {
                 } //self.stringToDateComponent(s: fullDate, dateFormat: K.fullDateFormat)
                 
                 else {
-                    //todo: show message error
-                    print("error creating iso")
+                    let errorText = "Error".localize + " " + "adding".localize + " " + "Due date".localize
                     self.ai.fastHide { _ in
                         DispatchQueue.main.async {
-                            self.newMessage.show(title:"Error adding Due Date", type: .error)
+                            self.newMessage.show(title:errorText, type: .error)
                         }
                     }
                 }
@@ -1052,7 +1049,7 @@ class AmountToPayCell: UITableViewCell {
     @IBAction func changePressed(_ sender: UIButton) {
         if isEdit {
           //  DispatchQueue.main.async {
-                HistoryVC.shared?.ai.show(title: "Sending", completion: { _ in
+            HistoryVC.shared?.ai.show(title: "Sending".localize, completion: { _ in
                     self.isEdit = false
                     self.showEdit(false, hideStack: true) { _ in
                         let text = self.amountToPayTextField.text ?? ""
@@ -1085,7 +1082,7 @@ class AmountToPayCell: UITableViewCell {
         if !isEdit {
             if let funcc = deleteFunc {
             //    DispatchQueue.main.async {
-                HistoryVC.shared?.ai.show(title: "Deleting", completion: { _ in
+                HistoryVC.shared?.ai.show(title: "Deleting".localize, completion: { _ in
                     self.showEdit(new, hideStack: true) { _ in
                             funcc()
                         

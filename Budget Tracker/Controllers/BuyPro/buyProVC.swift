@@ -6,6 +6,12 @@
 //  Copyright © 2021 Misha Dovhiy. All rights reserved.
 //
 
+
+
+// LOCALIZED
+
+
+
 import UIKit
 import StoreKit
 
@@ -148,7 +154,7 @@ class BuyProVC: SuperViewController {
         if segue.identifier == "toSingIn" {
             //messagesFromOtherScreen
             if let vc = segue.destination as? LoginViewController {
-                vc.messagesFromOtherScreen = "Sign in to use pro version across all your devices"
+                vc.messagesFromOtherScreen = "Sign in to use pro version across all your devices".localize
                 vc.fromPro = true
             }
             
@@ -164,14 +170,14 @@ class BuyProVC: SuperViewController {
                  //   let load = LoadFromDB()
                     LoadFromDB.shared.Users { (loadedData, error) in
                         if error {
-                            self.showAlert(title: "Internet error", text: "Try again later", error: true)
+                            self.showAlert(title: "Internet error".localize, text: "Try again later".localize, error: true)
                         } else {
                             let email = appData.emailFromLoadedDataPurch(loadedData) //appData.username
                             for i in 0..<loadedData.count {
                                 if loadedData[i][1] == email {
                                     if loadedData[i][5] != "" {
 
-                                        self.showAlert(title: "Access denied", text: "You have already tried trial version", error: true)
+                                        self.showAlert(title: "Access denied".localize, text: "You have already tried trial version".localize, error: true)
                                         return
                                     } else {
                                         self.userData = (loadedData[i][1], loadedData[i][2], loadedData[i][3], loadedData[i][5])
@@ -186,17 +192,17 @@ class BuyProVC: SuperViewController {
                 
             } else {
                 //trial only if singed in
-                let firstButton = IndicatorView.button(title: "Close", style: .standart, close: true) { _ in
+                let firstButton = IndicatorView.button(title: "Close".localize, style: .standart, close: true) { _ in
                    // self.trialWithoutAcoount()
                 }
-                let secondButton = IndicatorView.button(title: "Sing in", style: .standart, close: true) { _ in
+                let secondButton = IndicatorView.button(title: "Sign in".localize, style: .standart, close: true) { _ in
                     DispatchQueue.main.async {
                         self.performSegue(withIdentifier: "toSingIn", sender: self)
                     }
                 }
                 
                 DispatchQueue.main.async {
-                    self.ai.completeWithActions(buttons: (firstButton, secondButton), title: "Sign in required", type: .standard)
+                    self.ai.completeWithActions(buttons: (firstButton, secondButton), title: "Sign in required".localize, type: .standard)
                 }
             }
         }
@@ -207,7 +213,7 @@ class BuyProVC: SuperViewController {
         appData.proTrial = true
         appData.trialDate = appData.filter.getToday(appData.filter.filterObjects.currentDate)
 
-        showAlert(title: "Success", text: "Trial has been started successfully", error: false, goHome: true)
+        showAlert(title: "Success".localize, text: "Trial has been started successfully".localize, error: false, goHome: true)
      /*   self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "Start"), rightButtonActon: { (_) in
             self.loadingIndicator.hideIndicator(fast: true) { (co) in
                 Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { (_) in
@@ -239,7 +245,7 @@ class BuyProVC: SuperViewController {
                     DispatchQueue.main.async {
                         appData.proTrial = true
                         appData.trialDate = today
-                        self.showAlert(title: "Success", text: "Trial has been started successfully", error: false, goHome: true)
+                        self.showAlert(title: "Success".localize, text: "Trial has been started successfully".localize, error: false, goHome: true)
 
                     }
                 }
@@ -278,7 +284,7 @@ class BuyProVC: SuperViewController {
                             }
                             print("buyPressed")
                             guard let myProduct = self.proVProduct else {
-                                self.showAlert(title: "Error", text: "Permission denied", error: true)
+                                self.showAlert(title: "Error".localize, text: "Permission denied".localize, error: true)
                                 return
                             }
                             if SKPaymentQueue.canMakePayments() {
@@ -288,11 +294,11 @@ class BuyProVC: SuperViewController {
                                 SKPaymentQueue.default().add(payment)
                             } else {
                                 print("go to restrictions")
-                                self.showAlert(title: "Error", text: "Permission denied", error: true)
+                                self.showAlert(title: "Error".localize, text: "Permission denied".localize, error: true)
                             }
                         } else {
 
-                            self.showAlert(title: "Internet error", text: "Try again later", error: true)
+                            self.showAlert(title: "Internet error".localize, text: "Try again later".localize, error: true)
                         }
                         
                     }
@@ -305,7 +311,7 @@ class BuyProVC: SuperViewController {
         } else {
             DispatchQueue.main.async {
                // self.message.showMessage(text: "You have already purchased pro version", type: .succsess, windowHeight: 65)
-                self.newMessage.show(title: "You have already purchased pro version", type: .error)
+                self.newMessage.show(title: "You have already purchased pro version".localize, type: .error)
             }
         }
         
@@ -326,7 +332,7 @@ class BuyProVC: SuperViewController {
             
         } else {
             print("go to restrictions")
-            self.showAlert(title: "Error", text: "Permission denied", error: true)
+            self.showAlert(title: "Error".localize, text: "Permission denied".localize, error: true)
         }
     }
     
@@ -387,11 +393,11 @@ extension BuyProVC: SKPaymentTransactionObserver {
         print(dataStringDelete)
         delete.User(toDataString: dataStringDelete) { (errorr) in
             if errorr {
-                self.showAlert(title: "Internet error", text: "Try again later", error: true)
+                self.showAlert(title: "Internet error".localize, text: "Try again later".localize, error: true)
             } else {
                 SaveToDB.shared.Users(toDataString: dataStringSave ) { (error) in
                     if error {
-                        self.showAlert(title: "Internet error", text: "Try again later", error: true)
+                        self.showAlert(title: "Internet error".localize, text: "Try again later".localize, error: true)
                     } else {
                         self.scsPurchaseShow()
                     }
@@ -405,7 +411,7 @@ extension BuyProVC: SKPaymentTransactionObserver {
     func scsPurchaseShow() {
         DispatchQueue.main.async {
             self.showPurchasedIndicator()
-            self.showAlert(title: "Success", text: "Pro features available across all your devices", error: false, goHome: true)
+            self.showAlert(title: "Success".localize, text: "Pro features available across all your devices".localize, error: false, goHome: true)
         }
     }
     
@@ -435,7 +441,7 @@ extension BuyProVC: SKPaymentTransactionObserver {
                 SKPaymentQueue.default().remove(self)
                 DispatchQueue.main.async {
 
-                    self.showAlert(title: "Payment failed", text: nil, error: true)
+                    self.showAlert(title: "Payment failed".localize, text: nil, error: true)
                 }
                 break
             default:

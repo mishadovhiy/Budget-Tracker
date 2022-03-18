@@ -65,6 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     func applicationWillResignActive(_ application: UIApplication) {
         if UserSettings.Security.password != "" {
             backgroundEnterDate = Date();
+            passcodeLock.present()
         }
     }
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
@@ -88,12 +89,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         if UserSettings.Security.password != "" {
             guard let logoutDate = backgroundEnterDate else{
                 passcodeLock.present()
+                passcodeLock.passcodeLock()
                 return;
             }
             let now = Date()
             let ti = now.timeIntervalSince(logoutDate)
-            if ti > Double(30) {
-                passcodeLock.present()
+            if ti > Double(5) {
+                passcodeLock.passcodeLock()
+            } else {
+                if !passcodeLock.passwordNotEntered {
+                    passcodeLock.hide()
+                }
+                
             }
         }
         

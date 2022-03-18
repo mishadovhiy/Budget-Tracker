@@ -19,8 +19,8 @@ class SettingsVC: SuperViewController {
     
     func loadData() {
         tableData = [
-            TableData(sectionTitle: "Appearence", cells: appearenceSection()),
-            TableData(sectionTitle: "Privacy", cells: privacySection()),
+            TableData(sectionTitle: "Appearance".localize, cells: appearenceSection()),
+            TableData(sectionTitle: "Security".localize, cells: privacySection()),
             TableData(sectionTitle: "", cells: otherSection())
         ]
         DispatchQueue.main.async {
@@ -189,8 +189,8 @@ extension SettingsVC {
         }
         
         return [
-            StandartCell(title: "Primary color", description: "", colorNamed:  AppData.linkColor, action: colorAction),
-            StandartCell(title: "Language", action: languageAction)
+            StandartCell(title: "Primary color".localize, description: "", colorNamed:  AppData.linkColor, action: colorAction),
+            StandartCell(title: "Language".localize, action: languageAction)
         ]
     }
     
@@ -200,7 +200,7 @@ extension SettingsVC {
         let passcodeSwitched:(Bool) -> () = { (newValue) in
             self.passcodeSitched(isON: newValue)
         }
-        let passcodeCell:TriggerCell = TriggerCell(title: "Passcode", isOn: passcodeOn, action: passcodeSwitched)
+        let passcodeCell:TriggerCell = TriggerCell(title: "Passcode".localize, isOn: passcodeOn, action: passcodeSwitched)
         if passcodeOn {
             let changePasscodeAction:() -> () = {
                 self.getUserPasscode {
@@ -210,7 +210,7 @@ extension SettingsVC {
                     }
                 }
             }
-            let changePasscodeCell = StandartCell(title: "Change passcode", action: changePasscodeAction)
+            let changePasscodeCell = StandartCell(title: "Change passcode".localize, action: changePasscodeAction)
             return [passcodeCell, changePasscodeCell]
         } else {
             return [passcodeCell]
@@ -221,7 +221,7 @@ extension SettingsVC {
     
     func otherSection() -> [Any] {
         return [
-            StandartCell(title: "Support", action: {
+            StandartCell(title: "Support".localize, action: {
                 DispatchQueue.main.async {
                     self.performSegue(withIdentifier: "toSupport", sender: self)
                 }
@@ -256,6 +256,7 @@ extension SettingsVC {
     
     func getUserPasscode(completion:@escaping() -> ()) {
         AppDelegate.shared?.passcodeLock.present(passcodeEntered: completion)
+        AppDelegate.shared?.passcodeLock.passcodeLock()
     }
     
     
@@ -264,19 +265,19 @@ extension SettingsVC {
         let nextAction:(String) -> () = { (newValue) in
             let repeateAction:(String) -> () = { (repeatedPascode) in
                 if newValue == repeatedPascode {
-                    AppDelegate.shared?.newMessage.show(title: "Passcode has been setted", type: .succsess)
+                    AppDelegate.shared?.newMessage.show(title: "Passcode has been setted".localize, type: .succsess)
                     self.toEnterValue(data: nil)
                     completion(newValue)
                 } else {
-                    AppDelegate.shared?.newMessage.show(title: "Passcodes don't much", type: .error)
+                    AppDelegate.shared?.newMessage.show(title: "Passcodes don't match".localize, type: .error)
                 }
             }
-            let passcodeSecondEntered = EnterValueVC.EnterValueVCScreenData(taskName: "Create Passcode", title: "Repeate Passcode", placeHolder: "Passcode", nextAction: repeateAction, screenType: .code)
+            let passcodeSecondEntered = EnterValueVC.EnterValueVCScreenData(taskName: "Create".localize + " " + "passcode".localize, title: "Repeat".localize + " " + "passcode".localize, placeHolder: "Password".localize, nextAction: repeateAction, screenType: .code)
             self.toEnterValue(data: passcodeSecondEntered)
             
         }
         
-        let screenData = EnterValueVC.EnterValueVCScreenData(taskName: "Create Passcode", title: "Create Passcode", placeHolder: "Passcode", nextAction: nextAction, screenType: .code)
+        let screenData = EnterValueVC.EnterValueVCScreenData(taskName: "Create".localize + " " + "passcode".localize, title: "Create".localize + " " + "passcode", placeHolder: "Passcode", nextAction: nextAction, screenType: .code)
         toEnterValue(data: screenData)
     }
 }

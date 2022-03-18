@@ -122,7 +122,7 @@ class TransitionVC: SuperViewController {
             if #available(iOS 13.0, *) {
                 
             } else {
-                removeLastButton.setTitle("<", for: .normal)
+                removeLastButton.setTitle("⌫", for: .normal)
             }
             
            // segmentControll.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.bala, for: .normal)
@@ -136,7 +136,8 @@ class TransitionVC: SuperViewController {
             categoryTextField.isUserInteractionEnabled = false
             categoryTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(categoryPressed)))
             self.dateTextField.attributedPlaceholder = NSAttributedString(string: defaultDate, attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
-            self.commentTextField.attributedPlaceholder = NSAttributedString(string: "Short comment", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.textFieldPlaceholder])
+            self.commentTextField.placeholder = "Short comment".localize
+            self.commentTextField.setPlaceHolderColor(K.Colors.textFieldPlaceholder)
             if #available(iOS 13.4, *) {
                 appData.objects.datePicker.preferredDatePickerStyle = .wheels
             }
@@ -405,7 +406,7 @@ class TransitionVC: SuperViewController {
                 selectedCategory = cat
                 placeHolder = cat.name
             } else {
-                let defCat = db.categories.first ?? NewCategories(id: -1, name: "Unknown", icon: "", color: "", purpose: sender.selectedSegmentIndex == 0 ? .expense : .income)
+                let defCat = db.categories.first ?? NewCategories(id: -1, name: "Unknown".localize, icon: "", color: "", purpose: sender.selectedSegmentIndex == 0 ? .expense : .income)
                 selectedCategory = defCat
                 placeHolder = defCat.name
             }

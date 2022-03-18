@@ -51,7 +51,7 @@ class IndicatorView: UIView {
     }
 
     
-    func show(showingAI: Bool = true, title: String? = "Loading", description: String? = nil, appeareAnimation: Bool = false, attention: Bool = false, completion: @escaping (Bool) -> ()) {
+    func show(showingAI: Bool = true, title: String? = "Loading".localize, description: String? = nil, appeareAnimation: Bool = false, attention: Bool = false, completion: @escaping (Bool) -> ()) {
         DispatchQueue.init(label: "\(#function)", qos: .userInteractive).async {
             if !self.hideIndicatorBlockDesibled {
             print("block")
@@ -259,7 +259,7 @@ class IndicatorView: UIView {
     private var rightFunc: (Any?, Bool)?
     private var leftFunc: (Any?, Bool)?
     private var hideIndicatorBlockDesibled = true
-    func completeWithActions(buttons: (button, button?), title: String? = "Done", descriptionText: String? = nil, descriptionTable: ((String, String), (String, String)?)? = nil, type: ViewType = .standard, showCloseButton: Bool = false) {
+    func completeWithActions(buttons: (button, button?), title: String? = "Done".localize, descriptionText: String? = nil, descriptionTable: ((String, String), (String, String)?)? = nil, type: ViewType = .standard, showCloseButton: Bool = false) {
         if !hideIndicatorBlockDesibled {
         let new = {
             self.completeWithActions(buttons: buttons, title: title, descriptionText: descriptionText, descriptionTable: descriptionTable, type: type, showCloseButton: showCloseButton)
@@ -307,10 +307,10 @@ class IndicatorView: UIView {
             }
             self.leftButton.setTitle(buttons.0.title, for: .normal)
             if buttons.1 != nil{
-                self.rightButton.setTitle(buttons.1?.title ?? "Cancel", for: .normal)
+                self.rightButton.setTitle(buttons.1?.title ?? "Cancel".localize, for: .normal)
             }
-            self.titleLabel.text = type == .internetError ? "Internet error" : title
-            self.descriptionLabel.text = type == .internetError ? "Try again later" : descriptionText
+            self.titleLabel.text = type == .internetError ? "Internet error".localize : title
+            self.descriptionLabel.text = type == .internetError ? "Try again later".localize : descriptionText
                 UIView.animate(withDuration: 0.20) {
                     if self.titleLabel.isHidden != false {
                         self.titleLabel.isHidden = false
@@ -514,7 +514,6 @@ class IndicatorView: UIView {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print(touches, "gyuikmnbhj")
         if canCloseOnSwipe {
             canCloseOnSwipe = false
             self.fastHide { (_) in

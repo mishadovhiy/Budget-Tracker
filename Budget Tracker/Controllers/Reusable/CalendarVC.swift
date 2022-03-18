@@ -576,31 +576,35 @@ class CalendarVC: SuperViewController {
     
     func goButtonsTitle() {
         
-        var textStart = "Start"
+        let strStart = "Start".localize
+        let strEnd = "End".localize
+        
+        
+        var textStart = strStart
         var leftStart = ""
         var rightStart = "▶︎"
         
-        let textEnd = "End"
+        let textEnd = strEnd
         var leftEnd = ""
         var rightEnd = "▶︎"
         
         if getYearFrom(string: selectedFrom) > year {
-            textStart = "Start"
+            textStart = strStart
             leftStart = ""
             rightStart = " ▶︎"
         } else {
-            textStart = "Start"
+            textStart = strStart
             leftStart = "◀︎ "
             rightStart = ""
         }
         
         if getYearFrom(string: selectedFrom) == year {
             if getMonthFrom(string: selectedFrom) > month {
-                textStart = "Start"
+                textStart = strStart
                 leftStart = ""
                 rightStart = "▶︎"
             } else {
-                textStart = "Start"
+                textStart = strStart
                 leftStart = "◀︎"
                 rightStart = ""
             }
@@ -610,7 +614,7 @@ class CalendarVC: SuperViewController {
             if getMonthFrom(string: selectedFrom) == getMonthFrom(string: selectedTo) {
 
                 toggleButton(b: endButton, hidden: true)
-                textStart = "Selected"
+                textStart = "Selected".localize
             }
             
         }
@@ -685,10 +689,11 @@ class CalendarVC: SuperViewController {
             let dayTo = appData.filter.getDayFromString(s: selectedTo)
             let monthTo = appData.filter.getMonthFromString(s: selectedTo)
             let yearTo = appData.filter.getYearFromString(s: selectedTo)
+            let strOf = "of".localize
             if yearTo == year {
-                selectedPeroud = "\(returnMonth(month)), \(day) → \(returnMonth(monthTo)), \(dayTo) of \(yearTo)"
+                selectedPeroud = "\(returnMonth(month)), \(day) → \(returnMonth(monthTo)), \(dayTo) \(strOf) \(yearTo)"
             } else {
-                selectedPeroud = "\(returnMonth(month)), \(day) of \(year) → \(returnMonth(monthTo)), \(dayTo) of \(yearTo)"
+                selectedPeroud = "\(returnMonth(month)), \(day) \(strOf) \(year) → \(returnMonth(monthTo)), \(dayTo) \(strOf) \(yearTo)"
             }
             self.dismiss(animated: true, completion: nil)
         }

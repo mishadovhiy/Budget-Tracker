@@ -164,7 +164,7 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
     private func next() {
         print(#function, enteringValue)
         let errorAction = {
-            AppDelegate.shared?.newMessage.show(title:"Error editing", type: .error)
+            AppDelegate.shared?.newMessage.show(title:"Error editing".localize, type: .error)
         }
         
         if let function = screenData?.nextAction {

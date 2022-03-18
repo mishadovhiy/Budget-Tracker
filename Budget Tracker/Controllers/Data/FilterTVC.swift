@@ -13,7 +13,7 @@ class FilterTVC: SuperViewController {
     var months: [String] = []
     var years: [String] = []
     var sectionsCount = 3
-    var buttonTitle = ["All Time".localize, NSLocalizedString("This Month", comment: ""), "Today".localize, "Yesterday".localize, "Custom".localize]
+    var buttonTitle = ["All Time".localize, "This Month".localize, "Today".localize, "Yesterday".localize, "Custom".localize]
     
     @IBOutlet weak var tableview: UITableView!
     
@@ -189,8 +189,7 @@ class FilterTVC: SuperViewController {
     func convertMonthFrom(int: Int) -> String {
         
         let monthes = [
-            1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "June",
-            7: "July", 8: "Aug", 9: "Sept", 10: "Oct", 11: "Nov", 12: "Dec"
+            1: "Jan".localize, 2: "Feb".localize, 3: "Mar".localize, 4: "Apr".localize, 5: "May".localize, 6: "June".localize, 7: "July".localize, 8: "Aug".localize, 9: "Sept".localize, 10: "Oct".localize, 11: "Nov".localize, 12: "Dec".localize
         ]
         return monthes[int] ?? "Jan"
     }
@@ -360,8 +359,8 @@ extension FilterTVC: UITableViewDelegate, UITableViewDataSource {
         
         switch section {
         case 0: label.text = ""
-        case 1: label.text = months.count > 0 ? "Months": ""//getTitleSectionFor(data: months, title: "Months")
-        case 2: label.text = years.count > 0 ? "Years": ""//getTitleSectionFor(data: years, title: "Years")
+        case 1: label.text = months.count > 0 ? "Months".localize: ""//getTitleSectionFor(data: months, title: "Months")
+        case 2: label.text = years.count > 0 ? "Years".localize: ""//getTitleSectionFor(data: years, title: "Years")
         default:
             label.text = ""
         }
@@ -373,8 +372,8 @@ extension FilterTVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if let cell = tableView.cellForRow(at: indexPath) as? FilterCell {
-            selectedPeroud = cell.titleLabel.text ?? "Unknown"
-            if cell.titleLabel.text != "Custom" {
+            selectedPeroud = cell.titleLabel.text ?? "Unknown".localize
+            if cell.titleLabel.text != "Custom".localize {
                 ifCustom = false
             }
         }

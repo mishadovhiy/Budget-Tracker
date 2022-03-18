@@ -11,9 +11,9 @@ import UIKit
 class BuyPageVC: UIPageViewController {
 
     var pages: [PageStruct] = [
-        PageStruct(title: "Reminders for debts", description: "Set notification reminders", imgName: "addReminder.pro"),
-        PageStruct(title: "Transfer data", description: "Transfer transactions and categories between accounts", imgName: "transfareDataIcon.pro"),
-        PageStruct(title: "App storage increes", description: "Create up to 15 accounts for email\n\nStores data about categories usage", imgName: "dbStorage.pro"),
+        PageStruct(title: "Reminders for debts".localize, description: "Set notification reminders".localize, imgName: "addReminder.pro"),
+        PageStruct(title: "Transfer data".localize, description: "Transfer transactions and categories between accounts".localize, imgName: "transfareDataIcon.pro"),
+        PageStruct(title: "App storage increes".localize, description: "Create up to 15 accounts for email\n\nStores data about categories usage".localize, imgName: "dbStorage.pro"),
     ]
     
     

@@ -22,7 +22,7 @@ class SelectUserVC: SuperViewController, UITableViewDelegate, UITableViewDataSou
         AppDelegate.shared?.ai.fastHide { _ in
             
         }
-        title = "Select user"
+        title = "Select user".localize
         tableView.delegate = self
         tableView.dataSource = self
     }

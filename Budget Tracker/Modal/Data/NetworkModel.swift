@@ -17,27 +17,31 @@ struct LoadFromDB {
     static var shared = LoadFromDB()
     private func load(urlPath: String, completion: @escaping (NSArray, error?) -> ()) {
 
-        let url: URL = URL(string: urlPath)!
-        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
-            
-            if error != nil {
-                completion([], .internet)
-                return
-            } else {
-                var jsonResult = NSArray()
-                do{
-                    jsonResult = try JSONSerialization.jsonObject(with: data!, options:JSONSerialization.ReadingOptions.allowFragments) as! NSArray
-                } catch let error as NSError {
+        if let url: URL = URL(string: urlPath) {
+            let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+                
+                if error != nil {
                     completion([], .internet)
                     return
-                }
+                } else {
+                    var jsonResult = NSArray()
+                    do{
+                        jsonResult = try JSONSerialization.jsonObject(with: data!, options:JSONSerialization.ReadingOptions.allowFragments) as! NSArray
+                    } catch let error as NSError {
+                        completion([], .internet)
+                        return
+                    }
 
-                completion(jsonResult, nil)
+                    completion(jsonResult, nil)
+                }
             }
+            DispatchQueue.main.async {
+                task.resume()
+            }
+        } else {
+            completion([], .other)
         }
-        DispatchQueue.main.async {
-            task.resume()
-        }
+        
     }
     
 

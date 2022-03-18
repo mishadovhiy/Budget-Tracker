@@ -84,7 +84,7 @@ class IconsVC: UIViewController {
         IconsVC.shared = self
         collectionView.delegate = self
         collectionView.dataSource = self
-        title = screenType == .colorsOnly ? "Primary color" : "Set icon"
+        title = screenType == .colorsOnly ? "Primary color".localize : "Set icon".localize
 
     }
     

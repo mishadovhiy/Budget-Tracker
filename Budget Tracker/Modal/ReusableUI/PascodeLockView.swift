@@ -11,8 +11,8 @@ import UIKit
 class PascodeLockView: UIView, UITextFieldDelegate {
 
     //for app delegate only
-    let backgroundCol = UIColor(red: 38/255, green: 38/255, blue: 38/255, alpha: 0.95)
-    
+    let backgroundCol = UIColor(red: 38/255, green: 38/255, blue: 38/255, alpha: 0.98)
+    let lightBackground = UIColor(red: 38/255, green: 38/255, blue: 38/255, alpha: 0.85)
     
     @IBOutlet private weak var textField: UITextField!
     @IBOutlet private weak var primaryStack: UIStackView!
@@ -48,25 +48,57 @@ class PascodeLockView: UIView, UITextFieldDelegate {
             self.backgroundColor = .clear
             AppDelegate.shared?.delegate?.resighnActive()
             UIView.animate(withDuration: 0.5) {
-                self.backgroundColor = self.backgroundCol
+                if self.appIcon.isHidden != false {
+                    self.appIcon.isHidden = false
+                }
+                if self.numbersStack.isHidden != true {
+                    self.numbersStack.isHidden = true
+                }
+                self.backgroundColor = self.lightBackground
                 self.primaryStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
             } completion: { _ in
 
             }
-
-            
-
         }
     }
     private var presenting = false
     
-    private func hide() {
+    var passwordNotEntered = true
+    func passcodeLock() {
+        passwordNotEntered = true
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 0.3) {
+                self.backgroundColor = self.backgroundCol
+                if self.numbersStack.isHidden != false {
+                    self.numbersStack.isHidden = false
+                }
+                if self.appIcon.isHidden != true {
+                    self.appIcon.isHidden = true
+                }
+
+            } completion: { _ in
+                
+            }
+
+        }
+    }
+    
+    
+    
+    
+    func hide() {
+        passwordNotEntered = false
         presenting = false
         DispatchQueue.main.async {
             let window = UIApplication.shared.keyWindow ?? UIWindow()
             UIView.animate(withDuration: 0.3) {
                 self.backgroundColor = .clear
                 self.primaryStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, window.frame.height + 100, 0)
+
+                if self.numbersStack.isHidden != true {
+                    self.numbersStack.isHidden = true
+                }
+                
             } completion: { _ in
                 if let action = self.enteredAction {
                     action()
