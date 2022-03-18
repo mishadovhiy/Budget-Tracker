@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 class PascodeLockView: UIView, UITextFieldDelegate {
 
@@ -125,10 +126,16 @@ class PascodeLockView: UIView, UITextFieldDelegate {
     
     private func checkPasscode(_ newValue:String) {
         if newValue == UserSettings.Security.password {
+            DispatchQueue.main.async {
+                AudioServicesPlaySystemSound(1101)
+            }
             hide()
         } else {
-            AppDelegate.shared?.newMessage.show(title: "Wrong code!", type: .error)
-            enteredValue = ""
+            DispatchQueue.main.async {
+                AudioServicesPlaySystemSound(1102)
+                AppDelegate.shared?.newMessage.show(title: "Wrong code!", type: .error)
+                self.enteredValue = ""
+            }
         }
     }
     

@@ -202,13 +202,13 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 
                 var resultData:[ScreenDataStruct] = []
                 resultData = [
-                    ScreenDataStruct(title: K.expense, data: resultDict[purposeToString(.expense)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: expenseImg, color: expenseColor, purpose: .expense), transactions: [])),
-                    ScreenDataStruct(title: K.income, data: resultDict[purposeToString(.income)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: incomeImg, color: incomeColor, purpose: .income), transactions: []))
+                    ScreenDataStruct(title: K.expense.localize, data: resultDict[purposeToString(.expense)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: expenseImg, color: expenseColor, purpose: .expense), transactions: [])),
+                    ScreenDataStruct(title: K.income.localize, data: resultDict[purposeToString(.income)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: incomeImg, color: incomeColor, purpose: .income), transactions: []))
                 ]
                 if fromSettings {
                     self.tableData = resultData
                 } else {
-                    resultData.append(ScreenDataStruct(title:purposeToString(.debt), data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: debtImg, color: debtColor, purpose: .debt), transactions: [])))
+                    resultData.append(ScreenDataStruct(title:purposeToString(.debt).localize, data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: debtImg, color: debtColor, purpose: .debt), transactions: [])))
                     
                     self.tableData = resultData
                 }
@@ -234,9 +234,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 }
                 self.tableData = [
                     ScreenDataStruct(title: "", data: [ScreenCategory(category: NewCategories(id: -1, name: "All transaction".localize, icon: "", color: "", purpose: .expense), transactions: allTransactions)], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .expense), transactions: [])),
-                    ScreenDataStruct(title: K.expense, data: resultDict[purposeToString(.expense)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .expense), transactions: [])),
-                    ScreenDataStruct(title: K.income, data: resultDict[purposeToString(.income)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .income), transactions: [])),
-                    ScreenDataStruct(title: purposeToString(.debt), data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .debt), transactions: []))
+                    ScreenDataStruct(title: K.expense.localize, data: resultDict[purposeToString(.expense)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .expense), transactions: [])),
+                    ScreenDataStruct(title: K.income.localize, data: resultDict[purposeToString(.income)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .income), transactions: [])),
+                    ScreenDataStruct(title: purposeToString(.debt).localize, data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .debt), transactions: []))
                 ]
             }
             DispatchQueue.main.async {
@@ -1546,9 +1546,10 @@ class categoriesVCcell: UITableViewCell {
             }
             
         }
-        let defPlaceHolder = "New Category"
+        let defPlaceHolder = "New category".localize
+        newCategoryTF.placeholder = index != nil ? (CategoriesVC.shared?.tableData[index!.section].data[index!.row].category.name ?? defPlaceHolder) : defPlaceHolder
+        newCategoryTF.setPlaceHolderColor(K.Colors.textFieldPlaceholder)
         
-        newCategoryTF.attributedPlaceholder = NSAttributedString(string: index != nil ? (CategoriesVC.shared?.tableData[index!.section].data[index!.row].category.name ?? defPlaceHolder) : defPlaceHolder, attributes: [NSAttributedString.Key.foregroundColor: K.Colors.textFieldPlaceholder])
     }
     
     @objc private func iconPressed(_ sender: UITapGestureRecognizer) {

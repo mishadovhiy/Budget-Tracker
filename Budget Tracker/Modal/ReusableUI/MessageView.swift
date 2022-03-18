@@ -46,7 +46,7 @@ class MessageView: UIView {
     var messageData: (String, String?, viewType, UIImage?, TimeInterval?)?
     private var userCanClose = true
     var isShowing = false
-    func show(title: String = "Succsess", description: String? = nil, type:viewType, customImage: UIImage? = nil, autohide: TimeInterval? = 7.0) {
+    func show(title: String = "Success".localize, description: String? = nil, type:viewType, customImage: UIImage? = nil, autohide: TimeInterval? = 7.0) {
 
         
         if isShowing {
@@ -81,8 +81,8 @@ class MessageView: UIView {
             
             
             
-            self.titleLabel.text = type == .internetError ? "Internet error" : title
-            self.descriptionLabel.text = type == .internetError ? "Try again later" : description
+            self.titleLabel.text = type == .internetError ? "Internet error".localize : title
+            self.descriptionLabel.text = type == .internetError ? "Try again later".localize : description
             if self.descriptionLabel.isHidden != hideDescription {
                 self.descriptionLabel.isHidden = hideDescription
             }

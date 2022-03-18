@@ -923,7 +923,7 @@ class ViewController: SuperViewController {
         }
         if needDownloadOnMainAppeare {
             needDownloadOnMainAppeare = false
-            self.downloadFromDB(title: "Fetching")
+            self.downloadFromDB(title: "Fetching".localize)
         }
 
         let safeTop = self.view.safeAreaInsets.top

@@ -155,8 +155,7 @@ class SuperViewController: UIViewController, AppDelegateProtocol {
     
     func returnMonth(_ month: Int) -> String {
         let monthes = [
-            1: "Jan", 2: "Feb", 3: "Mar", 4: "Apr", 5: "May", 6: "Jun",
-            7: "Jul", 8: "Aug", 9: "Sep", 10: "Oct", 11: "Nov", 12: "Dec"
+            1: "Jan".localize, 2: "Feb".localize, 3: "Mar".localize, 4: "Apr".localize, 5: "May".localize, 6: "Jun".localize, 7: "Jul".localize, 8: "Aug".localize, 9: "Sep".localize, 10: "Oct".localize, 11: "Nov".localize, 12: "Dec".localize
         ]
         return monthes[month] ?? "Jan"
     }

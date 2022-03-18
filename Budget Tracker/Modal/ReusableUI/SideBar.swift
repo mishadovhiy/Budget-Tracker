@@ -21,25 +21,25 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
            //     let dataCount = (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String]] ?? []).count + (UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String]] ?? []).count + (UserDefaults.standard.value(forKey: K.Keys.localDebts) as? [[String]] ?? []).count
                 return "toAccount"//dataCount > 0 ? "toSavedData" : "toAccount"
             }
-            return CellData(name: "Account", value: appData.username == "" ? "Log in" : appData.username, segue: accountSegue, image: "person.fill")
+            return CellData(name: "Account".localize, value: appData.username == "" ? "Log in".localize : appData.username, segue: accountSegue, image: "person.fill")
         }
         
-        var settingsCell = CellData(name: "Settings", value: "", segue: "toSettingsVC", image: "gearshape.2.fill")
+        var settingsCell = CellData(name: "Settings".localize, value: "", segue: "toSettingsVC", image: "gearshape.2.fill")
         
         
         let catsCo = UserDefaults.standard.value(forKey: "categoriesDataNew") as? [[String:Any]] ?? []
         
         var categories = [
-            CellData(name: "Categories", value: "\(catsCo.count)", segue: "toCategories", image: "folder.fill"),
-            CellData(name: "Debts", value: "\(debts)", segue: "toDebts", image: "rectangle.3.group.fill", pro: pro)
+            CellData(name: "Categories".localize, value: "\(catsCo.count)", segue: "toCategories", image: "folder.fill"),
+            CellData(name: "Debts".localize, value: "\(debts)", segue: "toDebts", image: "rectangle.3.group.fill", pro: pro)
         ]
         let localCount = ((UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String:Any]] ?? []) + (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String:Any]] ?? [])).count
         if localCount > 0 {
-            categories.append(CellData(name: "local Data", value: "\(localCount)", segue: "toLocalData", image: "tray.fill"))
+            categories.append(CellData(name: "local Data".localize, value: "\(localCount)", segue: "toLocalData", image: "tray.fill"))
         }
         
-        let statistic = CellData(name: "Statistic", value: "", segue: "toStatisticVC", image: "chart.pie.fill")
-        let support = CellData(name: "Support", value: "", segue: "toSupportVC", image: "support.fill")
+        let statistic = CellData(name: "Statistic".localize, value: "", segue: "toStatisticVC", image: "chart.pie.fill")
+        let support = CellData(name: "Support".localize, value: "", segue: "toSupportVC", image: "support.fill")
         let trialDays = UserDefaults.standard.value(forKey: "trialToExpireDays") as? Int ?? 0
         let trialCell = CellData(name: "Trail till", value: "\(7 - trialDays)", segue: "toProVC", image: "clock.fill")
         //toSupportVC

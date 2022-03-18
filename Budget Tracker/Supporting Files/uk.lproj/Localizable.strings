@@ -9,6 +9,12 @@
 "Categories" = "Категорії";
 
 
+"Fetching" = "Оновлення";
+"Account" = "Профіль";
+"Statistic" = "Статистика";
+"New category" = "Нова категорія";
+
+
 "Loading" = "Завантаження";
 "Done" = "Готово";
 "Cancel" = "Скасувати";
@@ -128,7 +134,7 @@
 "Security" = "Безпека";
 "Appearance" = "Зовнішній вигляд";
 "Primary color" = "Основний колір";
-"Language" = "Мову";
+"Language" = "Мова";
 "Passcode" = "Код доступу";
 "Change passcode" = "Змінити пароль";
 "Support" = "Підтримка";
@@ -186,6 +192,9 @@
 "Error editing" = "Помилка редагування";
 "Sign in to use pro version across all your devices" = "Увійдіть, щоб використовувати професійну версію на всіх своїх пристроях";
 "Access denied" = "Доступ заборонено";
+"Trial has been started successfully" = "Розпочато випробувальний період";
+"You have already purchased pro version" = "Ви вже придбали PRO версію";
+"Permission denied" = "У дозволі відмовлено";
 "You have already tried trial version" = "Ви вже спробували пробну версію";
 "Reminders for debts" = "Нагадування про борги";
 "Set notification reminders" = "Встановити нагадування про сповіщення";

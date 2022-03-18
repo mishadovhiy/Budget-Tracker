@@ -3269,17 +3269,17 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="JvK-vT-odU">
                                                     <rect key="frame" x="12" y="12.000000000000002" width="364" height="20.666666666666671"/>
                                                     <subviews>
-                                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="iGD-oo-gzx">
+                                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="iGD-oo-gzx">
                                                             <rect key="frame" x="0.0" y="0.0" width="364" height="20.666666666666668"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PUz-jz-SfH">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="182" height="20.666666666666668"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="205.33333333333334" height="20.666666666666668"/>
                                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                                     <color key="textColor" name="CategoryColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sdU-fb-GXc">
-                                                                    <rect key="frame" x="182" y="0.0" width="182" height="20.666666666666668"/>
+                                                                    <rect key="frame" x="205.33333333333337" y="0.0" width="158.66666666666663" height="20.666666666666668"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                     <color key="textColor" name="balanceValueColor"/>
                                                                     <nil key="highlightedColor"/>
@@ -3584,8 +3584,8 @@ AAAAAAIBAAAAAAAAAGEAAAAAAAAAAAAAAAAAAChAA
         <image name="line.3.horizontal" width="17" height="9"/>
         <image name="paperplane.fill" width="18" height="18"/>
         <image name="pencil" width="14" height="14"/>
-        <image name="plus" width="14" height="14"/>
         <image name="plus" catalog="system" width="128" height="113"/>
+        <image name="plus" width="14" height="14"/>
         <image name="scroll" width="18" height="18"/>
         <image name="square.and.arrow.down" catalog="system" width="121" height="128"/>
         <image name="trash" width="16" height="19"/>

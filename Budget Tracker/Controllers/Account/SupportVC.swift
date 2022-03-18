@@ -147,9 +147,11 @@ class SupportVC: SuperViewController, UITextViewDelegate {
                         let okButton = IndicatorView.button(title: "OK", style: .standart, close: true) { _ in
                             
                         }
+                        let title =  error ? "Error".localize : "Thank you".localize
+                        let description = error ? "Try later".localize : "Your message has been sent".localize
                         DispatchQueue.main.async {
-                            self.navigationController?.popToRootViewController(animated: true)
-                            AppDelegate.shared?.ai.completeWithActions(buttons: (okButton, nil), title: error ? "Error".localize : "Thank you".localize, descriptionText: error ? "Try later".localize : "Your message has been sent".localize, type: error ? .error : .succsess)
+                            self.navigationController?.popViewController(animated: true)
+                            AppDelegate.shared?.ai.completeWithActions(buttons: (okButton, nil), title: title, descriptionText: description, type: error ? .error : .succsess)
                             
                             if !error {
                                 self.textView.text = ""

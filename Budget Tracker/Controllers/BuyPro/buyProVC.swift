@@ -19,7 +19,7 @@ class BuyProVC: SuperViewController {
     
     func showAlert(title:String,text:String?, error: Bool, goHome: Bool = false) {
         
-        let okButton = IndicatorView.button(title: "OK", style: .standart, close: true) { _ in
+        let okButton = IndicatorView.button(title: "OK".localize, style: .standart, close: true) { _ in
             if goHome {
                 DispatchQueue.main.async {
                     self.performSegue(withIdentifier: "homeVC", sender: self)
@@ -235,12 +235,12 @@ class BuyProVC: SuperViewController {
         delete.User(toDataString: toDataStringMian) { (errorr) in
             if errorr {
                 //showError    appData.unsendedData.append(["deleteUser": dataStringDelete])
-                self.showAlert(title: "Internet error", text: "Try again later", error: true)
+                self.showAlert(title: "Internet error".localize, text: "Try again later".localize, error: true)
             } else {
                 SaveToDB.shared.Users(toDataString: dataStringSave ) { (error) in
                 if error {
                     //showError       appData.unsendedData.append(["saveUser": dataStringSave])
-                    self.showAlert(title: "Internet error", text: "Try again later", error: true)
+                    self.showAlert(title: "Internet error".localize, text: "Try again later".localize, error: true)
                 } else {
                     DispatchQueue.main.async {
                         appData.proTrial = true

@@ -142,7 +142,7 @@ struct LoadFromDB {
     func Users(completion: @escaping ([[String]], Bool) -> ()) {
         var loadedData: [[String]] = []
         let urlPath = Keys.dbURL + "users.php"
-        let url: URL = URL(string: urlPath)!
+        if let url: URL = URL(string: urlPath) {
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             
             if error != nil {
@@ -185,6 +185,7 @@ struct LoadFromDB {
 
         DispatchQueue.main.async {
             task.resume()
+        }
         }
         
     }
@@ -294,13 +295,15 @@ struct SaveToDB {
     }
 
     private func save(dbFileURL: String, httpMethod: String = "POST", toDataString: String, error: @escaping (Bool) -> ()) {
-        
-        let url = NSURL(string: dbFileURL)
-        var request = URLRequest(url: url! as URL)
+        if let urlData = dbFileURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+        let url = NSURL(string: urlData)
+        if let reqUrl = url as URL? {
+        var request = URLRequest(url: reqUrl)
         request.httpMethod = httpMethod
         var dataToSend = "secretWord=" + Keys.secretKey
                 
         dataToSend = dataToSend + toDataString
+            
         let dataD = dataToSend.data(using: .utf8)
         needDownloadOnMainAppeare = true
         do {
@@ -344,7 +347,14 @@ struct SaveToDB {
             DispatchQueue.main.async {
                 uploadJob.resume()
             }
-            
+        }
+            } else {
+                print("url data error")
+                error(true)
+            }
+        } else {
+            print("error creating url")
+            error(true)
         }
             
     }
@@ -446,43 +456,52 @@ struct DeleteFromDB {
     
     private func delete(dbFileURL: String, toDataString: String, error: @escaping (Bool) -> ()) {
         let url = NSURL(string: dbFileURL)
-        var request = URLRequest(url: url! as URL)
+        if let reqUrl = url as URL? {
+        var request = URLRequest(url: reqUrl)
         request.httpMethod = "POST"
         var dataString = "secretWord=" + Keys.secretKey
         needDownloadOnMainAppeare = true
         //send
         dataString = dataString + toDataString
              print(dataString, "dataStringdataStringdataString delete")
-        let dataD = dataString.data(using: .utf8)
-        do {
-            let uploadJob = URLSession.shared.uploadTask(with: request, from: dataD) { data, response, errr in
-                
-                if errr != nil {
-                    error(true)
-                    return
+        if let urlStringData = dataString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+            
+            let dataD = urlStringData.data(using: .utf8)
+            do {
+                let uploadJob = URLSession.shared.uploadTask(with: request, from: dataD) { data, response, errr in
                     
-                } else {
-                    if let unwrappedData = data {
-                        let returnedData = NSString(data: unwrappedData, encoding: String.Encoding.utf8.rawValue)
-                        if returnedData == "1" {
-                            print("ok")
-                            error(false)
-                            return
-                        } else {
-                            print("delete: db error for (cats, etc)")
-                            error(true)
-                            return
+                    if errr != nil {
+                        error(true)
+                        return
+                        
+                    } else {
+                        if let unwrappedData = data {
+                            let returnedData = NSString(data: unwrappedData, encoding: String.Encoding.utf8.rawValue)
+                            if returnedData == "1" {
+                                print("ok")
+                                error(false)
+                                return
+                            } else {
+                                print("delete: db error for (cats, etc)")
+                                error(true)
+                                return
+                            }
+                            
                         }
                         
                     }
                     
                 }
+                DispatchQueue.main.async {
+                    uploadJob.resume()
+                }
                 
             }
-            DispatchQueue.main.async {
-                uploadJob.resume()
-            }
-            
+        } else {
+            error(true)
+        }
+        } else {
+            error(true)
         }
             
     }
