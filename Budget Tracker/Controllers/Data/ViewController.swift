@@ -1880,6 +1880,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "mainHeaderCell") as! mainHeaderCell
             
+            cell.dateLabel.textColor = K.Colors.link
             cell.dateLabel.text = "\(makeTwo(n: newTableData[section - 1].date.day ?? 0))"
             cell.monthLabel.text = "\(returnMonth(newTableData[section - 1].date.month ?? 0)),\n\(newTableData[section - 1].date.year ?? 0)"
             cell.yearLabel.text = "\(newTableData[section - 1].date.year ?? 0)"

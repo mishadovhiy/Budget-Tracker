@@ -304,6 +304,7 @@ class LoginViewController: SuperViewController {
     func logIn(nickname: String, password: String, loadedData: [[String]]) {
         let DBusernameIndex = 0
         let DBpasswordIndex = 2
+        let DBEmailIndex = 1
         var psswordFromDB = ""
  
         if userExists(name: nickname, loadedData: loadedData) {
@@ -334,6 +335,7 @@ class LoginViewController: SuperViewController {
                         
                         appData.username = nickname
                         appData.password = password
+                        appData.userEmailHolder = loadedData[i][DBEmailIndex]
                         if prevUserName != nickname {
                             userChanged()
                             UserDefaults.standard.setValue(prevUserName, forKey: "prevUserName")
@@ -455,7 +457,7 @@ class LoginViewController: SuperViewController {
                                     KeychainService.savePassword(service: "BudgetTrackerApp", account: name, data: password)
                                     appData.username = name
                                     appData.password = password
-
+                                    appData.userEmailHolder = email
                                     if prevUsere == "" && self.forceLoggedOutUser == "" {
                                         let db = DataBase()
                                         db.localTransactions = db.transactions

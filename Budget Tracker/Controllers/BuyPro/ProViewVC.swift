@@ -34,12 +34,8 @@ class ProViewVC: SuperViewController {
         super.viewDidAppear(animated)
         self.mainTitleLabel.text = data.title
         self.mainDescriptionLabel.text = data.description
-        self.mainImage.image = iconNamed(data.imgName)
+        self.mainImage.image = UIImage(named: data.imgName)
     }
-    override func viewDidLoad() {
-        super.viewDidLoad()
 
-     
-    }
 
 }

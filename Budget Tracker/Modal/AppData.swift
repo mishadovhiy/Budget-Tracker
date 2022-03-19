@@ -11,7 +11,7 @@ import UIKit
 
 
 class AppData {
-
+    
     static var linkColor: String {
         set {
             UserDefaults.standard.setValue(newValue, forKey: "SelectedTintColor")
@@ -165,6 +165,22 @@ class AppData {
             defaults.set(value, forKey: "password")
         }
     }
+    
+    var userEmailHolder: String {
+        get{
+            return defaults.value(forKey: "userEmailHolder") as? String ?? ""
+        }
+        set(value){
+            print("new password setted - \(value)")
+            defaults.set(value, forKey: "userEmailHolder")
+        }
+    }
+    
+    var devMode:Bool {
+        return userEmailHolder.contains("dovhiy.com")
+    }
+    
+    
     
     var unshowedError: String {
         get{

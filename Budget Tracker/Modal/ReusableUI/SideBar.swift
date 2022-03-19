@@ -24,7 +24,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
             return CellData(name: "Account".localize, value: appData.username == "" ? "Log in".localize : appData.username, segue: accountSegue, image: "person.fill")
         }
         
-        var settingsCell = CellData(name: "Settings".localize, value: "", segue: "toSettingsVC", image: "gearshape.2.fill")
+        let settingsCell = CellData(name: "Settings".localize, value: "", segue: "toSettingsVC", image: "gearshape.fill")
         
         
         let catsCo = UserDefaults.standard.value(forKey: "categoriesDataNew") as? [[String:Any]] ?? []

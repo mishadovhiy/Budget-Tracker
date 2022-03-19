@@ -18,4 +18,13 @@ class Button: UIButton {
         }
     }
 
+    
+    @IBInspectable open var linkBackground: Bool = false {
+        didSet {
+            DispatchQueue.main.async {
+                self.backgroundColor = K.Colors.link
+            }
+        }
+    }
+    
 }

@@ -14,10 +14,7 @@ class Icons {
         get {
 
             return [
-                IconsData(sectionName: "", data: allIcons),
-             //   IconsData(sectionName: "other", data: otherSection),
-             //   IconsData(sectionName: "other", data: otherTwoSection)
-                
+                IconsData(sectionName: "", data: allIcons)
             ]
         }
     }

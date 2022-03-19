@@ -55,11 +55,13 @@ class CalendarVC: SuperViewController {
     @IBOutlet weak var closeButton: UIButton!
     
     var datePickerDate: String?
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        /*DispatchQueue.main.async {
-            self.reminderTimeLabel.isHidden = true
-        }*/
+    var svsLoaded = false
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        if !svsLoaded {
+            svsLoaded = true
+        
+        self.doneButton.backgroundColor = K.Colors.link
         doneButton.layer.cornerRadius = 5
         closeButton.layer.cornerRadius = 5
         let height = self.view.frame.height
@@ -67,6 +69,14 @@ class CalendarVC: SuperViewController {
         endButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, height + self.endButton.layer.frame.height, 0)
         textField.layer.masksToBounds = true
         textField.layer.cornerRadius = 5
+        }
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        /*DispatchQueue.main.async {
+            self.reminderTimeLabel.isHidden = true
+        }*/
+        
         
       //  commentTextField.layer.masksToBounds = true
         //commentTextField.layer.cornerRadius = 5
@@ -674,29 +684,40 @@ class CalendarVC: SuperViewController {
         }
     }
     
+    //here
+    var selectingDate = true
     @IBAction func closePressed(_ sender: UIButton) {
-        if ifCustom == false {
-            appData.filter.from = ""
-            appData.filter.to = ""
+        if !selectingDate {
             DispatchQueue.main.async {
-                self.performSegue(withIdentifier: K.calendarClosed, sender: self)
+                self.dismiss(animated: true) {
+                    
+                }
             }
-            
         } else {
-            let day = appData.filter.getDayFromString(s: selectedFrom)
-            let month = appData.filter.getMonthFromString(s: selectedFrom)
-            let year = appData.filter.getYearFromString(s: selectedFrom)
-            let dayTo = appData.filter.getDayFromString(s: selectedTo)
-            let monthTo = appData.filter.getMonthFromString(s: selectedTo)
-            let yearTo = appData.filter.getYearFromString(s: selectedTo)
-            let strOf = "of".localize
-            if yearTo == year {
-                selectedPeroud = "\(returnMonth(month)), \(day) → \(returnMonth(monthTo)), \(dayTo) \(strOf) \(yearTo)"
+            if ifCustom == false {
+                appData.filter.from = ""
+                appData.filter.to = ""
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: K.calendarClosed, sender: self)
+                }
+                
             } else {
-                selectedPeroud = "\(returnMonth(month)), \(day) \(strOf) \(year) → \(returnMonth(monthTo)), \(dayTo) \(strOf) \(yearTo)"
+                let day = appData.filter.getDayFromString(s: selectedFrom)
+                let month = appData.filter.getMonthFromString(s: selectedFrom)
+                let year = appData.filter.getYearFromString(s: selectedFrom)
+                let dayTo = appData.filter.getDayFromString(s: selectedTo)
+                let monthTo = appData.filter.getMonthFromString(s: selectedTo)
+                let yearTo = appData.filter.getYearFromString(s: selectedTo)
+                let strOf = "of".localize
+                if yearTo == year {
+                    selectedPeroud = "\(returnMonth(month)), \(day) → \(returnMonth(monthTo)), \(dayTo) \(strOf) \(yearTo)"
+                } else {
+                    selectedPeroud = "\(returnMonth(month)), \(day) \(strOf) \(year) → \(returnMonth(monthTo)), \(dayTo) \(strOf) \(yearTo)"
+                }
+                self.dismiss(animated: true, completion: nil)
             }
-            self.dismiss(animated: true, completion: nil)
         }
+        
     }
     
     var showTimePicker = false

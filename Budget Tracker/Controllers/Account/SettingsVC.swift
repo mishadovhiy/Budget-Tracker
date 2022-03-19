@@ -183,14 +183,23 @@ extension SettingsVC {
         }
         
         let languageAction = {
-            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:]) { _ in
+            /*UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:]) { _ in
                 
+            }*/
+            if UserSettings.launchedLocalization == .eng {
+                UserDefaults.standard.setValue("ua", forKey: "Localization")
+                UserSettings.launchedLocalization = .ua
+                
+            } else {
+                UserDefaults.standard.setValue("eng", forKey: "Localization")
+                UserSettings.launchedLocalization = .eng
             }
+            self.loadData()
         }
         
         return [
             StandartCell(title: "Primary color".localize, description: "", colorNamed:  AppData.linkColor, action: colorAction),
-            StandartCell(title: "Language".localize, action: languageAction)
+            StandartCell(title: "Language".localize, description: UserSettings.launchedLocalization.rawValue, action: languageAction)
         ]
     }
     

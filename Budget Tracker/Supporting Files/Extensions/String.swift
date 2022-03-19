@@ -11,7 +11,14 @@ import UIKit
 extension String {
     var localize: String {
         get {
-            return NSLocalizedString(self, comment: "")
+            let loc = UserSettings.launchedLocalization
+            switch loc {
+            case .ua:
+                return LocalizationDict.UADict[self] ?? self
+            case .eng:
+                return self
+            }
+
         }
     }
 }

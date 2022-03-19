@@ -92,6 +92,8 @@ class HistoryVC: SuperViewController {
             }
 
            // }
+        } else {
+            self.addTransButton.alpha = 0
         }
         transactionAdded = false
         historyDataStruct = historyDataStruct.sorted{ $0.dateFromString < $1.dateFromString }
@@ -325,6 +327,7 @@ class HistoryVC: SuperViewController {
             vc.vcHeaderData = headerData(title: "Create".localize + " " + "notification".localize, description: "Get notification reminder on specific date".localize)
             vc.needPressDone = true
             vc.canSelectOnlyOne = true
+            vc.selectingDate = false
             //headerData
             //vc.selectedFrom
         default:

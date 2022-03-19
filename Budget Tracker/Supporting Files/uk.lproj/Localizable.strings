@@ -13,7 +13,6 @@
 "Enter your username" = "Введіть своє ім'я користувача";
 "Username" = "Ім'я користувача";
 "Change Email" = "Змінити електронну адресу";
-"Transfer data" = "Передача даних";
 "Log out" = "Вийти";
 "Transfare data" = "Передача даних";
 "Restoration code would be sent on: " = "Код відновлення буде надіслано: ";
@@ -191,13 +190,13 @@
 
 
 
-"Amount to pay" = "Сума для оплати";
-"Due date" = "Термін сплати";
+"Amount to pay" = "Сума до спплати";
+"Due date" = "Нагадування про сплату";
 "Due date has expired" = "Термін сплати закінчився";
 
 
 "notification" = "повідомлення";
-"Get notification reminder on specific date" = "Отримати сповіщення на певну дату";
+"Get notification reminder on specific date" = "Отримати сповіщення про оплату";
 "Unset" = "Не налаштовано";
 "Local notification not added" = "Локальне сповіщення не додано";
 
@@ -214,7 +213,7 @@
 
 
 "All Time" = "Весь час";
-"This Month" = "Цього місяця";
+"This Month" = "Цей місяць";
 "Today" = "Сьогодні";
 "Yesterday" = "Вчора";
 "Custom" = "Обрати";
@@ -242,4 +241,7 @@
 "Create up to 15 accounts for email\n\nStores data about categories usage" = "Створити до 15 облікових записів для електронної пошти\n\nЗберігає дані про використання категорій";
 
 
-
+"Pro version available across all your devices" = "Pro-версія доступна на всіх ваших пристроях";
+"Payment failed" = "Платіж не вдалося";
+"Sign in to use pro version across all your devices" = "Увійдіть, щоб використовувати Pro версію на всіх своїх пристроях";
+"Sign in required" = "Потрібна авторизація";

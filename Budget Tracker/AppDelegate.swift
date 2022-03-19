@@ -46,7 +46,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
             lastSelectedDate = nil
             _categoriesHolder.removeAll()
         }
-
+        
+        
         
         print(today, "didFinishLaunchingWithOptions")
         center.getDeliveredNotifications { notifications in
@@ -55,8 +56,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
             }
         }
         
+        
+        
+        let localization = UserDefaults.standard.value(forKey: "Localization") as? String
+        UserSettings.launchedLocalization = UserSettings.stringToLocalization(localization)
+        
+        
         return true
     }
+    
+    
     
     var delegate:AppDelegateProtocol?
     private var backgroundEnterDate:Date?
@@ -68,13 +77,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         }
     }
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
+        if appData.devMode {
+            let button = IndicatorView.button(title: "ok", style: .error, close: true) { _ in
+                
+            }
+            DispatchQueue.main.async {
+                self.ai.completeWithActions(buttons: (button, nil), title:"Memory warning!")
+            }
+        }
         
-        let button = IndicatorView.button(title: "ok", style: .error, close: true) { _ in
-            
-        }
-        DispatchQueue.main.async {
-            self.ai.completeWithActions(buttons: (button, nil), title:"Memory warning!")
-        }
         print(#function)
     }
     var becameActive = false

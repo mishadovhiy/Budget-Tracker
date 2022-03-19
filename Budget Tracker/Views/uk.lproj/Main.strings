@@ -59,7 +59,7 @@
 "BX1-ND-moi.text" = "Мітка";
 
 /* Клас = "UILabel"; text = "Сонце"; ObjectID = "BrR-tF-WZX"; */
-"BrR-tF-WZX.text" = "Сонце";
+"BrR-tF-WZX.text" = "Вс";
 
 /* Клас = "UILabel"; text = "Витрати"; ObjectID = "CJF-1D-UVd"; */
 "CJF-1D-UVd.text" = "Витрати";
@@ -98,7 +98,7 @@
 "IhM-qn-Xr4.text" = "Категорія";
 
 /* Клас = "UILabel"; text = «Термін дії закінчився!»; ObjectID = "IhO-B5-kQQ"; */
-"IhO-B5-kQQ.text" = "Термін дії закінчився!";
+"IhO-B5-kQQ.text" = "Термін сплати\nзакінчився!";
 
 /* Клас = "UIButton"; normalTitle = "Кінець"; ObjectID = "JQu-2B-c5Z"; */
 "JQu-2B-c5Z.normalTitle" = "Кінець";
@@ -134,7 +134,7 @@
 "OR0-C5-JSU.text" = "Мітка";
 
 /* Клас = "UILabel"; text = "Залишок періоду"; ObjectID = "OyJ-pP-66Q"; */
-"OyJ-pP-66Q.text" = "Залишок періоду";
+"OyJ-pP-66Q.text" = "Баланс за період";
 
 /* Клас = "UILabel"; text = "Мітка"; ObjectID = "PUz-jz-SfH"; */
 "PUz-jz-SfH.text" = "Мітка";
@@ -149,7 +149,7 @@
 "S9x-lc-Jd6.text" = "Мітка";
 
 /* Клас = "UILabel"; text = "Усього:"; ObjectID = "TTP-GQ-6kd"; */
-"TTP-GQ-6kd.text" = "Усього:";
+"TTP-GQ-6kd.text" = "Всього:";
 
 /* Клас = "UILabel"; текст = "..."; ObjectID = "Usv-GA-nDE"; */
 "Usv-GA-nDE.text" = "...";
@@ -212,7 +212,7 @@
 "flQ-Ba-Szl.text" = "0";
 
 /* Клас = "UILabel"; text = "Відпочинок:"; ObjectID = "fo7-Zj-SZS"; */
-"fo7-Zj-SZS.text" = "Відпочинок:";
+"fo7-Zj-SZS.text" = "Залишок:";
 
 /* Клас = "UILabel"; текст = "..."; ObjectID = "gLh-dE-v59"; */
 "gLh-dE-v59.text" = "...";
@@ -266,7 +266,7 @@
 "nCI-C8-lB0.text" = "Мітка";
 
 /* Клас = "UILabel"; text = "Сума до оплати:"; ObjectID = "oHP-lO-eLe"; */
-"oHP-lO-eLe.text" = "Сума для оплати:";
+"oHP-lO-eLe.text" = "Сума до сплати:";
 
 /* Клас = "UILabel"; text = "Зберегти локально"; ObjectID = "oWQ-XA-hYv"; */
 "oWQ-XA-hYv.text" = "Зберегти локально";

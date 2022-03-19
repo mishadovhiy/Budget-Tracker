@@ -9,6 +9,25 @@
 import UIKit
 
 struct UserSettings {
+    
+
+    static func stringToLocalization(_ str: String?) -> Localization {
+        switch str {
+        case "eng":
+            return .eng
+        case "ua":
+            return .ua
+        default:
+            return .eng
+        }
+    }
+    enum Localization:String {
+        case ua = "ua"
+        case eng = "eng"
+    }
+    
+    static var launchedLocalization:Localization = .eng
+
     static var dict:[String:Any] {
         get {
             return UserDefaults.standard.value(forKey: "UserSettingsDict") as? [String:Any] ?? [:]

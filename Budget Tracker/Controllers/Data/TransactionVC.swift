@@ -64,6 +64,9 @@ class TransitionVC: SuperViewController {
     var pressedValueArrey: [String] =  []
 
     
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

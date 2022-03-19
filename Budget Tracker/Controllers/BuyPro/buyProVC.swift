@@ -213,7 +213,7 @@ class BuyProVC: SuperViewController {
         appData.proTrial = true
         appData.trialDate = appData.filter.getToday(appData.filter.filterObjects.currentDate)
 
-        showAlert(title: "Success".localize, text: "Trial has been started successfully".localize, error: false, goHome: true)
+        showAlert(title: Text.success, text: "Trial has been started successfully".localize, error: false, goHome: true)
      /*   self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "Start"), rightButtonActon: { (_) in
             self.loadingIndicator.hideIndicator(fast: true) { (co) in
                 Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { (_) in
@@ -411,7 +411,7 @@ extension BuyProVC: SKPaymentTransactionObserver {
     func scsPurchaseShow() {
         DispatchQueue.main.async {
             self.showPurchasedIndicator()
-            self.showAlert(title: Text.success, text: "Pro features available across all your devices".localize, error: false, goHome: true)
+            self.showAlert(title: Text.success, text: "Pro version available across all your devices".localize, error: false, goHome: true)
         }
     }
     
