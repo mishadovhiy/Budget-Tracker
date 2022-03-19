@@ -81,8 +81,8 @@ class MessageView: UIView {
             
             
             
-            self.titleLabel.text = type == .internetError ? "Internet error".localize : title
-            self.descriptionLabel.text = type == .internetError ? "Try again later".localize : description
+            self.titleLabel.text = type == .internetError ? Text.Error.InternetTitle : title
+            self.descriptionLabel.text = type == .internetError ? Text.Error.internetDescription : description
             if self.descriptionLabel.isHidden != hideDescription {
                 self.descriptionLabel.isHidden = hideDescription
             }

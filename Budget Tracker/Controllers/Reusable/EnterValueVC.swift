@@ -43,7 +43,7 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
         }
     }
 
-    lazy var ai = AppDelegate.shared!.ai
+    lazy var ai = AppDelegate.shared.ai
     
     
     override func viewWillLayoutSubviews() {
@@ -74,7 +74,7 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
             var vcs = nav.viewControllers
             vc.textFieldValue = defaultValue
             vc.screenData = data
-            vc.minValue = data.screenType == .code ? 4 : 2
+            vc.minValue = data.screenType == .code ? 4 : (data.screenType != .string ? 4 : 1)
             if vcs.count != 0 {
                 vcs.removeLast()
             }
@@ -170,7 +170,7 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
     private func next() {
         print(#function, enteringValue)
         let errorAction = {
-            AppDelegate.shared?.newMessage.show(title:"Error editing".localize, type: .error)
+            AppDelegate.shared.newMessage.show(title:"Error editing".localize, type: .error)
         }
         
         if let function = screenData?.nextAction {

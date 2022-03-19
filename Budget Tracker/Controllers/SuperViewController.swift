@@ -15,14 +15,8 @@ class SuperViewController: UIViewController, AppDelegateProtocol {
     }
     
 
-    lazy var newMessage: MessageView = {
-        let newView = AppDelegate.shared?.newMessage ?? (MessageView.instanceFromNib() as! MessageView)
-        return newView
-    }()
-    lazy var ai: IndicatorView = {
-        let newView = AppDelegate.shared?.ai ?? IndicatorView.instanceFromNib() as! IndicatorView
-        return newView
-    }()
+    lazy var newMessage: MessageView = AppDelegate.shared.newMessage
+    lazy var ai: IndicatorView = AppDelegate.shared.ai
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         //screen rotation
     }
@@ -52,7 +46,7 @@ class SuperViewController: UIViewController, AppDelegateProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         definesPresentationContext = true
-        AppDelegate.shared?.delegate = self
+        AppDelegate.shared.delegate = self
       /*  let window = UIApplication.shared.keyWindow ?? UIWindow()
         let indd = IndicatorView.instanceFromNib() as! IndicatorView
         indd.tag = 23450

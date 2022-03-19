@@ -140,7 +140,7 @@ class HistoryVC: SuperViewController {
         if selectedCategory?.purpose == .debt {
       //      center.removePendingNotificationRequests(withIdentifiers: ["Debts\(debt.name)"])
             if let cat = self.selectedCategory {
-                AppDelegate.shared?.removeNotification(id: "Debts\(cat.id )")
+                AppDelegate.shared.removeNotification(id: "Debts\(cat.id )")
             }
             
         }
@@ -166,14 +166,14 @@ class HistoryVC: SuperViewController {
         }
     }
     
-    let center = AppDelegate.shared?.center
+    let center = AppDelegate.shared.center
     func addLocalNotification(date: DateComponents, completion: @escaping (Bool) -> ()) {
         
         //if date > today
         let title = self.selectedCategory?.name ?? ""
         let id = "Debts\(self.selectedCategory?.id ?? 0)"
-        center?.removePendingNotificationRequests(withIdentifiers: [id])
-        center?.getNotificationSettings { (settings) in
+        center.removePendingNotificationRequests(withIdentifiers: [id])
+        center.getNotificationSettings { (settings) in
             if settings.authorizationStatus != .authorized {
                 completion(false)
           }
@@ -205,7 +205,7 @@ class HistoryVC: SuperViewController {
         
 
         //center.removeAllPendingNotificationRequests()
-        center?.add(request) { (error) in
+        center.add(request) { (error) in
             
             if error != nil {
                 completion(false)
@@ -366,7 +366,7 @@ class HistoryVC: SuperViewController {
     
     func tocalendatPressed() {
         
-        center?.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+        center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
 
             DispatchQueue.main.async {
                 self.ai.fastHide { _ in
@@ -480,7 +480,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
         self.changeDueDate(fullDate: "")
                         
                         let id = "Debts\(self.selectedCategory?.name ?? "")"
-                        self.center?.removePendingNotificationRequests(withIdentifiers: [id])
+                        self.center.removePendingNotificationRequests(withIdentifiers: [id])
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
                             self.ai.fastHide(completionn: { _ in
@@ -783,7 +783,7 @@ extension HistoryVC: CalendarVCProtocol {
      //   DispatchQueue.main.async {
             self.ai.show { (_) in
                 let id = "Debts\(self.selectedCategory?.id ?? 0)"
-                self.center?.removePendingNotificationRequests(withIdentifiers: [id])
+                self.center.removePendingNotificationRequests(withIdentifiers: [id])
                 let fullDate = "\(date) \(self.makeTwo(n: time?.hour ?? 0)):\(self.makeTwo(n: time?.minute ?? 0)):\(self.makeTwo(n: time?.second ?? 0))"
                 print(fullDate, "fullDatefullDatefullDatefullDate")
                 if let dateComp = self.createDateComp(date: date, time: time) {
@@ -874,7 +874,7 @@ class DebtDescriptionCell: UITableViewCell {
         }
     }
 
-    private let ai = AppDelegate.shared?.ai ?? IndicatorView.instanceFromNib() as! IndicatorView
+    private let ai = AppDelegate.shared.ai ?? IndicatorView.instanceFromNib() as! IndicatorView
     
     var removeAction:(() -> ())?
     @IBAction func changeDatePressed(_ sender: Any) {//remove

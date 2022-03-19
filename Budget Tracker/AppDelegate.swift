@@ -13,7 +13,7 @@ import AVFoundation
 class AppDelegate: UIResponder, UIApplicationDelegate{
 
     var window: UIWindow?
-    static var shared: AppDelegate?
+    static let shared = AppDelegate()
     
     
     let center = UNUserNotificationCenter.current()
@@ -38,7 +38,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         // Override point for customization after application launch.
         window?.tintColor = colorNamed(AppData.linkColor)
         center.delegate = self
-        AppDelegate.shared = self
         window?.backgroundColor = K.Colors.primaryBacground
         let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
         let value = UserDefaults.standard.value(forKey: "lastLaunching") as? String ?? ""

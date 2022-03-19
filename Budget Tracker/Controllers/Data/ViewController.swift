@@ -887,7 +887,7 @@ class ViewController: SuperViewController {
     
     var safeArreaHelperView: UIView?
     
-    let center = AppDelegate.shared?.center
+    let center = AppDelegate.shared.center
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
@@ -930,7 +930,7 @@ class ViewController: SuperViewController {
         self.safeArreaHelperView?.alpha = 0
         if !safeArreaHelperViewAdded {
             safeArreaHelperViewAdded = true
-            if let window = AppDelegate.shared?.window {
+            if let window = AppDelegate.shared.window {
                 DispatchQueue.main.async {
                     let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: safeTop))
                     self.safeArreaHelperView = view

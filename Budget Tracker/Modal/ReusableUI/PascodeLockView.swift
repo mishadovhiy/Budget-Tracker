@@ -40,6 +40,7 @@ class PascodeLockView: UIView, UITextFieldDelegate {
         }
         presenting = true
         DispatchQueue.main.async {
+            AppDelegate.shared.delegate?.resighnActive()
             let window = UIApplication.shared.keyWindow ?? UIWindow()
             self.frame = window.frame
             
@@ -47,7 +48,6 @@ class PascodeLockView: UIView, UITextFieldDelegate {
             
             window.addSubview(self)
             self.backgroundColor = .clear
-            AppDelegate.shared?.delegate?.resighnActive()
             UIView.animate(withDuration: 0.5) {
                 if self.appIcon.isHidden != false {
                     self.appIcon.isHidden = false
@@ -133,7 +133,7 @@ class PascodeLockView: UIView, UITextFieldDelegate {
         } else {
             DispatchQueue.main.async {
                 AudioServicesPlaySystemSound(1102)
-                AppDelegate.shared?.newMessage.show(title: "Wrong code!", type: .error)
+                AppDelegate.shared.newMessage.show(title: "Wrong code!".localize, type: .error)
                 self.enteredValue = ""
             }
         }

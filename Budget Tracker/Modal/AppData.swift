@@ -81,7 +81,7 @@ class AppData {
         }
         set {
             UserDefaults.standard.setValue(newValue, forKey: "deliveredNotificationIDs")
-            AppDelegate.shared?.center.getDeliveredNotifications { notifications in
+            AppDelegate.shared.center.getDeliveredNotifications { notifications in
                 DispatchQueue.main.async {
                     UIApplication.shared.applicationIconBadgeNumber = notifications.count + newValue.count
                 }

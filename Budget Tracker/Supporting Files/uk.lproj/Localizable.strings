@@ -6,7 +6,45 @@
   Copyright © 2022 Misha Dovhiy. All rights reserved.
 */
 
+
+
+"User not found" = "Користувач не знайдений";
+"Forgot password" = "Забули пароль";
+"Enter your username" = "Введіть своє ім'я користувача";
+"Username" = "Ім'я користувача";
+"Change Email" = "Змінити електронну адресу";
+"Transfer data" = "Передача даних";
+"Log out" = "Вийти";
+"Transfare data" = "Передача даних";
+"Restoration code would be sent on: " = "Код відновлення буде надіслано: ";
+"Send code" = "Надіслати код";
+"Send" = "Надіслати";
+"Cancel" = "Скасувати";
+"Wrong password" = "Неправильний пароль";
+"Enter password" = "Введіть пароль";
+"Enter username" = "Введіть ім'я користувача";
+"Enter username or email" = "Введіть ім'я користувача або електронну адресу";
+"Username or email" = "Ім'я користувача або адресу електронної пошти";
+"Change password" = "Змінити пароль";
+"Repeat password" = "Повторити пароль";
+"Your email has been changed" = "Вашу електронну адресу було змінено";
+"Enter your new email" = "Введіть нову електронну адресу";
+"You have entered: " = "Ви ввели: ";
+"Wrong code!" = "Невірний код!";
+"We have sent 4-digit resoration code on your email" = "Ми надіслали 4-значний код відновлення на вашу електронну пошту";
+"Restoration code" = "Код відновлення";
+"Code" = "Код";
+"You will receive restoration code" = "Ви отримаєте код відновлення";
+"Create your new password" = "Створіть новий пароль";
+"Enter your old password" = "Введіть свій старий пароль";
+"Old password" = "Старий пароль";
+
+
+
+
 "Categories" = "Категорії";
+
+
 
 
 "Fetching" = "Оновлення";

@@ -14,14 +14,14 @@ class NotificationsVC: SuperViewController {
     
     var tableData: [String] = []
     
-    let center = AppDelegate.shared?.center
+    let center = AppDelegate.shared.center
     override func viewDidLoad() {
         super.viewDidLoad()
 
         tableView.delegate = self
         tableView.dataSource = self
 
-        self.title = "Notification center"
+        self.title = "Notification center".localize
         
     }
     
@@ -58,7 +58,7 @@ class NotificationsVC: SuperViewController {
             }
         }*/
         
-        center?.getDeliveredNotifications { delivered in
+        center.getDeliveredNotifications { delivered in
             var res:[String] = []
             for i in 0..<delivered.count {
                 let text = delivered[i].request.identifier + "\n" + delivered[i].request.content.title + "\n" + delivered[i].request.content.subtitle + "\n" + delivered[i].request.content.body

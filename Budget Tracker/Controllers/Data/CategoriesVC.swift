@@ -632,7 +632,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     }
     
     func loadNotifications(completion: @escaping (Bool) -> ()) {
-        AppDelegate.shared?.center.getDeliveredNotifications(completionHandler: { nitof in
+        AppDelegate.shared.center.getDeliveredNotifications(completionHandler: { nitof in
             var newIDs:[String] = []
             for i in 0..<nitof.count {
                 let requestID = nitof[i].request.identifier
@@ -1721,7 +1721,7 @@ class LocalDataActionCell: UITableViewCell {
     @objc func saveLocallyPress(_ sender: UITapGestureRecognizer) {
         needDownloadOnMainAppeare = true
         DispatchQueue.main.async {
-            AppDelegate.shared?.ai.show(title:"Saving") { _ in
+            AppDelegate.shared.ai.show(title:"Saving") { _ in
                 if let action = self.saveAction {
                     action()
                 }
@@ -1731,7 +1731,7 @@ class LocalDataActionCell: UITableViewCell {
     }
     @objc func sendPress(_ sender: UITapGestureRecognizer) {
         DispatchQueue.main.async {
-            AppDelegate.shared?.ai.show(title:"Preparing") { _ in
+            AppDelegate.shared.ai.show(title:"Preparing") { _ in
                 if let action = self.sendAction {
             action()
         }
@@ -1740,7 +1740,7 @@ class LocalDataActionCell: UITableViewCell {
     }
     @objc func deletePress(_ sender: UITapGestureRecognizer) {
         DispatchQueue.main.async {
-            AppDelegate.shared?.ai.show(title:"Deleting") { _ in
+            AppDelegate.shared.ai.show(title:"Deleting") { _ in
         needDownloadOnMainAppeare = true
                 if let action = self.deleteAction {
             action()

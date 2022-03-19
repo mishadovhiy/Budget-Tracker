@@ -19,7 +19,7 @@ class SelectUserVC: SuperViewController, UITableViewDelegate, UITableViewDataSou
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        AppDelegate.shared?.ai.fastHide { _ in
+        AppDelegate.shared.ai.fastHide { _ in
             
         }
         title = "Select user".localize

@@ -309,8 +309,8 @@ class IndicatorView: UIView {
             if buttons.1 != nil{
                 self.rightButton.setTitle(buttons.1?.title ?? "Cancel".localize, for: .normal)
             }
-            self.titleLabel.text = type == .internetError ? "Internet error".localize : title
-            self.descriptionLabel.text = type == .internetError ? "Try again later".localize : descriptionText
+            self.titleLabel.text = type == .internetError ? Text.Error.InternetTitle: title
+            self.descriptionLabel.text = type == .internetError ? Text.Error.internetDescription : descriptionText
                 UIView.animate(withDuration: 0.20) {
                     if self.titleLabel.isHidden != false {
                         self.titleLabel.isHidden = false

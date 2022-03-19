@@ -170,7 +170,7 @@ class BuyProVC: SuperViewController {
                  //   let load = LoadFromDB()
                     LoadFromDB.shared.Users { (loadedData, error) in
                         if error {
-                            self.showAlert(title: "Internet error".localize, text: "Try again later".localize, error: true)
+                            self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
                         } else {
                             let email = appData.emailFromLoadedDataPurch(loadedData) //appData.username
                             for i in 0..<loadedData.count {
@@ -235,17 +235,17 @@ class BuyProVC: SuperViewController {
         delete.User(toDataString: toDataStringMian) { (errorr) in
             if errorr {
                 //showError    appData.unsendedData.append(["deleteUser": dataStringDelete])
-                self.showAlert(title: "Internet error".localize, text: "Try again later".localize, error: true)
+                self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
             } else {
                 SaveToDB.shared.Users(toDataString: dataStringSave ) { (error) in
                 if error {
                     //showError       appData.unsendedData.append(["saveUser": dataStringSave])
-                    self.showAlert(title: "Internet error".localize, text: "Try again later".localize, error: true)
+                    self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
                 } else {
                     DispatchQueue.main.async {
                         appData.proTrial = true
                         appData.trialDate = today
-                        self.showAlert(title: "Success".localize, text: "Trial has been started successfully".localize, error: false, goHome: true)
+                        self.showAlert(title: Text.success, text: "Trial has been started successfully".localize, error: false, goHome: true)
 
                     }
                 }
@@ -298,7 +298,7 @@ class BuyProVC: SuperViewController {
                             }
                         } else {
 
-                            self.showAlert(title: "Internet error".localize, text: "Try again later".localize, error: true)
+                            self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
                         }
                         
                     }
@@ -393,11 +393,11 @@ extension BuyProVC: SKPaymentTransactionObserver {
         print(dataStringDelete)
         delete.User(toDataString: dataStringDelete) { (errorr) in
             if errorr {
-                self.showAlert(title: "Internet error".localize, text: "Try again later".localize, error: true)
+                self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
             } else {
                 SaveToDB.shared.Users(toDataString: dataStringSave ) { (error) in
                     if error {
-                        self.showAlert(title: "Internet error".localize, text: "Try again later".localize, error: true)
+                        self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
                     } else {
                         self.scsPurchaseShow()
                     }
@@ -411,7 +411,7 @@ extension BuyProVC: SKPaymentTransactionObserver {
     func scsPurchaseShow() {
         DispatchQueue.main.async {
             self.showPurchasedIndicator()
-            self.showAlert(title: "Success".localize, text: "Pro features available across all your devices".localize, error: false, goHome: true)
+            self.showAlert(title: Text.success, text: "Pro features available across all your devices".localize, error: false, goHome: true)
         }
     }
     
