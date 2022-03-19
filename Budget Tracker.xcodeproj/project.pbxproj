@@ -14,8 +14,9 @@
 		8B20751227D9A7AF00CF2172 /* PascodeLockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B20751127D9A7AF00CF2172 /* PascodeLockView.swift */; };
 		8B2163A2274070BA003EDFE0 /* snippets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2163A1274070BA003EDFE0 /* snippets.swift */; };
 		8B26327E27E66B060086C3A8 /* LocalizationDict.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B26327D27E66B060086C3A8 /* LocalizationDict.swift */; };
-		8B26328027E675CE0086C3A8 /* NavigationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B26327F27E675CE0086C3A8 /* NavigationItem.swift */; };
 		8B26328227E677930086C3A8 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B26328127E677930086C3A8 /* Label.swift */; };
+		8B26328427E67D1D0086C3A8 /* SegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B26328327E67D1D0086C3A8 /* SegmentedControl.swift */; };
+		8B26328627E67E720086C3A8 /* UISegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B26328527E67E720086C3A8 /* UISegmentedControl.swift */; };
 		8B2A4D72271439520085E0F0 /* MoreVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2A4D71271439520085E0F0 /* MoreVC.swift */; };
 		8B324B692683118000E72275 /* NotificationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B324B682683118000E72275 /* NotificationsVC.swift */; };
 		8B331AF727E4105C0093BF72 /* LogIn.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B331AF927E4105C0093BF72 /* LogIn.storyboard */; };
@@ -96,8 +97,9 @@
 		8B20751127D9A7AF00CF2172 /* PascodeLockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PascodeLockView.swift; sourceTree = "<group>"; };
 		8B2163A1274070BA003EDFE0 /* snippets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = snippets.swift; sourceTree = "<group>"; };
 		8B26327D27E66B060086C3A8 /* LocalizationDict.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationDict.swift; sourceTree = "<group>"; };
-		8B26327F27E675CE0086C3A8 /* NavigationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationItem.swift; sourceTree = "<group>"; };
 		8B26328127E677930086C3A8 /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
+		8B26328327E67D1D0086C3A8 /* SegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedControl.swift; sourceTree = "<group>"; };
+		8B26328527E67E720086C3A8 /* UISegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UISegmentedControl.swift; sourceTree = "<group>"; };
 		8B2A4D71271439520085E0F0 /* MoreVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreVC.swift; sourceTree = "<group>"; };
 		8B324B682683118000E72275 /* NotificationsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsVC.swift; sourceTree = "<group>"; };
 		8B331AF327E40FFA0093BF72 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Main.strings; sourceTree = "<group>"; };
@@ -198,6 +200,14 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		8B26328727E681110086C3A8 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				8B26327D27E66B060086C3A8 /* LocalizationDict.swift */,
+			);
+			path = Localization;
+			sourceTree = "<group>";
+		};
 		8B3F919827D31C4000BE826C /* Data */ = {
 			isa = PBXGroup;
 			children = (
@@ -238,6 +248,7 @@
 				8B82A04027E2BDBD0011EC80 /* UITextField.swift */,
 				8B52CC6627E3001B008D5348 /* UITableViewCell.swift */,
 				8B331B0A27E4128B0093BF72 /* String.swift */,
+				8B26328527E67E720086C3A8 /* UISegmentedControl.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -324,9 +335,9 @@
 			isa = PBXGroup;
 			children = (
 				8BC31D7A27E3E5EA00FBC939 /* Button.swift */,
-				8B26327F27E675CE0086C3A8 /* NavigationItem.swift */,
 				8BD3A3D827E4097400547022 /* View.swift */,
 				8B26328127E677930086C3A8 /* Label.swift */,
+				8B26328327E67D1D0086C3A8 /* SegmentedControl.swift */,
 			);
 			path = ovverideObjects;
 			sourceTree = "<group>";
@@ -368,14 +379,14 @@
 			isa = PBXGroup;
 			children = (
 				8B82A04227E2BDCD0011EC80 /* Extensions */,
+				8B91F09027E58EF900B74F5A /* Text.swift */,
 				8B7D1AA0276CF203008942EC /* IconList.swift */,
 				8DBA7E5B23F0317100D8214C /* Assets.xcassets */,
 				8DBA7E5D23F0317100D8214C /* LaunchScreen.storyboard */,
 				8BAA72B427CB7D41005298B6 /* Keys.swift */,
 				8DD89D8B23F1485700273904 /* Constants.swift */,
 				8B331B0827E412170093BF72 /* Localizable.strings */,
-				8B91F09027E58EF900B74F5A /* Text.swift */,
-				8B26327D27E66B060086C3A8 /* LocalizationDict.swift */,
+				8B26328727E681110086C3A8 /* Localization */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -546,6 +557,7 @@
 				8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */,
 				8B47F92D2773B90300FD96AA /* MessageView.swift in Sources */,
 				8B52CC6727E3001B008D5348 /* UITableViewCell.swift in Sources */,
+				8B26328627E67E720086C3A8 /* UISegmentedControl.swift in Sources */,
 				8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */,
 				8B91F09127E58EF900B74F5A /* Text.swift in Sources */,
 				8B57837E275E6977007BA9EC /* SideBar.swift in Sources */,
@@ -558,6 +570,7 @@
 				8B1FD85D270C4DE2004E225E /* splitVC.swift in Sources */,
 				8DBA7E5423F0316F00D8214C /* ViewController.swift in Sources */,
 				8BD2E77C25B8622100D4DFBF /* LoginViewController.swift in Sources */,
+				8B26328427E67D1D0086C3A8 /* SegmentedControl.swift in Sources */,
 				8B35DA6625C6F124008A8719 /* Keychain.swift in Sources */,
 				8D8B6C3C245023D0007260A0 /* FilterTVC.swift in Sources */,
 				8BE60E5927726EA8007B7FB3 /* LastSelected.swift in Sources */,
@@ -573,7 +586,6 @@
 				8B7D1AA1276CF203008942EC /* IconList.swift in Sources */,
 				8B91F08E27E587A800B74F5A /* SettingsData.swift in Sources */,
 				8B52DFEA2750232D00595A0C /* NumbersView.swift in Sources */,
-				8B26328027E675CE0086C3A8 /* NavigationItem.swift in Sources */,
 				8BD3A3D927E4097400547022 /* View.swift in Sources */,
 				8DD89D8723F1471400273904 /* AppData.swift in Sources */,
 				8B8D556125BB218400D7C6A7 /* UnsendedDataVC.swift in Sources */,

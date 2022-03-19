@@ -16,7 +16,7 @@ class SupportVC: SuperViewController, UITextViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.title = "Support message".localize
         textView.delegate = self
         
         //textView.addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)

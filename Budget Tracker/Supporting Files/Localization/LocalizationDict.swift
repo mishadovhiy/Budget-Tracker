@@ -9,10 +9,11 @@
 import UIKit
 
 struct LocalizationDict {
-
+    
     static let UADict: [String:String] = [
         "Enter Passcode":"Введіть пароль",
-        
+        "Total":"Всього",
+        "Total:":"Всього:",
         "User not found" : "Користувач не знайдений",
         "Forgot password" : "Забули пароль",
         "Enter your username" : "Введіть своє ім'я користувача",
@@ -108,6 +109,10 @@ struct LocalizationDict {
         "Months" : "Місяці",
         "Years" : "Роки",
         "Debts" : "Борги",
+        
+        "Jul" : "Лип",
+        "Jun" : "Чер",
+        "Sep" : "Вер",
         
         "All transaction" : "Усі транзакції",
         "Saving" : "Збереження",

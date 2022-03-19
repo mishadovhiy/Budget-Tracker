@@ -29,7 +29,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        searchBar.placeholder = "Category search".localize
         CategoriesVC.shared = self
         tableView.delegate = self
         tableView.dataSource = self

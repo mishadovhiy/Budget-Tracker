@@ -1,5 +1,5 @@
 //
-//  Label.swift
+//  SegmentedControl.swift
 //  Budget Tracker
 //
 //  Created by Mikhailo Dovhyi on 19.03.2022.
@@ -8,18 +8,21 @@
 
 import UIKit
 
-@IBDesignable
-class Label: UILabel {
+class SegmentedControl: UISegmentedControl {
 
     private var drawed = false
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         if !drawed {
             drawed = true
-            self.text = self.text?.localize
+            let all = self.numberOfSegments
+            for i in 0..<all {
+                let title = self.titleForSegment(at: i)?.localize
+                self.setTitle(title, forSegmentAt: i)
+            }
         }
-        
+       
     }
-
+    
 
 }

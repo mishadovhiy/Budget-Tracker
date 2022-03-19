@@ -11,6 +11,19 @@ import UIKit
 @IBDesignable
 class Button: UIButton {
     
+    private var drawed = false
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        if !drawed {
+            drawed = true
+            DispatchQueue.main.async {
+                self.setTitle(self.title(for: .normal)?.localize, for: .normal)
+            }
+        }
+        
+    }
+    
+    
     @IBInspectable open var cornerRadius: CGFloat = 0 {
         didSet {
             layer.cornerRadius = cornerRadius

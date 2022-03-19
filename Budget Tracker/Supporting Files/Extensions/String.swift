@@ -14,7 +14,11 @@ extension String {
             let loc = UserSettings.launchedLocalization
             switch loc {
             case .ua:
-                return LocalizationDict.UADict[self] ?? self
+                let text = LocalizationDict.UADict[self]
+                if text == nil {
+                    print("/////////////////////////// STRING NOT FOUND: ", self)
+                }
+                return text ?? self
             case .eng:
                 return self
             }

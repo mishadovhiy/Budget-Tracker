@@ -305,6 +305,11 @@
             <point key="canvasLocation" x="137.68115942028987" y="-19.419642857142858"/>
         </view>
     </objects>
+    <designables>
+        <designable name="Iam-YJ-BVU">
+            <size key="intrinsicContentSize" width="161.5" height="27.5"/>
+        </designable>
+    </designables>
     <resources>
         <image name="delete.left.fill" catalog="system" width="128" height="104"/>
         <image name="ic" width="1024" height="1024"/>
