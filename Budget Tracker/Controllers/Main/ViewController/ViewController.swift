@@ -53,7 +53,7 @@ class ViewController: SuperViewController {
 
         //needDownloadOnMainAppeare = false
         let sideBarPinch = UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:)))
-        mainContentView.addGestureRecognizer(sideBarPinch)
+        pinchView.addGestureRecognizer(sideBarPinch)
         ViewController.shared = self
         updateUI()
         if #available(iOS 15.0, *) {
@@ -258,6 +258,7 @@ class ViewController: SuperViewController {
                 UIView.animate(withDuration: 0.05) {
                     self.mainContentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, newPosition, 0, 0)
                     self.mainContentViewHelpher.layer.transform = CATransform3DTranslate(CATransform3DIdentity, newPosition, 0, 0)
+                    self.pinchView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, newPosition, 0, 0)
                 } completion: { _ in
                     
                 }
@@ -294,6 +295,7 @@ class ViewController: SuperViewController {
             UIView.animate(withDuration: animated ? 0.35 : 0) {
                 self.mainContentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
                 self.mainContentViewHelpher.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
+                self.pinchView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
 
             } completion: { _ in
                 self.sideBar.getData()
@@ -379,6 +381,7 @@ class ViewController: SuperViewController {
     
     var layaled = false
 
+    @IBOutlet weak var pinchView: UIView!
     
     func updateUI() {
      //   addTransitionButton.translatesAutoresizingMaskIntoConstraints = true

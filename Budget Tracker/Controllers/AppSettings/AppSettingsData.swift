@@ -93,7 +93,7 @@ class AppSettingsData {
             })
             
             
-            return [passcodeCell, changePasscodeCell, passcodeTimeOut]
+            return [passcodeCell, passcodeTimeOut, changePasscodeCell]
         } else {
             return [passcodeCell]
         }
