@@ -67,7 +67,7 @@ class AppSettingsData {
         
         if passcodeOn {
 
-            let changePasscodeCell = SettingsVC.StandartCell(title: "Change passcode".localize, action: {
+            let changePasscodeCell = SettingsVC.StandartCell(title: "Change passcode".localize, showIndicator: false, action: {
                 
                 self.getUserPasscode {
                     self.createPassword { newValue in
@@ -103,7 +103,7 @@ class AppSettingsData {
     
     func otherSection() -> [Any] {
         
-        let otherCell = SettingsVC.StandartCell(title: "Access settings".localize, description: "", action: {
+        let otherCell = SettingsVC.StandartCell(title: "Access settings".localize, description: "", showIndicator: false, action: {
             DispatchQueue.main.async {
                 if let url = URL(string: UIApplication.openSettingsURLString) {
                     UIApplication.shared.open(url, options: [:]) { _ in
@@ -120,7 +120,7 @@ class AppSettingsData {
             }
         })
         
-        let devSupport = SettingsVC.StandartCell(title: "App website".localize, action: {
+        let devSupport = SettingsVC.StandartCell(title: "App website".localize, showIndicator: false, action: {
             let urlString = "https://dovhiy.com/#budget"
             if let url = URL(string: urlString) {
                 DispatchQueue.main.async {
@@ -139,9 +139,16 @@ class AppSettingsData {
                     WebViewVC.shared.presentScreen(in: nav, data: .init(url: "https://dovhiy.com/apps/previews/budget.html", key: "Privacy"), screenTitle: pprivacyTitle)
                 }
             }
+            
         })
         
-        return [otherCell, supportCell, devSupport, privacy]
+        if #available(iOS 13.0, *) {
+            return [supportCell, privacy, devSupport, otherCell]
+        } else {
+            return [supportCell, devSupport, otherCell]
+        }
+        
+        
     }
 }
 

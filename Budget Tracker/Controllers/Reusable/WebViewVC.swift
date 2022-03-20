@@ -10,10 +10,6 @@ import UIKit
 import WebKit
 
 class WebViewVC: UIViewController, UIScrollViewDelegate, WKNavigationDelegate {
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        print("CAaaaaaaallll")
-        decisionHandler(.allow)
-    }
     @IBOutlet weak var screenAI: UIActivityIndicatorView!
     
     @IBOutlet weak var webView: WKWebView!

@@ -127,7 +127,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource {
                 if standartData.colorNamed != "" {
                     cell.colorView.backgroundColor = AppData.colorNamed(standartData.colorNamed)
                 }
-                
+                cell.accessoryType = standartData.showIndicator ? .disclosureIndicator : .none
                 return cell
             } else {
                 return UITableViewCell()
@@ -160,6 +160,7 @@ extension SettingsVC {
         
         var description:String = ""
         var colorNamed:String = ""
+        var showIndicator:Bool = true
         let action: () -> ()
     }
     
