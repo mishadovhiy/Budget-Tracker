@@ -26,7 +26,7 @@ class CalendarVC: SuperViewController {
     @IBOutlet weak var collectionView: UICollectionView!
    // @IBOutlet weak var textField: UITextField!
     
-    @IBOutlet weak var textField: TextField!
+    @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var endButton: UIButton!
     @IBOutlet weak var buttonsStack: UIStackView!
@@ -69,6 +69,7 @@ class CalendarVC: SuperViewController {
         endButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, height + self.endButton.layer.frame.height, 0)
         textField.layer.masksToBounds = true
         textField.layer.cornerRadius = 5
+            textField.setPaddings(5)
         }
     }
     override func viewDidLoad() {
@@ -950,19 +951,5 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
     
 }
 
-class TextField: UITextField {
 
-    let padding = UIEdgeInsets(top: 0, left: 7, bottom: 0, right: 7)
 
-    override open func textRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.inset(by: padding)
-    }
-
-    override open func placeholderRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.inset(by: padding)
-    }
-
-    override open func editingRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds.inset(by: padding)
-    }
-}

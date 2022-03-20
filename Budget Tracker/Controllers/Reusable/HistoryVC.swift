@@ -310,7 +310,7 @@ class HistoryVC: SuperViewController {
         switch segue.identifier {
         case "toTransVC":
             toAddVC = true
-            let nav = segue.destination as! NavigationController
+            let nav = segue.destination as! UINavigationController
             let vc = nav.topViewController as! TransitionVC
             vc.delegate = self
             vc.fromDebts = fromCategories ? true : false
@@ -346,7 +346,8 @@ class HistoryVC: SuperViewController {
     func changeDueDate(fullDate: String) {
         //self.addLocalNotification(date: dateComp, title: self.debt?.name ?? "") { (_) in
         if let category = selectedCategory {
-            let newDate = stringToCompIso(s: fullDate)
+            let comp = DateComponents()
+            let newDate = comp.stringToCompIso(s: fullDate)
             self.dbLoadRemoveBeforeUpdate { (loadedData, _) in
               //  let save = SaveToDB()
                 var newCategory = category
@@ -574,7 +575,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             cell.restAmountLabel.text = "\(amToPay + tEx)"
             cell.amountToPayLabel.text = "\(amToPay)"
             cell.progressBar.progress = Float(progress)
-            cell.progressBar.progressTintColor = colorNamed(selectedCategory?.color)
+            cell.progressBar.progressTintColor = AppData.colorNamed(selectedCategory?.color)
             cell.progressBar.isHidden = amToPay == 0
       //      cell.amountToPayTextField.isHidden = !amountToPayEditing
   //          cell.amountToPayLabel.isHidden = amountToPayEditing
@@ -657,7 +658,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
 
                 
             }
-            deleteAction.image = iconNamed("trash.red")
+            deleteAction.image = AppData.iconNamed("trash.red")
             deleteAction.backgroundColor = K.Colors.primaryBacground
             return historyDataStruct.count == 0 ? nil : UISwipeActionsConfiguration(actions: allowEditing && mainType != .unsaved ? [deleteAction] : [])
         } else {
@@ -770,11 +771,11 @@ extension HistoryVC: TransitionVCProtocol {
 extension HistoryVC: CalendarVCProtocol {
     
     func createDateComp(date:String, time:DateComponents?) -> DateComponents? {
-        var date = stringToCompIso(s: date)
+        var date = time?.stringToCompIso(s: date)
         if let time = time {
-            date.second = time.second
-            date.minute = time.minute
-            date.hour = time.hour
+            date?.second = time.second
+            date?.minute = time.minute
+            date?.hour = time.hour
             
         }
         return date
@@ -792,7 +793,7 @@ extension HistoryVC: CalendarVCProtocol {
                 if let dateComp = self.createDateComp(date: date, time: time) {
                     print(dateComp, "dateCompdateCompdateComp")
                     
-                    if let isoFullString = dateCompToIso(isoComp: dateComp) {
+                    if let isoFullString = dateComp.toIsoString() {
                         if !self.dateExpired(dateComp) {
                             self.addLocalNotification(date: dateComp) { (added) in
                                 self.changeDueDate(fullDate: isoFullString)
@@ -1005,8 +1006,8 @@ class AmountToPayCell: UITableViewCell {
                     }
                 }
                 
-                self.deleteButton.setImage(iconNamed(deleteIcon), for: .normal)
-                self.changeButton.setImage(iconNamed(changeIcon), for: .normal)
+                self.deleteButton.setImage(AppData.iconNamed(deleteIcon), for: .normal)
+                self.changeButton.setImage(AppData.iconNamed(changeIcon), for: .normal)
                
             }
         }

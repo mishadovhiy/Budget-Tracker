@@ -36,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        window?.tintColor = colorNamed(AppData.linkColor)
+        window?.tintColor = AppData.colorNamed(AppData.linkColor)
         center.delegate = self
         window?.backgroundColor = K.Colors.primaryBacground
         let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
@@ -59,7 +59,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         
         
         let localization = UserDefaults.standard.value(forKey: "Localization") as? String
-        UserSettings.launchedLocalization = UserSettings.stringToLocalization(localization)
+        AppLocalization.launchedLocalization = AppLocalization.stringToLocalization(localization)
         
         
         return true
