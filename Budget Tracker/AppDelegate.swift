@@ -56,12 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
             }
         }
         
-        
-        
-        let localization = UserDefaults.standard.value(forKey: "Localization") as? String
-        let devicaLoc = NSLocale.current.languageCode ?? "-"
-        print(devicaLoc, "devicaLocdevicaLocdevicaLocdevicaLoc")
-        AppLocalization.launchedLocalization = localization ?? devicaLoc
+        AppLocalization.launchedLocalization = AppLocalization.udLocalization ?? (NSLocale.current.languageCode ?? "-")
         
         
         return true
@@ -73,8 +68,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     private var backgroundEnterDate:Date?
     
     func applicationWillResignActive(_ application: UIApplication) {
-        if UserSettings.Security.password != "" {
+        if UserSettings.Security.password != "" && !(passcodeLock.presenting ?? true) {
             backgroundEnterDate = Date();
+            
             passcodeLock.present()
         }
     }
@@ -100,8 +96,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         }
         if UserSettings.Security.password != "" {
             guard let logoutDate = backgroundEnterDate else{
-                passcodeLock.present()
-                passcodeLock.passcodeLock()
+                if !(passcodeLock.presenting ?? true) {
+                    passcodeLock.present()
+                    passcodeLock.passcodeLock()
+                }
+                
                 return;
             }
             let now = Date()
@@ -110,7 +109,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
             if ti > timeout {
                 passcodeLock.passcodeLock()
             } else {
-                if !passcodeLock.passwordNotEntered {
+                if !(passcodeLock.passwordNotEntered ?? true) {
                     passcodeLock.hide()
                 }
                 

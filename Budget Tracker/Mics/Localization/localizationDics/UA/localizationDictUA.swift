@@ -12,6 +12,10 @@ import UIKit
 struct localizationDictUA {
 
     static let dictUA: [String:String] = [
+        "Price":"Ціна",
+        "Free Trial":"Безкоштовне випробування",
+        "Restore purchase":"Відновити покупку",
+        "Buy Pro":"Купити Pro",
         "Developer website":"Сайт розробника",
         "Set":"Встановити",
         "Passcode timeout":"Час очікування пароля",
@@ -211,11 +215,11 @@ struct localizationDictUA {
         "Permission denied" : "У дозволі відмовлено",
         "You have already tried trial version" : "Ви вже спробували пробну версію",
         "Reminders for debts" : "Нагадування про борги",
-        "Set notification reminders" : "Встановити нагадування про сповіщення",
-        "Transfer data" : "Перенести данi з iншого аккаунту",
-        "Transfer transactions and categories between accounts" : "Транзакції та категорії перенесення між рахунками",
-        "App storage increes" : "Збільшується обсяг пам'яті програми",
-        "Create up to 15 accounts for email\n\nStores data about categories usage" : "Створити до 15 облікових записів для електронної пошти\n\nЗберігає дані про використання категорій",
+        "Set notification reminders" : "Встановити нагадування",
+        "Transfer data" : "Данi мiж аккаунтами",
+        "Transfer transactions and categories between accounts" : "Переносьте транзакції та категорії між аккаунтами",
+        "App storage increes" : "Збільште обсяг пам'яті програми",
+        "Create up to 15 accounts for email\n\nStores data about categories usage" : "Стоворюйте до 15 облікових записів для електронної пошти\n\nДодаток зберігає дані про використання категорій",
 
         "Pro version available across all your devices" : "Pro-версія доступна на всіх ваших пристроях",
         "Payment failed" : "Платіж не вдалося",

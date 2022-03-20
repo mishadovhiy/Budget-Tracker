@@ -43,6 +43,7 @@ class AppSettingsData {
             let langs = ["eng", "ua"]
             let colorSetted: (Int) -> () = { (newValue) in
                 AppLocalization.launchedLocalization = langs[newValue]
+                AppLocalization.udLocalization = langs[newValue]
                 self.vc.loadData()
             }
             
@@ -102,7 +103,12 @@ class AppSettingsData {
     func otherSection() -> [Any] {
         
         let otherCell = SettingsVC.StandartCell(title: "Access settings".localize, description: "", action: {
-            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:]) { _ in
+            DispatchQueue.main.async {
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url, options: [:]) { _ in
+                        
+                    }
+                }
                 
             }
         })

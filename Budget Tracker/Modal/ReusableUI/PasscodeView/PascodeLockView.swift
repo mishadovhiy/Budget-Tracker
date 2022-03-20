@@ -48,7 +48,9 @@ class PascodeLockView: UIView, UITextFieldDelegate {
             
             window.addSubview(self)
             self.backgroundColor = .clear
+            self.appIcon.alpha = 1
             UIView.animate(withDuration: 0.5) {
+                
                 if self.appIcon.isHidden != false {
                     self.appIcon.isHidden = false
                 }
@@ -62,13 +64,15 @@ class PascodeLockView: UIView, UITextFieldDelegate {
             }
         }
     }
-    private var presenting = false
+     var presenting = false
     
     var passwordNotEntered = true
     func passcodeLock() {
+        presenting = true
         passwordNotEntered = true
         DispatchQueue.main.async {
             UIView.animate(withDuration: 0.3) {
+                self.appIcon.alpha = 0
                 self.backgroundColor = self.backgroundCol
                 if self.numbersStack.isHidden != false {
                     self.numbersStack.isHidden = false

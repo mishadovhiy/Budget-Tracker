@@ -624,7 +624,7 @@ class AppData {
     
     func createFirstData(completion: @escaping () -> ()) {
         
-       /* let transactions = [
+    /*    let transactions = [
             TransactionsStruct(value: "5000", categoryID: "Freelance", date: "\(filter.getToday(filter.filterObjects.currentDate, dateformatter: "01.MM.yyyy"))", comment: ""),
             TransactionsStruct(value: "10000", categoryID: "Work", date: "\(filter.getToday(filter.filterObjects.currentDate, dateformatter: "01.01.yyyy"))", comment: ""),
             TransactionsStruct(value: "-100", categoryID: "Food", date: "\(filter.getToday(filter.filterObjects.currentDate, dateformatter: "01.MM.yyyy"))", comment: ""),
@@ -632,6 +632,7 @@ class AppData {
             TransactionsStruct(value: "-1000", categoryID: "Bills", date: "\(filter.getToday(filter.filterObjects.currentDate))", comment: ""),
         ]
         let categories = [
+            NewCategories(id: <#T##Int#>, name: <#T##String#>, icon: <#T##String#>, color: <#T##String#>, purpose: <#T##CategoryPurpose#>)
             CategoriesStruct(name: "Food", purpose: K.expense, count: 0),
             CategoriesStruct(name: "Taxi", purpose: K.expense, count: 0),
             CategoriesStruct(name: "Public Transport", purpose: K.expense, count: 0),

@@ -24,6 +24,15 @@ struct AppLocalization {
     
     static var launchedLocalization:String = "eng"
 
+    
+    static var udLocalization :String? {
+        get {
+            return UserDefaults.standard.value(forKey: "Localization") as? String
+        }
+        set {
+            UserDefaults.standard.value(forKey: "Localization")
+        }
+    }
 
 }
 
