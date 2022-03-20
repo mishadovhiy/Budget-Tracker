@@ -33,7 +33,7 @@ struct UserSettings {
         
         static var timeOut:String {
             get {
-                return UserSettings.dict["timeOut"] as? String ?? ""
+                return UserSettings.dict["timeOut"] as? String ?? "15"
             }
             set {
                 UserSettings.dict["timeOut"] = newValue

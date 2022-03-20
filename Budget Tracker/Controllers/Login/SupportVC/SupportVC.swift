@@ -19,10 +19,6 @@ class SupportVC: SuperViewController, UITextViewDelegate {
         self.title = "Support message".localize
         textView.delegate = self
         
-        //textView.addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
-        //value did change
-        title = "Support message"
-
         let swipe = UISwipeGestureRecognizer(target: self, action: #selector(closeSwipped(_:)))
         let closePress = UISwipeGestureRecognizer(target: self, action: #selector(closePressed(_:)))
         swipe.direction = .down

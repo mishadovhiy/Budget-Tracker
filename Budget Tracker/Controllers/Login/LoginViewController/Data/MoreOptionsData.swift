@@ -9,7 +9,7 @@
 import UIKit
 
 
-class SettingsDataLogin {
+class MoreOptionsData {
     //[MoreVC.ScreenData]
     
     let vc:LoginViewController
@@ -662,7 +662,7 @@ class SettingsDataLogin {
 
 
 
-extension SettingsDataLogin {
+extension MoreOptionsData {
     func showAlert(title:String? = nil,text:String? = nil, error: Bool, goToLogin: Bool = false) {
         
         let resultTitle = title == nil ? (error ? Text.Error.error : Text.success) : title!

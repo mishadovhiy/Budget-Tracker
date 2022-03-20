@@ -11,18 +11,16 @@ import UIKit
 @IBDesignable
 class Button: UIButton {
     
-    private var drawed = false
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        if !drawed {
-            drawed = true
+    override func willMove(toWindow newWindow: UIWindow?) {
+        super.willMove(toWindow: newWindow)
+        
+        if let local = self.title(for: .normal)?.localize {
             DispatchQueue.main.async {
-                self.setTitle(self.title(for: .normal)?.localize, for: .normal)
+                self.setTitle(local, for: .normal)
             }
         }
         
     }
-    
     
     @IBInspectable open var cornerRadius: CGFloat = 0 {
         didSet {

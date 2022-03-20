@@ -8,21 +8,16 @@
 
 import UIKit
 
-
-// перенести сюда суппорт
-
 class SettingsVC: SuperViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
     var tableData:[TableData]  = []
     
+
     func loadData() {
-        tableData = [
-            TableData(sectionTitle: "Appearance".localize, cells: appearenceSection()),
-            TableData(sectionTitle: "Security".localize, cells: privacySection()),
-            TableData(sectionTitle: "", cells: otherSection())
-        ]
+        let dataModel = AppSettingsData(vc: self)
+        tableData = dataModel.getData()
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
@@ -82,6 +77,15 @@ class SettingsVC: SuperViewController {
             }
         }
     }
+    
+    
+    func toChooseIn(data:[String], title:String, selectedAction:@escaping(Int) -> ()) {
+        if let nav = self.navigationController {
+            SelectUserVC.shared.presentScreen(in: nav, with: data, title: title, selected: selectedAction)
+        }
+        
+    }
+    
 }
 
 
@@ -169,127 +173,6 @@ extension SettingsVC {
 
 
 
-
-
-
-
-extension SettingsVC {
-
-    func appearenceSection() -> [Any] {
-        let colorAction = {
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "toColors", sender: self)
-            }
-        }
-        
-        let languageAction = {
-            /*UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:]) { _ in
-                
-            }*/
-            if AppLocalization.launchedLocalization == .eng {
-                UserDefaults.standard.setValue("ua", forKey: "Localization")
-                AppLocalization.launchedLocalization = .ua
-                
-            } else {
-                UserDefaults.standard.setValue("eng", forKey: "Localization")
-                AppLocalization.launchedLocalization = .eng
-            }
-            self.loadData()
-        }
-        
-        return [
-            StandartCell(title: "Primary color".localize, description: "", colorNamed:  AppData.linkColor, action: colorAction),
-            StandartCell(title: "Language".localize, description: AppLocalization.launchedLocalization.rawValue, action: languageAction)
-        ]
-    }
-    
-    func privacySection() -> [Any] {
-        print("privacySection")
-        let passcodeOn = UserSettings.Security.password != ""
-        let passcodeSwitched:(Bool) -> () = { (newValue) in
-            self.passcodeSitched(isON: newValue)
-        }
-        let passcodeCell:TriggerCell = TriggerCell(title: "Passcode".localize, isOn: passcodeOn, action: passcodeSwitched)
-        if passcodeOn {
-            let changePasscodeAction:() -> () = {
-                self.getUserPasscode {
-                    self.createPassword { newValue in
-                        UserSettings.Security.password = newValue
-                        self.loadData()
-                    }
-                }
-            }
-            let changePasscodeCell = StandartCell(title: "Change passcode".localize, action: changePasscodeAction)
-            return [passcodeCell, changePasscodeCell]
-        } else {
-            return [passcodeCell]
-        }
-        
-    }
-    
-    
-    func otherSection() -> [Any] {
-        return [
-            StandartCell(title: "Support".localize, action: {
-                DispatchQueue.main.async {
-                    self.performSegue(withIdentifier: "toSupport", sender: self)
-                }
-            })
-        ]
-    }
-}
-
-
-extension SettingsVC {
-    //create password
-    
-    func passcodeSitched(isON:Bool) {
-        if !isON {
-            if UserSettings.Security.password != "" {
-                self.getUserPasscode {
-                    UserSettings.Security.password = ""
-                    self.loadData()
-                }
-            }
-            loadData()
-            
-        } else {
-            loadData()
-            self.createPassword { newValue in
-                UserSettings.Security.password = newValue
-                self.loadData()
-            }
-            
-        }
-    }
-    
-    func getUserPasscode(completion:@escaping() -> ()) {
-        AppDelegate.shared.passcodeLock.present(passcodeEntered: completion)
-        AppDelegate.shared.passcodeLock.passcodeLock()
-    }
-    
-    
-    func createPassword(completion: @escaping(String) -> ()) {
-        
-        let nextAction:(String) -> () = { (newValue) in
-            let repeateAction:(String) -> () = { (repeatedPascode) in
-                if newValue == repeatedPascode {
-                    AppDelegate.shared.newMessage.show(title: "Passcode has been setted".localize, type: .succsess)
-                    self.toEnterValue(data: nil)
-                    completion(newValue)
-                } else {
-                    AppDelegate.shared.newMessage.show(title: "Passcodes don't match".localize, type: .error)
-                }
-            }
-            let passcodeSecondEntered = EnterValueVC.EnterValueVCScreenData(taskName: "Create".localize + " " + "passcode".localize, title: "Repeat".localize + " " + "passcode".localize, placeHolder: "Password".localize, nextAction: repeateAction, screenType: .code)
-            self.toEnterValue(data: passcodeSecondEntered)
-            
-        }
-        
-        let screenData = EnterValueVC.EnterValueVCScreenData(taskName: ("Create".localize + " " + "passcode".localize), title: ("Enter".localize + " " + "passcode".localize), placeHolder: "Passcode".localize, nextAction: nextAction, screenType: .code)
-        toEnterValue(data: screenData)
-    }
-}
 
 
 

@@ -10,19 +10,15 @@ import UIKit
 
 class SegmentedControl: UISegmentedControl {
 
-    private var drawed = false
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        if !drawed {
-            drawed = true
-            let all = self.numberOfSegments
-            for i in 0..<all {
-                let title = self.titleForSegment(at: i)?.localize
+    override func willMove(toWindow newWindow: UIWindow?) {
+        super.willMove(toWindow: newWindow)
+        let all = self.numberOfSegments
+        for i in 0..<all {
+            
+            if let title = self.titleForSegment(at: i)?.localize {
                 self.setTitle(title, forSegmentAt: i)
             }
         }
-       
     }
-    
 
 }

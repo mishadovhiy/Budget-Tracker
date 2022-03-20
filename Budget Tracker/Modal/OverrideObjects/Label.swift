@@ -13,17 +13,11 @@ class Label: UILabel {
 
     override func willMove(toWindow newWindow: UIWindow?) {
         super.willMove(toWindow: newWindow)
-        self.text = self.text?.localize
+        if let local = self.text?.localize {
+            self.text = local
+        }
     }
     
-  /*  @IBInspectable open var textLocalized: String = "" {
-        didSet {
-            DispatchQueue.main.async {
-                self.text = self.textLocalized.localize
-            }
-        }
-    }*/
-
 }
 
 

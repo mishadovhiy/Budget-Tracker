@@ -12,6 +12,13 @@ import UIKit
 struct localizationDictUA {
 
     static let dictUA: [String:String] = [
+        "Developer website":"Сайт розробника",
+        "Set":"Встановити",
+        "Passcode timeout":"Час очікування пароля",
+        "Select color":"Оберіть колір",
+        "Access settings": "Налаштування доступу",
+        "Ask passcode in": "Запитувати пароль через",
+        "seconds": "сек",
         "Support message":"Підтримка",
         "Period Balance":"Баланс за період",
         "Balance":"Баланс",
@@ -39,7 +46,9 @@ struct localizationDictUA {
         "Forgot password" : "Забули пароль",
         "Enter your username" : "Введіть своє ім'я користувача",
         "Username" : "Ім'я користувача",
-        "Change Email" : "Змінити електронну адресу",
+        "Change Email" : "Змінити пошту",
+        "Change email" : "Змінити пошту",
+        "Email":"електронна адреса",
         "Log out" : "Вийти",
         "Restoration code would be sent on: " : "Код буде надіслано: ",
         "Send code" : "Надіслати код",
@@ -53,7 +62,7 @@ struct localizationDictUA {
         "Change password" : "Змінити пароль",
         "Repeat password" : "Повторити пароль",
         "Your email has been changed" : "Вашу електронну адресу було змінено",
-        "Enter your new email" : "Введіть нову електронну адресу",
+        "Enter your new email" : "Введіть нову електронну пошту",
         "You have entered: " : "Ви ввели: ",
         "Wrong code!" : "Невірний код!",
         "We have sent 4-digit resoration code on your email" : "Ми надіслали 4-значний код на вашу електронну пошту",
@@ -90,10 +99,10 @@ struct localizationDictUA {
         "Already have an account" : "Вже є аккаунт",
 
         "Log in" : "Увійти",
-        "Create username" : "Створити ім'я користувача",
+        "Create username" : "Введіть ім'я користувача",
         "Enter your email" : "Введіть свою електронну адресу",
         "Create password" : "Створити пароль",
-        "Confirm password" : "Підтвердьте пароль",
+        "Confirm password" : "Підтвердiть пароль",
         "Password" : "Пароль",
         "Email not found" : "Електронну пошту не знайдено",
         "Sign in" : "Увійти",
@@ -128,8 +137,8 @@ struct localizationDictUA {
         "Oct" : "Жовт",
         "Nov" : "Лист",
         "Dec" : "Груд",
-        "Months" : "Місяці",
-        "Years" : "Роки",
+        "Months" : "Місяць",
+        "Years" : "Рiк",
         "Debts" : "Борги",
         
         "Jul" : "Лип",
@@ -150,7 +159,8 @@ struct localizationDictUA {
 
         "No" : "Немає",
         "Data" : "Даних",
-
+        
+        "Create an account" : "Створити аккаунт",
         "Unknown category" : "Невідома категорія",
         "Settings" : "Налаштування",
         "Security" : "Безпека",
@@ -202,7 +212,7 @@ struct localizationDictUA {
         "You have already tried trial version" : "Ви вже спробували пробну версію",
         "Reminders for debts" : "Нагадування про борги",
         "Set notification reminders" : "Встановити нагадування про сповіщення",
-        "Transfer data" : "Передача даних",
+        "Transfer data" : "Перенести данi з iншого аккаунту",
         "Transfer transactions and categories between accounts" : "Транзакції та категорії перенесення між рахунками",
         "App storage increes" : "Збільшується обсяг пам'яті програми",
         "Create up to 15 accounts for email\n\nStores data about categories usage" : "Створити до 15 облікових записів для електронної пошти\n\nЗберігає дані про використання категорій",

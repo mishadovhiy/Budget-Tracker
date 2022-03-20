@@ -59,7 +59,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         
         
         let localization = UserDefaults.standard.value(forKey: "Localization") as? String
-        AppLocalization.launchedLocalization = AppLocalization.stringToLocalization(localization)
+        let devicaLoc = NSLocale.current.languageCode ?? "-"
+        print(devicaLoc, "devicaLocdevicaLocdevicaLocdevicaLoc")
+        AppLocalization.launchedLocalization = localization ?? devicaLoc
         
         
         return true
@@ -104,7 +106,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
             }
             let now = Date()
             let ti = now.timeIntervalSince(logoutDate)
-            if ti > Double(5) {
+            let timeout = Double(UserSettings.Security.timeOut) ?? 15
+            if ti > timeout {
                 passcodeLock.passcodeLock()
             } else {
                 if !passcodeLock.passwordNotEntered {

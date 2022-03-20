@@ -673,7 +673,7 @@
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="bMG-w1-NUh">
                                                                 <rect key="frame" x="0.0" y="0.0" width="76.666666666666671" height="35"/>
                                                                 <subviews>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Expences" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="3" translatesAutoresizingMaskIntoConstraints="NO" id="CJF-1D-UVd" userLabel="BalanceLabel">
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Expenses" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="3" translatesAutoresizingMaskIntoConstraints="NO" id="CJF-1D-UVd" userLabel="BalanceLabel" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="0.0" width="76.666666666666671" height="17.666666666666668"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                         <color key="textColor" name="balanceTitleColor"/>
@@ -712,7 +712,7 @@
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="ghU-Hm-GBG">
                                                                 <rect key="frame" x="0.0" y="0.0" width="76.666666666666671" height="35"/>
                                                                 <subviews>
-                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Income" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="3" translatesAutoresizingMaskIntoConstraints="NO" id="QH9-Ow-4a2" userLabel="BalanceLabel">
+                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Income" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="3" translatesAutoresizingMaskIntoConstraints="NO" id="QH9-Ow-4a2" userLabel="BalanceLabel" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="0.0" width="76.666666666666671" height="17.666666666666668"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                         <color key="textColor" name="balanceTitleColor"/>
@@ -749,7 +749,7 @@
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="l4D-FW-Tfh">
                                                         <rect key="frame" x="162" y="0.0" width="48" height="35"/>
                                                         <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Balance" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="3" translatesAutoresizingMaskIntoConstraints="NO" id="ieF-m1-ryE" userLabel="BalanceLabel">
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Balance" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="3" translatesAutoresizingMaskIntoConstraints="NO" id="ieF-m1-ryE" userLabel="BalanceLabel" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
                                                                 <rect key="frame" x="0.0" y="0.0" width="48" height="17.666666666666668"/>
                                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                 <color key="textColor" name="balanceTitleColor"/>
@@ -3429,6 +3429,9 @@
         <designable name="BrR-tF-WZX">
             <size key="intrinsicContentSize" width="20.333333333333332" height="13.333333333333334"/>
         </designable>
+        <designable name="CJF-1D-UVd">
+            <size key="intrinsicContentSize" width="58" height="15.666666666666666"/>
+        </designable>
         <designable name="I2z-U6-EDp">
             <size key="intrinsicContentSize" width="13.666666666666666" height="13.333333333333334"/>
         </designable>
@@ -3437,6 +3440,9 @@
         </designable>
         <designable name="OyJ-pP-66Q">
             <size key="intrinsicContentSize" width="78.333333333333329" height="13.333333333333334"/>
+        </designable>
+        <designable name="QH9-Ow-4a2">
+            <size key="intrinsicContentSize" width="44.333333333333336" height="15.666666666666666"/>
         </designable>
         <designable name="TTP-GQ-6kd">
             <size key="intrinsicContentSize" width="33.333333333333336" height="15.666666666666666"/>
@@ -3455,6 +3461,9 @@
         </designable>
         <designable name="gwp-y1-Jmr">
             <size key="intrinsicContentSize" width="88.333333333333329" height="15.666666666666666"/>
+        </designable>
+        <designable name="ieF-m1-ryE">
+            <size key="intrinsicContentSize" width="48" height="15.666666666666666"/>
         </designable>
         <designable name="jBw-Wl-arg">
             <size key="intrinsicContentSize" width="32.333333333333336" height="18"/>
@@ -3486,11 +3495,11 @@
     </designables>
     <inferredMetricsTieBreakers>
         <segue reference="161-Ie-baa"/>
-        <segue reference="HlC-bb-GVq"/>
+        <segue reference="rIb-KG-K0i"/>
         <segue reference="Lvn-mS-peb"/>
         <segue reference="Ega-tn-GzY"/>
         <segue reference="U95-ph-p6h"/>
-        <segue reference="v2X-Of-iEX"/>
+        <segue reference="N0q-Op-l1q"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="airplane" width="19" height="17"/>

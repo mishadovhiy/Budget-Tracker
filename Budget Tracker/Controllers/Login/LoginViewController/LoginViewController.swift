@@ -145,6 +145,7 @@ class LoginViewController: SuperViewController {
             let vc = segue.destination as! SelectUserVC
             vc.delegate = self
             vc.users = enteredEmailUsers
+            vc.titleText = "Select user".localize
             DispatchQueue.main.async {
                 self.nicknameLogLabel.endEditing(true)
             }
@@ -1051,7 +1052,7 @@ extension LoginViewController {
         _categoriesHolder.removeAll()
     }
     @IBAction func moreButtonPressed(_ sender: UIButton) {//morepressed
-        let data = SettingsDataLogin(vc: self)
+        let data = MoreOptionsData(vc: self)
         appData.presentMoreVC(currentVC: self, data: data.get(), proIndex: 1)
         hideKeyboard()
     }

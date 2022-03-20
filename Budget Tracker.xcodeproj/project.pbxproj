@@ -40,11 +40,12 @@
 		8B63312F260FD65200D9E117 /* buyProVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B63312E260FD65200D9E117 /* buyProVC.swift */; };
 		8B633132260FDB3900D9E117 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B633131260FDB3900D9E117 /* StoreKit.framework */; };
 		8B633135260FE7FF00D9E117 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B633134260FE7FF00D9E117 /* AuthenticationServices.framework */; };
+		8B6BA97927E6E2500067FF58 /* AppSettingsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6BA97827E6E2500067FF58 /* AppSettingsData.swift */; };
 		8B7B63CC2655CAFB0067C434 /* SuperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7B63CB2655CAFB0067C434 /* SuperViewController.swift */; };
 		8B7D1AA1276CF203008942EC /* IconList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7D1AA0276CF203008942EC /* IconList.swift */; };
 		8B82A04127E2BDBD0011EC80 /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82A04027E2BDBD0011EC80 /* UITextField.swift */; };
 		8B8D556125BB218400D7C6A7 /* UnsendedDataVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D556025BB218400D7C6A7 /* UnsendedDataVC.swift */; };
-		8B91F08E27E587A800B74F5A /* SettingsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91F08D27E587A800B74F5A /* SettingsData.swift */; };
+		8B91F08E27E587A800B74F5A /* MoreOptionsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91F08D27E587A800B74F5A /* MoreOptionsData.swift */; };
 		8B91F09127E58EF900B74F5A /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91F09027E58EF900B74F5A /* Text.swift */; };
 		8BAA72B527CB7D41005298B6 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BAA72B427CB7D41005298B6 /* Keys.swift */; };
 		8BC31D7B27E3E5EA00FBC939 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC31D7A27E3E5EA00FBC939 /* Button.swift */; };
@@ -126,11 +127,12 @@
 		8B63312E260FD65200D9E117 /* buyProVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = buyProVC.swift; sourceTree = "<group>"; };
 		8B633131260FDB3900D9E117 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		8B633134260FE7FF00D9E117 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
+		8B6BA97827E6E2500067FF58 /* AppSettingsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsData.swift; sourceTree = "<group>"; };
 		8B7B63CB2655CAFB0067C434 /* SuperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperViewController.swift; sourceTree = "<group>"; };
 		8B7D1AA0276CF203008942EC /* IconList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconList.swift; sourceTree = "<group>"; };
 		8B82A04027E2BDBD0011EC80 /* UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
 		8B8D556025BB218400D7C6A7 /* UnsendedDataVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsendedDataVC.swift; sourceTree = "<group>"; };
-		8B91F08D27E587A800B74F5A /* SettingsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsData.swift; sourceTree = "<group>"; };
+		8B91F08D27E587A800B74F5A /* MoreOptionsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreOptionsData.swift; sourceTree = "<group>"; };
 		8B91F09027E58EF900B74F5A /* Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
 		8BAA72B427CB7D41005298B6 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		8BC31D7A27E3E5EA00FBC939 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
@@ -341,6 +343,30 @@
 			path = notUsing;
 			sourceTree = "<group>";
 		};
+		8B6BA97A27E6E4370067FF58 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				8B91F08D27E587A800B74F5A /* MoreOptionsData.swift */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		8B6BA97B27E6E46A0067FF58 /* SupportVC */ = {
+			isa = PBXGroup;
+			children = (
+				8BF63E8C27629D14002E8601 /* SupportVC.swift */,
+			);
+			path = SupportVC;
+			sourceTree = "<group>";
+		};
+		8B6BA97C27E6E5360067FF58 /* AppSettings */ = {
+			isa = PBXGroup;
+			children = (
+				8B6BA97827E6E2500067FF58 /* AppSettingsData.swift */,
+			);
+			path = AppSettings;
+			sourceTree = "<group>";
+		};
 		8B82A04227E2BDCD0011EC80 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -357,8 +383,8 @@
 		8B91F08C27E5873900B74F5A /* LoginViewController */ = {
 			isa = PBXGroup;
 			children = (
+				8B6BA97A27E6E4370067FF58 /* Data */,
 				8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */,
-				8B91F08D27E587A800B74F5A /* SettingsData.swift */,
 			);
 			path = LoginViewController;
 			sourceTree = "<group>";
@@ -395,6 +421,7 @@
 		8BC1B23B27D31426002C1E38 /* Reusable */ = {
 			isa = PBXGroup;
 			children = (
+				8BF63E8E2762C83F002E8601 /* SettingsVC.swift */,
 				8BF63E8A276294F2002E8601 /* SelectUserVC.swift */,
 				8B52DFEB27504D2900595A0C /* IconsVC.swift */,
 				8D52066A24216A6200772CD5 /* HistoryVC.swift */,
@@ -409,9 +436,9 @@
 			isa = PBXGroup;
 			children = (
 				8B91F08C27E5873900B74F5A /* LoginViewController */,
-				8BF63E8E2762C83F002E8601 /* SettingsVC.swift */,
-				8BF63E8C27629D14002E8601 /* SupportVC.swift */,
 				8B4D33BB27825F6D00B83D8A /* BuyPro */,
+				8B6BA97B27E6E46A0067FF58 /* SupportVC */,
+				8B6BA97C27E6E5360067FF58 /* AppSettings */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -641,6 +668,7 @@
 				8B26327E27E66B060086C3A8 /* AppLocalization.swift in Sources */,
 				8B331B0B27E4128B0093BF72 /* String.swift in Sources */,
 				8DD89D8323F1468E00273904 /* mainVCcell.swift in Sources */,
+				8B6BA97927E6E2500067FF58 /* AppSettingsData.swift in Sources */,
 				8B82A04127E2BDBD0011EC80 /* UITextField.swift in Sources */,
 				8B63312F260FD65200D9E117 /* buyProVC.swift in Sources */,
 				8B26329827E6A4470086C3A8 /* DateComponents.swift in Sources */,
@@ -675,7 +703,7 @@
 				8B7B63CC2655CAFB0067C434 /* SuperViewController.swift in Sources */,
 				8B324B692683118000E72275 /* NotificationsVC.swift in Sources */,
 				8B7D1AA1276CF203008942EC /* IconList.swift in Sources */,
-				8B91F08E27E587A800B74F5A /* SettingsData.swift in Sources */,
+				8B91F08E27E587A800B74F5A /* MoreOptionsData.swift in Sources */,
 				8B52DFEA2750232D00595A0C /* NumbersView.swift in Sources */,
 				8BD3A3D927E4097400547022 /* View.swift in Sources */,
 				8DD89D8723F1471400273904 /* AppData.swift in Sources */,
