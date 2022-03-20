@@ -142,11 +142,11 @@ class AppSettingsData {
             
         })
         
-        if #available(iOS 13.0, *) {
+       // if #available(iOS 13.0, *) {
             return [supportCell, privacy, devSupport, otherCell]
-        } else {
-            return [supportCell, devSupport, otherCell]
-        }
+       // } else {
+       //     return [supportCell, devSupport, otherCell]
+       // }
         
         
     }
