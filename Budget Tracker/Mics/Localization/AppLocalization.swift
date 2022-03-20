@@ -30,7 +30,7 @@ struct AppLocalization {
             return UserDefaults.standard.value(forKey: "Localization") as? String
         }
         set {
-            UserDefaults.standard.value(forKey: "Localization")
+            UserDefaults.standard.setValue(newValue, forKey: "Localization")
         }
     }
 

@@ -38,15 +38,9 @@ class SelectUserVC: SuperViewController, UITableViewDelegate, UITableViewDataSou
         DispatchQueue.main.async {
             let storyboard = UIStoryboard(name: "LogIn", bundle: nil)
             let vc = storyboard.instantiateViewController(withIdentifier: "SelectUserVC") as! SelectUserVC
-            
-            var vcs = nav.viewControllers
             vc.users = data
             vc.selectedIdxAction = selected
             vc.titleText = title
-            if vcs.count != 0 {
-                vcs.removeLast()
-            }
-            vcs.append(vc)
             nav.pushViewController(vc, animated: true)
         }
 

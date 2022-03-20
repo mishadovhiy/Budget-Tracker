@@ -88,6 +88,7 @@ class AppSettingsData {
                 self.vc.toChooseIn(data: timoutOptions, title: vcTitle) { newValue in
                     
                     UserSettings.Security.timeOut = timoutOptions[newValue]
+                    self.vc.loadData()
                 }
             })
             
@@ -109,7 +110,6 @@ class AppSettingsData {
                         
                     }
                 }
-                
             }
         })
         
@@ -120,8 +120,8 @@ class AppSettingsData {
             }
         })
         
-        let devSupport = SettingsVC.StandartCell(title: "Developer website".localize, action: {
-            let urlString = "https://www.dovhiy.com"
+        let devSupport = SettingsVC.StandartCell(title: "App website".localize, action: {
+            let urlString = "https://dovhiy.com/#budget"
             if let url = URL(string: urlString) {
                 DispatchQueue.main.async {
                     UIApplication.shared.open(url, options: [:]) { _ in
@@ -132,7 +132,16 @@ class AppSettingsData {
         
         })
         
-        return [otherCell, supportCell, devSupport]
+        let pprivacyTitle = "Privacy policy".localize
+        let privacy = SettingsVC.StandartCell(title: pprivacyTitle, action: {
+            DispatchQueue.main.async {
+                if let nav = self.vc.navigationController {
+                    WebViewVC.shared.presentScreen(in: nav, data: .init(url: "https://dovhiy.com/apps/previews/budget.html", key: "Privacy"), screenTitle: pprivacyTitle)
+                }
+            }
+        })
+        
+        return [otherCell, supportCell, devSupport, privacy]
     }
 }
 

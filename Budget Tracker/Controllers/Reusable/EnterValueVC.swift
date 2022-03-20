@@ -70,15 +70,9 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
         DispatchQueue.main.async {
             let storyboard = UIStoryboard(name: "LogIn", bundle: nil)
             let vc = storyboard.instantiateViewController(withIdentifier: "EnterValueVC") as! EnterValueVC
-            
-            var vcs = nav.viewControllers
             vc.textFieldValue = defaultValue
             vc.screenData = data
             vc.minValue = data.screenType == .code ? 4 : (data.screenType != .string ? 4 : 1)
-            if vcs.count != 0 {
-                vcs.removeLast()
-            }
-            vcs.append(vc)
             nav.pushViewController(vc, animated: true)
         }
 

@@ -41,6 +41,9 @@
 		8B633132260FDB3900D9E117 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B633131260FDB3900D9E117 /* StoreKit.framework */; };
 		8B633135260FE7FF00D9E117 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B633134260FE7FF00D9E117 /* AuthenticationServices.framework */; };
 		8B6BA97927E6E2500067FF58 /* AppSettingsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6BA97827E6E2500067FF58 /* AppSettingsData.swift */; };
+		8B6BA97E27E715C20067FF58 /* Reusable.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B6BA97D27E715C20067FF58 /* Reusable.storyboard */; };
+		8B6BA98027E716220067FF58 /* WebViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6BA97F27E716220067FF58 /* WebViewVC.swift */; };
+		8B6BA98227E717850067FF58 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6BA98127E717850067FF58 /* Date.swift */; };
 		8B7B63CC2655CAFB0067C434 /* SuperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7B63CB2655CAFB0067C434 /* SuperViewController.swift */; };
 		8B7D1AA1276CF203008942EC /* IconList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7D1AA0276CF203008942EC /* IconList.swift */; };
 		8B82A04127E2BDBD0011EC80 /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82A04027E2BDBD0011EC80 /* UITextField.swift */; };
@@ -128,6 +131,9 @@
 		8B633131260FDB3900D9E117 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		8B633134260FE7FF00D9E117 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		8B6BA97827E6E2500067FF58 /* AppSettingsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsData.swift; sourceTree = "<group>"; };
+		8B6BA97D27E715C20067FF58 /* Reusable.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Reusable.storyboard; sourceTree = "<group>"; };
+		8B6BA97F27E716220067FF58 /* WebViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewVC.swift; sourceTree = "<group>"; };
+		8B6BA98127E717850067FF58 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		8B7B63CB2655CAFB0067C434 /* SuperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperViewController.swift; sourceTree = "<group>"; };
 		8B7D1AA0276CF203008942EC /* IconList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconList.swift; sourceTree = "<group>"; };
 		8B82A04027E2BDBD0011EC80 /* UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
@@ -376,6 +382,7 @@
 				8B52CC6627E3001B008D5348 /* UITableViewCell.swift */,
 				8B82A04027E2BDBD0011EC80 /* UITextField.swift */,
 				8B26328527E67E720086C3A8 /* UISegmentedControl.swift */,
+				8B6BA98127E717850067FF58 /* Date.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -428,6 +435,7 @@
 				8D8B6C3D245023EC007260A0 /* CalendarVC.swift */,
 				8B5F342B26FB2D97000DDCAF /* EnterValueVC.swift */,
 				8B2A4D71271439520085E0F0 /* MoreVC.swift */,
+				8B6BA97F27E716220067FF58 /* WebViewVC.swift */,
 			);
 			path = Reusable;
 			sourceTree = "<group>";
@@ -438,7 +446,6 @@
 				8B91F08C27E5873900B74F5A /* LoginViewController */,
 				8B4D33BB27825F6D00B83D8A /* BuyPro */,
 				8B6BA97B27E6E46A0067FF58 /* SupportVC */,
-				8B6BA97C27E6E5360067FF58 /* AppSettings */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -514,6 +521,7 @@
 			children = (
 				8DBA7E5523F0316F00D8214C /* Main.storyboard */,
 				8B331AF927E4105C0093BF72 /* LogIn.storyboard */,
+				8B6BA97D27E715C20067FF58 /* Reusable.storyboard */,
 			);
 			path = Storybords;
 			sourceTree = "<group>";
@@ -525,6 +533,7 @@
 				8BC1B23C27D314CC002C1E38 /* Login */,
 				8BC1B23B27D31426002C1E38 /* Reusable */,
 				8B26328D27E698C60086C3A8 /* Base */,
+				8B6BA97C27E6E5360067FF58 /* AppSettings */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -610,6 +619,7 @@
 				8DBA7E5C23F0317100D8214C /* Assets.xcassets in Resources */,
 				8B052E3F26EFD4A0000BA66A /* IndicatorView.xib in Resources */,
 				8DBA7E5723F0316F00D8214C /* Main.storyboard in Resources */,
+				8B6BA97E27E715C20067FF58 /* Reusable.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -667,6 +677,7 @@
 				8B26329627E6A32E0086C3A8 /* UIViewController.swift in Sources */,
 				8B26327E27E66B060086C3A8 /* AppLocalization.swift in Sources */,
 				8B331B0B27E4128B0093BF72 /* String.swift in Sources */,
+				8B6BA98227E717850067FF58 /* Date.swift in Sources */,
 				8DD89D8323F1468E00273904 /* mainVCcell.swift in Sources */,
 				8B6BA97927E6E2500067FF58 /* AppSettingsData.swift in Sources */,
 				8B82A04127E2BDBD0011EC80 /* UITextField.swift in Sources */,
@@ -694,6 +705,7 @@
 				8D8B6C3C245023D0007260A0 /* FilterTVC.swift in Sources */,
 				8BE60E5927726EA8007B7FB3 /* LastSelected.swift in Sources */,
 				8DD89D9023F1496100273904 /* CategoriesVC.swift in Sources */,
+				8B6BA98027E716220067FF58 /* WebViewVC.swift in Sources */,
 				8B2163A2274070BA003EDFE0 /* snippets.swift in Sources */,
 				8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */,
 				8BF63E8F2762C83F002E8601 /* SettingsVC.swift in Sources */,
@@ -891,7 +903,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 5;
+				MARKETING_VERSION = 6.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
@@ -917,7 +929,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 5;
+				MARKETING_VERSION = 6.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;

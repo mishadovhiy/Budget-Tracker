@@ -12,10 +12,12 @@ import UIKit
 struct localizationDictUA {
 
     static let dictUA: [String:String] = [
+        "Privacy policy":"Політика конфіденційності",
         "Price":"Ціна",
         "Free Trial":"Безкоштовне випробування",
         "Restore purchase":"Відновити покупку",
         "Buy Pro":"Купити Pro",
+        "App website":"Сайт додатку",
         "Developer website":"Сайт розробника",
         "Set":"Встановити",
         "Passcode timeout":"Час очікування пароля",

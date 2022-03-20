@@ -57,20 +57,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         }
         
         AppLocalization.launchedLocalization = AppLocalization.udLocalization ?? (NSLocale.current.languageCode ?? "-")
+        print("LOCALIZATION: ", AppLocalization.launchedLocalization)
         
         
         return true
     }
     
-    
-    
-    var delegate:AppDelegateProtocol?
+
     private var backgroundEnterDate:Date?
     
     func applicationWillResignActive(_ application: UIApplication) {
         if UserSettings.Security.password != "" && !(passcodeLock.presenting ?? true) {
             backgroundEnterDate = Date();
-            
+            //delegate.resighnActive()
             passcodeLock.present()
         }
     }
@@ -95,11 +94,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
             needDownloadOnMainAppeare = true
         }
         if UserSettings.Security.password != "" {
+            //end editing tf of window-topViewController-view
             guard let logoutDate = backgroundEnterDate else{
-                if !(passcodeLock.presenting ?? true) {
-                    passcodeLock.present()
-                    passcodeLock.passcodeLock()
-                }
+                passcodeLock.present()
+                passcodeLock.passcodeLock()
                 
                 return;
             }
@@ -109,9 +107,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
             if ti > timeout {
                 passcodeLock.passcodeLock()
             } else {
-                if !(passcodeLock.passwordNotEntered ?? true) {
-                    passcodeLock.hide()
-                }
+                passcodeLock.hide()
                 
             }
         }

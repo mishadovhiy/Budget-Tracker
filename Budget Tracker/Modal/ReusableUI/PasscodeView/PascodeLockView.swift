@@ -40,7 +40,6 @@ class PascodeLockView: UIView, UITextFieldDelegate {
         }
         presenting = true
         DispatchQueue.main.async {
-            AppDelegate.shared.delegate?.resighnActive()
             let window = UIApplication.shared.keyWindow ?? UIWindow()
             self.frame = window.frame
             

@@ -46,7 +46,6 @@ class SuperViewController: UIViewController, AppDelegateProtocol {
     override func viewDidLoad() {
         super.viewDidLoad()
         definesPresentationContext = true
-        AppDelegate.shared.delegate = self
       /*  let window = UIApplication.shared.keyWindow ?? UIWindow()
         let indd = IndicatorView.instanceFromNib() as! IndicatorView
         indd.tag = 23450
@@ -281,50 +280,7 @@ class SuperViewController: UIViewController, AppDelegateProtocol {
 
 
 
-extension ISO8601DateFormatter {
-    convenience init(_ formatOptions: Options) {
-        self.init()
-        self.formatOptions = formatOptions
-    }
-}
-extension Formatter {
-    static let iso8601withFractionalSeconds = ISO8601DateFormatter([.withInternetDateTime, .withFractionalSeconds])
-}
-extension Date {
-    var iso8601withFractionalSeconds: String { return Formatter.iso8601withFractionalSeconds.string(from: self) }
-}
-extension String {
-    var iso8601withFractionalSeconds: Date? { return Formatter.iso8601withFractionalSeconds.date(from: self) }
-    
-    func slice(from: String, to: String) -> String? {
-        var text:String?
-        let _ = (range(of: from)?.upperBound).flatMap { substringFrom in
-            (range(of: to, range: substringFrom..<endIndex)?.lowerBound).map { substringTo in
-                text = String(self[substringFrom..<substringTo])
-            }
-        }
-        
-        return text
-    }
-    
-    func endIndex<S: StringProtocol>(of string: S, options: String.CompareOptions = []) -> Index? {
-        range(of: string, options: options)?.upperBound
-    }
-}
 
 
 
-extension UIViewController{//test
-    var previousViewController:UIViewController?{
-        if let controllersOnNavStack = self.navigationController?.viewControllers{
-            let n = controllersOnNavStack.count
-            //if self is still on Navigation stack
-            if controllersOnNavStack.last === self, n > 1{
-                return controllersOnNavStack[n - 2]
-            }else if n > 0{
-                return controllersOnNavStack[n - 1]
-            }
-        }
-        return nil
-    }
-}
+
