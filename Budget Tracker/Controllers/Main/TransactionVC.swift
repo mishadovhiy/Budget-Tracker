@@ -63,8 +63,7 @@ class TransitionVC: SuperViewController {
     
     var pressedValueArrey: [String] =  []
 
-    
-    
+
     
     
     override func viewDidLoad() {
@@ -395,7 +394,9 @@ class TransitionVC: SuperViewController {
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
+        UIView.animate(withDuration: 0.2) {
+            self.numbarPadView.alpha = 1
+        }
      //   purposeSwitcher.tintColor = K.Colors.category
     }
     @IBAction func purposeSwitched(_ sender: UISegmentedControl) {

@@ -71,7 +71,7 @@ class ViewController: SuperViewController {
     
     
     var correctFrameBackground:CGRect = .zero
-    var refreshControl = UIRefreshControl()
+  //  var refreshControl = UIRefreshControl()
     var tableData:[TransactionsStruct] = []
     var _TableData: [tableStuct] = []
     var newTableData: [tableStuct] {
@@ -89,10 +89,10 @@ class ViewController: SuperViewController {
                     self.darkBackgroundUnderTable.frame = CGRect(x: 0, y: self.view.frame.height, width: self.view.frame.width, height: 0)
                 }*/
                 self.mainTableView.reloadData()
-                if self.refreshControl.isRefreshing {
+        //        if self.refreshControl.isRefreshing {
                  //   self.refreshControl.backgroundColor = .clear
-                    self.refreshControl.endRefreshing()
-                }
+        //            self.refreshControl.endRefreshing()
+        //        }
 
                 
                // self.mainTableView.alpha = 1//tableDataDataCount == 0 ? 0 : 1
@@ -372,10 +372,10 @@ class ViewController: SuperViewController {
             self.refreshSubview.addSubview(button)
             let superWidth = self.view.frame.width
             self.refreshSubview.frame = CGRect(x: superWidth / 2 - 10, y: 0, width: 20, height: 20)
-            self.refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
-            self.refreshSubview.alpha = 0
-            self.refreshControl.addSubview(self.refreshSubview)
-            self.mainTableView.addSubview(self.refreshControl)
+        //    self.refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
+      //      self.refreshSubview.alpha = 0
+      //      self.refreshControl.addSubview(self.refreshSubview)
+      //      self.mainTableView.addSubview(self.refreshControl)
         }
     }
     
@@ -1421,11 +1421,11 @@ class ViewController: SuperViewController {
         toggleSideBar(false, animated: true)
         print("prepare")
         selectedCell = nil
-        DispatchQueue.main.async {
+   /*     DispatchQueue.main.async {
             if self.refreshControl.isRefreshing {
                 self.refreshControl.endRefreshing()
             }
-        }
+        }*/
         switch segue.identifier {
         case "toDebts":
             print("k")
@@ -1616,7 +1616,7 @@ class ViewController: SuperViewController {
         }
         let finger = scrollView.panGestureRecognizer.location(in: self.view)
         refreshData = finger.x > self.view.frame.width / 2 ? false : true
-        self.refreshControl.tintColor = self.refreshData ? K.Colors.pink : .clear
+   //     self.refreshControl.tintColor = self.refreshData ? K.Colors.pink : .clear
         
         let max:CGFloat = 100
         let offsetY = scrollView.contentOffset.y * (-1)
@@ -1627,7 +1627,7 @@ class ViewController: SuperViewController {
             }
         } else {
             UIView.animate(withDuration: 0.3) {
-                self.refreshControl.tintColor = .clear
+  //              self.refreshControl.tintColor = .clear
                 self.refreshSubview.alpha = alpha
             }
         }
@@ -1635,11 +1635,11 @@ class ViewController: SuperViewController {
         
         let lastCellVisible = self.newTableData.count > 8 ? true : false
         if scrollView.contentOffset.y > 5.0 {
-            DispatchQueue.main.async {
+    /*        DispatchQueue.main.async {
                 if self.refreshControl.isRefreshing {
                     self.refreshControl.endRefreshing()
                 }
-            }
+            }*/
         }
         
         
@@ -2075,9 +2075,9 @@ extension ViewController: TransitionVCProtocol {
             print("reloaddd")
             self.editingTransaction = nil
             DispatchQueue.main.async {
-                if self.refreshControl.isRefreshing {
+             /*   if self.refreshControl.isRefreshing {
                     self.refreshControl.endRefreshing()
-                }
+                }*/
                 self.calculateLabels()
             }
         }

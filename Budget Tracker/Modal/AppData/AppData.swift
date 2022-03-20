@@ -708,7 +708,7 @@ class AppData {
         let namee = name ?? def
         let resultName = namee != "" ? namee : def
         if #available(iOS 13.0, *) {
-            return UIImage(named: resultName) ?? UIImage(named: def)!
+            return UIImage(named: resultName) ?? (UIImage(named: def) ?? UIImage(named: "comment")!)
         } else {
             return UIImage(named: "warning")!
         }

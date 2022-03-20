@@ -15,7 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     var window: UIWindow?
     static let shared = AppDelegate()
     
-    
     let center = UNUserNotificationCenter.current()
     
     lazy var newMessage: MessageView = {

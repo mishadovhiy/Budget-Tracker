@@ -22,7 +22,7 @@ protocol CategoriesVCProtocol {
 class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var tableView: UITableView!
     var catData = appData.categoryVC
-    var refreshControl = UIRefreshControl()
+        //  var refreshControl = UIRefreshControl()
     var hideTitle = false
     var fromSettings = false
     var delegate: CategoriesVCProtocol?
@@ -84,9 +84,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                     
                 }
               //  self.tableView.reloadData()
-                if self.refreshControl.isRefreshing {
-                    self.refreshControl.endRefreshing()
-                }
+            //    if self.refreshControl.isRefreshing {
+            //        self.refreshControl.endRefreshing()
+            //    }
                 if self.tableView.alpha != 1 {
                 //    self.tableView.transform =
                 //    self.tableView.alpha = 1
@@ -698,10 +698,10 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     }
     
     func addRefreshControll() {
-        DispatchQueue.main.async {
-            self.refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
-            self.tableView.addSubview(self.refreshControl)
-        }
+     //   DispatchQueue.main.async {
+        //    self.refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
+        //    self.tableView.addSubview(self.refreshControl)
+        //}
     }
 
 
@@ -1138,7 +1138,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         if screenType != .localData {
             let savePressed = UITapGestureRecognizer(target: self, action: #selector(newCategoryPressed(_:)))
             savePressed.name = "\(sect)"
-            cell.saveButton.addGestureRecognizer(savePressed)
+//commented            cell.saveButton.addGestureRecognizer(savePressed)
             
             let iconPressed = UITapGestureRecognizer(target: self, action: #selector(iconTapped(_:)))
             iconPressed.name = "\(sect)"
@@ -1297,7 +1297,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             }
 
             
-            self.tableView.reloadData()
+     //commented       self.tableView.reloadData()
         }
     }
 }

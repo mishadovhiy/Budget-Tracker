@@ -16,7 +16,7 @@ class CalendarVC: SuperViewController {
     
     //@IBOutlet weak var commentTextField: UITextField!
     //  @IBOutlet weak var reminderTimeLabel: UILabel!
-    @IBOutlet weak var timePicker: UIDatePicker!
+   // @IBOutlet weak var timePicker: UIDatePicker!
     @IBOutlet weak var mainDescriptionLabel: UILabel!
     @IBOutlet weak var mainTitleLabel: UILabel!
     
@@ -49,9 +49,9 @@ class CalendarVC: SuperViewController {
     var year = 1996
     var month = 11
     
-    @objc func dateSelected(_ sender: UIDatePicker) {
-        print(sender.date)
-    }
+//    @objc func dateSelected(_ sender: UIDatePicker) {
+//        print(sender.date)
+//    }
     @IBOutlet weak var closeButton: UIButton!
     
     var datePickerDate: String?
@@ -81,7 +81,7 @@ class CalendarVC: SuperViewController {
         
       //  commentTextField.layer.masksToBounds = true
         //commentTextField.layer.cornerRadius = 5
-        if let pickerDate = datePickerDate {
+/*        if let pickerDate = datePickerDate {
             timePicker.alpha = 1
             timePicker.addTarget(self, action: #selector(dateSelected(_:)), for: .valueChanged)
             if datePickerDate != "" {
@@ -94,7 +94,7 @@ class CalendarVC: SuperViewController {
             
         } else {
             timePicker.alpha = 0
-        }
+        }*/
         
 
         
@@ -743,10 +743,15 @@ class CalendarVC: SuperViewController {
                     }
                 }
             }*/
-            let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: self.timePicker.date)
+    /*        let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: self.timePicker.date)
             DispatchQueue.main.async {
                 self.dismiss(animated: true) {
                     self.delegate?.dateSelected(date: self.selectedFrom, time: components)
+                }
+            }*/
+            DispatchQueue.main.async {
+                self.dismiss(animated: true) {
+                    self.delegate?.dateSelected(date: self.selectedFrom, time: nil)
                 }
             }
         }
