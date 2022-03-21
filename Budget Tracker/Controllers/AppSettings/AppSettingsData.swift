@@ -180,8 +180,8 @@ extension AppSettingsData {
     }
     
     func getUserPasscode(completion:@escaping() -> ()) {
-        AppDelegate.shared.passcodeLock.present(passcodeEntered: completion)
-        AppDelegate.shared.passcodeLock.passcodeLock()
+
+        AppDelegate.shared.presentLock(passcode: true, passcodeVerified: completion)
     }
     
     

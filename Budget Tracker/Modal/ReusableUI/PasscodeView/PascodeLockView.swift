@@ -32,8 +32,8 @@ class PascodeLockView: UIView, UITextFieldDelegate {
     }
     
     
-    public func present(passcodeEntered:(()->())? = nil) {
-        enteredAction = passcodeEntered
+    public func present(presentCompletion:((Bool)->())? = nil) {
+
         enteredValue = ""
         if presenting {
             return
@@ -59,16 +59,28 @@ class PascodeLockView: UIView, UITextFieldDelegate {
                 self.backgroundColor = self.lightBackground
                 self.primaryStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
             } completion: { _ in
-
+                if let presentCompletion = presentCompletion {
+                    presentCompletion(true)
+                }
             }
         }
     }
      var presenting = false
     
     var passwordNotEntered = true
-    func passcodeLock() {
-        presenting = true
+    func passcodeLock(passcodeEntered:(()->())? = nil) {
+        enteredAction = passcodeEntered
         passwordNotEntered = true
+        if !presenting {
+            present(presentCompletion:  { _ in
+                self.performPresentingLock()
+            })
+        } else {
+            performPresentingLock()
+        }
+        
+    }
+    private func performPresentingLock() {
         DispatchQueue.main.async {
             UIView.animate(withDuration: 0.3) {
                 self.appIcon.alpha = 0
@@ -83,10 +95,8 @@ class PascodeLockView: UIView, UITextFieldDelegate {
             } completion: { _ in
                 
             }
-
         }
     }
-    
     
     
     

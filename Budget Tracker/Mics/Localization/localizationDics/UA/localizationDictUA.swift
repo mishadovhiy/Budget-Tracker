@@ -12,6 +12,7 @@ import UIKit
 struct localizationDictUA {
 
     static let dictUA: [String:String] = [
+        "No transactions history":"Порожньо",
         "Privacy policy":"Політика конфіденційності",
         "Price":"Ціна",
         "Free Trial":"Безкоштовне випробування",
@@ -44,6 +45,7 @@ struct localizationDictUA {
         "Total payed:":"Всього сплачено:",
         "Rest:":"Залишок:",
         "Amount to pay:":"Сума для cплати:",
+        "Amount to pay":"Сума для cплати",
         "Expired!":"Термін\nзакінчився!",
         "Enter Passcode":"Введіть пароль",
         "Total":"Всього",

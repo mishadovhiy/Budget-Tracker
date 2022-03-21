@@ -62,6 +62,8 @@
 		8BF63E8B276294F2002E8601 /* SelectUserVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF63E8A276294F2002E8601 /* SelectUserVC.swift */; };
 		8BF63E8D27629D14002E8601 /* SupportVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF63E8C27629D14002E8601 /* SupportVC.swift */; };
 		8BF63E8F2762C83F002E8601 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF63E8E2762C83F002E8601 /* SettingsVC.swift */; };
+		8BFA15D127E8E8510078856A /* categoriesVCcell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFA15D027E8E8510078856A /* categoriesVCcell.swift */; };
+		8BFA15D427E8E87B0078856A /* LocalDataActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFA15D327E8E87B0078856A /* LocalDataActionCell.swift */; };
 		8D36724224D315BC00CE90A9 /* NetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D36724124D315BC00CE90A9 /* NetworkModel.swift */; };
 		8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5206662421695200772CD5 /* StatisticBrain.swift */; };
 		8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D52066824216A2900772CD5 /* StatisticVC.swift */; };
@@ -153,6 +155,8 @@
 		8BF63E8A276294F2002E8601 /* SelectUserVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectUserVC.swift; sourceTree = "<group>"; };
 		8BF63E8C27629D14002E8601 /* SupportVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportVC.swift; sourceTree = "<group>"; };
 		8BF63E8E2762C83F002E8601 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
+		8BFA15D027E8E8510078856A /* categoriesVCcell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = categoriesVCcell.swift; sourceTree = "<group>"; };
+		8BFA15D327E8E87B0078856A /* LocalDataActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalDataActionCell.swift; sourceTree = "<group>"; };
 		8D36724124D315BC00CE90A9 /* NetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkModel.swift; sourceTree = "<group>"; };
 		8D5206662421695200772CD5 /* StatisticBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticBrain.swift; sourceTree = "<group>"; };
 		8D52066824216A2900772CD5 /* StatisticVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticVC.swift; sourceTree = "<group>"; };
@@ -460,7 +464,7 @@
 				8B91F08F27E58B6100B74F5A /* Statistic */,
 				8B26328E27E699610086C3A8 /* ViewController */,
 				8DD89D8D23F1495300273904 /* TransactionVC.swift */,
-				8DD89D8F23F1496100273904 /* CategoriesVC.swift */,
+				8BFA15CF27E8E82F0078856A /* CategoriesVC */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -474,6 +478,24 @@
 				8B26328327E67D1D0086C3A8 /* SegmentedControl.swift */,
 			);
 			path = OverrideObjects;
+			sourceTree = "<group>";
+		};
+		8BFA15CF27E8E82F0078856A /* CategoriesVC */ = {
+			isa = PBXGroup;
+			children = (
+				8DD89D8F23F1496100273904 /* CategoriesVC.swift */,
+				8BFA15D227E8E8620078856A /* Cells */,
+			);
+			path = CategoriesVC;
+			sourceTree = "<group>";
+		};
+		8BFA15D227E8E8620078856A /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				8BFA15D027E8E8510078856A /* categoriesVCcell.swift */,
+				8BFA15D327E8E87B0078856A /* LocalDataActionCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		8DBA7E4323F0316F00D8214C = {
@@ -695,6 +717,7 @@
 				8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */,
 				8B91F09127E58EF900B74F5A /* Text.swift in Sources */,
 				8B57837E275E6977007BA9EC /* SideBar.swift in Sources */,
+				8BFA15D427E8E87B0078856A /* LocalDataActionCell.swift in Sources */,
 				8BF63E8B276294F2002E8601 /* SelectUserVC.swift in Sources */,
 				8B26328227E677930086C3A8 /* Label.swift in Sources */,
 				8BAA72B527CB7D41005298B6 /* Keys.swift in Sources */,
@@ -733,6 +756,7 @@
 				8D36724224D315BC00CE90A9 /* NetworkModel.swift in Sources */,
 				8B42FCDD2776805800013E4B /* NumbersTF.swift in Sources */,
 				8B5F342C26FB2D98000DDCAF /* EnterValueVC.swift in Sources */,
+				8BFA15D127E8E8510078856A /* categoriesVCcell.swift in Sources */,
 				8BC31D7B27E3E5EA00FBC939 /* Button.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

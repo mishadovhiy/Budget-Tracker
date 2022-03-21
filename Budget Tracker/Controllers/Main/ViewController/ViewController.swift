@@ -55,7 +55,10 @@ class ViewController: SuperViewController {
         let sideBarPinch = UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:)))
         mainContentView.addGestureRecognizer(sideBarPinch)
         ViewController.shared = self
-        updateUI()
+        
+            updateUI()
+        
+        
         if #available(iOS 15.0, *) {
             self.mainTableView.sectionHeaderTopPadding = 0
         }
@@ -384,7 +387,10 @@ class ViewController: SuperViewController {
      //   addTransitionButton.translatesAutoresizingMaskIntoConstraints = true
   //      self.mainTableView.backgroundColor = K.Colors.background
 
-        downloadFromDB()
+        DispatchQueue.init(label: "dbLoad", qos: .userInteractive).async {
+            self.downloadFromDB()
+        }
+        
         self.mainTableView.delegate = self
         self.mainTableView.dataSource = self
         self.enableLocalDataPress = false
