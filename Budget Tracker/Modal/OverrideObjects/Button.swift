@@ -11,6 +11,17 @@ import UIKit
 @IBDesignable
 class Button: UIButton {
     
+    @IBInspectable open var linkBackground = false {
+        didSet {
+            if linkBackground {
+                DispatchQueue.main.async {
+                    self.backgroundColor = K.Colors.link
+                }
+            }
+        }
+    }
+    
+    
     override func willMove(toWindow newWindow: UIWindow?) {
         super.willMove(toWindow: newWindow)
         
@@ -29,13 +40,5 @@ class Button: UIButton {
         }
     }
 
-    
-    @IBInspectable open var linkBackground: Bool = false {
-        didSet {
-            DispatchQueue.main.async {
-                self.backgroundColor = K.Colors.link
-            }
-        }
-    }
     
 }
