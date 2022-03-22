@@ -47,7 +47,7 @@ class AppSettingsData {
                 self.vc.loadData()
             }
             
-            self.vc.toChooseIn(data: langs, title:"Set".localize + " " + "Language".localize , selectedAction: colorSetted)
+            self.vc.toChooseIn(data: langs, title:"Language".localize , selectedAction: colorSetted)
         })
         
         
@@ -82,8 +82,8 @@ class AppSettingsData {
 
             let passcodeTimeOut = SettingsVC.StandartCell(title: timeoutText, description: UserSettings.Security.timeOut + " " + "seconds".localize, action: {
                 
-                let timoutOptions = ["5", "15", "30", "60", "90", "120", "180", "300", "500"]
-                let vcTitle = "Set".localize + " " + timeoutText
+                let timoutOptions = ["15", "30", "60", "90", "120", "180", "300", "500"]
+                let vcTitle = timeoutText
                 
                 self.vc.toChooseIn(data: timoutOptions, title: vcTitle) { newValue in
                     
@@ -136,17 +136,13 @@ class AppSettingsData {
         let privacy = SettingsVC.StandartCell(title: pprivacyTitle, action: {
             DispatchQueue.main.async {
                 if let nav = self.vc.navigationController {
-                    WebViewVC.shared.presentScreen(in: nav, data: .init(url: "https://dovhiy.com/apps/previews/budget.html", key: "Privacy"), screenTitle: pprivacyTitle)
+                    WebViewVC.shared.presentScreen(in: nav, data: .init(url: "https://dovhiy.com/apps/previews/budget.html", key: "Privacy".localize), screenTitle: pprivacyTitle)
                 }
             }
             
         })
         
-       // if #available(iOS 13.0, *) {
-            return [supportCell, privacy, devSupport, otherCell]
-       // } else {
-       //     return [supportCell, devSupport, otherCell]
-       // }
+        return [supportCell, privacy, devSupport, otherCell]
         
         
     }
@@ -180,8 +176,8 @@ extension AppSettingsData {
     }
     
     func getUserPasscode(completion:@escaping() -> ()) {
-        AppDelegate.shared.passcodeLock.present(passcodeEntered: completion)
-        AppDelegate.shared.passcodeLock.passcodeLock()
+
+        AppDelegate.shared.presentLock(passcode: true, passcodeVerified: completion)
     }
     
     

@@ -14,7 +14,7 @@ var appData = AppData()
 var statisticBrain = StatisticBrain()//?
 var sumAllCategories: [String: Double] = [:]//?
 var expenseLabelPressed = true//make only in vc
-var selectedPeroud = ""//try to ud
+//try to ud
 var sendSavedData = false
 
 var needDownloadOnMainAppeare = false
@@ -55,7 +55,10 @@ class ViewController: SuperViewController {
         let sideBarPinch = UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:)))
         pinchView.addGestureRecognizer(sideBarPinch)
         ViewController.shared = self
-        updateUI()
+        
+            updateUI()
+        
+        
         if #available(iOS 15.0, *) {
             self.mainTableView.sectionHeaderTopPadding = 0
         }
@@ -103,7 +106,7 @@ class ViewController: SuperViewController {
                 if self.mainTableView.visibleCells.count > 1 {
                     self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
                 }
-                self.filterText = "Filter".localize + ": " + selectedPeroud
+                self.filterText = "Filter".localize + ": " + appData.filter.selectedPeroud
                 self.calculationSView.alpha = 0
                 UIView.animate(withDuration: 0.8) {
                     self.calculationSView.alpha = 1
@@ -387,7 +390,10 @@ class ViewController: SuperViewController {
      //   addTransitionButton.translatesAutoresizingMaskIntoConstraints = true
   //      self.mainTableView.backgroundColor = K.Colors.background
 
-        downloadFromDB()
+        DispatchQueue.init(label: "dbLoad", qos: .userInteractive).async {
+            self.downloadFromDB()
+        }
+        
         self.mainTableView.delegate = self
         self.mainTableView.dataSource = self
         self.enableLocalDataPress = false
@@ -571,7 +577,7 @@ class ViewController: SuperViewController {
         print("filterCalled")
         dataTaskCount = (0,0)
         animateCellWillAppear = true
-        selectedPeroud = selectedPeroud != "" ? selectedPeroud : "This Month".localize
+        appData.filter.selectedPeroud = appData.filter.selectedPeroud != "" ? appData.filter.selectedPeroud : "This Month"
         DispatchQueue.main.async {
             self.filterText = "Filtering".localize
         }
@@ -848,12 +854,12 @@ class ViewController: SuperViewController {
             for i in 0..<self.timers.count {
                 self.timers[i].invalidate()
             }
-            if newValue != "Filter".localize + ": \(selectedPeroud)" {
+            if newValue != "Filter".localize + ": \(appData.filter.selectedPeroud)" {
                 let timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { (timer) in
-                    if self._filterText == ("Filter".localize + ": \(selectedPeroud)") {
+                    if self._filterText == ("Filter".localize + ": \(appData.filter.selectedPeroud)") {
                         timer.invalidate()
                         DispatchQueue.main.async {
-                            self.filterTextLabel.text = "Filter".localize + ": \(selectedPeroud)"
+                            self.filterTextLabel.text = "Filter".localize + ": \(appData.filter.selectedPeroud)"
                         }
                         for i in 0..<self.timers.count {
                             self.timers[i].invalidate()
@@ -1365,7 +1371,7 @@ class ViewController: SuperViewController {
 
     var editingTransaction: TransactionsStruct?
     
-    var prevSelectedPer = selectedPeroud
+    var prevSelectedPer = appData.filter.selectedPeroud
     
     var filteredData:[String: [String]] {
         get {
@@ -1438,7 +1444,7 @@ class ViewController: SuperViewController {
             vc.fromSettings = true
         case "toFiterVC":
             self.mainTableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
-            prevSelectedPer = selectedPeroud
+            prevSelectedPer = appData.filter.selectedPeroud
             print("toFiterVC")
             let vc = segue.destination as? FilterTVC
             vc?.months = filteredData["months"] ?? []
@@ -1537,9 +1543,9 @@ class ViewController: SuperViewController {
                     self.filterTextLabel.alpha = 1
                 }
             }
-            if self.prevSelectedPer != selectedPeroud {
+            if self.prevSelectedPer != appData.filter.selectedPeroud {
                 self.filter()
-                print("unwindToFilter filter: \(selectedPeroud)")
+                print("unwindToFilter filter: \(appData.filter.selectedPeroud)")
             }
         }
     }
@@ -1722,7 +1728,7 @@ class ViewController: SuperViewController {
                 self.filterTextLabel.alpha = 0.2
             }
         }
-        if self._filterText == "Filter".localize + ": \(selectedPeroud)" {
+        if self._filterText == "Filter".localize + ": \(appData.filter.selectedPeroud)" {
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: "toFiterVC", sender: self)
             }

@@ -11,6 +11,17 @@ import UIKit
 @IBDesignable
 class Button: UIButton {
     
+    @IBInspectable open var linkBackground = false {
+        didSet {
+            if linkBackground {
+                DispatchQueue.main.async {
+                    self.backgroundColor = K.Colors.link
+                }
+            }
+        }
+    }
+    
+    
     override func willMove(toWindow newWindow: UIWindow?) {
         super.willMove(toWindow: newWindow)
         
@@ -19,8 +30,19 @@ class Button: UIButton {
                 self.setTitle(local, for: .normal)
             }
         }
+        //set background for mac //fix when button background is always white
         
     }
+    
+    
+    @IBInspectable open var titleWhenNoSymbols: String = "" {
+        didSet {
+            DispatchQueue.main.async {
+                self.setTitle(self.titleWhenNoSymbols, for: .normal)
+            }
+        }
+    }
+    
     
     @IBInspectable open var cornerRadius: CGFloat = 0 {
         didSet {
@@ -29,13 +51,5 @@ class Button: UIButton {
         }
     }
 
-    
-    @IBInspectable open var linkBackground: Bool = false {
-        didSet {
-            DispatchQueue.main.async {
-                self.backgroundColor = K.Colors.link
-            }
-        }
-    }
     
 }

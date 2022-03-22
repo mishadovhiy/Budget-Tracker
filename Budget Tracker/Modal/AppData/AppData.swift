@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Foundation
 
 
 
@@ -362,8 +363,9 @@ class AppData {
     ]
     
     var randomColorName: String {
-        let data = categoryColors
-        return data[Int.random(in: 0..<data.count)]
+       /* let data = categoryColors
+        return data[Int.random(in: 0..<data.count)]*/
+        return UserDefaults.standard.value(forKey: "SelectedTintColor") as? String ?? "yellowColor"
     }
     
     func stringDate(_ sender: UIDatePicker) -> String {
@@ -496,9 +498,38 @@ class AppData {
     var filter = Filter()
     struct Filter {
         
-        var showAll = false
-        var from: String = ""
-        var to: String = ""
+        var showAll:Bool {
+            get {
+                UserDefaults.standard.value(forKey: "showAll") as? Bool ?? false
+            }
+            set {
+                UserDefaults.standard.setValue(newValue, forKey: "showAll")
+            }
+        }
+        var from: String {
+            get {
+                UserDefaults.standard.value(forKey: "SortFrom") as? String ?? ""
+            }
+            set {
+                UserDefaults.standard.setValue(newValue, forKey: "SortFrom")
+            }
+        }
+        var to: String {
+            get {
+                UserDefaults.standard.value(forKey: "SortTo") as? String ?? ""
+            }
+            set {
+                UserDefaults.standard.setValue(newValue, forKey: "SortTo")
+            }
+        }
+        var selectedPeroud:String {
+            get {
+                UserDefaults.standard.value(forKey: "SortSelectedPeroud") as? String ?? ""
+            }
+            set {
+                UserDefaults.standard.setValue(newValue, forKey: "SortSelectedPeroud")
+            }
+        }
         
         func getLastDayOf(month: Int, year: Int) -> Int {
             

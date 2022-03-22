@@ -14,8 +14,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
 
     var window: UIWindow?
     static let shared = AppDelegate()
-    
+
     let center = UNUserNotificationCenter.current()
+    private var backgroundEnterDate:Date?
+    private var becameActive = false
     
     lazy var newMessage: MessageView = {
         return MessageView.instanceFromNib() as! MessageView
@@ -25,12 +27,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         return newView
     }()
     
-    lazy var passcodeLock: PascodeLockView = {
-        let newView = PascodeLockView.instanceFromNib() as! PascodeLockView
-        return newView
-    }()
+    let passcodeLock = PascodeLockView.instanceFromNib() as! PascodeLockView
     
-
+    
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -63,13 +62,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }
     
 
-    private var backgroundEnterDate:Date?
+    
     
     func applicationWillResignActive(_ application: UIApplication) {
+        DispatchQueue.main.async {
+            self.window?.endEditing(true)
+        }
+        
         if UserSettings.Security.password != "" && !(passcodeLock.presenting ?? true) {
             backgroundEnterDate = Date();
             //delegate.resighnActive()
-            passcodeLock.present()
+            presentLock(passcode: false)
         }
     }
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
@@ -84,7 +87,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         
         print(#function)
     }
-    var becameActive = false
+    
     func applicationDidBecomeActive(_ application: UIApplication) {
         print(#function)
         if !becameActive {
@@ -95,8 +98,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         if UserSettings.Security.password != "" {
             //end editing tf of window-topViewController-view
             guard let logoutDate = backgroundEnterDate else{
-                passcodeLock.present()
-                passcodeLock.passcodeLock()
+                presentLock(passcode: true)
                 
                 return;
             }
@@ -104,7 +106,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
             let ti = now.timeIntervalSince(logoutDate)
             let timeout = Double(UserSettings.Security.timeOut) ?? 15
             if ti > timeout {
-                passcodeLock.passcodeLock()
+
+                presentLock(passcode: true)
             } else {
                 passcodeLock.hide()
                 
@@ -116,17 +119,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         print(#function)
     }
     
-    func removeNotification(id:String) {
-        center.removeDeliveredNotifications(withIdentifiers: [id])
-        let deliveredHolder = appData.deliveredNotificationIDs
-        var newNotif:[String] = []
-        for i in 0..<deliveredHolder.count {
-            if deliveredHolder[i] != id {
-                newNotif.append(deliveredHolder[i])
-            }
-        }
-        appData.deliveredNotificationIDs = newNotif
-    }
+    
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
@@ -179,7 +172,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         } else {
             DispatchQueue.main.async {
                 self.ai.fastHide { (_) in
-                    self.newMessage.show(title:"Category not found", type: .error)
+                    self.newMessage.show(title:("Category".localize + " " + "not found".localize), type: .error)
                 }
             }
         }
@@ -188,7 +181,37 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     }
     
     
+/// methods
+    func removeNotification(id:String) {
+        center.removeDeliveredNotifications(withIdentifiers: [id])
+        let deliveredHolder = appData.deliveredNotificationIDs
+        var newNotif:[String] = []
+        for i in 0..<deliveredHolder.count {
+            if deliveredHolder[i] != id {
+                newNotif.append(deliveredHolder[i])
+            }
+        }
+        appData.deliveredNotificationIDs = newNotif
+    }
+    
 }
+
+
+
+extension AppDelegate {
+    func presentLock(passcode:Bool, passcodeVerified: (()->())? = nil ) {
+        if passcode {
+            passcodeLock.passcodeLock(passcodeEntered: passcodeVerified)
+        } else {
+            passcodeLock.present()
+        }
+        
+    }
+    
+}
+
+
+
 
 
 protocol AppDelegateProtocol {
