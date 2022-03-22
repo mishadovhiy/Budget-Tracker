@@ -857,34 +857,24 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
 
     
     func hideAll() {
-        toggleIcons(show: false, animated: true, category: nil)
-        DispatchQueue.main.async {
-             if self.searchBar.isFirstResponder {
-                 self.searchBar.endEditing(true)
+        if showingIcons {
+            toggleIcons(show: false, animated: true, category: nil)
+        }
+        
+             if searchBar.isFirstResponder {
+                 DispatchQueue.main.async {
+                     self.searchBar.endEditing(true)
+                 }
+                 
              }
             if let editing = self.editingTF {
                 self.editingTF = nil
-            //    t/oggleIcons(show: false, animated: true, category: nil)
                 DispatchQueue.main.async {
                     editing.endEditing(true)
                     
                 }
             }
-         }
-       /* DispatchQueue.main.async {
-            if self.searchBar.isFirstResponder {
-                self.searchBar.endEditing(true)
-            }
-        }
-        if let editing = editingTF {
-            editingTF = nil
-        //    t/oggleIcons(show: false, animated: true, category: nil)
-            DispatchQueue.main.async {
-                editing.endEditing(true)
-                
-            }
-        }
-        selectingIconFor = (nil,nil)*/
+
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
