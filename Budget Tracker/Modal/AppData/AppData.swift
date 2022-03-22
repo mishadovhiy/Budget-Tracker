@@ -363,8 +363,9 @@ class AppData {
     ]
     
     var randomColorName: String {
-        let data = categoryColors
-        return data[Int.random(in: 0..<data.count)]
+       /* let data = categoryColors
+        return data[Int.random(in: 0..<data.count)]*/
+        return UserDefaults.standard.value(forKey: "SelectedTintColor") as? String ?? "yellowColor"
     }
     
     func stringDate(_ sender: UIDatePicker) -> String {

@@ -136,6 +136,10 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         }
     }
     
+    func defaultCategory(icon:String, color:String, purpose:CategoryPurpose) -> ScreenCategory {
+        
+        return ScreenCategory(category: NewCategories(id: -1, name: "", icon: icon, color: color, purpose: .expense), transactions: [])
+    }
     
     var _categories:[NewCategories] = []
     var categories:[NewCategories] {
@@ -202,13 +206,13 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 
                 var resultData:[ScreenDataStruct] = []
                 resultData = [
-                    ScreenDataStruct(title: K.expense.localize, data: resultDict[purposeToString(.expense)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: expenseImg, color: expenseColor, purpose: .expense), transactions: [])),
-                    ScreenDataStruct(title: K.income.localize, data: resultDict[purposeToString(.income)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: incomeImg, color: incomeColor, purpose: .income), transactions: []))
+                    ScreenDataStruct(title: K.expense.localize, data: resultDict[purposeToString(.expense)] ?? [], newCategory: defaultCategory(icon: expenseImg, color: expenseColor, purpose: .expense)),
+                    ScreenDataStruct(title: K.income.localize, data: resultDict[purposeToString(.income)] ?? [], newCategory: defaultCategory(icon: incomeImg, color: incomeColor, purpose: .income))
                 ]
                 if fromSettings {
                     self.tableData = resultData
                 } else {
-                    resultData.append(ScreenDataStruct(title:purposeToString(.debt).localize, data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: debtImg, color: debtColor, purpose: .debt), transactions: [])))
+                    resultData.append(ScreenDataStruct(title:purposeToString(.debt).localize, data: resultDict[purposeToString(.debt)] ?? [], newCategory: defaultCategory(icon: debtImg, color: debtColor, purpose: .debt)))
                     
                     self.tableData = resultData
                 }
@@ -220,7 +224,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                     return data[Int.random(in: 0..<data.count)]
                 }
                 let debtColor = appData.lastSelected.gett(setterType: .color, valueType: .debt) ?? AppData.linkColor
-                let debtImg = appData.lastSelected.gett(setterType: .icon, valueType: .debt) ?? randomIcon
+                let debtImg = appData.lastSelected.gett(setterType: .icon, valueType: .debt) ?? ""
                 self.tableData = [
                     ScreenDataStruct(title: "", data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: debtImg, color: debtColor, purpose: .debt), transactions: [])),
                 ]
