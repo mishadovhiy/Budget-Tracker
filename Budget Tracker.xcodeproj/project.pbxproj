@@ -215,6 +215,14 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		8B1E932027E970320031D36F /* TransactionVC */ = {
+			isa = PBXGroup;
+			children = (
+				8DD89D8D23F1495300273904 /* TransactionVC.swift */,
+			);
+			path = TransactionVC;
+			sourceTree = "<group>";
+		};
 		8B26328727E681110086C3A8 /* Localization */ = {
 			isa = PBXGroup;
 			children = (
@@ -463,7 +471,7 @@
 			children = (
 				8B91F08F27E58B6100B74F5A /* Statistic */,
 				8B26328E27E699610086C3A8 /* ViewController */,
-				8DD89D8D23F1495300273904 /* TransactionVC.swift */,
+				8B1E932027E970320031D36F /* TransactionVC */,
 				8BFA15CF27E8E82F0078856A /* CategoriesVC */,
 			);
 			path = Main;
