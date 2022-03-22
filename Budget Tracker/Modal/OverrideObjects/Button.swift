@@ -30,8 +30,19 @@ class Button: UIButton {
                 self.setTitle(local, for: .normal)
             }
         }
+        //set background for mac //fix when button background is always white
         
     }
+    
+    
+    @IBInspectable open var titleWhenNoSymbols: String = "" {
+        didSet {
+            DispatchQueue.main.async {
+                self.setTitle(self.titleWhenNoSymbols, for: .normal)
+            }
+        }
+    }
+    
     
     @IBInspectable open var cornerRadius: CGFloat = 0 {
         didSet {
