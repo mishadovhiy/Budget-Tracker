@@ -155,7 +155,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
             
 
             DispatchQueue.main.async {
-                self.titleLabel.text = (expenseLabelPressed ? "Expenses".localize : "Incomes".localize) + " " + "for".localize + " " + selectedPeroud
+                self.titleLabel.text = (expenseLabelPressed ? "Expenses".localize : "Incomes".localize) + " " + "for".localize + " " + appData.filter.selectedPeroud
                 self.totalLabel.text = "\(Int(totalAmount))"
             }
             ifNoData()

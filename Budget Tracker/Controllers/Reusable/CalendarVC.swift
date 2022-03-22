@@ -711,9 +711,9 @@ class CalendarVC: SuperViewController {
                 let yearTo = appData.filter.getYearFromString(s: selectedTo)
                 let strOf = "of".localize
                 if yearTo == year {
-                    selectedPeroud = "\(returnMonth(month)), \(day) → \(returnMonth(monthTo)), \(dayTo) \(strOf) \(yearTo)"
+                    appData.filter.selectedPeroud = "\(returnMonth(month)), \(day) → \(returnMonth(monthTo)), \(dayTo) \(strOf) \(yearTo)"
                 } else {
-                    selectedPeroud = "\(returnMonth(month)), \(day) \(strOf) \(year) → \(returnMonth(monthTo)), \(dayTo) \(strOf) \(yearTo)"
+                    appData.filter.selectedPeroud = "\(returnMonth(month)), \(day) \(strOf) \(year) → \(returnMonth(monthTo)), \(dayTo) \(strOf) \(yearTo)"
                 }
                 self.dismiss(animated: true, completion: nil)
             }

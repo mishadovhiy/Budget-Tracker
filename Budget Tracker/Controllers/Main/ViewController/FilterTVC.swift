@@ -223,7 +223,7 @@ class FilterTVC: SuperViewController {
         DispatchQueue.global(qos: .userInteractive).async {
             if appData.filter.from == "" || appData.filter.to == "" {
                 self.defaultFilter()
-                selectedPeroud = "\(self.buttonTitle[1])"
+                appData.filter.selectedPeroud = "\(self.buttonTitle[1])"
                 ifCustom = false
                 appData.filter.showAll = false
                 DispatchQueue.main.async {
@@ -249,9 +249,9 @@ class FilterTVC: SuperViewController {
         let yearTo = appData.filter.getYearFromString(s: appData.filter.to)
         ifCustom = true
         if yearTo == year {
-            selectedPeroud = month != monthTo || day != dayTo ? "\(convertMonthFrom(int: month)) \(day) → \(convertMonthFrom(int: monthTo)) \(dayTo), \(yearTo)" : "\(convertMonthFrom(int: month)) \(day), \(year)"
+            appData.filter.selectedPeroud = month != monthTo || day != dayTo ? "\(convertMonthFrom(int: month)) \(day) → \(convertMonthFrom(int: monthTo)) \(dayTo), \(yearTo)" : "\(convertMonthFrom(int: month)) \(day), \(year)"
         } else {
-            selectedPeroud = "\(convertMonthFrom(int: month)) \(day), \(year) → \(convertMonthFrom(int: monthTo)) \(dayTo), \(yearTo)"
+            appData.filter.selectedPeroud = "\(convertMonthFrom(int: month)) \(day), \(year) → \(convertMonthFrom(int: monthTo)) \(dayTo), \(yearTo)"
         }
         
         DispatchQueue.main.async {
@@ -312,7 +312,7 @@ extension FilterTVC: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
 
-        if data == selectedPeroud {
+        if data == appData.filter.selectedPeroud {
             cell.layer.masksToBounds = true
             cell.layer.cornerRadius = 6
            // cell.titleLabel.textColor = K.Colors.category
@@ -372,7 +372,7 @@ extension FilterTVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if let cell = tableView.cellForRow(at: indexPath) as? FilterCell {
-            selectedPeroud = cell.titleLabel.text ?? "Unknown".localize
+            appData.filter.selectedPeroud = cell.titleLabel.text ?? "Unknown".localize
             if cell.titleLabel.text != "Custom".localize {
                 ifCustom = false
             }
