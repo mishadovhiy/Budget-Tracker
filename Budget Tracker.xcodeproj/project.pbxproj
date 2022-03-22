@@ -357,12 +357,12 @@
 			path = notUsing;
 			sourceTree = "<group>";
 		};
-		8B6BA97A27E6E4370067FF58 /* Data */ = {
+		8B6BA97A27E6E4370067FF58 /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				8B91F08D27E587A800B74F5A /* MoreOptionsData.swift */,
 			);
-			path = Data;
+			path = Model;
 			sourceTree = "<group>";
 		};
 		8B6BA97B27E6E46A0067FF58 /* SupportVC */ = {
@@ -398,8 +398,8 @@
 		8B91F08C27E5873900B74F5A /* LoginViewController */ = {
 			isa = PBXGroup;
 			children = (
-				8B6BA97A27E6E4370067FF58 /* Data */,
 				8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */,
+				8B6BA97A27E6E4370067FF58 /* Model */,
 			);
 			path = LoginViewController;
 			sourceTree = "<group>";

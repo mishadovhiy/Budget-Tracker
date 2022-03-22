@@ -396,7 +396,7 @@ class MoreOptionsData {
                 
             } else {
                 DispatchQueue.main.async {
-                    self.vc.navigationController?.popViewController(animated: true)
+                    self.vc.navigationController?.popToViewController(self.vc, animated: true)
                 }
             }
             
@@ -469,7 +469,7 @@ class MoreOptionsData {
                                                 
                                             } else {
                                                 DispatchQueue.main.async {
-                                                    self.vc.navigationController?.popViewController(animated: true)
+                                                    self.vc.navigationController?.popToViewController(self.vc, animated: true)
                                                 }
                                             }
                                             
@@ -670,7 +670,7 @@ extension MoreOptionsData {
         let okButton = IndicatorView.button(title: "OK", style: .standart, close: true) { _ in
             if goToLogin {
                 DispatchQueue.main.async {
-                    self.vc.navigationController?.popViewController(animated: true)
+                    self.vc.navigationController?.popToViewController(self.vc, animated: true)
                 }
             }
         }
