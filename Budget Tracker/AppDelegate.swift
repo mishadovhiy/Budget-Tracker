@@ -33,11 +33,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }()
     
     public lazy var deviceType:DeviceType = {
-        if #available(iOS 13.0, *) {
+        /*if #available(iOS 13.0, *) {
             return .primary
         } else {
             return .underIos13
-        }
+        }*/
+        return .mac
     }()
     
     public lazy var symbolsAllowed:Bool = {
