@@ -50,23 +50,18 @@ class mainVCcell: UITableViewCell {
     }
 
     func setupCell(_ data: TransactionsStruct, i: Int, tableData: [TransactionsStruct], selectedCell: IndexPath?, indexPath: IndexPath) {
-        if (Double(data.value) ?? 0.0) > 0 {
-            valueLabel.textColor = K.Colors.link
 
-        } else {
-            valueLabel.textColor = K.Colors.category
-        }
-
+        valueLabel.textColor = (Double(data.value) ?? 0.0) > 0 ? K.Colors.link : K.Colors.category
        // commentLabel.isHidden = true
         
         let value = String(format:"%.0f", Double(data.value) ?? 0.0)
         valueLabel.text = Double(data.value) ?? 0.0 > 0.0 ? "+\(value)" : value
         let category = ViewController.shared?.db.category(data.categoryID)
         print(category, "vghjnvgujnbhj")
-        if #available(iOS 13.0, *) {
+        if AppDelegate.shared.symbolsAllowed {
             categoryImage.image = AppData.iconNamed(category?.icon)
         } else {
-            categoryImage.isHidden = true
+            categoryImage.superview?.isHidden = true
         }
         
         categoryImage.tintColor = AppData.colorNamed(category?.color)

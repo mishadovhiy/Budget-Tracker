@@ -98,7 +98,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
             cell.nameLabel.superview?.alpha = tableData[indexPath.section].section[indexPath.row].name == "" ? 0 : 1
             cell.nameLabel.text = tableData[indexPath.section].section[indexPath.row].name
             cell.valueLabel.text = tableData[indexPath.section].section[indexPath.row].value
-            if #available(iOS 13.0, *) {
+            if AppDelegate.shared.symbolsAllowed {
                 cell.optionIcon.image = AppData.iconNamed(tableData[indexPath.section].section[indexPath.row].image)
             }
             return cell
@@ -149,9 +149,8 @@ class SideBardCell: UITableViewCell {
         let selected = UIView(frame: .zero)
         selected.backgroundColor = K.Colors.primaryBacground
         self.selectedBackgroundView = selected
-        if #available(iOS 13.0, *) {
-            
-        } else {
+
+        if !AppDelegate.shared.symbolsAllowed {
             optionIcon.isHidden = true
         }
     }

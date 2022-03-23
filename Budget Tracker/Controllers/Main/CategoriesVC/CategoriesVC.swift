@@ -1032,7 +1032,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                     cell.dueDateLabel.textColor = expired ? K.Colors.negative : K.Colors.balanceT
                     
                     cell.qntLabel.text = "\(category.transactions.count)"
-                    if #available(iOS 13.0, *) {
+                    if AppDelegate.shared.symbolsAllowed {
                         cell.iconimage.image = category.editing == nil ? AppData.iconNamed(category.category.icon) : AppData.iconNamed(category.editing?.icon)
                         cell.iconimage.tintColor = category.editing == nil ? AppData.colorNamed(category.category.color) : AppData.colorNamed(category.editing?.color)
                     }
@@ -1111,7 +1111,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             cell.footerHelperBottomView.isHidden = false
         cell.lo(index: nil, footer: sect)
         cell.newCategoryTF.text = category.name
-            if #available(iOS 13.0, *) {
+            if AppDelegate.shared.symbolsAllowed {
                 cell.iconimage.image = AppData.iconNamed(category.icon)
                 cell.iconimage.tintColor = AppData.colorNamed(category.color)
             } else {

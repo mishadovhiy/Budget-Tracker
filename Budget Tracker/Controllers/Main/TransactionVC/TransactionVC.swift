@@ -122,9 +122,7 @@ class TransitionVC: SuperViewController {
         super.viewWillLayoutSubviews()
         if !sbvsloded {
             doneButton.backgroundColor = K.Colors.link
-            if #available(iOS 13.0, *) {
-                
-            } else {
+            if !AppDelegate.shared.symbolsAllowed {
                 removeLastButton.setTitle("⌫", for: .normal)
             }
             

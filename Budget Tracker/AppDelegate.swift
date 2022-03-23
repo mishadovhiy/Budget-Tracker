@@ -15,8 +15,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     var window: UIWindow?
     static let shared = AppDelegate()
     let center = UNUserNotificationCenter.current()
+    
+    
+    private let passcodeLock = PascodeLockView.instanceFromNib() as! PascodeLockView
     private var backgroundEnterDate:Date?
     private var becameActive = false
+    
+    
     
     lazy var newMessage: MessageView = {
         return MessageView.instanceFromNib() as! MessageView
@@ -26,7 +31,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         return newView
     }()
     
-    let passcodeLock = PascodeLockView.instanceFromNib() as! PascodeLockView
+    public lazy var deviceType:DeviceType = {
+        if #available(iOS 13.0, *) {
+            return .primary
+        } else {
+            return .underIos13
+        }
+    }()
+    
+    public lazy var symbolsAllowed:Bool = {
+        return deviceType != .primary ? false : true
+    }()
+    
     
     
     
@@ -56,6 +72,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         AppLocalization.launchedLocalization = AppLocalization.udLocalization ?? (NSLocale.current.languageCode ?? "-")
         print("LOCALIZATION: ", AppLocalization.launchedLocalization)
         
+
         
         return true
     }
@@ -207,6 +224,15 @@ extension AppDelegate {
         
     }
     
+}
+
+
+extension AppDelegate {
+    enum DeviceType {
+        case primary
+        case underIos13
+        case mac
+    }
 }
 
 

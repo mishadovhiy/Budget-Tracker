@@ -353,8 +353,8 @@ class ViewController: SuperViewController {
             self.darkBackgroundUnderTable.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
             self.darkBackgroundUnderTable.translatesAutoresizingMaskIntoConstraints = true
             self.addTransitionButton.layer.cornerRadius = self.addTransitionButton.layer.frame.width / 2
-            if #available(iOS 13.0, *) {
-            } else {
+
+            if !AppDelegate.shared.symbolsAllowed {
                 self.addTransitionButton.setTitle("+", for: .normal)
                 self.menuButton.setTitle("⌘", for: .normal)
             }
@@ -621,7 +621,7 @@ class ViewController: SuperViewController {
                                 if loadedData[i][2] != appData.password {
                             
                                     self.forceLoggedOutUser = appData.username
-                                    if #available(iOS 13.0, *) {
+                                    if AppDelegate.shared.deviceType != .primary {
                                         
                                         DispatchQueue.main.async {
                                             self.performSegue(withIdentifier: "toSingIn", sender: self)
@@ -1548,19 +1548,7 @@ class ViewController: SuperViewController {
     }
 
     
-    @IBAction func settingsPressed(_ sender: UIButton) {
-        //toSettingsFullScreen
-        if #available(iOS 13.0, *) {
-            DispatchQueue.main.async {//toSettings
-                self.performSegue(withIdentifier: "toSettingsFullScreen", sender: self)
-            }
-        } else {
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "toSettingsFullScreen", sender: self)
-            }
-        }
-        
-    }
+    
     @IBAction func statisticLabelPressed(_ sender: UIButton) {
         
         switch sender.tag {
