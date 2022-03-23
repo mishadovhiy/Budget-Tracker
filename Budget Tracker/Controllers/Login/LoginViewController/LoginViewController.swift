@@ -192,9 +192,7 @@ class LoginViewController: SuperViewController {
         if !sbvsLoaded {
             sbvsLoaded = true
             DispatchQueue.main.async {
-                if #available(iOS 13.0, *) {
-                    
-                } else {
+                if !AppDelegate.shared.symbolsAllowed {
                     self.moreButton.setTitle("● ● ●", for: .normal)
                 }
                 

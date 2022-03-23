@@ -9,11 +9,7 @@
 import UIKit
 import UserNotifications
 
-class SuperViewController: UIViewController, AppDelegateProtocol {
-    func resighnActive() {
-        self.view.endEditing(true)
-    }
-    
+class SuperViewController: UIViewController {
 
     lazy var newMessage: MessageView = AppDelegate.shared.newMessage
     lazy var ai: IndicatorView = AppDelegate.shared.ai
@@ -32,6 +28,7 @@ class SuperViewController: UIViewController, AppDelegateProtocol {
         //}
  */
     }
+    
     
     var loadedSubviews: Bool = false
     override func viewDidLayoutSubviews() {
@@ -68,6 +65,8 @@ class SuperViewController: UIViewController, AppDelegateProtocol {
         self.view.endEditing(true)
     }
 
+    
+ 
     
     func makeTwo(n: Int) -> String {
         if n < 10 {

@@ -31,9 +31,7 @@ class SupportVC: SuperViewController, UITextViewDelegate {
         super.viewWillLayoutSubviews()
         if !svslded {
             svslded = true
-            if #available(iOS 13.0, *) {
-                
-            } else {
+            if !AppDelegate.shared.symbolsAllowed {
                 DispatchQueue.main.async {
                     self.sendButton.setTitle("Send".localize, for: .normal)
                 }

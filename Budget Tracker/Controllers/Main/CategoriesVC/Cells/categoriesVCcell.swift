@@ -44,9 +44,7 @@ class categoriesVCcell: UITableViewCell {
         super.draw(rect)
         if !drawed {
             drawed = true
-            if #available(iOS 13.0, *) {
-                
-            } else {
+            if !AppDelegate.shared.symbolsAllowed {
                 iconimage.isHidden = true
             }
         }
@@ -78,7 +76,7 @@ class categoriesVCcell: UITableViewCell {
         if index != nil {
             self.newCategoryTF.delegate = self
             self.newCategoryTF.addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
-            if #available(iOS 13.0, *) {
+            if AppDelegate.shared.symbolsAllowed {
                 let iconPressed = UITapGestureRecognizer(target: self, action: #selector(self.iconPressed(_:)))//
                 self.iconimage.addGestureRecognizer(iconPressed)
             }
