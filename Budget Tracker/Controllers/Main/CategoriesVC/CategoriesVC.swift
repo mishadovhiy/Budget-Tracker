@@ -138,7 +138,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
     func defaultCategory(icon:String, color:String, purpose:CategoryPurpose) -> ScreenCategory {
         
-        return ScreenCategory(category: NewCategories(id: -1, name: "", icon: icon, color: color, purpose: .expense), transactions: [])
+        return ScreenCategory(category: NewCategories(id: -1, name: "", icon: icon, color: color, purpose: purpose), transactions: [])
     }
     
     var _categories:[NewCategories] = []
