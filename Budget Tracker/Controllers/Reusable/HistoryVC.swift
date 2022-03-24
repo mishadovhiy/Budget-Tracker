@@ -63,9 +63,6 @@ class HistoryVC: SuperViewController {
         if !svsloaded {
             addTransButton.backgroundColor = K.Colors.link
             svsloaded = true
-            if !AppDelegate.shared.symbolsAllowed {
-                self.moreButton.setTitle("• • •", for: .normal)
-            }
         }
         
         

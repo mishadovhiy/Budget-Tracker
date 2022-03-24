@@ -354,10 +354,6 @@ class ViewController: SuperViewController {
             self.darkBackgroundUnderTable.translatesAutoresizingMaskIntoConstraints = true
             self.addTransitionButton.layer.cornerRadius = self.addTransitionButton.layer.frame.width / 2
 
-            if !AppDelegate.shared.symbolsAllowed {
-                self.addTransitionButton.setTitle("+", for: .normal)
-                self.menuButton.setTitle("⌘", for: .normal)
-            }
             self.view.addSubview(self.filterHelperView)
             self.shadow(for: self.filterHelperView)
             self.filterView.superview?.layer.masksToBounds = true
@@ -1825,40 +1821,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             
         }
     }
-    
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-    
-        if indexPath.section != 0 {
-            let editeAction = UIContextualAction(style: .destructive, title: "Edit".localize) {  (contextualAction, view, boolValue) in
-                self.editingTransaction = self.newTableData[indexPath.section - 1].transactions[indexPath.row]
-                DispatchQueue.main.async {
-                    self.performSegue(withIdentifier: "goToEditVC", sender: self)
-                }
-            }
-            let deleteAction = UIContextualAction(style: .destructive, title: "Delete".localize) {  (contextualAction, view, boolValue) in
-                self.tableActionActivityIndicator.startAnimating()
-                self.tableActionActivityIndicator.frame = CGRect(x: view.frame.width / 2 - 5, y: 0, width: 10, height: view.frame.height)
-                view.addSubview(self.tableActionActivityIndicator)
-                self.deleteFromDB(at: IndexPath(row: indexPath.row, section: indexPath.section - 1))
-            }
-            editeAction.image = AppData.iconNamed("pencil.yellow")
-            deleteAction.image = AppData.iconNamed("trash.red")
-            editeAction.backgroundColor = K.Colors.primaryBacground
-            deleteAction.backgroundColor = K.Colors.primaryBacground
-            if newTableData.count != 0 {
-                if newTableData[indexPath.section - 1].transactions.count != indexPath.row {
-                    return nil//UISwipeActionsConfiguration(actions: [editeAction, deleteAction])
-                }
-            }
-            return nil
 
-                                               
-                                               } else {
-                return nil
-            }
-        
-        
-    }
     
     
     

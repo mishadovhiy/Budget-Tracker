@@ -34,12 +34,21 @@ class Button: UIButton {
         
     }
     
-    
+    /**
+     - set when you use SF Symbol as icon
+     */
     @IBInspectable open var titleWhenNoSymbols: String = "" {
         didSet {
-            DispatchQueue.main.async {
-                self.setTitle(self.titleWhenNoSymbols, for: .normal)
+            
+            if !AppDelegate.shared.symbolsAllowed && (titleWhenNoSymbols != "") {
+                DispatchQueue.main.async {
+                    self.setTitle(self.titleWhenNoSymbols, for: .normal)
+                    self.setImage(nil, for: .normal)
+                    self.titleLabel?.font = .systemFont(ofSize: 15)
+                    
+                }
             }
+            
         }
     }
     

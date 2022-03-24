@@ -26,18 +26,7 @@ class SupportVC: SuperViewController, UITextViewDelegate {
         self.view.addGestureRecognizer(swipe)
         self.view.addGestureRecognizer(closePress)
     }
-    var svslded = false
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        if !svslded {
-            svslded = true
-            if !AppDelegate.shared.symbolsAllowed {
-                DispatchQueue.main.async {
-                    self.sendButton.setTitle("Send".localize, for: .normal)
-                }
-            }
-        }
-    }
+
     override func viewDidAppear(_ animated: Bool) {
         textView.becomeFirstResponder()
     }

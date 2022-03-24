@@ -1195,7 +1195,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             
         }
         
-        let editAction = UIContextualAction(style: .destructive, title: "Edit".localize) {  (contextualAction, view, boolValue) in
+        let editAction = UIContextualAction(style: .normal, title: "Edit".localize) {  (contextualAction, view, boolValue) in
             //self.tableActionActivityIndicator.startAnimating()
             self.tableData[indexPath.section - self.sectionsBeforeData].data[indexPath.row].editing = self.tableData[indexPath.section - self.sectionsBeforeData].data[indexPath.row].category
             DispatchQueue.main.async {
@@ -1203,12 +1203,14 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                // self.tableView.reloadData()
             }
         }
-        editAction.image = AppData.iconNamed("pencil.yellow")
-        deleteAction.image = AppData.iconNamed("trash.red")
-        editAction.backgroundColor = K.Colors.primaryBacground
-        deleteAction.backgroundColor = K.Colors.primaryBacground
-        localDeleteAction.backgroundColor = K.Colors.primaryBacground
-        localDeleteAction.image = AppData.iconNamed("trash.red")
+        if AppDelegate.shared.symbolsAllowed {
+            editAction.image = AppData.iconNamed("pencil.yellow")
+            deleteAction.image = AppData.iconNamed("trash.red")
+            editAction.backgroundColor = K.Colors.primaryBacground
+            deleteAction.backgroundColor = K.Colors.primaryBacground
+            localDeleteAction.backgroundColor = K.Colors.primaryBacground
+            localDeleteAction.image = AppData.iconNamed("trash.red")
+        }
         
         if indexPath.section == 0 || indexPath.section == 1 {
             return nil
