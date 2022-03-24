@@ -121,9 +121,7 @@ class TransitionVC: SuperViewController {
         super.viewWillLayoutSubviews()
         if !sbvsloded {
             doneButton.backgroundColor = K.Colors.link
-            if !AppDelegate.shared.symbolsAllowed {
-                removeLastButton.setTitle("⌫", for: .normal)
-            }
+
             
            // segmentControll.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.bala, for: .normal)
            // purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.category ?? .white], for: .selected)

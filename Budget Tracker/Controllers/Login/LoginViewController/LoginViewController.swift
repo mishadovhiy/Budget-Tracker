@@ -192,9 +192,7 @@ class LoginViewController: SuperViewController {
         if !sbvsLoaded {
             sbvsLoaded = true
             DispatchQueue.main.async {
-                if !AppDelegate.shared.symbolsAllowed {
-                    self.moreButton.setTitle("● ● ●", for: .normal)
-                }
+
                 
                 let tfs = Array(self.textfields)
                 for i in 0..<tfs.count {
