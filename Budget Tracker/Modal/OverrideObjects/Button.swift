@@ -42,7 +42,7 @@ class Button: UIButton {
             
             if !AppDelegate.shared.symbolsAllowed && (titleWhenNoSymbols != "") {
                 DispatchQueue.main.async {
-                    self.setTitle(self.titleWhenNoSymbols, for: .normal)
+                    self.setTitle(self.titleWhenNoSymbols.localize, for: .normal)
                     self.setImage(nil, for: .normal)
                     self.titleLabel?.font = .systemFont(ofSize: 15)
                     
