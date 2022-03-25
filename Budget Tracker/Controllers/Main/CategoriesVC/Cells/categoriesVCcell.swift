@@ -49,10 +49,7 @@ class categoriesVCcell: UITableViewCell {
             }
         }
         unseenIndicatorView.layer.cornerRadius = 4
-       // newCategoryTF.layer.cornerRadius = 6
-       // newCategoryTF.setRightPaddingPoints(5)
-       // newCategoryTF.setLeftPaddingPoints(5)
-        
+
     }
     
     func lo(index:IndexPath?, footer: Int?) {

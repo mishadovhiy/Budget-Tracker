@@ -787,18 +787,7 @@ extension TransactionsStruct {
     
 }
 
-struct TransactionsStruct {
-    let value: String
-    var categoryID: String
-    var date: String
-    let comment: String
-    
-    var category:NewCategories {
-        let db = DataBase()
-        return db.category(categoryID) ?? NewCategories(id: -1, name: "Unknown", icon: "", color: "", purpose: .expense)
-    }
-    
-}
+
 
 
 struct CategoriesStruct {

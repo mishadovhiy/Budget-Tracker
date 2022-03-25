@@ -164,54 +164,7 @@ class HistoryVC: SuperViewController {
     }
     
     let center = AppDelegate.shared.center
-    func addLocalNotification(date: DateComponents, completion: @escaping (Bool) -> ()) {
-        
-        //if date > today
-        let title = self.selectedCategory?.name ?? ""
-        let id = "Debts\(self.selectedCategory?.id ?? 0)"
-        center.removePendingNotificationRequests(withIdentifiers: [id])
-        center.getNotificationSettings { (settings) in
-            if settings.authorizationStatus != .authorized {
-                completion(false)
-          }
-        }
-        
-        
-        let content = UNMutableNotificationContent()
-        content.title = title//"Kirill"
-        content.body = "Due date has expired".localize
-        content.sound = UNNotificationSound.default
-        content.badge = NSNumber(value: UIApplication.shared.applicationIconBadgeNumber + 1)
-        
-        content.categoryIdentifier = title
-        content.threadIdentifier = "\(self.selectedCategory?.id ?? 0)"
-        var dateComponents = DateComponents()
-        dateComponents.calendar = Calendar.current
-        
-     //   dateComponents.weekday = 5
-        dateComponents.year = date.year
-        dateComponents.month = date.month
-        dateComponents.day = date.day
-        dateComponents.hour = date.hour
-        dateComponents.minute = date.minute
-
-        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
     
-        let request = UNNotificationRequest(identifier: id,
-                    content: content, trigger: trigger)
-        
-
-        //center.removeAllPendingNotificationRequests()
-        center.add(request) { (error) in
-            
-            if error != nil {
-                completion(false)
-            } else {
-                completion(true)
-
-            }
-        }
-    }
 
     let db = DataBase()
     func getDebtData() {
@@ -735,7 +688,7 @@ extension HistoryVC: TransitionVCProtocol {
         
     }
 
-    func addNewTransaction(value: String, category: String, date: String, comment: String) {
+    func addNewTransaction(value: String, category: String, date: String, comment: String, repreat:TransactionsStruct.ReminderType?, notifTime:DateComponents?) {
         toAddVC = false
         transactionAdded = true
         needDownloadOnMainAppeare = true
@@ -765,19 +718,6 @@ extension HistoryVC: TransitionVCProtocol {
 
 extension HistoryVC: CalendarVCProtocol {
     
-    func createDateComp(date:String, time:DateComponents?) -> DateComponents? {
-        var date = time?.stringToCompIso(s: date)
-        if let time = time {
-            date?.second = time.second
-            date?.minute = time.minute
-            date?.hour = time.hour
-            
-        }
-        return date
-    }
-    
-    
-    
     func dateSelected(date: String, time: DateComponents?) {
      //   DispatchQueue.main.async {
             self.ai.show { (_) in
@@ -785,12 +725,15 @@ extension HistoryVC: CalendarVCProtocol {
                 self.center.removePendingNotificationRequests(withIdentifiers: [id])
                 let fullDate = "\(date) \(self.makeTwo(n: time?.hour ?? 0)):\(self.makeTwo(n: time?.minute ?? 0)):\(self.makeTwo(n: time?.second ?? 0))"
                 print(fullDate, "fullDatefullDatefullDatefullDate")
-                if let dateComp = self.createDateComp(date: date, time: time) {
+                if let dateComp = time?.createDateComp(date: date, time: time) {
                     print(dateComp, "dateCompdateCompdateComp")
                     
                     if let isoFullString = dateComp.toIsoString() {
                         if !self.dateExpired(dateComp) {
-                            self.addLocalNotification(date: dateComp) { (added) in
+                            let nodifCen = Notifications()
+                            let notifTitle = self.selectedCategory?.name ?? ""
+                            let notifID = "Debts\(self.selectedCategory?.id ?? 0)"
+                            nodifCen.addLocalNotification(date: dateComp, title: notifTitle, id: notifID, body: "Due date has expired") { added in
                                 self.changeDueDate(fullDate: isoFullString)
                                 if !added {
                                     DispatchQueue.main.async {
@@ -798,6 +741,7 @@ extension HistoryVC: CalendarVCProtocol {
                                     }
                                 }
                             }
+
                           } else {
                             self.changeDueDate(fullDate: isoFullString)
                             DispatchQueue.main.async {

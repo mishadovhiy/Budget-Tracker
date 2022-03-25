@@ -9,7 +9,6 @@
 import UIKit
 
 class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
-    //toSettingsVC
     
     func getData(){
         let db = DataBase()
@@ -18,8 +17,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         
         var accpuntCell:CellData {
             var accountSegue:String {
-           //     let dataCount = (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String]] ?? []).count + (UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String]] ?? []).count + (UserDefaults.standard.value(forKey: K.Keys.localDebts) as? [[String]] ?? []).count
-                return "toAccount"//dataCount > 0 ? "toSavedData" : "toAccount"
+                return "toAccount"
             }
             return CellData(name: "Account".localize, value: appData.username == "" ? "Log in".localize : appData.username, segue: accountSegue, image: "person.fill")
         }
@@ -30,7 +28,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         let catsCo = UserDefaults.standard.value(forKey: "categoriesDataNew") as? [[String:Any]] ?? []
         
         var categories = [
-            CellData(name: "Categories".localize, value: "\(catsCo.count)", segue: "toCategories", image: "folder.fill"),
+            CellData(name: "Categories".localize, value: "\(catsCo.count - debts)", segue: "toCategories", image: "folder.fill"),
             CellData(name: "Debts".localize, value: "\(debts)", segue: "toDebts", image: "rectangle.3.group.fill", pro: pro)
         ]
         let localCount = ((UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String:Any]] ?? []) + (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String:Any]] ?? [])).count
@@ -39,21 +37,23 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         }
         
         let statistic = CellData(name: "Statistic".localize, value: "", segue: "toStatisticVC", image: "chart.pie.fill")
-        let support = CellData(name: "Support".localize, value: "", segue: "toSupportVC", image: "support.fill")
         let trialDays = UserDefaults.standard.value(forKey: "trialToExpireDays") as? Int ?? 0
         let trialCell = CellData(name: "Trail till", value: "\(7 - trialDays)", segue: "toProVC", image: "clock.fill")
-        //toSupportVC
-        //chart.pie.fill - statistic
+
         let emptySec = TableData(section: [CellData(name: "", value: "", segue: "", image: "")], title: "", hidden: false)
         
         var accountSection:[CellData] {
             return trialDays == 0 ? [accpuntCell, settingsCell] : [accpuntCell, settingsCell, trialCell]
         }
         
+        let upcommingRemiders = CellData(name: "PaymentReminders", value: "", segue: "", image: "", pro: true, selectAction: toRemindersVC)
+        
         tableData = [
             TableData(section: accountSection, title: "", hidden: false),
             emptySec,
             TableData(section: categories, title: "", hidden: false),
+            emptySec,
+            TableData(section: [upcommingRemiders], title: "", hidden: false),
             emptySec,
             TableData(section: [statistic], title: "", hidden: false),
         ]
@@ -65,7 +65,14 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
     
     var tableData:[TableData] = []
 
-    
+    func toRemindersVC() {
+        DispatchQueue.main.async {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let vccc = storyboard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
+            vccc.screenType = .paymentReminders
+            ViewController.shared?.navigationController?.pushViewController(vccc, animated: true)
+        }
+    }
     
     func load() {
         DispatchQueue.main.async {
@@ -84,8 +91,6 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-
         if tableData[indexPath.section].section[indexPath.row].name == "" {
             let emptyCell = tableView.dequeueReusableCell(withIdentifier: "EmptyCell", for: indexPath) as! EmptyCell
             let selected = UIView(frame: .zero)
@@ -94,7 +99,6 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
             return emptyCell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "SideBardCell", for: indexPath) as! SideBardCell
-            
             cell.nameLabel.superview?.alpha = tableData[indexPath.section].section[indexPath.row].name == "" ? 0 : 1
             cell.nameLabel.text = tableData[indexPath.section].section[indexPath.row].name
             cell.valueLabel.text = tableData[indexPath.section].section[indexPath.row].value
@@ -104,17 +108,19 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
             return cell
         }
         
-        
-        
-        
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("sd")
         if tableData[indexPath.section].section[indexPath.row].name != "" {
             let segue = tableData[indexPath.section].section[indexPath.row].segue
-            DispatchQueue.main.async {
-                ViewController.shared?.performSegue(withIdentifier: segue, sender: self)
+            if segue != "" {
+                DispatchQueue.main.async {
+                    ViewController.shared?.performSegue(withIdentifier: segue, sender: self)
+                }
+            } else {
+                if let action = tableData[indexPath.section].section[indexPath.row].selectAction {
+                    action()
+                }
             }
         }
         tableView.reloadData()
@@ -134,6 +140,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         let segue: String
         let image: String
         var pro: Bool = true
+        var selectAction:(()->())? = nil
         
     }
 }

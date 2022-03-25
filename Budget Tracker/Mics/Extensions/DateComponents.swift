@@ -29,4 +29,17 @@ extension DateComponents {
             return stringToDateComponent(s: s, dateFormat: dateFormat)
         }
     }
+    
+    
+    func createDateComp(date:String, time:DateComponents?) -> DateComponents? {
+        var date = time?.stringToCompIso(s: date)
+        if let time = time {
+            date?.second = time.second
+            date?.minute = time.minute
+            date?.hour = time.hour
+            
+        }
+        return date
+    }
+    
 }

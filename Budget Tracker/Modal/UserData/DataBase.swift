@@ -9,24 +9,45 @@
 import UIKit
 
 
-struct NewCategories {
-    var id: Int
-    var name: String
-    var icon: String
-    var color: String
-    let purpose: CategoryPurpose
-    var dueDate: DateComponents?
-    var amountToPay: Double? = nil
 
-    var transactions: [TransactionsStruct] {
-        let db = DataBase()
-        return db.transactions(for: self)
-    }
-    
-}
 
 class DataBase {
 
+    func paymentReminders() -> [TransactionsStruct] {
+        let data = UserDefaults.standard.value(forKey: "PaymentReminder") as? [[String:Any]] ?? []
+        var result:[TransactionsStruct] = []
+        for item in data {
+            if let new = transactionFrom(item) {
+                result.append(new)
+            }
+            
+        }
+        print(data, " paymentReminders")
+        return result
+    }
+    
+    func saveReminder(transaction:TransactionsStruct, time:DateComponents?, completion: @escaping (Bool) -> ()) {
+        let notifications = Notifications()
+        let body = transaction.value + " " + "for category".localize + ": " + transaction.category.name
+        if let date = time?.createDateComp(date: transaction.date, time: time) {
+            
+            notifications.addLocalNotification(date: date, title: "Payment reminder", id: "paymentReminder", body: body) { added in
+                if added {
+                    var allReminders = UserDefaults.standard.value(forKey: "PaymentReminder") as? [[String:Any]] ?? []
+                    allReminders.append(self.transactionToDict(transaction))
+                    UserDefaults.standard.setValue(allReminders, forKey: "PaymentReminder")
+                    completion(true)
+                } else {
+                    completion(false)
+                }
+            }
+        } else {
+            completion(false)
+        }
+        
+    }
+    
+    
     func category(_ id: String, local: Bool = false) -> NewCategories? {
         //localCategories
         let data = UserDefaults.standard.value(forKey: !local ? categoriesKey : K.Keys.localCategories) as? [[String:Any]] ?? []
@@ -48,7 +69,8 @@ class DataBase {
                 let amount = dict["Amount"] as? String ?? ""
                 let date = dict["Date"] as? String ?? ""
                 let comment = dict["Comment"] as? String ?? ""
-                return TransactionsStruct(value: amount, categoryID: id, date: date, comment: comment)
+                let reminder = dict["ReminderType"] as? String ?? ""
+                return TransactionsStruct(value: amount, categoryID: id, date: date, comment: comment, reminderType: TransactionsStruct.strToReminder(reminder))
             }
         }
         return nil
@@ -59,7 +81,8 @@ class DataBase {
             "CategoryId":transaction.categoryID,
             "Amount":transaction.value,
             "Date":transaction.date,
-            "Comment":transaction.comment
+            "Comment":transaction.comment,
+            "ReminderType":transaction.reminderType?.rawValue ?? ""
         ]
     }
     
@@ -310,4 +333,62 @@ class DataBase {
         return result
     }
     
+}
+
+
+struct NewCategories {
+    var id: Int
+    var name: String
+    var icon: String
+    var color: String
+    let purpose: CategoryPurpose
+    var dueDate: DateComponents?
+    var amountToPay: Double? = nil
+
+    var transactions: [TransactionsStruct] {
+        let db = DataBase()
+        return db.transactions(for: self)
+    }
+    
+}
+
+struct TransactionsStruct {
+    let value: String
+    var categoryID: String
+    var date: String
+    let comment: String
+    
+    var reminderType:ReminderType? = nil
+    
+    var category:NewCategories {
+        let db = DataBase()
+        return db.category(categoryID) ?? NewCategories(id: -1, name: "Unknown", icon: "", color: "", purpose: .expense)
+    }
+}
+
+extension TransactionsStruct {
+    enum ReminderType:String {
+        case monthly = "monthly"
+        case weekly = "weekly"
+        case threeMonth = "threeMonth"
+        case fourMonth = "fourMonth"
+        case yearly = "yearly"
+    }
+    
+    static func strToReminder(_ string:String) -> ReminderType? {
+        switch string {
+        case "monthly":
+            return .monthly
+        case "weekly":
+            return .weekly
+        case "threeMonth":
+            return .threeMonth
+        case "fourMonth":
+            return .fourMonth
+        case "yearly":
+            return .yearly
+        default:
+            return nil
+        }
+    }
 }
