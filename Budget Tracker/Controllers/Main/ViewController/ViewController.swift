@@ -73,21 +73,18 @@ class ViewController: SuperViewController {
             _TableData = newValue
             dataTaskCount = nil
             selectedCell = nil
-            let tableDataDataCount = self.tableData.count
             DispatchQueue.main.async {
                 self.mainTableView.reloadData()
                 if self.refreshControl.isRefreshing {
                     self.refreshControl.endRefreshing()
                 }
-                self.calculateLabels(noData: tableDataDataCount == 0 ? true : false)
                 self.toggleNoData(show: false, addButtonHidden: true)
-                if self.mainTableView.visibleCells.count > 1 {
-                    self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
-                }
                 self.filterText = "Filter".localize + ": " + appData.filter.selectedPeroud
                 self.calculationSView.alpha = 0
                 UIView.animate(withDuration: 0.8) {
                     self.calculationSView.alpha = 1
+                } completion: { _ in
+                    self.updateDataLabels(noData: newValue.count == 0)
                 }
                 self.tableActionActivityIndicator.removeFromSuperview()
                     if appData.username != "" {
@@ -101,58 +98,117 @@ class ViewController: SuperViewController {
                     self.openFiler = false
                         self.performSegue(withIdentifier: "toFiterVC", sender: self)
                 }
-                self.checkOldData()
+                
             }
         }
     }
     
-    
-    
-    func checkOldData() {
-        if appData.unsendedData.count == 0 {
-            let categories = appData.getCategories()
-            let transactions = appData.getTransactions
-            if categories.count + transactions.count > 0 {
-                var categorizedTransactions: [String:[TransactionsStruct]] = [:]
-                for i in 0..<transactions.count {
-                    let name = transactions[i].categoryID
-                    var transForKey = categorizedTransactions[name]
-                    transForKey?.append(transactions[i])
-                    categorizedTransactions.updateValue(transForKey ?? [], forKey: name)
+
+
+    var _calculations:Calculations = .init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)
+    var calculations:Calculations {
+        get { return _calculations }
+        set {
+            _calculations = newValue
+            DispatchQueue.main.async {
+                for label in self.self.ecpensesLabels {
+                    label.text = "\(Int(newValue.expenses))"
                 }
-                print(categorizedTransactions, "ghjkmnbhjkmbhjk")
-                var ids = 0
-                var newTransactions:[TransactionsStruct] = []
-                var newCategories:[NewCategories] = []
-                for key in categorizedTransactions {
-                    if let transs = categorizedTransactions[key.key] {
-                        ids += 1
-                        var balance = 0.0
-                        for n in 0..<transs.count {
-                            let value = transs[n].value
-                            balance += (Double(value) ?? 0)
-                            let newTransaction = TransactionsStruct(value: value, categoryID: "\(ids)", date: transs[n].date, comment: transs[n].comment)
-                            appData.unsendedData.append(["transactionNew": db.transactionToDict(newTransaction)])
-                            newTransactions.append(newTransaction)
-                        }
-                        let newCategory = NewCategories(id: ids, name: key.key, icon: "", color: appData.randomColorName, purpose: balance > 0 ? .income : .expense)
-                        appData.unsendedData.append(["categoryNew": db.categoryToDict(newCategory)])
-                        newCategories.append(newCategory)
-                    }
+                for label in self.incomeLabels {
+                    label.text = "\(Int(newValue.income))"
                 }
-                UserDefaults.standard.setValue(nil, forKey: "transactionsData")
-                UserDefaults.standard.setValue(nil, forKey: "categoriesData")
-                filter()
+                for label in self.perioudBalanceLabels {
+                    let value = Int(newValue.perioudBalance)
+                    label.text = "\(value)"
+                    label.textColor = value >= 0 ? K.Colors.category : K.Colors.negative
+                }
+                for label in self.balanceLabels {
+                    let value = Int(newValue.balance)
+                    label.text = "\(value)"
+                    label.textColor = value >= 0 ? K.Colors.category : K.Colors.negative
+                }
+                
             }
+        }
+    }
+    struct Calculations {
+        var expenses:Double
+        var income:Double
+        var balance:Double
+        var perioudBalance:Double
+    }
+    
+    func dataToDict(_ transactions:[TransactionsStruct]) -> [String:[TransactionsStruct]] {
+        var result:[String:[TransactionsStruct]] = [:]
+        var i = 0
+        let totalCount = transactions.count
+        for trans in transactions {
+            self.calculations.balance += (Double(trans.value) ?? 0.0)
+            dataTaskCount = (i, totalCount)
+            i += 1
+            if trans.category.purpose != .debt {
+                if containsDay(curDay: trans.date) {
+                    var transForDay = result[trans.date] ?? []
+                    transForDay.append(trans)
+                    result.updateValue(transForDay, forKey: trans.date)
+                    
+                }
+            }
+        }
+        return result
+    }
+    //here
+    func dictToTable(_ dict:[String:[TransactionsStruct]]) -> [tableStuct] {
+        var result:[tableStuct] = []
+        for (key, value) in dict {
+            let co = DateComponents()
+            let transactions = value.sorted { Double($0.value) ?? 0.0 < Double($1.value) ?? 0.0 }
+            let date = co.stringToDateComponent(s: key)
+            let amount = Int(amountForTransactions(transactions))
+            let new:tableStuct = .init(date:  date, amount: amount, transactions: transactions)
+            result.append(new)
+        }
+        return result
+    }
+    
+    private func amountForTransactions(_ transactions:[TransactionsStruct]) -> Double {
+        var result:Double = 0
+        var calcs:Calculations = .init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)
+        for transaction in transactions {
+            let amount = (Double(transaction.value) ?? 0.0)
+            result += amount
+            
+            if amount > 0 {
+                calcs.income += amount
+            } else {
+                calcs.expenses += amount
+            }
+            calcs.perioudBalance += amount
+            
+        }
+        let currentCalcs = calculations
+        calculations = .init(expenses: currentCalcs.expenses + calcs.expenses, income: currentCalcs.income + calcs.income, balance: calculations.balance, perioudBalance: currentCalcs.perioudBalance + calcs.perioudBalance)
+        return result
+    }
+    private func containsDay(curDay:String) -> Bool {
+        if appData.filter.showAll || screenType == .paymentReminders {
+            return true
+        } else {
+            for day in daysBetween {
+                if day == curDay {
+                    return true
+                }
+            }
+            return false
         }
         
     }
-
     
     func downloadFromDB(showError: Bool = false, title: String = "Downloading".localize) {
         if screenType == .paymentReminders {
-            tableData = db.paymentReminders()
-            filter()
+            let data = db.paymentReminders()
+            tableData = data
+            filter(data:data)
         } else {
             self.editingTransaction = nil
             self.sendError = false
@@ -169,7 +225,7 @@ class ViewController: SuperViewController {
                         self.tableData = loadedData
                         self.checkPurchase()
                         self.prepareFilterOptions()
-                        self.filter()
+                        self.filter(data: loadedData)
                     }
                 } else {
                     self.prepareFilterOptions()
@@ -453,10 +509,18 @@ class ViewController: SuperViewController {
                         self.dataFromValueLabel.superview?.superview?.isHidden = hideLocal
                     }
                 } completion: { (_) in
-                    self.mainTableView.reloadData()
+                    if self.mainTableView.visibleCells.count > 1 {
+                        self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
+                    } else {
+                        self.mainTableView.reloadData()
+                    }
                 }
             } else {
-                self.mainTableView.reloadData()
+                if self.mainTableView.visibleCells.count > 1 {
+                    self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
+                } else {
+                    self.mainTableView.reloadData()
+                }
             }
         }
     }
@@ -487,8 +551,9 @@ class ViewController: SuperViewController {
         return (result, Int(amount))
     }
     
-    func filter() {
+    func filter(data:[TransactionsStruct]? = nil) {
         print("filterCalled")
+        calculations = .init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)
         dataTaskCount = (0,0)
         animateCellWillAppear = true
         appData.filter.selectedPeroud = appData.filter.selectedPeroud != "" ? appData.filter.selectedPeroud : "This Month"
@@ -498,15 +563,18 @@ class ViewController: SuperViewController {
         if !appData.filter.showAll && screenType == .home {
             allDaysBetween()
         }
-        let allFilteredData = performFiltering(from: appData.filter.from, to: appData.filter.to, all: appData.filter.showAll).sorted{ $0.dateFromString < $1.dateFromString }
-        newTableData = createTableData(filteredData: allFilteredData)
-
-
+        let transactions = (data ?? tableData).sorted{ $0.dateFromString < $1.dateFromString }
+        let filtered = dataToDict(transactions)
+        newTableData = dictToTable(filtered).sorted{
+            Calendar.current.date(from: $0.date ) ?? Date.distantFuture >
+                    Calendar.current.date(from: $1.date ) ?? Date.distantFuture
+        }
+        
     }
     
     
     
-    func checkPurchase() {
+    func checkPurchase() {//add completion
             let nick = appData.username
         if nick == "" {
             return
@@ -603,17 +671,7 @@ class ViewController: SuperViewController {
         return date
     }
     
-    var _Calculations = (0, 0, 0, 0)
-    func calculate(filteredData: [TransactionsStruct]) -> (Int, Int, Int, Int) {
-        let result = (0, 0, 0, 0)
-        let allTrans = Array(appData.getTransactions)
-        for i in 0..<allTrans.count {
-            if Double(allTrans[i].value) ?? 0.0 > 0 {
-            }
-        }
-        _Calculations = result
-        return result
-    }
+
     
     var dataTaskCount: (Int, Int)? {
         get { return nil }
@@ -635,34 +693,7 @@ class ViewController: SuperViewController {
             }
         }
     }
-    
-    
-    
-    func createTableData(filteredData: [TransactionsStruct]) -> [tableStuct] {
-        var result: [tableStuct] = []
-        var currentDate = ""
-        let otherSections = 1
-        let co = DateComponents()
-        for i in 0..<filteredData.count {
-            dataTaskCount = (i+1, filteredData.count)
-            currentDate = filteredData[i].date
-            if i > 0 {
-                if filteredData[i-otherSections].date != currentDate {
-                    let cteatedTransaction = createTransactionsFor(date: filteredData[i].date, filteredData: filteredData)
-                    
-                    let new = tableStuct(date: co.stringToDateComponent(s: currentDate), amount: cteatedTransaction.1, transactions: cteatedTransaction.0.sorted { Double($0.value) ?? 0.0 < Double($1.value) ?? 0.0 })
-                    result.insert(new, at: 0)
-                }
-            } else {
-                let cteatedTransaction = createTransactionsFor(date: filteredData[i].date, filteredData: filteredData)
-                let new = tableStuct(date: co.stringToDateComponent(s: currentDate), amount: cteatedTransaction.1, transactions: cteatedTransaction.0.sorted { Double($0.value) ?? 0.0 < Double($1.value) ?? 0.0 })
-                result.insert(new, at: 0)
-            }
-        }
-        
-        return result
-    }
-    
+
     func allDaysBetween() {
         
         if getYearFrom(string: appData.filter.to) == getYearFrom(string: appData.filter.from) {
@@ -699,73 +730,7 @@ class ViewController: SuperViewController {
         
     }
 
-    func performFiltering(from: String, to: String, all: Bool) -> [TransactionsStruct] {
-        
-        print("performFiltering called")
-        if all == true && screenType == .home {
-            let transactions = UserDefaults.standard.value(forKey: db.transactionsKey) as? [[String:Any]] ?? []
-            var arr:[TransactionsStruct] = []
-            for i in 0..<transactions.count {
-                if let new = db.transactionFrom(transactions[i]) {
-                    if new.category.purpose != .debt {
-                        arr.append(new)
-                    }
-                }
-            }
-            tableData = arr
-            return arr
 
-        } else {
-            print("performFiltering: appending transactions data")
-            print("daysBetween count: \(daysBetween.count), appData.transactions: \(appData.getTransactions.count)")
-            var arr:[TransactionsStruct] = []
-            var matches = 0
-            let days = Array(daysBetween)
-            if screenType != .paymentReminders {
-                let transactions = UserDefaults.standard.value(forKey: db.transactionsKey) as? [[String:Any]] ?? []
-                for number in 0..<days.count {
-                    for i in 0..<transactions.count {
-                        if days.count > number {
-                            if days[number] == (transactions[i]["Date"] as? String ?? "") {
-                                
-                                if let new = db.transactionFrom(transactions[i]) {
-                                    if new.category.purpose != .debt {
-                                        matches += 1
-                                        arr.append(new)
-                                    }
-                                    
-                                }
-
-                            }
-                        }
-                    }
-                }
-                self.tableData = arr
-                return arr
-            } else {
-                let transactions = Array(self.tableData)
-                for number in 0..<days.count {
-                    for i in 0..<transactions.count {
-                        if days.count > number {
-                            if days[number] == transactions[i].date {
-                                
-                                matches += 1
-                                arr.append(transactions[i])
-
-                            }
-                        }
-                    }
-                }
-                self.tableData = arr
-                return arr
-            }
-            
-            
-        }
-        
-    }
-    
-    
     var _filterText: String = "Filter".localize
     var filterText: String{
         get {
@@ -1166,103 +1131,6 @@ class ViewController: SuperViewController {
     
 
     var totalBalance = 0.0
-    
-    func calculateLabels(noData: Bool = false) {
-        let tableTrans = Array(tableData)
-        let allTrans = Array(appData.getTransactions)
-        recalculation(i: self.incomeLabels, e: self.ecpensesLabels, periudData: tableTrans, noData:noData)
-        var totalExpenses = 0.0
-        var totalIncomes = 0.0
-        for i in 0..<allTrans.count {
-            let value = Double(allTrans[i].value) ?? 0.0
-            if value > 0.0 {
-                totalIncomes = totalIncomes + value
-            } else {
-                totalExpenses = totalExpenses + value
-            }
-        }
-        totalBalance = totalIncomes + totalExpenses
-        let totalBalanceD = db.totalTransactionBalance
-        let total = "\(totalBalanceD)"
-        
-        DispatchQueue.main.async {
-            let labelsBalance = self.balanceLabels ?? []
-            for label in labelsBalance {
-                label.text = total
-                label.textColor = totalBalanceD < 0 ? K.Colors.negative : (totalBalanceD == 0 ? K.Colors.balanceV : K.Colors.category)
-            }
-                // self.mainTableView.reloadData()
-        }
-        
-        
-      //  statisticBrain.getlocalData(from: tableTrans) -- change statistic
-        sumAllCategories = statisticBrain.statisticData
-    }
-    
-    private func recalculation(i:[UILabel], e: [UILabel], periudData: [TransactionsStruct], noData: Bool = false) {
-        var sumIncomes = 0.0
-        var sumExpenses = 0.0
-        var sumPeriodBalance = 0.0
-        var arreyNegative: [Double] = [0.0]
-        var arreyPositive: [Double] = [0.0]
-        print("recalculation", periudData.count)
-        for i in 0..<periudData.count {
-            sumPeriodBalance = sumPeriodBalance + (Double(periudData[i].value) ?? 0.0)
-            
-            if (Double(periudData[i].value) ?? 0.0) > 0 {
-                arreyPositive.append((Double(periudData[i].value) ?? 0.0))
-                sumIncomes = sumIncomes + (Double(periudData[i].value) ?? 0.0)
-                
-            } else {
-                arreyNegative.append((Double(periudData[i].value) ?? 0.0))
-                sumExpenses = sumExpenses + (Double(periudData[i].value) ?? 0.0)
-            }}
-        
-        if sumPeriodBalance < Double(Int.max), sumIncomes < Double(Int.max), sumExpenses < Double(Int.max) {
-            DispatchQueue.main.async {
-                for label in i {
-                    label.text = "\(Int(sumIncomes))"
-                }
-                for label in e {
-                    label.text = "\(Int(sumExpenses) * -1)"
-                }
-                for label in self.perioudBalanceLabels {
-                    label.text = "\(Int(sumPeriodBalance))"
-                }
-            }
-        } else {
-            DispatchQueue.main.async {
-                for label in i {
-                    label.text = "\(sumIncomes)"
-                }
-                for label in e {
-                    label.text = "\(sumExpenses * -1)"
-                }
-                for label in self.perioudBalanceLabels {
-                    label.text = "\(sumPeriodBalance)"
-                }
-            }
-        }
-        
-        let hidePerioudBalance = (Double(db.totalTransactionBalance) == sumPeriodBalance || sumPeriodBalance == 0) ? true : false
-        
-        DispatchQueue.main.async {
-            if self.perioudBalanceLabels.first?.superview?.isHidden ?? false != hidePerioudBalance {
-                UIView.animate(withDuration: noData ? 0.0 : 0.35) {
-                    self.perioudBalanceLabels.first?.superview?.isHidden = hidePerioudBalance
-                } completion: { (_) in
-                    self.updateDataLabels(noData: noData)
-                }
-            } else {
-                self.updateDataLabels(noData: noData)
-            }
-            
-
-        }
-        //hide or not
-        print("recalculating labels")
-    }
-    
 
     
 
@@ -1823,7 +1691,7 @@ extension ViewController: TransitionVCProtocol {
                 if self.refreshControl.isRefreshing {
                     self.refreshControl.endRefreshing()
                 }
-                self.calculateLabels()
+               // self.calculateLabels()
             }
         }
     }
@@ -1862,13 +1730,15 @@ extension ViewController: UnsendedDataVCProtocol {
     func quiteUnsendedData(deletePressed: Bool, sendPressed: Bool) {
         
         if !deletePressed && !sendPressed {
-            calculateLabels()
+         //   calculateLabels()
+            filter()
         } else {
             if deletePressed {
                 appData.saveTransations([], key: K.Keys.localTrancations)
                 appData.saveCategories([], key: K.Keys.localCategories)
                 appData.saveDebts([], key: K.Keys.localDebts)
-                calculateLabels()
+              //  calculateLabels()
+                filter()
             } else {
                 if sendPressed {
                     sendSavedData = true
