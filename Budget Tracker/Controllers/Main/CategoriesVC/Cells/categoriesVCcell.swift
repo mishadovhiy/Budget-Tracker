@@ -48,7 +48,7 @@ class categoriesVCcell: UITableViewCell {
                 iconimage.isHidden = true
             }
         }
-        unseenIndicatorView.layer.cornerRadius = 4
+
 
     }
     

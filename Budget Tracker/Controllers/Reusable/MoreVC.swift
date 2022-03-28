@@ -213,8 +213,5 @@ class DataOptionCell: UITableViewCell {
     @IBOutlet weak var textField: UITextField!
     
     @IBOutlet weak var proView: UIView!
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        proView.layer.cornerRadius = 6
-    }
+
 }

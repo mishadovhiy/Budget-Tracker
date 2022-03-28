@@ -21,7 +21,6 @@
 		8B26329627E6A32E0086C3A8 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B26329527E6A32E0086C3A8 /* UIViewController.swift */; };
 		8B26329827E6A4470086C3A8 /* DateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B26329727E6A4470086C3A8 /* DateComponents.swift */; };
 		8B2A4D72271439520085E0F0 /* MoreVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2A4D71271439520085E0F0 /* MoreVC.swift */; };
-		8B324B692683118000E72275 /* NotificationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B324B682683118000E72275 /* NotificationsVC.swift */; };
 		8B331AF727E4105C0093BF72 /* LogIn.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B331AF927E4105C0093BF72 /* LogIn.storyboard */; };
 		8B331AFC27E410A00093BF72 /* PascodeLockView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B331AFE27E410A00093BF72 /* PascodeLockView.xib */; };
 		8B331B0B27E4128B0093BF72 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B331B0A27E4128B0093BF72 /* String.swift */; };
@@ -47,10 +46,12 @@
 		8B6BA98027E716220067FF58 /* WebViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6BA97F27E716220067FF58 /* WebViewVC.swift */; };
 		8B6BA98227E717850067FF58 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6BA98127E717850067FF58 /* Date.swift */; };
 		8B6BA98427E73B8A0067FF58 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B6BA98327E73B8A0067FF58 /* WebKit.framework */; };
+		8B78559C27F0C9F200169A93 /* RemindersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B78559B27F0C9F200169A93 /* RemindersVC.swift */; };
+		8B78559F27F0CA2A00169A93 /* ReminderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B78559E27F0CA2A00169A93 /* ReminderCell.swift */; };
+		8B7855A227F1527000169A93 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7855A127F1526F00169A93 /* UIView.swift */; };
 		8B7B63CC2655CAFB0067C434 /* SuperViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7B63CB2655CAFB0067C434 /* SuperViewController.swift */; };
 		8B7D1AA1276CF203008942EC /* IconList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7D1AA0276CF203008942EC /* IconList.swift */; };
 		8B82A04127E2BDBD0011EC80 /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82A04027E2BDBD0011EC80 /* UITextField.swift */; };
-		8B8D556125BB218400D7C6A7 /* UnsendedDataVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8D556025BB218400D7C6A7 /* UnsendedDataVC.swift */; };
 		8B91EF1127EBD7680026D0A4 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91EF1027EBD7680026D0A4 /* Keys.swift */; };
 		8B91F08E27E587A800B74F5A /* MoreOptionsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91F08D27E587A800B74F5A /* MoreOptionsData.swift */; };
 		8B91F09127E58EF900B74F5A /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91F09027E58EF900B74F5A /* Text.swift */; };
@@ -62,7 +63,7 @@
 		8BE60E5927726EA8007B7FB3 /* LastSelected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE60E5827726EA8007B7FB3 /* LastSelected.swift */; };
 		8BF58D1D277C78B7005A7F38 /* ProViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF58D1C277C78B7005A7F38 /* ProViewVC.swift */; };
 		8BF58D1F277C793D005A7F38 /* BuyPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF58D1E277C793D005A7F38 /* BuyPageVC.swift */; };
-		8BF63E8B276294F2002E8601 /* SelectUserVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF63E8A276294F2002E8601 /* SelectUserVC.swift */; };
+		8BF63E8B276294F2002E8601 /* SelectValueVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF63E8A276294F2002E8601 /* SelectValueVC.swift */; };
 		8BF63E8D27629D14002E8601 /* SupportVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF63E8C27629D14002E8601 /* SupportVC.swift */; };
 		8BF63E8F2762C83F002E8601 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF63E8E2762C83F002E8601 /* SettingsVC.swift */; };
 		8BFA15D127E8E8510078856A /* categoriesVCcell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFA15D027E8E8510078856A /* categoriesVCcell.swift */; };
@@ -116,7 +117,6 @@
 		8B26329527E6A32E0086C3A8 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		8B26329727E6A4470086C3A8 /* DateComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateComponents.swift; sourceTree = "<group>"; };
 		8B2A4D71271439520085E0F0 /* MoreVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoreVC.swift; sourceTree = "<group>"; };
-		8B324B682683118000E72275 /* NotificationsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsVC.swift; sourceTree = "<group>"; };
 		8B331AF827E4105C0093BF72 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LogIn.storyboard; sourceTree = "<group>"; };
 		8B331AFD27E410A00093BF72 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/PascodeLockView.xib; sourceTree = "<group>"; };
 		8B331B0A27E4128B0093BF72 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -143,10 +143,12 @@
 		8B6BA97F27E716220067FF58 /* WebViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewVC.swift; sourceTree = "<group>"; };
 		8B6BA98127E717850067FF58 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		8B6BA98327E73B8A0067FF58 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/System/iOSSupport/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
+		8B78559B27F0C9F200169A93 /* RemindersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersVC.swift; sourceTree = "<group>"; };
+		8B78559E27F0CA2A00169A93 /* ReminderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderCell.swift; sourceTree = "<group>"; };
+		8B7855A127F1526F00169A93 /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
 		8B7B63CB2655CAFB0067C434 /* SuperViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperViewController.swift; sourceTree = "<group>"; };
 		8B7D1AA0276CF203008942EC /* IconList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconList.swift; sourceTree = "<group>"; };
 		8B82A04027E2BDBD0011EC80 /* UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
-		8B8D556025BB218400D7C6A7 /* UnsendedDataVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsendedDataVC.swift; sourceTree = "<group>"; };
 		8B91EF1027EBD7680026D0A4 /* Keys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		8B91F08D27E587A800B74F5A /* MoreOptionsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreOptionsData.swift; sourceTree = "<group>"; };
 		8B91F09027E58EF900B74F5A /* Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
@@ -158,7 +160,7 @@
 		8BE60E5827726EA8007B7FB3 /* LastSelected.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastSelected.swift; sourceTree = "<group>"; };
 		8BF58D1C277C78B7005A7F38 /* ProViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProViewVC.swift; sourceTree = "<group>"; };
 		8BF58D1E277C793D005A7F38 /* BuyPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyPageVC.swift; sourceTree = "<group>"; };
-		8BF63E8A276294F2002E8601 /* SelectUserVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectUserVC.swift; sourceTree = "<group>"; };
+		8BF63E8A276294F2002E8601 /* SelectValueVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectValueVC.swift; sourceTree = "<group>"; };
 		8BF63E8C27629D14002E8601 /* SupportVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportVC.swift; sourceTree = "<group>"; };
 		8BF63E8E2762C83F002E8601 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		8BFA15D027E8E8510078856A /* categoriesVCcell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = categoriesVCcell.swift; sourceTree = "<group>"; };
@@ -371,9 +373,7 @@
 		8B5CE1CF2720991B0092BBFB /* notUsing */ = {
 			isa = PBXGroup;
 			children = (
-				8B8D556025BB218400D7C6A7 /* UnsendedDataVC.swift */,
 				8B2163A1274070BA003EDFE0 /* snippets.swift */,
-				8B324B682683118000E72275 /* NotificationsVC.swift */,
 				8B5BE4782648038F005B182C /* expectingPaymentsVC.swift */,
 				8B1FD85C270C4DE2004E225E /* splitVC.swift */,
 			);
@@ -404,6 +404,31 @@
 			path = AppSettings;
 			sourceTree = "<group>";
 		};
+		8B78559A27F0B3AD00169A93 /* TransactionsVC */ = {
+			isa = PBXGroup;
+			children = (
+				8D52066A24216A6200772CD5 /* HistoryVC.swift */,
+			);
+			path = TransactionsVC;
+			sourceTree = "<group>";
+		};
+		8B78559D27F0C9F900169A93 /* RemindersVC */ = {
+			isa = PBXGroup;
+			children = (
+				8B78559B27F0C9F200169A93 /* RemindersVC.swift */,
+				8B7855A027F0CA3000169A93 /* Cells */,
+			);
+			path = RemindersVC;
+			sourceTree = "<group>";
+		};
+		8B7855A027F0CA3000169A93 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				8B78559E27F0CA2A00169A93 /* ReminderCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		8B82A04227E2BDCD0011EC80 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -415,6 +440,7 @@
 				8B6BA98127E717850067FF58 /* Date.swift */,
 				8B26329727E6A4470086C3A8 /* DateComponents.swift */,
 				8B5434F727ED80F400417141 /* UITableView.swift */,
+				8B7855A127F1526F00169A93 /* UIView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -428,13 +454,13 @@
 			path = LoginViewController;
 			sourceTree = "<group>";
 		};
-		8B91F08F27E58B6100B74F5A /* Statistic */ = {
+		8B91F08F27E58B6100B74F5A /* StatisticVC */ = {
 			isa = PBXGroup;
 			children = (
 				8D52066824216A2900772CD5 /* StatisticVC.swift */,
 				8D5206662421695200772CD5 /* StatisticBrain.swift */,
 			);
-			path = Statistic;
+			path = StatisticVC;
 			sourceTree = "<group>";
 		};
 		8B94918E27E6BB490072168E /* UA */ = {
@@ -460,11 +486,10 @@
 		8BC1B23B27D31426002C1E38 /* Reusable */ = {
 			isa = PBXGroup;
 			children = (
-				8BF63E8E2762C83F002E8601 /* SettingsVC.swift */,
-				8BF63E8A276294F2002E8601 /* SelectUserVC.swift */,
-				8B52DFEB27504D2900595A0C /* IconsVC.swift */,
-				8D52066A24216A6200772CD5 /* HistoryVC.swift */,
 				8D8B6C3D245023EC007260A0 /* CalendarVC.swift */,
+				8BF63E8E2762C83F002E8601 /* SettingsVC.swift */,
+				8BF63E8A276294F2002E8601 /* SelectValueVC.swift */,
+				8B52DFEB27504D2900595A0C /* IconsVC.swift */,
 				8B5F342B26FB2D97000DDCAF /* EnterValueVC.swift */,
 				8B2A4D71271439520085E0F0 /* MoreVC.swift */,
 				8B6BA97F27E716220067FF58 /* WebViewVC.swift */,
@@ -488,12 +513,14 @@
 				8B26328E27E699610086C3A8 /* ViewController */,
 				8B1E932027E970320031D36F /* TransactionVC */,
 				8BFA15CF27E8E82F0078856A /* CategoriesVC */,
-				8B91F08F27E58B6100B74F5A /* Statistic */,
+				8B91F08F27E58B6100B74F5A /* StatisticVC */,
+				8B78559A27F0B3AD00169A93 /* TransactionsVC */,
+				8B78559D27F0C9F900169A93 /* RemindersVC */,
 			);
 			path = Main;
 			sourceTree = "<group>";
 		};
-		8BC31D7D27E3E60600FBC939 /* OverrideObjects */ = {
+		8BC31D7D27E3E60600FBC939 /* UIObjects */ = {
 			isa = PBXGroup;
 			children = (
 				8BC31D7A27E3E5EA00FBC939 /* Button.swift */,
@@ -501,7 +528,7 @@
 				8B26328127E677930086C3A8 /* Label.swift */,
 				8B26328327E67D1D0086C3A8 /* SegmentedControl.swift */,
 			);
-			path = OverrideObjects;
+			path = UIObjects;
 			sourceTree = "<group>";
 		};
 		8BFA15CF27E8E82F0078856A /* CategoriesVC */ = {
@@ -593,7 +620,7 @@
 			children = (
 				8B26329027E69AE10086C3A8 /* AppData */,
 				8B3F919827D31C4000BE826C /* UserData */,
-				8BC31D7D27E3E60600FBC939 /* OverrideObjects */,
+				8BC31D7D27E3E60600FBC939 /* UIObjects */,
 				8BC1B23A27D3136C002C1E38 /* ReusableUI */,
 				8B5434FB27ED83AC00417141 /* Notifications */,
 			);
@@ -745,7 +772,7 @@
 				8B91F09127E58EF900B74F5A /* Text.swift in Sources */,
 				8B57837E275E6977007BA9EC /* SideBar.swift in Sources */,
 				8BFA15D427E8E87B0078856A /* LocalDataActionCell.swift in Sources */,
-				8BF63E8B276294F2002E8601 /* SelectUserVC.swift in Sources */,
+				8BF63E8B276294F2002E8601 /* SelectValueVC.swift in Sources */,
 				8B26328227E677930086C3A8 /* Label.swift in Sources */,
 				8BAA72B527CB7D41005298B6 /* Keys.swift in Sources */,
 				8BF58D1D277C78B7005A7F38 /* ProViewVC.swift in Sources */,
@@ -767,13 +794,14 @@
 				8B2A4D72271439520085E0F0 /* MoreVC.swift in Sources */,
 				8B052E3D26EFD48E000BA66A /* IndicatorView.swift in Sources */,
 				8B7B63CC2655CAFB0067C434 /* SuperViewController.swift in Sources */,
-				8B324B692683118000E72275 /* NotificationsVC.swift in Sources */,
 				8B7D1AA1276CF203008942EC /* IconList.swift in Sources */,
+				8B7855A227F1527000169A93 /* UIView.swift in Sources */,
+				8B78559C27F0C9F200169A93 /* RemindersVC.swift in Sources */,
 				8B91F08E27E587A800B74F5A /* MoreOptionsData.swift in Sources */,
 				8B52DFEA2750232D00595A0C /* NumbersView.swift in Sources */,
 				8BD3A3D927E4097400547022 /* View.swift in Sources */,
+				8B78559F27F0CA2A00169A93 /* ReminderCell.swift in Sources */,
 				8DD89D8723F1471400273904 /* AppData.swift in Sources */,
-				8B8D556125BB218400D7C6A7 /* UnsendedDataVC.swift in Sources */,
 				8B52DFEC27504D2900595A0C /* IconsVC.swift in Sources */,
 				8BF58D1F277C793D005A7F38 /* BuyPageVC.swift in Sources */,
 				8D52066B24216A6200772CD5 /* HistoryVC.swift in Sources */,

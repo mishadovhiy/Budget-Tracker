@@ -16,7 +16,6 @@ struct K {
     static let mainCellIdent = "TableViewCell"
     static let catCellIdent = "categoriesVCTableViewCell"
     static let settCellIdent = "settingsTableViewCell"
-    static let plotCellIdent = "plotCellIdentifier"
     static let redIndicator = "negativeValue"
     static let greenIndicator = "positiveValue"
     static let income = "Incomes"

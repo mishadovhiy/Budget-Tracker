@@ -69,21 +69,24 @@ class DataBase {
                 let amount = dict["Amount"] as? String ?? ""
                 let date = dict["Date"] as? String ?? ""
                 let comment = dict["Comment"] as? String ?? ""
-                let reminder = dict["ReminderType"] as? String ?? ""
-                return TransactionsStruct(value: amount, categoryID: id, date: date, comment: comment, reminderType: TransactionsStruct.strToReminder(reminder))
+                let reminder = dict["Reminder"] as? [String:Any] ?? [:]
+                return TransactionsStruct(value: amount, categoryID: id, date: date, comment: comment, reminder: reminder)
             }
         }
         return nil
     }
     func transactionToDict(_ transaction: TransactionsStruct) -> [String:Any] {
         print(transaction.categoryID, "transaction.categoryIDtransaction.categoryIDtransaction.categoryID")
-        return [
+        var result:[String:Any] = [
             "CategoryId":transaction.categoryID,
             "Amount":transaction.value,
             "Date":transaction.date,
-            "Comment":transaction.comment,
-            "ReminderType":transaction.reminderType?.rawValue ?? ""
+            "Comment":transaction.comment
         ]
+        if let reminder = transaction.reminder {
+            result.updateValue(reminder, forKey: "Reminder")
+        }
+        return result
     }
     
     
@@ -358,7 +361,11 @@ struct TransactionsStruct {
     var date: String
     let comment: String
     
-    var reminderType:ReminderType? = nil
+    var reminder:[String:Any]? = nil
+    
+    func compToIso() {
+        
+    }
     
     var category:NewCategories {
         let db = DataBase()
@@ -366,29 +373,3 @@ struct TransactionsStruct {
     }
 }
 
-extension TransactionsStruct {
-    enum ReminderType:String {
-        case monthly = "monthly"
-        case weekly = "weekly"
-        case threeMonth = "threeMonth"
-        case fourMonth = "fourMonth"
-        case yearly = "yearly"
-    }
-    
-    static func strToReminder(_ string:String) -> ReminderType? {
-        switch string {
-        case "monthly":
-            return .monthly
-        case "weekly":
-            return .weekly
-        case "threeMonth":
-            return .threeMonth
-        case "fourMonth":
-            return .fourMonth
-        case "yearly":
-            return .yearly
-        default:
-            return nil
-        }
-    }
-}

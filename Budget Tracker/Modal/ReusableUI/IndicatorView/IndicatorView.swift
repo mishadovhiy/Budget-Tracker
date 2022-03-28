@@ -42,10 +42,6 @@ class IndicatorView: UIView {
             drawed = true
         }
         DispatchQueue.main.async {
-            self.rightButton.layer.cornerRadius = 6
-            self.leftButton.layer.cornerRadius = 6
-            self.mainView.layer.cornerRadius = 9
-            self.mainView.layer.masksToBounds = true
             self.normalTitleSize = self.titleLabel.font
         }
     }
@@ -152,7 +148,6 @@ class IndicatorView: UIView {
                 case .error, .internetError:
                     UIView.animate(withDuration: 0.3) {
                         self.imageView.image = UIImage(named: "warning")
-                        self.mainView.layer.shadowOpacity = 0.9
                         self.titleLabel.font = .systemFont(ofSize: 32, weight: .bold)
 
                         if self.imageView.superview?.isHidden != false {
@@ -180,7 +175,6 @@ class IndicatorView: UIView {
                     
                     self.titleLabel.font = newValue == .standardError ? self.errorFont : self.normalTitleSize
                     UIView.animate(withDuration: 0.3) {
-                        self.mainView.layer.shadowOpacity = 0.9
                         if self.imageView.superview?.isHidden != hideImage {
                             self.imageView.superview?.isHidden = hideImage
                         }
@@ -189,12 +183,8 @@ class IndicatorView: UIView {
                         self.backgroundView.backgroundColor = self.accentBackgroundColor
                     }
                 case .ai:
-                    self.leftButton.layer.shadowOpacity = 0
-                    self.mainView.layer.shadowOpacity = 0.3
-
+break
                 case .succsess:
-                    self.leftButton.layer.shadowOpacity = 0
-                    self.mainView.layer.shadowOpacity = 0.3
                     self.imageView.image = UIImage(named: "success")
                     UIView.animate(withDuration: 0.3) {
                         if self.imageView.superview?.isHidden != false {

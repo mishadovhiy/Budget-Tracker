@@ -324,6 +324,7 @@ class ViewController: SuperViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         if !subviewsLoaded {
+            self.noDataView.isHidden = false
             subviewsLoaded = true
             toggleNoData(show: true, text: "Loading".localize, fromTop: true, appeareAnimation: false, addButtonHidden: true)
             self.unsendedDataLabel.superview?.superview?.isHidden = true
@@ -334,8 +335,7 @@ class ViewController: SuperViewController {
             let superframe = self.calculationSView.superview?.frame ?? .zero
             let calcFrame = self.calculationSView.frame
             self.calculationSView.frame = CGRect(x: -superframe.height, y: calcFrame.minY, width: calcFrame.width, height: calcFrame.height)
-            self.addTransactionWhenEmptyButton.layer.cornerRadius = 5
-            self.addTransactionWhenEmptyButton.layer.masksToBounds = true
+
             self.noDataView.translatesAutoresizingMaskIntoConstraints = true
             self.noDataView.layer.masksToBounds = true
             self.noDataView.layer.cornerRadius = self.tableCorners
@@ -347,7 +347,8 @@ class ViewController: SuperViewController {
             self.addTransitionButton.layer.cornerRadius = self.addTransitionButton.layer.frame.width / 2
 
             self.view.addSubview(self.filterHelperView)
-            self.shadow(for: self.filterHelperView)
+            self.filterHelperView.shadow()
+
             self.filterView.superview?.layer.masksToBounds = true
             self.filterView.superview?.translatesAutoresizingMaskIntoConstraints = true
             self.filterView.translatesAutoresizingMaskIntoConstraints = true
@@ -1239,8 +1240,8 @@ class ViewController: SuperViewController {
         case "goToEditVC":
             let nav = segue.destination as! UINavigationController
             let vc = nav.topViewController as! TransitionVC
+            vc.delegate = self
             if screenType == .home {
-                vc.delegate = self
                 if let transaction = editingTransaction {
                     vc.editingDate = transaction.date
                     vc.editingValue = Double(transaction.value) ?? 0.0
@@ -1250,13 +1251,7 @@ class ViewController: SuperViewController {
             } else {
                 vc.paymentReminderAdding = true
             }
-            
-        case "toUnsendedVC":
-            let vc = segue.destination as! UnsendedDataVC
-            DispatchQueue.main.async {
-                self.mainTableView.reloadData()
-            }
-            vc.delegate = self
+
         case "toStatisticVC":
             let vc = segue.destination as! StatisticVC
             vc.dataFromMain = tableData
@@ -1284,7 +1279,7 @@ class ViewController: SuperViewController {
     @IBAction func homeVC(segue: UIStoryboardSegue) {
         DispatchQueue.global(qos: .userInteractive).async {
             print("HomeVC called")
-            transactionAdded = false
+
             DispatchQueue.main.async {
                 self.dataCountLabel.text = ""
             }
@@ -1504,8 +1499,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 if newTableData[indexPath.section - 1].transactions.count == indexPath.row {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "mainFooterCell") as! mainFooterCell
                     cell.totalLabel.text = "\(newTableData[indexPath.section - 1].amount)"
-                    cell.cornerView.layer.cornerRadius = 15
-                    cell.cornerView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+                    
                     cell.separatorInset.left = tableView.frame.width / 2
                     cell.separatorInset.right = tableView.frame.width / 2
                     return cell
@@ -1696,11 +1690,13 @@ extension ViewController: TransitionVCProtocol {
         }
     }
     
-    func addNewTransaction(value: String, category: String, date: String, comment: String, repreat:TransactionsStruct.ReminderType?, notifTime:DateComponents?) {
-        let new = TransactionsStruct(value: value, categoryID: category, date: date, comment: comment, reminderType: repreat)
+    func addNewTransaction(value: String, category: String, date: String, comment: String, repreat:Bool, notifTime:DateComponents?) {
+        let new = //TransactionsStruct(value: value, categoryID: category, date: date, comment: comment, reminderType: repreat)
+        TransactionsStruct(value: <#T##String#>, categoryID: <#T##String#>, date: <#T##String#>, comment: <#T##String#>, reminder: <#T##[String : Any]?#>)
         if screenType == .home {
             addNewTransaction(new)
         } else {
+            
             db.saveReminder(transaction: new, time: notifTime) { added in
                 if !added {
                     self.newMessage.show(title: "Error creating reminder".localize, description: "Try again".localize, type: .error)
@@ -1726,33 +1722,6 @@ extension ViewController: TransitionVCProtocol {
 }
 
 
-extension ViewController: UnsendedDataVCProtocol {
-    func quiteUnsendedData(deletePressed: Bool, sendPressed: Bool) {
-        
-        if !deletePressed && !sendPressed {
-         //   calculateLabels()
-            filter()
-        } else {
-            if deletePressed {
-                appData.saveTransations([], key: K.Keys.localTrancations)
-                appData.saveCategories([], key: K.Keys.localCategories)
-                appData.saveDebts([], key: K.Keys.localDebts)
-              //  calculateLabels()
-                filter()
-            } else {
-                if sendPressed {
-                    sendSavedData = true
-                    forseSendUnsendedData = true
-                    if appData.username != "" {
-                        self.sendUnsaved()
-                    }
-                }
-            }
-        }
-    }
-    
-}
-
 
 extension ViewController {
     enum ViewControllerType {
@@ -1776,6 +1745,12 @@ class mainFooterCell: UITableViewCell {
     
     @IBOutlet weak var cornerView: UIView!
     @IBOutlet weak var totalLabel: UILabel!
+    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        self.cornerView.layer.cornerRadius = 15
+        self.cornerView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+    }
 }
 
 

@@ -25,11 +25,7 @@ class MessageView: UIView {
     
     
     override func draw(_ rect: CGRect) {
-        self.mainView.layer.shadowColor = UIColor.black.cgColor
-        self.mainView.layer.shadowOpacity = 0.3
-        self.mainView.layer.shadowOffset = .zero
-        self.mainView.layer.shadowRadius = 9
-        self.mainView.layer.cornerRadius = 9
+        //shadowRadius
         let swipeTop = UISwipeGestureRecognizer(target: self, action: #selector(closeSwipe(_:)))
         swipeTop.direction = .up
         self.mainView.addGestureRecognizer(swipeTop)

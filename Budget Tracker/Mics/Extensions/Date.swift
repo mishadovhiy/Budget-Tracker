@@ -10,7 +10,14 @@ import UIKit
 
 
 extension Date {
-    var iso8601withFractionalSeconds: String { return Formatter.iso8601withFractionalSeconds.string(from: self) }
+    var iso8601withFractionalSeconds: String {
+        return Formatter.iso8601withFractionalSeconds.string(from: self)
+        
+    }
+    
+    var differenceFromNow: DateComponents {
+        return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: self, to: Date())
+    }
 }
 
 extension ISO8601DateFormatter {

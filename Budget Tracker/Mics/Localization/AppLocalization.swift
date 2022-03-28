@@ -10,20 +10,12 @@ import UIKit
 
 struct AppLocalization {
     
+    static let dictionary:[String:[String:String]] = [
+        "ua":localizationDictUA.dictUA
+    ]
     
-    
-    static var dict:[String:String]? {
-        let loc = AppLocalization.launchedLocalization
-        switch loc {
-        case "ua":
-            return localizationDictUA.dictUA
-        default:
-            return nil
-        }
-    }
     
     static var launchedLocalization:String = "eng"
-
     
     static var udLocalization :String? {
         get {

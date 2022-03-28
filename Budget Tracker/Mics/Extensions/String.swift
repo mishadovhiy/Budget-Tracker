@@ -10,16 +10,14 @@ import UIKit
 
 extension String {
     var localize: String {
-        get {
-            let string = AppLocalization.dict?[self]
-            if string == nil {
-                print("//////////////// NO VALUE FOR:", self)
-            }
-            return string ?? self
-        }
+        let lang = AppLocalization.launchedLocalization
+        return AppLocalization.dictionary[lang]?[self] ?? self
     }
     
-    var iso8601withFractionalSeconds: Date? { return Formatter.iso8601withFractionalSeconds.date(from: self) }
+    var iso8601withFractionalSeconds: Date? {
+        return Formatter.iso8601withFractionalSeconds.date(from: self)
+        
+    }
     
     func slice(from: String, to: String) -> String? {
         var text:String?

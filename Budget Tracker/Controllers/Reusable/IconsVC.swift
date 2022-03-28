@@ -143,7 +143,7 @@ extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
             
             cell.colorView.backgroundColor = AppData.colorNamed(coloresStrTemporary[indexPath.row])
             //cell.backgroundColor = indexPath.row == selectedColorId ? K.Colors.secondaryBackground : .clear
-            cell.backgroundColor = coloresStrTemporary[indexPath.row] == selectedColorName ? K.Colors.secondaryBackground : .clear
+            cell.backgroundColor = coloresStrTemporary[indexPath.row] == selectedColorName ? K.Colors.primaryBacground : .clear
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "IconsVCCell", for: indexPath) as! IconsVCCell

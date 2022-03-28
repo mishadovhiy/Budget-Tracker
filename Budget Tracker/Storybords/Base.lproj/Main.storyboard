@@ -233,7 +233,7 @@
                                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="0O4-5C-pjg">
                                                                 <rect key="frame" x="0.0" y="0.0" width="388" height="50"/>
                                                                 <subviews>
-                                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4d7-Fl-6zl">
+                                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4d7-Fl-6zl" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="0.0" width="321" height="35"/>
                                                                         <subviews>
                                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="Bpw-oX-ZtL">
@@ -262,8 +262,13 @@
                                                                             <constraint firstItem="Bpw-oX-ZtL" firstAttribute="leading" secondItem="4d7-Fl-6zl" secondAttribute="leading" constant="2" id="klT-2w-5kp"/>
                                                                             <constraint firstAttribute="height" constant="35" id="zG4-H3-X9t"/>
                                                                         </constraints>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                <real key="value" value="6"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
                                                                     </view>
-                                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TlO-Ln-54D">
+                                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TlO-Ln-54D" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="0.0" width="321" height="2"/>
                                                                         <subviews>
                                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="meX-ga-QXR">
@@ -294,6 +299,11 @@
                                                                             <constraint firstItem="meX-ga-QXR" firstAttribute="leading" secondItem="TlO-Ln-54D" secondAttribute="leading" constant="2" id="AFB-ya-FlI"/>
                                                                             <constraint firstAttribute="bottom" secondItem="meX-ga-QXR" secondAttribute="bottom" constant="2" id="OFE-Cm-0GV"/>
                                                                         </constraints>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                <real key="value" value="6"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
                                                                     </view>
                                                                 </subviews>
                                                                 <constraints>
@@ -802,7 +812,10 @@
                                         <state key="normal" title="+"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                <real key="value" value="6"/>
+                                                <real key="value" value="20"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                                <real key="value" value="0.10000000000000001"/>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
@@ -815,7 +828,7 @@
                                         <color key="textColor" name="balanceTitleColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zua-Ep-o90" userLabel="noDataView">
+                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zua-Ep-o90" userLabel="noDataView">
                                         <rect key="frame" x="0.0" y="44" width="428" height="794"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KFO-iG-5jp">
@@ -986,17 +999,16 @@
                         <outletCollection property="ecpensesLabels" destination="V6b-AO-Tjy" collectionClass="NSMutableArray" id="27R-LQ-tFj"/>
                         <segue destination="frg-a4-0Ha" kind="presentation" identifier="toFiterVC" modalPresentationStyle="overFullScreen" modalTransitionStyle="coverVertical" id="7Gk-Ct-C8q"/>
                         <segue destination="vu8-NJ-1xS" kind="show" identifier="toSingIn" id="Txh-Ht-m0M"/>
-                        <segue destination="Jxx-iV-tad" kind="show" identifier="toUnsendedVC" id="Lvn-mS-peb"/>
                         <segue destination="U5Q-a5-Vkx" kind="show" identifier="toStatisticVC" id="eSH-bL-GVK"/>
                         <segue destination="cP3-cv-3dE" kind="show" identifier="toCategories" id="v2X-Of-iEX"/>
                         <segue destination="cP3-cv-3dE" kind="show" identifier="toDebts" id="RlV-WA-O6N"/>
-                        <segue destination="Jxx-iV-tad" kind="show" id="g1l-DM-EcT"/>
                         <segue destination="Idf-nc-cty" kind="show" identifier="toAccount" id="g1u-Db-RGW"/>
                         <segue destination="NIc-Ro-QVQ" kind="show" identifier="toProVC" id="riu-P4-hGQ"/>
                         <segue destination="FwK-rC-fD4" kind="show" identifier="toSupportVC" id="5jl-oe-edg"/>
                         <segue destination="2ZU-xp-0Yh" kind="show" identifier="toSettingsVC" id="jIk-bo-Flg"/>
                         <segue destination="cP3-cv-3dE" kind="show" identifier="toLocalData" id="9VA-wc-3tg"/>
                         <segue destination="84E-gG-7XB" kind="show" identifier="goToEditVC" id="161-Ie-baa"/>
+                        <segue destination="dzc-FL-Ze3" kind="show" id="xyt-YY-6wJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -1008,11 +1020,11 @@
             <objects>
                 <viewController storyboardIdentifier="CategoriesVC" id="cP3-cv-3dE" customClass="CategoriesVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="m5f-dV-6zU">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="872"/>
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="786"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" alpha="0.0" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="black" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="60" translatesAutoresizingMaskIntoConstraints="NO" id="kTa-v1-Lr8">
-                                <rect key="frame" x="0.0" y="0.0" width="428" height="838"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="black" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="60" translatesAutoresizingMaskIntoConstraints="NO" id="kTa-v1-Lr8">
+                                <rect key="frame" x="0.0" y="0.0" width="428" height="752"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="separatorColor" name="darkSeparetor"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -1029,13 +1041,13 @@
                                 </searchBar>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="NoCategoriesCell" id="S3f-Cu-wvm" customClass="NoCategoriesCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="95.666666030883789" width="428" height="70.333335876464844"/>
+                                        <rect key="frame" x="0.0" y="100.66666603088379" width="428" height="70.333335876464844"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="S3f-Cu-wvm" id="mYp-17-mJ3">
                                             <rect key="frame" x="0.0" y="0.0" width="428" height="70.333335876464844"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rFz-G2-oOy">
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rFz-G2-oOy" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
                                                     <rect key="frame" x="10" y="0.0" width="408" height="70.333333333333329"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No data" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j4T-XU-bZ7">
@@ -1064,7 +1076,7 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="LocalDataActionCell" id="2AL-sF-FF1" customClass="LocalDataActionCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="166.00000190734863" width="428" height="60.333332061767578"/>
+                                        <rect key="frame" x="0.0" y="171.00000190734863" width="428" height="60.333332061767578"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="2AL-sF-FF1" id="e6P-AW-Mt2">
                                             <rect key="frame" x="0.0" y="0.0" width="428" height="60.333332061767578"/>
@@ -1073,7 +1085,7 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="fCz-NT-Fys">
                                                     <rect key="frame" x="10" y="5" width="355" height="50.333333333333336"/>
                                                     <subviews>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2gi-j4-gOi" userLabel="saveLocallyView">
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2gi-j4-gOi" userLabel="saveLocallyView" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="0.0" width="115" height="50.333333333333336"/>
                                                             <subviews>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="IID-xz-I6t">
@@ -1102,8 +1114,16 @@
                                                                 <constraint firstItem="IID-xz-I6t" firstAttribute="leading" secondItem="2gi-j4-gOi" secondAttribute="leading" constant="2" id="Y4A-To-8Gj"/>
                                                                 <constraint firstItem="IID-xz-I6t" firstAttribute="centerY" secondItem="2gi-j4-gOi" secondAttribute="centerY" id="l5X-NN-k9K"/>
                                                             </constraints>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                    <real key="value" value="5"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                                                    <real key="value" value="0.10000000000000001"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
                                                         </view>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zxO-pc-xqr" userLabel="saveLocallyView">
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zxO-pc-xqr" userLabel="saveLocallyView" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
                                                             <rect key="frame" x="120" y="0.0" width="115" height="50.333333333333336"/>
                                                             <subviews>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="sJ9-vJ-GUw">
@@ -1132,8 +1152,16 @@
                                                                 <constraint firstAttribute="trailing" secondItem="sJ9-vJ-GUw" secondAttribute="trailing" constant="2" id="CmY-l1-oFi"/>
                                                                 <constraint firstAttribute="width" constant="115" id="mLy-fp-xDN"/>
                                                             </constraints>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                    <real key="value" value="5"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                                                    <real key="value" value="0.10000000000000001"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
                                                         </view>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jek-Fk-wgF" userLabel="saveLocallyView">
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jek-Fk-wgF" userLabel="saveLocallyView" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
                                                             <rect key="frame" x="240" y="0.0" width="115" height="50.333333333333336"/>
                                                             <subviews>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="FGZ-wS-L5Z">
@@ -1162,6 +1190,14 @@
                                                                 <constraint firstItem="FGZ-wS-L5Z" firstAttribute="centerY" secondItem="Jek-Fk-wgF" secondAttribute="centerY" id="Xo8-bW-MWN"/>
                                                                 <constraint firstAttribute="width" constant="115" id="haN-5s-hYe"/>
                                                             </constraints>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                    <real key="value" value="5"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                                                    <real key="value" value="0.10000000000000001"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
                                                         </view>
                                                     </subviews>
                                                     <constraints>
@@ -1185,7 +1221,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="categoriesVCTableViewCell" id="Ugt-jI-QpQ" customClass="categoriesVCcell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="226.33333396911621" width="428" height="60.333332061767578"/>
+                                        <rect key="frame" x="0.0" y="231.33333396911621" width="428" height="60.333332061767578"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Ugt-jI-QpQ" id="8cn-F5-cRV">
                                             <rect key="frame" x="0.0" y="0.0" width="428" height="60.333332061767578"/>
@@ -1327,7 +1363,7 @@
                                                                         <constraint firstItem="OkY-Mh-Uok" firstAttribute="top" secondItem="CLU-hq-erz" secondAttribute="top" id="v7O-9X-hnI"/>
                                                                     </constraints>
                                                                 </stackView>
-                                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x2D-Rm-9qA">
+                                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x2D-Rm-9qA" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
                                                                     <rect key="frame" x="348" y="20.333333333333332" width="40" height="19.999999999999996"/>
                                                                     <subviews>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PRO" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HZV-9k-7zv">
@@ -1337,7 +1373,7 @@
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
                                                                     </subviews>
-                                                                    <color key="backgroundColor" name="yellowColor"/>
+                                                                    <color key="backgroundColor" systemColor="tintColor"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="20" id="1kd-33-azw"/>
                                                                         <constraint firstAttribute="trailing" secondItem="HZV-9k-7zv" secondAttribute="trailing" constant="2" id="QgC-2f-H8p"/>
@@ -1346,6 +1382,15 @@
                                                                         <constraint firstAttribute="width" constant="40" id="aja-yl-MiV"/>
                                                                         <constraint firstAttribute="bottom" secondItem="HZV-9k-7zv" secondAttribute="bottom" id="qwz-LU-JXP"/>
                                                                     </constraints>
+                                                                    <userDefinedRuntimeAttributes>
+                                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                            <real key="value" value="5"/>
+                                                                        </userDefinedRuntimeAttribute>
+                                                                        <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                                                            <real key="value" value="0.10000000000000001"/>
+                                                                        </userDefinedRuntimeAttribute>
+                                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="linkBackground" value="YES"/>
+                                                                    </userDefinedRuntimeAttributes>
                                                                 </view>
                                                             </subviews>
                                                             <color key="backgroundColor" name="SecondaryBacroundColor"/>
@@ -1367,12 +1412,20 @@
                                                         </view>
                                                     </subviews>
                                                 </stackView>
-                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x8J-13-MPb">
+                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x8J-13-MPb" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
                                                     <rect key="frame" x="7" y="2" width="5" height="56.333333333333336"/>
                                                     <color key="backgroundColor" name="negativeColor"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="5" id="GwH-Bi-aeg"/>
                                                     </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                            <real key="value" value="3"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                                            <real key="value" value="0.90000000000000002"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                 </view>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1409,12 +1462,12 @@
                                 </prototypes>
                             </tableView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="UzW-vR-Z71">
-                                <rect key="frame" x="204" y="426" width="20" height="20"/>
+                                <rect key="frame" x="204" y="383" width="20" height="20"/>
                                 <color key="color" name="CategoryColor"/>
                             </activityIndicatorView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="56v-i7-otg">
-                                <rect key="frame" x="0.0" y="472" width="428" height="400"/>
-                                <color key="backgroundColor" name="SecondaryBacroundColor"/>
+                                <rect key="frame" x="0.0" y="386" width="428" height="400"/>
+                                <color key="backgroundColor" name="balanceTitleColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="400" id="x0e-ki-C50"/>
                                 </constraints>
@@ -1477,7 +1530,7 @@
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Arh-nB-5Oe">
                                 <rect key="frame" x="5" y="5" width="418" height="390"/>
-                                <color key="backgroundColor" name="PrimaryBackgroundColor"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="8cc-4e-emd">
                                     <size key="itemSize" width="40" height="40"/>
                                     <size key="estimatedItemSize" width="40" height="40"/>
@@ -1493,13 +1546,18 @@
                                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jC3-N8-Zdg">
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jC3-N8-Zdg" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
                                                     <rect key="frame" x="10" y="10" width="30" height="30"/>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="20" id="YI6-Az-Kdg"/>
                                                         <constraint firstAttribute="width" constant="20" id="dSt-wY-WoE"/>
                                                     </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                            <real key="value" value="5"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                 </view>
                                             </subviews>
                                             <constraints>
@@ -1508,6 +1566,11 @@
                                                 <constraint firstAttribute="trailing" secondItem="jC3-N8-Zdg" secondAttribute="trailing" constant="10" id="MQd-C5-5G5"/>
                                                 <constraint firstItem="jC3-N8-Zdg" firstAttribute="leading" secondItem="WGi-am-kE7" secondAttribute="leading" constant="10" id="YQg-Wa-43d"/>
                                             </constraints>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                    <real key="value" value="5"/>
+                                                </userDefinedRuntimeAttribute>
+                                            </userDefinedRuntimeAttributes>
                                         </collectionViewCellContentView>
                                         <size key="customSize" width="50" height="50"/>
                                         <connections>
@@ -1551,7 +1614,7 @@
                             </collectionView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="uXk-Ar-jF4"/>
-                        <color key="backgroundColor" name="PrimaryBackgroundColor"/>
+                        <color key="backgroundColor" name="SecondaryBacroundColor2"/>
                         <constraints>
                             <constraint firstItem="uXk-Ar-jF4" firstAttribute="trailing" secondItem="Arh-nB-5Oe" secondAttribute="trailing" constant="5" id="3aO-Tp-76e"/>
                             <constraint firstItem="Arh-nB-5Oe" firstAttribute="leading" secondItem="uXk-Ar-jF4" secondAttribute="leading" constant="5" id="V9Z-ET-bmK"/>
@@ -1573,7 +1636,7 @@
             <objects>
                 <viewController storyboardIdentifier="TransitionVC" id="o1K-SN-bUx" customClass="TransitionVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="405-H3-8an">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="764"/>
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="786"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c9d-cL-RPP" userLabel="doneButton" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
@@ -1631,7 +1694,7 @@
                                 </connections>
                             </segmentedControl>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0o7-y6-JW8">
-                                <rect key="frame" x="15" y="80" width="398" height="364"/>
+                                <rect key="frame" x="15" y="80" width="398" height="352"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="17f-0J-k9a" userLabel="valueView">
                                         <rect key="frame" x="0.0" y="0.0" width="398" height="60"/>
@@ -1674,7 +1737,7 @@
                                         </constraints>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V1P-Cy-4Mn">
-                                        <rect key="frame" x="0.0" y="202" width="398" height="162"/>
+                                        <rect key="frame" x="0.0" y="202" width="398" height="150"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -1798,7 +1861,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3iV-TP-Myd" userLabel="padView">
-                                <rect key="frame" x="0.0" y="464" width="428" height="300"/>
+                                <rect key="frame" x="0.0" y="452" width="428" height="300"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dtl-DA-9aX" userLabel="backgroundView">
                                         <rect key="frame" x="0.0" y="0.0" width="428" height="300"/>
@@ -2301,11 +2364,11 @@
             <objects>
                 <viewController storyboardIdentifier="HistoryVC" id="Zmr-vi-AsB" customClass="HistoryVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4Hr-9J-3zH">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="872"/>
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="786"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nMe-Ik-tvJ">
-                                <rect key="frame" x="0.0" y="0.0" width="428" height="872"/>
+                                <rect key="frame" x="0.0" y="0.0" width="428" height="786"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="scrollIndicatorInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="50"/>
                                 <color key="separatorColor" red="0.83499997854232788" green="0.83499997854232788" blue="0.83499997854232788" alpha="0.10000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2382,7 +2445,7 @@
                                                 <stackView opaque="NO" alpha="0.0" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="HFp-oZ-7QB">
                                                     <rect key="frame" x="30" y="13.666666666666664" width="110" height="45"/>
                                                     <subviews>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FW8-0G-7Gd">
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FW8-0G-7Gd" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="0.0" width="45" height="45"/>
                                                             <color key="backgroundColor" name="SecondaryBacroundColor"/>
                                                             <constraints>
@@ -2391,15 +2454,33 @@
                                                             <color key="tintColor" name="negativeColor"/>
                                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             <state key="normal" image="trash"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="titleWhenNoSymbols" value="🗑"/>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                    <real key="value" value="5"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                                                    <real key="value" value="0.10000000000000001"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
                                                             <connections>
                                                                 <action selector="deletePressed:" destination="Hww-YT-JUT" eventType="touchUpInside" id="XeR-H3-AQk"/>
                                                             </connections>
                                                         </button>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dKD-na-Qxv">
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dKD-na-Qxv" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
                                                             <rect key="frame" x="65" y="0.0" width="45" height="45"/>
                                                             <color key="backgroundColor" name="SecondaryBacroundColor"/>
                                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             <state key="normal" image="pencil"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="titleWhenNoSymbols" value="✏️"/>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                    <real key="value" value="5"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                                                    <real key="value" value="0.10000000000000001"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
                                                             <connections>
                                                                 <action selector="changePressed:" destination="Hww-YT-JUT" eventType="touchUpInside" id="Cyf-P3-8hC"/>
                                                             </connections>
@@ -2448,7 +2529,7 @@
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QQM-2F-g2O">
                                                     <rect key="frame" x="0.0" y="0.0" width="161.66666666666666" height="80.666666666666671"/>
                                                     <subviews>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ltS-Vk-tdM">
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ltS-Vk-tdM" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
                                                             <rect key="frame" x="25" y="25.333333333333329" width="30" height="30"/>
                                                             <subviews>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bell.fill" translatesAutoresizingMaskIntoConstraints="NO" id="k3O-GK-uQr">
@@ -2466,6 +2547,11 @@
                                                                 <constraint firstAttribute="width" constant="30" id="j8j-5Y-nVG"/>
                                                                 <constraint firstAttribute="height" constant="30" id="sFd-Fa-W1Y"/>
                                                             </constraints>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                    <real key="value" value="15"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
                                                         </view>
                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="top" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="hQj-ZN-cMI">
                                                             <rect key="frame" x="60.000000000000007" y="19.999999999999996" width="81.666666666666686" height="40.666666666666657"/>
@@ -2513,17 +2599,26 @@
                                                 <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="XRD-dz-Go1">
                                                     <rect key="frame" x="298" y="18" width="110" height="45"/>
                                                     <subviews>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vsx-oo-isP">
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vsx-oo-isP" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="0.0" width="45" height="45"/>
                                                             <color key="backgroundColor" name="SecondaryBacroundColor"/>
                                                             <color key="tintColor" name="negativeColor"/>
                                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             <state key="normal" image="trash"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="titleWhenNoSymbols" value="🗑"/>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                    <real key="value" value="5"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                                                    <real key="value" value="0.10000000000000001"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
                                                             <connections>
                                                                 <action selector="doneDatePressed:" destination="Rha-KM-KqS" eventType="touchUpInside" id="McH-xR-IL1"/>
                                                             </connections>
                                                         </button>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pK6-4E-O38">
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pK6-4E-O38" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
                                                             <rect key="frame" x="65" y="0.0" width="45" height="45"/>
                                                             <color key="backgroundColor" name="SecondaryBacroundColor"/>
                                                             <constraints>
@@ -2531,6 +2626,15 @@
                                                             </constraints>
                                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                             <state key="normal" image="pencil"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="titleWhenNoSymbols" value="✏️"/>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                    <real key="value" value="5"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                                                    <real key="value" value="0.10000000000000001"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
                                                             <connections>
                                                                 <action selector="changeDatePressed:" destination="Rha-KM-KqS" eventType="touchUpInside" id="Uno-1x-xzl"/>
                                                             </connections>
@@ -2664,9 +2768,9 @@
                                 </prototypes>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4la-rP-xjs">
-                                <rect key="frame" x="0.0" y="793" width="428" height="45"/>
+                                <rect key="frame" x="0.0" y="707" width="428" height="45"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gIt-0L-4IJ">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gIt-0L-4IJ" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
                                         <rect key="frame" x="15" y="0.0" width="40" height="40"/>
                                         <color key="backgroundColor" systemColor="tintColor"/>
                                         <constraints>
@@ -2679,6 +2783,15 @@
                                         <state key="normal" title="+">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="linkBackground" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="20"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                                <real key="value" value="0.29999999999999999"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="toTransPressed:" destination="Zmr-vi-AsB" eventType="touchUpInside" id="qMB-L4-2Xw"/>
                                         </connections>
@@ -2773,15 +2886,276 @@
             </objects>
             <point key="canvasLocation" x="6246.728971962616" y="-421.16630669546441"/>
         </scene>
-        <!--UnsendedDataVC-->
-        <scene sceneID="lWV-Jy-JnC">
+        <!--RemindersVC-->
+        <scene sceneID="rwC-Y1-DEm">
             <objects>
-                <viewControllerPlaceholder storyboardName="LogIn" referencedIdentifier="UnsendedDataVC" id="Jxx-iV-tad" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="hpw-Fe-TQc"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="mWB-wD-RKM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <viewController id="dzc-FL-Ze3" customClass="RemindersVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="6Pt-ug-Nzf">
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="786"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="YY2-NA-vRx">
+                                <rect key="frame" x="0.0" y="0.0" width="428" height="786"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="ReminderCell" id="0VC-sg-p8P" customClass="ReminderCell" customModule="Budget_Tracker" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="44.666666030883789" width="428" height="127"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="0VC-sg-p8P" id="TYY-To-r2K">
+                                            <rect key="frame" x="0.0" y="0.0" width="428" height="127"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="4WP-OF-7Yv">
+                                                    <rect key="frame" x="14" y="20" width="400" height="100"/>
+                                                    <subviews>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z80-lj-paH" userLabel="BackgroundView" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="0.0" width="400" height="60"/>
+                                                            <subviews>
+                                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="fSm-oD-pj9">
+                                                                    <rect key="frame" x="5" y="10" width="388" height="40"/>
+                                                                    <subviews>
+                                                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="c7X-Pq-KL5">
+                                                                            <rect key="frame" x="0.0" y="0.0" width="80" height="40"/>
+                                                                            <subviews>
+                                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="01" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="daM-fM-aqs" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
+                                                                                    <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
+                                                                                    <constraints>
+                                                                                        <constraint firstAttribute="width" constant="40" id="MCM-qx-Wf4"/>
+                                                                                    </constraints>
+                                                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
+                                                                                    <color key="textColor" systemColor="tintColor"/>
+                                                                                    <nil key="highlightedColor"/>
+                                                                                </label>
+                                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8La-rA-VJH">
+                                                                                    <rect key="frame" x="42" y="0.0" width="38" height="40"/>
+                                                                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                                                    <color key="textColor" name="balanceTitleColor"/>
+                                                                                    <nil key="highlightedColor"/>
+                                                                                </label>
+                                                                            </subviews>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="width" constant="80" id="CST-kM-ysR"/>
+                                                                            </constraints>
+                                                                        </stackView>
+                                                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="tFH-ve-QNX">
+                                                                            <rect key="frame" x="80" y="0.0" width="218" height="40"/>
+                                                                            <subviews>
+                                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BwX-ep-M5D">
+                                                                                    <rect key="frame" x="0.0" y="0.0" width="218" height="25.666666666666668"/>
+                                                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                                                                                    <color key="textColor" name="CategoryColor"/>
+                                                                                    <nil key="highlightedColor"/>
+                                                                                </label>
+                                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1ms-IH-hnB">
+                                                                                    <rect key="frame" x="0.0" y="25.666666666666661" width="218" height="14.333333333333332"/>
+                                                                                    <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                                                                    <color key="textColor" name="balanceTitleColor"/>
+                                                                                    <nil key="highlightedColor"/>
+                                                                                </label>
+                                                                            </subviews>
+                                                                        </stackView>
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="wqt-dB-Hev">
+                                                                            <rect key="frame" x="298" y="0.0" width="90" height="40"/>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="width" constant="90" id="W2h-dt-qtJ"/>
+                                                                            </constraints>
+                                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                                                                            <color key="textColor" name="CategoryColor"/>
+                                                                            <nil key="highlightedColor"/>
+                                                                        </label>
+                                                                    </subviews>
+                                                                </stackView>
+                                                            </subviews>
+                                                            <color key="backgroundColor" name="SecondaryBacroundColor"/>
+                                                            <constraints>
+                                                                <constraint firstItem="fSm-oD-pj9" firstAttribute="leading" secondItem="Z80-lj-paH" secondAttribute="leading" constant="5" id="Aef-TU-gMN"/>
+                                                                <constraint firstAttribute="trailing" secondItem="fSm-oD-pj9" secondAttribute="trailing" constant="7" id="FP0-9x-Wxd"/>
+                                                                <constraint firstItem="fSm-oD-pj9" firstAttribute="top" secondItem="Z80-lj-paH" secondAttribute="top" constant="10" id="Op5-Vs-vLw"/>
+                                                                <constraint firstAttribute="height" constant="60" id="S5X-bp-rMd"/>
+                                                                <constraint firstAttribute="bottom" secondItem="fSm-oD-pj9" secondAttribute="bottom" constant="10" id="vN3-Uq-Rpx"/>
+                                                            </constraints>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                    <real key="value" value="6"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                                                    <real key="value" value="0.20000000000000001"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </view>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QJo-NV-ygh">
+                                                            <rect key="frame" x="0.0" y="70" width="400" height="30"/>
+                                                            <subviews>
+                                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Xpm-VN-McQ">
+                                                                    <rect key="frame" x="5" y="0.0" width="160" height="30"/>
+                                                                    <subviews>
+                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WI4-9c-ADb" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                                                                            <rect key="frame" x="0.0" y="0.0" width="106" height="30"/>
+                                                                            <color key="backgroundColor" name="yellowColor"/>
+                                                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="5" maxY="0.0"/>
+                                                                            <state key="normal" title="Add transaction"/>
+                                                                            <userDefinedRuntimeAttributes>
+                                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="linkBackground" value="YES"/>
+                                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                    <real key="value" value="5"/>
+                                                                                </userDefinedRuntimeAttribute>
+                                                                            </userDefinedRuntimeAttributes>
+                                                                            <connections>
+                                                                                <action selector="actionPressed:" destination="0VC-sg-p8P" eventType="touchUpInside" id="FeN-cM-xBg"/>
+                                                                            </connections>
+                                                                        </button>
+                                                                        <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l1D-Pu-GKB" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                                                                            <rect key="frame" x="111" y="0.0" width="49" height="30"/>
+                                                                            <color key="backgroundColor" name="SecondaryBacroundColor"/>
+                                                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="5" maxY="0.0"/>
+                                                                            <state key="normal" title="Ignore">
+                                                                                <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            </state>
+                                                                            <userDefinedRuntimeAttributes>
+                                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="linkBackground" value="NO"/>
+                                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                    <real key="value" value="5"/>
+                                                                                </userDefinedRuntimeAttribute>
+                                                                            </userDefinedRuntimeAttributes>
+                                                                            <connections>
+                                                                                <action selector="actionPressed:" destination="0VC-sg-p8P" eventType="touchUpInside" id="XxS-Qo-hJS"/>
+                                                                            </connections>
+                                                                        </button>
+                                                                    </subviews>
+                                                                </stackView>
+                                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="03P-Lo-lY1">
+                                                                    <rect key="frame" x="305" y="0.0" width="90" height="30"/>
+                                                                    <subviews>
+                                                                        <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jaM-jn-Fof" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                                                                            <rect key="frame" x="0.0" y="0.0" width="51" height="30"/>
+                                                                            <color key="backgroundColor" name="SecondaryBacroundColor"/>
+                                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="13"/>
+                                                                            <color key="tintColor" name="negativeColor"/>
+                                                                            <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="5" maxY="0.0"/>
+                                                                            <state key="normal" title="Delete">
+                                                                                <color key="titleColor" name="negativeColor"/>
+                                                                            </state>
+                                                                            <userDefinedRuntimeAttributes>
+                                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="linkBackground" value="YES"/>
+                                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                    <real key="value" value="5"/>
+                                                                                </userDefinedRuntimeAttribute>
+                                                                            </userDefinedRuntimeAttributes>
+                                                                            <connections>
+                                                                                <action selector="actionPressed:" destination="0VC-sg-p8P" eventType="touchUpInside" id="bUu-2Y-2gg"/>
+                                                                            </connections>
+                                                                        </button>
+                                                                        <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HCu-31-FZE" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                                                                            <rect key="frame" x="56" y="0.0" width="34" height="30"/>
+                                                                            <color key="backgroundColor" name="SecondaryBacroundColor"/>
+                                                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                            <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="5" maxY="0.0"/>
+                                                                            <state key="normal" title="Edit"/>
+                                                                            <userDefinedRuntimeAttributes>
+                                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="linkBackground" value="NO"/>
+                                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                    <real key="value" value="5"/>
+                                                                                </userDefinedRuntimeAttribute>
+                                                                            </userDefinedRuntimeAttributes>
+                                                                            <connections>
+                                                                                <action selector="actionPressed:" destination="0VC-sg-p8P" eventType="touchUpInside" id="KNc-sc-JvO"/>
+                                                                            </connections>
+                                                                        </button>
+                                                                    </subviews>
+                                                                </stackView>
+                                                            </subviews>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="30" id="4o8-O4-PSV"/>
+                                                                <constraint firstAttribute="bottom" secondItem="Xpm-VN-McQ" secondAttribute="bottom" id="AB1-ER-GGc"/>
+                                                                <constraint firstItem="Xpm-VN-McQ" firstAttribute="leading" secondItem="QJo-NV-ygh" secondAttribute="leading" constant="5" id="Bzf-sM-vny"/>
+                                                                <constraint firstItem="Xpm-VN-McQ" firstAttribute="top" secondItem="QJo-NV-ygh" secondAttribute="top" id="M6u-aR-dKu"/>
+                                                                <constraint firstItem="03P-Lo-lY1" firstAttribute="top" secondItem="QJo-NV-ygh" secondAttribute="top" id="OGm-f1-xl8"/>
+                                                                <constraint firstAttribute="bottom" secondItem="03P-Lo-lY1" secondAttribute="bottom" id="ZAD-re-mKD"/>
+                                                                <constraint firstAttribute="trailing" secondItem="03P-Lo-lY1" secondAttribute="trailing" constant="5" id="rfl-pI-kH9"/>
+                                                            </constraints>
+                                                        </view>
+                                                    </subviews>
+                                                </stackView>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N24-QN-GrJ" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
+                                                    <rect key="frame" x="30.000000000000004" y="7.6666666666666661" width="39.333333333333343" height="17.333333333333336"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="28L-no-ZPG">
+                                                            <rect key="frame" x="4.9999999999999982" y="1.9999999999999991" width="29.333333333333329" height="13.333333333333332"/>
+                                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="11"/>
+                                                            <color key="textColor" name="CategoryColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <color key="backgroundColor" systemColor="tintColor"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="28L-no-ZPG" secondAttribute="trailing" constant="5" id="70E-kz-80V"/>
+                                                        <constraint firstItem="28L-no-ZPG" firstAttribute="leading" secondItem="N24-QN-GrJ" secondAttribute="leading" constant="5" id="P50-CP-c8b"/>
+                                                        <constraint firstItem="28L-no-ZPG" firstAttribute="top" secondItem="N24-QN-GrJ" secondAttribute="top" constant="2" id="ffX-MV-jo3"/>
+                                                        <constraint firstAttribute="bottom" secondItem="28L-no-ZPG" secondAttribute="bottom" constant="2" id="gSr-eC-dBb"/>
+                                                    </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="linkBackground" value="YES"/>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                            <real key="value" value="4"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </view>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HRs-9q-ZqI">
+                                                    <rect key="frame" x="76.333333333333329" y="8.6666666666666679" width="34" height="15.666666666666668"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="13"/>
+                                                    <color key="textColor" name="negativeColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstItem="4WP-OF-7Yv" firstAttribute="top" secondItem="TYY-To-r2K" secondAttribute="top" constant="20" id="B3F-0j-Zai"/>
+                                                <constraint firstAttribute="bottom" secondItem="4WP-OF-7Yv" secondAttribute="bottom" constant="7" id="Fs9-Ft-GVJ"/>
+                                                <constraint firstItem="4WP-OF-7Yv" firstAttribute="leading" secondItem="TYY-To-r2K" secondAttribute="leading" constant="14" id="IZg-Ji-uwU"/>
+                                                <constraint firstItem="HRs-9q-ZqI" firstAttribute="leading" secondItem="N24-QN-GrJ" secondAttribute="trailing" constant="7" id="RsS-Eh-yB3"/>
+                                                <constraint firstItem="HRs-9q-ZqI" firstAttribute="centerY" secondItem="N24-QN-GrJ" secondAttribute="centerY" id="bUD-Iu-qLo"/>
+                                                <constraint firstAttribute="trailing" secondItem="4WP-OF-7Yv" secondAttribute="trailing" constant="14" id="bqa-RA-IoW"/>
+                                                <constraint firstItem="N24-QN-GrJ" firstAttribute="leading" secondItem="TYY-To-r2K" secondAttribute="leading" constant="30" id="dVM-4M-Ql0"/>
+                                                <constraint firstItem="4WP-OF-7Yv" firstAttribute="top" secondItem="N24-QN-GrJ" secondAttribute="bottom" constant="-5" id="rBn-1n-72R"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <connections>
+                                            <outlet property="actionsView" destination="QJo-NV-ygh" id="tod-bS-gsx"/>
+                                            <outlet property="amountLabel" destination="wqt-dB-Hev" id="78U-c0-RQy"/>
+                                            <outlet property="categoryLabel" destination="BwX-ep-M5D" id="BTU-IL-Gcb"/>
+                                            <outlet property="commentLabel" destination="1ms-IH-hnB" id="EYV-Xs-9om"/>
+                                            <outlet property="dateLabel" destination="8La-rA-VJH" id="KFT-S4-RDV"/>
+                                            <outlet property="expiredLabel" destination="HRs-9q-ZqI" id="STh-nk-oSl"/>
+                                            <outlet property="timeLabel" destination="28L-no-ZPG" id="c0Y-Vn-WKK"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="PqB-jk-LDq"/>
+                        <color key="backgroundColor" name="PrimaryBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="YY2-NA-vRx" firstAttribute="leading" secondItem="PqB-jk-LDq" secondAttribute="leading" id="OV1-Jp-Xy8"/>
+                            <constraint firstItem="YY2-NA-vRx" firstAttribute="top" secondItem="6Pt-ug-Nzf" secondAttribute="top" id="VCh-gG-ncF"/>
+                            <constraint firstItem="PqB-jk-LDq" firstAttribute="trailing" secondItem="YY2-NA-vRx" secondAttribute="trailing" id="fSk-Zv-5B6"/>
+                            <constraint firstAttribute="bottom" secondItem="YY2-NA-vRx" secondAttribute="bottom" id="t8j-5x-cMU"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="SFV-9J-3xV"/>
+                    <connections>
+                        <outlet property="tableView" destination="YY2-NA-vRx" id="JI6-td-X45"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3VG-ES-RAY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="244" y="-2471"/>
+            <point key="canvasLocation" x="-1232" y="1264"/>
         </scene>
         <!--FilterTVC-->
         <scene sceneID="krz-S5-Yf0">
@@ -2800,13 +3174,14 @@
                                 <color key="sectionIndexBackgroundColor" name="backgroundColor"/>
                                 <color key="sectionIndexTrackingBackgroundColor" name="backgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="filterCell" translatesAutoresizingMaskIntoConstraints="NO" id="K0H-L4-Y70" customClass="FilterCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="44.666666030883789" width="428" height="48"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="filterCell" id="K0H-L4-Y70" customClass="FilterCell" customModule="Budget_Tracker" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="44.666666030883789" width="428" height="47"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="K0H-L4-Y70" translatesAutoresizingMaskIntoConstraints="NO" id="E0S-2R-c7D">
-                                            <rect key="frame" x="0.0" y="0.0" width="428" height="48"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="428" height="47"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="HRa-sZ-rk4">
-                                                    <rect key="frame" x="10" y="15" width="37.666666666666664" height="18"/>
+                                                    <rect key="frame" x="10" y="15" width="408" height="17"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <color key="textColor" name="CategoryColor"/>
                                                     <nil key="highlightedColor"/>
@@ -2818,6 +3193,12 @@
                                                 <constraint firstAttribute="trailing" secondItem="HRa-sZ-rk4" secondAttribute="trailing" constant="10" id="XAx-yw-wvf"/>
                                                 <constraint firstItem="HRa-sZ-rk4" firstAttribute="leading" secondItem="E0S-2R-c7D" secondAttribute="leading" constant="10" id="bzx-og-nIA"/>
                                             </constraints>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                    <real key="value" value="9"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="linkBackground" value="YES"/>
+                                            </userDefinedRuntimeAttributes>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" name="pinkColor"/>
                                         <color key="tintColor" name="yellowColor"/>
@@ -2860,11 +3241,11 @@
             <objects>
                 <viewController storyboardIdentifier="CalendarVC" id="5n4-P6-pnR" customClass="CalendarVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="67i-SE-sWB">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="872"/>
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ur5-R3-sfZ">
-                                <rect key="frame" x="10" y="65" width="408" height="50"/>
+                                <rect key="frame" x="10" y="109" width="408" height="50"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0U3-LJ-bys">
                                         <rect key="frame" x="0.0" y="0.0" width="60" height="50"/>
@@ -2915,7 +3296,7 @@
                                 </constraints>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rmd-nB-JWC">
-                                <rect key="frame" x="59" y="158.33333333333337" width="310" height="260"/>
+                                <rect key="frame" x="59" y="202.33333333333337" width="310" height="260"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="310" id="cus-cS-kD5"/>
@@ -2954,13 +3335,18 @@
                                                     <color key="textColor" name="CategoryColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4vl-jP-Zov" userLabel="backgroundView">
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4vl-jP-Zov" userLabel="backgroundView" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
                                                     <rect key="frame" x="0.0" y="30" width="35" height="5"/>
                                                     <color key="backgroundColor" name="backgroundColor"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="35" id="EK8-rZ-ZM3"/>
                                                         <constraint firstAttribute="height" constant="5" id="nvB-XK-bqp"/>
                                                     </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                            <real key="value" value="3"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                 </view>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2987,10 +3373,10 @@
                                 </cells>
                             </collectionView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="278-rW-rj0" userLabel="headetView">
-                                <rect key="frame" x="0.0" y="0.0" width="428" height="50"/>
+                                <rect key="frame" x="0.0" y="44" width="428" height="50"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Calendar" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rGq-Aj-Zje" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="55" y="16.333333333333329" width="318" height="27.666666666666671"/>
+                                        <rect key="frame" x="55" y="16.333333333333336" width="318" height="27.666666666666664"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="23"/>
                                         <color key="textColor" name="CategoryColor"/>
                                         <nil key="highlightedColor"/>
@@ -3039,6 +3425,7 @@
                                             <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                                 <real key="value" value="6"/>
                                             </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="linkBackground" value="YES"/>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="donePressed:" destination="5n4-P6-pnR" eventType="touchUpInside" id="dfl-US-7kv"/>
@@ -3060,7 +3447,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mUw-Or-FG0">
-                                <rect key="frame" x="49" y="130" width="330" height="13.333333333333343"/>
+                                <rect key="frame" x="49" y="174" width="330" height="13.333333333333343"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="wQi-bJ-DxV">
                                         <rect key="frame" x="0.0" y="0.0" width="330" height="13.333333333333334"/>
@@ -3128,19 +3515,19 @@
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="InH-AG-csp" userLabel="timeViewStack View">
-                                <rect key="frame" x="61.666666666666657" y="418.33333333333326" width="305" height="453.66666666666674"/>
+                                <rect key="frame" x="61.666666666666657" y="462.33333333333326" width="305" height="463.66666666666674"/>
                                 <subviews>
                                     <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="h2d-GY-FrE">
-                                        <rect key="frame" x="0.0" y="0.0" width="305" height="453.66666666666669"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="305" height="463.66666666666669"/>
                                         <color key="tintColor" name="CategoryColor"/>
                                     </datePicker>
                                 </subviews>
                                 <color key="tintColor" name="CategoryColor"/>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="XFt-LS-Qbp">
-                                <rect key="frame" x="20" y="783" width="388" height="35"/>
+                                <rect key="frame" x="20" y="837" width="388" height="35"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j8N-A3-4Wm">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j8N-A3-4Wm" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="100" height="35"/>
                                         <color key="backgroundColor" systemColor="tintColor"/>
                                         <constraints>
@@ -3150,11 +3537,20 @@
                                         <state key="normal" title="Start">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="linkBackground" value="YES"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                                <real key="value" value="0.10000000000000001"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="goPressed:" destination="5n4-P6-pnR" eventType="touchUpInside" id="0h2-4q-par"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JQu-2B-c5Z">
+                                    <button opaque="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JQu-2B-c5Z" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
                                         <rect key="frame" x="105" y="0.0" width="283" height="35"/>
                                         <color key="backgroundColor" systemColor="tintColor"/>
                                         <constraints>
@@ -3164,6 +3560,15 @@
                                         <state key="normal" title="End">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                                <real key="value" value="0.10000000000000001"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="linkBackground" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="goPressed:" destination="5n4-P6-pnR" eventType="touchUpInside" id="pSI-gU-f0B"/>
                                         </connections>
@@ -3265,16 +3670,6 @@
             </objects>
             <point key="canvasLocation" x="2716" y="-2372"/>
         </scene>
-        <!--NotificationsVC-->
-        <scene sceneID="bot-Wk-uHz">
-            <objects>
-                <viewControllerPlaceholder storyboardIdentifier="NotificationsVC" storyboardName="LogIn" referencedIdentifier="NotificationsVC" id="jeo-IP-bhQ" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="cbr-Sv-5Af"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="lMS-zE-gGO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1461" y="-2196"/>
-        </scene>
         <!--SettingsVC-->
         <scene sceneID="WD5-I2-TyS">
             <objects>
@@ -3292,7 +3687,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="3cL-kn-iw3"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" largeTitles="YES" id="DoX-Gq-L35">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="108"/>
+                        <rect key="frame" x="0.0" y="44" width="428" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" name="PrimaryBackgroundColor"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -3359,7 +3754,7 @@
                                                         </stackView>
                                                     </subviews>
                                                 </stackView>
-                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hIS-QB-36b">
+                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hIS-QB-36b" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
                                                     <rect key="frame" x="336" y="12.333333333333336" width="40" height="20"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PRO" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="leV-7a-WDQ">
@@ -3378,6 +3773,15 @@
                                                         <constraint firstItem="leV-7a-WDQ" firstAttribute="leading" secondItem="hIS-QB-36b" secondAttribute="leading" constant="2" id="nQM-fc-hiB"/>
                                                         <constraint firstAttribute="height" constant="20" id="zd2-zM-LWm"/>
                                                     </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="linkBackground" value="YES"/>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                                            <real key="value" value="0.10000000000000001"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                            <real key="value" value="5"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                 </view>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -3491,6 +3895,12 @@
         <designable name="CJF-1D-UVd">
             <size key="intrinsicContentSize" width="58" height="15.666666666666666"/>
         </designable>
+        <designable name="FW8-0G-7Gd">
+            <size key="intrinsicContentSize" width="16" height="22"/>
+        </designable>
+        <designable name="HCu-31-FZE">
+            <size key="intrinsicContentSize" width="34" height="16"/>
+        </designable>
         <designable name="I2z-U6-EDp">
             <size key="intrinsicContentSize" width="13.666666666666666" height="13.333333333333334"/>
         </designable>
@@ -3499,6 +3909,9 @@
         </designable>
         <designable name="JJR-Nl-rYc">
             <size key="intrinsicContentSize" width="15" height="20.333333333333332"/>
+        </designable>
+        <designable name="JQu-2B-c5Z">
+            <size key="intrinsicContentSize" width="30" height="30"/>
         </designable>
         <designable name="OgK-5z-ssL">
             <size key="intrinsicContentSize" width="30" height="36"/>
@@ -3518,8 +3931,14 @@
         <designable name="VZM-jH-tpn">
             <size key="intrinsicContentSize" width="38.333333333333336" height="13.333333333333334"/>
         </designable>
+        <designable name="Vsx-oo-isP">
+            <size key="intrinsicContentSize" width="16" height="22"/>
+        </designable>
         <designable name="W31-Wn-OVi">
             <size key="intrinsicContentSize" width="50.333333333333336" height="13.333333333333334"/>
+        </designable>
+        <designable name="WI4-9c-ADb">
+            <size key="intrinsicContentSize" width="106" height="16"/>
         </designable>
         <designable name="ZwM-nG-kM6">
             <size key="intrinsicContentSize" width="26.666666666666668" height="12"/>
@@ -3527,11 +3946,20 @@
         <designable name="c9d-cL-RPP">
             <size key="intrinsicContentSize" width="30" height="36"/>
         </designable>
+        <designable name="dKD-na-Qxv">
+            <size key="intrinsicContentSize" width="13.333333333333334" height="22"/>
+        </designable>
         <designable name="dSw-Y8-OrZ">
             <size key="intrinsicContentSize" width="15.666666666666666" height="18"/>
         </designable>
+        <designable name="daM-fM-aqs">
+            <size key="intrinsicContentSize" width="34" height="36"/>
+        </designable>
         <designable name="fo7-Zj-SZS">
             <size key="intrinsicContentSize" width="28.666666666666668" height="14.333333333333334"/>
+        </designable>
+        <designable name="gIt-0L-4IJ">
+            <size key="intrinsicContentSize" width="30" height="48"/>
         </designable>
         <designable name="gwp-y1-Jmr">
             <size key="intrinsicContentSize" width="88.333333333333329" height="15.666666666666666"/>
@@ -3539,11 +3967,23 @@
         <designable name="ieF-m1-ryE">
             <size key="intrinsicContentSize" width="48" height="15.666666666666666"/>
         </designable>
+        <designable name="j8N-A3-4Wm">
+            <size key="intrinsicContentSize" width="36" height="30"/>
+        </designable>
         <designable name="jBw-Wl-arg">
             <size key="intrinsicContentSize" width="32.333333333333336" height="18"/>
         </designable>
+        <designable name="jaM-jn-Fof">
+            <size key="intrinsicContentSize" width="51" height="16"/>
+        </designable>
+        <designable name="l1D-Pu-GKB">
+            <size key="intrinsicContentSize" width="49" height="16"/>
+        </designable>
         <designable name="oHP-lO-eLe">
             <size key="intrinsicContentSize" width="86" height="14.333333333333334"/>
+        </designable>
+        <designable name="pK6-4E-O38">
+            <size key="intrinsicContentSize" width="13.333333333333334" height="22"/>
         </designable>
         <designable name="qT6-jw-Pe1">
             <size key="intrinsicContentSize" width="30" height="30"/>
@@ -3577,12 +4017,11 @@
         </designable>
     </designables>
     <inferredMetricsTieBreakers>
-        <segue reference="IMh-Gb-0ws"/>
-        <segue reference="rIb-KG-K0i"/>
-        <segue reference="Lvn-mS-peb"/>
+        <segue reference="161-Ie-baa"/>
+        <segue reference="IDN-MG-5hD"/>
         <segue reference="Ega-tn-GzY"/>
         <segue reference="U95-ph-p6h"/>
-        <segue reference="N0q-Op-l1q"/>
+        <segue reference="v2X-Of-iEX"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="airplane" width="19" height="17"/>
@@ -3785,6 +4224,9 @@ AAAAAAIBAAAAAAAAAGEAAAAAAAAAAAAAAAAAAChAA
         </namedColor>
         <namedColor name="SecondaryBacroundColor">
             <color red="0.14900000393390656" green="0.14900000393390656" blue="0.14900000393390656" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="SecondaryBacroundColor2">
+            <color red="0.125" green="0.125" blue="0.125" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="backgroundColor">
             <color red="0.86699998378753662" green="0.86699998378753662" blue="0.86699998378753662" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -52,9 +52,10 @@ class SupportVC: SuperViewController, UITextViewDelegate {
     private func save(dbFileURL: String, error: @escaping (Bool) -> ()) {
         
         let url = NSURL(string: dbFileURL)
-        var request = URLRequest(url: url! as URL)
+        if let RegUrl = url as URL? {
+        var request = URLRequest(url: RegUrl)
         request.httpMethod = "POST"
-        let dataToSend = "secretWord=44fdcv8jf3"
+            let dataToSend = Keys.secretKey
                 
        // dataToSend = dataToSend + toDataString
         let dataD = dataToSend.data(using: .utf8)
@@ -95,6 +96,7 @@ class SupportVC: SuperViewController, UITextViewDelegate {
                 uploadJob.resume()
             }
             
+        }
         }
             
     }

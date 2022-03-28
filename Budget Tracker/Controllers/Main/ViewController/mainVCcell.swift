@@ -152,27 +152,6 @@ class calcCell: UITableViewCell {
 
 
 
-class PlotCell: UITableViewCell {
-
-    @IBOutlet weak var categoryLabel: UILabel!
-    @IBOutlet weak var valueLabel: UILabel!
-    @IBOutlet weak var highValueView: UIView!
-    
-    func setupCell() {
-        highValueView.layer.cornerRadius = 6
-        highValueView.layer.shadowColor = UIColor.black.cgColor
-        highValueView.layer.shadowOpacity = 0.2
-        highValueView.layer.shadowOffset = .zero
-        highValueView.layer.shadowRadius = 6
-        categoryLabel.text = statisticBrain.maxExpenceName
-        if statisticBrain.minValue < Double(Int.max) {
-            valueLabel.text = "\(Int(statisticBrain.minValue))"
-        } else {
-            valueLabel.text = "\(statisticBrain.minValue)"
-        }
-    }
-    
-}
 
 
 class StatisticCell: UITableViewCell {
@@ -209,7 +188,12 @@ class FilterCell: UITableViewCell {
     
     @IBOutlet weak var backgroundCell: UIView!
     @IBOutlet weak var titleLabel: UILabel!
-    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        self.layer.masksToBounds = true
+        self.layer.cornerRadius = 6
+        self.tintColor = K.Colors.link
+    }
 }
 
 class CVCell: UICollectionViewCell {
@@ -217,11 +201,7 @@ class CVCell: UICollectionViewCell {
     @IBOutlet weak var backgroundCell: UIView!
     @IBOutlet weak var dayLabel: UILabel!
     @IBOutlet weak var cellTypeLabel: UILabel!
-    
-    func setupCell() {
-        backgroundCell.layer.masksToBounds = true
-        backgroundCell.layer.cornerRadius = 3//backgroundCell.bounds.width / 2
-    }
+
 }
 
 

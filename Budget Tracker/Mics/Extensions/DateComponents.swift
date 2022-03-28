@@ -9,6 +9,17 @@
 import UIKit
 
 extension DateComponents {
+    var expired:Bool {
+        if let dateDate = NSCalendar.current.date(from: self) {
+            let difference = dateDate.differenceFromNow
+            let one = (difference.second ?? 0) + (difference.minute ?? 0) + (difference.hour ?? 0)
+            let expiredSeconds = one + (difference.day ?? 0) + (difference.month ?? 0) + (difference.year ?? 0)
+            return expiredSeconds >= 0 ? true : false
+        } else {
+            return false
+        }
+    }
+    
     func toIsoString() -> String? {
         if let date = Calendar.current.date(from: self){
             return date.iso8601withFractionalSeconds

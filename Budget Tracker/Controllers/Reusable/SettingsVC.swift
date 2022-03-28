@@ -81,7 +81,7 @@ class SettingsVC: SuperViewController {
     
     func toChooseIn(data:[String], title:String, selectedAction:@escaping(Int) -> ()) {
         if let nav = self.navigationController {
-            SelectUserVC.shared.presentScreen(in: nav, with: data, title: title, selected: selectedAction)
+            SelectValueVC.shared.presentScreen(in: nav, with: data, title: title, selected: selectedAction)
         }
         
     }

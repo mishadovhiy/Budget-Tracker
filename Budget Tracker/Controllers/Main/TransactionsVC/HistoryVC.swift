@@ -78,10 +78,7 @@ class HistoryVC: SuperViewController {
         if allowEditing {
          //   DispatchQueue.main.async {
 
-            addTransButton.layer.shadowColor = UIColor.black.cgColor
-            addTransButton.layer.shadowOpacity = 0.15
-            addTransButton.layer.shadowOffset = .zero
-            addTransButton.layer.shadowRadius = 10
+
             if mainType == .db  {
                 self.addTransButton.alpha = 1
             }
@@ -98,10 +95,6 @@ class HistoryVC: SuperViewController {
         tableView.dataSource = self
         title = selectedCategory?.name.capitalized
 
-   //     DispatchQueue.main.async {
-            self.addTransButton.layer.cornerRadius = self.addTransButton.layer.frame.width / 2
-            //self.addTransButton.layer.masksToBounds = true
-     //   }
         if mainType == .db {
             getDebtData()
         }
@@ -121,21 +114,19 @@ class HistoryVC: SuperViewController {
         case db
     }
     
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-       notificationReceiver(notification: notification)
-    }
-    
+ 
     var fromStatistic = false
 
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
-    
+    var bottomTableInsert:CGFloat = 50
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-
+        let inserts = self.totalLabel.superview?.layer.frame.height ?? 50
+        self.tableView.contentInset.bottom = inserts
+        self.bottomTableInsert = inserts
         if selectedCategory?.purpose == .debt {
-      //      center.removePendingNotificationRequests(withIdentifiers: ["Debts\(debt.name)"])
             if let cat = self.selectedCategory {
                 AppDelegate.shared.removeNotification(id: "Debts\(cat.id )")
             }
@@ -205,7 +196,7 @@ class HistoryVC: SuperViewController {
     @objc func keyboardWillHide(_ notification: Notification) {
            
             DispatchQueue.main.async {
-                self.tableView.contentInset.bottom = 0
+                self.tableView.contentInset.bottom = self.bottomTableInsert
                 self.tableView.reloadData()
                 
             }
@@ -266,7 +257,7 @@ class HistoryVC: SuperViewController {
             vc.selectedPurpose = selectedPurposeH
         case "toCalendar":
             let vc = segue.destination as! CalendarVC
-            vc.delegate = self
+            vc.delegate = self//CalendarVCProtocol
              let string = self.selectedCategory?.dueDate
             let stringDate = "\(self.makeTwo(n: string?.day ?? 0)).\(self.makeTwo(n: string?.month ?? 0)).\(string?.year ?? 0)"
             let time = "\(self.makeTwo(n: string?.hour ?? 0)):\(self.makeTwo(n: string?.minute ?? 0)):\(self.makeTwo(n: string?.second ?? 0))"
@@ -292,12 +283,10 @@ class HistoryVC: SuperViewController {
     
     
     func changeDueDate(fullDate: String) {
-        //self.addLocalNotification(date: dateComp, title: self.debt?.name ?? "") { (_) in
         if let category = selectedCategory {
             let comp = DateComponents()
             let newDate = comp.stringToCompIso(s: fullDate)
             self.dbLoadRemoveBeforeUpdate { (loadedData, _) in
-              //  let save = SaveToDB()
                 var newCategory = category
                 newCategory.dueDate = fullDate == "" ? nil : newDate
                 SaveToDB.shared.newCategories(newCategory) { _ in
@@ -688,7 +677,7 @@ extension HistoryVC: TransitionVCProtocol {
         
     }
 
-    func addNewTransaction(value: String, category: String, date: String, comment: String, repreat:TransactionsStruct.ReminderType?, notifTime:DateComponents?) {
+    func addNewTransaction(value: String, category: String, date: String, comment: String, repreat:Bool, notifTime:DateComponents?) {
         toAddVC = false
         transactionAdded = true
         needDownloadOnMainAppeare = true
@@ -838,6 +827,7 @@ class DebtDescriptionCell: UITableViewCell {
         super.draw(rect)
         changeButton.layer.cornerRadius = changeButton.layer.frame.width / 2
         doneButton.layer.cornerRadius = doneButton.layer.frame.width / 2
+        
     }
     
     var changeAction:(() -> ())?

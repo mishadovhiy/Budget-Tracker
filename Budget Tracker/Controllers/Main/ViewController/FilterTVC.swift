@@ -26,9 +26,7 @@ class FilterTVC: SuperViewController {
         
     }
     
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-       notificationReceiver(notification: notification)
-    }
+
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first {
@@ -171,6 +169,7 @@ class FilterTVC: SuperViewController {
         case K.toCalendar:
             let vc = segue.destination as! CalendarVC
             vc.needPressDone = true
+            vc.vcHeaderData = .init(title: "Calendar")
         default:
             break
         }
@@ -313,8 +312,7 @@ extension FilterTVC: UITableViewDelegate, UITableViewDataSource {
         }
 
         if data == appData.filter.selectedPeroud {
-            cell.layer.masksToBounds = true
-            cell.layer.cornerRadius = 6
+            
            // cell.titleLabel.textColor = K.Colors.category
             cell.backgroundColor = K.Colors.link//UIColor(named: "darkTableColor") //K.Colors.yellow
         } else {

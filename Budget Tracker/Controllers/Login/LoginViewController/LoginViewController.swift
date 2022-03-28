@@ -96,13 +96,7 @@ class LoginViewController: SuperViewController {
     }
     
     
-    
 
-    
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-       notificationReceiver(notification: notification)
-    }
-    
     func loadUsers(completion:@escaping ([[String]]) -> ()) {
       //  let load = LoadFromDB()
         LoadFromDB.shared.Users { (users, error) in
@@ -142,7 +136,7 @@ class LoginViewController: SuperViewController {
         switch segue.identifier {
             
         case "toSelectUserVC":
-            let vc = segue.destination as! SelectUserVC
+            let vc = segue.destination as! SelectValueVC
             vc.delegate = self
             vc.users = enteredEmailUsers
             vc.titleText = "Select user".localize

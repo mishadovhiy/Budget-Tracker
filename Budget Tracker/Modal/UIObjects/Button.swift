@@ -11,7 +11,7 @@ import UIKit
 @IBDesignable
 class Button: UIButton {
     
-    @IBInspectable open var linkBackground = false {
+    @IBInspectable open var linkBackground:Bool = false {
         didSet {
             if linkBackground {
                 DispatchQueue.main.async {
@@ -55,10 +55,23 @@ class Button: UIButton {
     
     @IBInspectable open var cornerRadius: CGFloat = 0 {
         didSet {
-            layer.cornerRadius = cornerRadius
-            layer.masksToBounds = cornerRadius > 0
+            DispatchQueue.main.async {
+                self.layer.cornerRadius = self.cornerRadius
+            }
+        //    layer.masksToBounds = cornerRadius > 0
         }
     }
 
+    @IBInspectable open var shadowOpasity: Float = 0 {
+        didSet {
+            DispatchQueue.main.async {
+                self.layer.shadowColor = K.Colors.secondaryBackground2.cgColor
+                self.layer.shadowOffset = .zero
+                self.layer.shadowRadius = 10
+                self.layer.shadowOpacity = self.shadowOpasity
+            }
+        }
+        
+    }
     
 }

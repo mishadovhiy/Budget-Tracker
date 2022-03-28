@@ -199,7 +199,7 @@ class SuperViewController: UIViewController {
     
     struct headerData {
         let title: String
-        let description: String?
+        var description: String? = nil
     }
     
 
@@ -209,50 +209,7 @@ class SuperViewController: UIViewController {
         print("showNotification")
     }
     
-    public func notificationReceiver(notification: UNNotification) {
-        print("willPresentwillPresent")
-        print("received notification:", notification.request.content.body)
-      //  notification.request.content.threadIdentifier == "Debts"
-        notificationShowed = false
-      /*  self.loadingIndicator.completeWithActions(buttonsTitles: ("Cancel", "View"), showCloseButton: false, leftButtonActon: { (_) in
-            self.loadingIndicator.fastHide { (_) in
-                self.notificationShowed = true
-            }
-        }, rightButtonActon: { (_) in
-            self.loadingIndicator.show { (_) in
-                let load = LoadFromDB()
-                load.Debts { (loadedDebts, debtsError) in
-                    var debtsResult: [DebtsStruct] = []
-                    for i in 0..<loadedDebts.count {
-                        let name = loadedDebts[i][1]
-                        let amountToPay = loadedDebts[i][2]
-                        let dueDate = loadedDebts[i][3]
-                        debtsResult.append(DebtsStruct(name: name, amountToPay: amountToPay, dueDate: dueDate))
-                    }
-                    if debtsError == "" {
-                        appData.saveDebts(debtsResult)
-                    }
-                    var transactions:[TransactionsStruct] = []
-                    let allTrans = Array(appData.getTransactions)
-                    for i in 0..<allTrans.count{
-                        if allTrans[i].category == notification.request.content.title {
-                            transactions.append(allTrans[i])
-                        }
-                    }
-                    DispatchQueue.main.async {
-                        self.loadingIndicator.fastHide { (_) in
-                            self.showHistory(categpry: notification.request.content.title, transactions: transactions)
-                        }
-                    }
-                }
-            }
-            self.loadingIndicator.fastHide { (_) in
-                print("Go to Notif")
-                self.notificationShowed = true
-                
-            }
-        }, title: notification.request.content.title, description: notification.request.content.body, error: false)*///PASTAI
-    }
+
     
     var notificationShowed: Bool = true
 

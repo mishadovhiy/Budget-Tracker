@@ -249,6 +249,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 self.editingTF?.endEditing(true)
                 self.editingTF = nil
                 self.tableView.reloadData()
+
             }
             
         }
@@ -459,11 +460,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     var editingTfIndex: (Int?,Int?) = (nil,nil)
     
     var endAll = false
-    
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-       notificationReceiver(notification: notification)
-    }
-    
+
     @objc func pressedToDismiss(_ sender: UITapGestureRecognizer) {
         hideAll()
         
@@ -568,7 +565,16 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         navigationController?.setNavigationBarHidden(false, animated: true)
         
     }
-    
+    var subvsLayed = false
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        if !subvsLayed {
+            subvsLayed = true
+            self.tableView.alpha = 0
+        }
+        
+    }
     
     override func viewWillDisappear(_ animated: Bool) {
 

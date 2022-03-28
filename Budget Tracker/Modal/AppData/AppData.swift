@@ -377,34 +377,7 @@ class AppData {
     
     
     
-    var styles = Styles()
-    struct Styles {
 
-        func cornerRadius(buttons: [UIButton]) {
-            
-            for i in 0..<buttons.count {
-                buttons[i].layer.cornerRadius = 6
-            }
-
-        }
-        
-        /*func dimNewCell(_ transactionsCell: mainVCcell, index: Int, tableView: UITableView) {
-
-            DispatchQueue.main.async {
-                tableView.scrollToRow(at: IndexPath(row: index, section: 1), at: .bottom, animated: true)
-            }
-            UIView.animate(withDuration: 0.6) {
-                transactionsCell.contentView.backgroundColor = K.Colors.separetor
-            }
-            Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (timer) in
-                UIView.animate(withDuration: 0.6) {
-                    transactionsCell.contentView.backgroundColor = K.Colors.background
-                }
-            }
-        }*/
-
-        
-    }
     
     
     

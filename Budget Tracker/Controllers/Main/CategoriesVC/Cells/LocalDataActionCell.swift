@@ -34,12 +34,7 @@ class LocalDataActionCell: UITableViewCell {
         let deleteGesture = UITapGestureRecognizer(target: self, action: #selector(deletePress(_:)))
         self.deletePressed.addGestureRecognizer(deleteGesture)
     }
-    
-    override func draw(_ rect: CGRect) {
-        self.saveLocallyView.layer.cornerRadius = 6
-        self.sendPressed.layer.cornerRadius = 6
-        self.deletePressed.layer.cornerRadius = 6
-    }
+
     
     @objc func saveLocallyPress(_ sender: UITapGestureRecognizer) {
         needDownloadOnMainAppeare = true

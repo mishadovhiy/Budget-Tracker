@@ -8,11 +8,11 @@
 
 import UIKit
 
-class SelectUserVC: SuperViewController, UITableViewDelegate, UITableViewDataSource {
+class SelectValueVC: SuperViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var tableView: UITableView!
     
-    static var shared = SelectUserVC()
+    static var shared = SelectValueVC()
     var users:[String] = []
     var delegate: SelectUserVCDelegate?
     var titleText:String?
@@ -37,7 +37,7 @@ class SelectUserVC: SuperViewController, UITableViewDelegate, UITableViewDataSou
 
         DispatchQueue.main.async {
             let storyboard = UIStoryboard(name: "LogIn", bundle: nil)
-            let vc = storyboard.instantiateViewController(withIdentifier: "SelectUserVC") as! SelectUserVC
+            let vc = storyboard.instantiateViewController(withIdentifier: "SelectUserVC") as! SelectValueVC
             vc.users = data
             vc.selectedIdxAction = selected
             vc.titleText = title

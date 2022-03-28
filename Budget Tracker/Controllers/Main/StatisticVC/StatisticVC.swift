@@ -27,10 +27,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
 
     }
     
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-       notificationReceiver(notification: notification)
-    }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         deselectAllCells()
@@ -331,9 +328,7 @@ extension StatisticVC: UITableViewDelegate, UITableViewDataSource {
         cell.percentLabel.text = "\(String(format: "%.2f", getPercent(n: data.value)))%"
         let r = (100 * data.value / maxValue) / 100
         cell.progressBar.progress = Float(r)
-       // let color = colorNamed(allData[indexPath.row].category.color)//setupColorView(indexPath: indexPath.row)
-       // cell.colorView.layer.cornerRadius = 3
-       // cell.colorView.backgroundColor = color
+
         cell.progressBar.tintColor = AppData.colorNamed(allData[indexPath.row].category.color)
         return cell
         

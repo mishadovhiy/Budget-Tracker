@@ -15,7 +15,7 @@ import AVFoundation
 var lastSelectedDate:String?
 
 protocol TransitionVCProtocol {
-    func addNewTransaction(value: String, category: String, date: String, comment: String, repreat:TransactionsStruct.ReminderType?, notifTime:DateComponents?)
+    func addNewTransaction(value: String, category: String, date: String, comment: String, repreat:Bool, notifTime:DateComponents?)
     func editTransaction(_ transaction:TransactionsStruct, was:TransactionsStruct)
     func quiteTransactionVC(reload:Bool)
     func deletePressed()
@@ -90,7 +90,6 @@ class TransitionVC: SuperViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        print(segue.identifier, "transactionVC")
         switch segue.identifier {
         case "toCalendar":
             let vc = segue.destination as! CalendarVC
@@ -102,9 +101,10 @@ class TransitionVC: SuperViewController {
 
             if paymentReminderAdding {
                 vc.vcHeaderData = headerData(title: "Select".localize + " " + "Date".localize, description: "Get notification reminder on selected date".localize)
+                vc.datePickerDate = ""
+                vc.selectingDate = false
                 vc.needPressDone = true
                 vc.canSelectOnlyOne = true
-                vc.selectingDate = false
             }
             
 
@@ -134,8 +134,7 @@ class TransitionVC: SuperViewController {
             
            // segmentControll.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.bala, for: .normal)
            // purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.category ?? .white], for: .selected)
-            closeButton.layer.cornerRadius = 5
-            doneButton.layer.cornerRadius = 5
+
             dateTextField.inputView = UIView(frame: .zero)
             dateTextField.isUserInteractionEnabled = false
             dateTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(datePressed)))

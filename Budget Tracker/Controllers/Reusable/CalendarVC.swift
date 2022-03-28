@@ -60,10 +60,7 @@ class CalendarVC: SuperViewController {
         super.viewWillLayoutSubviews()
         if !svsLoaded {
             svsLoaded = true
-        
-        self.doneButton.backgroundColor = K.Colors.link
-        doneButton.layer.cornerRadius = 5
-        closeButton.layer.cornerRadius = 5
+
         let height = self.view.frame.height
         startButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, height + self.startButton.layer.frame.height, 0)
         endButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, height + self.endButton.layer.frame.height, 0)
@@ -108,53 +105,28 @@ class CalendarVC: SuperViewController {
                 if self.vcHeaderData?.description != "" {
                     self.mainDescriptionLabel.text = self.vcHeaderData?.description
                 }
+                self.mainDescriptionLabel.isHidden = self.vcHeaderData?.description ?? "" == ""
+                
             }
         }
-        
-      /*  if #available(iOS 13.0, *) {
-            if darkAppearence {
-                self.view.backgroundColor = UIColor(named: "darkTableColor")
-                self.textField.superview?.backgroundColor = UIColor(named: "darkTableColor")
-                self.collectionView.backgroundColor = UIColor(named: "darkTableColor")
-                self.textField.textColor = K.Colors.background
-                weekDaySeparetorView.backgroundColor = UIColor(named: "darkSeparetor")
-                for i in 0..<weekDayLabels.count{
-                    weekDayLabels[i].backgroundColor = UIColor(named: "darkTableColor")
-                    weekDayLabels[i].textColor = i > 4 ? K.Colors.balanceV : K.Colors.balanceT
-                }
-            }
-        } else {
-            DispatchQueue.main.async {
-                if self.darkAppearence {
-                    self.view.backgroundColor = UIColor(named: "darkTableColor")
-                    self.textField.superview?.backgroundColor = UIColor(named: "darkTableColor")
-                    self.collectionView.backgroundColor = UIColor(named: "darkTableColor")
-                    self.textField.textColor = K.Colors.background
-                    
-                    self.weekDaySeparetorView.backgroundColor = UIColor(named: "darkSeparetor")
-                    for i in 0..<self.weekDayLabels.count{
-                        self.weekDayLabels[i].backgroundColor = UIColor(named: "darkTableColor")
-                        self.weekDayLabels[i].textColor = i > 4 ? K.Colors.balanceV : K.Colors.balanceT
-                    }
-                }
-            }
-        }*/
         
         updaiteUI()
     }
 
 
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-       notificationReceiver(notification: notification)
-    }
-    
+
     override func viewWillAppear(_ animated: Bool) {
-        if delegate != nil {
-            if vcHeaderData == nil {
-                navigationController?.setNavigationBarHidden(false, animated: true)
-                headerView.isHidden = true
-                title = "Calendar"
+        var hideNav:Bool {
+            if delegate != nil {
+                return false
+            } else {
+                return true
             }
+        }
+        DispatchQueue.main.async {
+            self.navigationController?.setNavigationBarHidden(hideNav, animated: true)
+            self.title = "Calendar"
+            self.headerView.isHidden = self.vcHeaderData == nil
         }
     }
     
@@ -235,8 +207,7 @@ class CalendarVC: SuperViewController {
         swipeRight.direction = .right;
         view.addGestureRecognizer(swipeLeft)
         view.addGestureRecognizer(swipeRight)
-        appData.styles.cornerRadius(buttons: [startButton, endButton])
-        
+
         print(selectedFrom, "selectedFromselectedFromselectedFromselectedFrom")
         year = appData.filter.getYearFromString(s: selectedFrom == "" ? today : selectedFrom)
         month = appData.filter.getMonthFromString(s: selectedFrom == "" ? today : selectedFrom)
@@ -736,18 +707,18 @@ class CalendarVC: SuperViewController {
                
             }
         } else {
-           /* if needPressDone {// test selecting from filtertwo values
-                DispatchQueue.main.async {
-                    self.dismiss(animated: true) {
-                        self.delegate?.dateSelected(date: self.selectedFrom)
-                    }
-                }
-            }*/
+
             let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: self.timePicker.date)
             DispatchQueue.main.async {
-                self.dismiss(animated: true) {
+                if self.navigationController?.isNavigationBarHidden ?? true {
+                    self.dismiss(animated: true) {
+                        self.delegate?.dateSelected(date: self.selectedFrom, time: components)
+                    }
+                } else {
                     self.delegate?.dateSelected(date: self.selectedFrom, time: components)
+                    self.navigationController?.popViewController(animated: true)
                 }
+                
             }
         }
         
@@ -792,10 +763,7 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
             upToFour = (0,0)
         }
         print(upToFour, "upToFourupToFour")
-        
-        
-        
-        cell.setupCell()
+
         cell.dayLabel.text = days[indexPath.row] != 0 ? "\(days[indexPath.row])" : ""
         
         let dayCell = makeTwo(n: days[indexPath.row])

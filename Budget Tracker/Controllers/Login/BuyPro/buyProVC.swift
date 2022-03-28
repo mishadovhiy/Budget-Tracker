@@ -89,10 +89,7 @@ class BuyProVC: SuperViewController {
         self.closeButton.alpha = navigationController == nil ? 1 : 0
         
     }
-    
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-       notificationReceiver(notification: notification)
-    }
+
 
     
     func showPurchasedIndicator() {

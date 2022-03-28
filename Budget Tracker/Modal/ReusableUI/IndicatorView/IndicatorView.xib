@@ -38,7 +38,7 @@
                             <rect key="frame" x="57" y="100" width="300" height="652"/>
                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </view>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nqa-Ge-IxV">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Nqa-Ge-IxV" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
                             <rect key="frame" x="57" y="321" width="300" height="210"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="SlJ-b0-wIK">
@@ -202,7 +202,7 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Jx0-V3-LLo">
                                                     <rect key="frame" x="0.0" y="0.0" width="270" height="40"/>
                                                     <subviews>
-                                                        <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C9g-jg-U4g">
+                                                        <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C9g-jg-U4g" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="0.0" width="130" height="40"/>
                                                             <color key="backgroundColor" name="balanceValueColor"/>
                                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
@@ -210,11 +210,19 @@
                                                             <state key="normal" title="Sing in">
                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             </state>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                    <real key="value" value="9"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                                                    <real key="value" value="0.59999999999999998"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
                                                             <connections>
                                                                 <action selector="buttonPress:" destination="N3p-ca-Qfb" eventType="touchUpInside" id="c3r-zL-wbN"/>
                                                             </connections>
                                                         </button>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vxe-5r-ts2">
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vxe-5r-ts2" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
                                                             <rect key="frame" x="140" y="0.0" width="130" height="40"/>
                                                             <color key="backgroundColor" name="yellowColor"/>
                                                             <constraints>
@@ -225,6 +233,14 @@
                                                             <state key="normal" title="Cancel">
                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             </state>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                    <real key="value" value="9"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                                                    <real key="value" value="0.59999999999999998"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
                                                             <connections>
                                                                 <action selector="buttonPress:" destination="N3p-ca-Qfb" eventType="touchUpInside" id="Ihb-Fp-EUK"/>
                                                             </connections>
@@ -245,6 +261,14 @@
                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="140" id="c8m-qT-HDV"/>
                                 <constraint firstAttribute="trailing" secondItem="SlJ-b0-wIK" secondAttribute="trailing" constant="15" id="uLt-IZ-8OA"/>
                             </constraints>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                    <real key="value" value="0.90000000000000002"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                    <real key="value" value="9"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
                         </view>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -300,6 +324,14 @@
             <point key="canvasLocation" x="137.68115942028987" y="61.607142857142854"/>
         </view>
     </objects>
+    <designables>
+        <designable name="C9g-jg-U4g">
+            <size key="intrinsicContentSize" width="48" height="30"/>
+        </designable>
+        <designable name="Vxe-5r-ts2">
+            <size key="intrinsicContentSize" width="49" height="30"/>
+        </designable>
+    </designables>
     <resources>
         <image name="checkmark.circle.fill" catalog="system" width="128" height="121"/>
         <image name="separetor" width="270" height="2"/>
