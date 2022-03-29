@@ -35,8 +35,11 @@ class RemindersVC: SuperViewController {
             }
             
         }
-        
-        tableData = result
+        let comp = DateComponents()
+        tableData = result.sorted{
+            Calendar.current.date(from: $0.time ?? comp ) ?? Date.distantFuture >
+                    Calendar.current.date(from: $1.time ?? comp ) ?? Date.distantFuture
+        }
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
@@ -104,6 +107,7 @@ extension RemindersVC:UITableViewDelegate, UITableViewDataSource {
         let data = tableData[indexPath.row]
         cell.amountLabel.text = data.transaction.value
         let date = data.time
+        cell.dayNumLabel.text = "\(AppData.makeTwo(n: date?.day))"
         cell.dateLabel.text = (date?.stringMonth ?? "") + "\n\(date?.year ?? 0)"
         cell.timeLabel.text = date?.stringTime
         cell.expiredLabel.isHidden = !(date?.expired ?? false)
@@ -129,12 +133,12 @@ extension RemindersVC :TransitionVCProtocol {
             reminder.id = "paymentReminder" + UUID().uuidString
             reminder.repeatedMonths = nil
             self.db.saveReminder(transaction: new, newReminder: reminder) { added in
+                self.ai.fastHide { _ in
+                    
+                }
                 if !added {
                     self.newMessage.show(title: "Error creating reminder".localize, description: "Try again".localize, type: .error)
                 } else {
-                    self.ai.fastHide { _ in
-                        
-                    }
                     self.loadData()
                 }
             }

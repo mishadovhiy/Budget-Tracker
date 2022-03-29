@@ -33,6 +33,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     
     public lazy var deviceType:DeviceType = {
         if #available(iOS 13.0, *) {
+            #if !os(iOS)
+            return .mac
+            #endif
             return .primary
         } else {
             return .underIos13

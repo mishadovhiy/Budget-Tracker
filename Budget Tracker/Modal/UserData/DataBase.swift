@@ -49,19 +49,23 @@ class DataBase {
         let notifications = Notifications()
         let body = transaction.value + " " + "for category".localize + ": " + transaction.category.name
         if let date = newReminder.time?.createDateComp(date: transaction.date, time: newReminder.time) {
-            
-            notifications.addLocalNotification(date: date, title: "Payment reminder", id: newReminder.id, body: body) { added in
-                if added {
-                    var allReminders = UserDefaults.standard.value(forKey: "PaymentReminder") as? [[String:Any]] ?? []
-                    var newTransaction = transaction
-                    newTransaction.reminder = newReminder.dict
-                    allReminders.append(self.transactionToDict(newTransaction))
-                    UserDefaults.standard.setValue(allReminders, forKey: "PaymentReminder")
-                    completion(true)
-                } else {
-                    completion(false)
+            if date.expired {
+                completion(false)
+            } else {
+                notifications.addLocalNotification(date: date, title: "Payment reminder", id: newReminder.id, body: body) { added in
+                    if added {
+                        var allReminders = UserDefaults.standard.value(forKey: "PaymentReminder") as? [[String:Any]] ?? []
+                        var newTransaction = transaction
+                        newTransaction.reminder = newReminder.dict
+                        allReminders.append(self.transactionToDict(newTransaction))
+                        UserDefaults.standard.setValue(allReminders, forKey: "PaymentReminder")
+                        completion(true)
+                    } else {
+                        completion(false)
+                    }
                 }
             }
+            
         } else {
             completion(false)
         }

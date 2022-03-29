@@ -33,7 +33,11 @@ extension RemindersVC {
             get {
                 let timeStr = dict["time"] as? String
                 let time = transaction.compToIso(dateStringOp: timeStr)
-                return time
+                var day =  transaction.compToIso(dateStringOp: transaction.date)
+                day?.hour = time?.hour
+                day?.minute = time?.minute
+                day?.second = time?.second
+                return day
             }
             set {
                 if let strTime = newValue?.toIsoString() {
