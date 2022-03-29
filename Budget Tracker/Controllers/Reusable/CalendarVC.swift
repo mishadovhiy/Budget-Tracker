@@ -238,7 +238,7 @@ class CalendarVC: SuperViewController {
 
         let formatter  = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
-        let strDate = "\(year)-\(makeTwo(n: month))-02"
+        let strDate = "\(year)-\(AppData.makeTwo(n: month))-02"
         let datee = formatter.date(from: strDate)
         let calendarr = Calendar(identifier: .gregorian)
         let weekNumber = calendarr.component(.weekday, from: datee ?? Date())-3
@@ -440,9 +440,9 @@ class CalendarVC: SuperViewController {
                 let between = (dayTo - dayFrom) - 1
                 var start = dayFrom + daystoWeekStart
                 for _ in 0..<between {
-                    let dayCell = makeTwo(n: days[start])
-                    let monthCell = makeTwo(n: month)
-                    let yearCell = makeTwo(n: year)
+                    let dayCell = AppData.makeTwo(n: days[start])
+                    let monthCell = AppData.makeTwo(n: month)
+                    let yearCell = AppData.makeTwo(n: year)
                     let new = "\(dayCell).\(monthCell).\(yearCell)"
                     daysBetween.append(new)
                     start += 1
@@ -494,7 +494,7 @@ class CalendarVC: SuperViewController {
                     yearA += 1
                 }
             }
-            let new: String = "\(makeTwo(n: dayA)).\(makeTwo(n: monthA)).\(makeTwo(n: yearA))"
+            let new: String = "\(AppData.makeTwo(n: dayA)).\(AppData.makeTwo(n: monthA)).\(AppData.makeTwo(n: yearA))"
             if new == selectedTo {
                 break
             }
@@ -766,9 +766,9 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
 
         cell.dayLabel.text = days[indexPath.row] != 0 ? "\(days[indexPath.row])" : ""
         
-        let dayCell = makeTwo(n: days[indexPath.row])
-        let monthCell = makeTwo(n: month)
-        let yearCell = makeTwo(n: year)
+        let dayCell = AppData.makeTwo(n: days[indexPath.row])
+        let monthCell = AppData.makeTwo(n: month)
+        let yearCell = AppData.makeTwo(n: year)
         cell.dayLabel.alpha = 1
         cell.cellTypeLabel.text = "\(dayCell).\(monthCell).\(yearCell)"
 
@@ -808,9 +808,9 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
             UIImpactFeedbackGenerator().impactOccurred()
         }
         let cell = collectionView.cellForItem(at: indexPath) as! CVCell
-        let dayCell = makeTwo(n: days[indexPath.row])
-        let monthCell = makeTwo(n: month)
-        let yearCell = makeTwo(n: year)
+        let dayCell = AppData.makeTwo(n: days[indexPath.row])
+        let monthCell = AppData.makeTwo(n: month)
+        let yearCell = AppData.makeTwo(n: year)
         if needPressDone {
             if cell.cellTypeLabel.text == selectedFrom || cell.cellTypeLabel.text == selectedTo {
               /*  DispatchQueue.main.async {

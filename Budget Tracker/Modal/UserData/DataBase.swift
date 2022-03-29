@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Foundation
 
 
 
@@ -26,15 +27,35 @@ class DataBase {
         return result
     }
     
-    func saveReminder(transaction:TransactionsStruct, time:DateComponents?, completion: @escaping (Bool) -> ()) {
+    func deleteReminder(id:String) {
+        DispatchQueue.main.async {
+            AppDelegate.shared?.center.removePendingNotificationRequests(withIdentifiers: [id])
+        }
+        let data = Array(UserDefaults.standard.value(forKey: "PaymentReminder") as? [[String:Any]] ?? [])
+        var result:[[String:Any]] = []
+        for i in 0..<data.count {
+            if let reminder = data[i]["Reminder"] as? [String:Any],
+               let remID = reminder["id"] as? String {
+                if remID != id {
+                    result.append(data[i])
+                }
+            }
+            
+         }
+        UserDefaults.standard.setValue(result, forKey: "PaymentReminder")
+    }
+    
+    func saveReminder(transaction:TransactionsStruct, newReminder:RemindersVC.RemindersData, completion: @escaping (Bool) -> ()) {
         let notifications = Notifications()
         let body = transaction.value + " " + "for category".localize + ": " + transaction.category.name
-        if let date = time?.createDateComp(date: transaction.date, time: time) {
+        if let date = newReminder.time?.createDateComp(date: transaction.date, time: newReminder.time) {
             
-            notifications.addLocalNotification(date: date, title: "Payment reminder", id: "paymentReminder", body: body) { added in
+            notifications.addLocalNotification(date: date, title: "Payment reminder", id: newReminder.id, body: body) { added in
                 if added {
                     var allReminders = UserDefaults.standard.value(forKey: "PaymentReminder") as? [[String:Any]] ?? []
-                    allReminders.append(self.transactionToDict(transaction))
+                    var newTransaction = transaction
+                    newTransaction.reminder = newReminder.dict
+                    allReminders.append(self.transactionToDict(newTransaction))
                     UserDefaults.standard.setValue(allReminders, forKey: "PaymentReminder")
                     completion(true)
                 } else {
@@ -46,6 +67,13 @@ class DataBase {
         }
         
     }
+    
+    
+    
+    
+    
+    
+    
     
     
     func category(_ id: String, local: Bool = false) -> NewCategories? {
@@ -339,37 +367,7 @@ class DataBase {
 }
 
 
-struct NewCategories {
-    var id: Int
-    var name: String
-    var icon: String
-    var color: String
-    let purpose: CategoryPurpose
-    var dueDate: DateComponents?
-    var amountToPay: Double? = nil
 
-    var transactions: [TransactionsStruct] {
-        let db = DataBase()
-        return db.transactions(for: self)
-    }
-    
-}
 
-struct TransactionsStruct {
-    let value: String
-    var categoryID: String
-    var date: String
-    let comment: String
-    
-    var reminder:[String:Any]? = nil
-    
-    func compToIso() {
-        
-    }
-    
-    var category:NewCategories {
-        let db = DataBase()
-        return db.category(categoryID) ?? NewCategories(id: -1, name: "Unknown", icon: "", color: "", purpose: .expense)
-    }
-}
+
 

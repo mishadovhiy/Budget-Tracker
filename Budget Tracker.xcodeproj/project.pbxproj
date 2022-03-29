@@ -56,6 +56,9 @@
 		8B91F08E27E587A800B74F5A /* MoreOptionsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91F08D27E587A800B74F5A /* MoreOptionsData.swift */; };
 		8B91F09127E58EF900B74F5A /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91F09027E58EF900B74F5A /* Text.swift */; };
 		8BAA72B527CB7D41005298B6 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BAA72B427CB7D41005298B6 /* Keys.swift */; };
+		8BB75D4227F26CA000AE71A1 /* RemindersData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB75D4127F26CA000AE71A1 /* RemindersData.swift */; };
+		8BB75D4427F294DE00AE71A1 /* TransactionStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB75D4327F294DE00AE71A1 /* TransactionStruct.swift */; };
+		8BB75D4727F2952300AE71A1 /* CategoriesStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB75D4627F2952300AE71A1 /* CategoriesStruct.swift */; };
 		8BC31D7B27E3E5EA00FBC939 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC31D7A27E3E5EA00FBC939 /* Button.swift */; };
 		8BC8525027E28D0F00C5A3A4 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC8524F27E28D0F00C5A3A4 /* UserSettings.swift */; };
 		8BD2E77C25B8622100D4DFBF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */; };
@@ -153,6 +156,9 @@
 		8B91F08D27E587A800B74F5A /* MoreOptionsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreOptionsData.swift; sourceTree = "<group>"; };
 		8B91F09027E58EF900B74F5A /* Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
 		8BAA72B427CB7D41005298B6 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
+		8BB75D4127F26CA000AE71A1 /* RemindersData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersData.swift; sourceTree = "<group>"; };
+		8BB75D4327F294DE00AE71A1 /* TransactionStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionStruct.swift; sourceTree = "<group>"; };
+		8BB75D4627F2952300AE71A1 /* CategoriesStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesStruct.swift; sourceTree = "<group>"; };
 		8BC31D7A27E3E5EA00FBC939 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		8BC8524F27E28D0F00C5A3A4 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -348,6 +354,7 @@
 				8B35DA6525C6F124008A8719 /* Keychain.swift */,
 				8BE60E5827726EA8007B7FB3 /* LastSelected.swift */,
 				8BC8524F27E28D0F00C5A3A4 /* UserSettings.swift */,
+				8BB75D4527F294ED00AE71A1 /* Structs */,
 			);
 			path = UserData;
 			sourceTree = "<group>";
@@ -417,6 +424,7 @@
 			children = (
 				8B78559B27F0C9F200169A93 /* RemindersVC.swift */,
 				8B7855A027F0CA3000169A93 /* Cells */,
+				8BB75D4127F26CA000AE71A1 /* RemindersData.swift */,
 			);
 			path = RemindersVC;
 			sourceTree = "<group>";
@@ -469,6 +477,15 @@
 				8B26329227E69EFA0086C3A8 /* localizationDictUA.swift */,
 			);
 			path = UA;
+			sourceTree = "<group>";
+		};
+		8BB75D4527F294ED00AE71A1 /* Structs */ = {
+			isa = PBXGroup;
+			children = (
+				8BB75D4327F294DE00AE71A1 /* TransactionStruct.swift */,
+				8BB75D4627F2952300AE71A1 /* CategoriesStruct.swift */,
+			);
+			path = Structs;
 			sourceTree = "<group>";
 		};
 		8BC1B23A27D3136C002C1E38 /* ReusableUI */ = {
@@ -765,13 +782,16 @@
 				8B26329327E69EFA0086C3A8 /* localizationDictUA.swift in Sources */,
 				8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */,
 				8B47F92D2773B90300FD96AA /* MessageView.swift in Sources */,
+				8BB75D4427F294DE00AE71A1 /* TransactionStruct.swift in Sources */,
 				8B52CC6727E3001B008D5348 /* UITableViewCell.swift in Sources */,
 				8B26328627E67E720086C3A8 /* UISegmentedControl.swift in Sources */,
+				8BB75D4727F2952300AE71A1 /* CategoriesStruct.swift in Sources */,
 				8B91EF1127EBD7680026D0A4 /* Keys.swift in Sources */,
 				8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */,
 				8B91F09127E58EF900B74F5A /* Text.swift in Sources */,
 				8B57837E275E6977007BA9EC /* SideBar.swift in Sources */,
 				8BFA15D427E8E87B0078856A /* LocalDataActionCell.swift in Sources */,
+				8BB75D4227F26CA000AE71A1 /* RemindersData.swift in Sources */,
 				8BF63E8B276294F2002E8601 /* SelectValueVC.swift in Sources */,
 				8B26328227E677930086C3A8 /* Label.swift in Sources */,
 				8BAA72B527CB7D41005298B6 /* Keys.swift in Sources */,

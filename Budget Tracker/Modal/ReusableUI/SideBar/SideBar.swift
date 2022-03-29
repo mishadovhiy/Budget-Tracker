@@ -46,7 +46,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
             return trialDays == 0 ? [accpuntCell, settingsCell] : [accpuntCell, settingsCell, trialCell]
         }
         
-        let upcommingRemiders = CellData(name: "PaymentReminders", value: "", segue: "", image: "", pro: true, selectAction: toRemindersVC)
+        let upcommingRemiders = CellData(name: "PaymentReminders", value: "", segue: "toReminders", image: "", pro: true)
         
         tableData = [
             TableData(section: accountSection, title: "", hidden: false),
@@ -102,7 +102,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
             cell.nameLabel.superview?.alpha = tableData[indexPath.section].section[indexPath.row].name == "" ? 0 : 1
             cell.nameLabel.text = tableData[indexPath.section].section[indexPath.row].name
             cell.valueLabel.text = tableData[indexPath.section].section[indexPath.row].value
-            if AppDelegate.shared.symbolsAllowed {
+            if (AppDelegate.shared?.symbolsAllowed ?? false) {
                 cell.optionIcon.image = AppData.iconNamed(tableData[indexPath.section].section[indexPath.row].image)
             }
             return cell
@@ -157,7 +157,7 @@ class SideBardCell: UITableViewCell {
         selected.backgroundColor = K.Colors.primaryBacground
         self.selectedBackgroundView = selected
 
-        if !AppDelegate.shared.symbolsAllowed {
+        if !(AppDelegate.shared?.symbolsAllowed ?? false) {
             optionIcon.isHidden = true
         }
     }

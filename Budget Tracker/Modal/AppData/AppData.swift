@@ -82,7 +82,7 @@ class AppData {
         }
         set {
             UserDefaults.standard.setValue(newValue, forKey: "deliveredNotificationIDs")
-            AppDelegate.shared.center.getDeliveredNotifications { notifications in
+            AppDelegate.shared!.center.getDeliveredNotifications { notifications in
                 DispatchQueue.main.async {
                     UIApplication.shared.applicationIconBadgeNumber = notifications.count + newValue.count
                 }
@@ -730,6 +730,20 @@ class AppData {
     }
     
     
+    
+    static func makeTwo(n: Int?) -> String {
+        if let num = n {
+            if num < 10 {
+                return "0\(num)"
+            } else {
+                return "\(num)"
+            }
+        } else {
+            return "00"
+        }
+        
+    }
+    
 }
 
 
@@ -798,11 +812,7 @@ func stringToPurpose(_ string: String) -> CategoryPurpose {
     }
 }
 
-struct DebtsStruct {
-    let name: String
-    var amountToPay: String
-    var dueDate: String
-}
+
 
 
 

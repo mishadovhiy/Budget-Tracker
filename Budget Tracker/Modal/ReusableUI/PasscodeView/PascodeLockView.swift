@@ -146,7 +146,7 @@ class PascodeLockView: UIView, UITextFieldDelegate {
         } else {
             DispatchQueue.main.async {
                 AudioServicesPlaySystemSound(1102)
-                AppDelegate.shared.newMessage.show(title: "Wrong code!".localize, type: .error)
+                AppDelegate.shared!.newMessage.show(title: "Wrong code!".localize, type: .error)
                 self.enteredValue = ""
             }
         }

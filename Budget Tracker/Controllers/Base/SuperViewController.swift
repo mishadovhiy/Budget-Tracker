@@ -11,8 +11,8 @@ import UserNotifications
 
 class SuperViewController: UIViewController {
 
-    lazy var newMessage: MessageView = AppDelegate.shared.newMessage
-    lazy var ai: IndicatorView = AppDelegate.shared.ai
+    lazy var newMessage: MessageView = AppDelegate.shared!.newMessage
+    lazy var ai: IndicatorView = AppDelegate.shared!.ai
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         //screen rotation
     }
@@ -68,13 +68,7 @@ class SuperViewController: UIViewController {
     
  
     
-    func makeTwo(n: Int) -> String {
-        if n < 10 {
-            return "0\(n)"
-        } else {
-            return "\(n)"
-        }
-    }
+    
     func getMonthFrom(string: String) -> Int {
         if string != "" {
             if string.count == 10 {

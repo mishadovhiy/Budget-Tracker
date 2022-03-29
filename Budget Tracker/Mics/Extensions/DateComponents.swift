@@ -53,4 +53,23 @@ extension DateComponents {
         return date
     }
     
+    //returnMonth() --- indeed : to do:replace!!!
+    var stringMonth:String? {
+        if let month = self.month {
+            let monthes = [
+                1: "Jan".localize, 2: "Feb".localize, 3: "Mar".localize, 4: "Apr".localize, 5: "May".localize, 6: "Jun".localize, 7: "Jul".localize, 8: "Aug".localize, 9: "Sep".localize, 10: "Oct".localize, 11: "Nov".localize, 12: "Dec".localize
+            ]
+            return monthes[month]
+        } else {
+            return nil
+        }
+    }
+    
+    
+    var stringTime:String? {
+        let hour = AppData.makeTwo(n: self.hour)
+        let second = AppData.makeTwo(n: self.minute)
+        return "\(hour):\(second)"
+    }
+
 }

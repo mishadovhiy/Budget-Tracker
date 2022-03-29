@@ -98,6 +98,10 @@ class ViewController: SuperViewController {
                     self.openFiler = false
                         self.performSegue(withIdentifier: "toFiterVC", sender: self)
                 }
+                if let addedAction = self.actionAfterAdded {
+                    self.actionAfterAdded = nil
+                    addedAction(true)
+                }
                 
             }
         }
@@ -604,7 +608,7 @@ class ViewController: SuperViewController {
                                 if loadedData[i][2] != appData.password {
                             
                                     self.forceLoggedOutUser = appData.username
-                                    if AppDelegate.shared.deviceType != .primary {
+                                    if (AppDelegate.shared?.deviceType ?? .mac) != .primary {
                                         
                                         DispatchQueue.main.async {
                                             self.performSegue(withIdentifier: "toSingIn", sender: self)
@@ -698,8 +702,8 @@ class ViewController: SuperViewController {
     func allDaysBetween() {
         
         if getYearFrom(string: appData.filter.to) == getYearFrom(string: appData.filter.from) {
-            let lastDay = "31.\(makeTwo(n: appData.filter.getMonthFromString(s: appData.filter.getToday(appData.filter.filterObjects.currentDate)))).\(appData.filter.getYearFromString(s: appData.filter.getToday(appData.filter.filterObjects.currentDate)))"
-            let firstDay = "01.\(makeTwo(n: appData.filter.getMonthFromString(s: appData.filter.getToday(appData.filter.filterObjects.currentDate)))).\(appData.filter.getYearFromString(s: appData.filter.getToday(appData.filter.filterObjects.currentDate)))"
+            let lastDay = "31.\(AppData.makeTwo(n: appData.filter.getMonthFromString(s: appData.filter.getToday(appData.filter.filterObjects.currentDate)))).\(appData.filter.getYearFromString(s: appData.filter.getToday(appData.filter.filterObjects.currentDate)))"
+            let firstDay = "01.\(AppData.makeTwo(n: appData.filter.getMonthFromString(s: appData.filter.getToday(appData.filter.filterObjects.currentDate)))).\(appData.filter.getYearFromString(s: appData.filter.getToday(appData.filter.filterObjects.currentDate)))"
             appData.filter.to = appData.filter.to == "" ? lastDay : appData.filter.to
             appData.filter.from = appData.filter.from == "" ? firstDay : appData.filter.from
             let to = appData.filter.to
@@ -790,7 +794,7 @@ class ViewController: SuperViewController {
     
     var safeArreaHelperView: UIView?
     
-    let center = AppDelegate.shared.center
+    let center = AppDelegate.shared?.center
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         if screenType != .home {
@@ -812,7 +816,7 @@ class ViewController: SuperViewController {
         self.safeArreaHelperView?.alpha = 0
         if !safeArreaHelperViewAdded {
             safeArreaHelperViewAdded = true
-            if let window = AppDelegate.shared.window {
+            if let window = AppDelegate.shared?.window {
                 DispatchQueue.main.async {
                     let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: safeTop))
                     self.safeArreaHelperView = view
@@ -1053,7 +1057,7 @@ class ViewController: SuperViewController {
                         yearA += 1
                     }
                 }
-                let new: String = "\(makeTwo(n: dayA)).\(makeTwo(n: monthA)).\(makeTwo(n: yearA))"
+                let new: String = "\(AppData.makeTwo(n: dayA)).\(AppData.makeTwo(n: monthA)).\(AppData.makeTwo(n: yearA))"
                 daysBetween.append(new) // was bellow break: last day in month wasnt displeying
                 if new == appData.filter.to {
                 print("breake new == appData.filter.to; new: \(new), appData.filter.to: \(appData.filter.to)")
@@ -1206,6 +1210,10 @@ class ViewController: SuperViewController {
             }
         }
         switch segue.identifier {
+        case "toReminders":
+       //     let nav = segue.destination as! UINavigationController
+            let vc = segue.destination as! RemindersVC
+            
         case "toDebts":
             print("k")
             let vc = segue.destination as! CategoriesVC
@@ -1467,6 +1475,7 @@ class ViewController: SuperViewController {
             self.mainTableView.reloadData()
         }
     }
+    var actionAfterAdded:((Bool) -> ())?
 }
 
 //MARK: - extension
@@ -1551,9 +1560,10 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             let cell = tableView.dequeueReusableCell(withIdentifier: "mainHeaderCell") as! mainHeaderCell
             
             cell.dateLabel.textColor = K.Colors.link
-            cell.dateLabel.text = "\(makeTwo(n: newTableData[section - 1].date.day ?? 0))"
-            cell.monthLabel.text = "\(returnMonth(newTableData[section - 1].date.month ?? 0)),\n\(newTableData[section - 1].date.year ?? 0)"
-            cell.yearLabel.text = "\(newTableData[section - 1].date.year ?? 0)"
+            let date = newTableData[section - 1].date
+            cell.dateLabel.text = "\(AppData.makeTwo(n: date.day ?? 0))"
+            cell.monthLabel.text =  date.stringMonth
+            cell.yearLabel.text = "\(date.year ?? 0)"
             let v = cell.contentView
             cell.mainView.layer.cornerRadius = 15
             cell.mainView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -1644,7 +1654,7 @@ extension ViewController: TransitionVCProtocol {
         }
     }
     
-    func editTransaction(_ transaction: TransactionsStruct, was: TransactionsStruct) {
+    func editTransaction(_ transaction: TransactionsStruct, was: TransactionsStruct, reminderTime:DateComponents?, repeated:Bool?) {
         let delete = DeleteFromDB()
         delete.newTransaction(was) { _ in
            // let save = SaveToDB()
@@ -1689,25 +1699,11 @@ extension ViewController: TransitionVCProtocol {
             }
         }
     }
-    
-    func addNewTransaction(value: String, category: String, date: String, comment: String, repreat:Bool, notifTime:DateComponents?) {
-        let new = //TransactionsStruct(value: value, categoryID: category, date: date, comment: comment, reminderType: repreat)
-        TransactionsStruct(value: <#T##String#>, categoryID: <#T##String#>, date: <#T##String#>, comment: <#T##String#>, reminder: <#T##[String : Any]?#>)
-        if screenType == .home {
-            addNewTransaction(new)
-        } else {
-            
-            db.saveReminder(transaction: new, time: notifTime) { added in
-                if !added {
-                    self.newMessage.show(title: "Error creating reminder".localize, description: "Try again".localize, type: .error)
-                } else {
-                    self.downloadFromDB()
-                }
-            }
-        }
-        
-        
+    func addNewTransaction(value: String, category: String, date: String, comment: String, reminderTime:DateComponents?, repeated:Bool?) {
+        let new = TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)
+        addNewTransaction(new)
     }
+
     
     func quiteTransactionVC(reload:Bool){
         self.editingTransaction = nil

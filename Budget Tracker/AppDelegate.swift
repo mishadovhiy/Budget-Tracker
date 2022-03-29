@@ -13,7 +13,7 @@ import AVFoundation
 class AppDelegate: UIResponder, UIApplicationDelegate{
 
     var window: UIWindow?
-    static let shared = AppDelegate()
+    static var shared:AppDelegate?
     let center = UNUserNotificationCenter.current()
     
     
@@ -49,6 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        AppDelegate.shared = self
         window?.tintColor = AppData.colorNamed(AppData.linkColor)
         center.delegate = self
         window?.backgroundColor = K.Colors.primaryBacground
@@ -199,7 +200,9 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     
 /// methods
     func removeNotification(id:String) {
-        center.removeDeliveredNotifications(withIdentifiers: [id])
+        DispatchQueue.main.async {
+            self.center.removeDeliveredNotifications(withIdentifiers: [id])
+        }
         let deliveredHolder = appData.deliveredNotificationIDs
         var newNotif:[String] = []
         for i in 0..<deliveredHolder.count {

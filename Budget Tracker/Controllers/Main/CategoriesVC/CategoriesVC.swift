@@ -642,7 +642,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     }
     
     func loadNotifications(completion: @escaping (Bool) -> ()) {
-        AppDelegate.shared.center.getDeliveredNotifications(completionHandler: { nitof in
+        AppDelegate.shared?.center.getDeliveredNotifications(completionHandler: { nitof in
             var newIDs:[String] = []
             for i in 0..<nitof.count {
                 let requestID = nitof[i].request.identifier
@@ -1031,14 +1031,14 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
 
                     cell.newCategoryTF.layer.name = "cell\(index.row)"
                     let dueDate = category.category.dueDate
-                   let stringDate = "\(self.makeTwo(n: dueDate?.day ?? 0)).\(self.makeTwo(n: dueDate?.month ?? 0)).\(dueDate?.year ?? 0)"
+                   let stringDate = "\(AppData.makeTwo(n: dueDate?.day ?? 0)).\(AppData.makeTwo(n: dueDate?.month ?? 0)).\(dueDate?.year ?? 0)"
                     cell.dueDateLabel.text = stringDate
                     let expired = dateExpired(dueDate)
                     cell.dueDateIcon.tintColor = expired ? K.Colors.negative : K.Colors.category
                     cell.dueDateLabel.textColor = expired ? K.Colors.negative : K.Colors.balanceT
                     
                     cell.qntLabel.text = "\(category.transactions.count)"
-                    if AppDelegate.shared.symbolsAllowed {
+                    if (AppDelegate.shared?.symbolsAllowed ?? false) {
                         cell.iconimage.image = category.editing == nil ? AppData.iconNamed(category.category.icon) : AppData.iconNamed(category.editing?.icon)
                         cell.iconimage.tintColor = category.editing == nil ? AppData.colorNamed(category.category.color) : AppData.colorNamed(category.editing?.color)
                     }
@@ -1117,7 +1117,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             cell.footerHelperBottomView.isHidden = false
         cell.lo(index: nil, footer: sect)
         cell.newCategoryTF.text = category.name
-            if AppDelegate.shared.symbolsAllowed {
+            if (AppDelegate.shared?.symbolsAllowed ?? false) {
                 cell.iconimage.image = AppData.iconNamed(category.icon)
                 cell.iconimage.tintColor = AppData.colorNamed(category.color)
             } else {
@@ -1209,7 +1209,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                // self.tableView.reloadData()
             }
         }
-        if AppDelegate.shared.symbolsAllowed {
+        if (AppDelegate.shared?.symbolsAllowed ?? false) {
             editAction.image = AppData.iconNamed("pencil.yellow")
             deleteAction.image = AppData.iconNamed("trash.red")
             editAction.backgroundColor = K.Colors.primaryBacground

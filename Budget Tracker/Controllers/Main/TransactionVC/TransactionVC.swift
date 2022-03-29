@@ -15,14 +15,15 @@ import AVFoundation
 var lastSelectedDate:String?
 
 protocol TransitionVCProtocol {
-    func addNewTransaction(value: String, category: String, date: String, comment: String, repreat:Bool, notifTime:DateComponents?)
-    func editTransaction(_ transaction:TransactionsStruct, was:TransactionsStruct)
+    func addNewTransaction(value: String, category: String, date: String, comment: String, reminderTime:DateComponents?, repeated:Bool?)
+    func editTransaction(_ transaction:TransactionsStruct, was:TransactionsStruct,reminderTime: DateComponents?, repeated: Bool?)
     func quiteTransactionVC(reload:Bool)
     func deletePressed()
 }
 
 class TransitionVC: SuperViewController {
-
+    var reminder_Repeated:Bool?
+    var reminder_Time:DateComponents?
     @IBOutlet weak var removeLastButton: UIButton!
     @IBOutlet weak var removeAllButton: UIButton!
     @IBAction func trashPressed(_ sender: UIButton) {
@@ -303,7 +304,7 @@ class TransitionVC: SuperViewController {
         }
     }
     
-    var selectedReminderOption:TransactionsStruct.ReminderType?
+    
     var donePressed = false
     func addNew(value: String, category: String, date: String, comment: String) {
         donePressed = true
@@ -312,9 +313,13 @@ class TransitionVC: SuperViewController {
             UIImpactFeedbackGenerator().impactOccurred()
             self.dismiss(animated: true) {
                 if self.editingDate != "" {
-                    self.delegate?.editTransaction(TransactionsStruct(value: value, categoryID: category, date: date, comment: comment), was: TransactionsStruct(value: "\(Int(self.editingValue))", categoryID: self.editingCategory, date: self.editingDate, comment: self.editingComment))
+                    let new = TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)
+                    let was = TransactionsStruct(value: "\(Int(self.editingValue))", categoryID: self.editingCategory, date: self.editingDate, comment: self.editingComment)
+                    self.delegate?.editTransaction(new, was: was, reminderTime: nil, repeated: nil)
+                   
                 } else {
-                    self.delegate?.addNewTransaction(value: value, category: category, date: date, comment: comment, repreat:self.selectedReminderOption, notifTime: self.calendarSelectedTime)
+
+                    self.delegate?.addNewTransaction(value: value, category: category, date: date, comment: comment, reminderTime: self.reminder_Time, repeated: self.reminder_Repeated)
                 }
                 
             }
@@ -558,6 +563,7 @@ class CustomTextField: UITextField {
 
 extension TransitionVC: CalendarVCProtocol {
     func dateSelected(date: String, time: DateComponents?) {
+        reminder_Time = time
         calendarSelectedTime = time
         dateChanged = true
         DispatchQueue.main.async {

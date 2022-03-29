@@ -128,7 +128,7 @@ class HistoryVC: SuperViewController {
         self.bottomTableInsert = inserts
         if selectedCategory?.purpose == .debt {
             if let cat = self.selectedCategory {
-                AppDelegate.shared.removeNotification(id: "Debts\(cat.id )")
+                AppDelegate.shared!.removeNotification(id: "Debts\(cat.id )")
             }
             
         }
@@ -154,7 +154,7 @@ class HistoryVC: SuperViewController {
         }
     }
     
-    let center = AppDelegate.shared.center
+    let center = AppDelegate.shared!.center
     
 
     let db = DataBase()
@@ -259,8 +259,8 @@ class HistoryVC: SuperViewController {
             let vc = segue.destination as! CalendarVC
             vc.delegate = self//CalendarVCProtocol
              let string = self.selectedCategory?.dueDate
-            let stringDate = "\(self.makeTwo(n: string?.day ?? 0)).\(self.makeTwo(n: string?.month ?? 0)).\(string?.year ?? 0)"
-            let time = "\(self.makeTwo(n: string?.hour ?? 0)):\(self.makeTwo(n: string?.minute ?? 0)):\(self.makeTwo(n: string?.second ?? 0))"
+            let stringDate = "\(AppData.makeTwo(n: string?.day ?? 0)).\(AppData.makeTwo(n: string?.month ?? 0)).\(string?.year ?? 0)"
+            let time = "\(AppData.makeTwo(n: string?.hour ?? 0)):\(AppData.makeTwo(n: string?.minute ?? 0)):\(AppData.makeTwo(n: string?.second ?? 0))"
             vc.selectedFrom = (string == nil) ? "" : stringDate
             vc.datePickerDate = string != nil ? time : ""
             vc.vcHeaderData = headerData(title: "Create".localize + " " + "notification".localize, description: "Get notification reminder on specific date".localize)
@@ -458,7 +458,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             
             let dateComponent = selectedCategory?.dueDate
         //    print(dateComponent, "dateComponentdateComponentdateComponent")
-            let date = "\(makeTwo(n: dateComponent?.day ?? 0))"
+            let date = "\(AppData.makeTwo(n: dateComponent?.day ?? 0))"
             let month = "\(returnMonth(dateComponent?.month ?? 0)), \(dateComponent?.year ?? 0)"
 
             cell.expiredStack.isHidden = !dateExpired(dateComponent)
@@ -475,7 +475,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             cell.AlertDateStack.axis = selectedCategory?.dueDate != nil ? .horizontal : .vertical
             cell.AlertDateStack.alignment = selectedCategory?.dueDate != nil ? .firstBaseline : .fill
             cell.timeLabel.isHidden = selectedCategory?.dueDate != nil ? false : true
-            cell.timeLabel.text = "\(makeTwo(n: dateComponent?.hour ?? 0)):" + "\(makeTwo(n: dateComponent?.minute ?? 0))"
+            cell.timeLabel.text = "\(AppData.makeTwo(n: dateComponent?.hour ?? 0)):" + "\(AppData.makeTwo(n: dateComponent?.minute ?? 0))"
          //   cell.mainView.alpha = expired ? (debt?.dueDate == "" ? 1 : 0.4) : 1
           //  cell.mainView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(toCalendarPressed(_:))))
             
@@ -669,15 +669,14 @@ extension HistoryVC: TransitionVCProtocol {
         //not usng
     }
     
-    func editTransaction(_ transaction: TransactionsStruct, was: TransactionsStruct) {
+    func editTransaction(_ transaction: TransactionsStruct, was: TransactionsStruct, reminderTime: DateComponents?, repeated: Bool?) {
         //not using
     }
     
     func quiteTransactionVC(reload: Bool) {
         
     }
-
-    func addNewTransaction(value: String, category: String, date: String, comment: String, repreat:Bool, notifTime:DateComponents?) {
+    func addNewTransaction(value: String, category: String, date: String, comment: String, reminderTime:DateComponents?, repeated:Bool?) {
         toAddVC = false
         transactionAdded = true
         needDownloadOnMainAppeare = true
@@ -697,8 +696,8 @@ extension HistoryVC: TransitionVCProtocol {
                     }
 
                 }
+        }
 
-    }
     
     
     
@@ -712,7 +711,7 @@ extension HistoryVC: CalendarVCProtocol {
             self.ai.show { (_) in
                 let id = "Debts\(self.selectedCategory?.id ?? 0)"
                 self.center.removePendingNotificationRequests(withIdentifiers: [id])
-                let fullDate = "\(date) \(self.makeTwo(n: time?.hour ?? 0)):\(self.makeTwo(n: time?.minute ?? 0)):\(self.makeTwo(n: time?.second ?? 0))"
+                let fullDate = "\(date) \(AppData.makeTwo(n: time?.hour ?? 0)):\(AppData.makeTwo(n: time?.minute ?? 0)):\(AppData.makeTwo(n: time?.second ?? 0))"
                 print(fullDate, "fullDatefullDatefullDatefullDate")
                 if let dateComp = time?.createDateComp(date: date, time: time) {
                     print(dateComp, "dateCompdateCompdateComp")
@@ -806,7 +805,7 @@ class DebtDescriptionCell: UITableViewCell {
         }
     }
 
-    private let ai = AppDelegate.shared.ai ?? IndicatorView.instanceFromNib() as! IndicatorView
+    private let ai = AppDelegate.shared?.ai ?? IndicatorView.instanceFromNib() as! IndicatorView
     
     var removeAction:(() -> ())?
     @IBAction func changeDatePressed(_ sender: Any) {//remove

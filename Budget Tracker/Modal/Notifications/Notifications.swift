@@ -12,18 +12,20 @@ import UIKit
 
 struct Notifications {
     
-    private let center = AppDelegate.shared.center
+    private let center = AppDelegate.shared?.center
     
     func addLocalNotification(date: DateComponents, title:String, id:String, body:String, completion: @escaping (Bool) -> ()) {
         
         //if date > today
       //  let title = self.selectedCategory?.name ?? ""
       //  let id = "Debts\(self.selectedCategory?.id ?? 0)"
-        center.removePendingNotificationRequests(withIdentifiers: [id])
-        center.getNotificationSettings { (settings) in
-            if settings.authorizationStatus != .authorized {
-                completion(false)
-          }
+        DispatchQueue.main.async {
+            self.center?.removePendingNotificationRequests(withIdentifiers: [id])
+            self.center?.getNotificationSettings { (settings) in
+                if settings.authorizationStatus != .authorized {
+                    completion(false)
+              }
+            }
         }
         
         
@@ -48,12 +50,14 @@ struct Notifications {
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
         let request = UNNotificationRequest(identifier: id,
                     content: content, trigger: trigger)
-        center.add(request) { (error) in
-            if error != nil {
-                completion(false)
-            } else {
-                completion(true)
+        DispatchQueue.main.async {
+            self.center?.add(request) { (error) in
+                if error != nil {
+                    completion(false)
+                } else {
+                    completion(true)
 
+                }
             }
         }
     }
