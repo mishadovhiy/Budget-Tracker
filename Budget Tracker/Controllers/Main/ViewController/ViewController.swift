@@ -19,7 +19,6 @@ var needDownloadOnMainAppeare = false
 
 class ViewController: SuperViewController {
     
-    public var screenType:ViewControllerType = .home
     @IBOutlet weak var sideTableView: UITableView!
     @IBOutlet weak var pinchView: UIView!
     @IBOutlet weak var sideBar: SideBar!
@@ -50,13 +49,11 @@ class ViewController: SuperViewController {
         super.viewDidLoad()
         updateUI()
         
-        if screenType == .home {
-            let sideBarPinch = UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:)))
-            pinchView.addGestureRecognizer(sideBarPinch)
-            ViewController.shared = self
-            sideBar.load()
-            toggleSideBar(false, animated: false)
-        }
+        let sideBarPinch = UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:)))
+        pinchView.addGestureRecognizer(sideBarPinch)
+        ViewController.shared = self
+        sideBar.load()
+        toggleSideBar(false, animated: false)
         
     }
     
@@ -195,7 +192,7 @@ class ViewController: SuperViewController {
         return result
     }
     private func containsDay(curDay:String) -> Bool {
-        if appData.filter.showAll || screenType == .paymentReminders {
+        if appData.filter.showAll {
             return true
         } else {
             for day in daysBetween {
@@ -209,38 +206,32 @@ class ViewController: SuperViewController {
     }
     
     func downloadFromDB(showError: Bool = false, title: String = "Downloading".localize) {
-        if screenType == .paymentReminders {
-            let data = db.paymentReminders()
-            tableData = data
-            filter(data:data)
-        } else {
-            self.editingTransaction = nil
-            self.sendError = false
-            _categoriesHolder.removeAll()
+        self.editingTransaction = nil
+        self.sendError = false
+        _categoriesHolder.removeAll()
 
-            lastSelectedDate = nil
-            DispatchQueue.main.async {
-                self.filterText = title
-            }
-            LoadFromDB.shared.newCategories { categoryes, error in
-                if error == .none {
-                    self.highesLoadedCatID = ((categoryes.sorted{ $0.id > $1.id }).first?.id ?? 0) + 1
-                    LoadFromDB.shared.newTransactions { loadedData, error in
-                        self.tableData = loadedData
-                        self.checkPurchase()
-                        self.prepareFilterOptions()
-                        self.filter(data: loadedData)
-                    }
-                } else {
+        lastSelectedDate = nil
+        DispatchQueue.main.async {
+            self.filterText = title
+        }
+        LoadFromDB.shared.newCategories { categoryes, error in
+            if error == .none {
+                self.highesLoadedCatID = ((categoryes.sorted{ $0.id > $1.id }).first?.id ?? 0) + 1
+                LoadFromDB.shared.newTransactions { loadedData, error in
+                    self.tableData = loadedData
+                    self.checkPurchase()
                     self.prepareFilterOptions()
-                    self.filter()
-                    if showError {
-                        DispatchQueue.main.async {
-                            self.newMessage.show(type: .internetError)
-                        }
-                    }
-
+                    self.filter(data: loadedData)
                 }
+            } else {
+                self.prepareFilterOptions()
+                self.filter()
+                if showError {
+                    DispatchQueue.main.async {
+                        self.newMessage.show(type: .internetError)
+                    }
+                }
+
             }
         }
         
@@ -386,9 +377,7 @@ class ViewController: SuperViewController {
         self.enableLocalDataPress = false
 
 
-        if screenType == .paymentReminders {
-            return
-        }
+
         if appData.defaults.value(forKey: "firstLaunch") as? Bool ?? true {
             /*appData.createFirstData {
                 self.prepareFilterOptions()
@@ -565,7 +554,7 @@ class ViewController: SuperViewController {
         DispatchQueue.main.async {
             self.filterText = "Filtering".localize
         }
-        if !appData.filter.showAll && screenType == .home {
+        if !appData.filter.showAll {
             allDaysBetween()
         }
         let transactions = (data ?? tableData).sorted{ $0.dateFromString < $1.dateFromString }
@@ -797,9 +786,6 @@ class ViewController: SuperViewController {
     let center = AppDelegate.shared?.center
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        if screenType != .home {
-            return
-        }
         DispatchQueue.main.async {
             if self.ai.isShowing {
                 self.ai.fastHide { _ in
@@ -1125,7 +1111,7 @@ class ViewController: SuperViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         print("today is", appData.filter.getToday(appData.filter.filterObjects.currentDate))
-        self.navigationController?.setNavigationBarHidden( screenType == .home ? true : false , animated: true)
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
     
 
@@ -1249,15 +1235,11 @@ class ViewController: SuperViewController {
             let nav = segue.destination as! UINavigationController
             let vc = nav.topViewController as! TransitionVC
             vc.delegate = self
-            if screenType == .home {
-                if let transaction = editingTransaction {
-                    vc.editingDate = transaction.date
-                    vc.editingValue = Double(transaction.value) ?? 0.0
-                    vc.editingCategory = transaction.categoryID
-                    vc.editingComment = transaction.comment
-                }
-            } else {
-                vc.paymentReminderAdding = true
+            if let transaction = editingTransaction {
+                vc.editingDate = transaction.date
+                vc.editingValue = Double(transaction.value) ?? 0.0
+                vc.editingCategory = transaction.categoryID
+                vc.editingComment = transaction.comment
             }
 
         case "toStatisticVC":

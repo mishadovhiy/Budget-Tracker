@@ -82,7 +82,12 @@ class CalendarVC: SuperViewController {
             timePicker.alpha = 1
             timePicker.addTarget(self, action: #selector(dateSelected(_:)), for: .valueChanged)
             if datePickerDate != "" {
-                timePicker.date = stringToDate(s: pickerDate, fullDate: true)
+                let comp = DateComponents()
+                let dateCo = comp.stringToCompIso(s: pickerDate)
+                if let date = Calendar.current.date(from: dateCo) {
+                    timePicker.date = date
+                }
+                
                 timePicker.setValue(K.Colors.category, forKeyPath: "textColor")
             } else {
                 //default date from settings
@@ -124,7 +129,7 @@ class CalendarVC: SuperViewController {
             }
         }
         DispatchQueue.main.async {
-            self.navigationController?.setNavigationBarHidden(hideNav, animated: true)
+            self.navigationController?.setNavigationBarHidden(hideNav, animated: false)
             self.title = "Calendar"
             self.headerView.isHidden = self.vcHeaderData == nil
         }

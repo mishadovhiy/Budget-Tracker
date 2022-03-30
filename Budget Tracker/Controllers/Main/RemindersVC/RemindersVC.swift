@@ -13,7 +13,7 @@ class RemindersVC: SuperViewController {
     var tableData:[RemindersData] = []
     @IBOutlet weak var tableView: UITableView!
     static var shared:RemindersVC?
-    lazy var db:DataBase = DataBase()
+    lazy var reminders = Reminders()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,15 +24,23 @@ class RemindersVC: SuperViewController {
         title = "Payment reminders".localize
     }
     
+    
     func loadData() {
-        let db = DataBase()
-        let data = db.paymentReminders()
+        
+        AppDelegate.shared?.notificationManager.loadNotifications { unsees in
+            self.loadReminders(unseen: unsees)
+        }
+        
+    }
+    
+    private func loadReminders(unseen:[String]) {
+        let data = reminders.reminders
         var result:[RemindersData] = []
         for raw in data {
-            if let reminder = raw.reminder {
-                let new:RemindersData = .init(transaction: raw, dict: reminder)
-                result.append(new)
-            }
+            var new:RemindersData = .init(transaction: raw.transaction, dict: raw.dict)
+            new.higlightUnseen = (AppDelegate.shared?.notificationManager.containsUnseen(id: new.id ?? "", unseen: unseen) ?? false)
+            print(new, "newnewnewnewnew")
+            result.append(new)
             
         }
         let comp = DateComponents()
@@ -42,6 +50,9 @@ class RemindersVC: SuperViewController {
         }
         DispatchQueue.main.async {
             self.tableView.reloadData()
+            self.ai.fastHide { _ in
+                
+            }
         }
     }
 
@@ -53,6 +64,16 @@ class RemindersVC: SuperViewController {
             let vc = nav.topViewController as! TransitionVC
             vc.delegate = self
             vc.paymentReminderAdding = true
+            if let row = editingReminder {
+                editingReminder = nil
+                let data = tableData[row]
+                vc.reminder_Repeated = data.repeated
+                vc.reminder_Time = data.time
+                vc.editingDate = data.transaction.date
+                vc.editingValue = Double(data.transaction.value) ?? 0.0
+                vc.editingCategory = data.transaction.categoryID
+                vc.editingComment = data.transaction.comment
+            }
         default:
             break
         }
@@ -67,27 +88,68 @@ class RemindersVC: SuperViewController {
     func addTransaction(idx:Int) {
         let reminder = tableData[idx]
         ai.show { _ in
-            let completion:(Bool) -> () = { _ in
-                self.ai.fastHide { _ in
+            self.addNextReminder(reminder: reminder) { added in
+                let completion:(Bool) -> () = { _ in
                     self.loadData()
+                    self.newMessage.show(title: Text.success, description: "Transaction has been added!".localize, type: .succsess)
                 }
-                self.newMessage.show(title: Text.success, description: "Transaction has been added!".localize, type: .succsess)
+                ViewController.shared?.actionAfterAdded = completion
+                ViewController.shared?.addNewTransaction(value: reminder.transaction.value, category: reminder.transaction.categoryID, date: self.today, comment: reminder.transaction.comment, reminderTime: nil, repeated: nil)
             }
-            ViewController.shared?.actionAfterAdded = completion
-            ViewController.shared?.addNewTransaction(value: reminder.transaction.value, category: reminder.transaction.categoryID, date: reminder.transaction.date, comment: reminder.transaction.comment, reminderTime: nil, repeated: nil)
         }
     }
+    
+    lazy var today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
+    
+    private func addNextReminder(reminder:RemindersData, completion:@escaping(Bool) -> ()) {
+        reminders.deleteReminder(id: reminder.id ?? "")
+        if !(reminder.repeated ?? false) {
+            completion(true)
+        } else {
+            if let newDate = self.addMonth(reminder) {
+                print("add month", newDate)
+                var newReminder = reminder
+                newReminder.time = newDate
+                newReminder.repeated = true
+                reminders.saveReminder(transaction: newReminder.transaction, newReminder: newReminder) { addded in
+                    if addded {
+                        completion(true)
+                    } else {
+                        self.ai.showAlert(title: "Error adding reminder", error: true)
+                    }
+                }
+
+            }
+        }
+        
+    }
+    
+    private func addMonth(_ reminder:RemindersData) -> DateComponents? {
+        var date = reminder.time
+        var newMonth = (date?.month ?? 0) + 1
+        if newMonth >= 13 {
+            newMonth = 1
+            let newYear = (date?.year ?? 0) + 1
+            date?.year = newYear
+        }
+        date?.month = newMonth
+        return date
+    }
+    
     
     private var editingReminder:Int?
     
     func editReminder(idx:Int) {
         editingReminder = idx
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: "goToEditVC", sender: self)
+        }
     }
     
     func deleteReminder(idx:Int) {
         DispatchQueue.main.async {
             let id = self.tableData[idx].id
-            self.db.deleteReminder(id: id)
+            self.reminders.deleteReminder(id: id ?? "")
             DispatchQueue.main.async {
                 self.loadData()
             }
@@ -111,7 +173,7 @@ extension RemindersVC:UITableViewDelegate, UITableViewDataSource {
         cell.dateLabel.text = (date?.stringMonth ?? "") + "\n\(date?.year ?? 0)"
         cell.timeLabel.text = date?.stringTime
         cell.expiredLabel.isHidden = !(date?.expired ?? false)
-        cell.commentLabel.text = data.transaction.comment
+        cell.commentLabel.text = data.transaction.comment + "//\((data.repeated ?? false) ? "1" : "0")"
         cell.categoryLabel.text = data.transaction.category.name
         cell.actionsView.isHidden = !data.selected
         cell.editAction = editReminder(idx:)
@@ -129,17 +191,13 @@ extension RemindersVC :TransitionVCProtocol {
         ai.show { _ in
             let new = TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)
             var reminder:RemindersData = .init(transaction: new, dict: [:])
-            reminder.time = reminderTime
+            reminder.time = reminderTime?.createDateComp(date: new.date, time: reminderTime)
             reminder.id = "paymentReminder" + UUID().uuidString
-            reminder.repeatedMonths = nil
-            self.db.saveReminder(transaction: new, newReminder: reminder) { added in
-                self.ai.fastHide { _ in
-                    
-                }
+            reminder.repeated = repeated
+            self.reminders.saveReminder(transaction: new, newReminder: reminder) { added in
+                self.loadData()
                 if !added {
                     self.newMessage.show(title: "Error creating reminder".localize, description: "Try again".localize, type: .error)
-                } else {
-                    self.loadData()
                 }
             }
         }
@@ -148,17 +206,16 @@ extension RemindersVC :TransitionVCProtocol {
     func editTransaction(_ transaction: TransactionsStruct, was: TransactionsStruct,reminderTime: DateComponents?, repeated: Bool?) {
         ai.show { _ in
             let wasID:RemindersData = .init(transaction: was, dict: was.reminder ?? [:])
-            self.db.deleteReminder(id: wasID.id)
+            self.reminders.deleteReminder(id: wasID.id ?? "")
             var newReminder:RemindersData = .init(transaction: transaction, dict: transaction.reminder ?? [:])
-            newReminder.time = reminderTime
+            newReminder.time = reminderTime?.createDateComp(date: transaction.date, time: reminderTime)
             newReminder.id = "paymentReminder" + UUID().uuidString
-            newReminder.repeatedMonths = nil
-            self.db.saveReminder(transaction: transaction, newReminder: newReminder) { added in
+            newReminder.repeated = repeated
+            //newReminder.time?.createDateComp(date: transaction.date, time: newReminder.time) {
+            self.reminders.saveReminder(transaction: transaction, newReminder: newReminder) { added in
                 self.loadData()
-                self.ai.fastHide { _ in
-                    if !added {
-                        self.newMessage.show(title: "Error creating reminder".localize, type: .error)
-                    }
+                if !added {
+                    self.newMessage.show(title: "Error creating reminder".localize, type: .error)
                 }
             }
             
@@ -167,14 +224,11 @@ extension RemindersVC :TransitionVCProtocol {
     }
     
     func quiteTransactionVC(reload: Bool) {
-        
+
     }
     
     func deletePressed() {
-        if let editing = editingReminder {
-            editingReminder = nil
-            deleteReminder(idx: editing)
-        }
+
     }
     
     

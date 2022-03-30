@@ -88,8 +88,6 @@ class LoginViewController: SuperViewController {
         }
         
         DispatchQueue.main.async {
-            
-       //     EnterValueVC.shared?.valueTextField.endEditing(true)
             self.ai.completeWithActions(buttons: (okButton, nil), title: resultTitle, descriptionText: text, type: error ? .error : .standard)
         }
 
@@ -1035,7 +1033,7 @@ extension LoginViewController {
             AppDelegate.shared?.center.removeAllPendingNotificationRequests()
             AppDelegate.shared?.center.removeAllDeliveredNotifications()
         }
-        appData.deliveredNotificationIDs = []
+        AppDelegate.shared?.notificationManager.deliveredNotificationIDs = []
         UserDefaults.standard.setValue(nil, forKey: "lastSelected")
         UserDefaults.standard.setValue(true, forKey: "checkTrialDate")
         UserDefaults.standard.setValue(false, forKey: "trialPressed")

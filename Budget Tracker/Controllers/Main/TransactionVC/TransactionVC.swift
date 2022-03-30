@@ -76,8 +76,7 @@ class TransitionVC: SuperViewController {
         purposeSwitcher.selectedSegmentIndex = 0
         purposeSwitched(purposeSwitcher)
         getEditingdata()
-        
-        
+
     }
 
     
@@ -98,18 +97,16 @@ class TransitionVC: SuperViewController {
       //      vc.darkAppearence = true
             if dateChanged {
                 vc.selectedFrom = displeyingTransaction.date
+                
             }
 
             if paymentReminderAdding {
-                vc.vcHeaderData = headerData(title: "Select".localize + " " + "Date".localize, description: "Get notification reminder on selected date".localize)
-                vc.datePickerDate = ""
+                vc.datePickerDate = reminder_Time?.toIsoString() ?? ""
                 vc.selectingDate = false
                 vc.needPressDone = true
                 vc.canSelectOnlyOne = true
             }
-            
 
-            
         case "toCategories":
             let vc = segue.destination as! CategoriesVC
             vc.delegate = self
@@ -136,6 +133,7 @@ class TransitionVC: SuperViewController {
            // segmentControll.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.bala, for: .normal)
            // purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.category ?? .white], for: .selected)
 
+            
             dateTextField.inputView = UIView(frame: .zero)
             dateTextField.isUserInteractionEnabled = false
             dateTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(datePressed)))
@@ -154,7 +152,10 @@ class TransitionVC: SuperViewController {
     
     
     func updateUI() {
-        
+        if paymentReminderAdding {
+            self.repeatedView.isHidden = false
+            self.repeateSwitch.isOn = (reminder_Repeated ?? false)
+        }
         appendPurposes()
         delegates(fields: [categoryTextField, dateTextField, commentTextField])
         appData.objects.datePicker.datePickerMode = .date
@@ -304,6 +305,13 @@ class TransitionVC: SuperViewController {
         }
     }
     
+    @IBOutlet weak var repeatedView: UIView!
+    
+    @IBAction func repeatedSwitched(_ sender: UISwitch) {
+        DispatchQueue.main.async {
+            self.reminder_Repeated = sender.isOn
+        }
+    }
     
     var donePressed = false
     func addNew(value: String, category: String, date: String, comment: String) {
@@ -334,6 +342,7 @@ class TransitionVC: SuperViewController {
 
     var displeyingTransaction = TransactionsStruct(value: "0", categoryID: "", date: "", comment: "")
     
+    @IBOutlet weak var repeateSwitch: UISwitch!
     @IBAction func donePressed(_ sender: UIButton) {
      //   selectedCategory
         let newDate = self.displeyingTransaction.date == "" ? defaultDate : self.displeyingTransaction.date
@@ -344,10 +353,7 @@ class TransitionVC: SuperViewController {
                     let selectedSeg = self.purposeSwitcher.selectedSegmentIndex
                     let intValue = (Double(self.valueLabel.text ?? "") ?? 0.0) * (-1)
                     let value = selectedSeg == 0 ? "\(Int(intValue))" : self.valueLabel.text ?? ""
-                   // let category = self.categoryTextField.text ?? self.categoryTextField.placeholder!
                     let comment = self.commentTextField.text ?? ""
-                    //category: category == "" ? self.categoryTextField.placeholder ?? (selectedSeg == 0 ? self.expenseArr[appData.selectedExpense] : self.incomeArr[appData.selectedIncome]) : category
-                    
                     self.addNew(value: value, category: "\(category.id)", date: newDate, comment: comment)
                 } else {
                     self.errorSaving()

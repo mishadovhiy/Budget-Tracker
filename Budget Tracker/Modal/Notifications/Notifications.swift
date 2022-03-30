@@ -15,17 +15,12 @@ struct Notifications {
     private let center = AppDelegate.shared?.center
     
     func addLocalNotification(date: DateComponents, title:String, id:String, body:String, completion: @escaping (Bool) -> ()) {
-        
-        //if date > today
-      //  let title = self.selectedCategory?.name ?? ""
-      //  let id = "Debts\(self.selectedCategory?.id ?? 0)"
-        DispatchQueue.main.async {
-            self.center?.removePendingNotificationRequests(withIdentifiers: [id])
-            self.center?.getNotificationSettings { (settings) in
-                if settings.authorizationStatus != .authorized {
-                    completion(false)
-              }
-            }
+        print("adding for:", date)
+        center?.removePendingNotificationRequests(withIdentifiers: [id])
+        center?.getNotificationSettings { (settings) in
+            if settings.authorizationStatus != .authorized {
+                completion(false)
+          }
         }
         
         

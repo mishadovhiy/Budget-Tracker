@@ -69,7 +69,6 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         DispatchQueue.main.async {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let vccc = storyboard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
-            vccc.screenType = .paymentReminders
             ViewController.shared?.navigationController?.pushViewController(vccc, animated: true)
         }
     }

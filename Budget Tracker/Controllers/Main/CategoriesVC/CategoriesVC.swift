@@ -608,8 +608,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         if appeareDidCall {
             if screenType == .categories || screenType == .debts {
                 DispatchQueue.init(label: "udLoad", qos: .userInteractive).async {
-                    self.loadNotifications { _ in
+                    AppDelegate.shared?.notificationManager.loadNotifications { unsees in
                        // self.categories = self.categoriesContains(self.searchingText, fromHolder: false)
+                        self.unseenIDs = unsees
                         self.loadData(loadFromUD: true)
                     }
                 }
@@ -622,7 +623,8 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             appeareDidCall = true
             if screenType == .categories || screenType == .debts {
                 DispatchQueue.init(label: "udLoad", qos: .userInteractive).async {
-                    self.loadNotifications { _ in
+                    AppDelegate.shared?.notificationManager.loadNotifications { unseen in
+                        self.unseenIDs = unseen
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
                         }
@@ -641,18 +643,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         
     }
     
-    func loadNotifications(completion: @escaping (Bool) -> ()) {
-        AppDelegate.shared?.center.getDeliveredNotifications(completionHandler: { nitof in
-            var newIDs:[String] = []
-            for i in 0..<nitof.count {
-                let requestID = nitof[i].request.identifier
-                newIDs.append(requestID)
-            }
-            newIDs += appData.deliveredNotificationIDs
-            self.unseenIDs = newIDs
-            completion(true)
-        })
-    }
+    
     
     override func viewDidDisappear(_ animated: Bool) {
         if !toHistory {

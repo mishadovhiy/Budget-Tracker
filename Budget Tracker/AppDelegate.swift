@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     var window: UIWindow?
     static var shared:AppDelegate?
     let center = UNUserNotificationCenter.current()
-    
+    lazy var notificationManager = NotificationManager()
     
     private let passcodeLock = PascodeLockView.instanceFromNib() as! PascodeLockView
     private var backgroundEnterDate:Date?
@@ -69,7 +69,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         print(today, "didFinishLaunchingWithOptions")
         center.getDeliveredNotifications { notifications in
             DispatchQueue.main.async {
-                UIApplication.shared.applicationIconBadgeNumber = notifications.count + appData.deliveredNotificationIDs.count
+                UIApplication.shared.applicationIconBadgeNumber = notifications.count + (AppDelegate.shared?.notificationManager.deliveredNotificationIDs.count ?? 999)
             }
         }
         
@@ -147,14 +147,19 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         let categpryID = notification.request.content.threadIdentifier
         let notificationText = notification.request.content.body
         let catName = notification.request.content.title
-        appData.deliveredNotificationIDs.append(notification.request.identifier)
+        notificationManager.deliveredNotificationIDs.append(notification.request.identifier)
         
         let okButton = IndicatorView.button(title: "OK", style: .standart, close: true) { _ in }
         let showButton = IndicatorView.button(title: "Show", style: .success, close: false) { _ in
-          //  let load = LoadFromDB()
-            LoadFromDB.shared.newCategories { categories, error in
-                self.showHistory(categpry: categpryID)
+            
+            if notification.request.identifier.contains("Debt") {
+                LoadFromDB.shared.newCategories { categories, error in
+                    self.showHistory(categpry: categpryID)
+                }
+            } else {
+                self.showPaymentReminders()
             }
+            
         }
         DispatchQueue.main.async {
             AudioServicesPlaySystemSound(1007)
@@ -201,19 +206,31 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     }
     
     
+    func showPaymentReminders() {
+        let strorybpard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = strorybpard.instantiateViewController(withIdentifier: "RemindersVC") as! RemindersVC
+        let nav = UINavigationController(rootViewController: vc)
+        UIApplication.shared.windows.last?.rootViewController?.present(nav, animated: true, completion: {
+            DispatchQueue.main.async {
+                self.ai.fastHide { (_) in
+                }
+            }
+        })
+    }
+    
 /// methods
     func removeNotification(id:String) {
         DispatchQueue.main.async {
             self.center.removeDeliveredNotifications(withIdentifiers: [id])
         }
-        let deliveredHolder = appData.deliveredNotificationIDs
+        let deliveredHolder = notificationManager.deliveredNotificationIDs
         var newNotif:[String] = []
         for i in 0..<deliveredHolder.count {
             if deliveredHolder[i] != id {
                 newNotif.append(deliveredHolder[i])
             }
         }
-        appData.deliveredNotificationIDs = newNotif
+        notificationManager.deliveredNotificationIDs = newNotif
     }
     
 }
