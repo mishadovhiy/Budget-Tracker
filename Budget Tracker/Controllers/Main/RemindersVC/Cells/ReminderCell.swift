@@ -55,6 +55,9 @@ class ReminderCell: UITableViewCell {
                 RemindersVC.shared?.tableView.beginUpdates()
                 UIView.animate(withDuration: 0.19) {
                     self.actionsView.isHidden = hide
+                    if self.unseenIndicator.isHidden != true {
+                        self.unseenIndicator.isHidden = true
+                    }
                 } completion: { _ in
                     RemindersVC.shared?.tableView.endUpdates()
                     self.animating = false
