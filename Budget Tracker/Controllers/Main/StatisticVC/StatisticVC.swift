@@ -211,24 +211,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
         selectedIndexPathToHighlite = IndexPath(row: indexPathRow, section: 0)
         historyDataStruct = allData[indexPathRow].transactions
         selectedCategoryName = "\(allData[indexPathRow].category.id)"
-       /* historyDataStruct = []
-        for i in 0..<dataFromMain.count {
-            if allData[indexPathRow].category == dataFromMain[i].categoryID {
-                historyDataStruct.append(dataFromMain[i])
-            }
-        }
-        fromDebts = false
-        
-        let allDebts = Array(appData.getDebts())
-        for i in 0..<allDebts.count {
-            if allData[indexPathRow].category == allDebts[i].name {
-                fromDebts = true
-                break
-            }
-        }
 
-        print(historyDataStruct.count, "historyDataStructhistoryDataStructhistoryDataStructhistoryDataStruct")
-        selectedCategoryName = allData[indexPathRow].category*/
         
         DispatchQueue.main.async {
             self.performSegue(withIdentifier: "toHistorySeque", sender: self)

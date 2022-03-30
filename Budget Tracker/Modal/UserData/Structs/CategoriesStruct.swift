@@ -23,6 +23,24 @@ struct NewCategories {
         return db.transactions(for: self)
     }
     
+    
+    enum CategoryPurpose:String {
+        case expense = "Expenses"
+        case income = "Incomes"
+        case debt = "debt"
+    }
+    static func stringToPurpose(_ string: String) -> CategoryPurpose {
+        switch string {
+        case K.income:
+            return .income
+        case K.expense:
+            return .expense
+        case "Debt":
+            return .debt
+        default:
+            return .debt
+        }
+    }
 }
 
 struct DebtsStruct {
@@ -30,3 +48,8 @@ struct DebtsStruct {
     var amountToPay: String
     var dueDate: String
 }
+
+
+
+
+

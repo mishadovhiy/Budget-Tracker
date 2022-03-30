@@ -13,6 +13,8 @@ import Foundation
 
 class AppData {
     
+    static var categoriesHolder:[NewCategories]?
+    
     static var linkColor: String {
         set {
             UserDefaults.standard.setValue(newValue, forKey: "SelectedTintColor")
@@ -31,7 +33,6 @@ class AppData {
     var safeArea: (CGFloat, CGFloat) = (0.0, 0.0)//0-bt  1-top
     var unshowedErrors = ""
     
-    var deptsData: [CategoriesStruct] = []
 
     let lastSelected = LastSelected()
     
@@ -124,7 +125,7 @@ class AppData {
         }
     }
     
-    var selectedUsernames: [String] {//сохранять и пароль и имейл и все что приходит
+    var selectedUsernames: [String] {
         get{
             let users = defaults.value(forKey: "selectedUsernames") as? [String] ?? ([defaults.value(forKey: "username") as? String ?? ""])
             return users// + ["mishadovhiy2"]
@@ -170,17 +171,7 @@ class AppData {
         return userEmailHolder.contains("dovhiy.com")
     }
     
-    
-    
-    var unshowedError: String {
-        get{
-            return defaults.value(forKey: "unshowedError") as? String ?? ""
-        }
-        set(value){
-            print("error saved - \(value)")
-            defaults.set(value, forKey: "unshowedError")
-        }
-    }
+
 
     var unsendedData:[[String: [String:Any]]] {
         //0 - type (delete transaction)
@@ -199,149 +190,13 @@ class AppData {
         return int <= 9 ? "0\(int)" : "\(int)"
     }
     
-    //savedTransactions
-    //unsavedTransactions 
-    func saveTransations(_ data: [TransactionsStruct], key: String = "transactionsData") {//delete
-        var dict: [[String]] = []
-        for i in 0..<data.count {
-            let nickname = username
-            let value = data[i].value
-            let category = data[i].categoryID
-            let date = data[i].date
-            let comment = data[i].comment
-            
-            dict.append([nickname, value, category, date, comment])
-        }
-        print("transactions saved to user defaults, count: \(dict.count)")
-        UserDefaults.standard.set(dict, forKey: key)
-    }
-    
-    var debts: [DebtsStruct] {
-        get {
-            let localData = Array(defaults.value(forKey: "allDebts") as? [[String]] ?? [])
-            var results: [DebtsStruct] = []
-            for i in 0..<localData.count {
-                let name = localData[i][1]
-                let amountToPay = localData[i][2]
-                let dueDate = localData[i][3]
-                results.append(DebtsStruct(name: name, amountToPay: amountToPay, dueDate: dueDate))
-            }
-            return results
-        }
-        set {
-            var dict: [[String]] = []
-            for i in 0..<newValue.count {
-                let nickname = username
-                let name = newValue[i].name
-                let amountToPay = newValue[i].amountToPay
-                let dueDate = "\(newValue[i].dueDate)"
-                dict.append([nickname, name, amountToPay, dueDate])
-            }
-            print("debts saved to user defaults, count: \(dict.count), \(dict)")
-            defaults.set(dict, forKey: "allDebts")
-        }
-    }
-    //"savedDebts" -- from prev acc
-    //"unsavedDebts" -- when no internet
-    func saveDebts(_ data: [DebtsStruct], key: String = "allDebts") {
-        var dict: [[String]] = []
-        for i in 0..<data.count {
-            let nickname = username
-            let name = data[i].name
-            let amountToPay = data[i].amountToPay
-            let dueDate = "\(data[i].dueDate)"
-            dict.append([nickname, name, amountToPay, dueDate])
-        }
-        print("debts saved to user defaults, count: \(dict.count), \(dict), key:", key)
-        defaults.set(dict, forKey: key)
-    }
-    func getDebts(key: String = "allDebts") -> [DebtsStruct] {
-        let localData = Array(defaults.value(forKey: key) as? [[String]] ?? [])
-        var results: [DebtsStruct] = []
-        for i in 0..<localData.count {
-            let name = localData[i][1]
-            let amountToPay = localData[i][2]
-            let dueDate = localData[i][3]
-            results.append(DebtsStruct(name: name, amountToPay: amountToPay, dueDate: dueDate))
-        }
-        return results
-    }
-    
-
-    var getTransactions: [TransactionsStruct] {//
-        get{
-            let localData = Array(defaults.value(forKey: "transactionsData") as? [[String]] ?? [])
-            var results: [TransactionsStruct] = []
-            for i in 0..<localData.count {
-                let value = localData[i][1]
-                let category = localData[i][2]
-                let date = localData[i][3]
-                let comment = localData[i][4]
-                results.append(TransactionsStruct(value: value, categoryID: category, date: date, comment: comment))
-            }
-            return results
-        }
-    }
-    
-    var getLocalTransactions: [TransactionsStruct] {
-        get{
-            let localData = defaults.value(forKey: K.Keys.localTrancations) as? [[String]] ?? []
-            var results: [TransactionsStruct] = []
-            for i in 0..<localData.count {
-                let value = localData[i][1]
-                let category = localData[i][2]
-                let date = localData[i][3]
-                let comment = localData[i][4]
-                results.append(TransactionsStruct(value: value, categoryID: category, date: date, comment: comment))
-            }
-            return results
-        }
-    }
-    
 
 
     
     
+
     
-    
-    //"savedCategories" -- from prev acc
-    //"unsavedCategories" -- when no internet
-    func saveCategories(_ data: [CategoriesStruct], key: String = "categoriesData") {
-        var dict: [[String]] = []
-        for i in 0..<data.count {
-            let nickname = username
-            let name = data[i].name
-            let purpose = data[i].purpose
-            dict.append([nickname, name, purpose])
-        }
-        print("categories saved to user defaults, count: \(dict.count), \(dict), key:", key)
-        defaults.set(dict, forKey: key)
-    }
-    
-    //"savedCategories" -- from prev acc
-    //"unsavedCategories" -- when no internet
-    func getCategories(key: String = "categoriesData") -> [CategoriesStruct] {//
-        let localData = defaults.value(forKey: key) as? [[String]] ?? []
-        var results: [CategoriesStruct] = []
-       // let trans = Array(transactions)
-        let trans = UserDefaults.standard.value(forKey: "transactionsData") as? [[String]] ?? []
-        for i in 0..<localData.count {
-            let name = localData[i][1]
-            let purpose = localData[i][2]
-            var count = 0
-            for t in 0..<trans.count {
-                if trans[t][2] == name {
-                    count += 1
-                }
-            }
-            results.append(CategoriesStruct(name: name, purpose: purpose, count: count))
-        }
-        return results
-    }
-    
-    var selectedExpense = 0
-    var selectedIncome = 0
-    
+
 
     let categoryColors = [
         "BlueColor", "BlueColor2", "BlueColor3", "GreenColor", "GreenColor-2", "yellowColor2", "OrangeColor", "OrangeColor-1", "pinkColor2", "PinkColor", "PinkColor-1", "RedColor", "yellowColor"
@@ -367,81 +222,7 @@ class AppData {
     
     
 
-    
-    
-    
-    var calculation = Calculation()
-    struct Calculation {
-        var sumIncomes: Double = 0.0
-        var sumExpenses: Double = 0.0
-        var sumPeriodBalance: Double = 0.0
-        
-        mutating func recalculation(i:UILabel, e: UILabel, data: [TransactionsStruct]) {
 
-            sumIncomes = 0.0
-            sumExpenses = 0.0
-            sumPeriodBalance = 0.0
-            var arreyNegative: [Double] = [0.0]
-            var arreyPositive: [Double] = [0.0]
-            
-            for i in 0..<data.count {
-                sumPeriodBalance = sumPeriodBalance + (Double(data[i].value) ?? 0.0)
-                
-                if (Double(data[i].value) ?? 0.0) > 0 {
-                    arreyPositive.append((Double(data[i].value) ?? 0.0))
-                    sumIncomes = sumIncomes + (Double(data[i].value) ?? 0.0)
-                    
-                } else {
-                    arreyNegative.append((Double(data[i].value) ?? 0.0))
-                    sumExpenses = sumExpenses + (Double(data[i].value) ?? 0.0)
-                }}
-            
-            if sumPeriodBalance < Double(Int.max), sumIncomes < Double(Int.max), sumExpenses < Double(Int.max) {
-                i.text = "\(Int(sumIncomes))"
-                e.text = "\(Int(sumExpenses) * -1)"
-                
-            } else {
-                i.text = "\(sumIncomes)"
-                e.text = "\(sumExpenses * -1)"
-            }
-            
-            print("recalculating labels")
-        }
-        
-        var totalBalance = 0.0
-        
-        mutating func calculateBalance(balanceLabel: UILabel) {
-            
-            var totalExpenses = 0.0
-            var totalIncomes = 0.0
-            let transactions = appData.getTransactions
-            
-            for i in 0..<transactions.count {
-
-                let value = Double(transactions[i].value) ?? 0.0
-                if value > 0.0 {
-                    totalIncomes = totalIncomes + value
-                } else {
-                    totalExpenses = totalExpenses + value
-                }
-            }
-            
-            totalBalance = totalIncomes + totalExpenses
-            
-            if totalBalance < Double(Int.max) {
-                balanceLabel.text = "\(Int(self.totalBalance))"
-                
-            } else { balanceLabel.text = "\(totalBalance)" }
-            
-            if totalBalance < 0.0 {
-                balanceLabel.textColor = K.Colors.negative
-            } else {
-                balanceLabel.textColor = K.Colors.balanceV
-            }
-            
-        }
-    }
-    
     
     
     var objects = Objects()
@@ -766,40 +547,8 @@ extension TransactionsStruct {
 
 
 
-struct CategoriesStruct {
-    let name: String
-    let purpose: String
-    let count: Int
-}
 
 
-enum CategoryPurpose {
-    case expense
-    case income
-    case debt
-}
-func purposeToString(_ pupose:CategoryPurpose) -> String {
-    switch pupose {
-    case .debt:
-        return "debt"
-    case .income:
-        return K.income
-    case .expense:
-        return K.expense
-    }
-}
-func stringToPurpose(_ string: String) -> CategoryPurpose {
-    switch string {
-    case K.income:
-        return .income
-    case K.expense:
-        return .expense
-    case "Debt":
-        return .debt
-    default:
-        return .debt
-    }
-}
 
 
 

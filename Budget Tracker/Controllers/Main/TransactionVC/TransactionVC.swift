@@ -48,8 +48,7 @@ class TransitionVC: SuperViewController {
     @IBOutlet weak var commentCountLabel: UILabel!
     var paymentReminderAdding = false
     var pressedValue = "0"
-    var expenseArr = [""]
-    var incomeArr = [""]
+
     var selectedPurpose: Int?
     var delegate:TransitionVCProtocol?;
     
@@ -156,7 +155,7 @@ class TransitionVC: SuperViewController {
             self.repeatedView.isHidden = false
             self.repeateSwitch.isOn = (reminder_Repeated ?? false)
         }
-        appendPurposes()
+
         delegates(fields: [categoryTextField, dateTextField, commentTextField])
         appData.objects.datePicker.datePickerMode = .date
         pressedValue = "0"
@@ -286,24 +285,7 @@ class TransitionVC: SuperViewController {
         pressedValue = "\(Int(editingValue) * multiply)"
     }
     
-    func appendPurposes() {
-        
-        expenseArr.removeAll()
-        incomeArr.removeAll()
-        let categories = appData.getCategories()
-        for i in 0..<categories.count {
-            if categories[i].purpose == K.expense {
-                expenseArr.append(categories[i].name)
-            } else {
-                incomeArr.append(categories[i].name)
-            }}
-        if expenseArr.count == 0 {
-            expenseArr.append(K.Text.unknExpense)
-        }
-        if incomeArr.count == 0 {
-            incomeArr.append(K.Text.unknIncome)
-        }
-    }
+
     
     @IBOutlet weak var repeatedView: UIView!
     

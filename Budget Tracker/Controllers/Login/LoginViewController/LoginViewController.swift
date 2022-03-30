@@ -484,7 +484,9 @@ class LoginViewController: SuperViewController {
                         }
                         if let emailLimit = emailLimitOp {
                             if emailLimit == .totalError {
-                                self.newMessage.show(title: "You have reached the maximum amount of usernames".localize, type: .error)
+                                DispatchQueue.main.async {
+                                    self.newMessage.show(title: "You have reached the maximum amount of usernames".localize, type: .error)
+                                }
                             } else {
                                 appData.presentBuyProVC(currentVC: self, selectedProduct: 2)
                                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
@@ -955,7 +957,7 @@ extension LoginViewController: UITextFieldDelegate {
 
 
 extension LoginViewController {
-    func logout() {
+    func logout() {//logged out when log out when logout
         if !appData.purchasedOnThisDevice {
             appData.proVersion = false
             appData.proTrial = false
@@ -963,9 +965,8 @@ extension LoginViewController {
         appData.username = ""
         appData.password = ""
         lastSelectedDate = nil
-        //_debtsHolder.removeAll()
+        AppData.categoriesHolder = nil
         UserDefaults.standard.setValue(nil, forKey: "lastSelected")
-        _categoriesHolder.removeAll()
 
         DispatchQueue.main.async {
             self.title = "Sign In".localize
@@ -1039,7 +1040,6 @@ extension LoginViewController {
         UserDefaults.standard.setValue(false, forKey: "trialPressed")
         UserDefaults.standard.setValue(nil, forKey: "trialToExpireDays")
         appData.proTrial = false
-        _categoriesHolder.removeAll()
     }
     @IBAction func moreButtonPressed(_ sender: UIButton) {//morepressed
         let data = MoreOptionsData(vc: self)

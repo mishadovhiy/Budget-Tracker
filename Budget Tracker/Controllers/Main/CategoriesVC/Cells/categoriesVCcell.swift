@@ -127,10 +127,10 @@ class categoriesVCcell: UITableViewCell {
         DispatchQueue.main.async {
             UIImpactFeedbackGenerator().impactOccurred()
             UIView.animate(withDuration: 0.18) {
-                self.editingStack.isHidden = true
                 self.editingStack.alpha = 0
                 self.qntLabel.superview?.isHidden = false
                 self.categoryNameLabel.isHidden = false
+                self.dueDateStack.isHidden = false
             } completion: { _ in
                 self.cancelEditing()
                 self.editingStack.alpha = 1

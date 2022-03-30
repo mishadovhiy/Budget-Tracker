@@ -68,7 +68,7 @@ class DataBase {
             let amountToPay = dict["AmountToPay"] as? String ?? ""
             let dueDate = dict["DueDate"] as? String ?? ""
             
-            let purp = stringToPurpose(purpose)
+            let purp = NewCategories.stringToPurpose(purpose)
             var date: DateComponents? {
                 let dateCo = DateComponents()
                 return dueDate == "" ? nil : dateCo.stringToCompIso(s: dueDate)
@@ -83,13 +83,12 @@ class DataBase {
     
 
     func categoryToDict(_ category: NewCategories) -> [String:Any] {
-        
-        let pupose = purposeToString(category.purpose)
+
         var result:[String:Any] = [
             "Name":category.name,
             "Id":"\(category.id)",
             "Icon":category.icon,
-            "Purpose":pupose,
+            "Purpose":category.purpose.rawValue,
             "Color":category.color
         ]
         

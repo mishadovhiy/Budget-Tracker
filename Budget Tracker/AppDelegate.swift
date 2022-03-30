@@ -61,7 +61,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         if value != today {
             UserDefaults.standard.setValue(today, forKey: "lastLaunching")
             lastSelectedDate = nil
-            _categoriesHolder.removeAll()
         }
         
         
@@ -85,11 +84,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     
     
     func applicationWillResignActive(_ application: UIApplication) {
-        DispatchQueue.main.async {
-            self.window?.endEditing(true)
-        }
+        
+        AppData.categoriesHolder = nil
         
         if UserSettings.Security.password != "" && !(passcodeLock.presenting ?? true) {
+            DispatchQueue.main.async {
+                self.window?.endEditing(true)
+            }
             backgroundEnterDate = Date();
             //delegate.resighnActive()
             presentLock(passcode: false)

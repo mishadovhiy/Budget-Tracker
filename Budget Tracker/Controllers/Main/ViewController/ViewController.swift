@@ -208,23 +208,20 @@ class ViewController: SuperViewController {
     func downloadFromDB(showError: Bool = false, title: String = "Downloading".localize) {
         self.editingTransaction = nil
         self.sendError = false
-        _categoriesHolder.removeAll()
 
         lastSelectedDate = nil
         DispatchQueue.main.async {
             self.filterText = title
         }
         LoadFromDB.shared.newCategories { categoryes, error in
+            AppData.categoriesHolder = categoryes
             if error == .none {
                 self.highesLoadedCatID = ((categoryes.sorted{ $0.id > $1.id }).first?.id ?? 0) + 1
                 LoadFromDB.shared.newTransactions { loadedData, error in
-                    self.tableData = loadedData
                     self.checkPurchase()
-                    self.prepareFilterOptions()
                     self.filter(data: loadedData)
                 }
             } else {
-                self.prepareFilterOptions()
                 self.filter()
                 if showError {
                     DispatchQueue.main.async {
@@ -547,13 +544,19 @@ class ViewController: SuperViewController {
     
     func filter(data:[TransactionsStruct]? = nil) {
         print("filterCalled")
+        //here
+        DispatchQueue.main.async {
+            self.filterText = "Filtering".localize
+        }
+        let all = db.transactions
+        tableData = all
+        prepareFilterOptions(all)
+        
         calculations = .init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)
         dataTaskCount = (0,0)
         animateCellWillAppear = true
         appData.filter.selectedPeroud = appData.filter.selectedPeroud != "" ? appData.filter.selectedPeroud : "This Month"
-        DispatchQueue.main.async {
-            self.filterText = "Filtering".localize
-        }
+        
         if !appData.filter.showAll {
             allDaysBetween()
         }

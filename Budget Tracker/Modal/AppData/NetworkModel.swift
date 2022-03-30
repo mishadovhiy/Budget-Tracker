@@ -236,7 +236,7 @@ struct SaveToDB {
             db.categories.append(category)
             completion(false)
         } else {
-            let pupose = purposeToString(category.purpose)
+            let pupose = category.purpose.rawValue
             
             var amount:String {
                 if let amount = category.amountToPay {
@@ -381,7 +381,7 @@ struct DeleteFromDB {
             deleteCategory(category: category)
             completion(false)
         } else {
-            let pupose = purposeToString(category.purpose)
+            let pupose = category.purpose.rawValue
             var amount:String {
                 if let amount = category.amountToPay {
                     return "&AmountToPay=\(amount)"

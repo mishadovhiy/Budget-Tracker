@@ -13,7 +13,6 @@ import AVFoundation
  iconTapped
  newCategoryPressed
  */
-var _categoriesHolder: [CategoriesStruct] = []
 
 protocol CategoriesVCProtocol {
     func categorySelected(category: NewCategories?, fromDebts: Bool, amount: Int)
@@ -136,7 +135,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         }
     }
     
-    func defaultCategory(icon:String, color:String, purpose:CategoryPurpose) -> ScreenCategory {
+    func defaultCategory(icon:String, color:String, purpose:NewCategories.CategoryPurpose) -> ScreenCategory {
         
         return ScreenCategory(category: NewCategories(id: -1, name: "", icon: icon, color: color, purpose: purpose), transactions: [])
     }
@@ -162,7 +161,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             
             for i in 0..<newValue.count {
                 let purpose = newValue[i].purpose
-                let strPurpose = purposeToString(purpose)
+                let strPurpose = purpose.rawValue
                 var data = resultDict[strPurpose] ?? []
 
                 var transactions:[TransactionsStruct] {
@@ -205,14 +204,15 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 let incomeImg = appData.lastSelected.gett(setterType: .icon, valueType: .income) ?? ""
                 
                 var resultData:[ScreenDataStruct] = []
+               
                 resultData = [
-                    ScreenDataStruct(title: K.expense.localize, data: resultDict[purposeToString(.expense)] ?? [], newCategory: defaultCategory(icon: expenseImg, color: expenseColor, purpose: .expense)),
-                    ScreenDataStruct(title: K.income.localize, data: resultDict[purposeToString(.income)] ?? [], newCategory: defaultCategory(icon: incomeImg, color: incomeColor, purpose: .income))
+                    ScreenDataStruct(title: K.expense.localize, data: resultDict[purpose(.expense)] ?? [], newCategory: defaultCategory(icon: expenseImg, color: expenseColor, purpose: .expense)),
+                    ScreenDataStruct(title: K.income.localize, data: resultDict[purpose(.income)] ?? [], newCategory: defaultCategory(icon: incomeImg, color: incomeColor, purpose: .income))
                 ]
                 if fromSettings {
                     self.tableData = resultData
                 } else {
-                    resultData.append(ScreenDataStruct(title:purposeToString(.debt).localize, data: resultDict[purposeToString(.debt)] ?? [], newCategory: defaultCategory(icon: debtImg, color: debtColor, purpose: .debt)))
+                    resultData.append(ScreenDataStruct(title:purpose(.debt).localize, data: resultDict[purpose(.debt)] ?? [], newCategory: defaultCategory(icon: debtImg, color: debtColor, purpose: .debt)))
                     
                     self.tableData = resultData
                 }
@@ -226,7 +226,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 let debtColor = appData.lastSelected.gett(setterType: .color, valueType: .debt) ?? AppData.linkColor
                 let debtImg = appData.lastSelected.gett(setterType: .icon, valueType: .debt) ?? ""
                 self.tableData = [
-                    ScreenDataStruct(title: "", data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: debtImg, color: debtColor, purpose: .debt), transactions: [])),
+                    ScreenDataStruct(title: "", data: resultDict[purpose(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: debtImg, color: debtColor, purpose: .debt), transactions: [])),
                 ]
             case .localData:
                 var allTransactions: [TransactionsStruct] {
@@ -238,9 +238,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 }
                 self.tableData = [
                     ScreenDataStruct(title: "", data: [ScreenCategory(category: NewCategories(id: -1, name: "All transaction".localize, icon: "", color: "", purpose: .expense), transactions: allTransactions)], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .expense), transactions: [])),
-                    ScreenDataStruct(title: K.expense.localize, data: resultDict[purposeToString(.expense)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .expense), transactions: [])),
-                    ScreenDataStruct(title: K.income.localize, data: resultDict[purposeToString(.income)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .income), transactions: [])),
-                    ScreenDataStruct(title: purposeToString(.debt).localize, data: resultDict[purposeToString(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .debt), transactions: []))
+                    ScreenDataStruct(title: K.expense.localize, data: resultDict[purpose(.expense)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .expense), transactions: [])),
+                    ScreenDataStruct(title: K.income.localize, data: resultDict[purpose(.income)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .income), transactions: [])),
+                    ScreenDataStruct(title: purpose(.debt).localize, data: resultDict[purpose(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .debt), transactions: []))
                 ]
             }
             DispatchQueue.main.async {
@@ -255,6 +255,10 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         }
     }
 
+    func purpose(_ purpose:NewCategories.CategoryPurpose) -> String {
+        return purpose.rawValue
+    }
+    
     
     func sort(_ data: [ScreenCategory]) -> [ScreenCategory] {
         switch sortOption {
@@ -334,7 +338,30 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         }
     }
     
-   
+    private func prerformDownload(showError:Bool, completion:@escaping([NewCategories])->()) {
+        let download = {
+            LoadFromDB.shared.newCategories { data, error in
+                AppData.categoriesHolder = data
+                if error != .none {
+                    if showError {
+                        DispatchQueue.main.async {
+                            self.newMessage.show(type: .internetError)
+                        }
+                    }
+                }
+                completion(data)
+            }
+        }
+        if !showError {
+            if let categoriesHolder = AppData.categoriesHolder {
+                completion(categoriesHolder)
+            } else {
+                download()
+            }
+        } else {
+            download()
+        }
+    }
 
     var searchingText = ""
     var allCategoriesHolder: [NewCategories] = []
@@ -343,17 +370,10 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
 
         if screenType != .localData {
             if !loadFromUD {
-               // let load = LoadFromDB()
-                LoadFromDB.shared.newCategories { loadedData, error in
+                prerformDownload(showError: showError) { loadedData in
                     self.allCategoriesHolder = loadedData
                     self.categories = self.categoriesContains(self.searchingText)
-                    if error != .none {
-                        if showError {
-                            DispatchQueue.main.async {
-                                self.newMessage.show(type: .internetError)
-                            }
-                        }
-                    }
+                    
                 }
             } else {
                 allCategoriesHolder = db.categories
@@ -362,14 +382,11 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             
         } else {
             if let transfare = transfaringCategories {
-              //  self.categories = transfare.categories
                 allCategoriesHolder = transfare.categories
                 categories = categoriesContains(searchingText)
             } else {
-                //ud
                 allCategoriesHolder = db.localCategories
                 categories = categoriesContains(searchingText)
-             //   self.categories = db.localCategories
             }
         }
         
@@ -381,11 +398,8 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
     let db = DataBase()
     func saveNewCategory(section: Int, category: ScreenCategory) {
-        
-       // let load = LoadFromDB()
         LoadFromDB.shared.newCategories { loadedData, error in
             var newCategory = category
-           // let save = SaveToDB()
             let all = loadedData.sorted{ $0.id > $1.id }
             let newID = (all.first?.id ?? 0) + 1
             
@@ -398,18 +412,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 self.tableData[section].data.insert(newCategory, at: 0)
                 self._categories.insert(newCategory.category, at: 0)
                 self.tableData[section].newCategory.category.name = ""
-              //  self.tableData[section].data.append(newCategory)
                 self.selectingIconFor = (nil,nil)
-           /*     if CategoriesVC.shared?.showingIcons ?? false {
-                    CategoriesVC.shared?.to/ggleIcons(show: false, animated: true, category: nil)
-                }*/
                 DispatchQueue.main.async {
                     UIImpactFeedbackGenerator().impactOccurred()
-          //          self.ai.fastHide { _ in
-                        
-          //          }
-                    
-                    
                     self.tableView.reloadData()
                 }
             }
@@ -418,7 +423,6 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     }
     
     func addCategoryPerform(section:Int) {
-       // DispatchQueue.main.async {
             UIImpactFeedbackGenerator().impactOccurred()
             let category = self.tableData[section].newCategory
             if category.category.name != "" {
@@ -455,10 +459,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         //}
     }
     
-    //editingTfIndex.0 - row
-    //editingTfIndex.1 - section
     var editingTfIndex: (Int?,Int?) = (nil,nil)
-    
     var endAll = false
 
     @objc func pressedToDismiss(_ sender: UITapGestureRecognizer) {
@@ -1002,12 +1003,12 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                     let hideEditing = category.editing != nil ? false : true
                     let hideQnt = !hideEditing
                     let hideTitle = !hideEditing
-                    let hidedueDate = category.category.dueDate == nil
+                    let hidedueDate = !hideEditing ? true : (category.category.dueDate == nil)
                     
                     if cell.editingStack.isHidden != hideEditing {
                         cell.editingStack.isHidden = hideEditing
                     }
-                    if cell.qntLabel.superview?.isHidden ?? false != hideQnt {
+                    if (cell.qntLabel.superview?.isHidden ?? false) != hideQnt {
                         cell.qntLabel.superview?.isHidden = hideQnt
                     }
                     if cell.categoryNameLabel.isHidden != hideTitle {

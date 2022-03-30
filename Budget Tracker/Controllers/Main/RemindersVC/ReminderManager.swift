@@ -8,14 +8,14 @@
 
 import UIKit
 
-class Reminders {
+class ReminderManager {
     private let db = DataBase()
     
     
-    var reminders:[RemindersData] {
+    var reminders:[ReminderStruct] {
         get {
             let data = UserDefaults.standard.value(forKey: "PaymentReminder") as? [[String:Any]] ?? []
-            var result:[RemindersData] = []
+            var result:[ReminderStruct] = []
             for item in data {
                 
                 if let transaction = self.db.transactionFrom(item) {
@@ -43,7 +43,7 @@ class Reminders {
             AppDelegate.shared?.center.removePendingNotificationRequests(withIdentifiers: [id])
         }
         let data = Array(self.reminders)
-        var result:[RemindersData] = []
+        var result:[ReminderStruct] = []
         for i in 0..<data.count {
             if data[i].id != id {
                 result.append(data[i])
@@ -53,10 +53,10 @@ class Reminders {
         self.reminders = result
     }
     
-    func saveReminder(transaction:TransactionsStruct, newReminder:RemindersData, completionn: @escaping (Bool) -> ()) {
+    func saveReminder(transaction:TransactionsStruct, newReminder:ReminderStruct, completionn: @escaping (Bool) -> ()) {
         let notifications = Notifications()
         let body = transaction.value + " " + "for category".localize + ": " + transaction.category.name
-        if let date = newReminder.time{//newReminder.time?.createDateComp(date: transaction.date, time: newReminder.time) {
+        if let date = newReminder.time {
             if date.expired {
                 completionn(false)
             } else {

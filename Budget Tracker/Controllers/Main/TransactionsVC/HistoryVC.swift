@@ -257,7 +257,7 @@ class HistoryVC: SuperViewController {
             vc.selectedPurpose = selectedPurposeH
         case "toCalendar":
             let vc = segue.destination as! CalendarVC
-            vc.delegate = self//CalendarVCProtocol
+            vc.delegate = self
              let string = self.selectedCategory?.dueDate
             let stringDate = "\(AppData.makeTwo(n: string?.day ?? 0)).\(AppData.makeTwo(n: string?.month ?? 0)).\(string?.year ?? 0)"
             let time = "\(AppData.makeTwo(n: string?.hour ?? 0)):\(AppData.makeTwo(n: string?.minute ?? 0)):\(AppData.makeTwo(n: string?.second ?? 0))"

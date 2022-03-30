@@ -8,8 +8,8 @@
 
 import UIKit
 
-struct RemindersData {
-    let transaction: TransactionsStruct
+struct ReminderStruct {
+    var transaction: TransactionsStruct
 
     var dict:[String:Any]
     
