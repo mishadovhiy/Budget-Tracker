@@ -57,8 +57,9 @@ extension IndicatorView {
         if let image = image {
             return .init(named: image.rawValue)
         } else {
-            let needError = type == .error || type == .internetError
-            return needError ? .init(named: Image.error.rawValue) : nil
+            let error:UIImage? = (type == .error || type == .internetError) ? .init(named: Image.error.rawValue) : nil
+            let scs:UIImage? = (type == .succsess) ? .init(named: Image.succsess.rawValue) : nil
+            return error ?? (scs ?? nil)
         }
     }
     

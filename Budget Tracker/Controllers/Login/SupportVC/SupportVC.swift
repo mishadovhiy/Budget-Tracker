@@ -134,13 +134,8 @@ class SupportVC: SuperViewController, UITextViewDelegate {
                         let title =  error ? "Error".localize : "Thank you".localize
                         let description = error ? "Try later".localize : "Your message has been sent".localize
                         DispatchQueue.main.async {
-                            self.navigationController?.popViewController(animated: true)
-
                             self.ai.showAlertWithOK(title: title, text: description, error: error)
-                            if !error {
-                                self.textView.text = ""
-                                self.message = ""
-                            }
+                            self.navigationController?.popViewController(animated: true)
                         }
                         
                     }

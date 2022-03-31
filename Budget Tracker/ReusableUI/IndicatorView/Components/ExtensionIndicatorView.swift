@@ -11,8 +11,9 @@ import UIKit
 extension IndicatorView {
     func showAlertWithOK(title:String? = nil,text:String? = nil, error: Bool, okTitle:String = "OK", hidePressed:((Bool)->())? = nil) {
         let alertTitle = title ?? (error ? "Error".localize : Text.success)
+        let okButton:button = .init(title: okTitle, style: error ? .error : .link, close: true, action: hidePressed)
         DispatchQueue.main.async {
-            self.showAlertWithOK(title: alertTitle, text: text, error: error, okTitle: okTitle, hidePressed: hidePressed)
+            self.showAlert(buttons: (okButton, nil), title: alertTitle, description: text, type: error ? .error : .standard)
         }
     }
     
