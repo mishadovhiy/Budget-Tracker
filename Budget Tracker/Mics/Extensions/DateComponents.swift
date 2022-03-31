@@ -26,7 +26,15 @@ extension DateComponents {
         }
         return nil
     }
-    func stringToDateComponent(s: String, dateFormat:String="dd.MM.yyyy") -> DateComponents {
+    
+    func toShortString(dateFormat:String="dd.MM.yyyy") -> String? {
+        let day = AppData.makeTwo(int: self.day)
+        let month = AppData.makeTwo(int: self.month)
+        let year = "\(self.year ?? 0)"
+        return day + "." + month + "." + year
+    }
+    
+    func stringToDateComponent(s: String, dateFormat:String="dd.MM.yyyy") -> DateComponents {//make privat
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = dateFormat
         let date = dateFormatter.date(from: s)

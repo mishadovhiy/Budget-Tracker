@@ -19,13 +19,8 @@ struct TransactionsStruct {
     
     func compToIso(dateStringOp:String? = nil) -> DateComponents?  {
         let date = dateStringOp ?? self.date
-      //  if let dateString = date {
-            let dateCo = DateComponents()
-            return date == "" ? nil : dateCo.stringToCompIso(s: date)
-    //    } else {
-      //      return nil
-       // }
-        
+        let dateCo = DateComponents()
+        return date == "" ? nil : dateCo.stringToCompIso(s: date)
     }
     
     

@@ -56,9 +56,6 @@ class IconsVC: UIViewController {
             
             
             collectionView.register(CollectionIconsHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: collectionHeaderID)
-            if screenType != .colorsOnly {
-                self.view.backgroundColor = K.Colors.sectionBackground
-            }
         }
         
     }
@@ -85,7 +82,7 @@ class IconsVC: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         title = screenType == .colorsOnly ? "Primary color".localize : "Set icon".localize
-
+        self.view.backgroundColor = screenType == .colorsOnly ? K.Colors.primaryBacground : K.Colors.secondaryBackground
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -142,8 +139,8 @@ extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "IconsVCColorCell", for: indexPath) as! IconsVCColorCell
             
             cell.colorView.backgroundColor = AppData.colorNamed(coloresStrTemporary[indexPath.row])
-            //cell.backgroundColor = indexPath.row == selectedColorId ? K.Colors.secondaryBackground : .clear
-            cell.backgroundColor = coloresStrTemporary[indexPath.row] == selectedColorName ? K.Colors.primaryBacground : .clear
+            let selectionColor = screenType == .colorsOnly ? K.Colors.sectionBackground : K.Colors.primaryBacground
+            cell.backgroundColor = coloresStrTemporary[indexPath.row] == selectedColorName ? selectionColor : .clear
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "IconsVCCell", for: indexPath) as! IconsVCCell

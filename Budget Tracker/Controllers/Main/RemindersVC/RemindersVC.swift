@@ -18,8 +18,6 @@ class RemindersVC: SuperViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         RemindersVC.shared = self
-        tableView.delegate = self
-        tableView.dataSource = self
         loadData()
         title = "Payment reminders".localize
     }
@@ -53,10 +51,13 @@ class RemindersVC: SuperViewController {
                 let data = tableData[row]
                 vc.reminder_Repeated = data.repeated
                 vc.reminder_Time = data.time
+               // let normalDate = data.transaction.date.stringToCompIso()
+               // print(normalDate, "normalDatenormalDatenormalDatenormalDate")
                 vc.editingDate = data.transaction.date
                 vc.editingValue = Double(data.transaction.value) ?? 0.0
                 vc.editingCategory = data.transaction.categoryID
                 vc.editingComment = data.transaction.comment
+                vc.idxHolder = row
             }
         default:
             break
@@ -66,28 +67,38 @@ class RemindersVC: SuperViewController {
 
 extension RemindersVC:UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        tableData.count
+        return tableData.count == 0 ? 1 : tableData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ReminderCell", for: indexPath) as! ReminderCell
-        cell.row = indexPath.row
-        let data = tableData[indexPath.row]
-        cell.amountLabel.text = data.transaction.value
-        let date = data.time
-        cell.dayNumLabel.text = "\(AppData.makeTwo(n: date?.day))"
-        cell.dateLabel.text = (date?.stringMonth ?? "") + "\n\(date?.year ?? 0)"
-        cell.timeLabel.text = date?.stringTime
-        cell.expiredLabel.isHidden = !(date?.expired ?? false)
-        cell.commentLabel.text = data.transaction.comment + "//\((data.repeated ?? false) ? "1" : "0")"
-        cell.categoryLabel.text = data.transaction.category.name
-        cell.actionsView.isHidden = !data.selected
-        cell.unseenIndicator.isHidden = !data.higlightUnseen
-        cell.repeatedIndicator.isHidden = !(data.repeated ?? false)
-        cell.editAction = editReminder(idx:)
-        cell.deleteAction = deleteReminder(idx:)
-        cell.addTransactionAction = addTransaction(idx:)
-        return cell
+        if tableData.count == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "NoRemindersCell", for: indexPath) as! NoRemindersCell
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ReminderCell", for: indexPath) as! ReminderCell
+            cell.row = indexPath.row
+            let data = tableData[indexPath.row]
+            cell.amountLabel.text = data.transaction.value
+            let date = data.time
+            cell.dayNumLabel.text = "\(AppData.makeTwo(n: date?.day))"
+            cell.dateLabel.text = (date?.stringMonth ?? "") + "\n\(date?.year ?? 0)"
+            cell.timeLabel.text = date?.stringTime
+            cell.expiredLabel.isHidden = !(date?.expired ?? false)
+            cell.commentLabel.text = data.transaction.comment + "//\((data.repeated ?? false) ? "1" : "0")"
+            cell.categoryLabel.text = data.transaction.category.name
+            cell.actionsView.isHidden = !data.selected
+            cell.unseenIndicator.isHidden = !data.higlightUnseen
+            cell.repeatedIndicator.isHidden = !(data.repeated ?? false)
+            cell.editAction = editReminder(idx:)
+            cell.deleteAction = deleteReminder(idx:)
+            cell.addTransactionAction = addTransaction(idx:)
+            return cell
+        }
+        
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return tableData.count == 0 ? tableView.frame.height : UITableView.automaticDimension
     }
     
     
@@ -97,11 +108,11 @@ extension RemindersVC :TransitionVCProtocol {
     
     func addNewTransaction(value: String, category: String, date: String, comment: String, reminderTime: DateComponents?, repeated: Bool?) {
         let new = TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)
-        addReminder(was: nil, transaction: new, reminderTime: reminderTime, repeated: repeated)
+        addReminder(wasStringID: nil, transaction: new, reminderTime: reminderTime, repeated: repeated)
     }
     
-    func editTransaction(_ transaction: TransactionsStruct, was: TransactionsStruct,reminderTime: DateComponents?, repeated: Bool?) {
-        addReminder(was: was, transaction: transaction, reminderTime: reminderTime, repeated: repeated)
+    func editTransaction(_ transaction: TransactionsStruct, was: TransactionsStruct,reminderTime: DateComponents?, repeated: Bool?, idx:Int?) {
+        addReminder(wasStringID: idx, transaction: transaction, reminderTime: reminderTime, repeated: repeated)
     }
     
     func quiteTransactionVC(reload: Bool) {

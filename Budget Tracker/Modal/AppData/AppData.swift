@@ -186,8 +186,12 @@ class AppData {
 
     var fromLoginVCMessage = ""
     
-    func makeTwo(int: Int) -> String {
-        return int <= 9 ? "0\(int)" : "\(int)"
+    static func makeTwo(int: Int?) -> String {
+        if let n = int {
+            return n <= 9 ? "0\(n)" : "\(n)"
+        } else {
+            return "00"
+        }
     }
     
 

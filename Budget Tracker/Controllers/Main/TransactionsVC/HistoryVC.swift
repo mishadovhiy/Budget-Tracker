@@ -665,7 +665,7 @@ extension HistoryVC: TransitionVCProtocol {
         //not usng
     }
     
-    func editTransaction(_ transaction: TransactionsStruct, was: TransactionsStruct, reminderTime: DateComponents?, repeated: Bool?) {
+    func editTransaction(_ transaction: TransactionsStruct, was: TransactionsStruct, reminderTime: DateComponents?, repeated: Bool?, idx:Int?) {
         //not using
     }
     

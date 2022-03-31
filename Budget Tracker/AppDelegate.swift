@@ -99,13 +99,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
         if appData.devMode {
             DispatchQueue.main.async {
-                self.ai.showAlertWithOK(title: "Memory warning!", error: false)
+                self.ai.showAlertWithOK(title: "Memory warning!", error: true)
             }
         }
         
         print(#function)
     }
-    
+
     func applicationDidBecomeActive(_ application: UIApplication) {
         print(#function)
         if !becameActive {
@@ -146,13 +146,13 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         let notificationText = notification.request.content.body
         let notificationTitle = notification.request.content.title
         notificationManager.deliveredNotificationIDs.append(notification.request.identifier)
-        let isDebts = notification.request.identifier.contains("Debt")
+        let isDebts = notification.request.identifier.contains("Debts")
         let okButton = IndicatorView.button(title: "Close", style: .regular, close: true) { _ in }
         let showButton = IndicatorView.button(title: "Show", style: .link, close: false) { _ in
             
             if isDebts {
                 LoadFromDB.shared.newCategories { categories, error in
-                    self.showHistory(categpry: categpryID)
+                    self.showHistory(categpry: categpryID.replacingOccurrences(of: "Debts", with: ""))
                 }
             } else {
                 self.showPaymentReminders()
@@ -192,10 +192,9 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
             }
         } else {
+            let text = appData.devMode ? categpry : nil
             DispatchQueue.main.async {
-                self.ai.fastHide { (_) in
-                    self.newMessage.show(title:("Category".localize + " " + "not found".localize), type: .error)
-                }
+                self.ai.showAlertWithOK(title:"Category not found".localize, text:text, error: true)
             }
         }
         
@@ -208,12 +207,9 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             let strorybpard = UIStoryboard(name: "Main", bundle: nil)
             let vc = strorybpard.instantiateViewController(withIdentifier: "RemindersVC") as! RemindersVC
             let nav = UINavigationController(rootViewController: vc)
-            if let currVC = self.window?.rootViewController {
-                currVC.present(nav, animated: true, completion: {
-                    self.ai.fastHide()
-                })
-            } else {
-                self.ai.showAlertWithOK(title: "Error".localize, text: Text.Error.internetDescription, error: true)
+            
+            self.ai.fastHide { _ in
+                UIApplication.shared.windows.last?.rootViewController?.present(nav, animated: true, completion: nil)
             }
             
         }

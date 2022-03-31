@@ -541,6 +541,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             UIView.animate(withDuration: animated ? 0.3 : 0) {
                 self.iconsContainer.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, show ? 0 : containerHeight + (appData.safeArea.0 + appData.safeArea.1 + 50), 0)
             } completion: { _ in
+                if self.iconsContainer.isHidden != false {
+                    self.iconsContainer.isHidden = false
+                }
                 if show {
                     IconsVC.shared?.selectedIconName = category?.icon ?? ""
                     IconsVC.shared?.selectedColorName = category?.color ?? ""

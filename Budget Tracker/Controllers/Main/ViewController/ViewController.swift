@@ -1637,7 +1637,7 @@ extension ViewController: TransitionVCProtocol {
         }
     }
     
-    func editTransaction(_ transaction: TransactionsStruct, was: TransactionsStruct, reminderTime:DateComponents?, repeated:Bool?) {
+    func editTransaction(_ transaction: TransactionsStruct, was: TransactionsStruct, reminderTime:DateComponents?, repeated:Bool?, idx:Int?) {
         let delete = DeleteFromDB()
         delete.newTransaction(was) { _ in
            // let save = SaveToDB()

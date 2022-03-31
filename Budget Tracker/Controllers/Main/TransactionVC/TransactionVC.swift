@@ -16,7 +16,7 @@ var lastSelectedDate:String?
 
 protocol TransitionVCProtocol {
     func addNewTransaction(value: String, category: String, date: String, comment: String, reminderTime:DateComponents?, repeated:Bool?)
-    func editTransaction(_ transaction:TransactionsStruct, was:TransactionsStruct,reminderTime: DateComponents?, repeated: Bool?)
+    func editTransaction(_ transaction:TransactionsStruct, was:TransactionsStruct,reminderTime: DateComponents?, repeated: Bool?, idx:Int?)
     func quiteTransactionVC(reload:Bool)
     func deletePressed()
 }
@@ -294,25 +294,50 @@ class TransitionVC: SuperViewController {
             self.reminder_Repeated = sender.isOn
         }
     }
-    
+    var idxHolder:Int?
     var donePressed = false
+    func checkDate(date:String, completion:(Bool)->()) {
+        if idxHolder != nil {
+            if let time = self.reminder_Time {
+                var day =  date.stringToCompIso()
+                day.hour = time.hour
+                day.minute = time.minute
+                day.second = time.second
+                if !day.expired {
+                    completion(true)
+                } else {
+                    DispatchQueue.main.async {
+                        self.newMessage.show(title:"Day can't be older than today".localize, type: .error)
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.newMessage.show(title:"Set reminder date".localize, type: .error)
+                }
+            }
+        } else {
+            completion(true)
+        }
+        
+    }
     func addNew(value: String, category: String, date: String, comment: String) {
         donePressed = true
         print("addNew called", value)
         DispatchQueue.main.async {
             UIImpactFeedbackGenerator().impactOccurred()
-            self.dismiss(animated: true) {
-                if self.editingDate != "" {
-                    let new = TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)
-                    let was = TransactionsStruct(value: "\(Int(self.editingValue))", categoryID: self.editingCategory, date: self.editingDate, comment: self.editingComment)
-                    self.delegate?.editTransaction(new, was: was, reminderTime: self.reminder_Time, repeated: self.reminder_Repeated)
-                   
-                } else {
-
-                    self.delegate?.addNewTransaction(value: value, category: category, date: date, comment: comment, reminderTime: self.reminder_Time, repeated: self.reminder_Repeated)
+            self.checkDate(date: date) { _ in
+                self.dismiss(animated: true) {
+                    if self.editingDate != "" {
+                        let new = TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)
+                        let was = TransactionsStruct(value: "\(Int(self.editingValue))", categoryID: self.editingCategory, date: self.editingDate, comment: self.editingComment)
+                        self.delegate?.editTransaction(new, was: was, reminderTime: self.reminder_Time, repeated: self.reminder_Repeated, idx: self.idxHolder)
+                    } else {
+                        self.delegate?.addNewTransaction(value: value, category: category, date: date, comment: comment, reminderTime: self.reminder_Time, repeated: self.reminder_Repeated)
+                    }
+                    
                 }
-                
             }
+            
         }
     }
     
@@ -554,11 +579,13 @@ extension TransitionVC: CalendarVCProtocol {
         reminder_Time = time
         calendarSelectedTime = time
         dateChanged = true
+        let compDate = date.stringToCompIso()
+        let newDate = compDate.toShortString() ?? date
         DispatchQueue.main.async {
-            self.dateTextField.text = date
+            self.dateTextField.text = newDate
         }
-        lastSelectedDate = date
-        displeyingTransaction.date = date
+        lastSelectedDate = newDate
+        displeyingTransaction.date = newDate
     }
     
     

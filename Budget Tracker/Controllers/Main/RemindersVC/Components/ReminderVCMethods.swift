@@ -18,16 +18,15 @@ extension RemindersVC {
     }
     
     
-    func addReminder(was:TransactionsStruct?, transaction:TransactionsStruct, reminderTime: DateComponents?, repeated: Bool?) {
+    func addReminder(wasStringID:Int?, transaction:TransactionsStruct, reminderTime: DateComponents?, repeated: Bool?) {
       //  ai.show { _ in
-            if let was = was {
-                let wasID:ReminderStruct = .init(transaction: was, dict: was.reminder ?? [:])
-                self.reminders.deleteReminder(id: wasID.id ?? "")
+            if let wasID = wasStringID {
+                self.reminders.deleteReminder(id: self.tableData[wasID].id ?? "")
             }
             let newDate = reminderTime?.createDateComp(date: transaction.date, time: reminderTime)
             var newReminder:ReminderStruct = .init(transaction: transaction, dict: transaction.reminder ?? [:])
             newReminder.time = newDate
-        newReminder.transaction.date = newDate?.toIsoString() ?? ""
+        newReminder.transaction.date = newDate?.toShortString() ?? ""
             newReminder.id = "paymentReminder" + UUID().uuidString
             newReminder.repeated = repeated
         self.reminders.saveReminder(transaction: newReminder.transaction, newReminder: newReminder) { added in
@@ -59,6 +58,10 @@ extension RemindersVC {
                     Calendar.current.date(from: $1.time ?? comp ) ?? Date.distantFuture
         }
         DispatchQueue.main.async {
+            if self.tableView.delegate == nil {
+                self.tableView.delegate = self
+                self.tableView.dataSource = self
+            }
             self.tableView.reloadData()
             self.ai.fastHide()
         }
