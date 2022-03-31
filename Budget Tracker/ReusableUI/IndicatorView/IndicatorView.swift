@@ -217,9 +217,7 @@ class IndicatorView: UIView {
 
     
     @IBAction private func closePressed(_ sender: UIButton) {
-        fastHide { _ in
-            
-        }
+        fastHide()
     }
     
     @IBAction private func buttonPress(_ sender: UIButton) {
@@ -237,6 +235,8 @@ class IndicatorView: UIView {
                         function(true)
                     }
                 }
+            } else {
+                fastHide()
             }
         case 1:
             print("rightButtonPress")
@@ -250,6 +250,8 @@ class IndicatorView: UIView {
                         function(true)
                     }
                 }
+            } else {
+                fastHide()
             }
         default:
             break
