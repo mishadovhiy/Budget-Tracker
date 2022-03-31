@@ -35,9 +35,7 @@ class HistoryVC: SuperViewController {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
                // self.tableView.scrollToRow(at: IndexPath(row: 0, section: 2), at: .bottom, animated: true)
-                self.ai.fastHide { _ in
-                    
-                }
+                self.ai.fastHide()
             }
         }
         
@@ -424,9 +422,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                         self.center.removePendingNotificationRequests(withIdentifiers: [id])
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
-                            self.ai.fastHide(completionn: { _ in
-                                
-                            })
+                            self.ai.fastHide()
                         }
     }
     
@@ -707,7 +703,6 @@ extension HistoryVC: TransitionVCProtocol {
 extension HistoryVC: CalendarVCProtocol {
     
     func dateSelected(date: String, time: DateComponents?) {
-     //   DispatchQueue.main.async {
             self.ai.show { (_) in
                 let id = "Debts\(self.selectedCategory?.id ?? 0)"
                 self.center.removePendingNotificationRequests(withIdentifiers: [id])
@@ -719,9 +714,10 @@ extension HistoryVC: CalendarVCProtocol {
                     if let isoFullString = dateComp.toIsoString() {
                         if !self.dateExpired(dateComp) {
                             let nodifCen = Notifications()
-                            let notifTitle = self.selectedCategory?.name ?? ""
+                            let notifTitle = "Due date has expired".localize
+                            let notifBody = "For category".localize + ": " + (self.selectedCategory?.name ?? "")
                             let notifID = "Debts\(self.selectedCategory?.id ?? 0)"
-                            nodifCen.addLocalNotification(date: dateComp, title: notifTitle, id: notifID, body: "Due date has expired") { added in
+                            nodifCen.addLocalNotification(date: dateComp, title: notifTitle, id: notifID, body: notifBody) { added in
                                 self.changeDueDate(fullDate: isoFullString)
                                 if !added {
                                     DispatchQueue.main.async {

@@ -18,17 +18,14 @@ import StoreKit
 class BuyProVC: SuperViewController {
     
     func showAlert(title:String,text:String?, error: Bool, goHome: Bool = false) {
-        
-        let okButton = IndicatorView.button(title: "OK".localize, style: .standart, close: true) { _ in
-            if goHome {
-                DispatchQueue.main.async {
-                    self.performSegue(withIdentifier: "homeVC", sender: self)
+        DispatchQueue.main.async {
+            self.ai.showAlertWithOK(title: title, text: text, error: error) { _ in
+                if goHome {
+                    DispatchQueue.main.async {
+                        self.performSegue(withIdentifier: "homeVC", sender: self)
+                    }
                 }
             }
-        }
-        
-        DispatchQueue.main.async {
-            self.ai.completeWithActions(buttons: (okButton, nil), title: title, descriptionText: text, type: error ? .error : .standard)
         }
 
     }
@@ -189,17 +186,17 @@ class BuyProVC: SuperViewController {
                 
             } else {
                 //trial only if singed in
-                let firstButton = IndicatorView.button(title: "Close".localize, style: .standart, close: true) { _ in
+                let firstButton = IndicatorView.button(title: "Close".localize, style: .error, close: true) { _ in
                    // self.trialWithoutAcoount()
                 }
-                let secondButton = IndicatorView.button(title: "Sign in".localize, style: .standart, close: true) { _ in
+                let secondButton = IndicatorView.button(title: "Sign in".localize, style: .regular, close: true) { _ in
                     DispatchQueue.main.async {
                         self.performSegue(withIdentifier: "toSingIn", sender: self)
                     }
                 }
                 
                 DispatchQueue.main.async {
-                    self.ai.completeWithActions(buttons: (firstButton, secondButton), title: "Sign in required".localize, type: .standard)
+                    self.ai.showAlert(buttons: (firstButton, secondButton), title: "Sign in required".localize, type: .standard)
                 }
             }
         }
@@ -443,7 +440,7 @@ extension BuyProVC: SKPaymentTransactionObserver {
                 break
             default:
                 DispatchQueue.main.async {
-                    self.ai.hideIndicator(fast: true) { (_) in
+                    self.ai.fastHide() { (_) in
                         SKPaymentQueue.default().finishTransaction(transaction)
                         SKPaymentQueue.default().remove(self)
                     }

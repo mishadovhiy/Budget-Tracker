@@ -305,7 +305,7 @@ class TransitionVC: SuperViewController {
                 if self.editingDate != "" {
                     let new = TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)
                     let was = TransactionsStruct(value: "\(Int(self.editingValue))", categoryID: self.editingCategory, date: self.editingDate, comment: self.editingComment)
-                    self.delegate?.editTransaction(new, was: was, reminderTime: nil, repeated: nil)
+                    self.delegate?.editTransaction(new, was: was, reminderTime: self.reminder_Time, repeated: self.reminder_Repeated)
                    
                 } else {
 

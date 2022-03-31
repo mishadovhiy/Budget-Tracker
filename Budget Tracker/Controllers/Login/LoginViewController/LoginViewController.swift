@@ -77,18 +77,16 @@ class LoginViewController: SuperViewController {
     
     func showAlert(title:String? = nil,text:String? = nil, error: Bool, goToLogin: Bool = false) {
         
-        let resultTitle = title == nil ? (error ? "Error".localize : "Success".localize) : title!
-        
-        let okButton = IndicatorView.button(title: "OK", style: .standart, close: true) { _ in
-            if goToLogin {
-                DispatchQueue.main.async {
-                    self.navigationController?.popViewController(animated: true)
-                }
-            }
-        }
+        let resultTitle = title ?? (error ? "Error".localize : "Success".localize)
         
         DispatchQueue.main.async {
-            self.ai.completeWithActions(buttons: (okButton, nil), title: resultTitle, descriptionText: text, type: error ? .error : .standard)
+            self.ai.showAlertWithOK(title: resultTitle, text: text, error: error) { _ in
+                if goToLogin {
+                    DispatchQueue.main.async {
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                }
+            }
         }
 
     }
@@ -264,9 +262,7 @@ class LoginViewController: SuperViewController {
                             self.actionButtonsEnabled = true
                             DispatchQueue.main.async {
                                 self.newMessage.show(title: "All fields are required".localize, type: .error)
-                                self.ai.hideIndicator(fast: true) { (_) in
-                                    
-                                }
+                                self.ai.fastHide()
                                 
                             }
                             self.obthervValues = true
@@ -307,9 +303,7 @@ class LoginViewController: SuperViewController {
                         let messageTitle = "Wrong".localize + " " + "password".localize
                         DispatchQueue.main.async {
                             self.newMessage.show(title: messageTitle, type: .error)
-                            self.ai.fastHide { _ in
-                                
-                            }
+                            self.ai.fastHide()
                         }
                         return
                     } else {
@@ -349,8 +343,7 @@ class LoginViewController: SuperViewController {
                         if fromPro || self.forceLoggedOutUser != "" {
                             DispatchQueue.main.async {
                                 self.dismiss(animated: true) {
-                                    self.ai.fastHide { _ in
-                                    }
+                                    self.ai.fastHide()
                                 }
                             }
                         } else {
@@ -371,9 +364,7 @@ class LoginViewController: SuperViewController {
             DispatchQueue.main.async {
                 DispatchQueue.main.async {
                     self.newMessage.show(title: "User not found".localize, type: .error)
-                    self.ai.hideIndicator(fast: true) { (_) in
-                        
-                    }
+                    self.ai.fastHide()
                 }
 
             }
@@ -425,11 +416,12 @@ class LoginViewController: SuperViewController {
                             self.showWrongFields()
                             
                             
-                            let firstButton = IndicatorView.button(title: "Try again".localize, style: .standart, close: true) { _ in
+                            let firstButton = IndicatorView.button(title: "Try again".localize, style: .regular, close: true) { _ in
                                 self.emailLabel.becomeFirstResponder()
                             }
                             DispatchQueue.main.async {
-                                self.ai.completeWithActions(buttons: (firstButton, nil), title: "Enter valid email address".localize, descriptionText: "With correct email address you could restore your password in the future".localize, type: .error)
+                                self.ai.showAlert(buttons: (firstButton, nil), title: "Enter valid email address".localize, description: "With correct email address you could restore your password in the future".localize, type: .error)
+                                
                             }
 
                         } else {
@@ -462,8 +454,7 @@ class LoginViewController: SuperViewController {
                                             
 
                                                 self.dismiss(animated: true) {
-                                                    self.ai.fastHide { _ in
-                                                    }
+                                                    self.ai.fastHide()
                                                 }
 
                                         }
@@ -480,8 +471,7 @@ class LoginViewController: SuperViewController {
                             }
                         }
                     } else {
-                        self.ai.hideIndicator(fast: true) { (_) in
-                        }
+                        self.ai.fastHide()
                         if let emailLimit = emailLimitOp {
                             if emailLimit == .totalError {
                                 DispatchQueue.main.async {
@@ -510,9 +500,7 @@ class LoginViewController: SuperViewController {
 
                   //  DispatchQueue.main.async {
                     self.newMessage.show(title: "All fields are required".localize, type: .error)
-                        self.ai.hideIndicator(fast: true) { (_) in
-                            
-                        }
+                        self.ai.fastHide()
                  //   }
                   
                 }
@@ -520,9 +508,7 @@ class LoginViewController: SuperViewController {
                 self.actionButtonsEnabled = true
          //       DispatchQueue.main.async {
                 self.newMessage.show(title: "Passwords not match".localize, type: .error)
-                    self.ai.hideIndicator(fast: true) { (_) in
-                        
-                    }
+                    self.ai.fastHide()
               //  }
             }
         }
@@ -973,9 +959,7 @@ extension LoginViewController {
             self.passwordLabel.text = ""
             self.passwordLogLabel.text = ""
             self.nicknameLogLabel.text = ""
-            self.ai.fastHide { _ in
-                
-            }
+            self.ai.fastHide()
         }
     }
     

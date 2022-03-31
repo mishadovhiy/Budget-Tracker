@@ -149,24 +149,19 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
                     tableView.deselectRow(at: indexPath, animated: true)
                 } else {
                 if let function = tableData[indexPath.row].action {
-                    if tableData[indexPath.row].showAI {
-                        
-                        AppDelegate.shared!.ai.show(completion: { _ in
-                            DispatchQueue.main.async {
-                                self.dismiss(animated: true) {
-                                   // AppDelegate.shared?.ai.fastHide(completionn: { _ in
-                                        function()
-                                 //   })
-                                }
-                            }
-                        })
-                    } else {
+                    let goNext = {
                         DispatchQueue.main.async {
                             self.dismiss(animated: true) {
                                 function()
                             }
                         }
-                        
+                    }
+                    if tableData[indexPath.row].showAI {
+                        AppDelegate.shared!.ai.show(completion: { _ in
+                            goNext()
+                        })
+                    } else {
+                        goNext()
                     }
                     
                 }

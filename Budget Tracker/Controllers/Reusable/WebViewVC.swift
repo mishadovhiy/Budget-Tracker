@@ -83,10 +83,11 @@ class WebViewVC: UIViewController, UIScrollViewDelegate, WKNavigationDelegate {
     
     private func errorLoading() {
         DispatchQueue.main.async {
-            let ok = IndicatorView.button(title: "OK", style: .error, close: true) { _ in
-                self.navigationController?.popViewController(animated: true)
-            }
-            AppDelegate.shared!.ai.completeWithActions(buttons: (ok, nil), title: Text.Error.InternetTitle, descriptionText: Text.Error.internetDescription)
+            AppDelegate.shared?.ai.showAlertWithOK(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, hidePressed: { _ in
+                DispatchQueue.main.async {
+                    self.navigationController?.popViewController(animated: true)
+                }
+            })
         }
     }
 

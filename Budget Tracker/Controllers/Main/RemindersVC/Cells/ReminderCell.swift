@@ -11,6 +11,7 @@ import UIKit
 class ReminderCell: UITableViewCell {
 
     
+    @IBOutlet weak var repeatedIndicator: UIImageView!
     @IBOutlet weak var dayNumLabel: Label!
     @IBOutlet weak var expiredLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!

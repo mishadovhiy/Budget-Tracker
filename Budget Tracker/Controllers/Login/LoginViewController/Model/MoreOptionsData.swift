@@ -123,14 +123,14 @@ class MoreOptionsData {
                                 }
                             }
 
-                            let firstButton = IndicatorView.button(title: "Cancel".localize, style: .standart, close: true) { _ in
+                            let firstButton = IndicatorView.button(title: "Cancel".localize, style: .regular, close: true) { _ in
                             }
-                            let secondButton = IndicatorView.button(title: "Send".localize, style: .success, close: false) { _ in
+                            let secondButton = IndicatorView.button(title: "Send".localize, style: .link, close: false) { _ in
                                 self.sendRestorationCode(toChange: .changePassword)
                             }
                             let text = "Restoration code would be sent on: ".localize + emailToSend
                             DispatchQueue.main.async {
-                                self.ai.completeWithActions(buttons: (secondButton, firstButton), title: "Send code".localize, descriptionText: text, type: .standard)
+                                self.ai.showAlert(buttons: (secondButton, firstButton), title: "Send code".localize, description: text, type: .standard)
                             }
                         } else {
                             self.sendRestorationCode(toChange: .changePassword)
@@ -161,15 +161,15 @@ class MoreOptionsData {
                             break
                         }
                     }
-                    let firstButton = IndicatorView.button(title: "Cancel".localize, style: .standart, close: true) { _ in
+                    let firstButton = IndicatorView.button(title: "Cancel".localize, style: .regular, close: true) { _ in
                                         
                     }
-                    let secondButton = IndicatorView.button(title: "Send".localize, style: .success, close: false) { _ in
+                    let secondButton = IndicatorView.button(title: "Send".localize, style: .link, close: false) { _ in
                         self.sendRestorationCode(toChange: .changeEmail)
                     }
                     let text = "Restoration code would be sent on: ".localize + emailToSend
                     DispatchQueue.main.async {
-                        self.ai.completeWithActions(buttons: (secondButton, firstButton), title: "Send code".localize, descriptionText: text, type: .standard)
+                        self.ai.showAlert(buttons: (secondButton, firstButton), title: "Send code".localize, description: text, type: .standard)
                     }
 
                 }
@@ -666,19 +666,14 @@ extension MoreOptionsData {
     func showAlert(title:String? = nil,text:String? = nil, error: Bool, goToLogin: Bool = false) {
         
         let resultTitle = title == nil ? (error ? Text.Error.error : Text.success) : title!
-        
-        let okButton = IndicatorView.button(title: "OK", style: .standart, close: true) { _ in
-            if goToLogin {
-                DispatchQueue.main.async {
-                    self.vc.navigationController?.popToViewController(self.vc, animated: true)
+        DispatchQueue.main.async {
+            self.ai.showAlertWithOK(title: resultTitle, text: text, error: error) { _ in
+                if goToLogin {
+                    DispatchQueue.main.async {
+                        self.vc.navigationController?.popToViewController(self.vc, animated: true)
+                    }
                 }
             }
-        }
-        
-        DispatchQueue.main.async {
-            
-       //     EnterValueVC.shared?.valueTextField.endEditing(true)
-            self.ai.completeWithActions(buttons: (okButton, nil), title: resultTitle, descriptionText: text, type: error ? .error : .standard)
         }
 
     }

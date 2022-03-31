@@ -150,9 +150,7 @@ class categoriesVCcell: UITableViewCell {
                 CategoriesVC.shared?.selectingIconFor = (nil, nil)
                 CategoriesVC.shared?.editingTfIndex = (nil, nil)
                 CategoriesVC.shared?.tableView.reloadData()
-                CategoriesVC.shared?.ai.fastHide { _ in
-                    
-                }
+                CategoriesVC.shared?.ai.fastHide()
             }
         }
     }
@@ -182,9 +180,7 @@ class categoriesVCcell: UITableViewCell {
                                 CategoriesVC.shared?.editingTF?.endEditing(true)
                                 CategoriesVC.shared?.editingTF = nil
                                 CategoriesVC.shared?.tableView.reloadData()
-                                CategoriesVC.shared?.ai.fastHide(completionn: { _ in
-                              //      UIImpactFeedbackGenerator().impactOccurred()
-                                })
+                                CategoriesVC.shared?.ai.fastHide()
                             }
                         }
                     }

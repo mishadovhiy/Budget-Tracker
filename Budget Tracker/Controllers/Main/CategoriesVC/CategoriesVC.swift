@@ -79,9 +79,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         set {
             _tableData = newValue
             DispatchQueue.main.async {
-                self.ai.fastHide { _ in
-                    
-                }
+                self.ai.fastHide()
               //  self.tableView.reloadData()
                 if self.refreshControl.isRefreshing {
                     self.refreshControl.endRefreshing()

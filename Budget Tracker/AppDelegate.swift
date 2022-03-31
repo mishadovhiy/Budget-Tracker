@@ -98,11 +98,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
         if appData.devMode {
-            let button = IndicatorView.button(title: "ok", style: .error, close: true) { _ in
-                
-            }
             DispatchQueue.main.async {
-                self.ai.completeWithActions(buttons: (button, nil), title:"Memory warning!")
+                self.ai.showAlertWithOK(title: "Memory warning!", error: false)
             }
         }
         
@@ -147,13 +144,13 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let categpryID = notification.request.content.threadIdentifier
         let notificationText = notification.request.content.body
-        let catName = notification.request.content.title
+        let notificationTitle = notification.request.content.title
         notificationManager.deliveredNotificationIDs.append(notification.request.identifier)
-        
-        let okButton = IndicatorView.button(title: "OK", style: .standart, close: true) { _ in }
-        let showButton = IndicatorView.button(title: "Show", style: .success, close: false) { _ in
+        let isDebts = notification.request.identifier.contains("Debt")
+        let okButton = IndicatorView.button(title: "Close", style: .regular, close: true) { _ in }
+        let showButton = IndicatorView.button(title: "Show", style: .link, close: false) { _ in
             
-            if notification.request.identifier.contains("Debt") {
+            if isDebts {
                 LoadFromDB.shared.newCategories { categories, error in
                     self.showHistory(categpry: categpryID)
                 }
@@ -164,7 +161,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         }
         DispatchQueue.main.async {
             AudioServicesPlaySystemSound(1007)
-            self.ai.completeWithActions(buttons: (showButton, okButton), title: notificationText, descriptionText: "For category: \(catName)")
+            self.ai.showAlert(buttons: (showButton, okButton), title: notificationTitle, description: notificationText)
         }
 
     }
@@ -189,8 +186,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
                 UIApplication.shared.windows.last?.rootViewController?.present(navController, animated: true, completion: {
                     DispatchQueue.main.async {
-                        self.ai.fastHide { (_) in
-                        }
+                        self.ai.fastHide()
                     }
                 })
 
@@ -208,15 +204,19 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     
     
     func showPaymentReminders() {
-        let strorybpard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = strorybpard.instantiateViewController(withIdentifier: "RemindersVC") as! RemindersVC
-        let nav = UINavigationController(rootViewController: vc)
-        UIApplication.shared.windows.last?.rootViewController?.present(nav, animated: true, completion: {
-            DispatchQueue.main.async {
-                self.ai.fastHide { (_) in
-                }
+        DispatchQueue.main.async {
+            let strorybpard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = strorybpard.instantiateViewController(withIdentifier: "RemindersVC") as! RemindersVC
+            let nav = UINavigationController(rootViewController: vc)
+            if let currVC = self.window?.rootViewController {
+                currVC.present(nav, animated: true, completion: {
+                    self.ai.fastHide()
+                })
+            } else {
+                self.ai.showAlertWithOK(title: "Error".localize, text: Text.Error.internetDescription, error: true)
             }
-        })
+            
+        }
     }
     
 /// methods

@@ -20,9 +20,7 @@ class SelectValueVC: SuperViewController, UITableViewDelegate, UITableViewDataSo
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        AppDelegate.shared!.ai.fastHide { _ in
-            
-        }
+        AppDelegate.shared!.ai.fastHide()
         title = titleText
         tableView.delegate = self
         tableView.dataSource = self

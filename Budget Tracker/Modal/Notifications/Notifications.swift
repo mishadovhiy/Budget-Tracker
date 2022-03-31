@@ -34,8 +34,6 @@ struct Notifications {
         content.threadIdentifier = id
         var dateComponents = DateComponents()
         dateComponents.calendar = Calendar.current
-        
-     //   dateComponents.weekday = 5
         dateComponents.year = date.year
         dateComponents.month = date.month
         dateComponents.day = date.day

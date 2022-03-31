@@ -101,7 +101,7 @@ class PascodeLockView: UIView, UITextFieldDelegate {
     
     
     func hide() {
-        passwordNotEntered = false
+   //     passwordNotEntered = false
         presenting = false
         DispatchQueue.main.async {
             let window = UIApplication.shared.keyWindow ?? UIWindow()
@@ -142,6 +142,7 @@ class PascodeLockView: UIView, UITextFieldDelegate {
             DispatchQueue.main.async {
                 AudioServicesPlaySystemSound(1101)
             }
+            passwordNotEntered = false
             hide()
         } else {
             DispatchQueue.main.async {

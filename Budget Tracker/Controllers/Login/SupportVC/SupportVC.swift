@@ -125,19 +125,18 @@ class SupportVC: SuperViewController, UITextViewDelegate {
         DispatchQueue.main.async {
             self.textView.endEditing(true)
         }
+        
             AppDelegate.shared!.ai.show { _ in
-                if let mesag = self.message.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+                let userMessage = self.message + "username:\(appData.username)"
+                if let mesag = userMessage.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
                     self.sendCode(title: "btUserSupportRequest", head: "SupportVC", body: mesag) { error in
 
-                        let okButton = IndicatorView.button(title: "OK", style: .standart, close: true) { _ in
-                            
-                        }
                         let title =  error ? "Error".localize : "Thank you".localize
                         let description = error ? "Try later".localize : "Your message has been sent".localize
                         DispatchQueue.main.async {
                             self.navigationController?.popViewController(animated: true)
-                            AppDelegate.shared!.ai.completeWithActions(buttons: (okButton, nil), title: title, descriptionText: description, type: error ? .error : .succsess)
-                            
+
+                            self.ai.showAlertWithOK(title: title, text: description, error: error)
                             if !error {
                                 self.textView.text = ""
                                 self.message = ""

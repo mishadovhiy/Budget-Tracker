@@ -55,13 +55,15 @@ class ReminderManager {
     
     func saveReminder(transaction:TransactionsStruct, newReminder:ReminderStruct, completionn: @escaping (Bool) -> ()) {
         let notifications = Notifications()
-        let body = transaction.value + " " + "for category".localize + ": " + transaction.category.name
+        let title = "Payment reminder".localize + "\n" + "For category".localize + ": " + transaction.category.name
+        let body = "Amount".localize + ": " + transaction.value
+
         if let date = newReminder.time {
             if date.expired {
                 completionn(false)
             } else {
                 if let id = newReminder.id {
-                    notifications.addLocalNotification(date: date, title: "Payment reminder", id: id, body: body) { added in
+                    notifications.addLocalNotification(date: date, title: title, id: id, body: body) { added in
                         if added {
                             var newTransaction = transaction
                             newTransaction.reminder = newReminder.dict

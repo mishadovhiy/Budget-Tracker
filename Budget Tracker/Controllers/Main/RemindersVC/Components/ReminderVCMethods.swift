@@ -19,17 +19,18 @@ extension RemindersVC {
     
     
     func addReminder(was:TransactionsStruct?, transaction:TransactionsStruct, reminderTime: DateComponents?, repeated: Bool?) {
-        ai.show { _ in
+      //  ai.show { _ in
             if let was = was {
                 let wasID:ReminderStruct = .init(transaction: was, dict: was.reminder ?? [:])
                 self.reminders.deleteReminder(id: wasID.id ?? "")
             }
-            
+            let newDate = reminderTime?.createDateComp(date: transaction.date, time: reminderTime)
             var newReminder:ReminderStruct = .init(transaction: transaction, dict: transaction.reminder ?? [:])
-            newReminder.time = reminderTime?.createDateComp(date: transaction.date, time: reminderTime)
+            newReminder.time = newDate
+        newReminder.transaction.date = newDate?.toIsoString() ?? ""
             newReminder.id = "paymentReminder" + UUID().uuidString
             newReminder.repeated = repeated
-            self.reminders.saveReminder(transaction: transaction, newReminder: newReminder) { added in
+        self.reminders.saveReminder(transaction: newReminder.transaction, newReminder: newReminder) { added in
                 self.loadData()
                 if !added {
                     DispatchQueue.main.async {
@@ -38,7 +39,7 @@ extension RemindersVC {
                 }
             }
             
-        }
+    //    }
     }
     
     
@@ -59,9 +60,7 @@ extension RemindersVC {
         }
         DispatchQueue.main.async {
             self.tableView.reloadData()
-            self.ai.fastHide { _ in
-                
-            }
+            self.ai.fastHide()
         }
     }
 
@@ -104,7 +103,7 @@ extension RemindersVC {
                     if addded {
                         completion(true)
                     } else {
-                        self.ai.showAlert(title: "Error adding reminder", error: true)
+                        self.ai.showAlertWithOK(title: "Error adding reminder", text: nil, error: true)
                     }
                 }
 

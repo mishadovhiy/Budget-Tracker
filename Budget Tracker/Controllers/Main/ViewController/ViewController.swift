@@ -791,9 +791,7 @@ class ViewController: SuperViewController {
         super.viewDidAppear(true)
         DispatchQueue.main.async {
             if self.ai.isShowing {
-                self.ai.fastHide { _ in
-                    
-                }
+                self.ai.fastHide()
             }
         }
         if needDownloadOnMainAppeare {

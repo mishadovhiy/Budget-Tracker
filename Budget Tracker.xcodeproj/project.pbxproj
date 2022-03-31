@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		297BDB649113044757C2CEF2 /* Pods_Budget_Tracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F84A1AEB24B0EC857F848E0 /* Pods_Budget_Tracker.framework */; };
-		8B052E3D26EFD48E000BA66A /* IndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B052E3C26EFD48E000BA66A /* IndicatorView.swift */; };
-		8B052E3F26EFD4A0000BA66A /* IndicatorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B052E3E26EFD4A0000BA66A /* IndicatorView.xib */; };
 		8B1FD85D270C4DE2004E225E /* splitVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1FD85C270C4DE2004E225E /* splitVC.swift */; };
 		8B20751227D9A7AF00CF2172 /* PascodeLockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B20751127D9A7AF00CF2172 /* PascodeLockView.swift */; };
 		8B2163A2274070BA003EDFE0 /* snippets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B2163A1274070BA003EDFE0 /* snippets.swift */; };
@@ -51,6 +49,7 @@
 		8B6BA98427E73B8A0067FF58 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B6BA98327E73B8A0067FF58 /* WebKit.framework */; };
 		8B746ABE27F4039E0010F0A4 /* UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B746ABD27F4039E0010F0A4 /* UINavigationController.swift */; };
 		8B746AC027F405970010F0A4 /* ReminderVCMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B746ABF27F405970010F0A4 /* ReminderVCMethods.swift */; };
+		8B746AC527F42DBC0010F0A4 /* IndicatorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B746AC327F42DBC0010F0A4 /* IndicatorView.xib */; };
 		8B78559C27F0C9F200169A93 /* RemindersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B78559B27F0C9F200169A93 /* RemindersVC.swift */; };
 		8B78559F27F0CA2A00169A93 /* ReminderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B78559E27F0CA2A00169A93 /* ReminderCell.swift */; };
 		8B7855A227F1527000169A93 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7855A127F1526F00169A93 /* UIView.swift */; };
@@ -67,6 +66,8 @@
 		8BB75D4727F2952300AE71A1 /* CategoriesStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB75D4627F2952300AE71A1 /* CategoriesStruct.swift */; };
 		8BC31D7B27E3E5EA00FBC939 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC31D7A27E3E5EA00FBC939 /* Button.swift */; };
 		8BC8525027E28D0F00C5A3A4 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC8524F27E28D0F00C5A3A4 /* UserSettings.swift */; };
+		8BD17F6A27F4FCA6008D9D57 /* IndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD17F6827F4FCA6008D9D57 /* IndicatorView.swift */; };
+		8BD17F6C27F50487008D9D57 /* IndicatorViewAppearence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD17F6B27F50487008D9D57 /* IndicatorViewAppearence.swift */; };
 		8BD2E77C25B8622100D4DFBF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */; };
 		8BD3A3D927E4097400547022 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD3A3D827E4097400547022 /* View.swift */; };
 		8BE60E5927726EA8007B7FB3 /* LastSelected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE60E5827726EA8007B7FB3 /* LastSelected.swift */; };
@@ -113,8 +114,6 @@
 		4495115F0F67B3D07EA6B233 /* Pods-Budget Tracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Budget Tracker.debug.xcconfig"; path = "Target Support Files/Pods-Budget Tracker/Pods-Budget Tracker.debug.xcconfig"; sourceTree = "<group>"; };
 		5F84A1AEB24B0EC857F848E0 /* Pods_Budget_Tracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Budget_Tracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60EB2258A12489890A827616 /* Pods-Budget Tracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Budget Tracker.release.xcconfig"; path = "Target Support Files/Pods-Budget Tracker/Pods-Budget Tracker.release.xcconfig"; sourceTree = "<group>"; };
-		8B052E3C26EFD48E000BA66A /* IndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndicatorView.swift; sourceTree = "<group>"; };
-		8B052E3E26EFD4A0000BA66A /* IndicatorView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IndicatorView.xib; sourceTree = "<group>"; };
 		8B1FD85C270C4DE2004E225E /* splitVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = splitVC.swift; sourceTree = "<group>"; };
 		8B20751127D9A7AF00CF2172 /* PascodeLockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PascodeLockView.swift; sourceTree = "<group>"; };
 		8B2163A1274070BA003EDFE0 /* snippets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = snippets.swift; sourceTree = "<group>"; };
@@ -157,6 +156,7 @@
 		8B6BA98327E73B8A0067FF58 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/System/iOSSupport/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
 		8B746ABD27F4039E0010F0A4 /* UINavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationController.swift; sourceTree = "<group>"; };
 		8B746ABF27F405970010F0A4 /* ReminderVCMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderVCMethods.swift; sourceTree = "<group>"; };
+		8B746AC327F42DBC0010F0A4 /* IndicatorView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = IndicatorView.xib; path = ../../../../../Desktop/IndicatorView/IndicatorView.xib; sourceTree = "<group>"; };
 		8B78559B27F0C9F200169A93 /* RemindersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersVC.swift; sourceTree = "<group>"; };
 		8B78559E27F0CA2A00169A93 /* ReminderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderCell.swift; sourceTree = "<group>"; };
 		8B7855A127F1526F00169A93 /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
@@ -173,6 +173,8 @@
 		8BB75D4627F2952300AE71A1 /* CategoriesStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesStruct.swift; sourceTree = "<group>"; };
 		8BC31D7A27E3E5EA00FBC939 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		8BC8524F27E28D0F00C5A3A4 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
+		8BD17F6827F4FCA6008D9D57 /* IndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndicatorView.swift; sourceTree = "<group>"; };
+		8BD17F6B27F50487008D9D57 /* IndicatorViewAppearence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorViewAppearence.swift; sourceTree = "<group>"; };
 		8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8BD3A3D827E4097400547022 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		8BE60E5827726EA8007B7FB3 /* LastSelected.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastSelected.swift; sourceTree = "<group>"; };
@@ -261,9 +263,9 @@
 		8B26328827E697FF0086C3A8 /* IndicatorView */ = {
 			isa = PBXGroup;
 			children = (
-				8B052E3C26EFD48E000BA66A /* IndicatorView.swift */,
-				8B052E3E26EFD4A0000BA66A /* IndicatorView.xib */,
-				8B6B509C27F3BEB40067C237 /* ExtensionIndicatorView.swift */,
+				8BD17F6D27F51D7C008D9D57 /* Components */,
+				8BD17F6827F4FCA6008D9D57 /* IndicatorView.swift */,
+				8B746AC327F42DBC0010F0A4 /* IndicatorView.xib */,
 			);
 			path = IndicatorView;
 			sourceTree = "<group>";
@@ -368,7 +370,6 @@
 				8BE60E5827726EA8007B7FB3 /* LastSelected.swift */,
 				8BC8524F27E28D0F00C5A3A4 /* UserSettings.swift */,
 				8B6B509A27F3B24B0067C237 /* NotificationManager.swift */,
-				8BB75D4527F294ED00AE71A1 /* Structs */,
 			);
 			path = UserData;
 			sourceTree = "<group>";
@@ -447,8 +448,7 @@
 				8B78559B27F0C9F200169A93 /* RemindersVC.swift */,
 				8B7855A027F0CA3000169A93 /* Cells */,
 				8B746AC127F405AA0010F0A4 /* Components */,
-				8BB75D4127F26CA000AE71A1 /* ReminderStruct.swift */,
-				8B6B509827F3A69F0067C237 /* ReminderManager.swift */,
+				8BD17F6E27F51F8D008D9D57 /* ReminderStruct */,
 			);
 			path = RemindersVC;
 			sourceTree = "<group>";
@@ -574,6 +574,24 @@
 			path = UIObjects;
 			sourceTree = "<group>";
 		};
+		8BD17F6D27F51D7C008D9D57 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				8B6B509C27F3BEB40067C237 /* ExtensionIndicatorView.swift */,
+				8BD17F6B27F50487008D9D57 /* IndicatorViewAppearence.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		8BD17F6E27F51F8D008D9D57 /* ReminderStruct */ = {
+			isa = PBXGroup;
+			children = (
+				8BB75D4127F26CA000AE71A1 /* ReminderStruct.swift */,
+				8B6B509827F3A69F0067C237 /* ReminderManager.swift */,
+			);
+			path = ReminderStruct;
+			sourceTree = "<group>";
+		};
 		8BFA15CF27E8E82F0078856A /* CategoriesVC */ = {
 			isa = PBXGroup;
 			children = (
@@ -616,6 +634,7 @@
 				8B331B0C27E415440093BF72 /* Info.plist */,
 				8DECAFBF2460461C0041B734 /* Budget Tracker.entitlements */,
 				8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */,
+				8BC1B23A27D3136C002C1E38 /* ReusableUI */,
 				8DD89D8823F1471900273904 /* Modal */,
 				8DBA7E6823F031F900D8214C /* Controllers */,
 				8DBA7E6723F031F200D8214C /* Storybords */,
@@ -664,8 +683,8 @@
 				8B26329027E69AE10086C3A8 /* AppData */,
 				8B3F919827D31C4000BE826C /* UserData */,
 				8BC31D7D27E3E60600FBC939 /* UIObjects */,
-				8BC1B23A27D3136C002C1E38 /* ReusableUI */,
 				8B5434FB27ED83AC00417141 /* Notifications */,
+				8BB75D4527F294ED00AE71A1 /* Structs */,
 			);
 			path = Modal;
 			sourceTree = "<group>";
@@ -732,13 +751,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B746AC527F42DBC0010F0A4 /* IndicatorView.xib in Resources */,
 				8B331AFC27E410A00093BF72 /* PascodeLockView.xib in Resources */,
 				8B47F92F2773B90D00FD96AA /* Message.xib in Resources */,
 				8B331AF727E4105C0093BF72 /* LogIn.storyboard in Resources */,
 				8DBA7E5F23F0317100D8214C /* LaunchScreen.storyboard in Resources */,
 				8B52DFE82750231000595A0C /* Numbers.xib in Resources */,
 				8DBA7E5C23F0317100D8214C /* Assets.xcassets in Resources */,
-				8B052E3F26EFD4A0000BA66A /* IndicatorView.xib in Resources */,
 				8DBA7E5723F0316F00D8214C /* Main.storyboard in Resources */,
 				8B6BA97E27E715C20067FF58 /* Reusable.storyboard in Resources */,
 			);
@@ -829,6 +848,7 @@
 				8B1FD85D270C4DE2004E225E /* splitVC.swift in Sources */,
 				8B746ABE27F4039E0010F0A4 /* UINavigationController.swift in Sources */,
 				8DBA7E5423F0316F00D8214C /* ViewController.swift in Sources */,
+				8BD17F6C27F50487008D9D57 /* IndicatorViewAppearence.swift in Sources */,
 				8BD2E77C25B8622100D4DFBF /* LoginViewController.swift in Sources */,
 				8B26328427E67D1D0086C3A8 /* SegmentedControl.swift in Sources */,
 				8B35DA6625C6F124008A8719 /* Keychain.swift in Sources */,
@@ -841,8 +861,8 @@
 				8BF63E8F2762C83F002E8601 /* SettingsVC.swift in Sources */,
 				8B20751227D9A7AF00CF2172 /* PascodeLockView.swift in Sources */,
 				8B6B509B27F3B24B0067C237 /* NotificationManager.swift in Sources */,
+				8BD17F6A27F4FCA6008D9D57 /* IndicatorView.swift in Sources */,
 				8B2A4D72271439520085E0F0 /* MoreVC.swift in Sources */,
-				8B052E3D26EFD48E000BA66A /* IndicatorView.swift in Sources */,
 				8B7B63CC2655CAFB0067C434 /* SuperViewController.swift in Sources */,
 				8B7D1AA1276CF203008942EC /* IconList.swift in Sources */,
 				8B7855A227F1527000169A93 /* UIView.swift in Sources */,

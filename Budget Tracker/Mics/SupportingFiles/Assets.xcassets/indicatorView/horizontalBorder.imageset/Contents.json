@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "warning.svg",
+      "filename" : "horizontalBorder.svg",
       "idiom" : "universal"
     }
   ],
@@ -10,7 +10,6 @@
     "version" : 1
   },
   "properties" : {
-    "auto-scaling" : "auto",
     "preserves-vector-representation" : true
   }
 }
