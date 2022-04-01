@@ -35,18 +35,13 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         searchBar.delegate = self
         DispatchQueue.init(label: "dbLoad", qos: .userInteractive).async {
             if !self.fromSettings {
-           //     if self.screenType != .localData {
                 self.categories = self.db.categories
-           //     }
             } else {
                 self.loadData()
             }
-            
-            
         }
         selectingIconFor = (nil,nil)
-        //t//oggleIcons(show: false, animated: false, category: nil)
-        
+
         var strTitle:String {
             switch screenType {
             case .localData:
@@ -60,11 +55,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         title = strTitle
         
         updateUI()
-     //   if !fromSettings {
-            
-      //  }
-        
-        
+
     }
     
     
@@ -367,7 +358,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     func loadData(showError:Bool = false, loadFromUD: Bool = false) {
 
         if screenType != .localData {
-            if !loadFromUD {
+            if !loadFromUD && appData.username != "" {
                 prerformDownload(showError: showError) { loadedData in
                     self.allCategoriesHolder = loadedData
                     self.categories = self.categoriesContains(self.searchingText)
@@ -414,6 +405,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 DispatchQueue.main.async {
                     UIImpactFeedbackGenerator().impactOccurred()
                     self.tableView.reloadData()
+                    self.view.endEditing(true)
                 }
             }
         }
@@ -734,8 +726,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             }
         }
         selectingIconFor = (nil,nil)
-       // t/oggleIcons(show: false, animated: true, category: nil)
-        
+
         let appData = AppData()
         //get screen data
         let idAction = {
@@ -754,14 +745,12 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             self.categories = self._categories
 
         }
-     //   let proResult = appData.proVersion || appData.proTrial
-        print(appData.proTrial, "appData.proTrialappData.proTrialappData.proTrialappData.proTrial")
         let moreData = [
             MoreVC.ScreenData(name: "Default".localize, description: "", showAI: true, selected: self.sortOption == .id, action: idAction),
             MoreVC.ScreenData(name: "Name".localize, description: "", showAI: true, selected: self.sortOption == .name, action: nameAction),
-            MoreVC.ScreenData(name: "Most used".localize, description: "", showAI: true, selected: self.sortOption == .transactionsCount, pro: appData.proVersion || appData.proTrial, action: countAction),
+            MoreVC.ScreenData(name: "Most used".localize, description: "", showAI: true, selected: self.sortOption == .transactionsCount, action: countAction),
         ]
-        appData.presentMoreVC(currentVC: self, data: moreData, proIndex: 2)
+        appData.presentMoreVC(currentVC: self, data: moreData, proIndex: 3)
     }
     @IBOutlet weak var searchBar: UISearchBar!
     

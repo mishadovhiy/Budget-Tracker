@@ -23,14 +23,14 @@
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v9F-6t-GpL" customClass="SideBar" customModule="Budget_Tracker" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="260" height="838"/>
                                 <subviews>
-                                    <tableView clipsSubviews="YES" tag="1" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="45" estimatedRowHeight="-1" sectionHeaderHeight="28" estimatedSectionHeaderHeight="-1" sectionFooterHeight="28" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="cxr-Go-fWV">
+                                    <tableView clipsSubviews="YES" tag="1" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="45" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="cxr-Go-fWV">
                                         <rect key="frame" x="0.0" y="0.0" width="260" height="838"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="separatorColor" name="darkSeparetor"/>
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="SideBardCell" id="3Jd-fc-tL3" customClass="SideBardCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="44.666666030883789" width="260" height="45"/>
+                                                <rect key="frame" x="0.0" y="31.666666030883789" width="260" height="45"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="3Jd-fc-tL3" id="4D3-uy-0g7">
                                                     <rect key="frame" x="0.0" y="0.0" width="235.33333333333334" height="45"/>
@@ -66,11 +66,42 @@
                                                                 </stackView>
                                                             </subviews>
                                                         </stackView>
+                                                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2cb-O7-PnU" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
+                                                            <rect key="frame" x="195.33333333333334" y="12.666666666666664" width="40" height="20"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PRO" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o69-Bk-eBW">
+                                                                    <rect key="frame" x="2" y="0.0" width="36" height="20"/>
+                                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
+                                                                    <color key="textColor" name="darkTableColor"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                            </subviews>
+                                                            <color key="backgroundColor" systemColor="tintColor"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="bottom" secondItem="o69-Bk-eBW" secondAttribute="bottom" id="3P7-K3-hq1"/>
+                                                                <constraint firstAttribute="trailing" secondItem="o69-Bk-eBW" secondAttribute="trailing" constant="2" id="Khb-RI-dXv"/>
+                                                                <constraint firstItem="o69-Bk-eBW" firstAttribute="leading" secondItem="2cb-O7-PnU" secondAttribute="leading" constant="2" id="Mqj-16-sEE"/>
+                                                                <constraint firstAttribute="height" constant="20" id="Otr-24-YYO"/>
+                                                                <constraint firstItem="o69-Bk-eBW" firstAttribute="top" secondItem="2cb-O7-PnU" secondAttribute="top" id="cYE-vI-NK5"/>
+                                                                <constraint firstAttribute="width" constant="40" id="sFD-VS-4Lb"/>
+                                                            </constraints>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="boolean" keyPath="linkBackground" value="YES"/>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                                                    <real key="value" value="0.10000000000000001"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                    <real key="value" value="5"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </view>
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="2cb-O7-PnU" secondAttribute="trailing" id="EdT-Fc-vit"/>
                                                         <constraint firstItem="cyz-Xc-1ne" firstAttribute="leading" secondItem="4D3-uy-0g7" secondAttribute="leading" constant="5" id="LPp-qx-Nrh"/>
                                                         <constraint firstAttribute="trailing" secondItem="cyz-Xc-1ne" secondAttribute="trailing" constant="5" id="OkL-hV-PZm"/>
+                                                        <constraint firstItem="2cb-O7-PnU" firstAttribute="centerY" secondItem="4D3-uy-0g7" secondAttribute="centerY" id="Tuw-LO-Ffy"/>
                                                         <constraint firstAttribute="bottom" secondItem="cyz-Xc-1ne" secondAttribute="bottom" constant="10" id="YQl-KS-N1U"/>
                                                         <constraint firstItem="cyz-Xc-1ne" firstAttribute="top" secondItem="4D3-uy-0g7" secondAttribute="top" constant="10" id="oa8-m0-CpR"/>
                                                     </constraints>
@@ -79,11 +110,12 @@
                                                 <connections>
                                                     <outlet property="nameLabel" destination="s5l-04-T2o" id="p8s-h7-Tdy"/>
                                                     <outlet property="optionIcon" destination="Kpf-Vl-IUu" id="jsK-4H-HwV"/>
+                                                    <outlet property="proView" destination="2cb-O7-PnU" id="ndw-2K-IvE"/>
                                                     <outlet property="valueLabel" destination="PWr-tf-lSZ" id="A9u-5C-vUu"/>
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="EmptyCell" id="tJX-e6-r6H" customClass="EmptyCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="89.666666030883789" width="260" height="45"/>
+                                                <rect key="frame" x="0.0" y="76.666666030883789" width="260" height="45"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="tJX-e6-r6H" id="tyr-Ls-49x">
                                                     <rect key="frame" x="0.0" y="0.0" width="260" height="45"/>
@@ -234,19 +266,19 @@
                                                                 <rect key="frame" x="0.0" y="0.0" width="388" height="50"/>
                                                                 <subviews>
                                                                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4d7-Fl-6zl" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="321" height="35"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="4" height="35"/>
                                                                         <subviews>
                                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="Bpw-oX-ZtL">
-                                                                                <rect key="frame" x="2" y="0.0" width="317" height="33"/>
+                                                                                <rect key="frame" x="2" y="0.0" width="0.0" height="33"/>
                                                                                 <subviews>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Data from" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tWb-PR-x7Z">
-                                                                                        <rect key="frame" x="0.0" y="0.0" width="277" height="33"/>
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="33"/>
                                                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                                         <color key="textColor" name="balanceTitleColor"/>
                                                                                         <nil key="highlightedColor"/>
                                                                                     </label>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="flQ-Ba-Szl">
-                                                                                        <rect key="frame" x="277" y="0.0" width="40" height="33"/>
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="33"/>
                                                                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
                                                                                         <color key="textColor" name="balanceTitleColor"/>
                                                                                         <nil key="highlightedColor"/>
@@ -269,19 +301,18 @@
                                                                         </userDefinedRuntimeAttributes>
                                                                     </view>
                                                                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TlO-Ln-54D" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="321" height="2"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="4" height="2"/>
                                                                         <subviews>
                                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="meX-ga-QXR">
-                                                                                <rect key="frame" x="2" y="0.0" width="317" height="0.0"/>
+                                                                                <rect key="frame" x="2" y="0.0" width="0.0" height="0.0"/>
                                                                                 <subviews>
-                                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unsaved Data:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gwp-y1-Jmr" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                                        <rect key="frame" x="0.0" y="0.0" width="277" height="0.0"/>
+                                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Unsaved Data:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gwp-y1-Jmr" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
                                                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                                         <color key="textColor" name="balanceTitleColor"/>
                                                                                         <nil key="highlightedColor"/>
                                                                                     </label>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x8a-G7-gqu">
-                                                                                        <rect key="frame" x="277" y="0.0" width="40" height="0.0"/>
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="40" height="0.0"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" constant="40" id="p2J-PH-vuc"/>
                                                                                         </constraints>
@@ -4174,11 +4205,11 @@
         </designable>
     </designables>
     <inferredMetricsTieBreakers>
-        <segue reference="dth-yA-UGp"/>
+        <segue reference="161-Ie-baa"/>
         <segue reference="rIb-KG-K0i"/>
         <segue reference="Ega-tn-GzY"/>
         <segue reference="U95-ph-p6h"/>
-        <segue reference="N0q-Op-l1q"/>
+        <segue reference="RlV-WA-O6N"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="airplane" width="19" height="17"/>

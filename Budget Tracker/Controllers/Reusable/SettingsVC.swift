@@ -118,16 +118,19 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource {
             cell.nameLabel.text = triggerData.title
             cell.switchedAction = triggerData.action
             cell.valueSwitcher.isOn = triggerData.isOn
+            cell.proView.isHidden = triggerData.pro == nil
+            cell.valueSwitcher.isHidden = !(triggerData.pro == nil)
             return cell
         } else {
             if let standartData = tableData[indexPath.section].cells[indexPath.row] as? StandartCell {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "StandartSettingsCell", for: indexPath) as! StandartSettingsCell
                 cell.nameLabel.text = standartData.title + (standartData.description == "" ? "" : (": " + standartData.description))
-                cell.colorView.isHidden = standartData.colorNamed == "" ? true : false
+                cell.colorView.isHidden = standartData.colorNamed == "" ? true : (standartData.pro == nil ? false : true)
                 if standartData.colorNamed != "" {
                     cell.colorView.backgroundColor = AppData.colorNamed(standartData.colorNamed)
                 }
-                cell.accessoryType = standartData.showIndicator ? .disclosureIndicator : .none
+                cell.accessoryType = standartData.showIndicator ? (standartData.pro == nil ? .disclosureIndicator : .none): .none
+                cell.proView.isHidden = standartData.pro == nil
                 return cell
             } else {
                 return UITableViewCell()
@@ -140,7 +143,17 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if let standartData = tableData[indexPath.section].cells[indexPath.row] as? StandartCell {
-            standartData.action()
+            if let proID = standartData.pro {
+                appData.presentBuyProVC(selectedProduct: proID)
+            } else {
+                standartData.action()
+            }
+        } else {
+            if let trigger = tableData[indexPath.section].cells[indexPath.row] as? TriggerCell {
+                if let proID = trigger.pro {
+                    appData.presentBuyProVC(selectedProduct: proID)
+                }
+            }
         }
     }
 
@@ -157,16 +170,17 @@ extension SettingsVC {
 
     struct StandartCell {
         let title: String
-        
         var description:String = ""
         var colorNamed:String = ""
         var showIndicator:Bool = true
+        var pro:Int? = nil
         let action: () -> ()
     }
     
     struct TriggerCell {
         let title: String
         let isOn: Bool
+        var pro:Int? = nil
         let action: (Bool) -> ()
     }
 }
@@ -182,6 +196,7 @@ extension SettingsVC {
 
 class StandartSettingsCell: UITableViewCell {
     
+    @IBOutlet weak var proView: View!
     @IBOutlet weak var colorView: View!
     @IBOutlet weak var nameLabel: UILabel!
 }
@@ -190,6 +205,7 @@ class TriggerSettingsCell: UITableViewCell {
     
     var switchedAction:((Bool) -> ())?
     
+    @IBOutlet weak var proView: View!
     @IBOutlet weak var nameLabel: UILabel!
     @IBAction func switchChanged(_ sender: UISwitch) {
         if let isON = switchedAction {

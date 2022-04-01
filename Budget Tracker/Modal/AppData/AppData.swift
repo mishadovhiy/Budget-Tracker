@@ -430,13 +430,13 @@ class AppData {
         ]
         return monthes[month] ?? "Jan"
     }
-    func presentBuyProVC(currentVC: UIViewController, selectedProduct:Int) {
+    func presentBuyProVC(selectedProduct:Int) {
         let storyboard = UIStoryboard(name: "LogIn", bundle: nil)
         let vccc = storyboard.instantiateViewController(withIdentifier: "BuyProVC") as! BuyProVC
         vccc.modalPresentationStyle = .formSheet
         vccc.navigationController?.setNavigationBarHidden(true, animated: false)
         vccc.selectedProduct = selectedProduct
-        currentVC.present(vccc, animated: true)
+        UIApplication.shared.windows.last?.rootViewController?.present(vccc, animated: true, completion: nil)
     }
     
     

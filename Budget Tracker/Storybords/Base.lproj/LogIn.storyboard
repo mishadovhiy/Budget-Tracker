@@ -717,13 +717,44 @@
                                                         <action selector="switchChanged:" destination="e4c-ci-wOD" eventType="valueChanged" id="fYB-lY-VHk"/>
                                                     </connections>
                                                 </switch>
+                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RcZ-t3-NCU" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
+                                                    <rect key="frame" x="324" y="15" width="40" height="20"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PRO" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vt0-6P-gIb">
+                                                            <rect key="frame" x="2" y="0.0" width="36" height="20"/>
+                                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
+                                                            <color key="textColor" name="darkTableColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <color key="backgroundColor" systemColor="tintColor"/>
+                                                    <constraints>
+                                                        <constraint firstItem="vt0-6P-gIb" firstAttribute="top" secondItem="RcZ-t3-NCU" secondAttribute="top" id="03A-bm-HcY"/>
+                                                        <constraint firstAttribute="width" constant="40" id="aDh-bd-XLz"/>
+                                                        <constraint firstAttribute="trailing" secondItem="vt0-6P-gIb" secondAttribute="trailing" constant="2" id="hXF-MZ-Tqz"/>
+                                                        <constraint firstAttribute="bottom" secondItem="vt0-6P-gIb" secondAttribute="bottom" id="usM-80-PL2"/>
+                                                        <constraint firstAttribute="height" constant="20" id="y9R-XE-pvi"/>
+                                                        <constraint firstItem="vt0-6P-gIb" firstAttribute="leading" secondItem="RcZ-t3-NCU" secondAttribute="leading" constant="2" id="zc7-2y-4ce"/>
+                                                    </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="linkBackground" value="YES"/>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                                            <real key="value" value="0.10000000000000001"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                            <real key="value" value="5"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </view>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
+                                                <constraint firstItem="RcZ-t3-NCU" firstAttribute="centerY" secondItem="1of-dg-ITu" secondAttribute="centerY" id="5rP-Ub-evB"/>
                                                 <constraint firstItem="SFb-cG-rRM" firstAttribute="centerY" secondItem="1of-dg-ITu" secondAttribute="centerY" id="HoR-s3-yuS"/>
                                                 <constraint firstAttribute="bottom" secondItem="gzz-Jm-AtH" secondAttribute="bottom" constant="10" id="IwF-8Q-T2p"/>
                                                 <constraint firstItem="SFb-cG-rRM" firstAttribute="leading" secondItem="gzz-Jm-AtH" secondAttribute="trailing" constant="5" id="L3N-KT-fWW"/>
                                                 <constraint firstItem="gzz-Jm-AtH" firstAttribute="top" secondItem="1of-dg-ITu" secondAttribute="top" constant="10" id="N80-8x-VY0"/>
+                                                <constraint firstAttribute="trailing" secondItem="RcZ-t3-NCU" secondAttribute="trailing" constant="10" id="aP5-sa-3ey"/>
                                                 <constraint firstAttribute="trailing" secondItem="SFb-cG-rRM" secondAttribute="trailing" constant="10" id="gqu-Qm-Thj"/>
                                                 <constraint firstItem="gzz-Jm-AtH" firstAttribute="leading" secondItem="1of-dg-ITu" secondAttribute="leading" constant="15" id="zEe-vF-t29"/>
                                             </constraints>
@@ -731,6 +762,7 @@
                                         <color key="backgroundColor" name="SecondaryBacroundColor"/>
                                         <connections>
                                             <outlet property="nameLabel" destination="gzz-Jm-AtH" id="52B-Jm-FSD"/>
+                                            <outlet property="proView" destination="RcZ-t3-NCU" id="jhT-Rz-T3K"/>
                                             <outlet property="valueSwitcher" destination="SFb-cG-rRM" id="Umc-q9-bxs"/>
                                         </connections>
                                     </tableViewCell>
@@ -741,6 +773,35 @@
                                             <rect key="frame" x="0.0" y="0.0" width="345.5" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
+                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rhw-Hs-S6x" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
+                                                    <rect key="frame" x="295.5" y="15" width="40" height="20"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PRO" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NIl-HH-CGZ">
+                                                            <rect key="frame" x="2" y="0.0" width="36" height="20"/>
+                                                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
+                                                            <color key="textColor" name="darkTableColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <color key="backgroundColor" systemColor="tintColor"/>
+                                                    <constraints>
+                                                        <constraint firstItem="NIl-HH-CGZ" firstAttribute="top" secondItem="Rhw-Hs-S6x" secondAttribute="top" id="9TH-zb-wEe"/>
+                                                        <constraint firstAttribute="width" constant="40" id="DYV-bU-X1L"/>
+                                                        <constraint firstAttribute="bottom" secondItem="NIl-HH-CGZ" secondAttribute="bottom" id="Hag-5L-Obw"/>
+                                                        <constraint firstAttribute="height" constant="20" id="Iyq-at-Sz0"/>
+                                                        <constraint firstItem="NIl-HH-CGZ" firstAttribute="leading" secondItem="Rhw-Hs-S6x" secondAttribute="leading" constant="2" id="NUU-so-auN"/>
+                                                        <constraint firstAttribute="trailing" secondItem="NIl-HH-CGZ" secondAttribute="trailing" constant="2" id="Wnb-bT-qT1"/>
+                                                    </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="linkBackground" value="YES"/>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                                            <real key="value" value="0.10000000000000001"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                            <real key="value" value="5"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </view>
                                                 <stackView opaque="NO" contentMode="scaleToFill" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ZrY-Tj-jSV">
                                                     <rect key="frame" x="15" y="10" width="327.5" height="30"/>
                                                     <subviews>
@@ -769,8 +830,10 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstItem="ZrY-Tj-jSV" firstAttribute="leading" secondItem="9mF-VD-4Ef" secondAttribute="leading" constant="15" id="Dnb-CN-7kk"/>
+                                                <constraint firstAttribute="trailing" secondItem="Rhw-Hs-S6x" secondAttribute="trailing" constant="10" id="Jzv-zU-gpa"/>
                                                 <constraint firstAttribute="trailing" secondItem="ZrY-Tj-jSV" secondAttribute="trailing" constant="3" id="TJm-5s-mEg"/>
                                                 <constraint firstAttribute="bottom" secondItem="ZrY-Tj-jSV" secondAttribute="bottom" constant="10" id="j2Z-lb-4Ge"/>
+                                                <constraint firstItem="Rhw-Hs-S6x" firstAttribute="centerY" secondItem="9mF-VD-4Ef" secondAttribute="centerY" id="po4-qm-iEa"/>
                                                 <constraint firstItem="ZrY-Tj-jSV" firstAttribute="top" secondItem="9mF-VD-4Ef" secondAttribute="top" constant="10" id="upo-mw-T52"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -778,6 +841,7 @@
                                         <connections>
                                             <outlet property="colorView" destination="n8k-go-PEX" id="RJs-ok-gou"/>
                                             <outlet property="nameLabel" destination="TEQ-1x-qYI" id="Mio-Ac-De9"/>
+                                            <outlet property="proView" destination="Rhw-Hs-S6x" id="KJh-1r-hWd"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -942,7 +1006,7 @@
                             <stackView opaque="NO" contentMode="scaleAspectFit" axis="vertical" distribution="fillProportionally" alignment="center" spacing="40" translatesAutoresizingMaskIntoConstraints="NO" id="Djn-zd-tlk">
                                 <rect key="frame" x="52" y="365" width="310" height="166"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Cdt-gs-eDX">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Cdt-gs-eDX">
                                         <rect key="frame" x="83.5" y="0.0" width="143" height="111"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="lessThanOrEqual" constant="175" id="hBJ-Ef-goP"/>

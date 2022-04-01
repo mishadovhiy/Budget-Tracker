@@ -145,7 +145,7 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         } else {
             if indexPath.section == 1 {
                 if !tableData[indexPath.row].pro {
-                    appData.presentBuyProVC(currentVC: self, selectedProduct: selectedProIndex)
+                    appData.presentBuyProVC(selectedProduct: selectedProIndex)
                     tableView.deselectRow(at: indexPath, animated: true)
                 } else {
                 if let function = tableData[indexPath.row].action {

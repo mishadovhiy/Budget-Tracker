@@ -11,9 +11,10 @@ import UIKit
 class BuyPageVC: UIPageViewController {
 
     var pages: [PageStruct] = [
-        PageStruct(title: "Reminders for debts".localize, description: "Set notification reminders".localize, imgName: "addReminder.pro"),
+        PageStruct(title: "Payment reminders".localize, description: "Set repeated or one time reminders for any category. Easy as adding new transaction".localize, imgName: "addReminder.pro"),
         PageStruct(title: "Transfer data".localize, description: "Transfer transactions and categories between accounts".localize, imgName: "transfareDataIcon.pro"),
-        PageStruct(title: "App storage increes".localize, description: "Create up to 15 accounts for email\n\nStores data about categories usage".localize, imgName: "dbStorage.pro"),
+        PageStruct(title: "Passcode protection".localize, description: "Create 4 digit passcode. Set passcode timeout".localize, imgName: "passcodeProtect.pro"),
+        PageStruct(title: "App storage increes and more".localize, description: "Create up to 15 accounts for email\n\nStores more data about app usage".localize, imgName: "dbStorage.pro"),
     ]
     
     

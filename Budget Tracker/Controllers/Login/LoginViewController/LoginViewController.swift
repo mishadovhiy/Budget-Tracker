@@ -478,7 +478,7 @@ class LoginViewController: SuperViewController {
                                     self.newMessage.show(title: "You have reached the maximum amount of usernames".localize, type: .error)
                                 }
                             } else {
-                                appData.presentBuyProVC(currentVC: self, selectedProduct: 2)
+                                appData.presentBuyProVC(selectedProduct: 2)
                                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                                     self.newMessage.show(title: "You have reached the maximum amount of usernames".localize, description: "Update to Pro".localize + " " + "to create new username".localize, type: .standart)
                                 }

@@ -29,7 +29,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         
         var categories = [
             CellData(name: "Categories".localize, value: "\(catsCo.count - debts)", segue: "toCategories", image: "folder.fill"),
-            CellData(name: "Debts".localize, value: "\(debts)", segue: "toDebts", image: "rectangle.3.group.fill", pro: pro)
+            CellData(name: "Debts".localize, value: "\(debts)", segue: "toDebts", image: "rectangle.3.group.fill", pro: !(pro) ? 3 : nil)
         ]
         let localCount = ((UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String:Any]] ?? []) + (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String:Any]] ?? [])).count
         if localCount > 0 {
@@ -40,21 +40,17 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         let trialDays = UserDefaults.standard.value(forKey: "trialToExpireDays") as? Int ?? 0
         let trialCell = CellData(name: "Trail till", value: "\(7 - trialDays)", segue: "toProVC", image: "clock.fill")
 
-        let emptySec = TableData(section: [CellData(name: "", value: "", segue: "", image: "")], title: "", hidden: false)
-        
+
         var accountSection:[CellData] {
             return trialDays == 0 ? [accpuntCell, settingsCell] : [accpuntCell, settingsCell, trialCell]
         }
         
-        let upcommingRemiders = CellData(name: "Payment reminders".localize, value: "", segue: "toReminders", image: "", pro: true)
+        let upcommingRemiders = CellData(name: "Payment reminders".localize, value: "", segue: "toReminders", image: "", pro: !(pro) ? 0 : nil)
         
         tableData = [
             TableData(section: accountSection, title: "", hidden: false),
-            emptySec,
             TableData(section: categories, title: "", hidden: false),
-            emptySec,
             TableData(section: [upcommingRemiders], title: "", hidden: false),
-            emptySec,
             TableData(section: [statistic], title: "", hidden: false),
         ]
         DispatchQueue.main.async {
@@ -90,35 +86,32 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if tableData[indexPath.section].section[indexPath.row].name == "" {
-            let emptyCell = tableView.dequeueReusableCell(withIdentifier: "EmptyCell", for: indexPath) as! EmptyCell
-            let selected = UIView(frame: .zero)
-            selected.backgroundColor = .clear
-            emptyCell.selectedBackgroundView = selected
-            return emptyCell
-        } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "SideBardCell", for: indexPath) as! SideBardCell
-            cell.nameLabel.superview?.alpha = tableData[indexPath.section].section[indexPath.row].name == "" ? 0 : 1
-            cell.nameLabel.text = tableData[indexPath.section].section[indexPath.row].name
-            cell.valueLabel.text = tableData[indexPath.section].section[indexPath.row].value
-            if (AppDelegate.shared?.symbolsAllowed ?? false) {
-                cell.optionIcon.image = AppData.iconNamed(tableData[indexPath.section].section[indexPath.row].image)
-            }
-            return cell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SideBardCell", for: indexPath) as! SideBardCell
+        cell.nameLabel.superview?.alpha = tableData[indexPath.section].section[indexPath.row].name == "" ? 0 : 1
+        cell.nameLabel.text = tableData[indexPath.section].section[indexPath.row].name
+        cell.valueLabel.text = tableData[indexPath.section].section[indexPath.row].value
+        cell.proView.isHidden = tableData[indexPath.section].section[indexPath.row].pro == nil
+        if (AppDelegate.shared?.symbolsAllowed ?? false) {
+            cell.optionIcon.image = AppData.iconNamed(tableData[indexPath.section].section[indexPath.row].image)
         }
+        return cell
         
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableData[indexPath.section].section[indexPath.row].name != "" {
-            let segue = tableData[indexPath.section].section[indexPath.row].segue
-            if segue != "" {
-                DispatchQueue.main.async {
-                    ViewController.shared?.performSegue(withIdentifier: segue, sender: self)
-                }
-            } else {
-                if let action = tableData[indexPath.section].section[indexPath.row].selectAction {
-                    action()
+        if let proID = tableData[indexPath.section].section[indexPath.row].pro {
+            appData.presentBuyProVC(selectedProduct: proID)
+        } else {
+            if tableData[indexPath.section].section[indexPath.row].name != "" {
+                let segue = tableData[indexPath.section].section[indexPath.row].segue
+                if segue != "" {
+                    DispatchQueue.main.async {
+                        ViewController.shared?.performSegue(withIdentifier: segue, sender: self)
+                    }
+                } else {
+                    if let action = tableData[indexPath.section].section[indexPath.row].selectAction {
+                        action()
+                    }
                 }
             }
         }
@@ -138,7 +131,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         let value: String
         let segue: String
         let image: String
-        var pro: Bool = true
+        var pro: Int? = nil
         var selectAction:(()->())? = nil
         
     }
@@ -146,6 +139,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
 
 class SideBardCell: UITableViewCell {
     
+    @IBOutlet weak var proView: View!
     @IBOutlet weak var optionIcon: UIImageView!
     @IBOutlet weak var valueLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
