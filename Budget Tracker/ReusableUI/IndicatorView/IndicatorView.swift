@@ -43,7 +43,7 @@ class IndicatorView: UIView {
     }
 
     
-    func show(title: String? = "Loading", description: String? = nil, appeareAnimation: Bool = false, completion: @escaping (Bool) -> ()) {
+    func show(title: String? = "Loading".localize, description: String? = nil, appeareAnimation: Bool = false, completion: @escaping (Bool) -> ()) {
         DispatchQueue.init(label: "\(#function)", qos: .userInteractive).async {
             if !self.hideIndicatorBlockDesibled {
             print("block")
@@ -101,7 +101,7 @@ class IndicatorView: UIView {
     }
 
     
-    func showAlert(buttons: (button, button?), title: String? = "Done", description: String? = nil, type: ViewType = .standard, image:Image? = nil) {
+    func showAlert(buttons: (button, button?), title: String? = "Done".localize, description: String? = nil, type: ViewType = .standard, image:Image? = nil) {
         if !hideIndicatorBlockDesibled {
             let new = {
                 self.showAlert(buttons: buttons, title: title, description:description, type: type)
@@ -135,8 +135,8 @@ class IndicatorView: UIView {
             if type == .error {
                 UIImpactFeedbackGenerator().impactOccurred()
             }
-            self.titleLabel.text = type == .internetError ? "Internet error" : title
-            self.descriptionLabel.text = type == .internetError ? "Try again later" : description
+            self.titleLabel.text = type == .internetError ? "Internet error".localize : title
+            self.descriptionLabel.text = type == .internetError ? "Try again later".localize : description
             let mailImage = self.getAlertImage(image: image, type: type)
                 UIView.animate(withDuration: 0.20) {
                     self.mainView.backgroundColor = self.mainViewDarkColor
