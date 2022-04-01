@@ -431,12 +431,14 @@ class AppData {
         return monthes[month] ?? "Jan"
     }
     func presentBuyProVC(selectedProduct:Int) {
-        let storyboard = UIStoryboard(name: "LogIn", bundle: nil)
-        let vccc = storyboard.instantiateViewController(withIdentifier: "BuyProVC") as! BuyProVC
-        vccc.modalPresentationStyle = .formSheet
-        vccc.navigationController?.setNavigationBarHidden(true, animated: false)
-        vccc.selectedProduct = selectedProduct
-        UIApplication.shared.windows.last?.rootViewController?.present(vccc, animated: true, completion: nil)
+        DispatchQueue.main.async {
+            let storyboard = UIStoryboard(name: "LogIn", bundle: nil)
+            let vccc = storyboard.instantiateViewController(withIdentifier: "BuyProVC") as! BuyProVC
+            vccc.modalPresentationStyle = .formSheet
+            vccc.navigationController?.setNavigationBarHidden(true, animated: false)
+            vccc.selectedProduct = selectedProduct
+            UIApplication.shared.windows.last?.rootViewController?.present(vccc, animated: true, completion: nil)
+        }
     }
     
     

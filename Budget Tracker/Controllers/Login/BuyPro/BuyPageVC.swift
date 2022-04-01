@@ -10,11 +10,11 @@ import UIKit
 
 class BuyPageVC: UIPageViewController {
 
-    var pages: [PageStruct] = [
-        PageStruct(title: "Payment reminders".localize, description: "Set repeated or one time reminders for any category. Easy as adding new transaction".localize, imgName: "addReminder.pro"),
+    let pages: [PageStruct] = [
+        PageStruct(title: "Payment reminders".localize, description: "Set repeated or one time reminders. Easy as adding new transaction".localize, imgName: "addReminder.pro"),
         PageStruct(title: "Transfer data".localize, description: "Transfer transactions and categories between accounts".localize, imgName: "transfareDataIcon.pro"),
-        PageStruct(title: "Passcode protection".localize, description: "Create 4 digit passcode. Set passcode timeout".localize, imgName: "passcodeProtect.pro"),
-        PageStruct(title: "App storage increes and more".localize, description: "Create up to 15 accounts for email\n\nStores more data about app usage".localize, imgName: "dbStorage.pro"),
+        PageStruct(title: "Passcode protection".localize, description: "Set 4 digit passcode".localize, imgName: "passcodeProtect.pro"),
+        PageStruct(title: "App storage increase and more".localize, description: "• Create up to 15 accounts for email\n• Stores more data about app usage\n• Set link color".localize, imgName: "dbStorage.pro"),
     ]
     
     
@@ -22,26 +22,27 @@ class BuyPageVC: UIPageViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //tableData = createVCS()
-        createVCS()
-
         dataSource = self
         delegate = self
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        createVCS()
     }
     
     func createVCS() {
         
         var result:[UIViewController] = []
-
-        for i in 0..<pages.count {
-            let vc = UIStoryboard(name: "LogIn", bundle: nil).instantiateViewController(withIdentifier: "ProViewVC") as! ProViewVC
-            vc.data = pages[i]
-            result.append(vc)
-
-            
-        }
-        tableData = result
+        let pags = pages
+        
         DispatchQueue.main.async {
+            for i in 0..<pags.count {
+                let vc = UIStoryboard(name: "LogIn", bundle: nil).instantiateViewController(withIdentifier: "ProViewVC") as! ProViewVC
+                vc.data = pags[i]
+                result.append(vc)
+            }
+            self.tableData = result
             if let firstPage = self.tableData.first {
                 self.setViewControllers([firstPage], direction: .forward, animated: true) { _ in
                     if BuyProVC.shared?.selectedProduct ?? 0 != 0 {

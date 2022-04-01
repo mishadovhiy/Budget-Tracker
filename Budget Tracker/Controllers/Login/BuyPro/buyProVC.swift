@@ -6,12 +6,6 @@
 //  Copyright © 2021 Misha Dovhiy. All rights reserved.
 //
 
-
-
-// LOCALIZED
-
-
-
 import UIKit
 import StoreKit
 
