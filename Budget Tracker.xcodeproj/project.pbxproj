@@ -49,7 +49,6 @@
 		8B6BA98427E73B8A0067FF58 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B6BA98327E73B8A0067FF58 /* WebKit.framework */; };
 		8B746ABE27F4039E0010F0A4 /* UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B746ABD27F4039E0010F0A4 /* UINavigationController.swift */; };
 		8B746AC027F405970010F0A4 /* ReminderVCMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B746ABF27F405970010F0A4 /* ReminderVCMethods.swift */; };
-		8B746AC527F42DBC0010F0A4 /* IndicatorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B746AC327F42DBC0010F0A4 /* IndicatorView.xib */; };
 		8B78559C27F0C9F200169A93 /* RemindersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B78559B27F0C9F200169A93 /* RemindersVC.swift */; };
 		8B78559F27F0CA2A00169A93 /* ReminderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B78559E27F0CA2A00169A93 /* ReminderCell.swift */; };
 		8B7855A227F1527000169A93 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7855A127F1526F00169A93 /* UIView.swift */; };
@@ -69,6 +68,7 @@
 		8BD17F6A27F4FCA6008D9D57 /* IndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD17F6827F4FCA6008D9D57 /* IndicatorView.swift */; };
 		8BD17F6C27F50487008D9D57 /* IndicatorViewAppearence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD17F6B27F50487008D9D57 /* IndicatorViewAppearence.swift */; };
 		8BD17F7027F54B6C008D9D57 /* NoRemindersCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD17F6F27F54B6B008D9D57 /* NoRemindersCell.swift */; };
+		8BD17F7A27F5833C008D9D57 /* IndicatorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BD17F7927F5833C008D9D57 /* IndicatorView.xib */; };
 		8BD2E77C25B8622100D4DFBF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */; };
 		8BD3A3D927E4097400547022 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD3A3D827E4097400547022 /* View.swift */; };
 		8BE60E5927726EA8007B7FB3 /* LastSelected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE60E5827726EA8007B7FB3 /* LastSelected.swift */; };
@@ -157,7 +157,6 @@
 		8B6BA98327E73B8A0067FF58 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/System/iOSSupport/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
 		8B746ABD27F4039E0010F0A4 /* UINavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationController.swift; sourceTree = "<group>"; };
 		8B746ABF27F405970010F0A4 /* ReminderVCMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderVCMethods.swift; sourceTree = "<group>"; };
-		8B746AC327F42DBC0010F0A4 /* IndicatorView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = IndicatorView.xib; path = ../../../../../Desktop/IndicatorView/IndicatorView.xib; sourceTree = "<group>"; };
 		8B78559B27F0C9F200169A93 /* RemindersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersVC.swift; sourceTree = "<group>"; };
 		8B78559E27F0CA2A00169A93 /* ReminderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderCell.swift; sourceTree = "<group>"; };
 		8B7855A127F1526F00169A93 /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
@@ -177,6 +176,7 @@
 		8BD17F6827F4FCA6008D9D57 /* IndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndicatorView.swift; sourceTree = "<group>"; };
 		8BD17F6B27F50487008D9D57 /* IndicatorViewAppearence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorViewAppearence.swift; sourceTree = "<group>"; };
 		8BD17F6F27F54B6B008D9D57 /* NoRemindersCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoRemindersCell.swift; sourceTree = "<group>"; };
+		8BD17F7927F5833C008D9D57 /* IndicatorView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IndicatorView.xib; sourceTree = "<group>"; };
 		8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8BD3A3D827E4097400547022 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		8BE60E5827726EA8007B7FB3 /* LastSelected.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastSelected.swift; sourceTree = "<group>"; };
@@ -267,7 +267,7 @@
 			children = (
 				8BD17F6D27F51D7C008D9D57 /* Components */,
 				8BD17F6827F4FCA6008D9D57 /* IndicatorView.swift */,
-				8B746AC327F42DBC0010F0A4 /* IndicatorView.xib */,
+				8BD17F7927F5833C008D9D57 /* IndicatorView.xib */,
 			);
 			path = IndicatorView;
 			sourceTree = "<group>";
@@ -754,7 +754,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B746AC527F42DBC0010F0A4 /* IndicatorView.xib in Resources */,
 				8B331AFC27E410A00093BF72 /* PascodeLockView.xib in Resources */,
 				8B47F92F2773B90D00FD96AA /* Message.xib in Resources */,
 				8B331AF727E4105C0093BF72 /* LogIn.storyboard in Resources */,
@@ -762,6 +761,7 @@
 				8B52DFE82750231000595A0C /* Numbers.xib in Resources */,
 				8DBA7E5C23F0317100D8214C /* Assets.xcassets in Resources */,
 				8DBA7E5723F0316F00D8214C /* Main.storyboard in Resources */,
+				8BD17F7A27F5833C008D9D57 /* IndicatorView.xib in Resources */,
 				8B6BA97E27E715C20067FF58 /* Reusable.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

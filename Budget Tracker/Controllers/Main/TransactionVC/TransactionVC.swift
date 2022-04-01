@@ -76,6 +76,7 @@ class TransitionVC: SuperViewController {
         purposeSwitched(purposeSwitcher)
         getEditingdata()
 
+        NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 
     
@@ -264,7 +265,9 @@ class TransitionVC: SuperViewController {
                         self.commentCountLabel.alpha = 1
                     }
                 }
-                self.trashButton.isHidden = false
+                if !self.paymentReminderAdding {
+                    self.trashButton.isHidden = false
+                }
             }
         } else {
             displeyingTransaction.date = defaultDate
@@ -459,12 +462,14 @@ class TransitionVC: SuperViewController {
             self.categoryTextField.attributedPlaceholder = NSAttributedString(string: placeHolder, attributes: [NSAttributedString.Key.foregroundColor: K.Colors.textFieldPlaceholder])
         }
     }
-    
+    //here
     @IBAction func showPadPressed(_ sender: UIButton) {
-        categoryTextField.endEditing(true)
-        commentTextField.endEditing(true)
-        UIView.animate(withDuration: 0.2) {
-            self.numbarPadView.alpha = 1
+        DispatchQueue.main.async {
+            self.categoryTextField.endEditing(true)
+            self.commentTextField.endEditing(true)
+            UIView.animate(withDuration: 0.2) {
+                self.numbarPadView.alpha = 1
+            }
         }
     }
     
@@ -520,6 +525,15 @@ class TransitionVC: SuperViewController {
     var fromDebts = false
     
     var calendarSelectedTime:DateComponents?
+    
+    
+    
+    
+    @objc func keyboardWillHide(_ notification: Notification) {
+        DispatchQueue.main.async {
+            self.showPadPressed(self.showValueButton)
+        }
+    }
 }
 
 

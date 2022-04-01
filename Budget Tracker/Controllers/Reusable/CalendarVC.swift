@@ -130,7 +130,7 @@ class CalendarVC: SuperViewController {
         }
         DispatchQueue.main.async {
             self.navigationController?.setNavigationBarHidden(hideNav, animated: false)
-            self.title = "Calendar"
+            self.title = "Calendar".localize
             self.headerView.isHidden = self.vcHeaderData == nil
         }
     }

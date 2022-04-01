@@ -18,6 +18,7 @@ import StoreKit
 class BuyProVC: SuperViewController {
     
     func showAlert(title:String,text:String?, error: Bool, goHome: Bool = false) {
+        paymentQueueResponded = true
         DispatchQueue.main.async {
             self.ai.showAlertWithOK(title: title, text: text, error: error) { _ in
                 if goHome {
@@ -29,15 +30,12 @@ class BuyProVC: SuperViewController {
         }
 
     }
-    
+    var paymentQueueResponded = false
     @IBOutlet weak var tryFree: UIButton!
     @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var pageControll: UIPageControl!
     var selectedProduct = 0
-   // @IBOutlet weak var productTitleLabel: UILabel!
-  //  @IBOutlet weak var productDescriptionLabel: UILabel!
-   // @IBOutlet weak var productImage: UIImageView!
     @IBOutlet weak var buyProutton: UIButton!
     @IBOutlet weak var buyProView: UIView!
     @IBOutlet weak var purchasedIndicatorView: UIView!
@@ -47,14 +45,7 @@ class BuyProVC: SuperViewController {
     var requestProd = SKProductsRequest()
     var proVProduct: SKProduct?
     
-    var sbsloaded = false
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        if !sbsloaded {
-            sbsloaded = true
-            closeButton.layer.cornerRadius = 5
-        }
-    }
+
     static var shared: BuyProVC?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,7 +55,6 @@ class BuyProVC: SuperViewController {
                 self.tryFree.alpha = 0
             }
             self.purchasedIndicatorView.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
-            self.purchasedIndicatorView.layer.cornerRadius = 4
         }
         pageChanged(pageControll)
         if let price = UserDefaults.standard.value(forKey: "productPrice") {
@@ -72,19 +62,8 @@ class BuyProVC: SuperViewController {
                 self.priceLabel.text = "\(price)"
             }
         }
-        
-
-        
-        DispatchQueue.main.async {
-            self.buyProView.layer.cornerRadius = 10
-            self.buyProutton.layer.cornerRadius = 10
-            
-        }
-
-        
 
         self.closeButton.alpha = navigationController == nil ? 1 : 0
-        
     }
 
 
@@ -114,25 +93,13 @@ class BuyProVC: SuperViewController {
     
     var fromSettings = false
     override func viewDidAppear(_ animated: Bool) {
-        //did lo - transform - small
         super.viewDidAppear(true)
         showPurchasedIndicator()
         getProducts()
     }
-    
 
-    override func viewWillDisappear(_ animated: Bool) {
-        if fromSettings {
-
-        }
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-
-    }
     
     @IBAction func pageChanged(_ sender: UIPageControl) {
-        //selectedProduct = sender.currentPage
         print(#function, sender.currentPage, "ghjcnhxuik")
     }
     
@@ -146,7 +113,6 @@ class BuyProVC: SuperViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toSingIn" {
-            //messagesFromOtherScreen
             if let vc = segue.destination as? LoginViewController {
                 vc.messagesFromOtherScreen = "Sign in to use pro version across all your devices".localize
                 vc.fromPro = true
@@ -155,40 +121,52 @@ class BuyProVC: SuperViewController {
         }
     }
     
+    func getUser(completion:@escaping([String]?) -> ()) {
+        LoadFromDB.shared.Users { (loadedData, error) in
+            if error {
+                self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
+                completion(nil)
+            } else {
+                let name = appData.username
+                for i in 0..<loadedData.count {
+                    if loadedData[i][0] == name {
+                        completion(loadedData[i])
+                        return
+                    }
+                }
+                completion(nil)
+            }
+        }
+    }
+    
     @IBAction func tryFreePressed(_ sender: UIButton) {
         UserDefaults.standard.setValue(true, forKey: "trialPressed")
         if !appData.proVersion {
             if appData.username != "" {
-
                 self.ai.show { (_) in
-                 //   let load = LoadFromDB()
-                    LoadFromDB.shared.Users { (loadedData, error) in
-                        if error {
-                            self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
-                        } else {
-                            let email = appData.emailFromLoadedDataPurch(loadedData) //appData.username
-                            for i in 0..<loadedData.count {
-                                if loadedData[i][1] == email {
-                                    if loadedData[i][5] != "" {
-
-                                        self.showAlert(title: "Access denied".localize, text: "You have already tried trial version".localize, error: true)
-                                        return
-                                    } else {
-                                        self.userData = (loadedData[i][1], loadedData[i][2], loadedData[i][3], loadedData[i][5])
-                                        self.performTrial()
-                                        break
-                                    }
+                    self.getUser { loadedData in
+                        if let data = loadedData {
+                            if data[5] != "" {
+                                self.showAlert(title: "Access denied".localize, text: "You have already tried trial version".localize, error: true)
+                                return
+                            } else {
+                                if data[4] != "1" {
+                                    let new = (data[1], data[2], data[3], data[5])
+                                    self.userData = new
+                                    self.performTrial(loadedData: new)
+                                } else {
+                                    self.showAlert(title: "You already have PRO version".localize, text: nil, error: false)
                                 }
+                                
+                                
                             }
                         }
+                        
                     }
                 }
                 
             } else {
-                //trial only if singed in
-                let firstButton = IndicatorView.button(title: "Close".localize, style: .error, close: true) { _ in
-                   // self.trialWithoutAcoount()
-                }
+                let firstButton = self.ai.prebuild_closeButton(title: "Close".localize, style: .error)
                 let secondButton = IndicatorView.button(title: "Sign in".localize, style: .regular, close: true) { _ in
                     DispatchQueue.main.async {
                         self.performSegue(withIdentifier: "toSingIn", sender: self)
@@ -206,34 +184,22 @@ class BuyProVC: SuperViewController {
     func trialWithoutAcoount() {
         appData.proTrial = true
         appData.trialDate = appData.filter.getToday(appData.filter.filterObjects.currentDate)
-
         showAlert(title: Text.success, text: "Trial has been started successfully".localize, error: false, goHome: true)
-     /*   self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "Start"), rightButtonActon: { (_) in
-            self.loadingIndicator.hideIndicator(fast: true) { (co) in
-                Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { (_) in
-                    self.performSegue(withIdentifier: "homeVC", sender: self)
-                }
-            }
-        }, title: "Success", description: "Trial has been started successfully")*/
-        
     }
     
-    func performTrial() {
+    func performTrial(loadedData:(String, String, String, String)) {
         let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
-       // let save = SaveToDB()
-        let toDataStringMian = "&Nickname=\(appData.username)" + "&Email=\(self.userData.0)" + "&Password=\(self.userData.1)" + "&Registration_Date=\(self.userData.2)"
+        let toDataStringMian = "&Nickname=\(appData.username)" + "&Email=\(loadedData.0)" + "&Password=\(loadedData.1)" + "&Registration_Date=\(loadedData.2)"
         
         let dataStringSave = toDataStringMian + "&ProVersion=0" + "&trialDate=\(today)"
         print(dataStringSave)
         let delete = DeleteFromDB()
         delete.User(toDataString: toDataStringMian) { (errorr) in
             if errorr {
-                //showError    appData.unsendedData.append(["deleteUser": dataStringDelete])
                 self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
             } else {
                 SaveToDB.shared.Users(toDataString: dataStringSave ) { (error) in
                 if error {
-                    //showError       appData.unsendedData.append(["saveUser": dataStringSave])
                     self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
                 } else {
                     DispatchQueue.main.async {
@@ -255,7 +221,7 @@ class BuyProVC: SuperViewController {
     
     var userData = ("","","","")
     @IBAction func buyPressed(_ sender: UIButton) {
-
+        paymentQueueResponded = false
         let nick = appData.username
         if !appData.proVersion {
             if appData.username == "" {
@@ -263,38 +229,20 @@ class BuyProVC: SuperViewController {
                     self.performSegue(withIdentifier: "toSingIn", sender: self)
                 }
             } else {
-                /*DispatchQueue.main.async {
-                    self.loadingIndicator.show()
-                }*/
-                self.ai.show { (_) in
-                //    let load = LoadFromDB()
-                    LoadFromDB.shared.Users { (loadedData, error) in
-                        if !error {
-                            for i in 0..<loadedData.count {
-                                if loadedData[i][0] == nick {
-                                    self.userData = (loadedData[i][1], loadedData[i][2], loadedData[i][3], loadedData[i][5])
-                                    break
-                                }
-                            }
-                            print("buyPressed")
-                            guard let myProduct = self.proVProduct else {
-                                self.showAlert(title: "Error".localize, text: "Permission denied".localize, error: true)
-                                return
-                            }
-                            if SKPaymentQueue.canMakePayments() {
-                                print("can make true")
-                                let payment = SKPayment(product: myProduct)
-                                SKPaymentQueue.default().add(self)
-                                SKPaymentQueue.default().add(payment)
-                            } else {
-                                print("go to restrictions")
-                                self.showAlert(title: "Error".localize, text: "Permission denied".localize, error: true)
-                            }
-                        } else {
 
-                            self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
-                        }
-                        
+                self.ai.show { (_) in
+                    guard let myProduct = self.proVProduct else {
+                        self.showAlert(title: "Error".localize, text: "Permission denied".localize, error: true)
+                        return
+                    }
+                    if SKPaymentQueue.canMakePayments() {
+                        print("can make true")
+                        let payment = SKPayment(product: myProduct)
+                        SKPaymentQueue.default().add(self)
+                        SKPaymentQueue.default().add(payment)
+                    } else {
+                        print("go to restrictions")
+                        self.showAlert(title: "Error".localize, text: "Permission denied".localize, error: true)
                     }
                 }
                 
@@ -304,7 +252,6 @@ class BuyProVC: SuperViewController {
             }
         } else {
             DispatchQueue.main.async {
-               // self.message.showMessage(text: "You have already purchased pro version", type: .succsess, windowHeight: 65)
                 self.newMessage.show(title: "You have already purchased pro version".localize, type: .error)
             }
         }
@@ -315,6 +262,7 @@ class BuyProVC: SuperViewController {
     let restoreRequest = SKReceiptRefreshRequest()
     @IBAction func restorePressed(_ sender: UIButton) {
         print("restorePressed")
+        paymentQueueResponded = false
         if SKPaymentQueue.canMakePayments() {
             SKPaymentQueue.default().restoreCompletedTransactions()
             SKPaymentQueue.default().add(self)
@@ -367,40 +315,40 @@ extension BuyProVC: SKPaymentTransactionObserver {
     
     func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
         print("restoreCompletedTransactionsFailedWithError")
-      /*  DispatchQueue.main.async {
-            self.loadingIndicator.completeWithActions(buttonsTitles: (nil, "OK"), rightButtonActon: { (_) in
-                self.loadingIndicator.hideIndicator(fast: true) { (co) in
-                    
-                }
-            }, title: "Payment not found", error: true)
-        }*/
+        self.showAlert(title: "Payment not found".localize, text: nil, error: true)
     }
 
     func dbSavePurchase() {
-       // let save = SaveToDB()
-        let toDataStringMian = "&Nickname=\(appData.username)" + "&Email=\(self.userData.0)" + "&Password=\(self.userData.1)" + "&Registration_Date=\(self.userData.2)"
-        
-        let dataStringSave = toDataStringMian + "&ProVersion=1" + "&trialDate=\(self.userData.3)"
-        print(dataStringSave)
-        let delete = DeleteFromDB()
-        let dataStringDelete = toDataStringMian
-        print(dataStringDelete)
-        delete.User(toDataString: dataStringDelete) { (errorr) in
-            if errorr {
-                self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
-            } else {
-                SaveToDB.shared.Users(toDataString: dataStringSave ) { (error) in
-                    if error {
+
+        getUser { loadedUser in
+            if let user = loadedUser {
+                let toDataStringMian = "&Nickname=\(user[0])" + "&Email=\(user[1])" + "&Password=\(user[2])" + "&Registration_Date=\(user[3])"
+                let dataStringSave = toDataStringMian + "&ProVersion=1" + "&trialDate=\(user[5])"
+                let delete = DeleteFromDB()
+                let dataStringDelete = toDataStringMian
+
+                delete.User(toDataString: dataStringDelete) { (errorr) in
+                    if errorr {
                         self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
                     } else {
-                        self.scsPurchaseShow()
+                        SaveToDB.shared.Users(toDataString: dataStringSave ) { (error) in
+                            if error {
+                                self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
+                            } else {
+                                self.scsPurchaseShow()
+                            }
+                            
+                        }
                     }
-                    
                 }
+            } else {
+                self.showAlert(title: "Error saving purchase".localize, text: "", error: true)
             }
-            
         }
+        
+        
     }
+    
     
     func scsPurchaseShow() {
         DispatchQueue.main.async {
@@ -417,24 +365,23 @@ extension BuyProVC: SKPaymentTransactionObserver {
 
             case .purchased, .restored:
                 print("paymentQueue pur succss")
-                SKPaymentQueue.default().finishTransaction(transaction)
-                SKPaymentQueue.default().remove(self)
-                appData.proVersion = true
-                appData.purchasedOnThisDevice = true
-                //if transaction.transactionState == .purchased {
+                if !paymentQueueResponded {
+                    paymentQueueResponded = true
+                    SKPaymentQueue.default().finishTransaction(transaction)
+                    SKPaymentQueue.default().remove(self)
+                    appData.proVersion = true
+                    appData.purchasedOnThisDevice = true
                     DispatchQueue.init(label: "DB").async {
                         self.dbSavePurchase()
                     }
-           /*     } else {
-                    scsPurchaseShow()
-                }*/
+                }
+                
                 break
             case .failed, .deferred:
                 print("paymentQueue pur ERROR")
                 SKPaymentQueue.default().finishTransaction(transaction)
                 SKPaymentQueue.default().remove(self)
                 DispatchQueue.main.async {
-
                     self.showAlert(title: "Payment failed".localize, text: nil, error: true)
                 }
                 break

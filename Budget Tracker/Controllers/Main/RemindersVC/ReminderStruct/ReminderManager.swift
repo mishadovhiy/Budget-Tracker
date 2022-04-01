@@ -44,9 +44,14 @@ class ReminderManager {
         }
         let data = Array(self.reminders)
         var result:[ReminderStruct] = []
+        var found = false
         for i in 0..<data.count {
-            if data[i].id != id {
+            if data[i].id != id || found {
                 result.append(data[i])
+            } else {
+                if data[i].id == id {
+                    found = true
+                }
             }
             
          }

@@ -46,7 +46,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
             return trialDays == 0 ? [accpuntCell, settingsCell] : [accpuntCell, settingsCell, trialCell]
         }
         
-        let upcommingRemiders = CellData(name: "PaymentReminders", value: "", segue: "toReminders", image: "", pro: true)
+        let upcommingRemiders = CellData(name: "Payment reminders".localize, value: "", segue: "toReminders", image: "", pro: true)
         
         tableData = [
             TableData(section: accountSection, title: "", hidden: false),

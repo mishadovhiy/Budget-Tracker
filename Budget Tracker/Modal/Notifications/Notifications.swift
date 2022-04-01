@@ -54,5 +54,25 @@ struct Notifications {
             }
         }
     }
+    
+    
+    
+    static func requestNotifications() {
+        DispatchQueue.main.async {
+            AppDelegate.shared?.center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+                if !granted {
+                    AppDelegate.shared?.ai.showAlertWithOK(title: "Notifications not permitted".localize, text: "Allow to use user notifications for this app".localize, error: true, okTitle:"Go to settings".localize) { _ in
+                        DispatchQueue.main.async {
+                            if let url = URL(string: UIApplication.openSettingsURLString) {
+                                UIApplication.shared.open(url, options: [:]) { _ in
+                                    
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 

@@ -1748,30 +1748,6 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="Wsl-xB-XcD">
                                                 <rect key="frame" x="0.0" y="0.0" width="398" height="128"/>
                                                 <subviews>
-                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BCu-Ak-7J7" userLabel="repeatedView">
-                                                        <rect key="frame" x="0.0" y="0.0" width="398" height="0.0"/>
-                                                        <subviews>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Repeated transaction" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JIF-7p-C1E">
-                                                                <rect key="frame" x="4" y="-9" width="146.66666666666666" height="18"/>
-                                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                                <color key="textColor" name="balanceTitleColor"/>
-                                                                <nil key="highlightedColor"/>
-                                                            </label>
-                                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="hjl-zB-vY5">
-                                                                <rect key="frame" x="344" y="-15.333333333333314" width="51" height="31"/>
-                                                                <connections>
-                                                                    <action selector="repeatedSwitched:" destination="o1K-SN-bUx" eventType="valueChanged" id="fdB-Tf-YFZ"/>
-                                                                </connections>
-                                                            </switch>
-                                                        </subviews>
-                                                        <color key="backgroundColor" name="PrimaryBackgroundColor"/>
-                                                        <constraints>
-                                                            <constraint firstItem="hjl-zB-vY5" firstAttribute="centerY" secondItem="BCu-Ak-7J7" secondAttribute="centerY" id="HPh-BI-CxK"/>
-                                                            <constraint firstItem="JIF-7p-C1E" firstAttribute="centerY" secondItem="BCu-Ak-7J7" secondAttribute="centerY" id="Tlc-st-qRg"/>
-                                                            <constraint firstAttribute="trailing" secondItem="hjl-zB-vY5" secondAttribute="trailing" constant="5" id="UXv-ge-4IC"/>
-                                                            <constraint firstItem="JIF-7p-C1E" firstAttribute="leading" secondItem="BCu-Ak-7J7" secondAttribute="leading" constant="4" id="WSc-SA-tzI"/>
-                                                        </constraints>
-                                                    </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pk9-BX-1S0" userLabel="cellView">
                                                         <rect key="frame" x="0.0" y="0.0" width="398" height="42"/>
                                                         <subviews>
@@ -1825,6 +1801,30 @@
                                                             <constraint firstItem="wMS-Hp-6gJ" firstAttribute="leading" secondItem="jBw-Wl-arg" secondAttribute="trailing" constant="4" id="RO9-oc-sQW"/>
                                                             <constraint firstAttribute="bottom" secondItem="jBw-Wl-arg" secondAttribute="bottom" id="wxT-aP-Zx3"/>
                                                             <constraint firstItem="wMS-Hp-6gJ" firstAttribute="top" secondItem="3QO-Fg-zuX" secondAttribute="top" id="zCV-ru-fG9"/>
+                                                        </constraints>
+                                                    </view>
+                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BCu-Ak-7J7" userLabel="repeatedView">
+                                                        <rect key="frame" x="0.0" y="85.666666666666686" width="398" height="0.0"/>
+                                                        <subviews>
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Monthly repeat" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JIF-7p-C1E" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
+                                                                <rect key="frame" x="4" y="-9" width="103.66666666666667" height="18"/>
+                                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                                <color key="textColor" name="balanceTitleColor"/>
+                                                                <nil key="highlightedColor"/>
+                                                            </label>
+                                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="hjl-zB-vY5">
+                                                                <rect key="frame" x="344" y="-15.666666666666686" width="51" height="31"/>
+                                                                <connections>
+                                                                    <action selector="repeatedSwitched:" destination="o1K-SN-bUx" eventType="valueChanged" id="fdB-Tf-YFZ"/>
+                                                                </connections>
+                                                            </switch>
+                                                        </subviews>
+                                                        <color key="backgroundColor" name="PrimaryBackgroundColor"/>
+                                                        <constraints>
+                                                            <constraint firstItem="hjl-zB-vY5" firstAttribute="centerY" secondItem="BCu-Ak-7J7" secondAttribute="centerY" id="HPh-BI-CxK"/>
+                                                            <constraint firstItem="JIF-7p-C1E" firstAttribute="centerY" secondItem="BCu-Ak-7J7" secondAttribute="centerY" id="Tlc-st-qRg"/>
+                                                            <constraint firstAttribute="trailing" secondItem="hjl-zB-vY5" secondAttribute="trailing" constant="5" id="UXv-ge-4IC"/>
+                                                            <constraint firstItem="JIF-7p-C1E" firstAttribute="leading" secondItem="BCu-Ak-7J7" secondAttribute="leading" constant="4" id="WSc-SA-tzI"/>
                                                         </constraints>
                                                     </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L8N-YR-jb6">
@@ -3361,7 +3361,7 @@
             <objects>
                 <viewController storyboardIdentifier="CalendarVC" id="5n4-P6-pnR" customClass="CalendarVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="67i-SE-sWB">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="872"/>
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="838"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ur5-R3-sfZ">
@@ -3635,17 +3635,17 @@
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="InH-AG-csp" userLabel="timeViewStack View">
-                                <rect key="frame" x="61.666666666666657" y="418.33333333333326" width="305" height="453.66666666666674"/>
+                                <rect key="frame" x="61.666666666666657" y="418.33333333333326" width="305" height="419.66666666666674"/>
                                 <subviews>
                                     <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="h2d-GY-FrE">
-                                        <rect key="frame" x="0.0" y="0.0" width="305" height="453.66666666666669"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="305" height="419.66666666666669"/>
                                         <color key="tintColor" name="CategoryColor"/>
                                     </datePicker>
                                 </subviews>
                                 <color key="tintColor" name="CategoryColor"/>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="XFt-LS-Qbp">
-                                <rect key="frame" x="20" y="783" width="388" height="35"/>
+                                <rect key="frame" x="20" y="749" width="388" height="35"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j8N-A3-4Wm" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="100" height="35"/>
@@ -4061,6 +4061,12 @@
         <designable name="JQu-2B-c5Z">
             <size key="intrinsicContentSize" width="30" height="30"/>
         </designable>
+        <designable name="NXe-cX-Hfu">
+            <size key="intrinsicContentSize" width="76.666666666666671" height="26.333333333333332"/>
+        </designable>
+        <designable name="O46-Bh-qBM">
+            <size key="intrinsicContentSize" width="174.66666666666666" height="30"/>
+        </designable>
         <designable name="OgK-5z-ssL">
             <size key="intrinsicContentSize" width="30" height="36"/>
         </designable>
@@ -4169,10 +4175,10 @@
     </designables>
     <inferredMetricsTieBreakers>
         <segue reference="dth-yA-UGp"/>
-        <segue reference="HlC-bb-GVq"/>
+        <segue reference="rIb-KG-K0i"/>
         <segue reference="Ega-tn-GzY"/>
         <segue reference="U95-ph-p6h"/>
-        <segue reference="9VA-wc-3tg"/>
+        <segue reference="N0q-Op-l1q"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="airplane" width="19" height="17"/>

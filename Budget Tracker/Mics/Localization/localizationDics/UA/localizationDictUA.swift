@@ -12,6 +12,9 @@ import UIKit
 struct localizationDictUA {
 
     static let dictUA: [String:String] = [
+        "You already have PRO version":"У вас вже є PRO версія",
+        "Error saving purchase":"Помилка збереження покупки",
+        "Payment not found":"Платіж не знайдено",
         "More":"Бiльше",
         "No transactions history":"Порожньо",
         "Privacy policy":"Політика конфіденційності",
@@ -236,5 +239,9 @@ struct localizationDictUA {
         "Payment failed" : "Платіж не вдалося",
         "Sign in required" : "Потрібна авторизація",
         "Calendar":"Календар",
+        "Monthly repeat":"Повторювати щомiсяця",
+        "Add transaction":"Додати транзакцію",
+        "Payment reminders":"Нагадування про платежі",
+        "Payment reminders ":"Нагадування",
     ]
 }

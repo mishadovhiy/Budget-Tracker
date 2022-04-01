@@ -451,7 +451,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <pageControl opaque="NO" alpha="0.0" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" hidesForSinglePage="YES" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="epx-o4-4WH">
-                                <rect key="frame" x="10" y="678" width="394" height="26"/>
+                                <rect key="frame" x="10" y="680.5" width="394" height="26"/>
                                 <connections>
                                     <action selector="pageChanged:" destination="kvJ-6b-N85" eventType="valueChanged" id="E4h-gM-p9w"/>
                                 </connections>
@@ -505,18 +505,18 @@
                                     <constraint firstItem="UsQ-pR-A8z" firstAttribute="leading" secondItem="xHS-Su-KKU" secondAttribute="leading" constant="10" id="ypu-MN-YDU"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hqm-2b-6Ca">
-                                <rect key="frame" x="7" y="714" width="400" height="143"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hqm-2b-6Ca" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
+                                <rect key="frame" x="7" y="716.5" width="400" height="140.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Price" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mGf-Yr-mD9" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="15" y="15" width="370" height="30"/>
+                                        <rect key="frame" x="15" y="15" width="370" height="27.5"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="23"/>
                                         <color key="textColor" name="backgroundColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GX0-5m-kFZ" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="320" y="15" width="65" height="30"/>
-                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                        <rect key="frame" x="331" y="15" width="54" height="27.5"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
                                         <state key="normal" title="Free Trial">
                                             <color key="titleColor" name="negativeColor"/>
                                         </state>
@@ -525,11 +525,11 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oVB-D9-t7E" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="15" y="45" width="370" height="38"/>
+                                        <rect key="frame" x="15" y="42.5" width="370" height="38"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="38" id="TrK-cm-kT1"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
                                         <state key="normal" title="Restore purchase">
                                             <color key="titleColor" name="balanceTitleColor"/>
                                         </state>
@@ -538,12 +538,12 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0eE-EE-uOy" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="10" y="93" width="380" height="40"/>
+                                        <rect key="frame" x="10" y="90.5" width="380" height="40"/>
                                         <color key="backgroundColor" systemColor="tintColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="jLP-tg-a5C"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="19"/>
                                         <state key="normal" title="Buy Pro">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
@@ -554,6 +554,7 @@
                                             <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
                                                 <real key="value" value="0.29999999999999999"/>
                                             </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="linkBackground" value="YES"/>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="buyPressed:" destination="kvJ-6b-N85" eventType="touchUpInside" id="oA9-8N-GP5"/>
@@ -603,9 +604,14 @@
                                     <constraint firstItem="GX0-5m-kFZ" firstAttribute="top" secondItem="Hqm-2b-6Ca" secondAttribute="top" constant="15" id="u52-vl-BNn"/>
                                     <constraint firstAttribute="bottom" secondItem="0eE-EE-uOy" secondAttribute="bottom" constant="10" id="vbr-5k-vIA"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="9"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                             </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MWo-Id-j5O">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="678"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="680.5"/>
                                 <connections>
                                     <segue destination="hGQ-HN-1kF" kind="embed" id="a2F-6w-DJf"/>
                                 </connections>
@@ -994,7 +1000,7 @@
     </scenes>
     <designables>
         <designable name="0eE-EE-uOy">
-            <size key="intrinsicContentSize" width="71" height="36"/>
+            <size key="intrinsicContentSize" width="69" height="35"/>
         </designable>
         <designable name="1Qc-L7-jFd">
             <size key="intrinsicContentSize" width="30" height="36"/>
@@ -1009,7 +1015,7 @@
             <size key="intrinsicContentSize" width="17.5" height="22"/>
         </designable>
         <designable name="GX0-5m-kFZ">
-            <size key="intrinsicContentSize" width="65" height="30"/>
+            <size key="intrinsicContentSize" width="54" height="27"/>
         </designable>
         <designable name="HpS-9h-MF7">
             <size key="intrinsicContentSize" width="54" height="31"/>
@@ -1021,7 +1027,7 @@
             <size key="intrinsicContentSize" width="53.5" height="27.5"/>
         </designable>
         <designable name="oVB-D9-t7E">
-            <size key="intrinsicContentSize" width="124" height="30"/>
+            <size key="intrinsicContentSize" width="102" height="27"/>
         </designable>
         <designable name="xd0-Jd-gZM">
             <size key="intrinsicContentSize" width="27.5" height="29"/>

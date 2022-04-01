@@ -19,7 +19,7 @@ class RemindersVC: SuperViewController {
         super.viewDidLoad()
         RemindersVC.shared = self
         loadData()
-        title = "Payment reminders".localize
+        title = "Payment reminders ".localize
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -33,15 +33,7 @@ class RemindersVC: SuperViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "goToEditVC":
-            DispatchQueue.main.async {
-                AppDelegate.shared?.center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
-                    if !granted {
-                        self.ai.showAlertWithOK(title: "Notifications not permitted", text: "Allow to use user notifications for this app", error: true, okTitle:"Go to settings") { _ in
-                            
-                        }
-                    }
-                }
-            }
+            Notifications.requestNotifications()
             let nav = segue.destination as! UINavigationController
             let vc = nav.topViewController as! TransitionVC
             vc.delegate = self
@@ -51,9 +43,8 @@ class RemindersVC: SuperViewController {
                 let data = tableData[row]
                 vc.reminder_Repeated = data.repeated
                 vc.reminder_Time = data.time
-               // let normalDate = data.transaction.date.stringToCompIso()
-               // print(normalDate, "normalDatenormalDatenormalDatenormalDate")
-                vc.editingDate = data.transaction.date
+                let normalDate = data.transaction.date.stringToCompIso()
+                vc.editingDate = normalDate.toShortString() ?? ""
                 vc.editingValue = Double(data.transaction.value) ?? 0.0
                 vc.editingCategory = data.transaction.categoryID
                 vc.editingComment = data.transaction.comment
@@ -84,7 +75,7 @@ extension RemindersVC:UITableViewDelegate, UITableViewDataSource {
             cell.dateLabel.text = (date?.stringMonth ?? "") + "\n\(date?.year ?? 0)"
             cell.timeLabel.text = date?.stringTime
             cell.expiredLabel.isHidden = !(date?.expired ?? false)
-            cell.commentLabel.text = data.transaction.comment + "//\((data.repeated ?? false) ? "1" : "0")"
+            cell.commentLabel.text = data.transaction.comment
             cell.categoryLabel.text = data.transaction.category.name
             cell.actionsView.isHidden = !data.selected
             cell.unseenIndicator.isHidden = !data.higlightUnseen
