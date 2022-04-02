@@ -17,18 +17,7 @@ class SuperViewController: UIViewController {
         //screen rotation
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
-    /*
-        //DispatchQueue.main.async {
-           // self.loadingIndicator.alpha = 1
-            let window = UIApplication.shared.keyWindow ?? UIWindow()
-           // self.loadingIndicator.alpha = 0
-            window.addSubview(self.loadingIndicator)
-        //}
- */
-    }
-    
+
     
     var loadedSubviews: Bool = false
     override func viewDidLayoutSubviews() {
@@ -43,20 +32,7 @@ class SuperViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         definesPresentationContext = true
-      /*  let window = UIApplication.shared.keyWindow ?? UIWindow()
-        let indd = IndicatorView.instanceFromNib() as! IndicatorView
-        indd.tag = 23450
-        indd.layer.zPosition = 99999
-        if !window.superview!.contains(indd) {
-            window.superview?.addSubview(indd)
-        }
-        */
-        
-        /*DispatchQueue.main.async {
-            let window = UIApplication.shared.keyWindow ?? UIWindow()
-           // self.loadingIndicator.alpha = 0
-            window.addSubview(self.loadingIndicator)
-        }*/
+
         
     }
     

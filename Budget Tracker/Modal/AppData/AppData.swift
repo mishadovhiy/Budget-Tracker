@@ -20,7 +20,7 @@ class AppData {
             UserDefaults.standard.setValue(newValue, forKey: "SelectedTintColor")
             let color = colorNamed(newValue)
             DispatchQueue.main.async {
-                let window = UIApplication.shared.keyWindow ?? UIWindow()
+                let window = AppDelegate.shared?.window ?? UIWindow()
                 window.tintColor = color
             }
         }
@@ -434,10 +434,36 @@ class AppData {
         DispatchQueue.main.async {
             let storyboard = UIStoryboard(name: "LogIn", bundle: nil)
             let vccc = storyboard.instantiateViewController(withIdentifier: "BuyProVC") as! BuyProVC
-            vccc.modalPresentationStyle = .formSheet
-            vccc.navigationController?.setNavigationBarHidden(true, animated: false)
+          //  vccc.modalPresentationStyle = .formSheet
+          //  vccc.navigationController?.setNavigationBarHidden(true, animated: false)
             vccc.selectedProduct = selectedProduct
-            UIApplication.shared.windows.last?.rootViewController?.present(vccc, animated: true, completion: nil)
+            self.present(vc: vccc)
+        }
+    }
+    
+    
+    func present(vc:UIViewController, completion:((Bool)->())? = nil) {
+        DispatchQueue.main.async {
+            let window = AppDelegate.shared?.window ?? UIWindow()
+            if let rootVC = window.rootViewController {
+                let presentt = {
+                  //  rootVC.presentedViewController
+                    rootVC.present(vc, animated: true, completion: {
+                        if let completion = completion {
+                            completion(true)
+                        }
+                    })
+                }
+                if let presenting = rootVC.presentedViewController {
+                    presenting.dismiss(animated: true, completion: presentt)
+                } else {
+                    presentt()
+                }
+                
+                
+            } else {
+                AppDelegate.shared?.ai.showAlertWithOK(title: "Error", text: Text.Error.internetDescription, error: true, hidePressed: completion)
+            }
         }
     }
     
@@ -446,7 +472,7 @@ class AppData {
         DispatchQueue.main.async {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let vccc = storyboard.instantiateViewController(withIdentifier: "MoreVC") as! MoreVC
-            vccc.modalPresentationStyle = .overFullScreen //.overCurrentContext - cant swipe close
+            vccc.modalPresentationStyle = .overFullScreen //.overFullScreen //.overCurrentContext - cant swipe close
             vccc.tableData = data
             vccc.navigationController?.setNavigationBarHidden(true, animated: false)
             let cellHeight = 50
@@ -456,7 +482,7 @@ class AppData {
             
             //let tableInButtom = (currentVC.view.frame.height - (safeAt + safebt + 150)) - CGFloat(contentHeight)
             
-            let window = UIApplication.shared.keyWindow ?? UIWindow()
+            let window = AppDelegate.shared?.window ?? UIWindow()
             let screenHeight = window.frame.height//currentVC.view.frame.height
             print(safeAt, "safebtsafebt")
             let additionalMargin:CGFloat = safeAt > 0 ? 45 : 40
@@ -478,6 +504,7 @@ class AppData {
     }
 
     
+
 
     
     

@@ -57,7 +57,8 @@ class IndicatorView: UIView {
         let hideDescription = (description == "" || description == nil) ? true : false
         self.setBacground(higlight: false, ai: true)
             DispatchQueue.main.sync {
-            let window = UIApplication.shared.keyWindow ?? UIWindow()
+                let window = AppDelegate.shared?.window ?? UIWindow()
+                //keyWindow ?? UIWindow()
             self.frame = window.frame
             window.addSubview(self)
             if self.imageView.superview?.isHidden != true {
@@ -178,7 +179,7 @@ class IndicatorView: UIView {
             print("NOT SHOWINGG")
             isShowing = true
             DispatchQueue.main.async {
-                let window = UIApplication.shared.keyWindow ?? UIWindow()
+                let window = AppDelegate.shared?.window ?? UIWindow()
                 self.frame = window.frame
                 window.addSubview(self)
                 self.alpha = 1
@@ -273,7 +274,7 @@ class IndicatorView: UIView {
             return
         }
         DispatchQueue.main.async {
-            let window = UIApplication.shared.keyWindow ?? UIWindow()
+            let window = AppDelegate.shared?.window ?? UIWindow()
             UIView.animate(withDuration: 0.10) {
                 self.backgroundView.backgroundColor = .clear
             } completion: { (_) in

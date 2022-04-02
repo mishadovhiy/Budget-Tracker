@@ -19,7 +19,7 @@ class BuyPageVC: UIPageViewController {
     
     
     
-    
+    var loadCalled = false
     override func viewDidLoad() {
         super.viewDidLoad()
         dataSource = self
@@ -28,7 +28,11 @@ class BuyPageVC: UIPageViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        createVCS()
+        
+        if !loadCalled {
+            loadCalled = true
+            createVCS()
+        }
     }
     
     func createVCS() {
@@ -36,12 +40,13 @@ class BuyPageVC: UIPageViewController {
         var result:[UIViewController] = []
         let pags = pages
         
-        DispatchQueue.main.async {
+        
             for i in 0..<pags.count {
                 let vc = UIStoryboard(name: "LogIn", bundle: nil).instantiateViewController(withIdentifier: "ProViewVC") as! ProViewVC
                 vc.data = pags[i]
                 result.append(vc)
             }
+        DispatchQueue.main.async {
             self.tableData = result
             if let firstPage = self.tableData.first {
                 self.setViewControllers([firstPage], direction: .forward, animated: true) { _ in

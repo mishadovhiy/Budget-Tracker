@@ -92,7 +92,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
                 self.window?.endEditing(true)
             }
             backgroundEnterDate = Date();
-            //delegate.resighnActive()
             presentLock(passcode: false)
         }
     }
@@ -114,7 +113,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
             needDownloadOnMainAppeare = true
         }
         if UserSettings.Security.password != "" {
-            //end editing tf of window-topViewController-view
             guard let logoutDate = backgroundEnterDate else{
                 presentLock(passcode: true)
                 
@@ -175,20 +173,13 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             DispatchQueue.main.async {
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let vc = storyboard.instantiateViewController(withIdentifier: "HistoryVC") as! HistoryVC
-                let navController = UINavigationController(rootViewController: vc)
-                navController.navigationBar.tintColor = K.Colors.category
-                navController.navigationBar.barTintColor = K.Colors.category
-                navController.navigationBar.barStyle = .black
-                navController.modalPresentationStyle = .pageSheet
+              //  let navController = UINavigationController(rootViewController: vc)
                 vc.historyDataStruct = db.transactions(for: categoryy)
                 vc.selectedCategory = categoryy
                 vc.fromCategories = true
-
-                UIApplication.shared.windows.last?.rootViewController?.present(navController, animated: true, completion: {
-                    DispatchQueue.main.async {
-                        self.ai.fastHide()
-                    }
-                })
+                appData.present(vc: vc) { _ in
+                    self.ai.fastHide()
+                }
 
             }
         } else {
@@ -206,10 +197,8 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         DispatchQueue.main.async {
             let strorybpard = UIStoryboard(name: "Main", bundle: nil)
             let vc = strorybpard.instantiateViewController(withIdentifier: "RemindersVC") as! RemindersVC
-            let nav = UINavigationController(rootViewController: vc)
-            
-            self.ai.fastHide { _ in
-                UIApplication.shared.windows.last?.rootViewController?.present(nav, animated: true, completion: nil)
+            appData.present(vc: vc) { _ in
+                self.ai.fastHide()
             }
             
         }

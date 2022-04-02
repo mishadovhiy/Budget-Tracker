@@ -104,7 +104,7 @@ class PascodeLockView: UIView, UITextFieldDelegate {
    //     passwordNotEntered = false
         presenting = false
         DispatchQueue.main.async {
-            let window = UIApplication.shared.keyWindow ?? UIWindow()
+            let window = AppDelegate.shared?.window ?? UIWindow()
             UIView.animate(withDuration: 0.3) {
                 self.backgroundColor = .clear
                 self.primaryStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, window.frame.height + 100, 0)

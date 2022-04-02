@@ -67,7 +67,7 @@ class MessageView: UIView {
             let hideImage = type == .standart
        // AudioServicesPlaySystemSound(1007)
         DispatchQueue.main.async {
-            let window = UIApplication.shared.keyWindow ?? UIWindow()
+            let window = AppDelegate.shared?.window ?? UIWindow()
             //self.frame = window.frame
             window.addSubview(self)
             self.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: 100)
