@@ -32,7 +32,7 @@ class AppSettingsData {
     
     
     func appearenceSection() -> [Any] {
-        let colorCell = SettingsVC.StandartCell(title: "Primary color".localize, description: "", colorNamed:  AppData.linkColor, pro:3, action: {
+        let colorCell = SettingsVC.StandartCell(title: "Primary color".localize, description: "", colorNamed:  AppData.linkColor, pro: !(appData.proTrial || appData.proVersion) ? 3 : nil, action: {
             DispatchQueue.main.async {
                 self.vc.performSegue(withIdentifier: "toColors", sender: self.vc)
             }
@@ -60,7 +60,7 @@ class AppSettingsData {
         print("privacySection")
         let passcodeOn = UserSettings.Security.password != ""
 
-        let passcodeCell:SettingsVC.TriggerCell = SettingsVC.TriggerCell(title: "Passcode".localize, isOn: passcodeOn, pro: 2, action: { (newValue) in
+        let passcodeCell:SettingsVC.TriggerCell = SettingsVC.TriggerCell(title: "Passcode".localize, isOn: passcodeOn, pro: !(appData.proTrial || appData.proVersion) ? 2 : nil, action: { (newValue) in
             
             self.passcodeSitched(isON: newValue)
         })

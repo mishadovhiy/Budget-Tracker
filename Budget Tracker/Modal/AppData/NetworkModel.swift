@@ -171,7 +171,6 @@ struct LoadFromDB {
                        let pro = jsonElement["ProVersion"] as? String, //(0,1)
                        let trialDate = jsonElement["trialDate"] as? String
                     {
-                        print(trialDate, "trialDatetrialDatetrialDatetrialDatetrialDate")
                         loadedData.append([name, email, password, registrationDate, pro, trialDate])
                     }
                     

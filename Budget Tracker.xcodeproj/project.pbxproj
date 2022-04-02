@@ -47,6 +47,9 @@
 		8B6BA98027E716220067FF58 /* WebViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6BA97F27E716220067FF58 /* WebViewVC.swift */; };
 		8B6BA98227E717850067FF58 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6BA98127E717850067FF58 /* Date.swift */; };
 		8B6BA98427E73B8A0067FF58 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B6BA98327E73B8A0067FF58 /* WebKit.framework */; };
+		8B6BFB1827F7C82C00DD4CBC /* CategoriesMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6BFB1727F7C82B00DD4CBC /* CategoriesMethods.swift */; };
+		8B6BFB1A27F7CB7600DD4CBC /* AppearcenceExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6BFB1927F7CB7600DD4CBC /* AppearcenceExtensions.swift */; };
+		8B6BFB1C27F7CB8600DD4CBC /* TableViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6BFB1B27F7CB8600DD4CBC /* TableViewExtension.swift */; };
 		8B746ABE27F4039E0010F0A4 /* UINavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B746ABD27F4039E0010F0A4 /* UINavigationController.swift */; };
 		8B746AC027F405970010F0A4 /* ReminderVCMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B746ABF27F405970010F0A4 /* ReminderVCMethods.swift */; };
 		8B78559C27F0C9F200169A93 /* RemindersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B78559B27F0C9F200169A93 /* RemindersVC.swift */; };
@@ -155,6 +158,9 @@
 		8B6BA97F27E716220067FF58 /* WebViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewVC.swift; sourceTree = "<group>"; };
 		8B6BA98127E717850067FF58 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		8B6BA98327E73B8A0067FF58 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk/System/iOSSupport/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
+		8B6BFB1727F7C82B00DD4CBC /* CategoriesMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesMethods.swift; sourceTree = "<group>"; };
+		8B6BFB1927F7CB7600DD4CBC /* AppearcenceExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearcenceExtensions.swift; sourceTree = "<group>"; };
+		8B6BFB1B27F7CB8600DD4CBC /* TableViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewExtension.swift; sourceTree = "<group>"; };
 		8B746ABD27F4039E0010F0A4 /* UINavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UINavigationController.swift; sourceTree = "<group>"; };
 		8B746ABF27F405970010F0A4 /* ReminderVCMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderVCMethods.swift; sourceTree = "<group>"; };
 		8B78559B27F0C9F200169A93 /* RemindersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersVC.swift; sourceTree = "<group>"; };
@@ -428,6 +434,16 @@
 			path = AppSettings;
 			sourceTree = "<group>";
 		};
+		8B6BFB1D27F7CB8C00DD4CBC /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				8B6BFB1727F7C82B00DD4CBC /* CategoriesMethods.swift */,
+				8B6BFB1927F7CB7600DD4CBC /* AppearcenceExtensions.swift */,
+				8B6BFB1B27F7CB8600DD4CBC /* TableViewExtension.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		8B746AC127F405AA0010F0A4 /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -600,6 +616,7 @@
 			children = (
 				8DD89D8F23F1496100273904 /* CategoriesVC.swift */,
 				8BFA15D227E8E8620078856A /* Cells */,
+				8B6BFB1D27F7CB8C00DD4CBC /* Components */,
 			);
 			path = CategoriesVC;
 			sourceTree = "<group>";
@@ -866,6 +883,7 @@
 				8B6B509B27F3B24B0067C237 /* NotificationManager.swift in Sources */,
 				8BD17F6A27F4FCA6008D9D57 /* IndicatorView.swift in Sources */,
 				8B2A4D72271439520085E0F0 /* MoreVC.swift in Sources */,
+				8B6BFB1C27F7CB8600DD4CBC /* TableViewExtension.swift in Sources */,
 				8B7B63CC2655CAFB0067C434 /* SuperViewController.swift in Sources */,
 				8B7D1AA1276CF203008942EC /* IconList.swift in Sources */,
 				8B7855A227F1527000169A93 /* UIView.swift in Sources */,
@@ -875,7 +893,9 @@
 				8BD3A3D927E4097400547022 /* View.swift in Sources */,
 				8B78559F27F0CA2A00169A93 /* ReminderCell.swift in Sources */,
 				8DD89D8723F1471400273904 /* AppData.swift in Sources */,
+				8B6BFB1827F7C82C00DD4CBC /* CategoriesMethods.swift in Sources */,
 				8B898CF427F3EB0800B66F79 /* UIDatePicker.swift in Sources */,
+				8B6BFB1A27F7CB7600DD4CBC /* AppearcenceExtensions.swift in Sources */,
 				8B52DFEC27504D2900595A0C /* IconsVC.swift in Sources */,
 				8BF58D1F277C793D005A7F38 /* BuyPageVC.swift in Sources */,
 				8D52066B24216A6200772CD5 /* HistoryVC.swift in Sources */,

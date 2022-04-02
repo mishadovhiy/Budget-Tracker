@@ -57,16 +57,20 @@ class categoriesVCcell: UITableViewCell {
         footerSection = footer
 
         var category:CategoriesVC.ScreenCategory {
-            let defaultCategory = CategoriesVC.ScreenCategory(category: NewCategories(id: -2, name: "-", icon: "", color: "", purpose: CategoriesVC.shared?.screenType == .debts ? .debt : .expense), transactions: [])
-            if let index = index {
-                return CategoriesVC.shared?.tableData[index.section].data[index.row] ?? defaultCategory
-            } else {
-                if let footer = footer {
-                    return CategoriesVC.shared?.tableData[footer].newCategory ?? defaultCategory
+            if let data = CategoriesVC.shared?.tableData {
+                if let index = index {
+                    if data.count > index.section {
+                        if data[index.section].data.count > index.row {
+                            return data[index.section].data[index.row]
+                        }
+                    }
                 } else {
-                    return defaultCategory
+                    if let footer = footer {
+                        return data[footer].newCategory
+                    }
                 }
             }
+            return CategoriesVC.ScreenCategory(category: NewCategories(id: -2, name: "-", icon: "", color: "", purpose: CategoriesVC.shared?.screenType == .debts ? .debt : .expense), transactions: [])
         }
 
         currentCategory = category
