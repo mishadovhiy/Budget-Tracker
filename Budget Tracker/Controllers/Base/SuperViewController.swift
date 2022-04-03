@@ -46,40 +46,12 @@ class SuperViewController: UIViewController {
     
     
     func getMonthFrom(string: String) -> Int {
-        if string != "" {
-            if string.count == 10 {
-                var monthS = string
-                for _ in 0..<3 {
-                    monthS.removeFirst()
-                }
-                for _ in 0..<5 {
-                    monthS.removeLast()
-                }
-                return Int(monthS) ?? 11
-            } else {
-                return 11
-            }
-            
-        } else {
-            return 11
-        }
+        let comp = string.stringToCompIso()
+        return comp.month ?? 2022
     }
     func getYearFrom(string: String) -> Int {
-        if string != "" {
-            if string.count == 10 {
-                var yearS = string
-                for _ in 0..<6 {
-                    yearS.removeFirst()
-                }
-                return Int(yearS) ?? 1996
-            } else {
-                return 1996
-            }
-            
-            
-        } else {
-            return 1996
-        }
+        let comp = string.stringToCompIso()
+        return comp.year ?? 2022
     }
     
     

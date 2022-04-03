@@ -71,13 +71,7 @@ class CalendarVC: SuperViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        /*DispatchQueue.main.async {
-            self.reminderTimeLabel.isHidden = true
-        }*/
-        
-        
-      //  commentTextField.layer.masksToBounds = true
-        //commentTextField.layer.cornerRadius = 5
+
         if let pickerDate = datePickerDate {
             timePicker.alpha = 1
             timePicker.addTarget(self, action: #selector(dateSelected(_:)), for: .valueChanged)
@@ -89,25 +83,18 @@ class CalendarVC: SuperViewController {
                 }
                 
                 timePicker.setValue(K.Colors.category, forKeyPath: "textColor")
-            } else {
-                //default date from settings
-                //timePicker.date = stringToDate(s: pickerDate, dateFormat: K.fullDateFormat)
             }
             
         } else {
             timePicker.alpha = 0
         }
-        
 
-        
-        
-        
         if vcHeaderData != nil {
             DispatchQueue.main.async {
                 if self.vcHeaderData?.title != "" {
                     self.mainTitleLabel.text = self.vcHeaderData?.title
                 }
-                if self.vcHeaderData?.description != "" {
+                if (self.vcHeaderData?.description ?? "") != "" {
                     self.mainDescriptionLabel.text = self.vcHeaderData?.description
                 }
                 self.mainDescriptionLabel.isHidden = self.vcHeaderData?.description ?? "" == ""
@@ -160,10 +147,6 @@ class CalendarVC: SuperViewController {
                     ifEndInvisible()
 
                     DispatchQueue.main.async {
-                      /*  UIView.animate(withDuration: 0.3) {
-                            self.reminderTimeLabel.isHidden = false
-                            self.timePicker.alpha = 1
-                        }*/
                         self.collectionView.reloadData()
                     }
                 } else {
@@ -218,16 +201,7 @@ class CalendarVC: SuperViewController {
         month = appData.filter.getMonthFromString(s: selectedFrom == "" ? today : selectedFrom)
         getDays()
         doneButtonIsActive()
-        /*if selectedTo == "" && selectedFrom == "" {
-            toggleButton(b: startButton, hidden: true, animation: false)
-            toggleButton(b: endButton, hidden: true, animation: false)
-            doneButtonIsActive()
-        }
-        
-        if selectedTo == "" {
-            toggleButton(b: endButton, hidden: true, animation: false)
-            toggleButton(b: startButton, hidden: true, animation: false)
-        }*/
+
     }
     
     var daystoWeekStart = 0
@@ -648,15 +622,10 @@ class CalendarVC: SuperViewController {
     
     var doneIsActive = false
     func doneButtonIsActive() {
-        if selectedFrom == "" {
-            doneIsActive = false
+        DispatchQueue.main.async {
             UIView.animate(withDuration: 0.3) {
-                self.doneButton.alpha = 0.2
-            }
-        } else {
-            doneIsActive = true
-            UIView.animate(withDuration: 0.3) {
-                self.doneButton.alpha = 1
+                self.doneButton.alpha = self.selectedFrom == ""  ? 0.2 : 1
+                self.doneIsActive = self.selectedFrom == "" ? false : true
             }
         }
     }
