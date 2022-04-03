@@ -203,11 +203,11 @@ class AppData {
 
 
     let categoryColors = [
-        "BlueColor", "BlueColor2", "BlueColor3", "GreenColor", "GreenColor-2", "yellowColor2", "OrangeColor", "OrangeColor-1", "pinkColor2", "PinkColor", "PinkColor-1", "RedColor", "yellowColor"
+        "BlueColor", "BlueColor2", "BlueColor3", "GreenColor", "GreenColor-2", "yellowColor2", "OrangeColor", "yellowColor", "OrangeColor-1", "pinkColor2", "PinkColor-1", "PinkColor", "RedColor"
     ]
     
     let screenColors = [
-        "BlueColor", "BlueColor2", "BlueColor3", "GreenColor", "GreenColor-2", "yellowColor2", "OrangeColor", "OrangeColor-1", "pinkColor2", "PinkColor", "PinkColor-1", "RedColor", "yellowColor"
+        "BlueColor", "BlueColor2", "BlueColor3", "GreenColor", "GreenColor-2", "yellowColor2", "OrangeColor", "yellowColor", "OrangeColor-1", "pinkColor2", "PinkColor-1", "PinkColor", "RedColor"
     ]
     
     var randomColorName: String {
