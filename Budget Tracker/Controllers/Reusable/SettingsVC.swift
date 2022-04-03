@@ -29,7 +29,7 @@ class SettingsVC: SuperViewController {
         tableView.layer.shadowOpacity = 0.1
         tableView.layer.shadowOffset = .zero
         tableView.layer.shadowRadius = 12
-        tableView.layer.cornerRadius = 9
+        tableView.contentInset.top = 10
     }
     
     override func viewDidLoad() {
