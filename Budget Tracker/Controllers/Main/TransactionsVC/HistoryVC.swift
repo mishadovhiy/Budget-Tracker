@@ -305,14 +305,13 @@ class HistoryVC: SuperViewController {
     
     func tocalendatPressed() {
         
-        center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
-
-            DispatchQueue.main.async {
-                self.ai.fastHide { _ in
-                    self.performSegue(withIdentifier: "toCalendar", sender: self)
-                }
+        Notifications.requestNotifications()
+        DispatchQueue.main.async {
+            self.ai.fastHide { _ in
+                self.performSegue(withIdentifier: "toCalendar", sender: self)
             }
         }
+
     }
     
     func dbLoadRemoveBeforeUpdate(completion: @escaping ([NewCategories], Bool) -> ()) {
