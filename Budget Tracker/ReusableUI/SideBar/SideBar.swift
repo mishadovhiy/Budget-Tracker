@@ -14,6 +14,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         let db = DataBase()
         let debts = db.debts.count
         let pro = appData.proVersion || appData.proTrial
+        let notifications = Notifications.notificationsCount
         
         var accpuntCell:CellData {
             var accountSegue:String {
@@ -22,21 +23,21 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
             return CellData(name: "Account".localize, value: appData.username == "" ? "Log in".localize : appData.username, segue: accountSegue, image: "person.fill")
         }
         
-        let settingsCell = CellData(name: "Settings".localize, value: "", segue: "toSettingsVC", image: "gearshape.fill")
+        let settingsCell:CellData = .init(name: "Settings".localize, value: "", segue: "toSettingsVC", image: "gearshape.fill")
         
         
         let catsCo = UserDefaults.standard.value(forKey: "categoriesDataNew") as? [[String:Any]] ?? []
         
-        var categories = [
-            CellData(name: "Categories".localize, value: "\(catsCo.count - debts)", segue: "toCategories", image: "folder.fill"),
-            CellData(name: "Debts".localize, value: "\(debts)", segue: "toDebts", image: "rectangle.3.group.fill", pro: !(pro) ? 3 : nil)
+        var categories:[CellData] = [
+            .init(name: "Categories".localize, value: "\(catsCo.count - debts)", segue: "toCategories", image: "folder.fill"),
+            .init(name: "Debts".localize, value: "\(debts)", segue: "toDebts", image: "rectangle.3.group.fill", pro: !(pro) ? 3 : nil, notifications: notifications.0)
         ]
         let localCount = ((UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String:Any]] ?? []) + (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String:Any]] ?? [])).count
         if localCount > 0 {
             categories.append(CellData(name: "local Data".localize, value: "\(localCount)", segue: "toLocalData", image: "tray.fill"))
         }
         
-        let statistic = CellData(name: "Statistic".localize, value: "", segue: "toStatisticVC", image: "chart.pie.fill")
+        let statistic:CellData = .init(name: "Statistic".localize, value: "", segue: "toStatisticVC", image: "chart.pie.fill")
         let trialDays = UserDefaults.standard.value(forKey: "trialToExpireDays") as? Int ?? 0
         let trialCell = CellData(name: "Trail till", value: "\(7 - trialDays)", segue: "toProVC", image: "clock.fill")
 
@@ -45,13 +46,13 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
             return trialDays == 0 ? [accpuntCell, settingsCell] : [accpuntCell, settingsCell, trialCell]
         }
         
-        let upcommingRemiders = CellData(name: "Payment reminders".localize, value: "", segue: "toReminders", image: "", pro: !(pro) ? 0 : nil)
+        let upcommingRemiders:CellData = .init(name: "Payment reminders".localize, value: "", segue: "toReminders", image: "", pro: !(pro) ? 0 : nil, notifications: notifications.1)
         
         tableData = [
-            TableData(section: accountSection, title: "", hidden: false),
-            TableData(section: categories, title: "", hidden: false),
-            TableData(section: [upcommingRemiders], title: "", hidden: false),
-            TableData(section: [statistic], title: "", hidden: false),
+            .init(section: accountSection, title: "", hidden: false),
+            .init(section: categories, title: "", hidden: false),
+            .init(section: [upcommingRemiders], title: "", hidden: false),
+            .init(section: [statistic], title: "", hidden: false),
         ]
         DispatchQueue.main.async {
             ViewController.shared?.sideTableView.reloadData()
@@ -90,6 +91,8 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         cell.nameLabel.superview?.alpha = tableData[indexPath.section].section[indexPath.row].name == "" ? 0 : 1
         cell.nameLabel.text = tableData[indexPath.section].section[indexPath.row].name
         cell.valueLabel.text = tableData[indexPath.section].section[indexPath.row].value
+        cell.notificationsView.isHidden = tableData[indexPath.section].section[indexPath.row].notifications == 0
+        cell.notificationsLabel.text = "\(tableData[indexPath.section].section[indexPath.row].notifications)"
         cell.proView.isHidden = tableData[indexPath.section].section[indexPath.row].pro == nil
         if (AppDelegate.shared?.symbolsAllowed ?? false) {
             cell.optionIcon.image = AppData.iconNamed(tableData[indexPath.section].section[indexPath.row].image)
@@ -132,6 +135,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         let segue: String
         let image: String
         var pro: Int? = nil
+        var notifications:Int = 0
         var selectAction:(()->())? = nil
         
     }
@@ -139,6 +143,8 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
 
 class SideBardCell: UITableViewCell {
     
+    @IBOutlet weak var notificationsLabel: UILabel!
+    @IBOutlet weak var notificationsView: View!
     @IBOutlet weak var proView: View!
     @IBOutlet weak var optionIcon: UIImageView!
     @IBOutlet weak var valueLabel: UILabel!

@@ -377,7 +377,6 @@
 				8B35DA6525C6F124008A8719 /* Keychain.swift */,
 				8BE60E5827726EA8007B7FB3 /* LastSelected.swift */,
 				8BC8524F27E28D0F00C5A3A4 /* UserSettings.swift */,
-				8B6B509A27F3B24B0067C237 /* NotificationManager.swift */,
 			);
 			path = UserData;
 			sourceTree = "<group>";
@@ -396,6 +395,7 @@
 			isa = PBXGroup;
 			children = (
 				8B5434F927ED838F00417141 /* Notifications.swift */,
+				8B6B509A27F3B24B0067C237 /* NotificationManager.swift */,
 			);
 			path = Notifications;
 			sourceTree = "<group>";
@@ -575,9 +575,10 @@
 				8B26328E27E699610086C3A8 /* ViewController */,
 				8B1E932027E970320031D36F /* TransactionVC */,
 				8BFA15CF27E8E82F0078856A /* CategoriesVC */,
-				8B91F08F27E58B6100B74F5A /* StatisticVC */,
 				8B78559A27F0B3AD00169A93 /* TransactionsVC */,
 				8B78559D27F0C9F900169A93 /* RemindersVC */,
+				8B91F08F27E58B6100B74F5A /* StatisticVC */,
+				8B6BA97C27E6E5360067FF58 /* AppSettings */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -692,7 +693,6 @@
 				8BC1B23D27D318E0002C1E38 /* Main */,
 				8BC1B23C27D314CC002C1E38 /* Login */,
 				8BC1B23B27D31426002C1E38 /* Reusable */,
-				8B6BA97C27E6E5360067FF58 /* AppSettings */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";

@@ -62,6 +62,8 @@ extension CategoriesVC {
     func deteteCategory(at: IndexPath) {
         let delete = DeleteFromDB()
         delete.CategoriesNew(category: tableData[at.section].data[at.row].category) { _ in
+            let id = "Debts" + "\(self.tableData[at.section].data[at.row].category.id)"
+            Notifications.removeNotification(id: id, pending: true)
             self.categories = self.db.categories
             self.searchingText = ""
             DispatchQueue.main.async {

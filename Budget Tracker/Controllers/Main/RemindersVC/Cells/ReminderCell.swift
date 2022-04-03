@@ -46,7 +46,7 @@ class ReminderCell: UITableViewCell {
     private func setSelected(_ selected:Bool, completion:((Bool) -> ())? = nil) {
         
         if let id = RemindersVC.shared?.tableData[row].id {
-            AppDelegate.shared?.removeNotification(id: id)
+            Notifications.removeNotification(id: id)
         }
         
         animating = true

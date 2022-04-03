@@ -43,6 +43,28 @@ class ViewController: SuperViewController {
     @IBOutlet var balanceLabels: [UILabel]!
     @IBOutlet var perioudBalanceLabels: [UILabel]!
     @IBOutlet weak var bigCalcView: UIView!
+    @IBOutlet weak var notificationsView: View!
+    @IBOutlet weak var notificationsLabel: UILabel!
+    
+    var _notificationsCount = (0,0)
+    var notificationsCount:(Int, Int) {
+        get { return _notificationsCount }
+        set {
+            _notificationsCount = newValue
+            let result = newValue.0 + newValue.1
+            let hide = result == 0
+            DispatchQueue.main.async {
+                self.notificationsLabel.text = "\(result)"
+                if self.notificationsView.isHidden != hide {
+                    UIView.animate(withDuration: 0.3) {
+                        self.notificationsView.isHidden = hide
+                    }
+                    
+                }
+            }
+        }
+    }
+    
     
     
     override func viewDidLoad() {
@@ -789,6 +811,7 @@ class ViewController: SuperViewController {
     let center = AppDelegate.shared?.center
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
+        self.notificationsCount = Notifications.notificationsCount
         DispatchQueue.main.async {
             if self.ai.isShowing {
                 self.ai.fastHide()

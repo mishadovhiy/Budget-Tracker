@@ -173,14 +173,11 @@ class categoriesVCcell: UITableViewCell {
                 if let editingValue = category.editing {
                     let delete = DeleteFromDB()
                     delete.CategoriesNew(category: category.category) { error in
-                       // let save = SaveToDB()
                         SaveToDB.shared.newCategories(editingValue) { error in
-                            //CategoriesVC.shared?.loadData(loadFromUD: true)
                             CategoriesVC.shared?.tableData[index.section].data[index.row].editing = nil
                             CategoriesVC.shared?.tableData[index.section].data[index.row].category = editingValue
                             DispatchQueue.main.async {
                                 CategoriesVC.shared?.selectingIconFor = (nil,nil)
-                             //   CategoriesVC.shared?.t/oggleIcons(show: false, animated: true, category: nil)
                                 CategoriesVC.shared?.editingTF?.endEditing(true)
                                 CategoriesVC.shared?.editingTF = nil
                                 CategoriesVC.shared?.tableView.reloadData()
@@ -199,7 +196,6 @@ class categoriesVCcell: UITableViewCell {
     
     
     @IBAction func sendPressed(_ sender: UIButton) {
-       // DispatchQueue.main.async {
             CategoriesVC.shared?.ai.show(title:"Saving") { _ in
                 if let currentCategory = self.currentCategory {
                     if currentCategory.editing?.name != "" {
@@ -209,21 +205,11 @@ class categoriesVCcell: UITableViewCell {
                     }
                 }
                 CategoriesVC.shared?.selectingIconFor = (nil,nil)
-              /*  if CategoriesVC.shared?.showingIcons ?? false {
-                    CategoriesVC.shared?.t/oggleIcons(show: false, animated: true, category: nil)
-                }*/
             }
-      //  }
     }
     
     
-    
-    
-    //new
-    func tfPressed() {
-        //table view reload
-        //tf begin editing
-    }
+
     
 }
 
@@ -265,7 +251,7 @@ extension categoriesVCcell:UITextFieldDelegate {
             if name.contains("section") {
                 let rowS = name.replacingOccurrences(of: "section", with: "")
                 let dobRo = Double(rowS) ?? 0.0
-                let section = Int(dobRo) //{
+                let section = Int(dobRo) 
                     CategoriesVC.shared?.editingTfIndex = (section, nil)
                     DispatchQueue.main.async {
                         UIView.animate(withDuration: 0.3) {
@@ -275,9 +261,6 @@ extension categoriesVCcell:UITextFieldDelegate {
                         }
 
                     }
-                    //CategoriesVC.shared?.tableView.reloadData()
-           //     }
-                
             }
         }
 

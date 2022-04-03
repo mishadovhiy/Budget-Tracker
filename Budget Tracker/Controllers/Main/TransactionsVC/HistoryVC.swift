@@ -126,7 +126,7 @@ class HistoryVC: SuperViewController {
         self.bottomTableInsert = inserts
         if selectedCategory?.purpose == .debt {
             if let cat = self.selectedCategory {
-                AppDelegate.shared!.removeNotification(id: "Debts\(cat.id )")
+                Notifications.removeNotification(id: "Debts\(cat.id )")
             }
             
         }

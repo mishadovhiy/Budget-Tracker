@@ -95,6 +95,34 @@
                                                                 </userDefinedRuntimeAttribute>
                                                             </userDefinedRuntimeAttributes>
                                                         </view>
+                                                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m6n-2L-x1J" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
+                                                            <rect key="frame" x="211.33333333333334" y="10.666666666666664" width="24" height="24"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fmu-LD-Ntr">
+                                                                    <rect key="frame" x="5" y="2" width="14" height="20"/>
+                                                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                                                    <color key="textColor" name="CategoryColor"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                            </subviews>
+                                                            <color key="backgroundColor" systemColor="systemRedColor"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="24" id="6xl-rb-oFA"/>
+                                                                <constraint firstItem="Fmu-LD-Ntr" firstAttribute="top" secondItem="m6n-2L-x1J" secondAttribute="top" constant="2" id="Bgf-gU-uyI"/>
+                                                                <constraint firstAttribute="height" constant="24" id="KjE-KS-fkE"/>
+                                                                <constraint firstItem="Fmu-LD-Ntr" firstAttribute="leading" secondItem="m6n-2L-x1J" secondAttribute="leading" constant="5" id="jKN-R4-paC"/>
+                                                                <constraint firstAttribute="bottom" secondItem="Fmu-LD-Ntr" secondAttribute="bottom" constant="2" id="o4W-Zt-HvZ"/>
+                                                                <constraint firstAttribute="trailing" secondItem="Fmu-LD-Ntr" secondAttribute="trailing" constant="5" id="wJu-HY-Psf"/>
+                                                            </constraints>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                    <real key="value" value="12"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                                <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                                                    <real key="value" value="0.10000000000000001"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
+                                                        </view>
                                                     </subviews>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
@@ -102,13 +130,17 @@
                                                         <constraint firstItem="cyz-Xc-1ne" firstAttribute="leading" secondItem="4D3-uy-0g7" secondAttribute="leading" constant="5" id="LPp-qx-Nrh"/>
                                                         <constraint firstAttribute="trailing" secondItem="cyz-Xc-1ne" secondAttribute="trailing" constant="5" id="OkL-hV-PZm"/>
                                                         <constraint firstItem="2cb-O7-PnU" firstAttribute="centerY" secondItem="4D3-uy-0g7" secondAttribute="centerY" id="Tuw-LO-Ffy"/>
+                                                        <constraint firstAttribute="trailing" secondItem="m6n-2L-x1J" secondAttribute="trailing" id="W2e-KC-m0y"/>
                                                         <constraint firstAttribute="bottom" secondItem="cyz-Xc-1ne" secondAttribute="bottom" constant="10" id="YQl-KS-N1U"/>
+                                                        <constraint firstItem="m6n-2L-x1J" firstAttribute="centerY" secondItem="4D3-uy-0g7" secondAttribute="centerY" id="c0O-HU-A9T"/>
                                                         <constraint firstItem="cyz-Xc-1ne" firstAttribute="top" secondItem="4D3-uy-0g7" secondAttribute="top" constant="10" id="oa8-m0-CpR"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
                                                 <color key="backgroundColor" name="SecondaryBacroundColor"/>
                                                 <connections>
                                                     <outlet property="nameLabel" destination="s5l-04-T2o" id="p8s-h7-Tdy"/>
+                                                    <outlet property="notificationsLabel" destination="Fmu-LD-Ntr" id="NUg-Iy-ZOi"/>
+                                                    <outlet property="notificationsView" destination="m6n-2L-x1J" id="PYb-9E-k8P"/>
                                                     <outlet property="optionIcon" destination="Kpf-Vl-IUu" id="jsK-4H-HwV"/>
                                                     <outlet property="proView" destination="2cb-O7-PnU" id="ndw-2K-IvE"/>
                                                     <outlet property="valueLabel" destination="PWr-tf-lSZ" id="A9u-5C-vUu"/>
@@ -266,19 +298,19 @@
                                                                 <rect key="frame" x="0.0" y="0.0" width="388" height="50"/>
                                                                 <subviews>
                                                                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4d7-Fl-6zl" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="4" height="35"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="321" height="35"/>
                                                                         <subviews>
                                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="Bpw-oX-ZtL">
-                                                                                <rect key="frame" x="2" y="0.0" width="0.0" height="33"/>
+                                                                                <rect key="frame" x="2" y="0.0" width="317" height="33"/>
                                                                                 <subviews>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Data from" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tWb-PR-x7Z">
-                                                                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="33"/>
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="277" height="33"/>
                                                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                                         <color key="textColor" name="balanceTitleColor"/>
                                                                                         <nil key="highlightedColor"/>
                                                                                     </label>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="flQ-Ba-Szl">
-                                                                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="33"/>
+                                                                                        <rect key="frame" x="277" y="0.0" width="40" height="33"/>
                                                                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
                                                                                         <color key="textColor" name="balanceTitleColor"/>
                                                                                         <nil key="highlightedColor"/>
@@ -301,18 +333,19 @@
                                                                         </userDefinedRuntimeAttributes>
                                                                     </view>
                                                                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TlO-Ln-54D" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="4" height="2"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="321" height="2"/>
                                                                         <subviews>
                                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="meX-ga-QXR">
-                                                                                <rect key="frame" x="2" y="0.0" width="0.0" height="0.0"/>
+                                                                                <rect key="frame" x="2" y="0.0" width="317" height="0.0"/>
                                                                                 <subviews>
-                                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Unsaved Data:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gwp-y1-Jmr" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
+                                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unsaved Data:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gwp-y1-Jmr" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="277" height="0.0"/>
                                                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                                         <color key="textColor" name="balanceTitleColor"/>
                                                                                         <nil key="highlightedColor"/>
                                                                                     </label>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x8a-G7-gqu">
-                                                                                        <rect key="frame" x="0.0" y="0.0" width="40" height="0.0"/>
+                                                                                        <rect key="frame" x="277" y="0.0" width="40" height="0.0"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" constant="40" id="p2J-PH-vuc"/>
                                                                                         </constraints>
@@ -674,6 +707,34 @@
                                             <action selector="menuPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Ykl-aJ-O04"/>
                                         </connections>
                                     </button>
+                                    <view hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="i1T-0z-OZY" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
+                                        <rect key="frame" x="5" y="0.0" width="24" height="24"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bad-KY-yUR">
+                                                <rect key="frame" x="5" y="2" width="14" height="20"/>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                                <color key="textColor" name="CategoryColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemRedColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="bad-KY-yUR" secondAttribute="bottom" constant="2" id="Rj1-I3-NA2"/>
+                                            <constraint firstAttribute="trailing" secondItem="bad-KY-yUR" secondAttribute="trailing" constant="5" id="UXH-Kp-Ryg"/>
+                                            <constraint firstItem="bad-KY-yUR" firstAttribute="leading" secondItem="i1T-0z-OZY" secondAttribute="leading" constant="5" id="i4p-sb-jGf"/>
+                                            <constraint firstItem="bad-KY-yUR" firstAttribute="top" secondItem="i1T-0z-OZY" secondAttribute="top" constant="2" id="vq2-D9-jHU"/>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="24" id="wOj-os-YFW"/>
+                                            <constraint firstAttribute="height" constant="24" id="ypd-Di-Vce"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="12"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                                <real key="value" value="0.10000000000000001"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bqc-vp-d9i" userLabel="filter calc">
                                         <rect key="frame" x="60" y="0.0" width="318" height="40"/>
                                         <subviews>
@@ -941,12 +1002,14 @@
                                     <constraint firstItem="Kwg-kx-2vX" firstAttribute="top" secondItem="gtA-fF-esq" secondAttribute="top" constant="45" id="YFU-wJ-Ohi"/>
                                     <constraint firstAttribute="bottom" secondItem="4SO-16-o5D" secondAttribute="bottom" id="Zhn-TD-MW0"/>
                                     <constraint firstItem="0oV-VO-FeH" firstAttribute="top" secondItem="gtA-fF-esq" secondAttribute="top" id="bEr-ZR-KxD"/>
+                                    <constraint firstItem="i1T-0z-OZY" firstAttribute="leading" secondItem="0oV-VO-FeH" secondAttribute="trailing" constant="-55" id="eaK-Wq-2f4"/>
                                     <constraint firstItem="Kwg-kx-2vX" firstAttribute="width" secondItem="0oV-VO-FeH" secondAttribute="width" multiplier="1:1" id="fyo-nr-kwZ"/>
                                     <constraint firstItem="zua-Ep-o90" firstAttribute="top" secondItem="Bqc-vp-d9i" secondAttribute="bottom" constant="4" id="gYj-lw-GNi"/>
                                     <constraint firstAttribute="trailing" secondItem="zIg-fF-jEa" secondAttribute="trailing" constant="20" id="jtJ-wQ-izJ"/>
                                     <constraint firstAttribute="bottom" secondItem="Kwg-kx-2vX" secondAttribute="bottom" id="kQB-2h-7gD"/>
                                     <constraint firstItem="zDz-M6-AUL" firstAttribute="leading" secondItem="Bqc-vp-d9i" secondAttribute="trailing" priority="750" id="lbl-ng-GPp"/>
                                     <constraint firstItem="4SO-16-o5D" firstAttribute="leading" secondItem="gtA-fF-esq" secondAttribute="leading" id="llO-BR-SPc"/>
+                                    <constraint firstItem="i1T-0z-OZY" firstAttribute="top" secondItem="gtA-fF-esq" secondAttribute="top" id="mnl-I9-ase"/>
                                     <constraint firstItem="Bqc-vp-d9i" firstAttribute="top" secondItem="gtA-fF-esq" secondAttribute="top" id="mwK-oJ-75M"/>
                                     <constraint firstItem="0oV-VO-FeH" firstAttribute="leading" secondItem="gtA-fF-esq" secondAttribute="leading" id="nIM-jm-4YQ"/>
                                     <constraint firstAttribute="trailing" secondItem="zua-Ep-o90" secondAttribute="trailing" id="nVW-yi-yFE"/>
@@ -1016,6 +1079,8 @@
                         <outlet property="menuButton" destination="0oV-VO-FeH" id="yGF-j0-pjm"/>
                         <outlet property="noDataLabel" destination="8Qd-Zo-Mqf" id="NNk-GP-Tv1"/>
                         <outlet property="noDataView" destination="zua-Ep-o90" id="cgg-4K-Hbt"/>
+                        <outlet property="notificationsLabel" destination="bad-KY-yUR" id="Vfp-PT-83E"/>
+                        <outlet property="notificationsView" destination="i1T-0z-OZY" id="kpG-bN-NRk"/>
                         <outlet property="perioudBalanceView" destination="ITM-V9-am7" id="pmF-KC-fQb"/>
                         <outlet property="pinchView" destination="Kwg-kx-2vX" id="dMA-ii-100"/>
                         <outlet property="sideBar" destination="v9F-6t-GpL" id="FUk-Ps-qXS"/>
@@ -4085,6 +4150,9 @@
         </designable>
         <designable name="IhO-B5-kQQ">
             <size key="intrinsicContentSize" width="45.333333333333336" height="13.333333333333334"/>
+        </designable>
+        <designable name="JIF-7p-C1E">
+            <size key="intrinsicContentSize" width="103.66666666666667" height="18"/>
         </designable>
         <designable name="JJR-Nl-rYc">
             <size key="intrinsicContentSize" width="15" height="20.333333333333332"/>

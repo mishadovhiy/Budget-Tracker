@@ -14,6 +14,53 @@ struct Notifications {
     
     private let center = AppDelegate.shared?.center
     
+    
+    static func removeNotification(id:String, pending:Bool = false) {
+        DispatchQueue.main.async {
+            AppDelegate.shared?.center.removeDeliveredNotifications(withIdentifiers: [id])
+            if pending {
+                AppDelegate.shared?.center.removePendingNotificationRequests(withIdentifiers: [id])
+            }
+        }
+        let deliveredHolder = AppDelegate.shared?.notificationManager.deliveredNotificationIDs ?? []
+        var newNotif:[String] = []
+        for i in 0..<deliveredHolder.count {
+            if deliveredHolder[i] != id {
+                newNotif.append(deliveredHolder[i])
+            }
+        }
+        AppDelegate.shared?.notificationManager.deliveredNotificationIDs = newNotif
+    }
+    
+    static func getNotificationsNumber() {
+        DispatchQueue.main.async {
+            AppDelegate.shared?.center.getDeliveredNotifications { notifications in
+                var ids = AppDelegate.shared?.notificationManager.deliveredNotificationIDs ?? []
+                for notification in notifications {
+                    ids.append(notification.request.identifier)
+                }
+                var notificationsCount = (0,0)
+                for id in ids {
+                    let isDebt = id.contains("Debts")
+                    if isDebt {
+                        notificationsCount = ((notificationsCount.0 + 1), notificationsCount.1)
+                    } else {
+                        notificationsCount = (notificationsCount.0, (notificationsCount.1 + 1))
+                    }
+                }
+                print(notificationsCount, "notificationsCountnotificationsCountnotificationsCount")
+                DispatchQueue.main.async {
+                    UIApplication.shared.applicationIconBadgeNumber = ids.count
+                    ViewController.shared?.notificationsCount = notificationsCount
+                    Notifications.notificationsCount = notificationsCount
+                    
+                }
+            }
+        }
+    }
+    
+    static var notificationsCount = (0,0)
+    
     func addLocalNotification(date: DateComponents, title:String, id:String, body:String, completion: @escaping (Bool) -> ()) {
         print("adding for:", date)
         center?.removePendingNotificationRequests(withIdentifiers: [id])

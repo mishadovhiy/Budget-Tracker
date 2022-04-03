@@ -66,11 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         
         
         print(today, "didFinishLaunchingWithOptions")
-        center.getDeliveredNotifications { notifications in
-            DispatchQueue.main.async {
-                UIApplication.shared.applicationIconBadgeNumber = notifications.count + (AppDelegate.shared?.notificationManager.deliveredNotificationIDs.count ?? 999)
-            }
-        }
+        Notifications.getNotificationsNumber()
         
         AppLocalization.launchedLocalization = AppLocalization.udLocalization ?? (NSLocale.current.languageCode ?? "-")
         print("LOCALIZATION: ", AppLocalization.launchedLocalization)
@@ -205,19 +201,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     }
     
 /// methods
-    func removeNotification(id:String) {
-        DispatchQueue.main.async {
-            self.center.removeDeliveredNotifications(withIdentifiers: [id])
-        }
-        let deliveredHolder = notificationManager.deliveredNotificationIDs
-        var newNotif:[String] = []
-        for i in 0..<deliveredHolder.count {
-            if deliveredHolder[i] != id {
-                newNotif.append(deliveredHolder[i])
-            }
-        }
-        notificationManager.deliveredNotificationIDs = newNotif
-    }
+    
     
 }
 
