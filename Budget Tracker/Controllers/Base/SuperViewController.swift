@@ -18,6 +18,7 @@ class SuperViewController: UIViewController {
     }
     
 
+    lazy var defaultTableInset = AppDelegate.shared?.bannerSize ?? 0
     
     var loadedSubviews: Bool = false
     override func viewDidLayoutSubviews() {

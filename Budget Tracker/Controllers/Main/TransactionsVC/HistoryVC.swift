@@ -122,8 +122,8 @@ class HistoryVC: SuperViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         let inserts = self.totalLabel.superview?.layer.frame.height ?? 50
-        self.tableView.contentInset.bottom = inserts
-        self.bottomTableInsert = inserts
+        self.bottomTableInsert = inserts + defaultTableInset
+        self.tableView.contentInset.bottom = self.bottomTableInsert
         if selectedCategory?.purpose == .debt {
             if let cat = self.selectedCategory {
                 Notifications.removeNotification(id: "Debts\(cat.id )")

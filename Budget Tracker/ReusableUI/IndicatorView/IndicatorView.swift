@@ -33,7 +33,7 @@ class IndicatorView: UIView {
     private var anshowedAIS: [Any] = []
     private var rightFunc: (Any?, Bool)?
     private var leftFunc: (Any?, Bool)?
-    private var hideIndicatorBlockDesibled = true
+    var hideIndicatorBlockDesibled = true
     private var normalTitleSize: UIFont = .systemFont(ofSize: 0)
     private let errorFont = UIFont.systemFont(ofSize: 32, weight: .bold)
     
@@ -288,16 +288,18 @@ class IndicatorView: UIView {
                     self.removeFromSuperview()
                     self.setAllHidden()
                     completionn(true)
-                    if let function = self.anshowedAIS.first as? () -> ()  {
-                        self.anshowedAIS.removeFirst()
-                        function()
-                    }
+                    self.checkUnshowed()
                 }
             }
         }
     }
     
-    
+    func checkUnshowed() {
+        if let function = anshowedAIS.first as? () -> ()  {
+            anshowedAIS.removeFirst()
+            function()
+        }
+    }
 
 
     class func instanceFromNib() -> UIView {

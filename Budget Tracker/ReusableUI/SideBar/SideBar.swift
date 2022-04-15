@@ -13,7 +13,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
     func getData(){
         let db = DataBase()
         let debts = db.debts.count
-        let pro = appData.proVersion || appData.proTrial
+        let pro = appData.proEnabeled
         let notifications = Notifications.notificationsCount
         
         var accpuntCell:CellData {
@@ -30,7 +30,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         
         var categories:[CellData] = [
             .init(name: "Categories".localize, value: "\(catsCo.count - debts)", segue: "toCategories", image: "folder.fill"),
-            .init(name: "Debts".localize, value: "\(debts)", segue: "toDebts", image: "rectangle.3.group.fill", pro: !(pro) ? 3 : nil, notifications: notifications.0)
+            .init(name: "Debts".localize, value: "\(debts)", segue: "toDebts", image: "rectangle.3.group.fill", pro: nil, notifications: notifications.0)//!(pro) ? 3 : nil
         ]
         let localCount = ((UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String:Any]] ?? []) + (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String:Any]] ?? [])).count
         if localCount > 0 {
@@ -46,7 +46,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
             return trialDays == 0 ? [accpuntCell, settingsCell] : [accpuntCell, settingsCell, trialCell]
         }
         
-        let upcommingRemiders:CellData = .init(name: "Payment reminders".localize, value: "", segue: "toReminders", image: "bell.fill", pro: !(pro) ? 0 : nil, notifications: notifications.1)
+        let upcommingRemiders:CellData = .init(name: "Payment reminders".localize, value: "", segue: "toReminders", image: "bell.fill", pro: nil, notifications: notifications.1)//!(pro) ? 0 : nil
         
         tableData = [
             .init(section: accountSection, title: "", hidden: false),

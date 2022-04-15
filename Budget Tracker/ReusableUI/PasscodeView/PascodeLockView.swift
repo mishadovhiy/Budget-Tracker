@@ -40,6 +40,7 @@ class PascodeLockView: UIView, UITextFieldDelegate {
         }
         presenting = true
         DispatchQueue.main.async {
+            AppDelegate.shared?.ai.hideIndicatorBlockDesibled = false
             let window = UIApplication.shared.keyWindow ?? UIWindow()
             self.frame = window.frame
             
@@ -118,6 +119,8 @@ class PascodeLockView: UIView, UITextFieldDelegate {
                     action()
                 }
                 self.removeFromSuperview()
+                AppDelegate.shared?.ai.hideIndicatorBlockDesibled = true
+                AppDelegate.shared?.ai.checkUnshowed()
             }
 
         }

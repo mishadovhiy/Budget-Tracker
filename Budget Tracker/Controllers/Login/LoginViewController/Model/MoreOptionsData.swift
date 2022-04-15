@@ -87,7 +87,7 @@ class MoreOptionsData {
             MoreVC.ScreenData(name: "Change Email".localize, description: vc.userEmail, action: changeEmailAction),
             MoreVC.ScreenData(name: "Change password".localize, description: "", action: changePassword),
             MoreVC.ScreenData(name: "Forgot password".localize, description: "", action: forgotPassword),
-            MoreVC.ScreenData(name: "Transfer data".localize, description: "", pro: appData.proVersion || appData.proTrial, action: transfareData),
+            MoreVC.ScreenData(name: "Transfer data".localize, description: "", pro: appData.proEnabeled, action: transfareData),
             MoreVC.ScreenData(name: "Log out".localize, description: "", distructive: true, showAI: false, action: logoutAction),
         ]
         

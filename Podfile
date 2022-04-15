@@ -7,5 +7,6 @@ target 'Budget Tracker' do
   # Pods for Budget Tracker
 
   pod 'CorePlot'
+  pod 'Google-Mobile-Ads-SDK'
 
 end

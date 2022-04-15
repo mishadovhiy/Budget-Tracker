@@ -128,6 +128,7 @@ class CalendarVC: SuperViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
+        
         if delegate == nil {
             if ifCustom {
                 if appData.filter.from != appData.filter.to {

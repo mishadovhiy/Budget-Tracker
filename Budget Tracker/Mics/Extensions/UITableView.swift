@@ -15,5 +15,6 @@ extension UITableView {
         if #available(iOS 15.0, *) {
             self.sectionHeaderTopPadding = 0
         }
+        self.contentInset.bottom = AppDelegate.shared?.bannerSize ?? 0
     }
 }

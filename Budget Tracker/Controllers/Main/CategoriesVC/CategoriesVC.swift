@@ -97,6 +97,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             self.tableView.alpha = 0
         }
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         searchBar.endEditing(true)
@@ -110,35 +111,11 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         } else {
             loadTableData(loadFromUD: true)
         }
-       /* if appeareDidCall {
-            if screenType == .categories || screenType == .debts {
-                DispatchQueue.init(label: "udLoad", qos: .userInteractive).async {
-                    
-                }
-            } else {
-                DispatchQueue.init(label: "udLoad", qos: .userInteractive).async {
-                    self.categories = self.categoriesContains(self.searchingText, fromHolder: false)
-                }
-            }
-        } else {
-            appeareDidCall = true
-            if screenType == .categories || screenType == .debts {
-                DispatchQueue.init(label: "udLoad", qos: .userInteractive).async {
-                    AppDelegate.shared?.notificationManager.loadNotifications { unseen in
-                        self.unseenIDs = unseen
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
-                        }
-                    }
-                }
-            }
-            
-        }*/
 
-        self.tableView.contentInset.bottom = 0
+        self.tableView.contentInset.bottom = self.defaultTableInset
         
     }
-
+    
     override func viewDidDisappear(_ animated: Bool) {
         if !toHistory {
             if fromSettings {

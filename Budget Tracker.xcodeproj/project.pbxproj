@@ -83,11 +83,14 @@
 		8BFA15D127E8E8510078856A /* categoriesVCcell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFA15D027E8E8510078856A /* categoriesVCcell.swift */; };
 		8BFA15D427E8E87B0078856A /* LocalDataActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFA15D327E8E87B0078856A /* LocalDataActionCell.swift */; };
 		8D36724224D315BC00CE90A9 /* NetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D36724124D315BC00CE90A9 /* NetworkModel.swift */; };
+		8D39788F28083E81007A2C55 /* AppDelegateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D39788E28083E81007A2C55 /* AppDelegateExtensions.swift */; };
+		8D3978912808D873007A2C55 /* GoogleMobileAds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3978902808D873007A2C55 /* GoogleMobileAds.swift */; };
 		8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5206662421695200772CD5 /* StatisticBrain.swift */; };
 		8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D52066824216A2900772CD5 /* StatisticVC.swift */; };
 		8D52066B24216A6200772CD5 /* HistoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D52066A24216A6200772CD5 /* HistoryVC.swift */; };
 		8D8B6C3C245023D0007260A0 /* FilterTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8B6C3B245023D0007260A0 /* FilterTVC.swift */; };
 		8D8B6C3E245023EC007260A0 /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8B6C3D245023EC007260A0 /* CalendarVC.swift */; };
+		8DB4DAC227FC10D000EAA56F /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB4DAC127FC10D000EAA56F /* Keys.swift */; };
 		8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */; };
 		8DBA7E5423F0316F00D8214C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5323F0316F00D8214C /* ViewController.swift */; };
 		8DBA7E5723F0316F00D8214C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5523F0316F00D8214C /* Main.storyboard */; };
@@ -194,11 +197,14 @@
 		8BFA15D027E8E8510078856A /* categoriesVCcell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = categoriesVCcell.swift; sourceTree = "<group>"; };
 		8BFA15D327E8E87B0078856A /* LocalDataActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalDataActionCell.swift; sourceTree = "<group>"; };
 		8D36724124D315BC00CE90A9 /* NetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkModel.swift; sourceTree = "<group>"; };
+		8D39788E28083E81007A2C55 /* AppDelegateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegateExtensions.swift; sourceTree = "<group>"; };
+		8D3978902808D873007A2C55 /* GoogleMobileAds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMobileAds.swift; sourceTree = "<group>"; };
 		8D5206662421695200772CD5 /* StatisticBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticBrain.swift; sourceTree = "<group>"; };
 		8D52066824216A2900772CD5 /* StatisticVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticVC.swift; sourceTree = "<group>"; };
 		8D52066A24216A6200772CD5 /* HistoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryVC.swift; sourceTree = "<group>"; };
 		8D8B6C3B245023D0007260A0 /* FilterTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterTVC.swift; sourceTree = "<group>"; };
 		8D8B6C3D245023EC007260A0 /* CalendarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarVC.swift; sourceTree = "<group>"; };
+		8DB4DAC127FC10D000EAA56F /* Keys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		8DBA7E4C23F0316F00D8214C /* Budget Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Budget Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8DBA7E5323F0316F00D8214C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -336,6 +342,7 @@
 			isa = PBXGroup;
 			children = (
 				8B91F09027E58EF900B74F5A /* Text.swift */,
+				8DB4DAC127FC10D000EAA56F /* Keys.swift */,
 				8DD89D8B23F1485700273904 /* Constants.swift */,
 				8BAA72B427CB7D41005298B6 /* Keys.swift */,
 				8B91EF1027EBD7680026D0A4 /* Keys.swift */,
@@ -631,6 +638,16 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		8D39788D28083E5B007A2C55 /* AppDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */,
+				8D39788E28083E81007A2C55 /* AppDelegateExtensions.swift */,
+				8D3978902808D873007A2C55 /* GoogleMobileAds.swift */,
+			);
+			path = AppDelegate;
+			sourceTree = "<group>";
+		};
 		8DBA7E4323F0316F00D8214C = {
 			isa = PBXGroup;
 			children = (
@@ -654,7 +671,7 @@
 			children = (
 				8B331B0C27E415440093BF72 /* Info.plist */,
 				8DECAFBF2460461C0041B734 /* Budget Tracker.entitlements */,
-				8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */,
+				8D39788D28083E5B007A2C55 /* AppDelegate */,
 				8BC1B23A27D3136C002C1E38 /* ReusableUI */,
 				8DD89D8823F1471900273904 /* Modal */,
 				8DBA7E6823F031F900D8214C /* Controllers */,
@@ -850,6 +867,7 @@
 				8BB75D4427F294DE00AE71A1 /* TransactionStruct.swift in Sources */,
 				8B52CC6727E3001B008D5348 /* UITableViewCell.swift in Sources */,
 				8B26328627E67E720086C3A8 /* UISegmentedControl.swift in Sources */,
+				8D39788F28083E81007A2C55 /* AppDelegateExtensions.swift in Sources */,
 				8BB75D4727F2952300AE71A1 /* CategoriesStruct.swift in Sources */,
 				8B746AC027F405970010F0A4 /* ReminderVCMethods.swift in Sources */,
 				8B6B509927F3A69F0067C237 /* ReminderManager.swift in Sources */,
@@ -883,6 +901,7 @@
 				8B6B509B27F3B24B0067C237 /* NotificationManager.swift in Sources */,
 				8BD17F6A27F4FCA6008D9D57 /* IndicatorView.swift in Sources */,
 				8B2A4D72271439520085E0F0 /* MoreVC.swift in Sources */,
+				8D3978912808D873007A2C55 /* GoogleMobileAds.swift in Sources */,
 				8B6BFB1C27F7CB8600DD4CBC /* TableViewExtension.swift in Sources */,
 				8B7B63CC2655CAFB0067C434 /* SuperViewController.swift in Sources */,
 				8B7D1AA1276CF203008942EC /* IconList.swift in Sources */,
@@ -892,6 +911,7 @@
 				8B52DFEA2750232D00595A0C /* NumbersView.swift in Sources */,
 				8BD3A3D927E4097400547022 /* View.swift in Sources */,
 				8B78559F27F0CA2A00169A93 /* ReminderCell.swift in Sources */,
+				8DB4DAC227FC10D000EAA56F /* Keys.swift in Sources */,
 				8DD89D8723F1471400273904 /* AppData.swift in Sources */,
 				8B6BFB1827F7C82C00DD4CBC /* CategoriesMethods.swift in Sources */,
 				8B898CF427F3EB0800B66F79 /* UIDatePicker.swift in Sources */,

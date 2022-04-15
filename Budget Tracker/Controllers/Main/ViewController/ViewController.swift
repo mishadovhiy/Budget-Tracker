@@ -235,22 +235,24 @@ class ViewController: SuperViewController {
         DispatchQueue.main.async {
             self.filterText = title
         }
-        LoadFromDB.shared.newCategories { categoryes, error in
-            AppData.categoriesHolder = categoryes
-            if error == .none {
-                self.highesLoadedCatID = ((categoryes.sorted{ $0.id > $1.id }).first?.id ?? 0) + 1
-                LoadFromDB.shared.newTransactions { loadedData, error in
-                    self.checkPurchase()
-                    self.filter(data: loadedData)
-                }
-            } else {
-                self.filter()
-                if showError {
-                    DispatchQueue.main.async {
-                        self.newMessage.show(type: .internetError)
+        DispatchQueue.init(label: "download").async {
+            LoadFromDB.shared.newCategories { categoryes, error in
+                AppData.categoriesHolder = categoryes
+                if error == .none {
+                    self.highesLoadedCatID = ((categoryes.sorted{ $0.id > $1.id }).first?.id ?? 0) + 1
+                    LoadFromDB.shared.newTransactions { loadedData, error in
+                        self.checkPurchase()
+                        self.filter(data: loadedData)
                     }
-                }
+                } else {
+                    self.filter()
+                    if showError {
+                        DispatchQueue.main.async {
+                            self.newMessage.show(type: .internetError)
+                        }
+                    }
 
+                }
             }
         }
         
@@ -387,10 +389,7 @@ class ViewController: SuperViewController {
 
     
     func updateUI() {
-        DispatchQueue.init(label: "dbLoad", qos: .userInteractive).async {
-            self.downloadFromDB()
-        }
-        
+        downloadFromDB()
         self.mainTableView.delegate = self
         self.mainTableView.dataSource = self
         self.enableLocalDataPress = false

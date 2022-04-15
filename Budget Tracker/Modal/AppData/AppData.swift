@@ -36,6 +36,10 @@ class AppData {
 
     let lastSelected = LastSelected()
     
+    var proEnabeled:Bool {
+        return appData.proTrial || appData.proVersion
+    }
+    
     var proVersion: Bool {
         get{
             let result = !purchasedOnThisDevice ? (defaults.value(forKey: "proVersion") as? Bool ?? false) : purchasedOnThisDevice
