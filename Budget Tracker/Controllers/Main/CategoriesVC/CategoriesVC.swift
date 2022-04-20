@@ -86,7 +86,10 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     override func viewWillAppear(_ animated: Bool) {
         toHistory = false
         navigationController?.setNavigationBarHidden(false, animated: true)
-        
+        UIView.animate(withDuration: 0.3) {
+            AppDelegate.shared?.bannerBacgroundView?.backgroundColor = K.Colors.primaryBacground
+        }
+
     }
     
     override func viewWillLayoutSubviews() {
@@ -114,6 +117,13 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
 
         self.tableView.contentInset.bottom = self.defaultTableInset
         
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        UIView.animate(withDuration: 0.3) {
+            AppDelegate.shared?.bannerBacgroundView?.backgroundColor = .clear
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {

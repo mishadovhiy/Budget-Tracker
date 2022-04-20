@@ -14,6 +14,7 @@ var transactionAdded = false
 
 class HistoryVC: SuperViewController {
 
+    @IBOutlet weak var addHelperView: UIView!
     @IBOutlet weak var addTransButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
     var historyDataStruct: [TransactionsStruct] = []
@@ -121,6 +122,10 @@ class HistoryVC: SuperViewController {
     var bottomTableInsert:CGFloat = 50
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
+        UIView.animate(withDuration: 0.3) {
+            self.addHelperView.isHidden = appData.proEnabeled ? true : false
+        }
+
         let inserts = self.totalLabel.superview?.layer.frame.height ?? 50
         self.bottomTableInsert = inserts + defaultTableInset
         self.tableView.contentInset.bottom = self.bottomTableInsert
@@ -209,7 +214,7 @@ class HistoryVC: SuperViewController {
             let hideLabel = newValue == 0
             DispatchQueue.main.async {
                 self.totalLabel.text = "\(newValue)"
-                if self.totalLabel.superview?.isHidden != hideLabel {
+                if self.totalLabel.superview?.isHidden ?? (!hideLabel) != hideLabel {
                     UIView.animate(withDuration: 0.3) {
                         self.totalLabel.superview?.isHidden = hideLabel
                     } 

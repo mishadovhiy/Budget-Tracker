@@ -27,23 +27,91 @@ extension AppDelegate:GADBannerViewDelegate {
             }
         }
     }
+    @objc func closeBannerPressed() {
+        appData.presentBuyProVC(selectedProduct: 2)
+    }
+    
     func addBannerViewToView(_ bannerView: GADBannerView) {
         let windoww = window ?? UIWindow()
         bannerView.translatesAutoresizingMaskIntoConstraints = false
-        windoww.addSubview(bannerView)
-
+        let backgroundV = UIView()
+        bannerBacgroundView = backgroundV
+        backgroundV.translatesAutoresizingMaskIntoConstraints = false
+        
+        windoww.addSubview(backgroundV)
+        backgroundV.addSubview(bannerView)
+        
+        
+        let closeButton = UIButton()
+        closeButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        closeButton.setTitle("✕", for: .normal)
+        closeButton.setTitleColor(K.Colors.category ?? .white, for: .normal)
+        closeButton.target(forAction: #selector(closeBannerPressed), withSender: self)
+        closeButton.addTarget(self, action: #selector(closeBannerPressed), for: .touchUpInside)
+        backgroundV.addSubview(closeButton)
         windoww.addConstraints(
-          [NSLayoutConstraint(item: bannerView,
+          [NSLayoutConstraint(item: closeButton,
+                              attribute: .left,
+                              relatedBy: .equal,
+                              toItem: backgroundV.safeAreaLayoutGuide,
+                              attribute: .left,
+                              multiplier: 1,
+                              constant: 10),
+           NSLayoutConstraint(item: closeButton,
+                              attribute: .centerY,
+                              relatedBy: .equal,
+                              toItem: backgroundV,
+                              attribute: .centerY,
+                              multiplier: 1,
+                              constant: 0)
+          ,
+         ])
+        windoww.addConstraints(
+          [NSLayoutConstraint(item: backgroundV,
                               attribute: .bottom,
                               relatedBy: .equal,
                               toItem: windoww.safeAreaLayoutGuide,
                               attribute: .bottom,
                               multiplier: 1,
                               constant: 0),
+           NSLayoutConstraint(item: backgroundV,
+                              attribute: .right,
+                              relatedBy: .equal,
+                              toItem: windoww.safeAreaLayoutGuide,
+                              attribute: .right,
+                              multiplier: 1,
+                              constant: 0)
+          ,
+          NSLayoutConstraint(item: backgroundV,
+                             attribute: .left,
+                             relatedBy: .equal,
+                             toItem: windoww.safeAreaLayoutGuide,
+                             attribute: .left,
+                             multiplier: 1,
+                             constant: 0)
+         ]
+        )
+       
+        windoww.addConstraints(
+          [NSLayoutConstraint(item: bannerView,
+                              attribute: .bottom,
+                              relatedBy: .equal,
+                              toItem: backgroundV.safeAreaLayoutGuide,
+                              attribute: .bottom,
+                              multiplier: 1,
+                              constant: 0),
+           NSLayoutConstraint(item: bannerView,
+                              attribute: .top,
+                              relatedBy: .equal,
+                              toItem: backgroundV.safeAreaLayoutGuide,
+                              attribute: .top,
+                              multiplier: 1,
+                              constant: 0),
            NSLayoutConstraint(item: bannerView,
                               attribute: .centerX,
                               relatedBy: .equal,
-                              toItem: windoww,
+                              toItem: backgroundV,
                               attribute: .centerX,
                               multiplier: 1,
                               constant: 0)

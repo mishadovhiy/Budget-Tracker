@@ -29,6 +29,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         return newView
     }()
     
+    var bannerBacgroundView:UIView?
+    
     public lazy var deviceType:DeviceType = {
         if #available(iOS 13.0, *) {
             #if !os(iOS)

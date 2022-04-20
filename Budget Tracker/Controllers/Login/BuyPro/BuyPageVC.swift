@@ -11,7 +11,7 @@ import UIKit
 class BuyPageVC: UIPageViewController {
 
     let pages: [PageStruct] = [
-        PageStruct(title: "Payment reminders".localize, description: "Set repeated or one time reminders. Easy as adding new transaction".localize, imgName: "addReminder.pro"),
+        PageStruct(title: "Payment reminders".localize, description: "Set payment reminders for Debit".localize, imgName: "addReminder.pro"),
         PageStruct(title: "Transfer data".localize, description: "Transfer transactions and categories between accounts".localize, imgName: "transfareDataIcon.pro"),
         //PageStruct(title: "Passcode protection".localize, description: "Set 4 digit passcode".localize, imgName: "passcodeProtect.pro"),
         PageStruct(title: "No Adds".localize, description: "Remove all ads".localize, imgName: "passcodeProtect.pro"),

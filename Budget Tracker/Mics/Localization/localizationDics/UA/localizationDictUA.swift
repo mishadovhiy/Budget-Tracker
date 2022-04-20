@@ -12,6 +12,7 @@ import UIKit
 struct localizationDictUA {
 
     static let dictUA: [String:String] = [
+        "Set payment reminders for Debit": "Встaновлюй нагадування для Боргів",
         "You already have PRO version":"У вас вже є PRO версія",
         "Error saving purchase":"Помилка збереження покупки",
         "Payment not found":"Платіж не знайдено",
