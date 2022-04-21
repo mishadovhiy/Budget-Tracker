@@ -92,7 +92,6 @@ extension RemindersVC:UITableViewDelegate, UITableViewDataSource {
         return tableData.count == 0 ? tableView.frame.height : UITableView.automaticDimension
     }
     
-    
 }
 
 extension RemindersVC :TransitionVCProtocol {

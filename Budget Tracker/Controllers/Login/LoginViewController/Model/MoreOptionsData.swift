@@ -93,7 +93,7 @@ class MoreOptionsData {
         
         let notUserLogged = [
             //MoreVC.ScreenData(name: "Device purchase", description: appData.purchasedOnThisDevice ? "Yes":"No", action: nil),
-            MoreVC.ScreenData(name: "Transfer data".localize, description: "", action: transfareData),
+            MoreVC.ScreenData(name: "Transfer data".localize, description: "", pro: appData.proEnabeled, action: transfareData),
             MoreVC.ScreenData(name: "Forgot password".localize, description: "", action: forgotPassword),
         ]
         

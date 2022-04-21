@@ -47,7 +47,7 @@ class HistoryVC: SuperViewController {
         
         let moreData = [
             MoreVC.ScreenData(name: "Amount to pay".localize, description: "", showAI:false, action: addAmountToPay),
-            MoreVC.ScreenData(name: "Due date".localize, description: "", showAI:false, pro: appData.proVersion || appData.proTrial, action: addDueDate),
+            MoreVC.ScreenData(name: "Due date".localize, description: "", showAI:false, pro: appData.proEnabeled, action: addDueDate),
         ]
         appData.presentMoreVC(currentVC: self, data: moreData, proIndex: 0)
     }
@@ -118,7 +118,9 @@ class HistoryVC: SuperViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: true)
+        
     }
+
     var bottomTableInsert:CGFloat = 50
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
@@ -309,13 +311,15 @@ class HistoryVC: SuperViewController {
 
     
     func tocalendatPressed() {
-        
-        Notifications.requestNotifications()
-        DispatchQueue.main.async {
-            self.ai.fastHide { _ in
+        if appData.proEnabeled {
+            Notifications.requestNotifications()
+            DispatchQueue.main.async {
                 self.performSegue(withIdentifier: "toCalendar", sender: self)
             }
+        } else {
+            appData.presentBuyProVC(selectedProduct: 0)
         }
+        
 
     }
     
@@ -423,10 +427,11 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
         self.changeDueDate(fullDate: "")
                         
                         let id = "Debts\(self.selectedCategory?.name ?? "")"
-                        self.center.removePendingNotificationRequests(withIdentifiers: [id])
+                        
                         DispatchQueue.main.async {
+                            self.center.removePendingNotificationRequests(withIdentifiers: [id])
                             self.tableView.reloadData()
-                            self.ai.fastHide()
+                          //  self.ai.fastHide()
                         }
     }
     
@@ -444,17 +449,8 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                 cell.changeButton.superview?.isHidden = hideBut
             }
             
-
-            let removeActio = {
-                self.tocalendatPressed()
-            }
-            let changeActio = {
-                self.removeDueDate()
-            }
-            cell.changeAction = changeActio
-            
-
-            cell.removeAction = removeActio
+            cell.changeAction = self.removeDueDate
+            cell.removeAction = self.tocalendatPressed
             
             let dateComponent = selectedCategory?.dueDate
         //    print(dateComponent, "dateComponentdateComponentdateComponent")
@@ -810,11 +806,11 @@ class DebtDescriptionCell: UITableViewCell {
     var removeAction:(() -> ())?
     @IBAction func changeDatePressed(_ sender: Any) {//remove
      //   DispatchQueue.main.async {
-            self.ai.show() { _ in
+          //  self.ai.show() { _ in
                 if let funcc = self.removeAction {
                     funcc()
                 }
-            }
+           // }
      //   }
         
 
@@ -831,8 +827,10 @@ class DebtDescriptionCell: UITableViewCell {
     
     var changeAction:(() -> ())?
     @IBAction func doneDatePressed(_ sender: Any) {//change
-        if let funcc = changeAction {
-            funcc()
+        self.ai.show { _ in
+            if let funcc = self.changeAction {
+                funcc()
+            }
         }
     }
     

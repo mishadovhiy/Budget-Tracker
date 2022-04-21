@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     let passcodeLock = PascodeLockView.instanceFromNib() as! PascodeLockView
     private var backgroundEnterDate:Date?
     private var becameActive = false
-    
+    var bannerSuperView:UIView?
     lazy var newMessage: MessageView = {
         return MessageView.instanceFromNib() as! MessageView
     }()
@@ -45,14 +45,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     public lazy var symbolsAllowed:Bool = {
         return deviceType != .primary ? false : true
     }()
-    var bannerSize:CGFloat = 0
-    
+    var bannerSize:CGFloat {
+        get {
+            return bannerHidden ? 0 : _bannerSize
+        }
+        set(value) {
+            _bannerSize = value
+        }
+    }
+    var _bannerSize:CGFloat = 0
+    var bannerHidden = true
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         AppDelegate.shared = self
         window?.tintColor = AppData.colorNamed(AppData.linkColor)
         center.delegate = self
-        window?.backgroundColor = K.Colors.primaryBacground
+        
         let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
         let value = UserDefaults.standard.value(forKey: "lastLaunching") as? String ?? ""
         if value != today {
@@ -86,6 +94,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }
     
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
+        AppData.categoriesHolder = nil
         if appData.devMode {
             DispatchQueue.main.async {
                 self.ai.showAlertWithOK(title: "Memory warning!", error: true)
@@ -110,8 +119,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         } else {
             let fiveMin = Double(60 * 5)
             if ti > fiveMin {
-                AppData.categoriesHolder = nil
-                needDownloadOnMainAppeare = true
+                if appData.username != "" {
+                    AppData.categoriesHolder = nil
+                    needDownloadOnMainAppeare = true
+                }
             }
         }
         if UserSettings.Security.password != "" {

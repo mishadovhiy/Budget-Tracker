@@ -17,7 +17,7 @@ class ProViewVC: SuperViewController {
     var _data: BuyPageVC.PageStruct?
     var data: BuyPageVC.PageStruct {
         get {
-            return _data ?? BuyPageVC.PageStruct(title: "-", description: "", imgName: "")
+            return _data ?? BuyPageVC.PageStruct(title: "-", description: "", imgName: "", backgroundName: "")
         }
         set {
             _data = newValue
@@ -35,6 +35,10 @@ class ProViewVC: SuperViewController {
         self.mainTitleLabel.text = data.title
         self.mainDescriptionLabel.text = data.description
         self.mainImage.image = UIImage(named: data.imgName)
+        UIView.animate(withDuration: 0.3) {
+            BuyProVC.shared?.proBackgroundView.image = UIImage.init(named: self.data.backgroundName)
+        }
+
     }
 
 

@@ -15,9 +15,9 @@ extension AppDelegate:GADBannerViewDelegate {
     func implementAdd() {
         GADMobileAds.sharedInstance().start { status in
             print(status.description, " GADMobileAdsGADMobileAds status")
+            let banSize = GADAdSizeBanner
+            self.bannerSize = banSize.size.height
             DispatchQueue.main.async {
-                let banSize = GADAdSizeBanner
-                self.bannerSize = banSize.size.height
                 let bannerView = GADBannerView(adSize: banSize)
                 self.addBannerViewToView(bannerView)
                 bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
@@ -27,8 +27,48 @@ extension AppDelegate:GADBannerViewDelegate {
             }
         }
     }
+    
+    
     @objc func closeBannerPressed() {
         appData.presentBuyProVC(selectedProduct: 2)
+    }
+    
+    
+    func hideAdd(remove:Bool = false, pro:Bool? = nil) {
+        bannerHidden = true
+        DispatchQueue.main.async {
+            if let bannerSuperView = self.bannerSuperView {
+            UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.75, initialSpringVelocity: 0, options: .allowAnimatedContent) {
+                bannerSuperView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, bannerSuperView.frame.height + ((self.window?.safeAreaInsets.bottom ?? 50) + 50), 0)
+            } completion: { _ in
+                if remove {
+                    self.removeAdd(pro: pro)
+                }
+            }
+            }
+        }
+    }
+    func bannerAppeare() {
+        bannerHidden = false
+        DispatchQueue.main.async {
+            if let bannerSuperView = self.bannerSuperView {
+                UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.75, initialSpringVelocity: 0, options: .allowAnimatedContent) {
+                    self.bannerSuperView?.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+                } completion: { _ in
+                }
+            }
+            
+        }
+    }
+    
+    private func removeAdd(pro:Bool?) {
+        let isPro = pro ?? appData.proEnabeled
+        if isPro {
+            self.bannerSize = 0
+            DispatchQueue.main.async {
+                self.bannerBacgroundView?.removeFromSuperview()
+            }
+        }
     }
     
     func addBannerViewToView(_ bannerView: GADBannerView) {
@@ -40,7 +80,7 @@ extension AppDelegate:GADBannerViewDelegate {
         
         windoww.addSubview(backgroundV)
         backgroundV.addSubview(bannerView)
-        
+        backgroundV.alpha = 0
         
         let closeButton = UIButton()
         closeButton.translatesAutoresizingMaskIntoConstraints = false
@@ -50,6 +90,8 @@ extension AppDelegate:GADBannerViewDelegate {
         closeButton.target(forAction: #selector(closeBannerPressed), withSender: self)
         closeButton.addTarget(self, action: #selector(closeBannerPressed), for: .touchUpInside)
         backgroundV.addSubview(closeButton)
+        
+        
         windoww.addConstraints(
           [NSLayoutConstraint(item: closeButton,
                               attribute: .left,
@@ -116,14 +158,24 @@ extension AppDelegate:GADBannerViewDelegate {
                               multiplier: 1,
                               constant: 0)
           ])
+        
+        
+        backgroundV.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, backgroundV.frame.height + (windoww.safeAreaInsets.bottom + 50), 0)
+        backgroundV.alpha = 1
+        self.bannerSuperView = backgroundV
+
        }
+    
+    
     
     func bannerViewDidReceiveAd(_ bannerView: GADBannerView) {
       print("bannerViewDidReceiveAd")
+        bannerAppeare()
     }
 
     func bannerView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) {
       print("bannerView:didFailToReceiveAdWithError: \(error.localizedDescription)")
+        
     }
 
     func bannerViewDidRecordImpression(_ bannerView: GADBannerView) {

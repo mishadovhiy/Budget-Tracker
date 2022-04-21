@@ -9,13 +9,12 @@
 import UIKit
 
 class BuyPageVC: UIPageViewController {
-
+    //PageStruct(title: "Passcode protection".localize, description: "Set 4 digit passcode".localize, imgName: "passcodeProtect.pro"),
     let pages: [PageStruct] = [
-        PageStruct(title: "Payment reminders".localize, description: "Set payment reminders for Debit".localize, imgName: "addReminder.pro"),
-        PageStruct(title: "Transfer data".localize, description: "Transfer transactions and categories between accounts".localize, imgName: "transfareDataIcon.pro"),
-        //PageStruct(title: "Passcode protection".localize, description: "Set 4 digit passcode".localize, imgName: "passcodeProtect.pro"),
-        PageStruct(title: "No Adds".localize, description: "Remove all ads".localize, imgName: "passcodeProtect.pro"),
-        PageStruct(title: "App storage increase and more".localize, description: "• Create up to 15 accounts for email\n• Stores more data about app usage".localize, imgName: "dbStorage.pro"),
+        .init(title: "Payment reminders".localize, description: "Set payment reminders for Debit".localize, imgName: "addReminder.pro", backgroundName: "purchaseBackground2"),
+        .init(title: "Transfer data".localize, description: "Transfer transactions and categories between accounts".localize, imgName: "transfareDataIcon.pro", backgroundName: "purchaseBackground1"),
+        .init(title: "No Adds".localize, description: "Remove all ads".localize, imgName: "noAds.pro", backgroundName: "purchaseBackground0"),
+        .init(title: "App storage increase and more".localize, description: "• Create up to 15 accounts for email\n• Stores more data about app usage".localize, imgName: "dbStorage.pro", backgroundName: "purchaseBackground3"),
     ]
     
     
@@ -40,8 +39,6 @@ class BuyPageVC: UIPageViewController {
         
         var result:[UIViewController] = []
         let pags = pages
-        
-        
             for i in 0..<pags.count {
                 let vc = UIStoryboard(name: "LogIn", bundle: nil).instantiateViewController(withIdentifier: "ProViewVC") as! ProViewVC
                 vc.data = pags[i]
@@ -73,6 +70,7 @@ extension BuyPageVC {
         let title: String
         let description: String
         let imgName: String
+        let backgroundName:String
     }
 }
 

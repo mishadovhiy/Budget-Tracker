@@ -18,3 +18,10 @@ extension UITableView {
         self.contentInset.bottom = AppDelegate.shared?.bannerSize ?? 0
     }
 }
+
+extension UICollectionView {
+    open override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        self.contentInset.bottom = AppDelegate.shared?.bannerSize ?? 0
+    }
+}

@@ -800,6 +800,7 @@ class ViewController: SuperViewController {
     var timers: [Timer] = []
 
     override func viewWillDisappear(_ animated: Bool) {
+        AppDelegate.shared?.window?.backgroundColor = K.Colors.primaryBacground
         safeArreaHelperView?.alpha = 1
     }
 
@@ -1134,6 +1135,7 @@ class ViewController: SuperViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         print("today is", appData.filter.getToday(appData.filter.filterObjects.currentDate))
+        AppDelegate.shared?.window?.backgroundColor = .clear
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
     

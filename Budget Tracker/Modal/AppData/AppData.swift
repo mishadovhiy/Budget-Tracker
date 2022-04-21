@@ -37,7 +37,7 @@ class AppData {
     let lastSelected = LastSelected()
     
     var proEnabeled:Bool {
-        return appData.proTrial || appData.proVersion
+        return false//appData.proTrial || appData.proVersion
     }
     
     var proVersion: Bool {
@@ -482,7 +482,7 @@ class AppData {
             let cellHeight = 50
             let contentHeight = (data.count) * cellHeight
             let safeAt = appData.safeArea.1
-            let safebt = appData.safeArea.0
+            let safebt = appData.safeArea.0 + (AppDelegate.shared?.bannerSize ?? 0)
             
             //let tableInButtom = (currentVC.view.frame.height - (safeAt + safebt + 150)) - CGFloat(contentHeight)
             

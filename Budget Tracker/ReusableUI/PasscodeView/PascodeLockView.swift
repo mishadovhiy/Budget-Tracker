@@ -103,6 +103,9 @@ class PascodeLockView: UIView, UITextFieldDelegate {
     
     func hide() {
    //     passwordNotEntered = false
+        if passwordNotEntered {
+            return
+        }
         presenting = false
         DispatchQueue.main.async {
             let window = AppDelegate.shared?.window ?? UIWindow()
@@ -116,6 +119,7 @@ class PascodeLockView: UIView, UITextFieldDelegate {
                 
             } completion: { _ in
                 if let action = self.enteredAction {
+                    self.enteredAction = nil
                     action()
                 }
                 self.removeFromSuperview()

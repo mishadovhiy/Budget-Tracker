@@ -25,6 +25,7 @@ class BuyProVC: SuperViewController {
 
     }
     var paymentQueueResponded = false
+    @IBOutlet weak var proBackgroundView: UIImageView!
     @IBOutlet weak var tryFree: UIButton!
     @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var closeButton: UIButton!
@@ -83,15 +84,22 @@ class BuyProVC: SuperViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: true)
+        AppDelegate.shared?.hideAdd()
     }
     
     var fromSettings = false
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
+        proBackgroundView.alpha = 0.5
         showPurchasedIndicator()
         getProducts()
     }
 
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(true)
+        AppDelegate.shared?.bannerAppeare()
+    }
+    
     
     @IBAction func pageChanged(_ sender: UIPageControl) {
         print(#function, sender.currentPage, "ghjcnhxuik")

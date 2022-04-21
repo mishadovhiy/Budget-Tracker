@@ -42,6 +42,9 @@ class ReminderCell: UITableViewCell {
         
         
     }
+    
+    
+    
     private var animating = false
     private func setSelected(_ selected:Bool, completion:((Bool) -> ())? = nil) {
         

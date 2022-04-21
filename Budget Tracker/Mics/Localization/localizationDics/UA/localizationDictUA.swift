@@ -12,6 +12,8 @@ import UIKit
 struct localizationDictUA {
 
     static let dictUA: [String:String] = [
+        "No Adds":"Без реклами",
+        "Remove all ads":"Прибрати всю рекламу",
         "Set payment reminders for Debit": "Встaновлюй нагадування для Боргів",
         "You already have PRO version":"У вас вже є PRO версія",
         "Error saving purchase":"Помилка збереження покупки",
@@ -249,5 +251,6 @@ struct localizationDictUA {
         "Passcode protection": "Захист паролем",
         "App storage increase and more":"Збільшення обсягу пам’яті додатків та iнше",
         "• Create up to 15 accounts for email\n• Stores more data about app usage\n• Set link color":"• Створюйте до 15 облікових записів для електронної пошти\n• Зберігання більше даних про використання додатку\n• Встановлюйте основний колiр додатку",
+        "• Create up to 15 accounts for email\n• Stores more data about app usage":"• Створюйте до 15 облікових записів для електронної пошти\n• Зберігання більше даних про використання додатку",
     ]
 }
