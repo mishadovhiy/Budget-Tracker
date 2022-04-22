@@ -31,7 +31,7 @@ class ReminderCell: UITableViewCell {
     var editAction:((_ row:Int)->())?
     
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+  /*  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         if !animating {
             print(row, "rowrowrow")
@@ -41,17 +41,22 @@ class ReminderCell: UITableViewCell {
         }
         
         
+    }*/
+
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        if !animating {
+            RemindersVC.shared?.tableData[row].selected = selected
+            setSelectedAnimationg(selected)
+        }
     }
     
-    
-    
     private var animating = false
-    private func setSelected(_ selected:Bool, completion:((Bool) -> ())? = nil) {
+    private func setSelectedAnimationg(_ selected:Bool, completion:((Bool) -> ())? = nil) {
         
         if let id = RemindersVC.shared?.tableData[row].id {
             Notifications.removeNotification(id: id)
         }
-        
         animating = true
         let hide = !selected
         DispatchQueue.main.async {
@@ -81,19 +86,19 @@ class ReminderCell: UITableViewCell {
         switch sender.tag {
         case 0:
             if let acion = addTransactionAction {
-                setSelected(false) { _ in
+                setSelectedAnimationg(false) { _ in
                     acion(self.row)
                 }
             }
         case 2:
             if let acion = deleteAction {
-                setSelected(false) { _ in
+                setSelectedAnimationg(false) { _ in
                     acion(self.row)
                 }
             }
         case 3:
             if let acion = editAction {
-                setSelected(false) { _ in
+                setSelectedAnimationg(false) { _ in
                     acion(self.row)
                 }
             }

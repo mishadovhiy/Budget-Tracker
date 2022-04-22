@@ -92,6 +92,10 @@ extension RemindersVC:UITableViewDelegate, UITableViewDataSource {
         return tableData.count == 0 ? tableView.frame.height : UITableView.automaticDimension
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("select")
+    }
+    
 }
 
 extension RemindersVC :TransitionVCProtocol {

@@ -84,7 +84,6 @@
 		8BFA15D427E8E87B0078856A /* LocalDataActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFA15D327E8E87B0078856A /* LocalDataActionCell.swift */; };
 		8D36724224D315BC00CE90A9 /* NetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D36724124D315BC00CE90A9 /* NetworkModel.swift */; };
 		8D39788F28083E81007A2C55 /* AppDelegateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D39788E28083E81007A2C55 /* AppDelegateExtensions.swift */; };
-		8D3978912808D873007A2C55 /* GoogleMobileAds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3978902808D873007A2C55 /* GoogleMobileAds.swift */; };
 		8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5206662421695200772CD5 /* StatisticBrain.swift */; };
 		8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D52066824216A2900772CD5 /* StatisticVC.swift */; };
 		8D52066B24216A6200772CD5 /* HistoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D52066A24216A6200772CD5 /* HistoryVC.swift */; };
@@ -102,6 +101,7 @@
 		8DD89D8C23F1485700273904 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8B23F1485700273904 /* Constants.swift */; };
 		8DD89D8E23F1495300273904 /* TransactionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8D23F1495300273904 /* TransactionVC.swift */; };
 		8DD89D9023F1496100273904 /* CategoriesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8F23F1496100273904 /* CategoriesVC.swift */; };
+		8DEA9D17281352C3003B92D5 /* GoogleMobileAds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEA9D16281352C3003B92D5 /* GoogleMobileAds.swift */; };
 		8DECAFC12460461F0041B734 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DECAFC02460461F0041B734 /* CloudKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -199,7 +199,6 @@
 		8BFA15D327E8E87B0078856A /* LocalDataActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalDataActionCell.swift; sourceTree = "<group>"; };
 		8D36724124D315BC00CE90A9 /* NetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkModel.swift; sourceTree = "<group>"; };
 		8D39788E28083E81007A2C55 /* AppDelegateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegateExtensions.swift; sourceTree = "<group>"; };
-		8D3978902808D873007A2C55 /* GoogleMobileAds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMobileAds.swift; sourceTree = "<group>"; };
 		8D5206662421695200772CD5 /* StatisticBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticBrain.swift; sourceTree = "<group>"; };
 		8D52066824216A2900772CD5 /* StatisticVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticVC.swift; sourceTree = "<group>"; };
 		8D52066A24216A6200772CD5 /* HistoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryVC.swift; sourceTree = "<group>"; };
@@ -218,6 +217,7 @@
 		8DD89D8B23F1485700273904 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		8DD89D8D23F1495300273904 /* TransactionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionVC.swift; sourceTree = "<group>"; };
 		8DD89D8F23F1496100273904 /* CategoriesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesVC.swift; sourceTree = "<group>"; };
+		8DEA9D16281352C3003B92D5 /* GoogleMobileAds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleMobileAds.swift; sourceTree = "<group>"; };
 		8DECAFBF2460461C0041B734 /* Budget Tracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Budget Tracker.entitlements"; sourceTree = "<group>"; };
 		8DECAFC02460461F0041B734 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -646,7 +646,7 @@
 			children = (
 				8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */,
 				8D39788E28083E81007A2C55 /* AppDelegateExtensions.swift */,
-				8D3978902808D873007A2C55 /* GoogleMobileAds.swift */,
+				8DEA9D16281352C3003B92D5 /* GoogleMobileAds.swift */,
 			);
 			path = AppDelegate;
 			sourceTree = "<group>";
@@ -906,7 +906,6 @@
 				8B6B509B27F3B24B0067C237 /* NotificationManager.swift in Sources */,
 				8BD17F6A27F4FCA6008D9D57 /* IndicatorView.swift in Sources */,
 				8B2A4D72271439520085E0F0 /* MoreVC.swift in Sources */,
-				8D3978912808D873007A2C55 /* GoogleMobileAds.swift in Sources */,
 				8B6BFB1C27F7CB8600DD4CBC /* TableViewExtension.swift in Sources */,
 				8B7B63CC2655CAFB0067C434 /* SuperViewController.swift in Sources */,
 				8B7D1AA1276CF203008942EC /* IconList.swift in Sources */,
@@ -921,6 +920,7 @@
 				8B6BFB1827F7C82C00DD4CBC /* CategoriesMethods.swift in Sources */,
 				8B898CF427F3EB0800B66F79 /* UIDatePicker.swift in Sources */,
 				8B6BFB1A27F7CB7600DD4CBC /* AppearcenceExtensions.swift in Sources */,
+				8DEA9D17281352C3003B92D5 /* GoogleMobileAds.swift in Sources */,
 				8B52DFEC27504D2900595A0C /* IconsVC.swift in Sources */,
 				8BF58D1F277C793D005A7F38 /* BuyPageVC.swift in Sources */,
 				8D52066B24216A6200772CD5 /* HistoryVC.swift in Sources */,

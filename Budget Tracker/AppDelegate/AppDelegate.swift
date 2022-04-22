@@ -16,21 +16,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     let center = UNUserNotificationCenter.current()
     lazy var notificationManager = NotificationManager()
     
-    let passcodeLock = PascodeLockView.instanceFromNib() as! PascodeLockView
-    private var backgroundEnterDate:Date?
-    private var becameActive = false
+    
+    var backgroundEnterDate:Date?
+    var becameActive = false
+    
+    
+    //banner
+    var bannerBacgroundView:UIView?
     var bannerSuperView:UIView?
+    var bannerSize:CGFloat {
+            get {
+                return bannerHidden ? 0 : _bannerSize
+            }
+            set(value) {
+                _bannerSize = value
+            }
+        }
+        var _bannerSize:CGFloat = 0
+        var bannerHidden = true
+    //banner end
+    
+    
     lazy var newMessage: MessageView = {
         return MessageView.instanceFromNib() as! MessageView
     }()
     
     lazy var ai: IndicatorView = {
-        let newView = IndicatorView.instanceFromNib() as! IndicatorView
-        return newView
+        return IndicatorView.instanceFromNib() as! IndicatorView
     }()
     
-    var bannerBacgroundView:UIView?
-    
+    let passcodeLock = PascodeLockView.instanceFromNib() as! PascodeLockView
+
     public lazy var deviceType:DeviceType = {
         if #available(iOS 13.0, *) {
             #if !os(iOS)
@@ -45,16 +61,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     public lazy var symbolsAllowed:Bool = {
         return deviceType != .primary ? false : true
     }()
-    var bannerSize:CGFloat {
-        get {
-            return bannerHidden ? 0 : _bannerSize
-        }
-        set(value) {
-            _bannerSize = value
-        }
-    }
-    var _bannerSize:CGFloat = 0
-    var bannerHidden = true
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         AppDelegate.shared = self
@@ -106,36 +113,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         print(#function)
-        guard let logoutDate = backgroundEnterDate else{
-            if UserSettings.Security.password != "" {
-                presentLock(passcode: true)
-            }
-            return;
-        }
-        let now = Date()
-        let ti = now.timeIntervalSince(logoutDate)
-        if !becameActive {
-            becameActive = true
-        } else {
-            let fiveMin = Double(60 * 5)
-            if ti > fiveMin {
-                if appData.username != "" {
-                    AppData.categoriesHolder = nil
-                    needDownloadOnMainAppeare = true
-                }
-            }
-        }
-        if UserSettings.Security.password != "" {
-            let timeout = Double(UserSettings.Security.timeOut) ?? 15
-            if ti > timeout {
-                presentLock(passcode: true)
-            } else {
-                passcodeLock.hide()
-                
-            }
-        }
-        
+        checkPasscodeTimout()
     }
+    
     func applicationWillTerminate(_ application: UIApplication) {
         print(#function)
     }

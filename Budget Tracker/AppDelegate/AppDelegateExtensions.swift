@@ -76,6 +76,38 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             
         }
     }
+    
+
+    func checkPasscodeTimout() {
+        guard let logoutDate = backgroundEnterDate else{
+            if UserSettings.Security.password != "" {
+                presentLock(passcode: true)
+            }
+            return;
+        }
+        let now = Date()
+        let ti = now.timeIntervalSince(logoutDate)
+        if !becameActive {
+            becameActive = true
+        } else {
+            let fiveMin = Double(60 * 5)
+            if ti > fiveMin {
+                if appData.username != "" {
+                    AppData.categoriesHolder = nil
+                    needDownloadOnMainAppeare = true
+                }
+            }
+        }
+        if UserSettings.Security.password != "" {
+            let timeout = Double(UserSettings.Security.timeOut) ?? 15
+            if ti > timeout {
+                presentLock(passcode: true)
+            } else {
+                passcodeLock.hide()
+                
+            }
+        }
+    }
 
 }
 
