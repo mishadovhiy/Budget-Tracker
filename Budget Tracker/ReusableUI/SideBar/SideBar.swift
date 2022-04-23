@@ -34,7 +34,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         ]
         let localCount = ((UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String:Any]] ?? []) + (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String:Any]] ?? [])).count
         if localCount > 0 {
-            categories.append(CellData(name: "local Data".localize, value: "\(localCount)", segue: "toLocalData", image: "tray.fill"))
+            categories.append(CellData(name: "Local Data".localize, value: "\(localCount)", segue: "toLocalData", image: "tray.fill"))
         }
         
         let statistic:CellData = .init(name: "Statistic".localize, value: "", segue: "toStatisticVC", image: "chart.pie.fill")

@@ -30,24 +30,22 @@ class ReminderCell: UITableViewCell {
     var deleteAction:((_ row:Int)->())?
     var editAction:((_ row:Int)->())?
     
-    
-  /*  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        if !animating {
-            print(row, "rowrowrow")
-            let isSelected = RemindersVC.shared?.tableData[row].selected ?? false
-            RemindersVC.shared?.tableData[row].selected = !isSelected
-            setSelected(!isSelected)
-        }
-        
-        
-    }*/
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        let selected = UIView(frame: .zero)
+        selected.backgroundColor = .clear
+        self.selectedBackgroundView = selected
+    }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        if !animating {
-            RemindersVC.shared?.tableData[row].selected = selected
-            setSelectedAnimationg(selected)
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touchView = touches.first?.view ?? UIView()
+        if touchView != self.contentView {
+            if !animating {
+                print(row, "rowrowrow")
+                let isSelected = RemindersVC.shared?.tableData[row].selected ?? false
+                RemindersVC.shared?.tableData[row].selected = !isSelected
+                setSelectedAnimationg(!isSelected)
+            }
         }
     }
     

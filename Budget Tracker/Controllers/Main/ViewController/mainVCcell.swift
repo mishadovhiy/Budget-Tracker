@@ -21,6 +21,13 @@ class mainVCcell: UITableViewCell {
     //let db = DataBase()
     
 
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        let selected = UIView(frame: .zero)
+        selected.backgroundColor = .clear
+        self.selectedBackgroundView = selected
+    }
+    
     var beginScrollPosition:CGFloat = 0
     @objc func cellSwipePan(_ sender: UIPanGestureRecognizer) {
         let finger = sender.location(in: self.contentView)

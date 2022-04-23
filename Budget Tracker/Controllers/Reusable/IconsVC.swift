@@ -72,6 +72,11 @@ class IconsVC: UIViewController {
         }
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.view.backgroundColor = screenType == .colorsOnly ? K.Colors.primaryBacground : K.Colors.secondaryBackground
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -79,7 +84,8 @@ class IconsVC: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         title = screenType == .colorsOnly ? "Primary color".localize : "Set icon".localize
-        self.view.backgroundColor = screenType == .colorsOnly ? K.Colors.primaryBacground : K.Colors.secondaryBackground
+        
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -1455,12 +1455,10 @@ class ViewController: SuperViewController {
             UIView.animate(withDuration: 0.3) {
                 self.filterTextLabel.alpha = 0.2
             }
+            self.performSegue(withIdentifier: "toFiterVC", sender: self)
         }
-        if self._filterText == "Filter".localize + ": \(appData.filter.selectedPeroud)" {
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "toFiterVC", sender: self)
-            }
-        } else {
+     //   if self._filterText == "Filter".localize + ": \(appData.filter.selectedPeroud)" {
+      /*  } else {
             DispatchQueue.main.async {
                 self.openFiler = true
                 UIImpactFeedbackGenerator().impactOccurred()
@@ -1468,7 +1466,7 @@ class ViewController: SuperViewController {
                     self.filterTextLabel.alpha = 1
                 }
             }
-        }
+        }*/
     }
     
     
@@ -1573,9 +1571,14 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             cell.yearLabel.text = "\(date.year ?? 0)"
             let v = cell.contentView
             cell.mainView.layer.cornerRadius = 15
-            cell.mainView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-            v.backgroundColor = K.Colors.primaryBacground
-            return v
+            let newViewFrame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: v.frame.height)//cell.mainView?.frame.width + 6
+            v.frame = .init(x: 0, y: 0, width: newViewFrame.width, height: v.frame.height)
+            let newView = UIView(frame: newViewFrame)
+            let helperTopView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: newViewFrame.height / 2))
+            helperTopView.backgroundColor = K.Colors.primaryBacground
+            newView.addSubview(helperTopView)
+            newView.addSubview(v)
+            return newView
         }
         
 
@@ -1583,7 +1586,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section != 0 || newTableData.count != 0 {
-            return 60
+            return 60 - 15
         } else {
             return 0
         }

@@ -30,7 +30,10 @@ class TransitionVC: SuperViewController {
         donePressed = true
         DispatchQueue.main.async {
             self.dismiss(animated: true) {
-                self.delegate?.deletePressed()
+                DispatchQueue.init(label: "reload").async {
+                    self.delegate?.deletePressed()
+                }
+                
             }
         }
         
@@ -331,6 +334,7 @@ class TransitionVC: SuperViewController {
             UIImpactFeedbackGenerator().impactOccurred()
             self.checkDate(date: date) { _ in
                 self.dismiss(animated: true) {
+                    DispatchQueue.init(label: "download").async {
                     if self.editingDate != "" {
                         let new = TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)
                         let was = TransactionsStruct(value: "\(Int(self.editingValue))", categoryID: self.editingCategory, date: self.editingDate, comment: self.editingComment)
@@ -338,7 +342,7 @@ class TransitionVC: SuperViewController {
                     } else {
                         self.delegate?.addNewTransaction(value: value, category: category, date: date, comment: comment, reminderTime: self.reminder_Time, repeated: self.reminder_Repeated)
                     }
-                    
+                    }
                 }
             }
             
@@ -401,20 +405,15 @@ class TransitionVC: SuperViewController {
     }
     
     @IBAction func cancelPressed(_ sender: UIButton) {
-       /* if editingDate != "" {
-            let value = "\(editingValueHolder)"
-            let category = editingCategoryHolder
-            let date = editingDateHolder
-            let comment = editingCommentHolder
-            addNew(value: value, category: category, date: date, comment: comment)
-        } else {
-            self.dismiss(animated: true, completion: nil)
-        }*/
+
         DispatchQueue.main.async {
             self.dismiss(animated: true) {
-                if self.editingDate != "" {
-                    self.delegate?.quiteTransactionVC(reload: true)
+                DispatchQueue.init(label: "reload").async {
+                    if self.editingDate != "" {
+                        self.delegate?.quiteTransactionVC(reload: true)
+                    }
                 }
+                
             }
         }
     }
