@@ -49,18 +49,19 @@ extension AppDelegate:GADBannerViewDelegate {
     }
     func bannerAppeare() {
         bannerHidden = false
-        DispatchQueue.main.async {
-            if let backgroundV = self.bannerSuperView {
-                let windoww = self.window ?? UIWindow()
-                backgroundV.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, backgroundV.frame.height + (windoww.safeAreaInsets.bottom + 50), 0)
-                
-                
-                UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.75, initialSpringVelocity: 0, options: .allowAnimatedContent) {
-                    self.bannerSuperView?.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
-                } completion: { _ in
+        if !appData.proEnabeled {
+            DispatchQueue.main.async {
+                if let backgroundV = self.bannerSuperView {
+                    let windoww = self.window ?? UIWindow()
+                    self.bannerSuperView?.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, backgroundV.frame.height + (windoww.safeAreaInsets.bottom + 50), 0)
+                    
+                    
+                    UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0, options: .allowAnimatedContent) {
+                        self.bannerSuperView?.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+                    } completion: { _ in
+                    }
                 }
             }
-            
         }
     }
     
@@ -175,7 +176,8 @@ extension AppDelegate:GADBannerViewDelegate {
         
         func bannerViewDidReceiveAd(_ bannerView: GADBannerView) {
           print("bannerViewDidReceiveAd")
-            if bannerHidden {
+            if bannerHidden && adNotReceved {
+                adNotReceved = false
                 bannerAppeare()
             }
         }

@@ -34,6 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         }
         var _bannerSize:CGFloat = 0
         var bannerHidden = true
+    var adNotReceved = true
     //banner end
     
     
