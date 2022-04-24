@@ -174,10 +174,19 @@
                                 </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                         </view>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4sR-wj-sa9">
+                            <rect key="frame" x="0.0" y="875.5" width="414" height="20.5"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <nil key="textColor"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
+                        <constraint firstItem="4sR-wj-sa9" firstAttribute="leading" secondItem="5g0-XA-2sn" secondAttribute="leading" id="Kht-cC-cVx"/>
                         <constraint firstItem="Nqa-Ge-IxV" firstAttribute="centerX" secondItem="5g0-XA-2sn" secondAttribute="centerX" id="UW6-4t-Hc0"/>
+                        <constraint firstAttribute="trailing" secondItem="4sR-wj-sa9" secondAttribute="trailing" id="Y3x-oE-huX"/>
+                        <constraint firstAttribute="bottom" secondItem="4sR-wj-sa9" secondAttribute="bottom" id="gKw-Po-qHO"/>
                         <constraint firstItem="Nqa-Ge-IxV" firstAttribute="centerY" secondItem="5g0-XA-2sn" secondAttribute="centerY" id="nXk-im-R9O"/>
                     </constraints>
                 </view>

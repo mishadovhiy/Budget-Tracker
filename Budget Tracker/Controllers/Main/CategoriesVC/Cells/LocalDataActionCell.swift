@@ -37,7 +37,7 @@ class LocalDataActionCell: UITableViewCell {
 
     
     @objc func saveLocallyPress(_ sender: UITapGestureRecognizer) {
-        needDownloadOnMainAppeare = true
+        appData.needDownloadOnMainAppeare = true
         DispatchQueue.main.async {
             AppDelegate.shared!.ai.show(title:"Saving") { _ in
                 if let action = self.saveAction {
@@ -59,7 +59,7 @@ class LocalDataActionCell: UITableViewCell {
     @objc func deletePress(_ sender: UITapGestureRecognizer) {
         DispatchQueue.main.async {
             AppDelegate.shared!.ai.show(title:"Deleting") { _ in
-        needDownloadOnMainAppeare = true
+                appData.needDownloadOnMainAppeare = true
                 if let action = self.deleteAction {
             action()
         }

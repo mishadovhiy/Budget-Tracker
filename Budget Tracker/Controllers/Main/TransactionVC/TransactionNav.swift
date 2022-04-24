@@ -18,12 +18,12 @@ class TransactionNav: UINavigationController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        AppDelegate.shared?.hideAdd()
+        AppDelegate.shared?.banner.hide()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        AppDelegate.shared?.bannerAppeare()
+        AppDelegate.shared?.banner.appeare()
     }
 
 }

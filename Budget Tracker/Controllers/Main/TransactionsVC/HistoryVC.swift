@@ -21,6 +21,8 @@ class HistoryVC: SuperViewController {
     var selectedCategory: NewCategories?
     var fromCategories = false
     var allowEditing = true
+    var fromAppDelegate = false
+    
     @IBAction func moreButtonPressed(_ sender: UIButton) {
         showMoreVC()
     }
@@ -394,6 +396,17 @@ class HistoryVC: SuperViewController {
             }
     }
     
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if (scrollView.contentOffset.y < -100.0) && fromAppDelegate {
+            DispatchQueue.main.async {
+                self.dismiss(animated: true) {
+                        
+                }
+            }
+        }
+    }
+    
 }
 
 
@@ -675,7 +688,7 @@ extension HistoryVC: TransitionVCProtocol {
     func addNewTransaction(value: String, category: String, date: String, comment: String, reminderTime:DateComponents?, repeated:Bool?) {
         toAddVC = false
         transactionAdded = true
-        needDownloadOnMainAppeare = true
+        appData.needDownloadOnMainAppeare = true
         let new = TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)
         if value != "" && category != "" && date != "" {
                   //  let save = SaveToDB()

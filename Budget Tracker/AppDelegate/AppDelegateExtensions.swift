@@ -46,11 +46,12 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             DispatchQueue.main.async {
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let vc = storyboard.instantiateViewController(withIdentifier: "HistoryVC") as! HistoryVC
-              //  let navController = UINavigationController(rootViewController: vc)
+                let navController = UINavigationController(rootViewController: vc)
+                vc.fromAppDelegate = true
                 vc.historyDataStruct = db.transactions(for: categoryy)
                 vc.selectedCategory = categoryy
                 vc.fromCategories = true
-                appData.present(vc: vc) { _ in
+                appData.present(vc: navController) { _ in
                     self.ai.fastHide()
                 }
 
@@ -70,7 +71,9 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         DispatchQueue.main.async {
             let strorybpard = UIStoryboard(name: "Main", bundle: nil)
             let vc = strorybpard.instantiateViewController(withIdentifier: "RemindersVC") as! RemindersVC
-            appData.present(vc: vc) { _ in
+            vc.fromAppDelegate = true
+            let nav = UINavigationController(rootViewController: vc)
+            appData.present(vc: nav) { _ in
                 self.ai.fastHide()
             }
             
@@ -94,7 +97,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             if ti > fiveMin {
                 if appData.username != "" {
                     AppData.categoriesHolder = nil
-                    needDownloadOnMainAppeare = true
+                    appData.needDownloadOnMainAppeare = true
                 }
             }
         }

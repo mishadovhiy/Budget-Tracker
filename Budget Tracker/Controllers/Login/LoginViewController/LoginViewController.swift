@@ -207,7 +207,7 @@ class LoginViewController: SuperViewController {
     
     
     override func viewDidDisappear(_ animated: Bool) {
-        AppDelegate.shared?.bannerAppeare()
+        AppDelegate.shared?.banner.appeare(force: true)
         DispatchQueue.main.async {
             self.helperNavView?.removeFromSuperview()
         }
@@ -216,7 +216,7 @@ class LoginViewController: SuperViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: true)
-        AppDelegate.shared?.hideAdd()
+        AppDelegate.shared?.banner.hide(ios13Hide: true)
     }
     
     var actionButtonsEnabled : Bool {

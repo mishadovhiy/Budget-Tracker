@@ -9,17 +9,15 @@
 import UIKit
 
 extension UIView {
-    func shadow(opasity: Float = 0.4, radius:CGFloat? = 9, color: UIColor = K.Colors.secondaryBackground) {
+
+    
+    func shadow(opasity:Float = 0.6) {
         DispatchQueue.main.async {
-            self.layer.shadowColor = UIColor.black.cgColor
-            self.layer.shadowOpacity = opasity
+            self.layer.shadowColor = K.Colors.secondaryBackground2.cgColor
             self.layer.shadowOffset = .zero
-            self.layer.shadowRadius = 12
-            if let radius = radius {
-                self.layer.cornerRadius = radius
-            }
-            
-            self.backgroundColor = color
+            self.layer.shadowRadius = 10//self.cornerRadius
+            self.layer.shadowOpacity = opasity
         }
     }
+    
 }

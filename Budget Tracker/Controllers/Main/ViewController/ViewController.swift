@@ -11,11 +11,7 @@ import UIKit
 //downloadFromDB
 //sendUnsaved
 let appData = AppData()
-let statisticBrain = StatisticBrain()//?
-var sumAllCategories: [String: Double] = [:]//?
-var expenseLabelPressed = true//make only in vc
-var sendSavedData = false
-var needDownloadOnMainAppeare = false
+
 
 class ViewController: SuperViewController {
     
@@ -445,7 +441,7 @@ class ViewController: SuperViewController {
                 }
             }
             if expensesPressed || incomePressed {
-                expenseLabelPressed = expensesPressed
+                appData.expenseLabelPressed = expensesPressed
                 DispatchQueue.main.async {
                     self.performSegue(withIdentifier: "toStatisticVC", sender: self)
                 }
@@ -817,8 +813,8 @@ class ViewController: SuperViewController {
                 self.ai.fastHide()
             }
         }
-        if needDownloadOnMainAppeare {
-            needDownloadOnMainAppeare = false
+        if appData.needDownloadOnMainAppeare {
+            appData.needDownloadOnMainAppeare = false
             self.downloadFromDB(title: "Fetching".localize)
         }
 
@@ -853,8 +849,8 @@ class ViewController: SuperViewController {
         let errorAction = {
             self.sendError = true
             self.startedSendingUnsended = false
-            if sendSavedData {
-                sendSavedData = false
+            if appData.sendSavedData {
+                appData.sendSavedData = false
                 //show message error, try again later
                 DispatchQueue.main.async {
                     self.newMessage.show(title:"Error sending data".localize, description: "Try again later".localize, type: .error)
@@ -961,7 +957,7 @@ class ViewController: SuperViewController {
                 downloadFromDB()
             } else {
                 //send local data
-                if sendSavedData {
+                if appData.sendSavedData {
                     //update labels
                     updateDataLabels(reloadAndAnimate: false)
                     if self._filterText != "Sending".localize {
@@ -1018,7 +1014,7 @@ class ViewController: SuperViewController {
                                 }
                             }
                         } else {
-                            sendSavedData = false
+                            appData.sendSavedData = false
                             downloadFromDB()
                         }
                     }
@@ -1335,9 +1331,9 @@ class ViewController: SuperViewController {
     @IBAction func statisticLabelPressed(_ sender: UIButton) {
         
         switch sender.tag {
-        case 0: expenseLabelPressed = true
-        case 1: expenseLabelPressed = false
-        default: expenseLabelPressed = true
+        case 0: appData.expenseLabelPressed = true
+        case 1: appData.expenseLabelPressed = false
+        default: appData.expenseLabelPressed = true
         }
         DispatchQueue.main.async {
             self.performSegue(withIdentifier: K.statisticSeque, sender: self)
@@ -1407,7 +1403,7 @@ class ViewController: SuperViewController {
     
 
     @objc func savedTransPressed(_ sender: UITapGestureRecognizer) {
-        if !sendSavedData {
+        if !appData.sendSavedData {
             
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: "toUnsendedVC", sender: self)
@@ -1437,13 +1433,13 @@ class ViewController: SuperViewController {
     let tableActionActivityIndicator = UIActivityIndicatorView.init(style: .gray)
     
     @objc func incomePressed(_ sender: UITapGestureRecognizer) {
-        expenseLabelPressed = false
+        appData.expenseLabelPressed = false
         DispatchQueue.main.async {
             self.performSegue(withIdentifier: "toStatisticVC", sender: self)
         }
     }
     @objc func expensesPressed(_ sender: UITapGestureRecognizer) {
-        expenseLabelPressed = true
+        appData.expenseLabelPressed = true
         DispatchQueue.main.async {
             self.performSegue(withIdentifier: "toStatisticVC", sender: self)
         }

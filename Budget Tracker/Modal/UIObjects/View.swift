@@ -19,18 +19,10 @@ class View: UIView {
             }
         }
     }
-    /**
-     -0.15
-     -0.4
-     */
+
     @IBInspectable open var shadowOpasity: Float = 0 {
         didSet {
-            DispatchQueue.main.async {
-                self.layer.shadowColor = K.Colors.secondaryBackground2.cgColor
-                self.layer.shadowOffset = .zero
-                self.layer.shadowRadius = 10//self.cornerRadius
-                self.layer.shadowOpacity = self.shadowOpasity
-            }
+            shadow(opasity: shadowOpasity)
         }
         
     }

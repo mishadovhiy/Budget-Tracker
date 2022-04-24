@@ -19,24 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     
     var backgroundEnterDate:Date?
     var becameActive = false
-    
-    
-    //banner
-    var bannerBacgroundView:UIView?
-    var bannerSuperView:UIView?
-    var bannerSize:CGFloat {
-            get {
-                return bannerHidden ? 0 : _bannerSize
-            }
-            set(value) {
-                _bannerSize = value
-            }
-        }
-        var _bannerSize:CGFloat = 0
-        var bannerHidden = true
-    var adNotReceved = true
-    //banner end
-    
+
     
     lazy var newMessage: MessageView = {
         return MessageView.instanceFromNib() as! MessageView
@@ -47,6 +30,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }()
     
     let passcodeLock = PascodeLockView.instanceFromNib() as! PascodeLockView
+    
+    lazy var banner: adBannerView = {
+        return adBannerView.instanceFromNib() as! adBannerView
+    }()
 
     public lazy var deviceType:DeviceType = {
         if #available(iOS 13.0, *) {
@@ -82,7 +69,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         print("LOCALIZATION: ", AppLocalization.launchedLocalization)
         
         if !appData.proEnabeled {
-            implementAdd()
+            banner.createBanner()
         }
         
         return true

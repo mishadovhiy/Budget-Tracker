@@ -14,7 +14,7 @@ class RemindersVC: SuperViewController {
     @IBOutlet weak var tableView: UITableView!
     static var shared:RemindersVC?
     lazy var reminders = ReminderManager()
-    
+    var fromAppDelegate = false
     override func viewDidLoad() {
         super.viewDidLoad()
         RemindersVC.shared = self
@@ -52,6 +52,16 @@ class RemindersVC: SuperViewController {
             }
         default:
             break
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if (scrollView.contentOffset.y < -100.0) && fromAppDelegate {
+            DispatchQueue.main.async {
+                self.dismiss(animated: true) {
+                        
+                }
+            }
         }
     }
 }

@@ -88,7 +88,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         navigationController?.setNavigationBarHidden(false, animated: true)
       //  AppDelegate.shared?.window?.backgroundColor = K.Colors.primaryBacground
         UIView.animate(withDuration: 0.3) {
-            AppDelegate.shared?.bannerBacgroundView?.backgroundColor = K.Colors.primaryBacground
+            AppDelegate.shared?.banner.backgroundView.backgroundColor = K.Colors.primaryBacground
         }
 
     }
@@ -124,7 +124,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         super.viewWillDisappear(animated)
 //        AppDelegate.shared?.window?.backgroundColor = .clear
         UIView.animate(withDuration: 0.3) {
-            AppDelegate.shared?.bannerBacgroundView?.backgroundColor = .clear
+            AppDelegate.shared?.banner.backgroundView.backgroundColor = .clear
             
         }
     }

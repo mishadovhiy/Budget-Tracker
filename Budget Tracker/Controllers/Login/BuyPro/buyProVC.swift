@@ -84,7 +84,7 @@ class BuyProVC: SuperViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: true)
-        AppDelegate.shared?.hideAdd()
+        AppDelegate.shared?.banner.hide()
     }
     
     var fromSettings = false
@@ -97,7 +97,7 @@ class BuyProVC: SuperViewController {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(true)
-        AppDelegate.shared?.bannerAppeare()
+        AppDelegate.shared?.banner.appeare()
     }
     
     

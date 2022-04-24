@@ -32,7 +32,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
         super.viewDidAppear(true)
         deselectAllCells()
         if transactionAdded {
-            needDownloadOnMainAppeare = true
+            appData.needDownloadOnMainAppeare = true
             updateUI()
             
         }
@@ -80,7 +80,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
         sum = 0.0
         tableView.delegate = self
         tableView.dataSource = self
-        if expenseLabelPressed == true {
+        if appData.expenseLabelPressed == true {
             segmentControll.selectedSegmentIndex = 0
         } else {
             segmentControll.selectedSegmentIndex = 1
@@ -104,7 +104,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
                 var newTransactions = resultDict["\(data[i].categoryID)"] ?? []
                 newTransactions.append(data[i])
                 let intValue = Double(data[i].value) ?? 0
-                if expenseLabelPressed {
+                if appData.expenseLabelPressed {
                     if intValue < 0 {
                         maxValue = intValue < maxValue ? intValue : maxValue
                     }
@@ -128,7 +128,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
                     value += (Double(transactions[n].value) ?? 0.0)
                 }
                 
-                if expenseLabelPressed {
+                if appData.expenseLabelPressed {
                     
                     if category.purpose != .income {
                         if value < 0 {
@@ -152,11 +152,11 @@ class StatisticVC: SuperViewController, CALayerDelegate {
             
 
             DispatchQueue.main.async {
-                self.titleLabel.text = (expenseLabelPressed ? "Expenses".localize : "Incomes".localize) + " " + "for".localize + " " + appData.filter.selectedPeroud
+                self.titleLabel.text = (appData.expenseLabelPressed ? "Expenses".localize : "Incomes".localize) + " " + "for".localize + " " + appData.filter.selectedPeroud
                 self.totalLabel.text = "\(Int(totalAmount))"
             }
             ifNoData()
-        return allData.sorted(by: { expenseLabelPressed ? $1.value > $0.value : $1.value < $0.value})
+        return allData.sorted(by: { appData.expenseLabelPressed ? $1.value > $0.value : $1.value < $0.value})
 
         
     }
@@ -177,7 +177,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
     }
     
     @IBAction func selectedSegment(_ sender: UISegmentedControl) {
-        expenseLabelPressed = sender.selectedSegmentIndex == 1 ? false : true
+        appData.expenseLabelPressed = sender.selectedSegmentIndex == 1 ? false : true
         allData = createTableData()
         sum = 0.0
         getMaxSum()

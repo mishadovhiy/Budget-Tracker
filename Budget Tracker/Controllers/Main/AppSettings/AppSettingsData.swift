@@ -142,9 +142,17 @@ class AppSettingsData {
             
         })
         
-        return [supportCell, privacy, devSupport, otherCell]
         
-        
+        let testPro:SettingsVC.TriggerCell = SettingsVC.TriggerCell(title: "forceNotPro", isOn: appData.forceNotPro ?? false, pro: nil, action: { (newValue) in
+            appData.forceNotPro = newValue ? true : nil
+        })
+
+        if appData.devMode {
+            return [supportCell, privacy, devSupport, otherCell, testPro]
+        } else {
+            return [supportCell, privacy, devSupport, otherCell]
+        }
+
     }
 }
 

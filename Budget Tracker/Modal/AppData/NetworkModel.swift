@@ -304,7 +304,7 @@ struct SaveToDB {
         dataToSend = dataToSend + toDataString
             
         let dataD = dataToSend.data(using: .utf8)
-        needDownloadOnMainAppeare = true
+        appData.needDownloadOnMainAppeare = true
         do {
             print("dbModel: saving data", dbFileURL)
             print("dbModel: saving data", dataToSend)
@@ -459,7 +459,7 @@ struct DeleteFromDB {
         var request = URLRequest(url: reqUrl)
         request.httpMethod = "POST"
         var dataString = "secretWord=" + Keys.secretKey
-        needDownloadOnMainAppeare = true
+            appData.needDownloadOnMainAppeare = true
         //send
         dataString = dataString + toDataString
              print(dataString, "dataStringdataStringdataString delete")

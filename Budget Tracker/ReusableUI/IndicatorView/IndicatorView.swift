@@ -320,16 +320,14 @@ class IndicatorView: UIView {
     }
     
 
-    private func setAllHidden() {
+    private func setAllHidden() {//mainthread
         canCloseOnSwipe = false
         isShowing = false
-        DispatchQueue.main.async {
-            if self.leftButton.superview?.isHidden != true {
-                self.leftButton.superview?.isHidden = true
-            }
-            if self.imageView.superview?.isHidden != true {
-                self.imageView.superview?.isHidden = true
-            }
+        if leftButton.superview?.isHidden != true {
+            leftButton.superview?.isHidden = true
+        }
+        if imageView.superview?.isHidden != true {
+            imageView.superview?.isHidden = true
         }
     }
     

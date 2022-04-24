@@ -63,8 +63,9 @@ struct Notifications {
     
     func addLocalNotification(date: DateComponents, title:String, id:String, body:String, completion: @escaping (Bool) -> ()) {
         print("adding for:", date)
-        center?.removePendingNotificationRequests(withIdentifiers: [id])
-        center?.getNotificationSettings { (settings) in
+        DispatchQueue.main.async {
+            self.center?.removePendingNotificationRequests(withIdentifiers: [id])
+            self.center?.getNotificationSettings { (settings) in
             if settings.authorizationStatus != .authorized {
                 completion(false)
           }
@@ -90,7 +91,6 @@ struct Notifications {
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: false)
         let request = UNNotificationRequest(identifier: id,
                     content: content, trigger: trigger)
-        DispatchQueue.main.async {
             self.center?.add(request) { (error) in
                 if error != nil {
                     completion(false)

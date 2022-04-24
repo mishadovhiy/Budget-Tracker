@@ -34,7 +34,7 @@ class WebViewVC: UIViewController, UIScrollViewDelegate, WKNavigationDelegate {
                         self.webView.isHidden = false
                         self.screenAI.stopAnimating()
                         self.screenAI.isHidden = true
-                        self.webView.scrollView.contentInset.bottom = AppDelegate.shared?.bannerSize ?? 0
+                        self.webView.scrollView.contentInset.bottom = AppDelegate.shared?.banner.size ?? 0
                     }
                 } else {
                     self.errorLoading()

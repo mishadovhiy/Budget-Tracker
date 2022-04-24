@@ -94,7 +94,7 @@ class PascodeLockView: UIView, UITextFieldDelegate {
                 }
 
             } completion: { _ in
-                
+                self.primaryStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
             }
         }
     }

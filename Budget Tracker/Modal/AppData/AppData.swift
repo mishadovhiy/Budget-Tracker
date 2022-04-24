@@ -12,6 +12,9 @@ import Foundation
 
 
 class AppData {
+    var expenseLabelPressed = true//make only in vc
+    var sendSavedData = false
+    var needDownloadOnMainAppeare = false
     
     static var categoriesHolder:[NewCategories]?
     
@@ -35,9 +38,20 @@ class AppData {
     
 
     let lastSelected = LastSelected()
+
+    var forceNotPro: Bool? {
+        get{
+
+            return defaults.value(forKey: "forcePro") as? Bool
+        }
+        set(value){
+            defaults.set(value, forKey: "forcePro")
+        }
+    }
     
     var proEnabeled:Bool {
-        return false//appData.proTrial || appData.proVersion
+        let result = appData.proTrial || appData.proVersion
+        return devMode ? !(forceNotPro ?? !result) : result
     }
     
     var proVersion: Bool {
@@ -482,7 +496,7 @@ class AppData {
             let cellHeight = 50
             let contentHeight = (data.count) * cellHeight
             let safeAt = appData.safeArea.1
-            let safebt = appData.safeArea.0 + (AppDelegate.shared?.bannerSize ?? 0)
+            let safebt = appData.safeArea.0 + (AppDelegate.shared?.banner.size ?? 0)
             
             //let tableInButtom = (currentVC.view.frame.height - (safeAt + safebt + 150)) - CGFloat(contentHeight)
             

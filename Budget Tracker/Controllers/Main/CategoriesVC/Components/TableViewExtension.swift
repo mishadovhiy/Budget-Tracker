@@ -56,7 +56,7 @@ extension CategoriesVC {
                 }
 
                 let deleteAction = {
-                    needDownloadOnMainAppeare = true
+                    appData.needDownloadOnMainAppeare = true
                     self.db.localCategories = []
                     self.db.localTransactions = []
                 //    DispatchQueue.main.async {
@@ -64,8 +64,8 @@ extension CategoriesVC {
                   //  }
                 }
                 let sendAll = {
-                    needDownloadOnMainAppeare = true
-                    sendSavedData = true
+                    appData.needDownloadOnMainAppeare = true
+                    appData.sendSavedData = true
                         self.navigationController?.popToRootViewController(animated: true)
                 }
                 
