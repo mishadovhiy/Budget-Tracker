@@ -14,29 +14,20 @@ class adBannerView: UIView {
     @IBOutlet weak var backgroundView: UIView!
     @IBOutlet private weak var adStack: UIStackView!
     
-    var size:CGFloat {
-        get {
-            return adHidden ? 0 : _size
-        }
-        set {
-            _size = newValue
-        }
-    }
     var _size:CGFloat = 0
     var adHidden = true
     var adNotReceved = true
     
-
     public func createBanner() {
+        
         GADMobileAds.sharedInstance().start { status in
-            
             DispatchQueue.main.async {
                 let height = self.backgroundView.frame.height
-                print(status.description, " GADMobileAdsGADMobileAds status  / height:", height)
                 let adSize = GADAdSizeFromCGSize(CGSize(width: 320, height: height))
                 self.size = height
                 let bannerView = GADBannerView(adSize: adSize)
-                bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+                bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"//"ca-app-pub-5463058852615321/8457751935"
+                //ca-app-pub-3940256099942544/2934735716 test
                 bannerView.rootViewController = AppDelegate.shared?.window?.rootViewController
                 bannerView.load(GADRequest())
                 bannerView.delegate = self
@@ -48,7 +39,6 @@ class adBannerView: UIView {
                     self.frame = self.backgroundView.frame
                     self.translatesAutoresizingMaskIntoConstraints = true
                 }
-               
                 self.adStack.layer.cornerRadius = 4
                 self.adStack.layer.masksToBounds = true
             }
@@ -74,10 +64,10 @@ class adBannerView: UIView {
                 }
             }
         }
-
     }
     
     public func hide(remove:Bool = false, ios13Hide:Bool = false) {
+        
         var go:Bool {
             if #available(iOS 13.0, *) {
                 return (remove || appData.proEnabeled || ios13Hide) && !adHidden
@@ -94,13 +84,23 @@ class adBannerView: UIView {
                     if remove {
                         self.removeAd()
                     }
-                    
                 }
             }
         }
-
-        
     }
+    
+    
+    
+    var size:CGFloat {
+        get {
+            return adHidden ? 0 : _size
+        }
+        set {
+            _size = newValue
+        }
+    }
+    
+    
     
     private func removeAd() {
         self.size = 0
@@ -109,16 +109,22 @@ class adBannerView: UIView {
         }
     }
     
+    
+    
+    
+    
     @IBAction private func closePressed(_ sender: UIButton) {
         appData.presentBuyProVC(selectedProduct: 2)
     }
+    
+    
+    
     
     
     class func instanceFromNib() -> UIView {
         return UINib(nibName: "adBannerView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! UIView
     }
     override init(frame: CGRect) {
-        print("BannerInit")
         super.init(frame: frame)
     }
     required init?(coder aDecoder: NSCoder) {
