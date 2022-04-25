@@ -17,6 +17,16 @@ extension UITableView {
         }
         self.contentInset.bottom = AppDelegate.shared?.banner.size ?? 0
     }
+    
+    func shadows(opasity:Float = 0.15, radius:CGFloat = 12) {
+        DispatchQueue.main.async {
+            self.layer.shadowColor = UIColor.black.cgColor
+            self.layer.shadowOpacity = opasity
+            self.layer.shadowOffset = .zero
+            self.layer.shadowRadius = radius
+        }
+    }
+    
 }
 
 extension UICollectionView {

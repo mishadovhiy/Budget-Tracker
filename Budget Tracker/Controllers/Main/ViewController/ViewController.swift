@@ -331,9 +331,9 @@ class ViewController: SuperViewController {
     @IBOutlet weak var menuButton: UIButton!
     
 
-    var subviewsLoaded = false
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
         if !subviewsLoaded {
             self.noDataView.isHidden = false
             subviewsLoaded = true
@@ -343,6 +343,8 @@ class ViewController: SuperViewController {
             self.filterAndCalcFrameHolder.0 = self.filterView.frame
             self.filterAndCalcFrameHolder.1 = self.calculationSView.frame
                         
+            self.view.addSubview(self.filterHelperView)
+            self.filterHelperView.shadow(opasity: 0.9, black: true)
             let superframe = self.calculationSView.superview?.frame ?? .zero
             let calcFrame = self.calculationSView.frame
             self.calculationSView.frame = CGRect(x: -superframe.height, y: calcFrame.minY, width: calcFrame.width, height: calcFrame.height)
@@ -356,10 +358,6 @@ class ViewController: SuperViewController {
             self.darkBackgroundUnderTable.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
             self.darkBackgroundUnderTable.translatesAutoresizingMaskIntoConstraints = true
             self.addTransitionButton.layer.cornerRadius = self.addTransitionButton.layer.frame.width / 2
-
-            self.view.addSubview(self.filterHelperView)
-            self.filterHelperView.shadow()
-
             self.filterView.superview?.layer.masksToBounds = true
             self.filterView.superview?.translatesAutoresizingMaskIntoConstraints = true
             self.filterView.translatesAutoresizingMaskIntoConstraints = true
@@ -379,8 +377,7 @@ class ViewController: SuperViewController {
             self.mainTableView.addSubview(self.refreshControl)
         }
     }
-    
-    var layaled = false
+    var subviewsLoaded = false
 
     
     func updateUI() {

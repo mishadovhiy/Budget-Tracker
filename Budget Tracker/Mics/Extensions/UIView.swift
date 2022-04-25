@@ -11,11 +11,11 @@ import UIKit
 extension UIView {
 
     
-    func shadow(opasity:Float = 0.6) {
+    func shadow(opasity:Float = 0.6, black:Bool = false) {
         DispatchQueue.main.async {
-            self.layer.shadowColor = K.Colors.secondaryBackground2.cgColor
+            self.layer.shadowColor = !black ? K.Colors.secondaryBackground2.cgColor : UIColor.black.cgColor
             self.layer.shadowOffset = .zero
-            self.layer.shadowRadius = 10//self.cornerRadius
+            self.layer.shadowRadius = 10
             self.layer.shadowOpacity = opasity
         }
     }

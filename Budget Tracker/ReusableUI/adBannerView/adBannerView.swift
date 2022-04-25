@@ -22,23 +22,20 @@ class adBannerView: UIView {
         
         GADMobileAds.sharedInstance().start { status in
             DispatchQueue.main.async {
+                let window = AppDelegate.shared?.window ?? UIWindow()
                 let height = self.backgroundView.frame.height
-                let adSize = GADAdSizeFromCGSize(CGSize(width: 320, height: height))
+                let screenWidth:CGFloat = window.frame.width > 330 ? 320 : 300
+                let adSize = GADAdSizeFromCGSize(CGSize(width: screenWidth, height: height))
                 self.size = height
                 let bannerView = GADBannerView(adSize: adSize)
-                bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"//"ca-app-pub-5463058852615321/8457751935"
+                bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
+                //"ca-app-pub-5463058852615321/8457751935"
                 //ca-app-pub-3940256099942544/2934735716 test
                 bannerView.rootViewController = AppDelegate.shared?.window?.rootViewController
                 bannerView.load(GADRequest())
                 bannerView.delegate = self
                 self.adStack.addArrangedSubview(bannerView)
-                let window = AppDelegate.shared?.window ?? UIWindow()
-                window.addSubview(self)
-                self.frame = window.frame
-                DispatchQueue.main.async {
-                    self.frame = self.backgroundView.frame
-                    self.translatesAutoresizingMaskIntoConstraints = true
-                }
+                self.addConstants(window)
                 self.adStack.layer.cornerRadius = 4
                 self.adStack.layer.masksToBounds = true
             }
@@ -119,7 +116,14 @@ class adBannerView: UIView {
     
     
     
-    
+    private func addConstants(_ window:UIWindow) {
+        window.addSubview(self)
+        window.addConstraints([
+            .init(item: self, attribute: .bottom, relatedBy: .equal, toItem: window.safeAreaLayoutGuide, attribute: .bottom, multiplier: 1, constant: 0),
+            .init(item: self, attribute: .centerXWithinMargins, relatedBy: .equal, toItem: window.safeAreaLayoutGuide, attribute: .centerXWithinMargins, multiplier: 1, constant: 0)
+        ])
+        self.translatesAutoresizingMaskIntoConstraints = false
+    }
     
     class func instanceFromNib() -> UIView {
         return UINib(nibName: "adBannerView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! UIView
@@ -131,12 +135,11 @@ class adBannerView: UIView {
         super.init(coder: aDecoder)
     }
     
-    func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+   /* func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         if appData.proEnabeled {
             self.frame = (AppDelegate.shared?.window ?? UIWindow()).frame
         }
-        
-    }
+    }*/
 }
 
 

@@ -25,10 +25,7 @@ class SettingsVC: SuperViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        tableView.layer.shadowColor = UIColor.black.cgColor
-        tableView.layer.shadowOpacity = 0.1
-        tableView.layer.shadowOffset = .zero
-        tableView.layer.shadowRadius = 12
+        tableView.shadows()
         tableView.contentInset.top = 10
     }
     

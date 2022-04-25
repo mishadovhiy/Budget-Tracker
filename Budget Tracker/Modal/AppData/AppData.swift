@@ -506,22 +506,17 @@ extension AppData {
         DispatchQueue.main.async {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let vccc = storyboard.instantiateViewController(withIdentifier: "MoreVC") as! MoreVC
-            vccc.modalPresentationStyle = .overFullScreen //.overFullScreen //.overCurrentContext - cant swipe close
+            vccc.modalPresentationStyle = .overFullScreen
             vccc.tableData = data
             vccc.navigationController?.setNavigationBarHidden(true, animated: false)
             let cellHeight = 50
             let contentHeight = (data.count) * cellHeight
             let safeAt = appData.safeArea.1
-            let safebt = appData.safeArea.0 + (AppDelegate.shared?.banner.size ?? 0)
-            
-            //let tableInButtom = (currentVC.view.frame.height - (safeAt + safebt + 150)) - CGFloat(contentHeight)
-            
+            let safebt = appData.safeArea.0 + (AppDelegate.shared?.banner.size ?? 0) + 10
             let window = AppDelegate.shared?.window ?? UIWindow()
-            let screenHeight = window.frame.height//currentVC.view.frame.height
+            let screenHeight = window.frame.height
             let additionalMargin:CGFloat = safeAt > 0 ? 45 : 40
             let tableInButtom = (screenHeight - (safeAt + safebt + additionalMargin)) - (CGFloat(contentHeight))
-
-          //  firstCellHeight = CGFloat(contentHeight) > self.view.frame.height / 2 ? self.view.frame.height / 2 : tableInButtom
             if CGFloat(contentHeight) > currentVC.view.frame.height / 2 {
                 vccc.firstCellHeight = currentVC.view.frame.height / 2
             } else {

@@ -8,7 +8,7 @@
 import UIKit
 
 class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    var cellBackground = K.Colors.secondaryBackground2//UIColor(red: 32/255, green: 32/255, blue: 32/255, alpha: 1)//darker seconadrybacground
+    var cellBackground = K.Colors.secondaryBackground2
     
     @IBOutlet weak var tableView: UITableView!
     var dataHolder:[ScreenData] = []
@@ -18,7 +18,6 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     var tableData:[ScreenData] {
         set {
             dataHolder = newValue
-            
             DispatchQueue.main.async {
                 if self.tableView != nil {
                     self.tableView.reloadData()
@@ -35,26 +34,34 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
         tableView.delegate = self
         tableView.dataSource = self
-       // loadData()
         if #available(iOS 15.0, *) {
             self.tableView.sectionHeaderTopPadding = 0
         }
-       
-        
+    }
+    
+    var storyColor:UIColor?
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        tableView.shadows()
+        storyColor = self.view.backgroundColor
+        self.view.backgroundColor = .clear
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+      //  UIView.animate(withDuration: 0.3) {
+            self.view.backgroundColor = .clear
+      //  }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        UIView.animate(withDuration: 0.3) {
+            self.view.backgroundColor = self.storyColor
+        }
     }
 
     func loadData() {
         tableData = dataHolder
-      /*  let logoutAction = {
-            DispatchQueue.main.async {
-                
-            }
-        }
-        
-        tableData = [
-            ScreenData(name: "Log out", description: "", distructive: true, action: logoutAction)
-        ]*/
-        
     }
     
     
