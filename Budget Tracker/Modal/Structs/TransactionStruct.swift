@@ -30,3 +30,22 @@ struct TransactionsStruct {
         return db.category(categoryID) ?? NewCategories(id: -1, name: "Unknown", icon: "", color: "", purpose: .expense)
     }
 }
+
+extension TransactionsStruct {
+    
+    static let isoFormatter: ISO8601DateFormatter = {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withFullDate,]
+        return formatter
+    }()
+
+    var dateFromString: Date {
+        let dateString = date.components(separatedBy: ".").reversed().joined(separator: ".")
+        if TransactionsStruct.isoFormatter.date(from: dateString) == nil {
+            return Date.init(timeIntervalSince1970: 1)
+        } else {
+            return TransactionsStruct.isoFormatter.date(from: dateString)!
+        }
+    }
+    
+}

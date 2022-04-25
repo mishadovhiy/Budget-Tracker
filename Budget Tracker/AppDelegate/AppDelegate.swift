@@ -56,7 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         window?.tintColor = AppData.colorNamed(AppData.linkColor)
         center.delegate = self
         
-        let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
+        let today = appData.filter.getToday()
         let value = UserDefaults.standard.value(forKey: "lastLaunching") as? String ?? ""
         if value != today {
             UserDefaults.standard.setValue(today, forKey: "lastLaunching")
@@ -71,7 +71,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         if !appData.proEnabeled {
             banner.createBanner()
         }
-        
         return true
     }
     
@@ -97,6 +96,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         }
         
         print(#function)
+        
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {

@@ -34,7 +34,6 @@ class AppData {
     
     let defaults = UserDefaults.standard
     var safeArea: (CGFloat, CGFloat) = (0.0, 0.0)//0-bt  1-top
-    var unshowedErrors = ""
     
 
     let lastSelected = LastSelected()
@@ -142,27 +141,7 @@ class AppData {
         }
     }
     
-    var selectedUsernames: [String] {
-        get{
-            let users = defaults.value(forKey: "selectedUsernames") as? [String] ?? ([defaults.value(forKey: "username") as? String ?? ""])
-            return users// + ["mishadovhiy2"]
-        }
-        set(value){
-            print("new usernames setted - \(value)")
-            defaults.set(value, forKey: "selectedUsernames")
-        }
-    }
-    
-    var loggedUsers: [String] {
-        get{
-            let users = defaults.value(forKey: "selectedUsernames") as? [String] ?? ([defaults.value(forKey: "username") as? String ?? ""])
-            return users + ["mishadovhiy2"]
-        }
-        set(value){
-            print("new usernames setted - \(value)")
-            defaults.set(value, forKey: "selectedUsernames")
-        }
-    }
+
 
     var password: String {
         get{
@@ -228,8 +207,6 @@ class AppData {
     ]
     
     var randomColorName: String {
-       /* let data = categoryColors
-        return data[Int.random(in: 0..<data.count)]*/
         return UserDefaults.standard.value(forKey: "SelectedTintColor") as? String ?? "yellowColor"
     }
     
@@ -248,13 +225,7 @@ class AppData {
     
     var objects = Objects()
     struct Objects {
-        
-        var amountField = UITextField()
-        var expensesField = UITextField()
-        var expensesPicker = UIPickerView()
         let datePicker = UIDatePicker()
-        var incomePicker = UIPickerView()
-        
     }
     
     
@@ -326,15 +297,11 @@ class AppData {
         
         
         
-        func getToday(_ sender: UIDatePicker, dateformatter: String = "dd.MM.yyyy") -> String {
+        func getToday(dateformatter: String = "dd.MM.yyyy") -> String {
             
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = dateformatter
-            var date: Date? = nil
-            DispatchQueue.main.async {
-                date = sender.date
-            }
-            let results = dateFormatter.string(from: date ?? Date())
+            let results = dateFormatter.string(from: Date())
             return results
         }
         
@@ -397,24 +364,10 @@ class AppData {
         struct FilterObjects {
             
             let currentDate = UIDatePicker()
-            var startDatePicker = UIDatePicker()
-            var endDatePicker = UIDatePicker()
-            var startDateField = UITextField()
-            var endDateField = UITextField()
             
         }
     }
     
-    
-    var categoryVC = CategoryVCBrain()
-    struct CategoryVCBrain {
-        
-        let allPurposes = [K.expense, K.income]
-        var categoryTextField = UITextField()
-        var purposeField = UITextField()
-        var selectedPurpose = 0
-        
-    }
     
     
     func createFirstData(completion: @escaping () -> ()) {
@@ -447,6 +400,70 @@ class AppData {
         ]
         return monthes[month] ?? "Jan"
     }
+    
+
+    
+
+
+    static func iconSystemNamed(_ name: String?, errorName:String = "photo.fill") -> UIImage {
+        let def = errorName
+        let namee = name ?? def
+        let resultName = namee != "" ? namee : def
+        if #available(iOS 13.0, *) {
+            if let image = UIImage(systemName: resultName) ?? UIImage(named: resultName) {
+                return image
+            } else {
+                print("Not found image named: ", name ?? "-")
+                return UIImage(systemName: def) ?? (UIImage(named: def)!)
+            }
+        } else {
+            return UIImage(named: "warning")!
+        } 
+        
+    }
+    
+    
+    static func iconNamed(_ name: String?) -> UIImage {
+        let def = "photo.fill"
+        let namee = name ?? def
+        let resultName = namee != "" ? namee : def
+        if #available(iOS 13.0, *) {
+            return UIImage(named: resultName) ?? UIImage(named: def)!
+        } else {
+            return UIImage(named: "warning")!
+        }
+        
+    }
+
+    static func colorNamed(_ name: String?) -> UIColor {
+        let defaultCo = K.Colors.link
+        if name ?? "" != "" {
+            return UIColor(named: name ?? "") ?? defaultCo
+        } else {
+            return defaultCo
+        }
+    }
+    
+    
+    
+    static func makeTwo(n: Int?) -> String {
+        if let num = n {
+            if num < 10 {
+                return "0\(num)"
+            } else {
+                return "\(num)"
+            }
+        } else {
+            return "00"
+        }
+        
+    }
+    
+}
+
+
+
+extension AppData {
     func presentBuyProVC(selectedProduct:Int) {
         DispatchQueue.main.async {
             let storyboard = UIStoryboard(name: "LogIn", bundle: nil)
@@ -516,114 +533,4 @@ class AppData {
         }
         
     }
-
-    
-
-
-    static func iconSystemNamed(_ name: String?, errorName:String = "photo.fill") -> UIImage {
-        let def = errorName
-        let namee = name ?? def
-        let resultName = namee != "" ? namee : def
-        if #available(iOS 13.0, *) {
-            if let image = UIImage(systemName: resultName) ?? UIImage(named: resultName) {
-                return image
-            } else {
-                print("Not found image named: ", name ?? "-")
-                return UIImage(systemName: def) ?? (UIImage(named: def)!)
-            }
-        } else {
-            return UIImage(named: "warning")!
-        } 
-        
-    }
-    
-    
-    static func iconNamed(_ name: String?) -> UIImage {
-        let def = "photo.fill"
-        let namee = name ?? def
-        let resultName = namee != "" ? namee : def
-        if #available(iOS 13.0, *) {
-            return UIImage(named: resultName) ?? UIImage(named: def)!
-        } else {
-            return UIImage(named: "warning")!
-        }
-        
-    }
-
-    static func colorNamed(_ name: String?) -> UIColor {
-        let defaultCo = K.Colors.link
-        if name ?? "" != "" {
-            return UIColor(named: name ?? "") ?? defaultCo
-        } else {
-            return defaultCo
-        }
-    }
-    
-    
-    
-    static func makeTwo(n: Int?) -> String {
-        if let num = n {
-            if num < 10 {
-                return "0\(num)"
-            } else {
-                return "\(num)"
-            }
-        } else {
-            return "00"
-        }
-        
-    }
-    
 }
-
-
-
-
-
-
-
-//MARK: - sort Item Extension
-
-
-extension TransactionsStruct {
-    
-    static let isoFormatter: ISO8601DateFormatter = {
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withFullDate,]
-        return formatter
-    }()
-
-    var dateFromString: Date {
-        let dateString = date.components(separatedBy: ".").reversed().joined(separator: ".")
-        if TransactionsStruct.isoFormatter.date(from: dateString) == nil {
-            return Date.init(timeIntervalSince1970: 1)
-        } else {
-            return TransactionsStruct.isoFormatter.date(from: dateString)!
-        }
-    }
-    
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

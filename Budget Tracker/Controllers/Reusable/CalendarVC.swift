@@ -186,7 +186,7 @@ class CalendarVC: SuperViewController {
         }
     }
     
-    let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
+    let today = appData.filter.getToday()
     func updaiteUI() {
         collectionView.delegate = self
         collectionView.dataSource = self

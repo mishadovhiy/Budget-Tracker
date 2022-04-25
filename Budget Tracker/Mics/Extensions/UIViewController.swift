@@ -7,7 +7,12 @@
 //
 
 import UIKit
-
+extension UIActivityIndicatorView {
+    open override func didMoveToWindow() {
+        super.didMoveToWindow()
+        self.hidesWhenStopped = true
+    }
+}
 extension UIViewController {
     func shadow(for view:UIView, opasity: Float = 0.4, radius:CGFloat? = 9, color: UIColor = K.Colors.secondaryBackground) {
         DispatchQueue.main.async {

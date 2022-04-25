@@ -100,7 +100,7 @@ class FilterTVC: SuperViewController {
     
     func firstSectionSelected(i: Int) {
         
-        let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
+        let today = appData.filter.getToday()
         
         switch i {
         case 0:
@@ -177,7 +177,7 @@ class FilterTVC: SuperViewController {
     
     func defaultFilter() {
         
-        let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
+        let today = appData.filter.getToday()
         let month = appData.filter.getMonthFromString(s: today)
         let year = appData.filter.getYearFromString(s: today)
         let dayTo = appData.filter.getLastDayOf(month: month, year: year)

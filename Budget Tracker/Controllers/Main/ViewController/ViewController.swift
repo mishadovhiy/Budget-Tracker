@@ -639,7 +639,7 @@ class ViewController: SuperViewController {
     var resetPassword = false
     func checkProTrial() {
         let wasStr = appData.trialDate
-        let todayStr = appData.filter.getToday(appData.filter.filterObjects.currentDate)
+        let todayStr = appData.filter.getToday()
         let dates = (dateFrom(sting: wasStr), dateFrom(sting: todayStr))
         let dif = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: dates.0 ?? Date(), to: dates.1 ?? Date())
         if dif.year == 0 && dif.month == 0 {
@@ -701,8 +701,9 @@ class ViewController: SuperViewController {
     func allDaysBetween() {
         
         if getYearFrom(string: appData.filter.to) == getYearFrom(string: appData.filter.from) {
-            let lastDay = "31.\(AppData.makeTwo(n: appData.filter.getMonthFromString(s: appData.filter.getToday(appData.filter.filterObjects.currentDate)))).\(appData.filter.getYearFromString(s: appData.filter.getToday(appData.filter.filterObjects.currentDate)))"
-            let firstDay = "01.\(AppData.makeTwo(n: appData.filter.getMonthFromString(s: appData.filter.getToday(appData.filter.filterObjects.currentDate)))).\(appData.filter.getYearFromString(s: appData.filter.getToday(appData.filter.filterObjects.currentDate)))"
+            let today = appData.filter.getToday()
+            let lastDay = "31.\(AppData.makeTwo(n: appData.filter.getMonthFromString(s: today))).\(appData.filter.getYearFromString(s: today))"
+            let firstDay = "01.\(AppData.makeTwo(n: appData.filter.getMonthFromString(s: today))).\(appData.filter.getYearFromString(s: today))"
             appData.filter.to = appData.filter.to == "" ? lastDay : appData.filter.to
             appData.filter.from = appData.filter.from == "" ? firstDay : appData.filter.from
             let to = appData.filter.to
@@ -1114,7 +1115,7 @@ class ViewController: SuperViewController {
 
 
     override func viewWillAppear(_ animated: Bool) {
-        print("today is", appData.filter.getToday(appData.filter.filterObjects.currentDate))
+        print("today is", appData.filter.getToday())
         AppDelegate.shared?.window?.backgroundColor = .clear
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }

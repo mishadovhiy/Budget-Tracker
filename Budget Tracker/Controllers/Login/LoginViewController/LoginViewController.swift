@@ -406,7 +406,7 @@ class LoginViewController: SuperViewController {
             let name = self.nicknameLabelCreate.text ?? ""
             let email = self.emailLabel.text ?? ""
             let password = self.passwordLabel.text ?? ""
-            let regDate = appData.filter.getToday(appData.filter.filterObjects.currentDate)
+            let regDate = appData.filter.getToday()
             if password == self.confirmPasswordLabel.text ?? "" {
                 if name != "" && !name.contains("@") && email != "" && password != "" {
                     let emailLimitOp = self.canAddForEmail(email, loadedData: loadedData)

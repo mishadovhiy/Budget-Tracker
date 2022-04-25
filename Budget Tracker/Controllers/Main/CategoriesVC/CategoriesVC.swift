@@ -15,7 +15,6 @@ protocol CategoriesVCProtocol {
 
 class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var tableView: UITableView!
-    var catData = appData.categoryVC
     var refreshControl = UIRefreshControl()
     var hideTitle = false
     var fromSettings = false

@@ -185,12 +185,12 @@ class BuyProVC: SuperViewController {
     
     func trialWithoutAcoount() {
         appData.proTrial = true
-        appData.trialDate = appData.filter.getToday(appData.filter.filterObjects.currentDate)
+        appData.trialDate = appData.filter.getToday()
         showAlert(title: Text.success, text: "Trial has been started successfully".localize, error: false, goHome: true)
     }
     
     func performTrial(loadedData:(String, String, String, String)) {
-        let today = appData.filter.getToday(appData.filter.filterObjects.currentDate)
+        let today = appData.filter.getToday()
         let toDataStringMian = "&Nickname=\(appData.username)" + "&Email=\(loadedData.0)" + "&Password=\(loadedData.1)" + "&Registration_Date=\(loadedData.2)"
         
         let dataStringSave = toDataStringMian + "&ProVersion=0" + "&trialDate=\(today)"

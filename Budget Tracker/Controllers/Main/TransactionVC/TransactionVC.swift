@@ -131,20 +131,15 @@ class TransitionVC: SuperViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         if !sbvsloded {
-            doneButton.backgroundColor = K.Colors.link
-
-            
-           // segmentControll.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.bala, for: .normal)
-           // purposeSwitcher.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.category ?? .white], for: .selected)
-
-            
             dateTextField.inputView = UIView(frame: .zero)
             dateTextField.isUserInteractionEnabled = false
             dateTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(datePressed)))
             commentTextField.addTarget(self, action: #selector(commentCount), for: .editingChanged)
             categoryTextField.isUserInteractionEnabled = false
             categoryTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(categoryPressed)))
-            self.dateTextField.attributedPlaceholder = NSAttributedString(string: defaultDate, attributes: [NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white])
+
+            self.dateTextField.placeholder = defaultDate
+            self.dateTextField.setPlaceHolderColor(K.Colors.textFieldPlaceholder)
             self.commentTextField.placeholder = "Short comment".localize
             self.commentTextField.setPlaceHolderColor(K.Colors.textFieldPlaceholder)
             if #available(iOS 13.4, *) {
