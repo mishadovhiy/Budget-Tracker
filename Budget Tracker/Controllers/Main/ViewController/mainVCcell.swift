@@ -35,7 +35,6 @@ class mainVCcell: UITableViewCell {
             beginScrollPosition = finger.x
         }
         if sender.state == .began || sender.state == .changed {
-            print("began")
             let newPosition = finger.x - beginScrollPosition
             self.mainBackgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, newPosition, 0, 0)
         } else {
@@ -64,9 +63,8 @@ class mainVCcell: UITableViewCell {
         let value = String(format:"%.0f", Double(data.value) ?? 0.0)
         valueLabel.text = Double(data.value) ?? 0.0 > 0.0 ? "+\(value)" : value
         let category = ViewController.shared?.db.category(data.categoryID)
-        print(category, "vghjnvgujnbhj")
         if AppDelegate.shared!.symbolsAllowed {
-            categoryImage.image = AppData.iconNamed(category?.icon)
+            categoryImage.image = AppData.iconSystemNamed(category?.icon)
         } else {
             categoryImage.superview?.isHidden = true
         }

@@ -121,7 +121,8 @@ extension CategoriesVC {
                     
                     cell.qntLabel.text = "\(category.transactions.count)"
                     if (AppDelegate.shared?.symbolsAllowed ?? false) {
-                        cell.iconimage.image = category.editing == nil ? AppData.iconNamed(category.category.icon) : AppData.iconNamed(category.editing?.icon)
+                        let imgName = category.editing == nil ? category.category.icon : category.editing?.icon
+                        cell.iconimage.image = AppData.iconSystemNamed(imgName)
                         cell.iconimage.tintColor = category.editing == nil ? AppData.colorNamed(category.category.color) : AppData.colorNamed(category.editing?.color)
                     }
                     
@@ -194,7 +195,7 @@ extension CategoriesVC {
         cell.lo(index: nil, footer: sect)
         cell.newCategoryTF.text = category.name
             if (AppDelegate.shared?.symbolsAllowed ?? false) {
-                cell.iconimage.image = AppData.iconNamed(category.icon)
+                cell.iconimage.image = AppData.iconSystemNamed(category.icon)
                 cell.iconimage.tintColor = AppData.colorNamed(category.color)
             } else {
                 cell.iconimage.isHidden = true

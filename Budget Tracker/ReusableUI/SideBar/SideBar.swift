@@ -95,7 +95,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         cell.notificationsLabel.text = "\(tableData[indexPath.section].section[indexPath.row].notifications)"
         cell.proView.isHidden = tableData[indexPath.section].section[indexPath.row].pro == nil
         if (AppDelegate.shared?.symbolsAllowed ?? false) {
-            cell.optionIcon.image = AppData.iconNamed(tableData[indexPath.section].section[indexPath.row].image)
+            cell.optionIcon.image = AppData.iconSystemNamed(tableData[indexPath.section].section[indexPath.row].image)
         }
         return cell
         

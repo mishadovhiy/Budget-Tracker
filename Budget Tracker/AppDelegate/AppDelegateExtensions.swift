@@ -39,8 +39,6 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     
     
     func showHistory(categpry: String) {
-        print("showHistory")
-
         let db = DataBase()
         if let categoryy = db.category(categpry) {
             DispatchQueue.main.async {

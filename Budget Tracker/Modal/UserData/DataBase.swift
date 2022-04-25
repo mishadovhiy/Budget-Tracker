@@ -31,7 +31,6 @@ class DataBase {
     func transactionFrom(_ dictt:[String:Any]?) -> TransactionsStruct? {
         if let dict = dictt {
             if let id = dict["CategoryId"] as? String {
-                print("bhjsdbhf", id)
                 let amount = dict["Amount"] as? String ?? ""
                 let date = dict["Date"] as? String ?? ""
                 let comment = dict["Comment"] as? String ?? ""
@@ -42,7 +41,6 @@ class DataBase {
         return nil
     }
     func transactionToDict(_ transaction: TransactionsStruct) -> [String:Any] {
-        print(transaction.categoryID, "transaction.categoryIDtransaction.categoryIDtransaction.categoryID")
         var result:[String:Any] = [
             "CategoryId":transaction.categoryID,
             "Amount":transaction.value,
@@ -166,7 +164,6 @@ class DataBase {
         for i in 0..<all.count {
             if let trans = transactionFrom(all[i]) {
                 if trans.categoryID == transaction.categoryID && trans.comment == transaction.comment && trans.date == transaction.date && trans.value == transaction.value && !found {
-                    print("found!!!!")
                     found = true
                 } else {
                     new.append(trans)

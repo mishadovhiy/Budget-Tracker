@@ -57,7 +57,6 @@ class AppData {
     var proVersion: Bool {
         get{
             let result = !purchasedOnThisDevice ? (defaults.value(forKey: "proVersion") as? Bool ?? false) : purchasedOnThisDevice
-            print(result, "resultresultresultresultresult")
             return result
         }
         set(value){
@@ -502,12 +501,9 @@ class AppData {
             
             let window = AppDelegate.shared?.window ?? UIWindow()
             let screenHeight = window.frame.height//currentVC.view.frame.height
-            print(safeAt, "safebtsafebt")
             let additionalMargin:CGFloat = safeAt > 0 ? 45 : 40
             let tableInButtom = (screenHeight - (safeAt + safebt + additionalMargin)) - (CGFloat(contentHeight))
-            //2
-            print(tableInButtom, "sectionHeight")
-            print(currentVC.view.frame.height, "ScreenHeight")
+
           //  firstCellHeight = CGFloat(contentHeight) > self.view.frame.height / 2 ? self.view.frame.height / 2 : tableInButtom
             if CGFloat(contentHeight) > currentVC.view.frame.height / 2 {
                 vccc.firstCellHeight = currentVC.view.frame.height / 2
@@ -524,11 +520,25 @@ class AppData {
     
 
 
-    
+    static func iconSystemNamed(_ name: String?, errorName:String = "photo.fill") -> UIImage {
+        let def = errorName
+        let namee = name ?? def
+        let resultName = namee != "" ? namee : def
+        if #available(iOS 13.0, *) {
+            if let image = UIImage(systemName: resultName) ?? UIImage(named: resultName) {
+                return image
+            } else {
+                print("Not found image named: ", name ?? "-")
+                return UIImage(systemName: def) ?? (UIImage(named: def)!)
+            }
+        } else {
+            return UIImage(named: "warning")!
+        } 
+        
+    }
     
     
     static func iconNamed(_ name: String?) -> UIImage {
-        print("iconNamed:", name ?? "-")
         let def = "photo.fill"
         let namee = name ?? def
         let resultName = namee != "" ? namee : def
@@ -541,8 +551,7 @@ class AppData {
     }
 
     static func colorNamed(_ name: String?) -> UIColor {
-        print("colorNamed:", name ?? "-")
-        let defaultCo = K.Colors.link ?? .red
+        let defaultCo = K.Colors.link
         if name ?? "" != "" {
             return UIColor(named: name ?? "") ?? defaultCo
         } else {

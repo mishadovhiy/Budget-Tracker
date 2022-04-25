@@ -28,8 +28,8 @@
                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="25" translatesAutoresizingMaskIntoConstraints="NO" id="LVO-fE-Wxs" userLabel="topStack View">
                             <rect key="frame" x="19.5" y="300" width="161.5" height="138.5"/>
                             <subviews>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lock.fill" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BlT-2W-xpF">
-                                    <rect key="frame" x="60.5" y="0.0" width="40" height="40"/>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lock.fill" catalog="system" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BlT-2W-xpF">
+                                    <rect key="frame" x="60.5" y="1" width="40" height="37.5"/>
                                     <color key="tintColor" name="CategoryColor"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="40" id="XFL-qX-jid"/>
@@ -313,7 +313,7 @@
     <resources>
         <image name="delete.left.fill" catalog="system" width="128" height="104"/>
         <image name="ic" width="1024" height="1024"/>
-        <image name="lock.fill" width="11" height="17"/>
+        <image name="lock.fill" catalog="system" width="128" height="128"/>
         <namedColor name="CategoryColor">
             <color red="0.86699998378753662" green="0.86699998378753662" blue="0.86699998378753662" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

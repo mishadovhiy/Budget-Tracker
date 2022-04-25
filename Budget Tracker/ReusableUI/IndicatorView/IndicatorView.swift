@@ -38,7 +38,6 @@ class IndicatorView: UIView {
     private let errorFont = UIFont.systemFont(ofSize: 32, weight: .bold)
     
     override func draw(_ rect: CGRect) {
-        print("indicatorView draw")
         self.normalTitleSize = self.titleLabel.font
     }
 

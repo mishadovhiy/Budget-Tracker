@@ -18,12 +18,12 @@ class TransactionNav: UINavigationController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        AppDelegate.shared?.banner.hide()
+        AppDelegate.shared?.banner.hide(ios13Hide: true)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        AppDelegate.shared?.banner.appeare()
+        AppDelegate.shared?.banner.appeare(force: true)
     }
 
 }

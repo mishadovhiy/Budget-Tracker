@@ -16,7 +16,6 @@ class NumbersTF: UITextField {
     }()
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        print(#function)//not calling
     }
 
     override func willMove(toSuperview newSuperview: UIView?) {

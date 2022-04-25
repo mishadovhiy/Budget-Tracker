@@ -105,8 +105,7 @@ class SuperViewController: UIViewController {
         if let comp = dateComponents {
             if let dateDate = NSCalendar.current.date(from: comp) {
                 let difference = differenceFromNow(startDate: dateDate)
-                print(difference)
-                
+
                 let one = (difference.second ?? 0) + (difference.minute ?? 0) + (difference.hour ?? 0)
                 let expiredSeconds = one + (difference.day ?? 0) + (difference.month ?? 0) + (difference.year ?? 0)
                 
@@ -146,11 +145,6 @@ class SuperViewController: UIViewController {
     }
     
 
-    
-    
-    func showNotification(notification: UNNotification, completion: @escaping (Any?) -> ()) {
-        print("showNotification")
-    }
     
 
     

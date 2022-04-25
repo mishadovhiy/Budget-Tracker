@@ -693,19 +693,11 @@ class LoginViewController: SuperViewController {
             let keyboardHeight = keyboardRectangle.height
             
             if keyboardHeight > 1.0 {
-             //   if let index = selectedTextfield {
                 DispatchQueue.main.async {
                     let selectedTextfieldd = self.selectedScreen == .createAccount ? self.logIn : self.createAcount
-                    //textfields[index]
-                    print(selectedTextfieldd?.frame.maxY ?? "____________________________________ERROR")
                     let dif = self.view.frame.height - CGFloat(keyboardHeight) - ((selectedTextfieldd?.frame.maxY ?? 0) + 5)
                     if dif < 20 {
-
-                        
-                        
                             UIView.animate(withDuration: 0.3) {
-                                //self.view.layer.frame = CGRect(x: 0, y: dif - 20, width: self.view.layer.frame.width, height: self.view.layer.frame.height)
-                                //self.view.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, dif - 20, 0)
                                 if self.selectedScreen == .createAccount {
                                     self.logIn.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, dif - 20, 0)
                                 } else {
@@ -713,11 +705,10 @@ class LoginViewController: SuperViewController {
                                         self.createAcount.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, dif - 20, 0)
                                     }
                                 }
-                               // self.view.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, dif - 20, 0)
+                               
                             }
                         }
                     }
-             //   }
             }
         }
         

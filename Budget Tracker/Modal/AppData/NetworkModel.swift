@@ -8,10 +8,6 @@
 
 import UIKit
 
-
-//send unsended here!
-
-
 struct LoadFromDB {
 
     static var shared = LoadFromDB()
@@ -61,15 +57,12 @@ struct LoadFromDB {
         let user = otherUser == nil ? appData.username : otherUser!
         if user == "" {
             let local = db.categories
-            print(local, "locallocallocallocal")
             completion(local, .none)
         } else {
             var loadedData: [NewCategories] = []
             load(urlPath: Keys.dbURL + "NewCategories.php") { jsonResult, error in
-                print(jsonResult, "jsonResultjsonResult")
                 if let error = error {
                     let local = db.categories
-                    print(local, "locallocallocallocal")
                     completion(local, error)
                 } else {
                     var jsonElement = NSDictionary()
@@ -102,15 +95,12 @@ struct LoadFromDB {
         let user = otherUser == nil ? appData.username : otherUser!
         if user == "" {
             let local = db.transactions
-            print(local, "locallocallocallocal")
             completion(local, .none)
         } else {
             var loadedData: [TransactionsStruct] = []
             load(urlPath: Keys.dbURL + "newTransactions.php") { jsonResult, error in
-                print(jsonResult, "jsonResultjsonResult")
                 if let error = error {
                     let local = db.transactions
-                    print(local, "locallocallocallocal")
                     completion(local, error)
                 } else {
                     var jsonElement = NSDictionary()
@@ -252,7 +242,6 @@ struct SaveToDB {
                 }
                 return ""
             }
-            print(category.color, "category.colorcategory.colorcategory.color")
             let data = "&Nickname=\(appData.username)" + "&Id=\(category.id)" + "&Name=\(category.name)" + "&Icon=\(category.icon)" + "&Color=\(category.color)" + "&Purpose=\(pupose)" + amount + dueDate
             save(dbFileURL: Keys.dbURL + "new-NewCategory.php", toDataString: data, error: { (error) in
                 if error {
@@ -506,3 +495,5 @@ struct DeleteFromDB {
     }
     
 }
+
+

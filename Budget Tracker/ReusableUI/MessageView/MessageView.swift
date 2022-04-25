@@ -72,7 +72,6 @@ class MessageView: UIView {
             window.addSubview(self)
             self.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: 100)
             let top = self.mainView.frame.maxY
-            print("message appeare from top:", top)
             self.mainView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 500, 0)
             
             

@@ -151,7 +151,9 @@ extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
             let index = IndexPath(row: indexPath.row, section: indexPath.section - 1)
             let iconName = iconsData[index.section].data[index.row]
            // cell.backgroundColor = index == selectedIconIndex ? K.Colors.secondaryBackground : .clear
-            cell.mainImage.image = UIImage(named: iconName)
+            if #available(iOS 13.0, *) {
+                cell.mainImage.image = AppData.iconSystemNamed(iconName, errorName: "warning")
+            }
             
             let selectedColor = AppData.colorNamed(selectedColorName)
             //cell.mainImage.tintColor = index == selectedIconIndex ? selectedColor :  K.Colors.balanceT

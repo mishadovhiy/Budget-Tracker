@@ -130,6 +130,13 @@ class adBannerView: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
+    
+    func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        if appData.proEnabeled {
+            self.frame = (AppDelegate.shared?.window ?? UIWindow()).frame
+        }
+        
+    }
 }
 
 

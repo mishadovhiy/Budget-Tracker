@@ -267,7 +267,6 @@ class ViewController: SuperViewController {
         }
         if sidescrolling || sideBarShowing {
             if sender.state == .began || sender.state == .changed {
-                print("began")
                 let newPosition = finger.x
                 UIView.animate(withDuration: 0.1) {
                     self.mainContentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, newPosition, 0, 0)
@@ -594,66 +593,58 @@ class ViewController: SuperViewController {
             return
         }
         LoadFromDB.shared.Users { (loadedData, error) in
-                print(loadedData, "checkPurchase")
                 if !error {
                     let _ = appData.emailFromLoadedDataPurch(loadedData)
-                    
+                    var wrongPassword = true
                     for i in 0..<loadedData.count {
                         if loadedData[i][0] == nick {
-                            print("checkPurchase for", nick)
-                            print(loadedData[i], "loadedData[i][3]loadedData[i][3]")
-                            appData.trialDate = loadedData[i][5]
-                            
-                            if !appData.purchasedOnThisDevice && !appData.proVersion {
-                                print("checkPurchase appData.proVersion", appData.proVersion)
-                            
-                                if loadedData[i][5] != "" {
-                                    self.checkProTrial()
-                                }
-                            }
-                                
-                                
-                                
-                                if loadedData[i][2] != appData.password {
-                            
-                                    self.forceLoggedOutUser = appData.username
-                                    if (AppDelegate.shared?.deviceType ?? .mac) != .primary {
-                                        
-                                        DispatchQueue.main.async {
-                                            self.performSegue(withIdentifier: "toSingIn", sender: self)
-                                        }
-                                    } else {
-                                        self.resetPassword = true
-                                        DispatchQueue.main.async {
-                                            self.performSegue(withIdentifier: "toSettingsFullScreen", sender: self)
-                                        }
+                            print(loadedData[i], " checkPurchase")
+                            if loadedData[i][2] == appData.password {
+                                wrongPassword = false
+                                appData.trialDate = loadedData[i][5]
+                                if !appData.purchasedOnThisDevice && !appData.proVersion {
+                                    print("checkPurchase appData.proVersion", appData.proVersion)
+                                    if loadedData[i][5] != "" {
+                                        self.checkProTrial()
                                     }
-                                    
                                 }
                                 break
                             }
+                            }
                         }
-                    //}
-                    
+                    if wrongPassword {
+                        self.wrongPassword()
+                    }
                 }
                 
             }
-       // }
     }
+    
+    func wrongPassword() {
+        self.forceLoggedOutUser = appData.username
+        if (AppDelegate.shared?.deviceType ?? .mac) != .primary {
+            
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "toSingIn", sender: self)
+            }
+        } else {
+            self.resetPassword = true
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "toSettingsFullScreen", sender: self)
+            }
+        }
+    }
+    
     var forceLoggedOutUser = ""
     var resetPassword = false
     func checkProTrial() {
         let wasStr = appData.trialDate
-        print(wasStr, "bvghujkmnjbhguijkсч wasStr")
         let todayStr = appData.filter.getToday(appData.filter.filterObjects.currentDate)
         let dates = (dateFrom(sting: wasStr), dateFrom(sting: todayStr))
-        print(dates, "bvghujkmnjbhguijk")
         let dif = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: dates.0 ?? Date(), to: dates.1 ?? Date())
-        print(dif, "bvghujkmnjbhguijk")
         if dif.year == 0 && dif.month == 0 {
             if dif.day ?? 0 <= 7 {
                 appData.proTrial = true
-                print(dif.day ?? 0, "dif.day ?? 0dif.day ?? 0")
                 UserDefaults.standard.setValue(dif.day ?? 0, forKey: "trialToExpireDays")
             } else {
                 appData.proTrial = false
@@ -678,7 +669,6 @@ class ViewController: SuperViewController {
     }
     
     func dateFrom(sting: String) -> Date? {
-        print("dateFrom", sting)
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy"
         let date = dateFormatter.date(from: sting)
@@ -724,7 +714,6 @@ class ViewController: SuperViewController {
             
             let monthDifference = getMonthFrom(string: appData.filter.to) - getMonthFrom(string: appData.filter.from)
             var amount = selectedToDayInt + (31 - selectedFromDayInt) + (monthDifference * 31)
-            print(amount)
             if amount < 0 {
                 amount *= -1
             }
@@ -1047,7 +1036,6 @@ class ViewController: SuperViewController {
     func calculateDifference(amount: Int) {
         allData = []
         if appData.filter.to != appData.filter.from {
-            print("calculateDifference: appData.filter.from: \(appData.filter.from), appData.filter.to: \(appData.filter.to ), amount: \(amount)")
             var dayA: Int = selectedFromDayInt
             var monthA: Int = getMonthFrom(string: appData.filter.from)
             var yearA: Int = getYearFrom(string: appData.filter.from)
@@ -1066,17 +1054,13 @@ class ViewController: SuperViewController {
                 let new: String = "\(AppData.makeTwo(n: dayA)).\(AppData.makeTwo(n: monthA)).\(AppData.makeTwo(n: yearA))"
                 daysBetween.append(new) // was bellow break: last day in month wasnt displeying
                 if new == appData.filter.to {
-                print("breake new == appData.filter.to; new: \(new), appData.filter.to: \(appData.filter.to)")
                     break
                 }
                 
             }
-            print("daysBetween", daysBetween)
         } else {
-            print("calculateDifference: appData.filter.from: \(appData.filter.from), appData.filter.to: \(appData.filter.to ), amount: \(amount)")
             daysBetween.removeAll()
             daysBetween.append(appData.filter.from)
-            print(daysBetween, "calculateDifference")
         }
         
     }
@@ -1222,7 +1206,6 @@ class ViewController: SuperViewController {
             let vc = segue.destination as! RemindersVC
             
         case "toDebts":
-            print("k")
             let vc = segue.destination as! CategoriesVC
             vc.fromSettings = true
             vc.screenType = .debts
@@ -1233,7 +1216,6 @@ class ViewController: SuperViewController {
         case "toFiterVC":
             self.mainTableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
             prevSelectedPer = appData.filter.selectedPeroud
-            print("toFiterVC")
             let vc = segue.destination as? FilterTVC
             vc?.months = filteredData["months"] ?? []
             vc?.years = filteredData["years"] ?? []
@@ -1517,8 +1499,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                     let transactionsCell = tableView.dequeueReusableCell(withIdentifier: K.mainCellIdent, for: indexPath) as! mainVCcell
                     transactionsCell.isUserInteractionEnabled = true
                     transactionsCell.contentView.isUserInteractionEnabled = true
-                    print("row:", indexPath.row)
-                    print("count:", newTableData[indexPath.section - 1].transactions.count)
                     let data = newTableData[indexPath.section - 1].transactions[indexPath.row]
                     transactionsCell.setupCell(data, i: indexPath.row, tableData: tableData, selectedCell: selectedCell, indexPath: indexPath)
                     return transactionsCell
