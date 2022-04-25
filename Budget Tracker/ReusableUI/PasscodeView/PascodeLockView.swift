@@ -43,9 +43,7 @@ class PascodeLockView: UIView, UITextFieldDelegate {
             AppDelegate.shared?.ai.hideIndicatorBlockDesibled = false
             let window = UIApplication.shared.keyWindow ?? UIWindow()
             self.frame = window.frame
-            
             self.primaryStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, window.frame.height + 100, 0)
-            
             window.addSubview(self)
             self.backgroundColor = .clear
             self.appIcon.alpha = 1
@@ -94,7 +92,18 @@ class PascodeLockView: UIView, UITextFieldDelegate {
                 }
 
             } completion: { _ in
-                self.primaryStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+                let window = UIApplication.shared.keyWindow ?? UIWindow()
+                var found = false
+                for i in 0..<window.subviews.count {
+                    if window.subviews[i] == self {
+                        found = true
+                    }
+                }
+                if !found {
+                    self.frame = window.frame
+                    self.primaryStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+                    window.addSubview(self)
+                }
             }
         }
     }
