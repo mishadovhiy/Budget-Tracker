@@ -618,17 +618,16 @@ class ViewController: SuperViewController {
     }
     
     func wrongPassword() {
-        self.forceLoggedOutUser = appData.username
-        if (AppDelegate.shared?.deviceType ?? .mac) != .primary {
-            
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "toSingIn", sender: self)
-            }
-        } else {
-            self.resetPassword = true
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "toSettingsFullScreen", sender: self)
-            }
+        print(appData.password)
+        self.forceLoggedOutUser = "delete"//appData.username
+        appData.username = ""
+        appData.password = ""
+        self.resetPassword = true
+        let segue = "toSingIn"
+        //(AppDelegate.shared?.deviceType ?? .mac) == .primary ? "toSingIn" : "toSettingsFullScreen"
+        print(#function, " ", segue)
+        DispatchQueue.main.async {
+            self.performSegue(withIdentifier: segue, sender: self)
         }
     }
     
@@ -1273,8 +1272,8 @@ class ViewController: SuperViewController {
             DispatchQueue.main.async {
                 self.dataCountLabel.text = ""
             }
-            if needFullReload {
-                needFullReload = false
+            if appData.needFullReload {
+                appData.needFullReload = false
                 self.toggleNoData(show: true, text: "Loading".localize, fromTop: true, appeareAnimation: false, addButtonHidden: true)
             }
             self.downloadFromDB()

@@ -15,7 +15,7 @@ class AppData {
     var expenseLabelPressed = true//make only in vc
     var sendSavedData = false
     var needDownloadOnMainAppeare = false
-    
+    var needFullReload = false
     static var categoriesHolder:[NewCategories]?
     
     static var linkColor: String {
@@ -137,11 +137,11 @@ class AppData {
     
     var username: String {
         get{
-            return defaults.value(forKey: "username") as? String ?? ""
+            return UserDefaults.standard.value(forKey: "username") as? String ?? ""
         }
         set(value){
             print("new username setted - \(value)")
-            defaults.set(value, forKey: "username")
+            UserDefaults.standard.set(value, forKey: "username")
         }
     }
     
@@ -149,21 +149,21 @@ class AppData {
 
     var password: String {
         get{
-            return defaults.value(forKey: "password") as? String ?? ""
+            return UserDefaults.standard.value(forKey: "password") as? String ?? ""
         }
         set(value){
             print("new password setted - \(value)")
-            defaults.set(value, forKey: "password")
+            UserDefaults.standard.set(value, forKey: "password")
         }
     }
     
     var userEmailHolder: String {
         get{
-            return defaults.value(forKey: "userEmailHolder") as? String ?? ""
+            return UserDefaults.standard.value(forKey: "userEmailHolder") as? String ?? ""
         }
         set(value){
             print("new password setted - \(value)")
-            defaults.set(value, forKey: "userEmailHolder")
+            UserDefaults.standard.set(value, forKey: "userEmailHolder")
         }
     }
     
