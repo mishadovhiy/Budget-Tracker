@@ -92,9 +92,9 @@ class BuyProVC: SuperViewController {
         proBackgroundView.alpha = 0.5
         showPurchasedIndicator()
         getProducts()
-        bannerWasHidden = AppDelegate.shared?.banner.adHidden ?? true
+        bannerWasHidden = AppDelegate.shared?.banner.adHidden ?? false
         if !bannerWasHidden {
-            AppDelegate.shared?.banner.hide()
+            AppDelegate.shared?.banner.hide(ios13Hide: true)
         }
         
     }
@@ -102,7 +102,7 @@ class BuyProVC: SuperViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(true)
         if !bannerWasHidden {
-            AppDelegate.shared?.banner.appeare()
+            AppDelegate.shared?.banner.appeare(force: true)
         }
        
     }
