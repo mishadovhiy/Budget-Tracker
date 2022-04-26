@@ -205,6 +205,8 @@ class IndicatorView: UIView {
                     self.backgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
                 } completion: { _ in
                     window.endEditing(true)
+                    self.bannerBackgroundWas = AppDelegate.shared?.banner.clearBackground ?? true
+                    AppDelegate.shared?.banner.setBackground(clear: true)
                     showed(true)
                 }
 
@@ -283,6 +285,11 @@ class IndicatorView: UIView {
                     }
                     self.backgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, window.frame.height + 100, 0)
                 } completion: { (_) in
+                    if let b = self.bannerBackgroundWas {
+                        self.bannerBackgroundWas = nil
+                        AppDelegate.shared?.banner.setBackground(clear: b)
+                    }
+                    
                     self.titleLabel.font = self.normalTitleSize
                     self.removeFromSuperview()
                     self.setAllHidden()
@@ -292,6 +299,7 @@ class IndicatorView: UIView {
             }
         }
     }
+    private var bannerBackgroundWas:Bool?
     
     func checkUnshowed() {
         if let function = anshowedAIS.first as? () -> ()  {
@@ -329,9 +337,7 @@ class IndicatorView: UIView {
             imageView.superview?.isHidden = true
         }
     }
-    
-    
-    
+
 }
 
 

@@ -545,7 +545,7 @@ class LoginViewController: SuperViewController {
         if fromSettings {
             DispatchQueue.main.async {
                 let window = AppDelegate.shared?.window ?? UIWindow()
-                self.helperNavView?.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: appData.safeArea.0)
+                self.helperNavView?.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: appData.resultSafeArea.0)
                 window.addSubview(self.helperNavView ?? UIView())
             }
         }

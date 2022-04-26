@@ -285,8 +285,8 @@
 			isa = PBXGroup;
 			children = (
 				8BD17F6D27F51D7C008D9D57 /* Components */,
-				8BD17F6827F4FCA6008D9D57 /* IndicatorView.swift */,
 				8BD17F7927F5833C008D9D57 /* IndicatorView.xib */,
+				8BD17F6827F4FCA6008D9D57 /* IndicatorView.swift */,
 			);
 			path = IndicatorView;
 			sourceTree = "<group>";

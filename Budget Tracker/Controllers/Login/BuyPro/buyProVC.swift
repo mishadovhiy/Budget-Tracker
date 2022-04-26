@@ -84,20 +84,27 @@ class BuyProVC: SuperViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: true)
-        AppDelegate.shared?.banner.hide()
     }
-    
+    var bannerWasHidden = false
     var fromSettings = false
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         proBackgroundView.alpha = 0.5
         showPurchasedIndicator()
         getProducts()
+        bannerWasHidden = AppDelegate.shared?.banner.adHidden ?? true
+        if !bannerWasHidden {
+            AppDelegate.shared?.banner.hide()
+        }
+        
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(true)
-        AppDelegate.shared?.banner.appeare()
+        if !bannerWasHidden {
+            AppDelegate.shared?.banner.appeare()
+        }
+       
     }
     
     

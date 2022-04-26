@@ -47,15 +47,17 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
         self.view.backgroundColor = .clear
     }
     
+    var bannerBackgroundWas = true
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-      //  UIView.animate(withDuration: 0.3) {
             self.view.backgroundColor = .clear
-      //  }
+        AppDelegate.shared?.banner.setBackground(clear: bannerBackgroundWas)
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        bannerBackgroundWas = AppDelegate.shared?.banner.clearBackground ?? true
         UIView.animate(withDuration: 0.3) {
+            AppDelegate.shared?.banner.setBackground(clear: true)
             self.view.backgroundColor = self.storyColor
         }
     }

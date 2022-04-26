@@ -73,7 +73,7 @@ extension CategoriesVC {
                 }
             }//here
             UIView.animate(withDuration: animated ? 0.3 : 0) {
-                self.iconsContainer.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, show ? 0 : containerHeight + (appData.safeArea.0 + appData.safeArea.1 + 50), 0)
+                self.iconsContainer.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, show ? 0 : containerHeight + (appData.resultSafeArea.0 + appData.resultSafeArea.1 + 50), 0)
             } completion: { _ in
                 if self.iconsContainer.isHidden != false {
                     self.iconsContainer.isHidden = false
@@ -261,7 +261,7 @@ extension CategoriesVC {//keyboard
     
     func kayboardAppeared(_ keyboardHeight:CGFloat) {
         DispatchQueue.main.async {
-            let height:CGFloat = keyboardHeight - appData.safeArea.1 - self.defaultButtonInset
+            let height:CGFloat = keyboardHeight - appData.resultSafeArea.1 - self.defaultButtonInset
             let cellEditing = (self.editingTF?.layer.name?.contains("cell") ?? false) || self.selectingIconFor.0 != nil
             self.tableView.contentInset.bottom = height + (cellEditing ? (self.regFooterHeight * (-1)) : 0)
 

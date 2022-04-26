@@ -14,7 +14,6 @@ var transactionAdded = false
 
 class HistoryVC: SuperViewController {
 
-    @IBOutlet weak var addHelperView: UIView!
     @IBOutlet weak var addTransButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
     var historyDataStruct: [TransactionsStruct] = []
@@ -123,13 +122,30 @@ class HistoryVC: SuperViewController {
         
     }
 
+    @IBOutlet weak var footerStack: UIStackView!
+    func addBennerHelper() {
+        if !appData.proEnabeled {
+            let view = UIView()
+            view.backgroundColor = .clear
+            view.isHidden = true
+            footerStack.addArrangedSubview(view)
+            self.view.addConstraints([
+                .init(item: view, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: AppDelegate.shared?.banner.size ?? 0),
+                .init(item: view, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: self.view.frame.width)
+            ])
+            view.translatesAutoresizingMaskIntoConstraints = false
+            UIView.animate(withDuration: 0.3) {
+                view.isHidden = false
+            }
+        }
+    }
     var bottomTableInsert:CGFloat = 50
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        UIView.animate(withDuration: 0.3) {
-            self.addHelperView.isHidden = appData.proEnabeled ? true : false
-        }
-
+        
+        
+        addBennerHelper()
+        
         let inserts = self.totalLabel.superview?.layer.frame.height ?? 50
         self.bottomTableInsert = inserts + defaultTableInset
         self.tableView.contentInset.bottom = self.bottomTableInsert
@@ -193,7 +209,7 @@ class HistoryVC: SuperViewController {
                 let keyboardHeight = keyboardRectangle.height
                 if keyboardHeight > 1.0 {
                     DispatchQueue.main.async {
-                                self.tableView.contentInset.bottom = keyboardHeight - appData.safeArea.1
+                                self.tableView.contentInset.bottom = keyboardHeight - appData.resultSafeArea.1
 
                             }
                 }
@@ -655,10 +671,6 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                 
             }
         }
-        
-        
-        
-        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -666,7 +678,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
         
         
         let dueViewHeight:CGFloat = self.selectedCategory?.dueDate == nil ? 70 : 150
-        let heightWhenNoData = tableView.frame.height - (appData.safeArea.1 + appData.safeArea.0 + dueViewHeight)
+        let heightWhenNoData = tableView.frame.height - (appData.resultSafeArea.1 + appData.resultSafeArea.0 + dueViewHeight)
         
         return indexPath.section == 2 ? (historyDataStruct.count == 0 ? heightWhenNoData : UITableView.automaticDimension) : ifDueDate
     }

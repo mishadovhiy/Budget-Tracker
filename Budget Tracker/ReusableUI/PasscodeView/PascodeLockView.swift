@@ -58,6 +58,8 @@ class PascodeLockView: UIView, UITextFieldDelegate {
                 self.backgroundColor = self.lightBackground
                 self.primaryStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
             } completion: { _ in
+                self.bannerBackgroundWas = AppDelegate.shared?.banner.clearBackground ?? true
+                AppDelegate.shared?.banner.setBackground(clear: true)
                 if let presentCompletion = presentCompletion {
                     presentCompletion(true)
                 }
@@ -65,7 +67,7 @@ class PascodeLockView: UIView, UITextFieldDelegate {
         }
     }
      var presenting = false
-    
+    private var bannerBackgroundWas = true
     var passwordNotEntered = true
     func passcodeLock(passcodeEntered:(()->())? = nil) {
         enteredAction = passcodeEntered
@@ -134,6 +136,7 @@ class PascodeLockView: UIView, UITextFieldDelegate {
                 self.removeFromSuperview()
                 AppDelegate.shared?.ai.hideIndicatorBlockDesibled = true
                 AppDelegate.shared?.ai.checkUnshowed()
+                AppDelegate.shared?.banner.setBackground(clear: self.bannerBackgroundWas)
             }
 
         }

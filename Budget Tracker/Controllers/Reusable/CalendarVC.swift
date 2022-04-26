@@ -125,10 +125,17 @@ class CalendarVC: SuperViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
     }
-    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if !bannerWasHidden {
+            AppDelegate.shared?.banner.appeare(force: true)
+        }
+    }
+    var bannerWasHidden = false
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        
+        bannerWasHidden = AppDelegate.shared?.banner.adHidden ?? false
+        AppDelegate.shared?.banner.hide(ios13Hide:true)
         if delegate == nil {
             if ifCustom {
                 if appData.filter.from != appData.filter.to {

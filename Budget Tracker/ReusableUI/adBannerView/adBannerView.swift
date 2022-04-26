@@ -38,6 +38,7 @@ class adBannerView: UIView {
                 self.addConstants(window)
                 self.adStack.layer.cornerRadius = 4
                 self.adStack.layer.masksToBounds = true
+                self.layer.zPosition = 999
             }
         }
     }
@@ -86,6 +87,16 @@ class adBannerView: UIView {
         }
     }
     
+    var clearBackground = true
+    func setBackground(clear:Bool) {
+        clearBackground = clear
+        UIView.animate(withDuration: 0.3) {
+            AppDelegate.shared?.banner.backgroundView.backgroundColor = clear ? .clear : K.Colors.primaryBacground
+        }
+    }
+    
+    
+    
     
     
     var size:CGFloat {
@@ -120,7 +131,9 @@ class adBannerView: UIView {
         window.addSubview(self)
         window.addConstraints([
             .init(item: self, attribute: .bottom, relatedBy: .equal, toItem: window.safeAreaLayoutGuide, attribute: .bottom, multiplier: 1, constant: 0),
-            .init(item: self, attribute: .centerXWithinMargins, relatedBy: .equal, toItem: window.safeAreaLayoutGuide, attribute: .centerXWithinMargins, multiplier: 1, constant: 0)
+            .init(item: self, attribute: .centerXWithinMargins, relatedBy: .equal, toItem: window.safeAreaLayoutGuide, attribute: .centerXWithinMargins, multiplier: 1, constant: 0),
+            .init(item: self, attribute: .trailing, relatedBy: .equal, toItem: window.safeAreaLayoutGuide, attribute: .trailing, multiplier: 1, constant: 0),
+            .init(item: self, attribute: .leading, relatedBy: .equal, toItem: window.safeAreaLayoutGuide, attribute: .leading, multiplier: 1, constant: 0)
         ])
         self.translatesAutoresizingMaskIntoConstraints = false
     }

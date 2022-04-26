@@ -819,7 +819,6 @@ class ViewController: SuperViewController {
                 }
             }
         }
-        
         appData.safeArea = (safeTop, self.view.safeAreaInsets.bottom)
     }
     

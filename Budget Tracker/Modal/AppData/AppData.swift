@@ -34,8 +34,12 @@ class AppData {
     
     let defaults = UserDefaults.standard
     var safeArea: (CGFloat, CGFloat) = (0.0, 0.0)//0-bt  1-top
-    
 
+    var resultSafeArea: (CGFloat, CGFloat) {
+        let btn = safeArea.0 + (AppDelegate.shared?.banner.size ?? 0)
+        return (btn, safeArea.1)
+    }
+    
     let lastSelected = LastSelected()
 
     var forceNotPro: Bool? {
@@ -511,8 +515,8 @@ extension AppData {
             vccc.navigationController?.setNavigationBarHidden(true, animated: false)
             let cellHeight = 50
             let contentHeight = (data.count) * cellHeight
-            let safeAt = appData.safeArea.1
-            let safebt = appData.safeArea.0 + (AppDelegate.shared?.banner.size ?? 0) + 10
+            let safeAt = appData.resultSafeArea.1
+            let safebt = appData.resultSafeArea.0 + 10
             let window = AppDelegate.shared?.window ?? UIWindow()
             let screenHeight = window.frame.height
             let additionalMargin:CGFloat = safeAt > 0 ? 45 : 40
