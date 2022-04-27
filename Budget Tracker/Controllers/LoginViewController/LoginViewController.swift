@@ -274,79 +274,77 @@ class LoginViewController: SuperViewController {
     }
     
 
+    func performLoggin(userData:[String]) {
+
+        let nickname = userData[0]
+        let password = userData[2]
+        let email = userData[1]
+        let isPro = userData[4]
+        if let keycheinPassword = KeychainService.loadPassword(service: "BudgetTrackerApp", account: nickname) {
+            if keycheinPassword != password {
+                KeychainService.updatePassword(service: "BudgetTrackerApp", account: nickname, data: password)
+            }
+        } else {
+            KeychainService.savePassword(service: "BudgetTrackerApp", account: nickname, data: password)
+        }
+        let prevUserName = appData.username
+        
+        appData.username = nickname
+        appData.password = password
+        appData.userEmailHolder = email
+        if prevUserName != nickname {
+            userChanged()
+            UserDefaults.standard.setValue(prevUserName, forKey: "prevUserName")
+
+            if prevUserName == "" && forceLoggedOutUser == "" {
+                let db = DataBase()
+                db.localCategories = db.categories
+                db.localTransactions = db.transactions
+                
+            }
+            
+            if forceLoggedOutUser == "" {
+                appData.fromLoginVCMessage = "Wellcome".localize + ", \(appData.username)"
+            }
+            
+        }
+        
+        
+        if !appData.purchasedOnThisDevice {
+            appData.proVersion = isPro == "1" ? true : appData.proVersion
+        }
+        if fromPro || self.forceLoggedOutUser != "" {
+            DispatchQueue.main.async {
+                self.dismiss(animated: true) {
+                    self.ai.fastHide()
+                }
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.ai.fastHide { _ in
+                    self.performSegue(withIdentifier: "homeVC", sender: self)
+                }
+            }
+
+        }
+    }
+    
     
     
     func logIn(nickname: String, password: String, loadedData: [[String]]) {
-        let DBusernameIndex = 0
-        let DBpasswordIndex = 2
-        let DBEmailIndex = 1
-        var psswordFromDB = ""
- 
-        if userExists(name: nickname, loadedData: loadedData) {
-            for i in 0..<loadedData.count {
-                if loadedData[i][DBusernameIndex] == nickname {
-                    print(loadedData[i], "loadedData[i]loadedData[i]loadedData[i]")
-                    psswordFromDB = loadedData[i][DBpasswordIndex]
-                    print(psswordFromDB, "psswordFromDBpsswordFromDBpsswordFromDBpsswordFromDB")
-                    if password != psswordFromDB {
-                        self.actionButtonsEnabled = true
-                        let messageTitle = "Wrong".localize + " " + "password".localize
-                        DispatchQueue.main.async {
-                            self.newMessage.show(title: messageTitle, type: .error)
-                            self.ai.fastHide()
-                        }
-                        return
-                    } else {
-                        if let keycheinPassword = KeychainService.loadPassword(service: "BudgetTrackerApp", account: nickname) {
-                            if keycheinPassword != password {
-                                KeychainService.updatePassword(service: "BudgetTrackerApp", account: nickname, data: password)
-                            }
-                        } else {
-                            KeychainService.savePassword(service: "BudgetTrackerApp", account: nickname, data: password)
-                        }
-                        let prevUserName = appData.username
-                        
-                        appData.username = nickname
-                        appData.password = password
-                        appData.userEmailHolder = loadedData[i][DBEmailIndex]
-                        if prevUserName != nickname {
-                            userChanged()
-                            UserDefaults.standard.setValue(prevUserName, forKey: "prevUserName")
 
-                            if prevUserName == "" && forceLoggedOutUser == "" {
-                                let db = DataBase()
-                                db.localCategories = db.categories
-                                db.localTransactions = db.transactions
-                                
-                            }
-                            
-                            if forceLoggedOutUser == "" {
-                                appData.fromLoginVCMessage = "Wellcome".localize + ", \(appData.username)"
-                            }
-                            
-                        }
-                        
-                        
-                        if !appData.purchasedOnThisDevice {
-                            appData.proVersion = loadedData[i][4] == "1" ? true : appData.proVersion
-                        }
-                        if fromPro || self.forceLoggedOutUser != "" {
-                            DispatchQueue.main.async {
-                                self.dismiss(animated: true) {
-                                    self.ai.fastHide()
-                                }
-                            }
-                        } else {
-                            DispatchQueue.main.async {
-                                self.ai.fastHide { _ in
-                                    self.performSegue(withIdentifier: "homeVC", sender: self)
-                                }
-                            }
-
-                        }
-                        
-                    }
-                    return
+        let checkPassword = LoadFromDB.checkPassword(from: loadedData, nickname: nickname, password: password)
+        
+        if let userExists = checkPassword.1 {
+            let wrongPassword = checkPassword.0
+            if !wrongPassword {
+                performLoggin(userData: userExists)
+            } else {
+                self.actionButtonsEnabled = true
+                let messageTitle = "Wrong".localize + " " + "password".localize
+                DispatchQueue.main.async {
+                    self.newMessage.show(title: messageTitle, type: .error)
+                    self.ai.fastHide()
                 }
             }
         } else {
@@ -356,9 +354,10 @@ class LoginViewController: SuperViewController {
                     self.newMessage.show(title: "User not found".localize, type: .error)
                     self.ai.fastHide()
                 }
-
             }
         }
+        
+
     }
 
     

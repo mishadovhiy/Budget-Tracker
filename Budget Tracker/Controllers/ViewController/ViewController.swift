@@ -140,6 +140,11 @@ class ViewController: SuperViewController {
                     let value = Int(newValue.perioudBalance)
                     label.text = "\(value)"
                     label.textColor = value >= 0 ? K.Colors.category : K.Colors.negative
+                    let hide = newValue.perioudBalance == newValue.balance
+                    if label.superview?.isHidden ?? false != hide {
+                        label.superview?.isHidden = hide
+                    }
+                    
                 }
                 for label in self.balanceLabels {
                     let value = Int(newValue.balance)
@@ -237,8 +242,9 @@ class ViewController: SuperViewController {
                 if error == .none {
                     self.highesLoadedCatID = ((categoryes.sorted{ $0.id > $1.id }).first?.id ?? 0) + 1
                     LoadFromDB.shared.newTransactions { loadedData, error in
-                        self.checkPurchase()
-                        self.filter(data: loadedData)
+                        self.checkPurchase { _ in
+                            self.filter(data: loadedData)
+                        }
                     }
                 } else {
                     self.filter()
@@ -584,42 +590,48 @@ class ViewController: SuperViewController {
     
     
     
-    func checkPurchase() {//add completion
+    func checkPurchase(completion:@escaping(Bool?)-> ()) {
             let nick = appData.username
         if nick == "" {
             return
         }
         LoadFromDB.shared.Users { (loadedData, error) in
                 if !error {
-                    let _ = appData.emailFromLoadedDataPurch(loadedData)
-                    var wrongPassword = true
-                    for i in 0..<loadedData.count {
-                        if loadedData[i][0] == nick {
-                            print(loadedData[i], " checkPurchase")
-                            if loadedData[i][2] == appData.password {
-                                wrongPassword = false
-                                appData.trialDate = loadedData[i][5]
-                                if !appData.purchasedOnThisDevice && !appData.proVersion {
-                                    print("checkPurchase appData.proVersion", appData.proVersion)
-                                    if loadedData[i][5] != "" {
-                                        self.checkProTrial()
-                                    }
+                    let checkPassword = LoadFromDB.checkPassword(from: loadedData, nickname: appData.username, password: appData.password)
+                    let wrongPassword = checkPassword.0
+                    if let userData = checkPassword.1 {
+                        if wrongPassword {
+                            self.wrongPassword()
+                            completion(false)
+                        } else {
+                            let _ = appData.emailFromLoadedDataPurch(loadedData)
+                            appData.trialDate = userData[5]
+                            if !appData.purchasedOnThisDevice && !appData.proVersion {
+                                print("checkPurchase appData.proVersion", appData.proVersion)
+                                if userData[5] != "" {
+                                    self.checkProTrial()
                                 }
-                                break
                             }
-                            }
+                            completion(true)
                         }
-                    if wrongPassword {
-                        self.wrongPassword()
+                        
+                    } else {
+                        DispatchQueue.main.async {
+                            self.newMessage.show(title:"User not found".localize, type: .error)
+                        }
+                        completion(nil)
                     }
+                } else {
+                    completion(nil)
                 }
+            
                 
             }
     }
     
     func wrongPassword() {
         print(appData.password)
-        self.forceLoggedOutUser = "delete"//appData.username
+        self.forceLoggedOutUser = appData.username
         appData.username = ""
         appData.password = ""
         self.resetPassword = true
@@ -1588,7 +1600,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let bigFr = bigCalcView.layer.frame.height
         if indexPath.section == 0 && indexPath.row == 0 {
-            return bigFr - 55
+            return bigFr - 45
         } else {
             if newTableData.count == 0 && indexPath.section == 1{
                 

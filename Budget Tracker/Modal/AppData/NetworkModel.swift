@@ -180,6 +180,27 @@ struct LoadFromDB {
     }
     
     
+    static func checkPassword(from loadedData:[[String]], nickname:String, password:String) -> (Bool, [String]?) {
+        var wrongPassword = true
+        var userData:[String]?
+        for i in 0..<loadedData.count {
+            if loadedData[i][0] == nickname {
+                print(loadedData[i], "loadedData[i]loadedData[i]loadedData[i]")
+                let psswordFromDB = loadedData[i][2]
+                
+                if password == psswordFromDB {
+                    wrongPassword = false
+                    userData = loadedData[i]
+                    break
+                } else {
+                    userData = loadedData[i]
+                }
+            }
+        }
+        return (wrongPassword, userData)
+    }
+    
+    
     
     
 }
