@@ -276,7 +276,7 @@ extension CategoriesVC {//keyboard
           
         DispatchQueue.main.async {
             if !self.showingIcons {
-                self.tableView.contentInset.bottom = 0
+                self.tableView.contentInset.bottom = self.defaultTableInset
             }
             self.editingTF = nil
             self.tableView.reloadData()
