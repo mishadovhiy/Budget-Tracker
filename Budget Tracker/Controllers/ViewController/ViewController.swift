@@ -142,7 +142,9 @@ class ViewController: SuperViewController {
                     label.textColor = value >= 0 ? K.Colors.category : K.Colors.negative
                     let hide = newValue.perioudBalance == newValue.balance
                     if label.superview?.isHidden ?? false != hide {
-                        label.superview?.isHidden = hide
+                        UIView.animate(withDuration: 0.2) {
+                            label.superview?.isHidden = hide
+                        }
                     }
                     
                 }

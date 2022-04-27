@@ -63,6 +63,7 @@ extension LoginViewController: UITextFieldDelegate {
     
     func keyChainPassword(nick: String) {
         if let keychainPassword = KeychainService.loadPassword(service: "BudgetTrackerApp", account: nick) {
+            self.textFieldValuesDict.updateValue(keychainPassword, forKey: "log.password")
             DispatchQueue.main.async {
                 self.passwordLogLabel.isSecureTextEntry = false
                 self.passwordLogLabel.text = keychainPassword
