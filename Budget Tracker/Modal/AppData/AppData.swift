@@ -375,25 +375,34 @@ class AppData {
     
     
     func createFirstData(completion: @escaping () -> ()) {
-        
-    /*    let transactions = [
-            TransactionsStruct(value: "5000", categoryID: "Freelance", date: "\(filter.getToday(filter.filterObjects.currentDate, dateformatter: "01.MM.yyyy"))", comment: ""),
-            TransactionsStruct(value: "10000", categoryID: "Work", date: "\(filter.getToday(filter.filterObjects.currentDate, dateformatter: "01.01.yyyy"))", comment: ""),
-            TransactionsStruct(value: "-100", categoryID: "Food", date: "\(filter.getToday(filter.filterObjects.currentDate, dateformatter: "01.MM.yyyy"))", comment: ""),
-            TransactionsStruct(value: "-400", categoryID: "Food", date: "\(filter.getToday(filter.filterObjects.currentDate))", comment: ""),
-            TransactionsStruct(value: "-1000", categoryID: "Bills", date: "\(filter.getToday(filter.filterObjects.currentDate))", comment: ""),
+        let thisMonth = filter.getToday(dateformatter: "01.MM.yyyy")
+        let thisYear = filter.getToday(dateformatter: "01.01.yyyy")
+        let today = filter.getToday(dateformatter: "dd.MM.yyyy")
+        let transactions:[TransactionsStruct] = [
+            .init(value: "12500", categoryID: "1", date: thisMonth, comment: ""),
+            .init(value: "-2200", categoryID: "4", date: thisMonth, comment: ""),
+            .init(value: "-2200", categoryID: "4", date: thisYear, comment: ""),
+            .init(value: "-5800", categoryID: "12", date: thisMonth, comment: "Rent"),
+            .init(value: "-670", categoryID: "18", date: thisMonth, comment: ""),
+            .init(value: "-30", categoryID: "16", date: today, comment: ""),
+            .init(value: "-1200", categoryID: "17", date: today, comment: ""),
+            .init(value: "-1200", categoryID: "3", date: thisYear, comment: ""),
+            .init(value: "10780", categoryID: "1", date: thisYear, comment: "")
         ]
-        let categories = [
-            NewCategories(id: <#T##Int#>, name: <#T##String#>, icon: <#T##String#>, color: <#T##String#>, purpose: <#T##CategoryPurpose#>)
-            CategoriesStruct(name: "Food", purpose: K.expense, count: 0),
-            CategoriesStruct(name: "Taxi", purpose: K.expense, count: 0),
-            CategoriesStruct(name: "Public Transport", purpose: K.expense, count: 0),
-            CategoriesStruct(name: "Bills", purpose: K.expense, count: 0),
-            CategoriesStruct(name: "Work", purpose: K.income, count: 0),
-            CategoriesStruct(name: "Freelance", purpose: K.income, count: 0)
+        let categories:[NewCategories] = [
+            .init(id: 1, name: "Work", icon: "briefcase.fill", color: "BlueColor", purpose: .income),
+            .init(id: 4, name: "TV", icon: "tv.inset.filled", color: "", purpose: .debt, amountToPay: 21000),
+            .init(id: 3, name: "Cindy", icon: "peacesign", color: "PinkColor-1", purpose: .debt),
+            .init(id: 18, name: "Food", icon: "takeoutbag.and.cup.and.straw.fill", color: "pinkColor2", purpose: .expense),
+            .init(id: 12, name: "Bills", icon: "scroll.fill", color: "yellowColor2", purpose: .expense),
+            .init(id: 17, name: "Restaurants", icon: "fork.knife", color: "PinkColor-1", purpose: .expense),
+            .init(id: 15, name: "Taxi", icon: "car.fill", color: "OrangeColor", purpose: .expense),
+            .init(id: 16, name: "Public transport", icon: "bus", color: "BlueColor3", purpose: .expense),
+            
         ]
-        saveTransations(transactions)
-        saveCategories(categories)*/
+        let db = DataBase()
+        db.categories = categories
+        db.transactions = transactions
         completion()
     }
     

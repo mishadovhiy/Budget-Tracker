@@ -397,7 +397,7 @@ class ViewController: SuperViewController {
 
 
         if appData.defaults.value(forKey: "firstLaunch") as? Bool ?? true {
-            /*appData.createFirstData {
+            appData.createFirstData {
                 self.prepareFilterOptions()
                 self.filter()
                 UserDefaults.standard.setValue(false, forKey: "firstLaunch")
@@ -406,7 +406,7 @@ class ViewController: SuperViewController {
                 
                     
                 }
-            }*/
+            }
         }
 
     }

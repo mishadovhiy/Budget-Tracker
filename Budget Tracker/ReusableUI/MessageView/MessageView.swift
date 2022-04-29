@@ -64,7 +64,7 @@ class MessageView: UIView {
             isShowing = true
             messageData = (title, description, type, customImage, autohide)
             let hideDescription = type == .internetError ? false : description ?? "" == ""
-            let hideImage = type == .standart
+            let hideImage = false//type == .standart
        // AudioServicesPlaySystemSound(1007)
         DispatchQueue.main.async {
             let window = AppDelegate.shared?.window ?? UIWindow()
@@ -91,11 +91,11 @@ class MessageView: UIView {
             case .succsess:
                 self.mainImage.image = self.succsessImage
             case .standart:
-                self.mainImage.image = AppData.iconNamed("ic")
+                self.mainImage.image = AppData.iconSystemNamed("ic")//gear
             }
             self.alpha = 1
             
-            UIView.animate(withDuration: 0.25) {
+            UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.75, initialSpringVelocity: 0, options: .allowAnimatedContent) {
                 self.mainView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
             } completion: { _ in
                 

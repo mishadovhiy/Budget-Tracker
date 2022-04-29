@@ -176,6 +176,7 @@ extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
             selectedIconIndex = IndexPath(row: indexPath.row, section: indexPath.section - 1)
             let imgName = iconsData[selectedIconIndex!.section].data[selectedIconIndex!.row]
            // let colorName = coloresStrTemporary[selectedColorId]
+            print(imgName)
             selectedIconName = imgName
             delegate?.selected(img: imgName, color: selectedColorName)
             collectionView.reloadData()
