@@ -18,7 +18,7 @@
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="100" translatesAutoresizingMaskIntoConstraints="NO" id="BHZ-p6-0Jf">
                     <rect key="frame" x="107" y="229" width="200" height="438.5"/>
                     <subviews>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic" translatesAutoresizingMaskIntoConstraints="NO" id="ycO-8t-jWW">
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icBig" translatesAutoresizingMaskIntoConstraints="NO" id="ycO-8t-jWW">
                             <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
                             <constraints>
                                 <constraint firstAttribute="width" secondItem="ycO-8t-jWW" secondAttribute="height" multiplier="1:1" id="0qw-Ts-t0J"/>
@@ -312,7 +312,7 @@
     </designables>
     <resources>
         <image name="delete.left.fill" catalog="system" width="128" height="104"/>
-        <image name="ic" width="1024" height="1024"/>
+        <image name="icBig" width="1240" height="1240"/>
         <image name="lock.fill" catalog="system" width="128" height="128"/>
         <namedColor name="CategoryColor">
             <color red="0.86699998378753662" green="0.86699998378753662" blue="0.86699998378753662" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
