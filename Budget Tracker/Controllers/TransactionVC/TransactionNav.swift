@@ -16,8 +16,8 @@ class TransactionNav: UINavigationController {
         // Do any additional setup after loading the view.
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         AppDelegate.shared?.banner.hide(ios13Hide: true)
     }
     

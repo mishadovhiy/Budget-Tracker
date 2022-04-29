@@ -84,6 +84,10 @@ class BuyProVC: SuperViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: true)
+        bannerWasHidden = AppDelegate.shared?.banner.adHidden ?? false
+        if !bannerWasHidden {
+            AppDelegate.shared?.banner.hide(ios13Hide: true)
+        }
     }
     var bannerWasHidden = false
     var fromSettings = false
@@ -92,10 +96,6 @@ class BuyProVC: SuperViewController {
         proBackgroundView.alpha = 0.5
         showPurchasedIndicator()
         getProducts()
-        bannerWasHidden = AppDelegate.shared?.banner.adHidden ?? false
-        if !bannerWasHidden {
-            AppDelegate.shared?.banner.hide(ios13Hide: true)
-        }
         
     }
 

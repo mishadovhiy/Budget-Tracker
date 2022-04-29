@@ -115,11 +115,11 @@ class CalendarVC: SuperViewController {
                 return true
             }
         }
-        DispatchQueue.main.async {
-            self.navigationController?.setNavigationBarHidden(hideNav, animated: false)
-            self.title = "Calendar".localize
-            self.headerView.isHidden = self.vcHeaderData == nil
-        }
+        self.navigationController?.setNavigationBarHidden(hideNav, animated: false)
+        self.title = "Calendar".localize
+        self.headerView.isHidden = self.vcHeaderData == nil
+        bannerWasHidden = AppDelegate.shared?.banner.adHidden ?? false
+        AppDelegate.shared?.banner.hide(ios13Hide:true)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -134,8 +134,6 @@ class CalendarVC: SuperViewController {
     var bannerWasHidden = false
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        bannerWasHidden = AppDelegate.shared?.banner.adHidden ?? false
-        AppDelegate.shared?.banner.hide(ios13Hide:true)
         if delegate == nil {
             if ifCustom {
                 if appData.filter.from != appData.filter.to {
