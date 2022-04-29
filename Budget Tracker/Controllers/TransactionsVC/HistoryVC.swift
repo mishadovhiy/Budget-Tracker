@@ -139,13 +139,16 @@ class HistoryVC: SuperViewController {
             }
         }
     }
+    var helperViewAdded = false
     var bottomTableInsert:CGFloat = 50
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
-        
-        addBennerHelper()
-        
+        if !helperViewAdded {
+            helperViewAdded = true
+            addBennerHelper()
+        }
+
         let inserts = self.totalLabel.superview?.layer.frame.height ?? 50
         self.bottomTableInsert = inserts + defaultTableInset
         self.tableView.contentInset.bottom = self.bottomTableInsert
