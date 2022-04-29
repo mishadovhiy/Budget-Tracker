@@ -42,7 +42,11 @@ class IndicatorView: UIView {
     }
 
     
-    func show(title: String? = "Loading".localize, description: String? = nil, appeareAnimation: Bool = false, completion: @escaping (Bool) -> ()) {
+    func show(title: String? = "Loading".localize, description: String? = nil, appeareAnimation: Bool = false, notShowIfLoggedUser:Bool = false, completion: @escaping (Bool) -> ()) {
+        if notShowIfLoggedUser && appData.username == "" {
+            completion(true)
+            return
+        }
         DispatchQueue.init(label: "\(#function)", qos: .userInteractive).async {
             if !self.hideIndicatorBlockDesibled {
             print("block")

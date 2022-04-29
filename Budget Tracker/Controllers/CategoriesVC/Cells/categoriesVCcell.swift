@@ -196,7 +196,7 @@ class categoriesVCcell: UITableViewCell {
     
     
     @IBAction func sendPressed(_ sender: UIButton) {
-            CategoriesVC.shared?.ai.show(title:"Saving") { _ in
+            CategoriesVC.shared?.ai.show(title:"Saving", notShowIfLoggedUser: true) { _ in
                 if let currentCategory = self.currentCategory {
                     if currentCategory.editing?.name != "" {
                         self.saveCategory(currentCategory)

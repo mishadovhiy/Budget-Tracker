@@ -595,6 +595,7 @@ class ViewController: SuperViewController {
     func checkPurchase(completion:@escaping(Bool?)-> ()) {
             let nick = appData.username
         if nick == "" {
+            completion(true)
             return
         }
         LoadFromDB.shared.Users { (loadedData, error) in

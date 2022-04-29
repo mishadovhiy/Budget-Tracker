@@ -37,6 +37,7 @@ class adBannerView: UIView {
                 self.adStack.layer.cornerRadius = 4
                 self.adStack.layer.masksToBounds = true
                 self.layer.zPosition = 999
+                self.backgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, window.frame.height, 0)
             }
         }
     }
@@ -54,9 +55,10 @@ class adBannerView: UIView {
         if go {
             adHidden = false
             DispatchQueue.main.async {
-                self.alpha = 0
-                UIView.animate(withDuration: 0.4) {
-                    self.alpha = 1
+                //self.alpha = 0
+                UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0, options: .allowAnimatedContent) {
+                    //self.alpha = 1
+                    self.backgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
                 }
             }
         }
@@ -74,8 +76,10 @@ class adBannerView: UIView {
         if !adNotReceved && go {
             adHidden = true
             DispatchQueue.main.async {
+                let window = AppDelegate.shared?.window ?? UIWindow()
                 UIView.animate(withDuration: 0.3) {
-                    self.alpha = 0
+                   // self.alpha = 0
+                    self.backgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, window.frame.height, 0)
                 } completion: { _ in
                     if remove {
                         self.removeAd()
@@ -146,11 +150,7 @@ class adBannerView: UIView {
         super.init(coder: aDecoder)
     }
     
-   /* func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        if appData.proEnabeled {
-            self.frame = (AppDelegate.shared?.window ?? UIWindow()).frame
-        }
-    }*/
+
 }
 
 

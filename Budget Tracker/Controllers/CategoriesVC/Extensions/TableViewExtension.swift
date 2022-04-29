@@ -211,12 +211,6 @@ extension CategoriesVC {
                 cell.unseenIndicatorView.isHidden = true
             }
         cell.cancelButton.isHidden = true
-        
-       /* print(category.name, "namenamenamenamenamename")
-        let hideSave = category.name == "" ? true : false
-        if cell.saveButton.isHidden != hideSave {
-            cell.saveButton.isHidden = hideSave
-        }*/
             cell.buttonsSeparetor.alpha = 0
         cell.categoryNameLabel.isHidden = true
         if screenType != .localData {
@@ -241,12 +235,8 @@ extension CategoriesVC {
             cell.newCategoryTF.layer.name = "section\(section - sectionsBeforeData)"
         let view = cell.contentView
         view.isUserInteractionEnabled = true
-        //view.layer.cornerRadius = 6
-       // view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
             let editingtfection = editingTfIndex.0 ?? -1
-            print(editingtfection, "editingtfectioneditingtfectioneditingtfectioneditingtfection")
             let isSelected = editingtfection == sect || selectingIconFor.1 == sect
-            print(isSelected, "isSelectedisSelectedisSelectedisSelected")
             view.backgroundColor = K.Colors.primaryBacground
         cell.footerBackground.backgroundColor = isSelected ? selectionBacground : K.Colors.secondaryBackground
         cell.footerBackground.layer.cornerRadius = tableCorners
@@ -261,7 +251,7 @@ extension CategoriesVC {
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete".localize) {  (contextualAction, view, boolValue) in
             //self.tableActionActivityIndicator.startAnimating()
           //  DispatchQueue.main.async {
-            self.ai.show(title: "Deleting".localize) { _ in
+            self.ai.show(title: "Deleting".localize, notShowIfLoggedUser: true) { _ in
                     self.deteteCategory(at: IndexPath(row: indexPath.row, section: indexPath.section - self.sectionsBeforeData))
                 }
           //  }
@@ -269,7 +259,7 @@ extension CategoriesVC {
         let localDeleteAction = UIContextualAction(style: .destructive, title: "Delete".localize) {  (contextualAction, view, boolValue) in
             //self.tableActionActivityIndicator.startAnimating()
           //  DispatchQueue.main.async {
-            self.ai.show(title: "Deleting".localize) { _ in
+            self.ai.show(title: "Deleting".localize, notShowIfLoggedUser: true) { _ in
                     let id = self.tableData[indexPath.section - self.sectionsBeforeData].data[indexPath.row].category.id
                     self.db.deleteCategory(id: "\(id)", local: true)
                     self.loadData()
