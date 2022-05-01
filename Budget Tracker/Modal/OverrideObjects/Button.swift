@@ -40,7 +40,7 @@ class Button: UIButton {
     @IBInspectable open var titleWhenNoSymbols: String = "" {
         didSet {
             
-            if !AppDelegate.shared.symbolsAllowed && (titleWhenNoSymbols != "") {
+            if !AppDelegate.shared!.symbolsAllowed && (titleWhenNoSymbols != "") {
                 DispatchQueue.main.async {
                     self.setTitle(self.titleWhenNoSymbols.localize, for: .normal)
                     self.setImage(nil, for: .normal)

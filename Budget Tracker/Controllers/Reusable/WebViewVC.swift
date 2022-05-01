@@ -86,7 +86,7 @@ class WebViewVC: UIViewController, UIScrollViewDelegate, WKNavigationDelegate {
             let ok = IndicatorView.button(title: "OK", style: .error, close: true) { _ in
                 self.navigationController?.popViewController(animated: true)
             }
-            AppDelegate.shared.ai.completeWithActions(buttons: (ok, nil), title: Text.Error.InternetTitle, descriptionText: Text.Error.internetDescription)
+            AppDelegate.shared?.ai.completeWithActions(buttons: (ok, nil), title: Text.Error.InternetTitle, descriptionText: Text.Error.internetDescription)
         }
     }
 

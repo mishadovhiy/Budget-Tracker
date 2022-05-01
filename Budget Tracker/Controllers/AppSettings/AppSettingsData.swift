@@ -177,7 +177,7 @@ extension AppSettingsData {
     
     func getUserPasscode(completion:@escaping() -> ()) {
 
-        AppDelegate.shared.presentLock(passcode: true, passcodeVerified: completion)
+        AppDelegate.shared?.presentLock(passcode: true, passcodeVerified: completion)
     }
     
     
@@ -186,11 +186,11 @@ extension AppSettingsData {
         let nextAction:(String) -> () = { (newValue) in
             let repeateAction:(String) -> () = { (repeatedPascode) in
                 if newValue == repeatedPascode {
-                    AppDelegate.shared.newMessage.show(title: "Passcode has been setted".localize, type: .succsess)
+                    AppDelegate.shared?.newMessage.show(title: "Passcode has been setted".localize, type: .succsess)
                     self.vc.toEnterValue(data: nil)
                     completion(newValue)
                 } else {
-                    AppDelegate.shared.newMessage.show(title: "Passcodes don't match".localize, type: .error)
+                    AppDelegate.shared?.newMessage.show(title: "Passcodes don't match".localize, type: .error)
                 }
             }
             let passcodeSecondEntered = EnterValueVC.EnterValueVCScreenData(taskName: "Create".localize + " " + "passcode".localize, title: "Repeat".localize + " " + "passcode".localize, placeHolder: "Password".localize, nextAction: repeateAction, screenType: .code)

@@ -58,7 +58,7 @@ class mainVCcell: UITableViewCell {
         valueLabel.text = Double(data.value) ?? 0.0 > 0.0 ? "+\(value)" : value
         let category = ViewController.shared?.db.category(data.categoryID)
         print(category, "vghjnvgujnbhj")
-        if AppDelegate.shared.symbolsAllowed {
+        if AppDelegate.shared!.symbolsAllowed {
             categoryImage.image = AppData.iconNamed(category?.icon)
         } else {
             categoryImage.superview?.isHidden = true

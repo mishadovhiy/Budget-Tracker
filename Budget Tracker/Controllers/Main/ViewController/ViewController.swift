@@ -286,7 +286,7 @@ class ViewController: SuperViewController {
     var firstLod = true
     
     @IBAction func addTransactionPressed(_ sender: Any) {
-        if AppDelegate.shared.deviceType == .mac {
+        if (AppDelegate.shared?.deviceType ?? .primary) == .mac {
             var data = UserDefaults.standard.value(forKey: "keyboardMessages") as? [String:Any] ?? [:]
             var vcc = data["ViewController"] as? [String:Any] ?? [:]
             let keyboarMessageShowed = vcc["keyN"] as? Bool ?? false
@@ -635,7 +635,7 @@ class ViewController: SuperViewController {
                                 if loadedData[i][2] != appData.password {
                             
                                     self.forceLoggedOutUser = appData.username
-                                    if AppDelegate.shared.deviceType != .primary {
+                                    if (AppDelegate.shared?.deviceType ?? .mac) != .primary {
                                         
                                         DispatchQueue.main.async {
                                             self.performSegue(withIdentifier: "toSingIn", sender: self)
@@ -909,31 +909,9 @@ class ViewController: SuperViewController {
     
     var safeArreaHelperView: UIView?
     
-    let center = AppDelegate.shared.center
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
-      /*  let testIcon = addTransitionButton.currentImage
-        print(testIcon?.description, "imageeeee")
-        
-        let form = testIcon?.imageRendererFormat
-        print(form, "formformformform")
-        
-        testIcon?.loadData(withTypeIdentifier: ., forItemProviderCompletionHandler: { data, error in
-            if let data = testIcon?.cgImage?.dataProvider?.data{
-                
-                let string = String(data: Data(, encoding:.utf8)
-                print(string, "stringstringstringstring")
-                if let currentColor = string?.slice(from: "fill=\"#", to: "\"") {
-                    print(currentColor, "currentColor")
-                    let resultString = string?.replacingOccurrences(of: "fill=\"#" + currentColor + "\"", with: "fill=\"#5BB7F6\"")
-                    
-                    print("RESULTT", resultString)
-                }
-            }
-        })
-        
-        */
         
         
         DispatchQueue.main.async {
@@ -952,7 +930,7 @@ class ViewController: SuperViewController {
         self.safeArreaHelperView?.alpha = 0
         if !safeArreaHelperViewAdded {
             safeArreaHelperViewAdded = true
-            if let window = AppDelegate.shared.window {
+            if let window = AppDelegate.shared?.window {
                 DispatchQueue.main.async {
                     let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: safeTop))
                     self.safeArreaHelperView = view

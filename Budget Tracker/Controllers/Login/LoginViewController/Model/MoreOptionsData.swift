@@ -20,7 +20,7 @@ class MoreOptionsData {
     deinit {
         print("deiniteeed")
     }
-    lazy var ai = AppDelegate.shared.ai
+    lazy var ai = AppDelegate.shared!.ai
     func get() -> [MoreVC.ScreenData] {
         wrongCodeCount = 0
         forgotPasswordUsername = ""
@@ -248,7 +248,7 @@ class MoreOptionsData {
                             
                         } else {
                             DispatchQueue.main.async {
-                                AppDelegate.shared.newMessage.show(title: "Wrong password".localize, type: .error)
+                                AppDelegate.shared!.newMessage.show(title: "Wrong password".localize, type: .error)
                             }
                         }
                     }
@@ -258,7 +258,7 @@ class MoreOptionsData {
                     self.toEnterValue(data: screenData)
                 } else {
                     DispatchQueue.main.async {
-                        AppDelegate.shared.newMessage.show(title: "User not found".localize, description: "'\(enteredUser)'", type: .error)
+                        AppDelegate.shared!.newMessage.show(title: "User not found".localize, description: "'\(enteredUser)'", type: .error)
                     }
                 }
             }
@@ -362,7 +362,7 @@ class MoreOptionsData {
       
           
             if !(newEmail).contains("@") || !(newEmail).contains(".") {
-                AppDelegate.shared.newMessage.show(title: "Enter valid email".localize, type: .error)
+                AppDelegate.shared!.newMessage.show(title: "Enter valid email".localize, type: .error)
             } else {
                 self.ai.show(title: nil) { _ in
                     self.performChanageEmail(userData: userData, newEmail: newEmail)

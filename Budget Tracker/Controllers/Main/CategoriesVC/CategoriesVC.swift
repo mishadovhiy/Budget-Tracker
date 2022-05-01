@@ -636,7 +636,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     }
     
     func loadNotifications(completion: @escaping (Bool) -> ()) {
-        AppDelegate.shared.center.getDeliveredNotifications(completionHandler: { nitof in
+        AppDelegate.shared!.center.getDeliveredNotifications(completionHandler: { nitof in
             var newIDs:[String] = []
             for i in 0..<nitof.count {
                 let requestID = nitof[i].request.identifier
@@ -1032,7 +1032,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                     cell.dueDateLabel.textColor = expired ? K.Colors.negative : K.Colors.balanceT
                     
                     cell.qntLabel.text = "\(category.transactions.count)"
-                    if AppDelegate.shared.symbolsAllowed {
+                    if AppDelegate.shared!.symbolsAllowed {
                         cell.iconimage.image = category.editing == nil ? AppData.iconNamed(category.category.icon) : AppData.iconNamed(category.editing?.icon)
                         cell.iconimage.tintColor = category.editing == nil ? AppData.colorNamed(category.category.color) : AppData.colorNamed(category.editing?.color)
                     }
@@ -1111,7 +1111,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             cell.footerHelperBottomView.isHidden = false
         cell.lo(index: nil, footer: sect)
         cell.newCategoryTF.text = category.name
-            if AppDelegate.shared.symbolsAllowed {
+            if AppDelegate.shared!.symbolsAllowed {
                 cell.iconimage.image = AppData.iconNamed(category.icon)
                 cell.iconimage.tintColor = AppData.colorNamed(category.color)
             } else {
@@ -1203,7 +1203,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                // self.tableView.reloadData()
             }
         }
-        if AppDelegate.shared.symbolsAllowed {
+        if AppDelegate.shared!.symbolsAllowed {
             editAction.image = AppData.iconNamed("pencil.yellow")
             deleteAction.image = AppData.iconNamed("trash.red")
             editAction.backgroundColor = K.Colors.primaryBacground

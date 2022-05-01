@@ -13,12 +13,12 @@ import AVFoundation
 class AppDelegate: UIResponder, UIApplicationDelegate{
 
     var window: UIWindow?
-    static let shared = AppDelegate()
+    static var shared: AppDelegate?
 
     let center = UNUserNotificationCenter.current()
     
     
-    private let passcodeLock = PascodeLockView.instanceFromNib() as! PascodeLockView
+    let passcodeLock = PascodeLockView.instanceFromNib() as! PascodeLockView
     private var backgroundEnterDate:Date?
     private var becameActive = false
     
@@ -60,6 +60,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        AppDelegate.shared = self
         // Override point for customization after application launch.
         window?.tintColor = AppData.colorNamed(AppData.linkColor)
         center.delegate = self
@@ -118,20 +119,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     
     func applicationDidBecomeActive(_ application: UIApplication) {
         print(#function)
+        let now = Date()
+        guard let logoutDate = backgroundEnterDate else{
+            if UserSettings.Security.password != "" {
+                presentLock(passcode: true)
+            }
+            
+            return;
+        }
+        let ti = now.timeIntervalSince(logoutDate)
         if !becameActive {
             becameActive = true
         } else {
-            needDownloadOnMainAppeare = true
+            let mac:Double = 60 * 5
+            if ti > mac {
+                needDownloadOnMainAppeare = true
+            }
+            
         }
         if UserSettings.Security.password != "" {
-            //end editing tf of window-topViewController-view
-            guard let logoutDate = backgroundEnterDate else{
-                presentLock(passcode: true)
-                
-                return;
-            }
-            let now = Date()
-            let ti = now.timeIntervalSince(logoutDate)
             let timeout = Double(UserSettings.Security.timeOut) ?? 15
             if ti > timeout {
 

@@ -74,7 +74,6 @@
 		8D6358D0281E1A3100D5CD45 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6358CF281E1A3100D5CD45 /* UIButton.swift */; };
 		8D6358D4281E220F00D5CD45 /* MacExtensionTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6358D3281E220F00D5CD45 /* MacExtensionTransaction.swift */; };
 		8D6358D6281E25B500D5CD45 /* MacExtensionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6358D5281E25B500D5CD45 /* MacExtensionsVC.swift */; };
-		8D6358D8281E2B1100D5CD45 /* MacExtensionsPasscode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6358D7281E2B1100D5CD45 /* MacExtensionsPasscode.swift */; };
 		8D8B6C3C245023D0007260A0 /* FilterTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8B6C3B245023D0007260A0 /* FilterTVC.swift */; };
 		8D8B6C3E245023EC007260A0 /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8B6C3D245023EC007260A0 /* CalendarVC.swift */; };
 		8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */; };
@@ -174,7 +173,6 @@
 		8D6358CF281E1A3100D5CD45 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
 		8D6358D3281E220F00D5CD45 /* MacExtensionTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacExtensionTransaction.swift; sourceTree = "<group>"; };
 		8D6358D5281E25B500D5CD45 /* MacExtensionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacExtensionsVC.swift; sourceTree = "<group>"; };
-		8D6358D7281E2B1100D5CD45 /* MacExtensionsPasscode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacExtensionsPasscode.swift; sourceTree = "<group>"; };
 		8D8B6C3B245023D0007260A0 /* FilterTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterTVC.swift; sourceTree = "<group>"; };
 		8D8B6C3D245023EC007260A0 /* CalendarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarVC.swift; sourceTree = "<group>"; };
 		8DBA7E4C23F0316F00D8214C /* Budget Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Budget Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -280,7 +278,6 @@
 			children = (
 				8B20751127D9A7AF00CF2172 /* PascodeLockView.swift */,
 				8B331AFE27E410A00093BF72 /* PascodeLockView.xib */,
-				8D6358D7281E2B1100D5CD45 /* MacExtensionsPasscode.swift */,
 			);
 			path = PasscodeView;
 			sourceTree = "<group>";
@@ -817,7 +814,6 @@
 				8B5F342C26FB2D98000DDCAF /* EnterValueVC.swift in Sources */,
 				8BFA15D127E8E8510078856A /* categoriesVCcell.swift in Sources */,
 				8BC31D7B27E3E5EA00FBC939 /* Button.swift in Sources */,
-				8D6358D8281E2B1100D5CD45 /* MacExtensionsPasscode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

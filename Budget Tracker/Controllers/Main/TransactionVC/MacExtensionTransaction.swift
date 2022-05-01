@@ -21,6 +21,10 @@ extension TransitionVC {
                 erace(all: false)
             case .keyboardReturnOrEnter, .keypadEnter:
                 donePressedd()
+            case .keyboardEscape:
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true, completion: nil)
+                }
             default:
                 super.pressesBegan(presses, with: event)
             }

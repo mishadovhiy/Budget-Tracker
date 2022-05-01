@@ -137,7 +137,7 @@ class HistoryVC: SuperViewController {
         if selectedCategory?.purpose == .debt {
       //      center.removePendingNotificationRequests(withIdentifiers: ["Debts\(debt.name)"])
             if let cat = self.selectedCategory {
-                AppDelegate.shared.removeNotification(id: "Debts\(cat.id )")
+                AppDelegate.shared!.removeNotification(id: "Debts\(cat.id )")
             }
             
         }
@@ -163,7 +163,7 @@ class HistoryVC: SuperViewController {
         }
     }
     
-    let center = AppDelegate.shared.center
+    let center = AppDelegate.shared!.center
     func addLocalNotification(date: DateComponents, completion: @escaping (Bool) -> ()) {
         
         //if date > today
@@ -873,7 +873,7 @@ class DebtDescriptionCell: UITableViewCell {
         }
     }
 
-    private let ai = AppDelegate.shared.ai ?? IndicatorView.instanceFromNib() as! IndicatorView
+    private let ai = AppDelegate.shared?.ai ?? IndicatorView.instanceFromNib() as! IndicatorView
     
     var removeAction:(() -> ())?
     @IBAction func changeDatePressed(_ sender: Any) {//remove

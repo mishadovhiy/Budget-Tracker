@@ -56,7 +56,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
             emptySec,
             TableData(section: [statistic], title: ""),
         ]
-        if AppDelegate.shared.deviceType == .mac {
+        if AppDelegate.shared!.deviceType == .mac {
             tableData.append(emptySec)
             let iphoneCell:CellData = .init(name: "App for iPhone".localize, value: "", segue: "toQR", image: "")
             tableData.append(.init(section: [iphoneCell], title: ""))
@@ -102,7 +102,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
             cell.nameLabel.superview?.alpha = tableData[indexPath.section].section[indexPath.row].name == "" ? 0 : 1
             cell.nameLabel.text = tableData[indexPath.section].section[indexPath.row].name
             cell.valueLabel.text = tableData[indexPath.section].section[indexPath.row].value
-            if AppDelegate.shared.symbolsAllowed {
+            if AppDelegate.shared!.symbolsAllowed {
                 cell.optionIcon.image = AppData.iconNamed(tableData[indexPath.section].section[indexPath.row].image)
             }
             return cell
@@ -154,7 +154,7 @@ class SideBardCell: UITableViewCell {
         selected.backgroundColor = K.Colors.primaryBacground
         self.selectedBackgroundView = selected
 
-        if !AppDelegate.shared.symbolsAllowed {
+        if !AppDelegate.shared!.symbolsAllowed {
             optionIcon.isHidden = true
         }
     }

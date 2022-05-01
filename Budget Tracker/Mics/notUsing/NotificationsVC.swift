@@ -14,7 +14,7 @@ class NotificationsVC: SuperViewController {
     
     var tableData: [String] = []
     
-    let center = AppDelegate.shared.center
+    let center = AppDelegate.shared!.center
     override func viewDidLoad() {
         super.viewDidLoad()
 

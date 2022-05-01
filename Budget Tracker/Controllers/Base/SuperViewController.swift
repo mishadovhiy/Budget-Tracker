@@ -11,8 +11,8 @@ import UserNotifications
 
 class SuperViewController: UIViewController {
 
-    lazy var newMessage: MessageView = AppDelegate.shared.newMessage
-    lazy var ai: IndicatorView = AppDelegate.shared.ai
+    lazy var newMessage: MessageView = AppDelegate.shared!.newMessage
+    lazy var ai: IndicatorView = AppDelegate.shared!.ai
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         //screen rotation
     }

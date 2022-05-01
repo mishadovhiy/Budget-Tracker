@@ -514,7 +514,7 @@ class TransitionVC: SuperViewController {
 extension TransitionVC: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        if AppDelegate.shared.deviceType == .mac {
+        if AppDelegate.shared!.deviceType == .mac {
             return
         }
         UIView.animate(withDuration: 0.2) {

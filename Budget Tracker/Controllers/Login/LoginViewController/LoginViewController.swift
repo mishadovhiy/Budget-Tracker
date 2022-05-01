@@ -1037,8 +1037,8 @@ extension LoginViewController {
         actionButtonsEnabled = true
         needFullReload = true
         lastSelectedDate = nil
-        AppDelegate.shared.center.removeAllPendingNotificationRequests()
-        AppDelegate.shared.center.removeAllDeliveredNotifications()
+        AppDelegate.shared!.center.removeAllPendingNotificationRequests()
+        AppDelegate.shared!.center.removeAllDeliveredNotifications()
         appData.deliveredNotificationIDs = []
         UserDefaults.standard.setValue(nil, forKey: "lastSelected")
         UserDefaults.standard.setValue(true, forKey: "checkTrialDate")

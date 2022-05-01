@@ -3588,6 +3588,9 @@
         <designable name="dSw-Y8-OrZ">
             <size key="intrinsicContentSize" width="16" height="18"/>
         </designable>
+        <designable name="e0g-mS-CbN">
+            <size key="intrinsicContentSize" width="59" height="31"/>
+        </designable>
         <designable name="fo7-Zj-SZS">
             <size key="intrinsicContentSize" width="28.666666666666668" height="14.333333333333334"/>
         </designable>
