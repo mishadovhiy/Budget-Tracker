@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Foundation
 //calculateLabels
 //downloadFromDB
 //sendUnsaved
@@ -285,6 +286,20 @@ class ViewController: SuperViewController {
     var firstLod = true
     
     @IBAction func addTransactionPressed(_ sender: Any) {
+        if AppDelegate.shared.deviceType == .mac {
+            var data = UserDefaults.standard.value(forKey: "keyboardMessages") as? [String:Any] ?? [:]
+            var vcc = data["ViewController"] as? [String:Any] ?? [:]
+            let keyboarMessageShowed = vcc["keyN"] as? Bool ?? false
+            if !keyboarMessageShowed {
+                vcc.updateValue(true, forKey: "keyN")
+                data.updateValue(vcc, forKey: "ViewController")
+                UserDefaults.standard.set(data, forKey: "keyboardMessages")
+                DispatchQueue.main.async {
+                    self.newMessage.show(title:"You also can press 'N' on your keyboard to open this screen".localize, type: .standart)
+                }
+            }
+            
+        }
         toAddTransaction()
     }
     @objc func mainContentTap(_ sender: UITapGestureRecognizer) {
@@ -1681,7 +1696,6 @@ class ViewController: SuperViewController {
             self.performSegue(withIdentifier: "goToEditVC", sender: self)
         }
     }
-    
     
     @objc func addTransButtonPressed(_ sender: UIButton) {
         print("addtrans")

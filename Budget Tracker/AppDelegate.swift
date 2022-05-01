@@ -47,7 +47,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     
     
     
-    
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        if passcodeLock.presenting {
+            guard let key = presses.first?.key else { return }
+            print(key.characters, "key.characterskey.characters")
+            if let _ = key.isNum() {
+                passcodeLock.numberPressed(key.characters)
+            }
+        } else {
+            super.pressesBegan(presses, with: event)
+        }
+    }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.

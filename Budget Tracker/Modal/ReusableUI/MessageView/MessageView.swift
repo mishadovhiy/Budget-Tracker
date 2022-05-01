@@ -68,7 +68,7 @@ class MessageView: UIView {
             isShowing = true
             messageData = (title, description, type, customImage, autohide)
             let hideDescription = type == .internetError ? false : description ?? "" == ""
-            let hideImage = type == .standart
+            let hideImage = false//type == .standart
        // AudioServicesPlaySystemSound(1007)
         DispatchQueue.main.async {
             let window = UIApplication.shared.keyWindow ?? UIWindow()

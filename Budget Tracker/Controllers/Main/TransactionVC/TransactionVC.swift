@@ -321,8 +321,7 @@ class TransitionVC: SuperViewController {
 
     var displeyingTransaction = TransactionsStruct(value: "0", categoryID: "", date: "", comment: "")
     
-    @IBAction func donePressed(_ sender: UIButton) {
-     //   selectedCategory
+    func donePressedd() {
         let newDate = self.displeyingTransaction.date == "" ? defaultDate : self.displeyingTransaction.date
         
         if let category = selectedCategory {
@@ -341,6 +340,11 @@ class TransitionVC: SuperViewController {
                 }
             }
         }
+    }
+    
+    @IBAction private func donePressed(_ sender: UIButton) {
+     //   selectedCategory
+        donePressedd()
         
     }
     
@@ -390,10 +394,7 @@ class TransitionVC: SuperViewController {
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        UIView.animate(withDuration: 0.2) {
-            self.numbarPadView.alpha = 1
-        }
-     //   purposeSwitcher.tintColor = K.Colors.category
+        self.commentTextField.endEditing(true)
     }
     @IBAction func purposeSwitched(_ sender: UISegmentedControl) {
         var placeHolder = ""
@@ -443,15 +444,13 @@ class TransitionVC: SuperViewController {
             self.numbarPadView.alpha = 1
         }
     }
-    
-    @IBAction func numberPressed(_ sender: UIButton) {
-        
+    func numberPressed(v:String) {
         if pressedValue == "0" {
             pressedValue = ""
         }
         if pressedValue.count != 7 {
             AudioServicesPlaySystemSound(1104)
-            pressedValue = pressedValue + (sender.currentTitle ?? "")
+            pressedValue = pressedValue + (v)
             if pressedValue != "0" {
                 minusPlusLabel.alpha = 1
             }
@@ -461,13 +460,25 @@ class TransitionVC: SuperViewController {
         DispatchQueue.main.async {
             self.valueLabel.text = self.pressedValue
         }
+    }
+    @IBAction func numberPressed(_ sender: UIButton) {
+        
+        
+        let newValue = sender.currentTitle ?? ""
+        numberPressed(v: newValue)
         
         
     }
     
-    @IBAction func erasePressed(_ sender: UIButton) {
-
-        if sender.tag == 1 {
+    func erace(all:Bool) {
+        if all {
+            AudioServicesPlaySystemSound(1156)
+            pressedValue.removeAll()
+            DispatchQueue.main.async {
+                self.valueLabel.text = "0"
+            }
+            minusPlusLabel.alpha = 0
+        } else {
             AudioServicesPlaySystemSound(1155)
             if pressedValue.count > 0 {
                 pressedValue.removeLast()
@@ -483,14 +494,10 @@ class TransitionVC: SuperViewController {
                 minusPlusLabel.alpha = 0
             }
         }
-        if sender.tag == 2 {
-            AudioServicesPlaySystemSound(1156)
-            pressedValue.removeAll()
-            DispatchQueue.main.async {
-                self.valueLabel.text = "0"
-            }
-            minusPlusLabel.alpha = 0
-        }
+    }
+    
+    @IBAction func erasePressed(_ sender: UIButton) {
+        erace(all: sender.tag == 2)
     }
     var selectedCategory: NewCategories?
     var fromDebts = false
@@ -507,6 +514,9 @@ class TransitionVC: SuperViewController {
 extension TransitionVC: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        if AppDelegate.shared.deviceType == .mac {
+            return
+        }
         UIView.animate(withDuration: 0.2) {
             self.numbarPadView.alpha = 0
         }

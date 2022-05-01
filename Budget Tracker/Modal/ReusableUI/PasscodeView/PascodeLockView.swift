@@ -153,18 +153,17 @@ class PascodeLockView: UIView, UITextFieldDelegate {
     }
     
     
-    
+    func numberPressed(_ number:String) {
+        if let _ = Int(number) {
+            self.enteredValue = (self.enteredValue ?? "") + number
+        }
+    }
     
     @IBAction private func numberPressed(_ sender: UIButton) {
         DispatchQueue.main.async {
-            
             if let numString = sender.title(for: .normal) {
-                if let _ = Int(numString) {
-                    AudioServicesPlaySystemSound(1104)
-                    self.enteredValue = (self.enteredValue ?? "") + numString
-                }
-                
-                
+                AudioServicesPlaySystemSound(1104)
+                self.numberPressed(numString)
             }
         }
     }

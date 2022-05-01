@@ -69,6 +69,12 @@
 		8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5206662421695200772CD5 /* StatisticBrain.swift */; };
 		8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D52066824216A2900772CD5 /* StatisticVC.swift */; };
 		8D52066B24216A6200772CD5 /* HistoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D52066A24216A6200772CD5 /* HistoryVC.swift */; };
+		8D6358C9281E0C7400D5CD45 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6358C8281E0C7400D5CD45 /* Keys.swift */; };
+		8D6358CE281E130B00D5CD45 /* QRcodeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6358CD281E130B00D5CD45 /* QRcodeVC.swift */; };
+		8D6358D0281E1A3100D5CD45 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6358CF281E1A3100D5CD45 /* UIButton.swift */; };
+		8D6358D4281E220F00D5CD45 /* MacExtensionTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6358D3281E220F00D5CD45 /* MacExtensionTransaction.swift */; };
+		8D6358D6281E25B500D5CD45 /* MacExtensionsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6358D5281E25B500D5CD45 /* MacExtensionsVC.swift */; };
+		8D6358D8281E2B1100D5CD45 /* MacExtensionsPasscode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6358D7281E2B1100D5CD45 /* MacExtensionsPasscode.swift */; };
 		8D8B6C3C245023D0007260A0 /* FilterTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8B6C3B245023D0007260A0 /* FilterTVC.swift */; };
 		8D8B6C3E245023EC007260A0 /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8B6C3D245023EC007260A0 /* CalendarVC.swift */; };
 		8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */; };
@@ -163,6 +169,12 @@
 		8D5206662421695200772CD5 /* StatisticBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticBrain.swift; sourceTree = "<group>"; };
 		8D52066824216A2900772CD5 /* StatisticVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticVC.swift; sourceTree = "<group>"; };
 		8D52066A24216A6200772CD5 /* HistoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryVC.swift; sourceTree = "<group>"; };
+		8D6358C8281E0C7400D5CD45 /* Keys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
+		8D6358CD281E130B00D5CD45 /* QRcodeVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QRcodeVC.swift; sourceTree = "<group>"; };
+		8D6358CF281E1A3100D5CD45 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
+		8D6358D3281E220F00D5CD45 /* MacExtensionTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacExtensionTransaction.swift; sourceTree = "<group>"; };
+		8D6358D5281E25B500D5CD45 /* MacExtensionsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacExtensionsVC.swift; sourceTree = "<group>"; };
+		8D6358D7281E2B1100D5CD45 /* MacExtensionsPasscode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacExtensionsPasscode.swift; sourceTree = "<group>"; };
 		8D8B6C3B245023D0007260A0 /* FilterTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterTVC.swift; sourceTree = "<group>"; };
 		8D8B6C3D245023EC007260A0 /* CalendarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarVC.swift; sourceTree = "<group>"; };
 		8DBA7E4C23F0316F00D8214C /* Budget Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Budget Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -221,6 +233,7 @@
 			isa = PBXGroup;
 			children = (
 				8DD89D8D23F1495300273904 /* TransactionVC.swift */,
+				8D6358D3281E220F00D5CD45 /* MacExtensionTransaction.swift */,
 			);
 			path = TransactionVC;
 			sourceTree = "<group>";
@@ -267,6 +280,7 @@
 			children = (
 				8B20751127D9A7AF00CF2172 /* PascodeLockView.swift */,
 				8B331AFE27E410A00093BF72 /* PascodeLockView.xib */,
+				8D6358D7281E2B1100D5CD45 /* MacExtensionsPasscode.swift */,
 			);
 			path = PasscodeView;
 			sourceTree = "<group>";
@@ -293,6 +307,7 @@
 				8DBA7E5323F0316F00D8214C /* ViewController.swift */,
 				8D8B6C3B245023D0007260A0 /* FilterTVC.swift */,
 				8DD89D8223F1468E00273904 /* mainVCcell.swift */,
+				8D6358D5281E25B500D5CD45 /* MacExtensionsVC.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -304,6 +319,7 @@
 				8DD89D8B23F1485700273904 /* Constants.swift */,
 				8BAA72B427CB7D41005298B6 /* Keys.swift */,
 				8BBAD63027F9A5D4005A2ADF /* Keys.swift */,
+				8D6358C8281E0C7400D5CD45 /* Keys.swift */,
 				8B7D1AA0276CF203008942EC /* IconList.swift */,
 			);
 			path = StoredProperties;
@@ -509,6 +525,30 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		8D6358CC281E12B600D5CD45 /* QRCodeVC */ = {
+			isa = PBXGroup;
+			children = (
+				8D6358CD281E130B00D5CD45 /* QRcodeVC.swift */,
+			);
+			path = QRCodeVC;
+			sourceTree = "<group>";
+		};
+		8D6358D1281E1A3800D5CD45 /* MacOnly */ = {
+			isa = PBXGroup;
+			children = (
+				8D6358D2281E1A4600D5CD45 /* Extenstions */,
+			);
+			path = MacOnly;
+			sourceTree = "<group>";
+		};
+		8D6358D2281E1A4600D5CD45 /* Extenstions */ = {
+			isa = PBXGroup;
+			children = (
+				8D6358CF281E1A3100D5CD45 /* UIButton.swift */,
+			);
+			path = Extenstions;
+			sourceTree = "<group>";
+		};
 		8DBA7E4323F0316F00D8214C = {
 			isa = PBXGroup;
 			children = (
@@ -537,6 +577,7 @@
 				8DBA7E6823F031F900D8214C /* Controllers */,
 				8DBA7E6723F031F200D8214C /* Storybords */,
 				8DBA7E6623F031E600D8214C /* Mics */,
+				8D6358D1281E1A3800D5CD45 /* MacOnly */,
 			);
 			path = "Budget Tracker";
 			sourceTree = "<group>";
@@ -571,6 +612,7 @@
 				8BC1B23C27D314CC002C1E38 /* Login */,
 				8BC1B23B27D31426002C1E38 /* Reusable */,
 				8B6BA97C27E6E5360067FF58 /* AppSettings */,
+				8D6358CC281E12B600D5CD45 /* QRCodeVC */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -709,9 +751,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D6358CE281E130B00D5CD45 /* QRcodeVC.swift in Sources */,
 				8BC8525027E28D0F00C5A3A4 /* UserSettings.swift in Sources */,
 				8B4728BC27533A470078BD34 /* DataBase.swift in Sources */,
+				8D6358D0281E1A3100D5CD45 /* UIButton.swift in Sources */,
 				8B26329627E6A32E0086C3A8 /* UIViewController.swift in Sources */,
+				8D6358D6281E25B500D5CD45 /* MacExtensionsVC.swift in Sources */,
 				8B26327E27E66B060086C3A8 /* AppLocalization.swift in Sources */,
 				8B331B0B27E4128B0093BF72 /* String.swift in Sources */,
 				8B6BA98227E717850067FF58 /* Date.swift in Sources */,
@@ -722,6 +767,7 @@
 				8B26329827E6A4470086C3A8 /* DateComponents.swift in Sources */,
 				8B26329327E69EFA0086C3A8 /* localizationDictUA.swift in Sources */,
 				8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */,
+				8D6358C9281E0C7400D5CD45 /* Keys.swift in Sources */,
 				8B47F92D2773B90300FD96AA /* MessageView.swift in Sources */,
 				8B52CC6727E3001B008D5348 /* UITableViewCell.swift in Sources */,
 				8B26328627E67E720086C3A8 /* UISegmentedControl.swift in Sources */,
@@ -758,6 +804,7 @@
 				8B52DFEA2750232D00595A0C /* NumbersView.swift in Sources */,
 				8BD3A3D927E4097400547022 /* View.swift in Sources */,
 				8DD89D8723F1471400273904 /* AppData.swift in Sources */,
+				8D6358D4281E220F00D5CD45 /* MacExtensionTransaction.swift in Sources */,
 				8B8D556125BB218400D7C6A7 /* UnsendedDataVC.swift in Sources */,
 				8B52DFEC27504D2900595A0C /* IconsVC.swift in Sources */,
 				8BF58D1F277C793D005A7F38 /* BuyPageVC.swift in Sources */,
@@ -770,6 +817,7 @@
 				8B5F342C26FB2D98000DDCAF /* EnterValueVC.swift in Sources */,
 				8BFA15D127E8E8510078856A /* categoriesVCcell.swift in Sources */,
 				8BC31D7B27E3E5EA00FBC939 /* Button.swift in Sources */,
+				8D6358D8281E2B1100D5CD45 /* MacExtensionsPasscode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -944,7 +992,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.3;
+				MARKETING_VERSION = 7;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
@@ -971,7 +1019,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 6.3;
+				MARKETING_VERSION = 7;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;

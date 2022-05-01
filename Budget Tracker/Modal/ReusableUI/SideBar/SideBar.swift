@@ -49,14 +49,18 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         var accountSection:[CellData] {
             return trialDays == 0 ? [accpuntCell, settingsCell] : [accpuntCell, settingsCell, trialCell]
         }
-        
         tableData = [
-            TableData(section: accountSection, title: "", hidden: false),
+            TableData(section: accountSection, title: ""),
             emptySec,
-            TableData(section: categories, title: "", hidden: false),
+            TableData(section: categories, title: ""),
             emptySec,
-            TableData(section: [statistic], title: "", hidden: false),
+            TableData(section: [statistic], title: ""),
         ]
+        if AppDelegate.shared.deviceType == .mac {
+            tableData.append(emptySec)
+            let iphoneCell:CellData = .init(name: "App for iPhone".localize, value: "", segue: "toQR", image: "")
+            tableData.append(.init(section: [iphoneCell], title: ""))
+        }
         DispatchQueue.main.async {
             ViewController.shared?.sideTableView.reloadData()
         }
@@ -125,7 +129,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
     struct TableData {
         let section: [CellData]
         let title: String
-        let hidden: Bool
+        var hidden: Bool = false
     }
     
     struct CellData {

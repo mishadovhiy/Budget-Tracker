@@ -12,6 +12,10 @@ import UIKit
 struct localizationDictUA {
 
     static let dictUA: [String:String] = [
+        "You also can press 'N' on your keyboard to open this screen":"Ви також можете натиснути «N» на клавіатурі, щоб відкрити цей екран",
+        "Open":"Перейти",
+        "App for iPhone": "Додаток для iPhone",
+        "Scan QR on your iPhone": "Проскануйте QR на своєму iPhone",
         "More":"Бiльше",
         "No transactions history":"Порожньо",
         "Privacy policy":"Політика конфіденційності",
