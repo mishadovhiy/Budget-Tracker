@@ -26,6 +26,7 @@ class MessageView: UIView {
     
     override func draw(_ rect: CGRect) {
         //shadowRadius
+        self.layer.zPosition = 1001
         let swipeTop = UISwipeGestureRecognizer(target: self, action: #selector(closeSwipe(_:)))
         swipeTop.direction = .up
         self.mainView.addGestureRecognizer(swipeTop)
@@ -72,7 +73,7 @@ class MessageView: UIView {
             window.addSubview(self)
             self.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: 100)
             let top = self.mainView.frame.maxY
-            self.mainView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 500, 0)
+            self.mainView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, -500, 0)
             
             
             
