@@ -94,6 +94,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     
     
     func applicationWillResignActive(_ application: UIApplication) {
+        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: self.classForCoder.description()))
         DispatchQueue.main.async {
             self.window?.endEditing(true)
         }
@@ -105,6 +106,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         }
     }
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
+        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: self.classForCoder.description()))
         if appData.devMode {
             let button = IndicatorView.button(title: "ok", style: .error, close: true) { _ in
                 
@@ -118,6 +120,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
+        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: self.classForCoder.description()))
         print(#function)
         let now = Date()
         guard let logoutDate = backgroundEnterDate else{
@@ -150,9 +153,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         
     }
     func applicationWillTerminate(_ application: UIApplication) {
+        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: self.classForCoder.description()))
+        
         print(#function)
     }
     
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: self.classForCoder.description()))
+        AnalyticModel.shared.checkData()
+        print(#function)
+    }
     
 }
 

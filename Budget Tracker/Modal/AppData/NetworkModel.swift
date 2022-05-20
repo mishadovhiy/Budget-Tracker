@@ -294,21 +294,27 @@ struct SaveToDB {
         })
     }
 
-    private func save(dbFileURL: String, httpMethod: String = "POST", toDataString: String, error: @escaping (Bool) -> ()) {
+    func sendAnalytics(data:String, completion:@escaping (Bool) -> ()) {
+        let doDataString = "applicationName=BudgetTracker&data=\(data)"
+        let url = Keys.analyticsURL + "newAnalytic.php?"
+        save(dbFileURL: url, toDataString: doDataString, secretWord: false, error: completion)
+    }
+    
+    private func save(dbFileURL: String, httpMethod: String = "POST", toDataString: String, secretWord:Bool = true, error: @escaping (Bool) -> ()) {
         if let urlData = dbFileURL.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
         let url = NSURL(string: urlData)
         if let reqUrl = url as URL? {
         var request = URLRequest(url: reqUrl)
         request.httpMethod = httpMethod
-        var dataToSend = "secretWord=" + Keys.secretKey
+            var dataToSend = secretWord ? ("secretWord=" + Keys.secretKey) : ""
                 
         dataToSend = dataToSend + toDataString
             
         let dataD = dataToSend.data(using: .utf8)
-        needDownloadOnMainAppeare = true
+       // appData.needDownloadOnMainAppeare = true
         do {
-            print("dbModel: saving data", dbFileURL)
-            print("dbModel: saving data", dataToSend)
+            print("dbModel: dbFileURL", dbFileURL)
+            print("dbModel: dataToSend", dataToSend)
 
             let uploadJob = URLSession.shared.uploadTask(with: request, from: dataD) { data, response, errr in
                 
