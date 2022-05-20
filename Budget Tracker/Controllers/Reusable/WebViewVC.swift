@@ -9,7 +9,7 @@
 import UIKit
 import WebKit
 
-class WebViewVC: UIViewController, UIScrollViewDelegate, WKNavigationDelegate {
+class WebViewVC: SuperViewController, UIScrollViewDelegate, WKNavigationDelegate {
     @IBOutlet weak var screenAI: UIActivityIndicatorView!
     
     @IBOutlet weak var webView: WKWebView!

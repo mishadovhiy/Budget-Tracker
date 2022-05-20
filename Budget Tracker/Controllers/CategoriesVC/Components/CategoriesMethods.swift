@@ -62,6 +62,7 @@ extension CategoriesVC {
     func deteteCategory(at: IndexPath) {
         let delete = DeleteFromDB()
         delete.CategoriesNew(category: tableData[at.section].data[at.row].category) { _ in
+            AppData.categoriesHolder = nil
             let id = "Debts" + "\(self.tableData[at.section].data[at.row].category.id)"
             Notifications.removeNotification(id: id, pending: true)
             self.categories = self.db.categories
@@ -76,6 +77,7 @@ extension CategoriesVC {
     @objc func newCategoryPressed(_ sender: UITapGestureRecognizer) {
         if let double = Double(sender.name ?? "") {
             let section = Int(double) //{
+            
                 addCategoryPerform(section: section)
         }
     }
@@ -102,6 +104,7 @@ extension CategoriesVC {
             print("new id:", newID)
             newCategory.category.id = newID
             SaveToDB.shared.newCategories(newCategory.category) { error in
+                AppData.categoriesHolder = nil
                 self.editingTF = nil
                 self.allCategoriesHolder = loadedData
                 self.tableData[section].data.insert(newCategory, at: 0)

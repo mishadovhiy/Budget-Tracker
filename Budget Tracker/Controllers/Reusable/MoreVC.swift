@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class MoreVC: SuperViewController, UITableViewDelegate, UITableViewDataSource {
     var cellBackground = K.Colors.secondaryBackground2
     
     @IBOutlet weak var tableView: UITableView!

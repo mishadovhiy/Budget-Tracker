@@ -67,13 +67,14 @@ class ViewController: SuperViewController {
         super.viewDidLoad()
         updateUI()
         
-        let sideBarPinch = UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:)))
-        pinchView.addGestureRecognizer(sideBarPinch)
+        pinchView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:))))
         ViewController.shared = self
         sideBar.load()
         toggleSideBar(false, animated: false)
         
     }
+    
+    
     
     
     var correctFrameBackground:CGRect = .zero
@@ -109,19 +110,18 @@ class ViewController: SuperViewController {
                     self.newTransaction = nil
                     self.compliteScrolling()
                 }
-                if self.openFiler {
-                    self.openFiler = false
-                        self.performSegue(withIdentifier: "toFiterVC", sender: self)
-                }
+
                 if let addedAction = self.actionAfterAdded {
                     self.actionAfterAdded = nil
                     addedAction(true)
                 }
-                
+                if self.firstAppearence {
+                    
+                }
             }
         }
     }
-    
+    var firstAppearence = true
 
 
     var _calculations:Calculations = .init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)

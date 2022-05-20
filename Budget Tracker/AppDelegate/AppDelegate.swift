@@ -51,8 +51,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
         AppDelegate.shared = self
+        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: self.classForCoder.description()))
+        
         window?.tintColor = AppData.colorNamed(AppData.linkColor)
         center.delegate = self
         
@@ -78,6 +79,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     
     
     func applicationWillResignActive(_ application: UIApplication) {
+        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: self.classForCoder.description()))
         backgroundEnterDate = Date();
         if UserSettings.Security.password != "" && !(passcodeLock.presenting) {
             DispatchQueue.main.async {
@@ -88,6 +90,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }
     
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
+        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: self.classForCoder.description()))
         AppData.categoriesHolder = nil
         if appData.devMode {
             DispatchQueue.main.async {
@@ -101,11 +104,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         print(#function)
+        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: self.classForCoder.description()))
         checkPasscodeTimout()
     }
     
     func applicationWillTerminate(_ application: UIApplication) {
+        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: self.classForCoder.description()))
         print(#function)
+    }
+    
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: self.classForCoder.description()))
+        AnalyticModel.shared.checkData()
+        print(#function)
+        
     }
     
     

@@ -20,7 +20,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="6lc-9J-Bfc">
                                 <rect key="frame" x="107" y="336" width="200" height="224"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic" translatesAutoresizingMaskIntoConstraints="NO" id="vNe-dD-bvO">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icBig" translatesAutoresizingMaskIntoConstraints="NO" id="vNe-dD-bvO">
                                         <rect key="frame" x="0.0" y="0.0" width="200" height="175"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="175" id="S9S-D6-WsC"/>
@@ -52,7 +52,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ic" width="1024" height="1024"/>
+        <image name="icBig" width="1240" height="1240"/>
         <namedColor name="CategoryColor">
             <color red="0.86699998378753662" green="0.86699998378753662" blue="0.86699998378753662" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

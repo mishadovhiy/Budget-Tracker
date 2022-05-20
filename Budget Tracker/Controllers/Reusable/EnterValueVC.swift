@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EnterValueVC:UIViewController, UITextFieldDelegate {
+class EnterValueVC:SuperViewController, UITextFieldDelegate {
     
     var screenData:EnterValueVCScreenData?
 
@@ -43,8 +43,6 @@ class EnterValueVC:UIViewController, UITextFieldDelegate {
         }
     }
 
-    lazy var ai = AppDelegate.shared!.ai
-    
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()

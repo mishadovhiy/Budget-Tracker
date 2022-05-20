@@ -20,20 +20,12 @@ class SuperViewController: UIViewController {
 
     lazy var defaultTableInset = AppDelegate.shared?.banner.size ?? 0
     
-    var loadedSubviews: Bool = false
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        if !loadedSubviews {
-            //self.ai = LoadingIndicator.instanceFromNib() as! LoadingIndicator
-            loadedSubviews = true
 
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         definesPresentationContext = true
-
+        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: self.classForCoder.description()))
         
     }
     

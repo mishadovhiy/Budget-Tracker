@@ -14,7 +14,7 @@ protocol IconsVCDelegate {
 }
 
 
-class IconsVC: UIViewController {
+class IconsVC: SuperViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     var delegate:IconsVCDelegate?
     let icons = Icons()

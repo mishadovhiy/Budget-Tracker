@@ -71,7 +71,6 @@ class Button: UIButton {
                 self.layer.shadowOpacity = self.shadowOpasity
             }
         }
-        
     }
     
 }
