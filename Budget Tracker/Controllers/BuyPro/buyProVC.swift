@@ -82,20 +82,30 @@ class BuyProVC: SuperViewController {
         }
     }
     
+    var appeareCalled = false
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: true)
-        bannerWasHidden = AppDelegate.shared?.banner.adHidden ?? false
-        if !bannerWasHidden {
-            AppDelegate.shared?.banner.hide(ios13Hide: true)
+        if !appeareCalled {
+            appeareCalled = true
+            bannerWasHidden = AppDelegate.shared?.banner.adHidden ?? false
+            if !bannerWasHidden {
+                AppDelegate.shared?.banner.hide(ios13Hide: true)
+            }
         }
+        
     }
     var bannerWasHidden = false
     var fromSettings = false
+    var didappCalled = false
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        proBackgroundView.alpha = 0.5
-        showPurchasedIndicator()
-        getProducts()
+        if !didappCalled {
+            didappCalled = true
+            proBackgroundView.alpha = 0.5
+            showPurchasedIndicator()
+            getProducts()
+        }
+        
         
     }
 

@@ -31,7 +31,7 @@ struct AnalyticModel {
 
     func checkData() {
         let all = UserDefaults.standard.value(forKey: "analiticStorage") as? [[String:Any]] ?? []
-        if all.count > 200 {
+        if all.count > (appData.devMode ? 20 : 50) {
             sendData(all)
         }
     }
@@ -39,7 +39,11 @@ struct AnalyticModel {
     
     private func createData(_ dataOt:[[String:Any]]?) -> String {
         var all = dataOt ?? (UserDefaults.standard.value(forKey: "analiticStorage") as? [[String:Any]] ?? [])
-        all.append(["id":UIDevice.current.identifierForVendor?.description ?? "unknown"])
+        all.append([
+            "id":(UIDevice.current.identifierForVendor?.description ?? "unknown"),
+            "deviceType":(AppDelegate.shared?.deviceType.rawValue ?? "unknown"),
+            "authorized":(appData.username == "" ? "1" : "0")
+        ])
         guard let data = try? JSONSerialization.data(withJSONObject: all, options: []) else {
             return ""
         }
@@ -68,14 +72,20 @@ struct AnalyticModel {
         let dict:[String:Any]
         
         init(dict:[String:Any]) {
-            let time = Date().iso8601withFractionalSeconds
-            var resultDict = dict
+           
+            if let timee = dict["time"] as? String {
+                self.time = timee
+                self.dict = dict
+            } else {
+                let time = Date().iso8601withFractionalSeconds
+                var resultDict = dict
+                resultDict.updateValue(time, forKey: "time")
+                self.time =  time
+                self.dict = resultDict
+            }
             
-            resultDict.updateValue(time, forKey: "time")
-            self.time = time
-            self.dict = resultDict
-            self.key = resultDict["key"] as? String ?? ""
-            self.action = resultDict["vc"] as? String ?? ""
+            self.key = dict["key"] as? String ?? ""
+            self.action = dict["vc"] as? String ?? ""
             
         }
         init(key:String, action:String) {

@@ -24,10 +24,12 @@ extension adBannerView:GADBannerViewDelegate {
     }
 
     func bannerViewDidRecordImpression(_ bannerView: GADBannerView) {
+        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: "GoogleMobileAds"))
       print("bannerViewDidRecordImpression")
     }
 
     func bannerViewWillPresentScreen(_ bannerView: GADBannerView) {
+        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: "GoogleMobileAds"))
       print("bannerViewWillPresentScreen")
     }
 

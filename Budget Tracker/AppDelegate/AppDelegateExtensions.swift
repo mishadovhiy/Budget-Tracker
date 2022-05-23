@@ -127,10 +127,10 @@ extension AppDelegate {
 
 
 extension AppDelegate {
-    enum DeviceType {
-        case primary
-        case underIos13
-        case mac
+    enum DeviceType:String {
+        case primary = "primary"
+        case underIos13 = "underIos13"
+        case mac = "mac"
     }
 }
 
