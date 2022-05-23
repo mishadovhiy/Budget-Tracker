@@ -31,7 +31,11 @@ struct AnalyticModel {
 
     func checkData() {
         let all = UserDefaults.standard.value(forKey: "analiticStorage") as? [[String:Any]] ?? []
-        if all.count > (appData.devMode ? 20 : 50) {
+        let first = UserDefaults.standard.value(forKey: "firstAnalyticSent") as? Bool ?? false
+        if (all.count > (appData.devMode ? 20 : 50)) || !first {
+            if !first {
+                UserDefaults.standard.setValue(true, forKey: "firstAnalyticSent")
+            }
             sendData(all)
         }
     }
