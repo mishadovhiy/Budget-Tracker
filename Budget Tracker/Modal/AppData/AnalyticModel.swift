@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Foundation
 
 struct AnalyticModel {
     static var shared = AnalyticModel()
@@ -31,7 +32,11 @@ struct AnalyticModel {
 
     func checkData() {
         let all = UserDefaults.standard.value(forKey: "analiticStorage") as? [[String:Any]] ?? []
-        if all.count > 70 {
+        let first = UserDefaults.standard.value(forKey: "firstAnalyticSent") as? Bool ?? false
+        if (all.count > (appData.devMode ? 20 : 50)) || !first {
+            if !first {
+                UserDefaults.standard.setValue(true, forKey: "firstAnalyticSent")
+            }
             sendData(all)
         }
     }
@@ -39,7 +44,11 @@ struct AnalyticModel {
     
     private func createData(_ dataOt:[[String:Any]]?) -> String {
         var all = dataOt ?? (UserDefaults.standard.value(forKey: "analiticStorage") as? [[String:Any]] ?? [])
-        all.append(["id":UIDevice.current.identifierForVendor?.description ?? "unknown"])
+        all.append([
+            "id":UIDevice.current.identifierForVendor?.description ?? "unknown",
+            "deviceType":(AppDelegate.shared?.deviceType.rawValue ?? "unknown"),
+            "authorized":(appData.username == "" ? "1" : "0")
+        ])
         guard let data = try? JSONSerialization.data(withJSONObject: all, options: []) else {
             return ""
         }

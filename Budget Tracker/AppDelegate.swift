@@ -58,8 +58,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
             super.pressesBegan(presses, with: event)
         }
     }
-    
+    private let analyticsName = "AppDelegate"
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
         AppDelegate.shared = self
         // Override point for customization after application launch.
         window?.tintColor = AppData.colorNamed(AppData.linkColor)
@@ -94,7 +95,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     
     
     func applicationWillResignActive(_ application: UIApplication) {
-        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: self.classForCoder.description()))
         DispatchQueue.main.async {
             self.window?.endEditing(true)
         }
@@ -106,7 +106,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         }
     }
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
-        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: self.classForCoder.description()))
+        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: analyticsName))
         if appData.devMode {
             let button = IndicatorView.button(title: "ok", style: .error, close: true) { _ in
                 
@@ -120,7 +120,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
-        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: self.classForCoder.description()))
+        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: analyticsName))
         print(#function)
         let now = Date()
         guard let logoutDate = backgroundEnterDate else{
@@ -153,13 +153,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         
     }
     func applicationWillTerminate(_ application: UIApplication) {
-        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: self.classForCoder.description()))
-        
         print(#function)
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
-        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: self.classForCoder.description()))
+        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: analyticsName))
         AnalyticModel.shared.checkData()
         print(#function)
     }
@@ -256,10 +254,10 @@ extension AppDelegate {
 
 
 extension AppDelegate {
-    enum DeviceType {
-        case primary
-        case underIos13
-        case mac
+    enum DeviceType:String {
+        case primary = "primary"
+        case underIos13 = "underIos13"
+        case mac = "mac"
     }
 }
 

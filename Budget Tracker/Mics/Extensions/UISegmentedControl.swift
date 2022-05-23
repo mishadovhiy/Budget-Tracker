@@ -11,13 +11,15 @@ import UIKit
 extension UISegmentedControl {
     open override func draw(_ rect: CGRect) {
         super.draw(rect)
-        self.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white], for: .normal)
-        self.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
-        
-        if #available(iOS 13.0, *) {
-            self.selectedSegmentTintColor = K.Colors.link
-        } else {
-            self.tintColor = K.Colors.link
+        if AppDelegate.shared?.deviceType != .mac {
+            self.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white], for: .normal)
+            self.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .selected)
+            
+            if #available(iOS 13.0, *) {
+                self.selectedSegmentTintColor = K.Colors.link
+            } else {
+                self.tintColor = K.Colors.link
+            }
         }
     }
 }
