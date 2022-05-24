@@ -541,6 +541,7 @@
 		8BC1B23A27D3136C002C1E38 /* ReusableUI */ = {
 			isa = PBXGroup;
 			children = (
+				8BC31D7D27E3E60600FBC939 /* UIObjects */,
 				8B26328C27E6986F0086C3A8 /* SideBar */,
 				8B26328827E697FF0086C3A8 /* IndicatorView */,
 				8B26328A27E6981F0086C3A8 /* MessageView */,
@@ -701,7 +702,6 @@
 			children = (
 				8B26329027E69AE10086C3A8 /* AppData */,
 				8B3F919827D31C4000BE826C /* UserData */,
-				8BC31D7D27E3E60600FBC939 /* UIObjects */,
 				8B5434FB27ED83AC00417141 /* Notifications */,
 				8BB75D4527F294ED00AE71A1 /* Structs */,
 			);

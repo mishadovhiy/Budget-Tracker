@@ -55,7 +55,7 @@ class adBannerView: UIView {
         if go {
             adHidden = false
             DispatchQueue.main.async {
-                //self.alpha = 0
+                self.isHidden = false
                 UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0, options: .allowAnimatedContent) {
                     //self.alpha = 1
                     self.backgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
@@ -81,6 +81,7 @@ class adBannerView: UIView {
                    // self.alpha = 0
                     self.backgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, window.frame.height, 0)
                 } completion: { _ in
+                    self.isHidden = true
                     if remove {
                         self.removeAd()
                     }

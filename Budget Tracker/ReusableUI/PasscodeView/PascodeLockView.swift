@@ -24,7 +24,12 @@ class PascodeLockView: UIView, UITextFieldDelegate {
     @IBOutlet private weak var primaryTitleLabel: UILabel!
     
     private var enteredAction:(()->())?
-    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        if passwordNotEntered && (enteredValue ?? "" == "") {
+            passcodeLock(passcodeEntered: enteredAction)
+        }
+    }
     override func didMoveToWindow() {
         super.didMoveToWindow()
         self.textField.delegate = self
