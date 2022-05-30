@@ -4127,7 +4127,7 @@
     </scenes>
     <designables>
         <designable name="0oV-VO-FeH">
-            <size key="intrinsicContentSize" width="16.666666666666668" height="22"/>
+            <size key="intrinsicContentSize" width="13" height="22"/>
         </designable>
         <designable name="1vj-92-UOQ">
             <size key="intrinsicContentSize" width="30" height="39"/>
@@ -4488,17 +4488,17 @@ FfUV+hYCFgUWChYZFh0WKBYwFj0WUhZXFlsWXRZfFmEWahZwFngWehZ8Fn4WgCggKCUoLSgwKDUoPQAA
 AAAAAAIBAAAAAAAAAGEAAAAAAAAAAAAAAAAAAChAA
 </mutableData>
         </image>
-        <image name="line.3.horizontal" width="17" height="9"/>
+        <image name="line.3.horizontal" width="13" height="7"/>
         <image name="paperplane.fill" catalog="system" width="128" height="118"/>
-        <image name="pencil" width="14" height="14"/>
         <image name="pencil" catalog="system" width="128" height="113"/>
+        <image name="pencil" width="14" height="14"/>
         <image name="repeat" catalog="system" width="128" height="98"/>
-        <image name="scroll" width="18" height="18"/>
+        <image name="scroll" width="14" height="14"/>
         <image name="square.and.arrow.down" catalog="system" width="121" height="128"/>
         <image name="trash" catalog="system" width="121" height="128"/>
         <image name="trash" width="25" height="29"/>
         <image name="trash.fill" catalog="system" width="121" height="128"/>
-        <image name="unknown" width="20" height="16"/>
+        <image name="unknown" width="15" height="12"/>
         <namedColor name="CategoryColor">
             <color red="0.86699998378753662" green="0.86699998378753662" blue="0.86699998378753662" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
