@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AlertViewLibrary
 
 
 class MoreOptionsData {
@@ -123,9 +124,9 @@ class MoreOptionsData {
                                 }
                             }
 
-                            let firstButton = IndicatorView.button(title: "Cancel".localize, style: .regular, close: true) { _ in
+                            let firstButton:AlertViewLibrary.button  = .init(title: "Cancel".localize, style: .regular, close: true) { _ in
                             }
-                            let secondButton = IndicatorView.button(title: "Send".localize, style: .link, close: false) { _ in
+                            let secondButton:AlertViewLibrary.button = .init(title: "Send".localize, style: .link, close: false) { _ in
                                 self.sendRestorationCode(toChange: .changePassword)
                             }
                             let text = "Restoration code would be sent on: ".localize + emailToSend
@@ -161,10 +162,10 @@ class MoreOptionsData {
                             break
                         }
                     }
-                    let firstButton = IndicatorView.button(title: "Cancel".localize, style: .regular, close: true) { _ in
+                    let firstButton:AlertViewLibrary.button  = .init(title: "Cancel".localize, style: .regular, close: true) { _ in
                                         
                     }
-                    let secondButton = IndicatorView.button(title: "Send".localize, style: .link, close: false) { _ in
+                    let secondButton:AlertViewLibrary.button  = .init(title: "Send".localize, style: .link, close: false) { _ in
                         self.sendRestorationCode(toChange: .changeEmail)
                     }
                     let text = "Restoration code would be sent on: ".localize + emailToSend

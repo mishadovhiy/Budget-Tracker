@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -23,8 +23,6 @@
 		8B35DA6625C6F124008A8719 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B35DA6525C6F124008A8719 /* Keychain.swift */; };
 		8B42FCDD2776805800013E4B /* NumbersTF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B42FCDC2776805800013E4B /* NumbersTF.swift */; };
 		8B4728BC27533A470078BD34 /* DataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B4728BB27533A470078BD34 /* DataBase.swift */; };
-		8B47F92D2773B90300FD96AA /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B47F92C2773B90300FD96AA /* MessageView.swift */; };
-		8B47F92F2773B90D00FD96AA /* Message.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B47F92E2773B90D00FD96AA /* Message.xib */; };
 		8B52CC6727E3001B008D5348 /* UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B52CC6627E3001B008D5348 /* UITableViewCell.swift */; };
 		8B52DFE82750231000595A0C /* Numbers.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8B52DFE72750231000595A0C /* Numbers.xib */; };
 		8B52DFEA2750232D00595A0C /* NumbersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B52DFE92750232D00595A0C /* NumbersView.swift */; };
@@ -38,7 +36,6 @@
 		8B633135260FE7FF00D9E117 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B633134260FE7FF00D9E117 /* AuthenticationServices.framework */; };
 		8B6B509927F3A69F0067C237 /* ReminderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6B509827F3A69F0067C237 /* ReminderManager.swift */; };
 		8B6B509B27F3B24B0067C237 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6B509A27F3B24B0067C237 /* NotificationManager.swift */; };
-		8B6B509D27F3BEB40067C237 /* ExtensionIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6B509C27F3BEB40067C237 /* ExtensionIndicatorView.swift */; };
 		8B6BA97927E6E2500067FF58 /* AppSettingsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6BA97827E6E2500067FF58 /* AppSettingsData.swift */; };
 		8B6BA97E27E715C20067FF58 /* Reusable.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8B6BA97D27E715C20067FF58 /* Reusable.storyboard */; };
 		8B6BA98027E716220067FF58 /* WebViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B6BA97F27E716220067FF58 /* WebViewVC.swift */; };
@@ -63,10 +60,7 @@
 		8BB75D4727F2952300AE71A1 /* CategoriesStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB75D4627F2952300AE71A1 /* CategoriesStruct.swift */; };
 		8BC31D7B27E3E5EA00FBC939 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC31D7A27E3E5EA00FBC939 /* Button.swift */; };
 		8BC8525027E28D0F00C5A3A4 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC8524F27E28D0F00C5A3A4 /* UserSettings.swift */; };
-		8BD17F6A27F4FCA6008D9D57 /* IndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD17F6827F4FCA6008D9D57 /* IndicatorView.swift */; };
-		8BD17F6C27F50487008D9D57 /* IndicatorViewAppearence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD17F6B27F50487008D9D57 /* IndicatorViewAppearence.swift */; };
 		8BD17F7027F54B6C008D9D57 /* NoRemindersCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD17F6F27F54B6B008D9D57 /* NoRemindersCell.swift */; };
-		8BD17F7A27F5833C008D9D57 /* IndicatorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8BD17F7927F5833C008D9D57 /* IndicatorView.xib */; };
 		8BD2E77C25B8622100D4DFBF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */; };
 		8BD3A3D927E4097400547022 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD3A3D827E4097400547022 /* View.swift */; };
 		8BE60E5927726EA8007B7FB3 /* LastSelected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE60E5827726EA8007B7FB3 /* LastSelected.swift */; };
@@ -87,6 +81,7 @@
 		8D8B6C3E245023EC007260A0 /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8B6C3D245023EC007260A0 /* CalendarVC.swift */; };
 		8DADC8922810E30300CC66EF /* TransactionNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DADC8912810E30300CC66EF /* TransactionNav.swift */; };
 		8DB4DAC227FC10D000EAA56F /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB4DAC127FC10D000EAA56F /* Keys.swift */; };
+		8DB7C459284EA064001DBFB7 /* AlertViewLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 8DB7C458284EA064001DBFB7 /* AlertViewLibrary */; };
 		8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */; };
 		8DBA7E5423F0316F00D8214C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5323F0316F00D8214C /* ViewController.swift */; };
 		8DBA7E5723F0316F00D8214C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5523F0316F00D8214C /* Main.storyboard */; };
@@ -97,6 +92,7 @@
 		8DD89D8C23F1485700273904 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8B23F1485700273904 /* Constants.swift */; };
 		8DD89D8E23F1495300273904 /* TransactionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8D23F1495300273904 /* TransactionVC.swift */; };
 		8DD89D9023F1496100273904 /* CategoriesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8F23F1496100273904 /* CategoriesVC.swift */; };
+		8DE94B702850336800ADF861 /* MessageViewLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 8DE94B6F2850336800ADF861 /* MessageViewLibrary */; };
 		8DEB0CD928184FC0002D24D3 /* Cells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEB0CD828184FC0002D24D3 /* Cells.swift */; };
 		8DEB0CDB28184FEA002D24D3 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEB0CDA28184FEA002D24D3 /* Extensions.swift */; };
 		8DEB0CDE28188762002D24D3 /* Public.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEB0CDD28188762002D24D3 /* Public.swift */; };
@@ -116,6 +112,16 @@
 			files = (
 			);
 			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8DB7C441284E8D1B001DBFB7 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -140,8 +146,6 @@
 		8B35DA6525C6F124008A8719 /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		8B42FCDC2776805800013E4B /* NumbersTF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumbersTF.swift; sourceTree = "<group>"; };
 		8B4728BB27533A470078BD34 /* DataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBase.swift; sourceTree = "<group>"; };
-		8B47F92C2773B90300FD96AA /* MessageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
-		8B47F92E2773B90D00FD96AA /* Message.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Message.xib; sourceTree = "<group>"; };
 		8B52CC6627E3001B008D5348 /* UITableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewCell.swift; sourceTree = "<group>"; };
 		8B52DFE72750231000595A0C /* Numbers.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Numbers.xib; sourceTree = "<group>"; };
 		8B52DFE92750232D00595A0C /* NumbersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumbersView.swift; sourceTree = "<group>"; };
@@ -155,7 +159,6 @@
 		8B633134260FE7FF00D9E117 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		8B6B509827F3A69F0067C237 /* ReminderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderManager.swift; sourceTree = "<group>"; };
 		8B6B509A27F3B24B0067C237 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
-		8B6B509C27F3BEB40067C237 /* ExtensionIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionIndicatorView.swift; sourceTree = "<group>"; };
 		8B6BA97827E6E2500067FF58 /* AppSettingsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsData.swift; sourceTree = "<group>"; };
 		8B6BA97D27E715C20067FF58 /* Reusable.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Reusable.storyboard; sourceTree = "<group>"; };
 		8B6BA97F27E716220067FF58 /* WebViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewVC.swift; sourceTree = "<group>"; };
@@ -180,10 +183,7 @@
 		8BB75D4627F2952300AE71A1 /* CategoriesStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesStruct.swift; sourceTree = "<group>"; };
 		8BC31D7A27E3E5EA00FBC939 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		8BC8524F27E28D0F00C5A3A4 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
-		8BD17F6827F4FCA6008D9D57 /* IndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndicatorView.swift; sourceTree = "<group>"; };
-		8BD17F6B27F50487008D9D57 /* IndicatorViewAppearence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorViewAppearence.swift; sourceTree = "<group>"; };
 		8BD17F6F27F54B6B008D9D57 /* NoRemindersCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoRemindersCell.swift; sourceTree = "<group>"; };
-		8BD17F7927F5833C008D9D57 /* IndicatorView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = IndicatorView.xib; sourceTree = "<group>"; };
 		8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8BD3A3D827E4097400547022 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		8BE60E5827726EA8007B7FB3 /* LastSelected.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastSelected.swift; sourceTree = "<group>"; };
@@ -235,7 +235,9 @@
 				8B633135260FE7FF00D9E117 /* AuthenticationServices.framework in Frameworks */,
 				8B633132260FDB3900D9E117 /* StoreKit.framework in Frameworks */,
 				297BDB649113044757C2CEF2 /* Pods_Budget_Tracker.framework in Frameworks */,
+				8DB7C459284EA064001DBFB7 /* AlertViewLibrary in Frameworks */,
 				8DECAFC12460461F0041B734 /* CloudKit.framework in Frameworks */,
+				8DE94B702850336800ADF861 /* MessageViewLibrary in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -281,16 +283,6 @@
 			path = Localization;
 			sourceTree = "<group>";
 		};
-		8B26328827E697FF0086C3A8 /* IndicatorView */ = {
-			isa = PBXGroup;
-			children = (
-				8BD17F6D27F51D7C008D9D57 /* Components */,
-				8BD17F7927F5833C008D9D57 /* IndicatorView.xib */,
-				8BD17F6827F4FCA6008D9D57 /* IndicatorView.swift */,
-			);
-			path = IndicatorView;
-			sourceTree = "<group>";
-		};
 		8B26328927E6980F0086C3A8 /* NumbdersView */ = {
 			isa = PBXGroup;
 			children = (
@@ -299,15 +291,6 @@
 				8B52DFE72750231000595A0C /* Numbers.xib */,
 			);
 			path = NumbdersView;
-			sourceTree = "<group>";
-		};
-		8B26328A27E6981F0086C3A8 /* MessageView */ = {
-			isa = PBXGroup;
-			children = (
-				8B47F92C2773B90300FD96AA /* MessageView.swift */,
-				8B47F92E2773B90D00FD96AA /* Message.xib */,
-			);
-			path = MessageView;
 			sourceTree = "<group>";
 		};
 		8B26328B27E6985B0086C3A8 /* PasscodeView */ = {
@@ -543,8 +526,6 @@
 			children = (
 				8BC31D7D27E3E60600FBC939 /* UIObjects */,
 				8B26328C27E6986F0086C3A8 /* SideBar */,
-				8B26328827E697FF0086C3A8 /* IndicatorView */,
-				8B26328A27E6981F0086C3A8 /* MessageView */,
 				8B26328927E6980F0086C3A8 /* NumbdersView */,
 				8B26328B27E6985B0086C3A8 /* PasscodeView */,
 				8DF9DCCE2815A87E00C7BFA0 /* adBannerView */,
@@ -575,15 +556,6 @@
 				8B26328327E67D1D0086C3A8 /* SegmentedControl.swift */,
 			);
 			path = UIObjects;
-			sourceTree = "<group>";
-		};
-		8BD17F6D27F51D7C008D9D57 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				8B6B509C27F3BEB40067C237 /* ExtensionIndicatorView.swift */,
-				8BD17F6B27F50487008D9D57 /* IndicatorViewAppearence.swift */,
-			);
-			path = Components;
 			sourceTree = "<group>";
 		};
 		8BD17F6E27F51F8D008D9D57 /* ReminderStruct */ = {
@@ -740,12 +712,17 @@
 				8DBA7E4A23F0316F00D8214C /* Resources */,
 				91E877923E02E04E742F617F /* [CP] Embed Pods Frameworks */,
 				8BA57844261F617700C48524 /* Embed Watch Content */,
+				8DB7C441284E8D1B001DBFB7 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = "Budget Tracker";
+			packageProductDependencies = (
+				8DB7C458284EA064001DBFB7 /* AlertViewLibrary */,
+				8DE94B6F2850336800ADF861 /* MessageViewLibrary */,
+			);
 			productName = "Budget Tracker";
 			productReference = 8DBA7E4C23F0316F00D8214C /* Budget Tracker.app */;
 			productType = "com.apple.product-type.application";
@@ -776,6 +753,10 @@
 				uk,
 			);
 			mainGroup = 8DBA7E4323F0316F00D8214C;
+			packageReferences = (
+				8DB7C457284EA064001DBFB7 /* XCRemoteSwiftPackageReference "AlertViewLibrary" */,
+				8DE94B6E2850336800ADF861 /* XCRemoteSwiftPackageReference "MessageViewLibrary" */,
+			);
 			productRefGroup = 8DBA7E4D23F0316F00D8214C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -791,13 +772,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B331AFC27E410A00093BF72 /* PascodeLockView.xib in Resources */,
-				8B47F92F2773B90D00FD96AA /* Message.xib in Resources */,
 				8B331AF727E4105C0093BF72 /* LogIn.storyboard in Resources */,
 				8DBA7E5F23F0317100D8214C /* LaunchScreen.storyboard in Resources */,
 				8B52DFE82750231000595A0C /* Numbers.xib in Resources */,
 				8DBA7E5C23F0317100D8214C /* Assets.xcassets in Resources */,
 				8DBA7E5723F0316F00D8214C /* Main.storyboard in Resources */,
-				8BD17F7A27F5833C008D9D57 /* IndicatorView.xib in Resources */,
 				8B6BA97E27E715C20067FF58 /* Reusable.storyboard in Resources */,
 				8DF9DCCD2815A87400C7BFA0 /* adBannerView.xib in Resources */,
 			);
@@ -869,7 +848,6 @@
 				8B26329827E6A4470086C3A8 /* DateComponents.swift in Sources */,
 				8B26329327E69EFA0086C3A8 /* localizationDictUA.swift in Sources */,
 				8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */,
-				8B47F92D2773B90300FD96AA /* MessageView.swift in Sources */,
 				8BB75D4427F294DE00AE71A1 /* TransactionStruct.swift in Sources */,
 				8B52CC6727E3001B008D5348 /* UITableViewCell.swift in Sources */,
 				8B26328627E67E720086C3A8 /* UISegmentedControl.swift in Sources */,
@@ -891,7 +869,6 @@
 				8DF9DCD02815A89400C7BFA0 /* adBannerView.swift in Sources */,
 				8B746ABE27F4039E0010F0A4 /* UINavigationController.swift in Sources */,
 				8DBA7E5423F0316F00D8214C /* ViewController.swift in Sources */,
-				8BD17F6C27F50487008D9D57 /* IndicatorViewAppearence.swift in Sources */,
 				8DF9DCD42815AAD000C7BFA0 /* ExtensionGADBannerViewDelegate.swift in Sources */,
 				8BD2E77C25B8622100D4DFBF /* LoginViewController.swift in Sources */,
 				8B26328427E67D1D0086C3A8 /* SegmentedControl.swift in Sources */,
@@ -905,7 +882,6 @@
 				8BF63E8F2762C83F002E8601 /* SettingsVC.swift in Sources */,
 				8B20751227D9A7AF00CF2172 /* PascodeLockView.swift in Sources */,
 				8B6B509B27F3B24B0067C237 /* NotificationManager.swift in Sources */,
-				8BD17F6A27F4FCA6008D9D57 /* IndicatorView.swift in Sources */,
 				8B2A4D72271439520085E0F0 /* MoreVC.swift in Sources */,
 				8B6BFB1C27F7CB8600DD4CBC /* TableViewExtension.swift in Sources */,
 				8B7B63CC2655CAFB0067C434 /* SuperViewController.swift in Sources */,
@@ -927,7 +903,6 @@
 				8D52066B24216A6200772CD5 /* HistoryVC.swift in Sources */,
 				8BD17F7027F54B6C008D9D57 /* NoRemindersCell.swift in Sources */,
 				8BF63E8D27629D14002E8601 /* SupportVC.swift in Sources */,
-				8B6B509D27F3BEB40067C237 /* ExtensionIndicatorView.swift in Sources */,
 				8DD89D8C23F1485700273904 /* Constants.swift in Sources */,
 				8B5434FA27ED838F00417141 /* Notifications.swift in Sources */,
 				8D36724224D315BC00CE90A9 /* NetworkModel.swift in Sources */,
@@ -1171,6 +1146,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8DB7C457284EA064001DBFB7 /* XCRemoteSwiftPackageReference "AlertViewLibrary" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mishadovhiy/AlertViewLibrary.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		8DE94B6E2850336800ADF861 /* XCRemoteSwiftPackageReference "MessageViewLibrary" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mishadovhiy/MessageViewLibrary.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8DB7C458284EA064001DBFB7 /* AlertViewLibrary */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8DB7C457284EA064001DBFB7 /* XCRemoteSwiftPackageReference "AlertViewLibrary" */;
+			productName = AlertViewLibrary;
+		};
+		8DE94B6F2850336800ADF861 /* MessageViewLibrary */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8DE94B6E2850336800ADF861 /* XCRemoteSwiftPackageReference "MessageViewLibrary" */;
+			productName = MessageViewLibrary;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8DBA7E4423F0316F00D8214C /* Project object */;
 }

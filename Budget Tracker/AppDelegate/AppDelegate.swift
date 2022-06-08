@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import AlertViewLibrary
+import MessageViewLibrary
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate{
@@ -21,12 +23,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     var becameActive = false
 
     
-    lazy var newMessage: MessageView = {
-        return MessageView.instanceFromNib() as! MessageView
+    lazy var newMessage: MessageViewLibrary = {
+        return MessageViewLibrary.instanceFromNib()
     }()
     
-    lazy var ai: IndicatorView = {
-        return IndicatorView.instanceFromNib() as! IndicatorView
+    lazy var ai: AlertViewLibrary = {
+        let ai = AlertViewLibrary.instanceFromNib()
+        return ai
     }()
     
     let passcodeLock = PascodeLockView.instanceFromNib() as! PascodeLockView
@@ -85,6 +88,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
             }
             presentLock(passcode: false)
         }
+        UserDefaults.standard.setValue(true, forKey: "BackgroundEntered")
     }
     
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
@@ -104,6 +108,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         print(#function)
         AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: analiticName))
         checkPasscodeTimout()
+        if let backgroundEntered = UserDefaults.standard.value(forKey: "BackgroundEntered") as? Bool {
+            if backgroundEntered != true {
+                if !appData.devMode {
+                    AnalyticModel.shared.analiticStorage.append(.init(key: "Crash", action: analiticName))
+                }
+                
+                if appData.devMode {
+                    DispatchQueue.main.async {
+                        self.ai.showAlertWithOK(title:"Crash detected", text:"Crash logs has been sent to developer", error: true)
+                    }
+                }
+            }
+        }
+        UserDefaults.standard.setValue(false, forKey: "BackgroundEntered")
     }
     
     func applicationWillTerminate(_ application: UIApplication) {
@@ -114,7 +132,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: analiticName))
         AnalyticModel.shared.checkData()
         print(#function)
-        
     }
     
     

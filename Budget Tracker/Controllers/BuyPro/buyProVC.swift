@@ -8,6 +8,7 @@
 
 import UIKit
 import StoreKit
+import AlertViewLibrary
 
 class BuyProVC: SuperViewController {
     
@@ -186,7 +187,7 @@ class BuyProVC: SuperViewController {
                 
             } else {
                 let firstButton = self.ai.prebuild_closeButton(title: "Close".localize, style: .error)
-                let secondButton = IndicatorView.button(title: "Sign in".localize, style: .regular, close: true) { _ in
+                let secondButton:AlertViewLibrary.button? = .init(title: "Sign in".localize, style: .regular, close: true) { _ in
                     DispatchQueue.main.async {
                         self.performSegue(withIdentifier: "toSingIn", sender: self)
                     }

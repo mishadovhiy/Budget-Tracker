@@ -809,8 +809,9 @@ class ViewController: SuperViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         self.notificationsCount = Notifications.notificationsCount
-        DispatchQueue.main.async {
-            if self.ai.isShowing {
+        
+        if self.ai.isShowing {
+            DispatchQueue.main.async {
                 self.ai.fastHide()
             }
         }

@@ -243,7 +243,7 @@ class DebtDescriptionCell: UITableViewCell {
         }
     }
 
-    private let ai = AppDelegate.shared?.ai ?? IndicatorView.instanceFromNib() as! IndicatorView
+//    private let ai = AppDelegate.shared?.ai ?? IndicatorView.instanceFromNib() as! IndicatorView
     
     var removeAction:(() -> ())?
     @IBAction func changeDatePressed(_ sender: Any) {//remove
@@ -269,7 +269,7 @@ class DebtDescriptionCell: UITableViewCell {
     
     var changeAction:(() -> ())?
     @IBAction func doneDatePressed(_ sender: Any) {//change
-        self.ai.show { _ in
+        AppDelegate.shared?.ai.show { _ in
             if let funcc = self.changeAction {
                 funcc()
             }

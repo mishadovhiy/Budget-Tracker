@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AlertViewLibrary
 
 extension LoginViewController {
     func createAccoun(loadedData: [[String]]) {
@@ -27,7 +28,7 @@ extension LoginViewController {
                             self.showWrongFields()
                             
                             
-                            let firstButton = IndicatorView.button(title: "Try again".localize, style: .regular, close: true) { _ in
+                            let firstButton:AlertViewLibrary.button = .init(title: "Try again".localize, style: .regular, close: true) { _ in
                                 self.emailLabel.becomeFirstResponder()
                             }
                             DispatchQueue.main.async {

@@ -8,7 +8,7 @@
 
 import UIKit
 import AVFoundation
-
+import AlertViewLibrary
 
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
@@ -18,8 +18,8 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         let notificationTitle = notification.request.content.title
         notificationManager.deliveredNotificationIDs.append(notification.request.identifier)
         let isDebts = notification.request.identifier.contains("Debts")
-        let okButton = IndicatorView.button(title: "Close", style: .regular, close: true) { _ in }
-        let showButton = IndicatorView.button(title: "Show", style: .link, close: false) { _ in
+        let okButton:AlertViewLibrary.button = .init(title: "Close", style: .regular, close:true, action: nil)
+        let showButton = AlertViewLibrary.button(title: "Show", style: .link, close: false) { _ in
             
             if isDebts {
                 LoadFromDB.shared.newCategories { categories, error in
