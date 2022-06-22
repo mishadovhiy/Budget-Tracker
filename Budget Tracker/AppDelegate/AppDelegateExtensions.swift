@@ -154,7 +154,9 @@ extension AppDelegate: AlertViewProtocol {
         return .init(text: texts, colors: colors)
     }
     
-    
+    func aiNotShowingCondition() -> Bool {
+        return appData.username == ""
+    }
 }
 
 
