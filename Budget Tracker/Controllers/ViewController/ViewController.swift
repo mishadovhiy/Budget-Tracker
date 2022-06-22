@@ -812,7 +812,7 @@ class ViewController: SuperViewController {
         
         if self.ai.isShowing {
             DispatchQueue.main.async {
-                self.ai.fastHide()
+             //   self.ai.fastHide()
             }
         }
         if appData.needDownloadOnMainAppeare {

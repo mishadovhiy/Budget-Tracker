@@ -34,7 +34,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             AudioServicesPlaySystemSound(1007)
             self.ai.showAlert(buttons: (showButton, okButton), title: notificationTitle, description: notificationText)
         }
-
+        
     }
     
     
@@ -52,7 +52,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                 appData.present(vc: navController) { _ in
                     self.ai.fastHide()
                 }
-
+                
             }
         } else {
             let text = appData.devMode ? categpry : nil
@@ -79,7 +79,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         }
     }
     
-
+    
     func checkPasscodeTimout() {
         guard let logoutDate = backgroundEnterDate else{
             if UserSettings.Security.password != "" {
@@ -110,7 +110,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             }
         }
     }
-
+    
 }
 
 
@@ -123,6 +123,38 @@ extension AppDelegate {
         }
         
     }
+}
+
+
+
+extension AppDelegate: AlertViewProtocol {
+    func alertViewWillAppear() {
+    }
+    
+    func alertViewDidDisappear() {
+    }
+    
+    func aiAppearence() -> AIAppearence {
+        let texts:AIAppearence.Text = .init(loading: "Loading".localize, done: "Done".localize, internetError: (title: "Internet error".localize, description: "Try again later".localize), error: "Error".localize, okButton: "OK".localize, success: "Success".localize)
+        
+        let view = K.Colors.primaryBacground
+        
+        let background = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 1)
+        
+        let accent = (background: background.withAlphaComponent(0.7),
+                      view: view.withAlphaComponent(0.8),
+                      higlight: UIColor.red)
+        
+        let normal = (background: background.withAlphaComponent(0.5),
+                      view: view.withAlphaComponent(0.6))
+        
+        let buttom = (link: K.Colors.link, normal: K.Colors.category ?? .red)
+        
+        let colors:AIAppearence.Colors = .init(accent: accent, normal: normal, buttom: buttom, texts: (title: K.Colors.category ?? .red, description: K.Colors.balanceT ?? .red))
+        return .init(text: texts, colors: colors)
+    }
+    
+    
 }
 
 

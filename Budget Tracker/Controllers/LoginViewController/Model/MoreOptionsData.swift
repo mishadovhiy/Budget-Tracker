@@ -124,14 +124,8 @@ class MoreOptionsData {
                                 }
                             }
 
-                            let firstButton:AlertViewLibrary.button  = .init(title: "Cancel".localize, style: .regular, close: true) { _ in
-                            }
-                            let secondButton:AlertViewLibrary.button = .init(title: "Send".localize, style: .link, close: false) { _ in
+                            self.aiRestorationCode(email: emailToSend) { okPressed in
                                 self.sendRestorationCode(toChange: .changePassword)
-                            }
-                            let text = "Restoration code would be sent on: ".localize + emailToSend
-                            DispatchQueue.main.async {
-                                self.ai.showAlert(buttons: (secondButton, firstButton), title: "Send code".localize, description: text, type: .standard)
                             }
                         } else {
                             self.sendRestorationCode(toChange: .changePassword)
@@ -144,7 +138,17 @@ class MoreOptionsData {
    //     }
     }
     
-    
+    func aiRestorationCode(email:String, sendPressed:@escaping(Bool)->()) {
+        let firstButton:AlertViewLibrary.button  = .init(title: "Cancel".localize, style: .regular, close: true) { _ in
+        }
+        let secondButton:AlertViewLibrary.button = .init(title: "Send".localize, style: .link, close: false) { _ in
+            sendPressed(true)
+        }
+        let text = "Restoration code would be sent on: ".localize + email
+        DispatchQueue.main.async {
+            self.ai.showAlert(buttons: (secondButton, firstButton), title: "Send code".localize, description: text, type: .standard, image: .init(named: "restorationCode"))
+        }
+    }
     
     func changeEmailTapped() {
         ai.show { (_) in
@@ -162,15 +166,9 @@ class MoreOptionsData {
                             break
                         }
                     }
-                    let firstButton:AlertViewLibrary.button  = .init(title: "Cancel".localize, style: .regular, close: true) { _ in
-                                        
-                    }
-                    let secondButton:AlertViewLibrary.button  = .init(title: "Send".localize, style: .link, close: false) { _ in
-                        self.sendRestorationCode(toChange: .changeEmail)
-                    }
-                    let text = "Restoration code would be sent on: ".localize + emailToSend
-                    DispatchQueue.main.async {
-                        self.ai.showAlert(buttons: (secondButton, firstButton), title: "Send code".localize, description: text, type: .standard)
+
+                    self.aiRestorationCode(email: emailToSend) { okPressed in
+                        self.sendRestorationCode(toChange: .changePassword)
                     }
 
                 }
@@ -423,7 +421,7 @@ class MoreOptionsData {
                         if error {
 
                             DispatchQueue.main.async {
-                                self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                                self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true, image: .init(named: "restorationCode"))
                             }
                         } else {
                             var emailToSend = ""
@@ -664,7 +662,7 @@ class MoreOptionsData {
 
 
 extension MoreOptionsData {
-    func showAlert(title:String? = nil,text:String? = nil, error: Bool, goToLogin: Bool = false) {
+    func showAlert(title:String? = nil,text:String? = nil, error: Bool, goToLogin: Bool = false, image:UIImage? = nil) {
         
         let resultTitle = title == nil ? (error ? Text.Error.error : Text.success) : title!
         DispatchQueue.main.async {

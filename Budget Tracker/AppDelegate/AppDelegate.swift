@@ -28,7 +28,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }()
     
     lazy var ai: AlertViewLibrary = {
-        let ai = AlertViewLibrary.instanceFromNib()
+        var appearence:AIAppearence = aiAppearence()
+        appearence.zPosition = 1001
+        let ai = AlertViewLibrary.instanceFromNib(appearence)
+      //  ai.delegate = self
         return ai
     }()
     
@@ -78,6 +81,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }
     
 
+    func testAI() {
+        self.ai.show { _ in
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
+                self.ai.showAlertWithOK(title: "sd", text: "sdsda", error: true, image: .init(named: "restorationCode")) { _ in
+                    
+
+                }
+            }
+        }
+        
+    }
     
     
     func applicationWillResignActive(_ application: UIApplication) {
@@ -106,6 +120,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         print(#function)
+        testAI()
         AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: analiticName))
         checkPasscodeTimout()
         if let backgroundEntered = UserDefaults.standard.value(forKey: "BackgroundEntered") as? Bool {
