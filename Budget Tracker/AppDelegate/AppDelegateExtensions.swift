@@ -139,7 +139,7 @@ extension AppDelegate: AlertViewProtocol {
         
         let view = K.Colors.primaryBacground
         
-        let background = UIColor.init(red: 0/255, green: 0/255, blue: 0/255, alpha: 1)
+        let background = UIColor.black
         
         let accent = (background: background.withAlphaComponent(0.7),
                       view: view.withAlphaComponent(0.8),
@@ -150,7 +150,11 @@ extension AppDelegate: AlertViewProtocol {
         
         let buttom = (link: K.Colors.link, normal: K.Colors.category ?? .red)
         
-        let colors:AIAppearence.Colors = .init(accent: accent, normal: normal, buttom: buttom, texts: (title: K.Colors.category ?? .red, description: K.Colors.balanceT ?? .red))
+        let textsColor = (title: K.Colors.category ?? .red, description: K.Colors.balanceT ?? .red)
+        
+        let separetor = (K.Colors.separetor ?? .red).withAlphaComponent(0.5)
+        
+        let colors:AIAppearence.Colors = .init(accent: accent, normal: normal, buttom: buttom, texts: textsColor, separetor: separetor)
         return .init(text: texts, colors: colors)
     }
     

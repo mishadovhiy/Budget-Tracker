@@ -608,8 +608,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "334"
             endingLineNumber = "334"
-            landmarkName = "instanceFromNib(_:)"
-            landmarkType = "7">
+            landmarkName = "AlertViewLibrary"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -624,7 +624,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "277"
             endingLineNumber = "277"
-            landmarkName = "fastHide(completionn:)"
+            landmarkName = "buttonPress(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -640,7 +640,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "283"
             endingLineNumber = "283"
-            landmarkName = "fastHide(completionn:)"
+            landmarkName = "fastHide()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -654,8 +654,8 @@
             filePath = "Budget Tracker/AppDelegate/AppDelegateExtensions.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "153"
-            endingLineNumber = "153"
+            startingLineNumber = "157"
+            endingLineNumber = "157"
             landmarkName = "aiAppearence()"
             landmarkType = "7">
          </BreakpointContent>
@@ -672,7 +672,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "284"
             endingLineNumber = "284"
-            landmarkName = "fastHide(completionn:)"
+            landmarkName = "fastHide()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -680,7 +680,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "9F3996F1-F8AF-4FD9-987C-B20528EA6A25"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../../Library/Developer/Xcode/DerivedData/Budget_Tracker-bqkmjlbvuhfewufwsxdimbocvwaf/SourcePackages/checkouts/AlertViewLibrary/Sources/AlertViewLibrary/AlertViewLibrary.swift"

@@ -121,7 +121,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         print(#function)
-    //    testAI()
+        testAI()
         AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: analiticName))
         checkPasscodeTimout()
         if let backgroundEntered = UserDefaults.standard.value(forKey: "BackgroundEntered") as? Bool {
