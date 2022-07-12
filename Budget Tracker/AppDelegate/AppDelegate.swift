@@ -31,7 +31,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         var appearence:AIAppearence = aiAppearence()
         appearence.zPosition = 1001
         let ai = AlertViewLibrary.instanceFromNib(appearence)
-      //  ai.delegate = self
         ai.notShowingCondition = aiNotShowingCondition
         return ai
     }()
@@ -121,7 +120,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         print(#function)
-        testAI()
+   //     testAI()
         AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: analiticName))
         checkPasscodeTimout()
         if let backgroundEntered = UserDefaults.standard.value(forKey: "BackgroundEntered") as? Bool {
