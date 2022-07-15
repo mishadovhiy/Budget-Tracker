@@ -25,7 +25,6 @@ class SuperViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         definesPresentationContext = true
-        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: self.classForCoder.description()))
         
     }
     

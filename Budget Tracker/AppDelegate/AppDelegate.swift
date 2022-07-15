@@ -106,7 +106,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }
     
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
-        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: analiticName))
+
         AppData.categoriesHolder = nil
         if appData.devMode {
             DispatchQueue.main.async {
@@ -120,13 +120,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         print(#function)
-   //     testAI()
-        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: analiticName))
+
         checkPasscodeTimout()
         if let backgroundEntered = UserDefaults.standard.value(forKey: "BackgroundEntered") as? Bool {
             if backgroundEntered != true {
                 if !appData.devMode {
-                    AnalyticModel.shared.analiticStorage.append(.init(key: "Crash", action: analiticName))
+                    //send crash
                 }
                 
                 if appData.devMode {
@@ -144,8 +143,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }
     private let analiticName = "AppDelegate"
     func applicationDidEnterBackground(_ application: UIApplication) {
-        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: analiticName))
-        AnalyticModel.shared.checkData()
         print(#function)
     }
     
