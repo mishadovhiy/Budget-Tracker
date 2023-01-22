@@ -121,7 +121,7 @@ class AppSettingsData {
         })
         
         let devSupport = SettingsVC.StandartCell(title: "App website".localize, showIndicator: false, action: {
-            let urlString = "https://dovhiy.com/#budget"
+            let urlString = "https://mishadovhiy.com/#budget"
             if let url = URL(string: urlString) {
                 DispatchQueue.main.async {
                     UIApplication.shared.open(url, options: [:]) { _ in
@@ -136,7 +136,7 @@ class AppSettingsData {
         let privacy = SettingsVC.StandartCell(title: pprivacyTitle, action: {
             DispatchQueue.main.async {
                 if let nav = self.vc.navigationController {
-                    WebViewVC.shared.presentScreen(in: nav, data: .init(url: "https://dovhiy.com/apps/previews/budget.html", key: "Privacy".localize), screenTitle: pprivacyTitle)
+                    WebViewVC.shared.presentScreen(in: nav, data: .init(url: "https://mishadovhiy.com/apps/previews/budget.html", key: "Privacy".localize), screenTitle: pprivacyTitle)
                 }
             }
             

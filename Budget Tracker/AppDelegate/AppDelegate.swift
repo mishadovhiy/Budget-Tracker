@@ -141,7 +141,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     func applicationWillTerminate(_ application: UIApplication) {
         print(#function)
     }
-    private let analiticName = "AppDelegate"
+
     func applicationDidEnterBackground(_ application: UIApplication) {
         print(#function)
     }

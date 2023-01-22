@@ -35,8 +35,13 @@
 		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>dovhiy.com</key>
-			<string></string>
+			<key>mishadovhiy.com</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
 		</dict>
 	</dict>
 	<key>SKAdNetworkItems</key>
