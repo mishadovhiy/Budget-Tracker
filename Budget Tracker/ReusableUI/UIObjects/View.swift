@@ -10,32 +10,67 @@ import UIKit
 
 @IBDesignable
 class View: UIView {
-
+    
     @IBInspectable open var cornerRadius: CGFloat = 0 {
         didSet {
             DispatchQueue.main.async {
                 self.layer.cornerRadius = self.cornerRadius
-              //  self.layer.masksToBounds = self.cornerRadius > 0
             }
         }
     }
-
-    @IBInspectable open var shadowOpasity: Float = 0 {
+    
+    @IBInspectable open var borderWidth: CGFloat = 0 {
         didSet {
-            shadow(opasity: shadowOpasity)
+            self.layer.borderWidth = self.borderWidth
         }
-        
     }
-
-    @IBInspectable open var linkBackground:Bool = false {
+    
+    @IBInspectable open var lineColor: UIColor? = nil {
         didSet {
-            if linkBackground {
-                DispatchQueue.main.async {
-                    self.backgroundColor = K.Colors.link
-                }
+            if let color = lineColor {
+                self.layer.borderWidth = borderWidth == 0 ? 2 : borderWidth
+                self.layer.borderColor = color.cgColor
             }
         }
     }
     
 
+    @IBInspectable open var shadowOpasity: Float = 0 {
+        didSet {
+            if !backgroundShadow {
+                self.layer.shadow(opasity: shadowOpasity)
+            }
+        }
+    }
+    
+    @IBInspectable open var backgroundShadow: Bool = false {
+        didSet {
+            if backgroundShadow {
+                self.layer.shadow(opasity: 0.3, offset: .init(width: 2, height: 5), color: self.backgroundColor ?? .black, radius: 5)
+            }
+            
+        }
+    }
+    
+    @IBInspectable open var linkBackground:Bool = false {
+        didSet {
+            if linkBackground {
+                DispatchQueue.main.async {
+                    self.backgroundColor = self.tintColor.withAlphaComponent(0.15)
+                }
+            }
+        }
+    }
+    
+    
+
+
+    
+    
+    @IBInspectable open var isOval: Bool = false {
+        didSet {
+            self.layer.cornerRadius = self.layer.frame.height / 2
+        }
+    }
 }
+

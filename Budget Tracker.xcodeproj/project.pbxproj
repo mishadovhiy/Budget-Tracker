@@ -76,6 +76,12 @@
 		8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5206662421695200772CD5 /* StatisticBrain.swift */; };
 		8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D52066824216A2900772CD5 /* StatisticVC.swift */; };
 		8D52066B24216A6200772CD5 /* HistoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D52066A24216A6200772CD5 /* HistoryVC.swift */; };
+		8D834D9C297E03D60056E686 /* CalendarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D834D96297E03D60056E686 /* CalendarModel.swift */; };
+		8D834D9D297E03D60056E686 /* UICollectionViewDelegate_CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D834D98297E03D60056E686 /* UICollectionViewDelegate_CalendarVC.swift */; };
+		8D834D9E297E03D60056E686 /* DaysCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D834D99297E03D60056E686 /* DaysCollectionCell.swift */; };
+		8D834D9F297E03D60056E686 /* UICollectionViewDelegate_CalendarControlVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D834D9A297E03D60056E686 /* UICollectionViewDelegate_CalendarControlVC.swift */; };
+		8D834DA0297E03D60056E686 /* CalendarControlVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D834D9B297E03D60056E686 /* CalendarControlVC.swift */; };
+		8D834DA2297E05530056E686 /* TouchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D834DA1297E05530056E686 /* TouchView.swift */; };
 		8D8B6C3C245023D0007260A0 /* FilterTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8B6C3B245023D0007260A0 /* FilterTVC.swift */; };
 		8D8B6C3E245023EC007260A0 /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8B6C3D245023EC007260A0 /* CalendarVC.swift */; };
 		8DADC8922810E30300CC66EF /* TransactionNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DADC8912810E30300CC66EF /* TransactionNav.swift */; };
@@ -198,6 +204,12 @@
 		8D5206662421695200772CD5 /* StatisticBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticBrain.swift; sourceTree = "<group>"; };
 		8D52066824216A2900772CD5 /* StatisticVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticVC.swift; sourceTree = "<group>"; };
 		8D52066A24216A6200772CD5 /* HistoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryVC.swift; sourceTree = "<group>"; };
+		8D834D96297E03D60056E686 /* CalendarModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarModel.swift; sourceTree = "<group>"; };
+		8D834D98297E03D60056E686 /* UICollectionViewDelegate_CalendarVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UICollectionViewDelegate_CalendarVC.swift; sourceTree = "<group>"; };
+		8D834D99297E03D60056E686 /* DaysCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DaysCollectionCell.swift; sourceTree = "<group>"; };
+		8D834D9A297E03D60056E686 /* UICollectionViewDelegate_CalendarControlVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UICollectionViewDelegate_CalendarControlVC.swift; sourceTree = "<group>"; };
+		8D834D9B297E03D60056E686 /* CalendarControlVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarControlVC.swift; sourceTree = "<group>"; };
+		8D834DA1297E05530056E686 /* TouchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchView.swift; sourceTree = "<group>"; };
 		8D8B6C3B245023D0007260A0 /* FilterTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterTVC.swift; sourceTree = "<group>"; };
 		8D8B6C3D245023EC007260A0 /* CalendarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarVC.swift; sourceTree = "<group>"; };
 		8DADC8912810E30300CC66EF /* TransactionNav.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionNav.swift; sourceTree = "<group>"; };
@@ -533,6 +545,7 @@
 		8BC1B23B27D31426002C1E38 /* Reusable */ = {
 			isa = PBXGroup;
 			children = (
+				8D834D95297E03D60056E686 /* CalendarControlVC */,
 				8D8B6C3D245023EC007260A0 /* CalendarVC.swift */,
 				8BF63E8E2762C83F002E8601 /* SettingsVC.swift */,
 				8BF63E8A276294F2002E8601 /* SelectValueVC.swift */,
@@ -549,6 +562,7 @@
 			children = (
 				8BC31D7A27E3E5EA00FBC939 /* Button.swift */,
 				8BD3A3D827E4097400547022 /* View.swift */,
+				8D834DA1297E05530056E686 /* TouchView.swift */,
 				8B26328127E677930086C3A8 /* Label.swift */,
 				8B26328327E67D1D0086C3A8 /* SegmentedControl.swift */,
 			);
@@ -591,6 +605,26 @@
 				8D39788E28083E81007A2C55 /* AppDelegateExtensions.swift */,
 			);
 			path = AppDelegate;
+			sourceTree = "<group>";
+		};
+		8D834D95297E03D60056E686 /* CalendarControlVC */ = {
+			isa = PBXGroup;
+			children = (
+				8D834D9B297E03D60056E686 /* CalendarControlVC.swift */,
+				8D834D96297E03D60056E686 /* CalendarModel.swift */,
+				8D834D97297E03D60056E686 /* Cells */,
+				8D834D9A297E03D60056E686 /* UICollectionViewDelegate_CalendarControlVC.swift */,
+			);
+			path = CalendarControlVC;
+			sourceTree = "<group>";
+		};
+		8D834D97297E03D60056E686 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				8D834D98297E03D60056E686 /* UICollectionViewDelegate_CalendarVC.swift */,
+				8D834D99297E03D60056E686 /* DaysCollectionCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		8DBA7E4323F0316F00D8214C = {
@@ -875,24 +909,30 @@
 				8B6BA98027E716220067FF58 /* WebViewVC.swift in Sources */,
 				8DADC8922810E30300CC66EF /* TransactionNav.swift in Sources */,
 				8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */,
+				8D834D9E297E03D60056E686 /* DaysCollectionCell.swift in Sources */,
 				8BF63E8F2762C83F002E8601 /* SettingsVC.swift in Sources */,
 				8B20751227D9A7AF00CF2172 /* PascodeLockView.swift in Sources */,
 				8B6B509B27F3B24B0067C237 /* NotificationManager.swift in Sources */,
 				8B2A4D72271439520085E0F0 /* MoreVC.swift in Sources */,
+				8D834DA2297E05530056E686 /* TouchView.swift in Sources */,
 				8B6BFB1C27F7CB8600DD4CBC /* TableViewExtension.swift in Sources */,
 				8B7B63CC2655CAFB0067C434 /* SuperViewController.swift in Sources */,
+				8D834D9F297E03D60056E686 /* UICollectionViewDelegate_CalendarControlVC.swift in Sources */,
 				8B7D1AA1276CF203008942EC /* IconList.swift in Sources */,
+				8D834D9D297E03D60056E686 /* UICollectionViewDelegate_CalendarVC.swift in Sources */,
 				8B7855A227F1527000169A93 /* UIView.swift in Sources */,
 				8B78559C27F0C9F200169A93 /* RemindersVC.swift in Sources */,
 				8B91F08E27E587A800B74F5A /* MoreOptionsData.swift in Sources */,
 				8B52DFEA2750232D00595A0C /* NumbersView.swift in Sources */,
 				8BD3A3D927E4097400547022 /* View.swift in Sources */,
 				8B78559F27F0CA2A00169A93 /* ReminderCell.swift in Sources */,
+				8D834DA0297E03D60056E686 /* CalendarControlVC.swift in Sources */,
 				8DEB0CDB28184FEA002D24D3 /* Extensions.swift in Sources */,
 				8DB4DAC227FC10D000EAA56F /* Keys.swift in Sources */,
 				8DD89D8723F1471400273904 /* AppData.swift in Sources */,
 				8B6BFB1827F7C82C00DD4CBC /* CategoriesMethods.swift in Sources */,
 				8B898CF427F3EB0800B66F79 /* UIDatePicker.swift in Sources */,
+				8D834D9C297E03D60056E686 /* CalendarModel.swift in Sources */,
 				8B6BFB1A27F7CB7600DD4CBC /* AppearcenceExtensions.swift in Sources */,
 				8B52DFEC27504D2900595A0C /* IconsVC.swift in Sources */,
 				8BF58D1F277C793D005A7F38 /* BuyPageVC.swift in Sources */,

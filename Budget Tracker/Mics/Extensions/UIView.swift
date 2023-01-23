@@ -21,3 +21,12 @@ extension UIView {
     }
     
 }
+
+extension CALayer {
+    func shadow(opasity:Float = 0.6, offset:CGSize = .init(width: 0, height: 0), color:UIColor? = nil, radius:CGFloat = 10) {
+        self.shadowColor = (color ?? .black).cgColor
+        self.shadowOffset = offset
+        self.shadowRadius = radius
+        self.shadowOpacity = opasity
+    }
+}
