@@ -62,16 +62,32 @@ class ViewController: SuperViewController {
     }
     
     
+    @IBOutlet weak var calendarContainer: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUI()
-        
+        if let v = CalendarControlVC.shared {
+            v.monthChanged = { year, month in
+                DispatchQueue.init(label: "local", qos: .userInitiated).async {
+                    appData.filter.showAll = false
+                    appData.filter.from = "\(appData.filter.makeTwo(n: 1)).\(appData.filter.makeTwo(n: month)).\(year)"
+                    appData.filter.to = "\(appData.filter.makeTwo(n: 31)).\(appData.filter.makeTwo(n: month)).\(year)"
+                    self.filter()
+                }
+            }
+            v.dateSelected = { newDate in
+                //scroll
+            }
+            
+        } else {
+            fatalError()
+        }
         pinchView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:))))
         ViewController.shared = self
         sideBar.load()
         toggleSideBar(false, animated: false)
-        
+        //here
     }
     
     

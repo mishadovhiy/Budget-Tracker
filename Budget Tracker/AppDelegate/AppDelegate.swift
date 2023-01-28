@@ -128,11 +128,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
                     //send crash
                 }
                 
-                if appData.devMode {
+  /*              if appData.devMode {
                     DispatchQueue.main.async {
                         self.ai.showAlertWithOK(title:"Crash detected", text:"Crash logs has been sent to developer", error: true)
                     }
-                }
+                }*/
             }
         }
         UserDefaults.standard.setValue(false, forKey: "BackgroundEntered")

@@ -21,6 +21,7 @@ class CalendarControlVC: UIViewController {
     var tableData:[CalendarModel] = []
     var _middleDate:CalendarData?
     var dateSelected:((_ date:DateComponents)->())?
+    var monthChanged:((_ month:Int, _ year:Int)->())?
     var selectedDate:DateComponents?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,6 +71,9 @@ class CalendarControlVC: UIViewController {
             _middleDate = newValue
             if let val = newValue {
                 createCalendarData(val)
+            }
+            if let action = monthChanged {
+                action(newValue?.year ?? 0, newValue?.month ?? 0)
             }
         }
     }
@@ -122,7 +126,6 @@ class CalendarControlVC: UIViewController {
     
     func calendarMonthChanged(appeared:Bool, plus:Bool = true) {
         collectionView.scrollToItem(at: .init(item: !plus ? 0 : 2, section: 0), at: .centeredHorizontally, animated: true)
-        
     }
     
     

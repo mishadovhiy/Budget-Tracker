@@ -239,34 +239,34 @@ class AppData {
         
         var showAll:Bool {
             get {
-                UserDefaults.standard.value(forKey: "showAll") as? Bool ?? false
+                UserDefaults.standard.value(forKey: "showAlll") as? Bool ?? false
             }
             set {
-                UserDefaults.standard.setValue(newValue, forKey: "showAll")
+                UserDefaults.standard.setValue(newValue, forKey: "showAlll")
             }
         }
         var from: String {
             get {
-                UserDefaults.standard.value(forKey: "SortFrom") as? String ?? ""
+                UserDefaults.standard.value(forKey: "SortFromm") as? String ?? ""
             }
             set {
-                UserDefaults.standard.setValue(newValue, forKey: "SortFrom")
+                UserDefaults.standard.setValue(newValue, forKey: "SortFromm")
             }
         }
         var to: String {
             get {
-                UserDefaults.standard.value(forKey: "SortTo") as? String ?? ""
+                UserDefaults.standard.value(forKey: "SortToo") as? String ?? ""
             }
             set {
-                UserDefaults.standard.setValue(newValue, forKey: "SortTo")
+                UserDefaults.standard.setValue(newValue, forKey: "SortToo")
             }
         }
         var selectedPeroud:String {
             get {
-                UserDefaults.standard.value(forKey: "SortSelectedPeroud") as? String ?? ""
+                UserDefaults.standard.value(forKey: "SortSelectedPeroudd") as? String ?? ""
             }
             set {
-                UserDefaults.standard.setValue(newValue, forKey: "SortSelectedPeroud")
+                UserDefaults.standard.setValue(newValue, forKey: "SortSelectedPeroudd")
             }
         }
         
