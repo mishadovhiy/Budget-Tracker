@@ -11,13 +11,9 @@ import UIKit
 extension ViewController {
     func scrollHead(_ scrollView: UIScrollView) {
         let offset = scrollView.contentOffset.y * -1
-        let height = (calendarContainer.frame.height + 10) * (-1)
+        let height = calendarContainer.frame.height * (-2)
         if height <= offset {
-            if offset <= 0 {
-                calendarContainer.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, offset, 0)
-            } else {
-                calendarContainer.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
-            }
+            calendarContainer.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, offset <= 0 ? offset : 0, 0)
         } else {
             calendarContainer.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, height, 0)
         }

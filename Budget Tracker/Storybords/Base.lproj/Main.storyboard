@@ -186,7 +186,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="430" height="829"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zIg-fF-jEa" userLabel="bigCalcView">
-                                        <rect key="frame" x="20" y="45" width="390" height="140"/>
+                                        <rect key="frame" x="20" y="50" width="390" height="140"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="gle-MX-Tpe">
                                                 <rect key="frame" x="0.0" y="0.0" width="390" height="140"/>
@@ -694,7 +694,7 @@
                                         </prototypes>
                                     </tableView>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7wN-Jq-Vyf">
-                                        <rect key="frame" x="0.0" y="175" width="430" height="220"/>
+                                        <rect key="frame" x="0.0" y="180" width="430" height="220"/>
                                         <color key="backgroundColor" name="PrimaryBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="220" id="vQe-Tn-2Ze"/>
@@ -1019,7 +1019,7 @@
                                     <constraint firstItem="Kwg-kx-2vX" firstAttribute="width" secondItem="0oV-VO-FeH" secondAttribute="width" multiplier="1:1" id="fyo-nr-kwZ"/>
                                     <constraint firstItem="zua-Ep-o90" firstAttribute="top" secondItem="Bqc-vp-d9i" secondAttribute="bottom" constant="4" id="gYj-lw-GNi"/>
                                     <constraint firstAttribute="trailing" secondItem="7wN-Jq-Vyf" secondAttribute="trailing" id="gqN-tD-el1"/>
-                                    <constraint firstItem="zIg-fF-jEa" firstAttribute="top" secondItem="Bqc-vp-d9i" secondAttribute="bottom" constant="5" id="gt8-Tg-4ZS"/>
+                                    <constraint firstItem="zIg-fF-jEa" firstAttribute="top" secondItem="Bqc-vp-d9i" secondAttribute="bottom" constant="10" id="gt8-Tg-4ZS"/>
                                     <constraint firstAttribute="trailing" secondItem="zIg-fF-jEa" secondAttribute="trailing" constant="20" id="jtJ-wQ-izJ"/>
                                     <constraint firstAttribute="bottom" secondItem="Kwg-kx-2vX" secondAttribute="bottom" id="kQB-2h-7gD"/>
                                     <constraint firstItem="zDz-M6-AUL" firstAttribute="leading" secondItem="Bqc-vp-d9i" secondAttribute="trailing" priority="750" id="lbl-ng-GPp"/>
@@ -2357,7 +2357,7 @@
                                 </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="statisticCellIdent" id="czw-1t-hDS" customClass="StatisticCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="408.5" width="430" height="48"/>
+                                        <rect key="frame" x="0.0" y="430.5" width="430" height="48"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="czw-1t-hDS" id="DL1-ap-cmz">
                                             <rect key="frame" x="0.0" y="0.0" width="399.66666666666669" height="48"/>
@@ -4518,8 +4518,8 @@ AAAAAAIBAAAAAAAAAGEAAAAAAAAAAAAAAAAAAChAA
         </image>
         <image name="line.3.horizontal" width="13" height="7"/>
         <image name="paperplane.fill" catalog="system" width="128" height="119"/>
-        <image name="pencil" catalog="system" width="128" height="113"/>
         <image name="pencil" width="14" height="14"/>
+        <image name="pencil" catalog="system" width="128" height="113"/>
         <image name="repeat" catalog="system" width="128" height="98"/>
         <image name="scroll" width="14" height="14"/>
         <image name="square.and.arrow.down" catalog="system" width="121" height="128"/>

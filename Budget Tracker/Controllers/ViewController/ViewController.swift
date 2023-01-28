@@ -308,7 +308,6 @@ class ViewController: SuperViewController {
 
     @objc func savedTransPressed(_ sender: UITapGestureRecognizer) {
         if !appData.sendSavedData {
-            
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: "toUnsendedVC", sender: self)
             }
