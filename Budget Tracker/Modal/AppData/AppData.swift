@@ -270,6 +270,13 @@ class AppData {
             }
         }
         
+        var filteredData:[String: [String]] {
+            get {return UserDefaults.standard.value(forKey: "filterOptions") as? [String: [String]] ?? [:]
+            }
+            set {UserDefaults.standard.setValue(newValue, forKey: "filterOptions")
+            }
+        }
+        
         var toDate:DateComponents {
             return to.stringToCompIso()
         }

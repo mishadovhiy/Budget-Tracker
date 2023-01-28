@@ -9,9 +9,6 @@
 import UIKit
 import Foundation
 
-
-
-
 class DataBase {
     
     func category(_ id: String, local: Bool = false) -> NewCategories? {
@@ -299,9 +296,5 @@ class DataBase {
     }
     
 }
-
-
-
-
 
 

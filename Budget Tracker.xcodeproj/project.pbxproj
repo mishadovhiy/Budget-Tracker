@@ -71,6 +71,7 @@
 		8BF63E8F2762C83F002E8601 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF63E8E2762C83F002E8601 /* SettingsVC.swift */; };
 		8BFA15D127E8E8510078856A /* categoriesVCcell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFA15D027E8E8510078856A /* categoriesVCcell.swift */; };
 		8BFA15D427E8E87B0078856A /* LocalDataActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFA15D327E8E87B0078856A /* LocalDataActionCell.swift */; };
+		8D0EC25F2985DB9600EBD1ED /* Extensions_ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0EC25E2985DB9600EBD1ED /* Extensions_ViewController.swift */; };
 		8D36724224D315BC00CE90A9 /* NetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D36724124D315BC00CE90A9 /* NetworkModel.swift */; };
 		8D39788F28083E81007A2C55 /* AppDelegateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D39788E28083E81007A2C55 /* AppDelegateExtensions.swift */; };
 		8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5206662421695200772CD5 /* StatisticBrain.swift */; };
@@ -200,6 +201,7 @@
 		8BF63E8E2762C83F002E8601 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		8BFA15D027E8E8510078856A /* categoriesVCcell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = categoriesVCcell.swift; sourceTree = "<group>"; };
 		8BFA15D327E8E87B0078856A /* LocalDataActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalDataActionCell.swift; sourceTree = "<group>"; };
+		8D0EC25E2985DB9600EBD1ED /* Extensions_ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions_ViewController.swift; sourceTree = "<group>"; };
 		8D36724124D315BC00CE90A9 /* NetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkModel.swift; sourceTree = "<group>"; };
 		8D39788E28083E81007A2C55 /* AppDelegateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegateExtensions.swift; sourceTree = "<group>"; };
 		8D5206662421695200772CD5 /* StatisticBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticBrain.swift; sourceTree = "<group>"; };
@@ -337,6 +339,7 @@
 				8D8B6C3B245023D0007260A0 /* FilterTVC.swift */,
 				8DD89D8223F1468E00273904 /* mainVCcell.swift */,
 				8DC033CB2985CA5A00CD98FF /* UITableViewDataSource_ViewController.swift */,
+				8D0EC25E2985DB9600EBD1ED /* Extensions_ViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -883,6 +886,7 @@
 				8B26329827E6A4470086C3A8 /* DateComponents.swift in Sources */,
 				8B26329327E69EFA0086C3A8 /* localizationDictUA.swift in Sources */,
 				8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */,
+				8D0EC25F2985DB9600EBD1ED /* Extensions_ViewController.swift in Sources */,
 				8BB75D4427F294DE00AE71A1 /* TransactionStruct.swift in Sources */,
 				8B52CC6727E3001B008D5348 /* UITableViewCell.swift in Sources */,
 				8B26328627E67E720086C3A8 /* UISegmentedControl.swift in Sources */,
