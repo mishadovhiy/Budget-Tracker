@@ -82,7 +82,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" layoutMarginsFollowReadableWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8YG-ZK-CWY" userLabel="controllView">
+                            <view hidden="YES" contentMode="scaleToFill" layoutMarginsFollowReadableWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8YG-ZK-CWY" userLabel="controllView">
                                 <rect key="frame" x="55" y="64" width="320" height="35"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vXW-Kx-evy" customClass="TouchView" customModule="Budget_Tracker" customModuleProvider="target">
@@ -226,7 +226,7 @@
                                 </constraints>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="KAA-zC-sm6">
-                                <rect key="frame" x="45" y="109" width="340" height="200"/>
+                                <rect key="frame" x="45" y="59" width="340" height="200"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="340" id="ZPW-zL-FvZ"/>
@@ -329,11 +329,10 @@
                             <constraint firstItem="GL9-3j-wZj" firstAttribute="top" secondItem="6GB-ud-7ah" secondAttribute="top" constant="150" id="MhI-oA-ucR"/>
                             <constraint firstItem="KAA-zC-sm6" firstAttribute="centerX" secondItem="6GB-ud-7ah" secondAttribute="centerX" id="WvU-6S-Wc6"/>
                             <constraint firstItem="8YG-ZK-CWY" firstAttribute="centerX" secondItem="6GB-ud-7ah" secondAttribute="centerX" id="YA0-hk-eEJ"/>
-                            <constraint firstItem="KAA-zC-sm6" firstAttribute="top" secondItem="GL9-3j-wZj" secondAttribute="bottom" priority="1" constant="10" id="arn-gK-4QU"/>
                             <constraint firstItem="GL9-3j-wZj" firstAttribute="centerX" secondItem="6GB-ud-7ah" secondAttribute="centerX" id="azi-23-fhf"/>
                             <constraint firstItem="GL9-3j-wZj" firstAttribute="top" secondItem="8YG-ZK-CWY" secondAttribute="bottom" constant="10" id="cZN-mn-CQh"/>
-                            <constraint firstItem="KAA-zC-sm6" firstAttribute="top" secondItem="8YG-ZK-CWY" secondAttribute="bottom" constant="10" id="rV3-Ax-5du"/>
                             <constraint firstItem="8YG-ZK-CWY" firstAttribute="top" secondItem="lNG-Mf-133" secondAttribute="top" constant="5" id="vAD-Rf-vQN"/>
+                            <constraint firstItem="KAA-zC-sm6" firstAttribute="top" secondItem="lNG-Mf-133" secondAttribute="top" id="wkm-5J-mg6"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
