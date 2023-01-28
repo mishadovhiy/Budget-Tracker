@@ -233,10 +233,10 @@ class AppData {
     }
     
     
-    
-    var filter = Filter()
+    //todo
+    var filter = Filter()//get from ud
     struct Filter {
-        
+        //add init from dict
         var showAll:Bool {
             get {
                 UserDefaults.standard.value(forKey: "showAlll") as? Bool ?? false
@@ -269,6 +269,14 @@ class AppData {
                 UserDefaults.standard.setValue(newValue, forKey: "SortSelectedPeroudd")
             }
         }
+        
+        var toDate:DateComponents {
+            return to.stringToCompIso()
+        }
+        var fromDate:DateComponents {
+            return from.stringToCompIso()
+        }
+        
         
         func getLastDayOf(month: Int, year: Int) -> Int {
             

@@ -82,4 +82,13 @@ extension Int {
         }
         return res.localize
     }
+    
+    func makeTwo() -> String {
+        if self < 10 {
+            return "0\(self)"
+        } else {
+            return "\(self)"
+        }
+        
+    }
 }
