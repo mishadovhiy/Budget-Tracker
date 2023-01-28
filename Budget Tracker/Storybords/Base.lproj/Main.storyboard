@@ -693,6 +693,17 @@
                                             </tableViewCell>
                                         </prototypes>
                                     </tableView>
+                                    <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7wN-Jq-Vyf">
+                                        <rect key="frame" x="55" y="40" width="320" height="250"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="250" id="vQe-Tn-2Ze"/>
+                                            <constraint firstAttribute="width" constant="320" id="wWV-Hk-Gm0"/>
+                                        </constraints>
+                                        <connections>
+                                            <segue destination="XMI-7k-slH" kind="embed" id="OkU-ey-862"/>
+                                        </connections>
+                                    </containerView>
                                     <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0oV-VO-FeH" userLabel="CategoriesButton" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="60" height="44"/>
                                         <constraints>
@@ -992,11 +1003,13 @@
                                 <color key="backgroundColor" name="PrimaryBackgroundColor"/>
                                 <constraints>
                                     <constraint firstItem="Bqc-vp-d9i" firstAttribute="leading" secondItem="0oV-VO-FeH" secondAttribute="trailing" id="4qK-39-xSN"/>
+                                    <constraint firstItem="7wN-Jq-Vyf" firstAttribute="centerX" secondItem="gtA-fF-esq" secondAttribute="centerX" id="50S-1q-AH3"/>
                                     <constraint firstItem="zIg-fF-jEa" firstAttribute="leading" secondItem="gtA-fF-esq" secondAttribute="leading" constant="20" id="Fde-cz-P7N"/>
                                     <constraint firstItem="zDz-M6-AUL" firstAttribute="top" secondItem="gtA-fF-esq" secondAttribute="top" id="Hku-w9-rjv"/>
                                     <constraint firstItem="4SO-16-o5D" firstAttribute="top" secondItem="Bqc-vp-d9i" secondAttribute="bottom" constant="10" id="Is8-PA-mXk"/>
                                     <constraint firstItem="4SO-16-o5D" firstAttribute="top" secondItem="iaT-LQ-3u9" secondAttribute="bottom" constant="5" id="KX3-bw-SLF"/>
                                     <constraint firstAttribute="trailing" secondItem="zDz-M6-AUL" secondAttribute="trailing" constant="10" id="QHs-Q1-IX0"/>
+                                    <constraint firstItem="7wN-Jq-Vyf" firstAttribute="top" secondItem="Bqc-vp-d9i" secondAttribute="bottom" id="SLA-Bj-76Y"/>
                                     <constraint firstItem="iaT-LQ-3u9" firstAttribute="leading" secondItem="gtA-fF-esq" secondAttribute="leading" constant="60" id="TNU-KP-L77"/>
                                     <constraint firstItem="zIg-fF-jEa" firstAttribute="top" secondItem="Bqc-vp-d9i" secondAttribute="bottom" constant="14" id="U0E-F0-XrB"/>
                                     <constraint firstAttribute="trailing" secondItem="4SO-16-o5D" secondAttribute="trailing" id="Ua1-Pm-fOn"/>
@@ -1025,22 +1038,10 @@
                                 <color key="textColor" name="balanceTitleColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7wN-Jq-Vyf">
-                                <rect key="frame" x="55" y="40" width="320" height="250"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="250" id="vQe-Tn-2Ze"/>
-                                    <constraint firstAttribute="width" constant="320" id="wWV-Hk-Gm0"/>
-                                </constraints>
-                                <connections>
-                                    <segue destination="XMI-7k-slH" kind="embed" id="OkU-ey-862"/>
-                                </connections>
-                            </containerView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="SecondaryBacroundColor"/>
                         <constraints>
-                            <constraint firstItem="7wN-Jq-Vyf" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="3sf-RX-6qK"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Aut-cX-vhd" secondAttribute="trailing" constant="50" id="3wV-OH-fwr"/>
                             <constraint firstItem="Aut-cX-vhd" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="AVr-PA-I2G"/>
                             <constraint firstAttribute="trailing" secondItem="aAI-27-UW5" secondAttribute="trailing" id="Blw-ka-H6c"/>
@@ -1057,7 +1058,6 @@
                             <constraint firstAttribute="bottom" secondItem="BBf-lk-CEi" secondAttribute="bottom" id="UvR-nF-oH0"/>
                             <constraint firstItem="Aut-cX-vhd" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="200" id="YoF-1n-tJE"/>
                             <constraint firstItem="BBf-lk-CEi" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="500" id="aSL-d7-jKu"/>
-                            <constraint firstItem="7wN-Jq-Vyf" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="40" id="btC-h8-na4"/>
                             <constraint firstItem="aAI-27-UW5" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="dl7-lJ-blg"/>
                             <constraint firstItem="gtA-fF-esq" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="ltP-40-tmP"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="hpF-9J-sJH" secondAttribute="trailing" constant="5" id="oVb-oq-i7A"/>
@@ -1153,7 +1153,7 @@
                                 </searchBar>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="NoCategoriesCell" id="S3f-Cu-wvm" customClass="NoCategoriesCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="84" width="430" height="70.333335876464844"/>
+                                        <rect key="frame" x="0.0" y="106" width="430" height="70.333335876464844"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="S3f-Cu-wvm" id="mYp-17-mJ3">
                                             <rect key="frame" x="0.0" y="0.0" width="430" height="70.333335876464844"/>
@@ -1188,7 +1188,7 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="LocalDataActionCell" id="2AL-sF-FF1" customClass="LocalDataActionCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="154.33333587646484" width="430" height="60.333332061767578"/>
+                                        <rect key="frame" x="0.0" y="176.33333587646484" width="430" height="60.333332061767578"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="2AL-sF-FF1" id="e6P-AW-Mt2">
                                             <rect key="frame" x="0.0" y="0.0" width="430" height="60.333332061767578"/>
@@ -1333,7 +1333,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="categoriesVCTableViewCell" id="Ugt-jI-QpQ" customClass="categoriesVCcell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="214.66666793823242" width="430" height="60.333332061767578"/>
+                                        <rect key="frame" x="0.0" y="236.66666793823242" width="430" height="60.333332061767578"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Ugt-jI-QpQ" id="8cn-F5-cRV">
                                             <rect key="frame" x="0.0" y="0.0" width="430" height="60.333332061767578"/>
@@ -2351,7 +2351,7 @@
                                 </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="statisticCellIdent" id="czw-1t-hDS" customClass="StatisticCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="408.5" width="430" height="48"/>
+                                        <rect key="frame" x="0.0" y="430.5" width="430" height="48"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="czw-1t-hDS" id="DL1-ap-cmz">
                                             <rect key="frame" x="0.0" y="0.0" width="399.66666666666669" height="48"/>
@@ -3059,7 +3059,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="ReminderCell" id="0VC-sg-p8P" customClass="ReminderCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="430" height="142"/>
+                                        <rect key="frame" x="0.0" y="50" width="430" height="142"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="0VC-sg-p8P" id="TYY-To-r2K">
                                             <rect key="frame" x="0.0" y="0.0" width="430" height="142"/>
@@ -3341,7 +3341,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="NoRemindersCell" id="JKn-bm-wcP" customClass="NoRemindersCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="170" width="430" height="26.333333969116211"/>
+                                        <rect key="frame" x="0.0" y="192" width="430" height="26.333333969116211"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="JKn-bm-wcP" id="U97-2I-zD1">
                                             <rect key="frame" x="0.0" y="0.0" width="430" height="26.333333969116211"/>

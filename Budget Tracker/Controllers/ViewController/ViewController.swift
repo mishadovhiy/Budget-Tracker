@@ -825,6 +825,10 @@ class ViewController: SuperViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         self.notificationsCount = Notifications.notificationsCount
+    //    self.mainTableView.contentInset.top = self.calendarContainer.frame.height
+        if defaultOffset == 0 {
+            defaultOffset = self.mainTableView.contentOffset.y
+        }
         
         if self.ai.isShowing {
             DispatchQueue.main.async {
@@ -1409,8 +1413,24 @@ class ViewController: SuperViewController {
             }
         }
         
+        self.scrollHead(scrollView)
+        
     }
-    
+    var defaultOffset:CGFloat = 0
+
+    func scrollHead(_ scrollView: UIScrollView) {
+        let offset = defaultOffset - scrollView.contentOffset.y
+        let height = (calendarContainer.frame.height + 10) * (-1)
+        if height <= offset {
+            if offset <= 0 {
+                calendarContainer.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, offset, 0)
+            } else {
+                calendarContainer.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+            }
+        } else {
+            calendarContainer.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, height, 0)
+        }
+    }
 
     @objc func savedTransPressed(_ sender: UITapGestureRecognizer) {
         if !appData.sendSavedData {
@@ -1618,7 +1638,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let bigFr = bigCalcView.layer.frame.height
+        let bigFr = bigCalcView.layer.frame.height + self.calendarContainer.frame.height
         if indexPath.section == 0 && indexPath.row == 0 {
             return bigFr - 45
         } else {
