@@ -119,8 +119,11 @@ extension ViewController {
                 let timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { (timer) in
                     if self.completedFiltering {
                         timer.invalidate()
+//                        DispatchQueue.main.async {
+//                            self.filterTextLabel.text = "Filter".localize + ": \(appData.filter.selectedPeroud)"
+//                        }
                         DispatchQueue.main.async {
-                            self.filterTextLabel.text = "Filter".localize + ": \(appData.filter.selectedPeroud)"
+                            self.filterTextLabel.text = self._filterText
                         }
                         for i in 0..<self.timers.count {
                             self.timers[i].invalidate()
@@ -338,8 +341,8 @@ extension ViewController {
             dataTaskCount = nil
             selectedCell = nil
             self.completedFiltering = true
-            let from = appData.filter.fromDate
-            let showAll = appData.filter.showAll
+          //  let from = appData.filter.fromDate
+          //  let showAll = appData.filter.showAll
             //here
             DispatchQueue.main.async {
                 self.mainTableView.reloadData()
@@ -347,8 +350,8 @@ extension ViewController {
                     self.refreshControl.endRefreshing()
                 }
                 self.toggleNoData(show: false, addButtonHidden: true)
-                let filterPeriod = (from.month?.stringMonth ?? "-").capitalized + ", \(from.year ?? 0)"
-                self.filterText = (showAll ? "All transactions" : filterPeriod).localize
+         //       let filterPeriod = (from.month?.stringMonth ?? "-").capitalized + ", \(from.year ?? 0)"
+             //   self.filterText = (showAll ? "All transactions" : filterPeriod).localize
                 //"Filter".localize + ": " + appData.filter.selectedPeroud
                 self.calculationSView.alpha = 0
                 UIView.animate(withDuration: 0.8) {

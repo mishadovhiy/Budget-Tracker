@@ -164,16 +164,19 @@ class ViewController: SuperViewController {
     
     
     var apiTransactions:[TransactionsStruct] = []
-    func filter(data:[TransactionsStruct]? = nil, changeTitle:Bool = false) {
+    func filter(data:[TransactionsStruct]? = nil) {
         completedFiltering = false
         print("filterCalled")
-        if changeTitle {
-            DispatchQueue.main.async {
-                self.filterText = "Filtering".localize
-            }
+        let showAll = appData.filter.showAll
+        let tod = appData.filter.fromDate
+        let filterPeriod = (tod.month?.stringMonth ?? "-").capitalized + ", \(tod.year ?? 0)"
+        DispatchQueue.main.async {
+            //self.filterText = "Filtering".localize
+            
+            self.filterText = (showAll ? "All transactions" : filterPeriod).localize
         }
         
-        let tod = appData.filter.fromDate
+        
         let all = apiTransactions.filter { transaction in
             return (transaction.date.stringToCompIso().year ?? 1) == (tod.year ?? 0)
         }
