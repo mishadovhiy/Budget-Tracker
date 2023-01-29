@@ -122,9 +122,9 @@ class TransitionVC: SuperViewController {
         }
     }
     
-    var defaultDate:String {
-        return lastSelectedDate ?? appData.stringDate(appData.objects.datePicker)
-    }
+    lazy var defaultDate:String = {
+        return appData.filter.from
+    }()
     @IBOutlet weak var doneButton: UIButton!
     var dateChanged = false
     var sbvsloded = false

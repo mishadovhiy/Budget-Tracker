@@ -722,6 +722,7 @@ extension ViewController: TransitionVCProtocol {
             selectedCell = nil
             let delete = DeleteFromDB()
             delete.newTransaction(editing) { _ in
+                self.apiTransactions = self.db.transactions
                 self.filter()
             }
         } else {
@@ -736,6 +737,7 @@ extension ViewController: TransitionVCProtocol {
         delete.newTransaction(was) { _ in
             // let save = SaveToDB()
             SaveToDB.shared.newTransaction(transaction) { _ in
+                self.apiTransactions = self.db.transactions
                 self.editingTransaction = nil
                 self.filter()
             }
@@ -757,6 +759,7 @@ extension ViewController: TransitionVCProtocol {
             }
             //let save = SaveToDB()
             SaveToDB.shared.newTransaction(TransactionsStruct(value: new.value, categoryID: "\(new.category.id)", date: new.date, comment: new.comment)) { error in
+                self.apiTransactions = self.db.transactions
                 self.filter()
                 self.editingTransaction = nil
                 if !error {
