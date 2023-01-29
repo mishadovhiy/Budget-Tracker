@@ -177,7 +177,12 @@ class CalendarControlVC: UIViewController {
         let cellWindth = self.collectionView.frame.width
         let pos = position + (cellWindth / 2)
         let selectedFloat = pos / cellWindth
-        var selectedIntResult = Int(selectedFloat != 0 && selectedFloat < CGFloat(Int.max) ? selectedFloat : 50)
+        print(selectedFloat, " htregrfwedas")
+        let err = selectedFloat >= 2 || selectedFloat <= 1
+        let n = err ? selectedFloat : (selectedFloat - CGFloat(Int(selectedFloat)))
+        print(n, " htrgetrfwdaws")
+        let rN = n >= 0.68 && !err ? selectedFloat + 1 : (n <= 0.34 && !err ? (selectedFloat - 1) : selectedFloat)
+        var selectedIntResult = Int(rN != 0 && rN < CGFloat(Int.max) ? rN : 1)
         
         if selectedIntResult <= tableData.count - 1 {
             selectedInt = selectedIntResult
