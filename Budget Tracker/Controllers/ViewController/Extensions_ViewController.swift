@@ -541,7 +541,7 @@ extension ViewController {
     func viewAppeared() {
         self.notificationsCount = Notifications.notificationsCount
         //    self.mainTableView.contentInset.top = self.calendarContainer.frame.height
-        
+        mainTableView.contentOffset.y = 0
         if self.ai.isShowing {
             DispatchQueue.main.async {
                 self.ai.fastHide()
@@ -551,7 +551,6 @@ extension ViewController {
             appData.needDownloadOnMainAppeare = false
             self.downloadFromDB(title: "Fetching".localize)
         }
-        
         let safeTop = self.view.safeAreaInsets.top
         self.safeArreaHelperView?.alpha = 0
         if !safeArreaHelperViewAdded {
@@ -567,6 +566,24 @@ extension ViewController {
             }
         }
         appData.safeArea = (safeTop, self.view.safeAreaInsets.bottom)
+    }
+    
+    func apiUpdated(_ loadedData: [TransactionsStruct]? = nil) {
+        let data = loadedData ?? db.transactions
+        self.apiTransactions = data
+        var resultt:[String:CGFloat] = [:]
+        data.forEach { transaction in
+            let date = transaction.date.stringToCompIso()
+            let model = "\(date.year ?? 0).\(date.month ?? 0).\(date.day ?? 0)"
+                //.init(year: date.year ?? 0, month: date.month ?? 0)
+            let val = (resultt[model] ?? 0)
+            let new = val + (Double(transaction.value) ?? 0)
+            resultt.updateValue(new, forKey: model)
+        }
+        CalendarControlVC.shared?.values = resultt
+        DispatchQueue.main.async {
+            CalendarControlVC.shared?.collectionView.reloadData()
+        }
     }
     
     func downloadFromDB(showError: Bool = false, title: String = "Downloading".localize) {
@@ -586,7 +603,7 @@ extension ViewController {
                 if error == .none {
                     self.highesLoadedCatID = ((categoryes.sorted{ $0.id > $1.id }).first?.id ?? 0) + 1
                     LoadFromDB.shared.newTransactions { loadedData, error in
-                        self.apiTransactions = loadedData
+                        self.apiUpdated(loadedData)
                         self.checkPurchase { _ in
                             self.apiLoading = false
                             self.filter(data: loadedData)
@@ -722,7 +739,7 @@ extension ViewController: TransitionVCProtocol {
             selectedCell = nil
             let delete = DeleteFromDB()
             delete.newTransaction(editing) { _ in
-                self.apiTransactions = self.db.transactions
+                self.apiUpdated()
                 self.filter()
             }
         } else {
@@ -737,7 +754,7 @@ extension ViewController: TransitionVCProtocol {
         delete.newTransaction(was) { _ in
             // let save = SaveToDB()
             SaveToDB.shared.newTransaction(transaction) { _ in
-                self.apiTransactions = self.db.transactions
+                self.apiUpdated()
                 self.editingTransaction = nil
                 self.filter()
             }
@@ -759,7 +776,7 @@ extension ViewController: TransitionVCProtocol {
             }
             //let save = SaveToDB()
             SaveToDB.shared.newTransaction(TransactionsStruct(value: new.value, categoryID: "\(new.category.id)", date: new.date, comment: new.comment)) { error in
-                self.apiTransactions = self.db.transactions
+                self.apiUpdated()
                 self.filter()
                 self.editingTransaction = nil
                 if !error {
@@ -852,7 +869,7 @@ extension ViewController: TransitionVCProtocol {
     }
     
     func compliteScrolling() {
-        if mainTableView.contentOffset.y < self.bigCalcView.frame.height {
+       /* if mainTableView.contentOffset.y < self.bigCalcView.frame.height {
             if mainTableView.contentOffset.y < self.bigCalcView.frame.height / 2 {
                 canTouchHandleTap = true
                 
@@ -865,7 +882,7 @@ extension ViewController: TransitionVCProtocol {
                     self.mainTableView.scrollToRow(at: IndexPath(row: 0, section: 1), at: .top, animated: true)
                 }
             }
-        }
+        }*/
     }
     
     func removeDayFromString(_ s: String) -> String {//-> date comp

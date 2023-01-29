@@ -618,8 +618,8 @@
 			children = (
 				8D834D9B297E03D60056E686 /* CalendarControlVC.swift */,
 				8D834D96297E03D60056E686 /* CalendarModel.swift */,
-				8D834D97297E03D60056E686 /* Cells */,
 				8D834D9A297E03D60056E686 /* UICollectionViewDelegate_CalendarControlVC.swift */,
+				8D834D97297E03D60056E686 /* Cells */,
 			);
 			path = CalendarControlVC;
 			sourceTree = "<group>";

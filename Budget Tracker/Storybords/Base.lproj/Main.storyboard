@@ -694,10 +694,10 @@
                                         </prototypes>
                                     </tableView>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7wN-Jq-Vyf">
-                                        <rect key="frame" x="10" y="180" width="410" height="190"/>
+                                        <rect key="frame" x="10" y="180" width="410" height="290"/>
                                         <color key="backgroundColor" name="PrimaryBackgroundColor"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="190" id="vQe-Tn-2Ze"/>
+                                            <constraint firstAttribute="height" constant="290" id="vQe-Tn-2Ze"/>
                                         </constraints>
                                         <connections>
                                             <segue destination="XMI-7k-slH" kind="embed" id="OkU-ey-862"/>

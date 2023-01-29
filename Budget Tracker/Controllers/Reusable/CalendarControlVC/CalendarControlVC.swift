@@ -23,6 +23,7 @@ class CalendarControlVC: UIViewController {
     var dateSelected:((_ date:DateComponents)->())?
     var monthChanged:((_ month:Int, _ year:Int)->())?
     var selectedDate:DateComponents?
+    var values:[String:CGFloat] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()

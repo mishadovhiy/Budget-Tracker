@@ -31,6 +31,7 @@ class CalendarCollectionCell: UICollectionViewCell {
 
 class CalendarCell: UICollectionViewCell {
     
+    @IBOutlet weak var valueLabel: UILabel!
     @IBOutlet weak var backgroundMainView: UIView!
     @IBOutlet weak var dayLabel: UILabel!
 }

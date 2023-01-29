@@ -7,21 +7,38 @@
 
 import UIKit
 
-struct CalendarData {
+struct CalendarData:Hashable, Identifiable {
+    var id: ObjectIdentifier? {
+        return nil
+    }
+    
     let year:Int
     let month:Int
+    
+    var identifier: String {
+        return UUID().uuidString
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        return hasher.combine(identifier)
+    }
+    static func == (lhs: CalendarData, rhs: CalendarData) -> Bool {
+        return lhs.year == rhs.year && lhs.month == rhs.month && lhs.identifier == rhs.identifier
+    }
 }
 
 class CalendarModel {
-
+    
+    
+    
     init(_ data:CalendarData) {
         self.year = data.year
         self.month = data.month
         self.days = getDays()
-
+        
     }
     
-
+    
     
     
     var year = 1996
@@ -36,18 +53,18 @@ class CalendarModel {
         return getToday()
     }()
     
-
+    
     
     func getDays() -> [Int]  {
         daystoWeekStart = 0
         let dateComponents = DateComponents(year: year, month: month)
         let calendar = Calendar.current
         let date = calendar.date(from: dateComponents)!
-
+        
         let range = calendar.range(of: .day, in: .month, for: date)!
         let numDays = range.count
         days.removeAll()
-
+        
         var resultDays:[Int] = []
         let formatter  = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
@@ -66,15 +83,15 @@ class CalendarModel {
         }
         self.days = resultDays
         return resultDays
-
+        
         /*DispatchQueue.main.async {
-            self.monthTF.text = "\(self.returnMonth(self.month)), \(self.year)"
-            self.daysLoaded()
-        }*/
+         self.monthTF.text = "\(self.returnMonth(self.month)), \(self.year)"
+         self.daysLoaded()
+         }*/
         
         
     }
-
+    
     
     func getToday() -> DateComponents {
         let now = Date()
@@ -90,7 +107,7 @@ class CalendarModel {
     }
     
     func returnMonth(_ month: Int) -> String {
-
+        
         return month.stringMonth
     }
     
@@ -122,11 +139,11 @@ extension Date {
         let comp = DateComponents()
         return comp.stringToCompIso(s: string)
     }
-
     
-   /* var differenceFromNow: DateComponents {
-        return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: self, to: Date())
-    }*/
+    
+    /* var differenceFromNow: DateComponents {
+     return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: self, to: Date())
+     }*/
 }
 
 
@@ -137,38 +154,38 @@ extension DateComponents {
         return "\(self.day ?? 0).\(self.month ?? 0).\(self.year ?? 0)"
     }
     /*func toIsoString() -> String? {
-        if let date = Calendar.current.date(from: self){
-            return date.iso8601withFractionalSeconds
-        }
-        return nil
-    }
-    
-    func stringToCompIso(s: String, dateFormat:String="dd.MM.yyyy") -> DateComponents {
-        if let date = s.iso8601withFractionalSeconds {
-            return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
-        } else {
-            return stringToDateComponent(s: s, dateFormat: dateFormat)
-        }
-    }
-    
-    private func stringToDateComponent(s: String, dateFormat:String="dd.MM.yyyy") -> DateComponents {//make privat
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = dateFormat
-        let date = dateFormatter.date(from: s)
-        return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date ?? Date())
-    }
-    
-    
-    func createDateComp(date:String, time:DateComponents?) -> DateComponents? {
-        var date = time?.stringToCompIso(s: date)
-        if let time = time {
-            date?.second = time.second
-            date?.minute = time.minute
-            date?.hour = time.hour
-            
-        }
-        return date
-    }*/
+     if let date = Calendar.current.date(from: self){
+     return date.iso8601withFractionalSeconds
+     }
+     return nil
+     }
+     
+     func stringToCompIso(s: String, dateFormat:String="dd.MM.yyyy") -> DateComponents {
+     if let date = s.iso8601withFractionalSeconds {
+     return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
+     } else {
+     return stringToDateComponent(s: s, dateFormat: dateFormat)
+     }
+     }
+     
+     private func stringToDateComponent(s: String, dateFormat:String="dd.MM.yyyy") -> DateComponents {//make privat
+     let dateFormatter = DateFormatter()
+     dateFormatter.dateFormat = dateFormat
+     let date = dateFormatter.date(from: s)
+     return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date ?? Date())
+     }
+     
+     
+     func createDateComp(date:String, time:DateComponents?) -> DateComponents? {
+     var date = time?.stringToCompIso(s: date)
+     if let time = time {
+     date?.second = time.second
+     date?.minute = time.minute
+     date?.hour = time.hour
+     
+     }
+     return date
+     }*/
 }
 
 
