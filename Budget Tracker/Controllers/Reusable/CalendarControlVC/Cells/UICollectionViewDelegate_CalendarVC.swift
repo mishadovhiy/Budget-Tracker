@@ -26,7 +26,11 @@ extension CalendarCollectionCell:UICollectionViewDelegate, UICollectionViewDataS
         let color:UIColor = K.Colors.Text.white//calendarModel?.today.desription ?? "" == day ? .red : K.Colors.Text.white
         cell.dayLabel.textColor = color
         */
+        
         let d = CalendarControlVC.shared?.middleDate
+        let today = Date().toDateComponents()
+        let isToday = today.year == d?.year && today.month == d?.month && today.day == Int(day)
+        cell.dayLabel.textColor = isToday ? .red : .white
         let selectedMonth = CalendarControlVC.shared?.selectedDate
         let value = CalendarControlVC.shared?.values["\(d?.year ?? 0).\(d?.month ?? 0).\(day)"]
         let plus = (value ?? 0) > 0 ? "+" : ""

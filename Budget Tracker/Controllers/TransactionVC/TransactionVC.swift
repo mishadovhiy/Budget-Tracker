@@ -99,10 +99,7 @@ class TransitionVC: SuperViewController {
             let vc = segue.destination as! CalendarVC
             vc.delegate = self
       //      vc.darkAppearence = true
-            if dateChanged {
-                vc.selectedFrom = displeyingTransaction.date
-                
-            }
+            vc.selectedFrom = displeyingTransaction.date == "" ? self.defaultDate : displeyingTransaction.date
 
             if paymentReminderAdding {
                 vc.datePickerDate = reminder_Time?.toIsoString() ?? ""
@@ -139,6 +136,9 @@ class TransitionVC: SuperViewController {
             categoryTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(categoryPressed)))
 
             self.dateTextField.placeholder = defaultDate
+            if editingDate == "" {
+                displeyingTransaction.date = defaultDate
+            }
             self.dateTextField.setPlaceHolderColor(K.Colors.textFieldPlaceholder)
             self.commentTextField.placeholder = "Short comment".localize
             self.commentTextField.setPlaceHolderColor(K.Colors.textFieldPlaceholder)
