@@ -698,6 +698,10 @@
                                             </tableViewCell>
                                         </prototypes>
                                     </tableView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ITl-82-VFp">
+                                        <rect key="frame" x="0.0" y="49" width="300" height="50"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7wN-Jq-Vyf">
                                         <rect key="frame" x="10" y="163" width="410" height="230"/>
                                         <color key="backgroundColor" name="PrimaryBackgroundColor"/>
@@ -1007,6 +1011,7 @@
                                 <color key="backgroundColor" name="PrimaryBackgroundColor"/>
                                 <constraints>
                                     <constraint firstItem="Bqc-vp-d9i" firstAttribute="leading" secondItem="0oV-VO-FeH" secondAttribute="trailing" id="4qK-39-xSN"/>
+                                    <constraint firstItem="ITl-82-VFp" firstAttribute="centerX" secondItem="E3U-sW-gjw" secondAttribute="centerX" id="Cqc-wJ-5Py"/>
                                     <constraint firstItem="zIg-fF-jEa" firstAttribute="leading" secondItem="gtA-fF-esq" secondAttribute="leading" constant="20" id="Fde-cz-P7N"/>
                                     <constraint firstItem="zDz-M6-AUL" firstAttribute="top" secondItem="gtA-fF-esq" secondAttribute="top" id="Hku-w9-rjv"/>
                                     <constraint firstItem="4SO-16-o5D" firstAttribute="top" secondItem="Bqc-vp-d9i" secondAttribute="bottom" constant="10" id="Is8-PA-mXk"/>
@@ -1015,6 +1020,7 @@
                                     <constraint firstAttribute="trailing" secondItem="zDz-M6-AUL" secondAttribute="trailing" constant="10" id="QHs-Q1-IX0"/>
                                     <constraint firstItem="iaT-LQ-3u9" firstAttribute="leading" secondItem="gtA-fF-esq" secondAttribute="leading" constant="60" id="TNU-KP-L77"/>
                                     <constraint firstAttribute="trailing" secondItem="4SO-16-o5D" secondAttribute="trailing" id="Ua1-Pm-fOn"/>
+                                    <constraint firstItem="ITl-82-VFp" firstAttribute="centerY" secondItem="E3U-sW-gjw" secondAttribute="centerY" id="VuK-jE-D7k"/>
                                     <constraint firstItem="zua-Ep-o90" firstAttribute="leading" secondItem="gtA-fF-esq" secondAttribute="leading" id="Xv7-74-GnM"/>
                                     <constraint firstItem="Kwg-kx-2vX" firstAttribute="top" secondItem="gtA-fF-esq" secondAttribute="top" constant="45" id="YFU-wJ-Ohi"/>
                                     <constraint firstAttribute="bottom" secondItem="4SO-16-o5D" secondAttribute="bottom" id="Zhn-TD-MW0"/>
@@ -1035,6 +1041,8 @@
                                     <constraint firstAttribute="trailing" secondItem="zua-Ep-o90" secondAttribute="trailing" id="nVW-yi-yFE"/>
                                     <constraint firstItem="7wN-Jq-Vyf" firstAttribute="leading" secondItem="gtA-fF-esq" secondAttribute="leading" constant="10" id="uAS-Jb-bP5"/>
                                     <constraint firstAttribute="bottom" secondItem="zua-Ep-o90" secondAttribute="bottom" id="uGK-31-CP2"/>
+                                    <constraint firstItem="ITl-82-VFp" firstAttribute="width" secondItem="E3U-sW-gjw" secondAttribute="width" multiplier="1.15385" id="v5m-JM-y4K"/>
+                                    <constraint firstItem="ITl-82-VFp" firstAttribute="height" secondItem="E3U-sW-gjw" secondAttribute="height" multiplier="1.04167" id="xDL-XA-I6m"/>
                                     <constraint firstItem="Kwg-kx-2vX" firstAttribute="leading" secondItem="gtA-fF-esq" secondAttribute="leading" id="xWr-Me-wJg"/>
                                 </constraints>
                                 <variation key="default">
@@ -1088,6 +1096,7 @@
                     <connections>
                         <outlet property="addTransactionWhenEmptyButton" destination="buj-Sc-nT6" id="bye-7h-RKW"/>
                         <outlet property="addTransitionButton" destination="zDz-M6-AUL" id="0Lg-cQ-Pv3"/>
+                        <outlet property="balanceHelperView" destination="ITl-82-VFp" id="hrl-U2-fga"/>
                         <outlet property="bigCalcView" destination="zIg-fF-jEa" id="nT4-zz-jVU"/>
                         <outlet property="bigExpensesStack" destination="E3U-sW-gjw" id="d8K-W9-1xm"/>
                         <outlet property="calculationSView" destination="69c-Jd-sTD" id="LFf-b3-HUW"/>
@@ -2362,7 +2371,7 @@
                                 </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="statisticCellIdent" id="czw-1t-hDS" customClass="StatisticCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="408.5" width="430" height="48"/>
+                                        <rect key="frame" x="0.0" y="430.5" width="430" height="48"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="czw-1t-hDS" id="DL1-ap-cmz">
                                             <rect key="frame" x="0.0" y="0.0" width="399.66666666666669" height="48"/>

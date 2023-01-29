@@ -93,6 +93,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
             self.tableView.reloadData()
         }
     }
+    var fromsideBar = false
     var selectedSegment = 0
     let db = DataBase()
     var maxValue = 0.0

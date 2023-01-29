@@ -108,6 +108,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
             if tableData[indexPath.section].section[indexPath.row].name != "" {
                 let segue = tableData[indexPath.section].section[indexPath.row].segue
                 if segue != "" {
+                    ViewController.shared?.fromSideBar = true
                     DispatchQueue.main.async {
                         ViewController.shared?.performSegue(withIdentifier: segue, sender: self)
                     }

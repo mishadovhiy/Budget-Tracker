@@ -12,6 +12,7 @@ let appData = AppData()
 
 class ViewController: SuperViewController {
     
+    @IBOutlet weak var balanceHelperView: UIView!
     @IBOutlet weak var sideTableView: UITableView!
     @IBOutlet weak var pinchView: UIView!
     @IBOutlet weak var sideBar: SideBar!
@@ -46,7 +47,7 @@ class ViewController: SuperViewController {
     @IBOutlet weak var bigExpensesStack: UIStackView!
     
     static var shared: ViewController?
-    
+    var fromSideBar = false
     var _notificationsCount = (0,0)
     var sidescrolling = false
     var wasShowingSideBar = false
@@ -239,9 +240,6 @@ class ViewController: SuperViewController {
         sideBarPinch(sender)
     }
 
-    @objc func bigCalcTaps(_ sender:UITapGestureRecognizer) {
-        bigLabTaps(sender)
-    }
     
     @IBAction func addTransactionPressed(_ sender: Any) {
         toAddTransaction()
@@ -331,6 +329,13 @@ class ViewController: SuperViewController {
     }
 
 
+    @objc func monthBalancePressed(_ sender:UITapGestureRecognizer) {
+        currentStatistic = true
+        if canTouchHandleTap {
+            self.performSegue(withIdentifier: K.statisticSeque, sender: self)
+        }
+    }
+    
     var currentStatistic = false
     @IBAction func statisticLabelPressed(_ sender: UIButton) {
         currentStatistic = true

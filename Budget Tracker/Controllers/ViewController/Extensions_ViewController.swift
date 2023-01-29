@@ -12,7 +12,9 @@ extension ViewController {
     func scrollHead(_ scrollView: UIScrollView) {
         let offset = scrollView.contentOffset.y * -1
         let height = calendarContainer.frame.height * (-2)
-        self.bigCalcView.alpha = scrollView.contentOffset.y >= bigCalcView.frame.height ? 0 : 1
+        let cantTapBig = scrollView.contentOffset.y >= bigCalcView.frame.height
+        self.bigCalcView.alpha = cantTapBig ? 0 : 1
+        canTouchHandleTap = !cantTapBig
         if height <= offset {
             calendarContainer.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, offset <= 0 ? offset : 0, 0)
         } else {
@@ -457,48 +459,6 @@ extension ViewController {
             self.mainTableView.addSubview(self.refreshControl)
         }
     }
-    func bigLabTaps(_ sender:UITapGestureRecognizer) {
-        if canTouchHandleTap {
-            //let topSafeAr = self.view.safeAreaInsets.top
-            let bigCalcFrame = bigCalcView.frame
-            let touchPoint = sender.location(in: self.view)
-            //local data pressed
-            let topMinus = dataFromTitleLabel.superview?.superview?.superview?.frame ?? .zero
-            let width = dataFromTitleLabel.superview?.superview?.frame ?? .zero
-            let supDataMinY = dataFromTitleLabel.superview?.superview?.superview?.superview?.frame ?? .zero
-            let localDataY = (supDataMinY.minY + bigCalcFrame.minY) + topMinus.minY
-            let localDataPosition = CGRect(x: bigCalcFrame.minX, y: localDataY, width: width.width, height: width.height)
-            let localDataPressed = localDataPosition.contains(touchPoint)
-            //expenses pressed
-            let expencesSuperLabel = self.bigExpensesStack.frame
-            let expensesPosition = CGRect(x: bigCalcView.frame.minX, y: bigCalcView.frame.minY, width: expencesSuperLabel.width, height: expencesSuperLabel.height)
-            let expensesPressed = expensesPosition.contains(touchPoint)
-            //incomes pressed
-            let incomeLabel = self.incomeLabels.first?.superview?.frame ?? .zero
-            let incomePosition = CGRect(x: incomeLabel.minX, y: expensesPosition.minY, width: expensesPosition.width, height: expensesPosition.height)
-            let incomePressed = incomePosition.contains(touchPoint)
-            //test
-            /*let redBox = UIView(frame: localDataPosition)
-             redBox.backgroundColor = .red
-             self.view.addSubview(redBox)*/
-            //actions
-            if enableLocalDataPress {
-                if localDataPressed {
-                    DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: "toUnsendedVC", sender: self)
-                    }
-                }
-            }
-            if expensesPressed || incomePressed {
-                appData.expenseLabelPressed = expensesPressed
-                DispatchQueue.main.async {
-                    self.performSegue(withIdentifier: "toStatisticVC", sender: self)
-                }
-            }
-            
-        }
-        
-    }
     func checkPurchase(completion:@escaping(Bool?)-> ()) {
         let nick = appData.username
         if nick == "" {
@@ -661,6 +621,7 @@ extension ViewController {
                 }
             }
         }
+        balanceHelperView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(monthBalancePressed(_:))))
         
     }
     func wrongPassword() {
@@ -1146,7 +1107,9 @@ extension ViewController: TransitionVCProtocol {
             let vc = segue.destination as! StatisticVC
             print(currentStatistic, " currentStatisticcurrentStatistic")
             vc.dataFromMain = currentStatistic ? monthTransactions : apiTransactions //or apidata
+            vc.fromsideBar = self.fromSideBar
             currentStatistic = false
+            self.fromSideBar = false
         case "toSingIn":
             let nav = segue.destination as! UINavigationController
             let vc = nav.topViewController as! LoginViewController
