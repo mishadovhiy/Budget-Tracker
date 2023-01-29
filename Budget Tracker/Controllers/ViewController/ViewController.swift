@@ -100,7 +100,7 @@ class ViewController: SuperViewController {
     var lastWhiteBackheight = 0
     var openFiler = false
     var apiLoading = true
-    var filterChanged = false
+ //   var filterChanged = false
     var newTableData: [tableStuct] {
         get { return _TableData }
         set {
@@ -118,9 +118,9 @@ class ViewController: SuperViewController {
                     appData.filter.showAll = false
                     appData.filter.from = "\(appData.filter.makeTwo(n: 1)).\(appData.filter.makeTwo(n: month)).\(year)"
                     appData.filter.to = "\(appData.filter.makeTwo(n: 31)).\(appData.filter.makeTwo(n: month)).\(year)"
-                    if !self.completedFiltering {
+                  /*  if !self.completedFiltering {
                         self.filterChanged = true
-                    }
+                    }*/
                     self.filter()
                 }
             }
@@ -145,6 +145,8 @@ class ViewController: SuperViewController {
     override func viewWillDisappear(_ animated: Bool) {
         AppDelegate.shared?.window?.backgroundColor = K.Colors.primaryBacground
         safeArreaHelperView?.alpha = 1
+        super.viewWillDisappear(animated)
+        
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -156,6 +158,8 @@ class ViewController: SuperViewController {
         print("today is", appData.filter.getToday())
         AppDelegate.shared?.window?.backgroundColor = .clear
         self.navigationController?.setNavigationBarHidden(true, animated: true)
+        super.viewWillAppear(animated)
+        
     }
     
     

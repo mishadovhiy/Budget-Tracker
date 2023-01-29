@@ -684,23 +684,18 @@ extension ViewController {
     var dataTaskCount: (Int, Int)? {
         get { return nil }
         set {
-            if filterChanged {
-                filterChanged = false
-                self.filter()
-            }  else {
-                if let new = newValue {
-                    let statusText = new.0 > 0 ? "\(new.0)/\(new.1)" : ""
-                    DispatchQueue.main.async {
-                        self.dataTaskCountLabel.text = statusText
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        UIView.animate(withDuration: 0.6) {
-                            self.dataTaskCountLabel.alpha = 0
-                        } completion: { (_) in
-                            self.dataTaskCountLabel.text = ""
-                            self.dataTaskCountLabel.alpha = 1
-                        }
+            if let new = newValue {
+                let statusText = new.0 > 0 ? "\(new.0)/\(new.1)" : ""
+                DispatchQueue.main.async {
+                    self.dataTaskCountLabel.text = statusText
+                }
+            } else {
+                DispatchQueue.main.async {
+                    UIView.animate(withDuration: 0.6) {
+                        self.dataTaskCountLabel.alpha = 0
+                    } completion: { (_) in
+                        self.dataTaskCountLabel.text = ""
+                        self.dataTaskCountLabel.alpha = 1
                     }
                 }
             }
