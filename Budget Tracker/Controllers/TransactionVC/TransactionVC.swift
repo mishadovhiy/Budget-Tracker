@@ -120,7 +120,7 @@ class TransitionVC: SuperViewController {
     }
     
     lazy var defaultDate:String = {
-        return appData.filter.from
+        return lastSelectedDate ?? appData.filter.from
     }()
     @IBOutlet weak var doneButton: UIButton!
     var dateChanged = false

@@ -115,6 +115,7 @@ class ViewController: SuperViewController {
         updateUI()
         if let v = CalendarControlVC.shared {
             v.monthChanged = { year, month in
+                lastSelectedDate = nil
                 DispatchQueue.init(label: "local", qos: .userInitiated).async {
                     appData.filter.showAll = false
                     appData.filter.from = "\(appData.filter.makeTwo(n: 1)).\(appData.filter.makeTwo(n: month)).\(year)"
