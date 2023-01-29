@@ -216,6 +216,10 @@ extension ViewController {
             self.calculations.balance += (Double(trans.value) ?? 0.0)
             dataTaskCount = (i, totalCount)
             i += 1
+            print(i)
+            if filterChanged {
+                return [:]
+            }
             if trans.category.purpose != .debt {
                 if containsDay(curDay: trans.date) {
                     var transForDay = result[trans.date] ?? []
@@ -265,11 +269,7 @@ extension ViewController {
    //     let hideLocal = localCount == 0 ? true : false
         
         DispatchQueue.main.async {
-            if self.mainTableView.visibleCells.count > 1 {
-                self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
-            } else {
-                self.mainTableView.reloadData()
-            }
+            self.mainTableView.reloadData()
            /* self.unsendedDataLabel.text = "\(unsendedCount)"
             self.dataFromTitleLabel.text = "Local data".localize + ":"
             self.dataFromValueLabel.text = "\(localCount)"
@@ -330,44 +330,51 @@ extension ViewController {
     }
     
     func tableDataLoaded(_ newValue:[tableStuct]) {
-        dataTaskCount = nil
-        selectedCell = nil
-        self.completedFiltering = true
-        let from = appData.filter.fromDate
-        let showAll = appData.filter.showAll
-        //here
-        DispatchQueue.main.async {
-            self.mainTableView.reloadData()
-            if self.refreshControl.isRefreshing {
-                self.refreshControl.endRefreshing()
-            }
-            self.toggleNoData(show: false, addButtonHidden: true)
-            let filterPeriod = (from.month?.stringMonth ?? "-").capitalized + ", \(from.year ?? 0)"
-            self.filterText = (showAll ? "All transactions" : filterPeriod).localize
-            //"Filter".localize + ": " + appData.filter.selectedPeroud
-            self.calculationSView.alpha = 0
-            UIView.animate(withDuration: 0.8) {
-                self.calculationSView.alpha = 1
-            } completion: { _ in
-                self.updateDataLabels(noData: newValue.count == 0)
-            }
-            self.tableActionActivityIndicator.removeFromSuperview()
-            if appData.username != "" {
-                self.sendUnsaved()
-            }
-            if let _ = self.newTransaction {
-                self.newTransaction = nil
-                self.compliteScrolling()
-            }
+        if filterChanged {
+            filterChanged = false
+           // filter()
             
-            if let addedAction = self.actionAfterAdded {
-                self.actionAfterAdded = nil
-                addedAction(true)
-            }
-            if self.firstAppearence {
+        } else {
+            dataTaskCount = nil
+            selectedCell = nil
+            self.completedFiltering = true
+            let from = appData.filter.fromDate
+            let showAll = appData.filter.showAll
+            //here
+            DispatchQueue.main.async {
+                self.mainTableView.reloadData()
+                if self.refreshControl.isRefreshing {
+                    self.refreshControl.endRefreshing()
+                }
+                self.toggleNoData(show: false, addButtonHidden: true)
+                let filterPeriod = (from.month?.stringMonth ?? "-").capitalized + ", \(from.year ?? 0)"
+                self.filterText = (showAll ? "All transactions" : filterPeriod).localize
+                //"Filter".localize + ": " + appData.filter.selectedPeroud
+                self.calculationSView.alpha = 0
+                UIView.animate(withDuration: 0.8) {
+                    self.calculationSView.alpha = 1
+                } completion: { _ in
+                    self.updateDataLabels(noData: newValue.count == 0)
+                }
+                self.tableActionActivityIndicator.removeFromSuperview()
+                if appData.username != "" {
+                    self.sendUnsaved()
+                }
+                if let _ = self.newTransaction {
+                    self.newTransaction = nil
+                    self.compliteScrolling()
+                }
                 
+                if let addedAction = self.actionAfterAdded {
+                    self.actionAfterAdded = nil
+                    addedAction(true)
+                }
+                if self.firstAppearence {
+                    
+                }
             }
         }
+        
     }
     
     var calculations:Calculations {

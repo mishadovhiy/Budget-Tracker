@@ -100,7 +100,7 @@ class ViewController: SuperViewController {
     var lastWhiteBackheight = 0
     var openFiler = false
     var apiLoading = true
- //   var filterChanged = false
+    var filterChanged = false
     var newTableData: [tableStuct] {
         get { return _TableData }
         set {
@@ -118,9 +118,9 @@ class ViewController: SuperViewController {
                     appData.filter.showAll = false
                     appData.filter.from = "\(appData.filter.makeTwo(n: 1)).\(appData.filter.makeTwo(n: month)).\(year)"
                     appData.filter.to = "\(appData.filter.makeTwo(n: 31)).\(appData.filter.makeTwo(n: month)).\(year)"
-                  /*  if !self.completedFiltering {
+                    if !self.completedFiltering {
                         self.filterChanged = true
-                    }*/
+                    }
                     self.filter()
                 }
             }
