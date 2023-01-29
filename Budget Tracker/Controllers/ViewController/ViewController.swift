@@ -100,6 +100,14 @@ class ViewController: SuperViewController {
     var lastWhiteBackheight = 0
     var openFiler = false
     var apiLoading = true
+    var filterChanged = false
+    var newTableData: [tableStuct] {
+        get { return _TableData }
+        set {
+            _TableData = newValue
+            tableDataLoaded(newValue)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -110,6 +118,9 @@ class ViewController: SuperViewController {
                     appData.filter.showAll = false
                     appData.filter.from = "\(appData.filter.makeTwo(n: 1)).\(appData.filter.makeTwo(n: month)).\(year)"
                     appData.filter.to = "\(appData.filter.makeTwo(n: 31)).\(appData.filter.makeTwo(n: month)).\(year)"
+                    if !self.completedFiltering {
+                        self.filterChanged = true
+                    }
                     self.filter()
                 }
             }
@@ -147,13 +158,21 @@ class ViewController: SuperViewController {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
     
-    func filter(data:[TransactionsStruct]? = nil) {
+    
+    var apiTransactions:[TransactionsStruct] = []
+    func filter(data:[TransactionsStruct]? = nil, changeTitle:Bool = false) {
         completedFiltering = false
         print("filterCalled")
-        DispatchQueue.main.async {
-            self.filterText = "Filtering".localize
+        if changeTitle {
+            DispatchQueue.main.async {
+                self.filterText = "Filtering".localize
+            }
         }
-        let all = db.transactions
+        
+        let tod = appData.filter.fromDate
+        let all = apiTransactions.filter { transaction in
+            return (transaction.date.stringToCompIso().year ?? 1) == (tod.year ?? 0)
+        }
         tableData = all
         prepareFilterOptions(all)
         

@@ -79,7 +79,7 @@ class CalendarControlVC: UIViewController {
                          month: !minus ? 1 : 12)
         }
     }
-    
+    var loaded = false
     func createCalendarData(_ middle:CalendarData, animated:Bool = false) {
         var new:[CalendarModel] = []
         for i in 0..<3 {
@@ -93,7 +93,9 @@ class CalendarControlVC: UIViewController {
             }
             self.collectionView.scrollToItem(at: .init(item: 1, section: 0), at: .centeredHorizontally, animated: animated)
             self.monthLabel.text = "\(middle.month.stringMonth.capitalized) \(middle.year)"
-            if !animated {
+            
+            if !animated && !self.loaded {
+                self.loaded = true
             self.collectionView.reloadData()
                 //get middle date
             }

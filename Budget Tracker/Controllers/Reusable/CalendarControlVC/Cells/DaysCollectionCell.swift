@@ -24,6 +24,7 @@ class CalendarCollectionCell: UICollectionViewCell {
         self.calendarModel = model
         self.didSelect = didSelect
         self.collectionView.reloadData()
+        
     }
     
 }

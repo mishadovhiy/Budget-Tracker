@@ -154,8 +154,8 @@ extension ViewController {
         
         if getYearFrom(string: appData.filter.to) == getYearFrom(string: appData.filter.from) {
             let today = appData.filter.getToday()
-            let lastDay = "31.\(AppData.makeTwo(n: appData.filter.getMonthFromString(s: today))).\(appData.filter.getYearFromString(s: today))"
-            let firstDay = "01.\(AppData.makeTwo(n: appData.filter.getMonthFromString(s: today))).\(appData.filter.getYearFromString(s: today))"
+            let lastDay = "31.\(appData.filter.getMonthFromString(s: today).makeTwo()).\(appData.filter.getYearFromString(s: today))"
+            let firstDay = "01.\(appData.filter.getMonthFromString(s: today).makeTwo()).\(appData.filter.getYearFromString(s: today))"
             appData.filter.to = appData.filter.to == "" ? lastDay : appData.filter.to
             appData.filter.from = appData.filter.from == "" ? firstDay : appData.filter.from
             let to = appData.filter.to
@@ -198,18 +198,15 @@ extension ViewController {
         
         return (result, Int(amount))
     }
-    
+
     func dictToTable(_ dict:[String:[TransactionsStruct]]) -> [tableStuct] {
-        var result:[tableStuct] = []
-        for (key, value) in dict {
+        return dict.compactMap { (key: String, value: [TransactionsStruct]) in
             let co = DateComponents()
             let transactions = value.sorted { Double($0.value) ?? 0.0 < Double($1.value) ?? 0.0 }
             let date = co.stringToDateComponent(s: key)
             let amount = Int(amountForTransactions(transactions))
-            let new:tableStuct = .init(date:  date, amount: amount, transactions: transactions)
-            result.append(new)
+            return .init(date:  date, amount: amount, transactions: transactions)
         }
-        return result
     }
     func dataToDict(_ transactions:[TransactionsStruct]) -> [String:[TransactionsStruct]] {
         var result:[String:[TransactionsStruct]] = [:]
@@ -254,35 +251,26 @@ extension ViewController {
         if appData.filter.showAll {
             return true
         } else {
-            for day in daysBetween {
-                if day == curDay {
-                    return true
-                }
-            }
-            return false
+            return daysBetween.contains(curDay)
+
         }
         
     }
     
-    var newTableData: [tableStuct] {
-        get {
-            return _TableData
-        }
-        set {
-            _TableData = newValue
-            tableDataLoaded(newValue)
-        }
-    }
-    
-    
+
     func updateDataLabels(reloadAndAnimate: Bool = true, noData: Bool = false) {
-        let unsendedCount = appData.unsendedData.count
-        let localCount = ((UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String:Any]] ?? []) + (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String:Any]] ?? [])).count
-        let hideUnsended = unsendedCount == 0 ? true : false
-        let hideLocal = localCount == 0 ? true : false
+   //     let unsendedCount = appData.unsendedData.count
+      //  let localCount = ((UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String:Any]] ?? []) + (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String:Any]] ?? [])).count
+   //     let hideUnsended = unsendedCount == 0 ? true : false
+   //     let hideLocal = localCount == 0 ? true : false
         
         DispatchQueue.main.async {
-            self.unsendedDataLabel.text = "\(unsendedCount)"
+            if self.mainTableView.visibleCells.count > 1 {
+                self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
+            } else {
+                self.mainTableView.reloadData()
+            }
+           /* self.unsendedDataLabel.text = "\(unsendedCount)"
             self.dataFromTitleLabel.text = "Local data".localize + ":"
             self.dataFromValueLabel.text = "\(localCount)"
             if reloadAndAnimate {
@@ -307,7 +295,7 @@ extension ViewController {
                 } else {
                     self.mainTableView.reloadData()
                 }
-            }
+            }*/
         }
     }
     func toggleNoData(show: Bool, text: String = "No Transactions".localize, fromTop: Bool = false, appeareAnimation: Bool = true, addButtonHidden: Bool = false) {
@@ -333,7 +321,8 @@ extension ViewController {
                 } completion: { (_) in
                     self.noDataView.isHidden = true
                     if self.mainTableView.visibleCells.count > 1 {
-                        self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
+                    //    self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
+                        self.mainTableView.reloadData()
                     }
                 }
             }
@@ -587,6 +576,7 @@ extension ViewController {
                 if error == .none {
                     self.highesLoadedCatID = ((categoryes.sorted{ $0.id > $1.id }).first?.id ?? 0) + 1
                     LoadFromDB.shared.newTransactions { loadedData, error in
+                        self.apiTransactions = loadedData
                         self.checkPurchase { _ in
                             self.apiLoading = false
                             self.filter(data: loadedData)
@@ -694,21 +684,27 @@ extension ViewController {
     var dataTaskCount: (Int, Int)? {
         get { return nil }
         set {
-            if let new = newValue {
-                let statusText = new.0 > 0 ? "\(new.0)/\(new.1)" : ""
-                DispatchQueue.main.async {
-                    self.dataTaskCountLabel.text = statusText
-                }
-            } else {
-                DispatchQueue.main.async {
-                    UIView.animate(withDuration: 0.6) {
-                        self.dataTaskCountLabel.alpha = 0
-                    } completion: { (_) in
-                        self.dataTaskCountLabel.text = ""
-                        self.dataTaskCountLabel.alpha = 1
+            if filterChanged {
+                filterChanged = false
+                self.filter()
+            }  else {
+                if let new = newValue {
+                    let statusText = new.0 > 0 ? "\(new.0)/\(new.1)" : ""
+                    DispatchQueue.main.async {
+                        self.dataTaskCountLabel.text = statusText
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        UIView.animate(withDuration: 0.6) {
+                            self.dataTaskCountLabel.alpha = 0
+                        } completion: { (_) in
+                            self.dataTaskCountLabel.text = ""
+                            self.dataTaskCountLabel.alpha = 1
+                        }
                     }
                 }
             }
+            
         }
     }
 }
@@ -822,7 +818,7 @@ extension ViewController: TransitionVCProtocol {
     }
     
     func prepareFilterOptions(_ data:[TransactionsStruct]? = nil) {
-        let dat = data == nil ? Array(db.transactions) : data!
+        let dat = data == nil ? Array(apiTransactions) : data!
         let arr = Array(dat.sorted{ $0.dateFromString > $1.dateFromString })
         var months:[String] = []
         var years:[String] = []
