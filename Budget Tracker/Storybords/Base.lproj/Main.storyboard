@@ -693,10 +693,10 @@
                                         </prototypes>
                                     </tableView>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7wN-Jq-Vyf">
-                                        <rect key="frame" x="10" y="192.66666666666669" width="410" height="290"/>
+                                        <rect key="frame" x="10" y="192.66666666666669" width="410" height="230"/>
                                         <color key="backgroundColor" name="PrimaryBackgroundColor"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="290" id="vQe-Tn-2Ze"/>
+                                            <constraint firstAttribute="height" constant="230" id="vQe-Tn-2Ze"/>
                                         </constraints>
                                         <connections>
                                             <segue destination="XMI-7k-slH" kind="embed" id="OkU-ey-862"/>
@@ -3064,7 +3064,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="ReminderCell" id="0VC-sg-p8P" customClass="ReminderCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="430" height="142"/>
+                                        <rect key="frame" x="0.0" y="50" width="430" height="142"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="0VC-sg-p8P" id="TYY-To-r2K">
                                             <rect key="frame" x="0.0" y="0.0" width="430" height="142"/>
@@ -3346,7 +3346,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="NoRemindersCell" id="JKn-bm-wcP" customClass="NoRemindersCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="170" width="430" height="26.333333969116211"/>
+                                        <rect key="frame" x="0.0" y="192" width="430" height="26.333333969116211"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="JKn-bm-wcP" id="U97-2I-zD1">
                                             <rect key="frame" x="0.0" y="0.0" width="430" height="26.333333969116211"/>

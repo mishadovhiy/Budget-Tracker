@@ -666,23 +666,25 @@ class LoginViewController: SuperViewController {
 
 
 extension LoginViewController {
-    func logout() {//logged out when log out when logout
-        if !appData.purchasedOnThisDevice {
-            appData.proVersion = false
-            appData.proTrial = false
-        }
-        appData.username = ""
-        appData.password = ""
-        lastSelectedDate = nil
-        AppData.categoriesHolder = nil
-        UserDefaults.standard.setValue(nil, forKey: "lastSelected")
+    func logout() {
+        DispatchQueue(label: "local", qos: .userInitiated).async {
+            if !appData.purchasedOnThisDevice {
+                appData.proVersion = false
+                appData.proTrial = false
+            }
+            appData.username = ""
+            appData.password = ""
+            lastSelectedDate = nil
+            AppData.categoriesHolder = nil
+            UserDefaults.standard.setValue(nil, forKey: "lastSelected")
 
-        DispatchQueue.main.async {
-            self.title = "Sign In".localize
-            self.passwordLabel.text = ""
-            self.passwordLogLabel.text = ""
-            self.nicknameLogLabel.text = ""
-            self.ai.fastHide()
+            DispatchQueue.main.async {
+                self.title = "Sign In".localize
+                self.passwordLabel.text = ""
+                self.passwordLogLabel.text = ""
+                self.nicknameLogLabel.text = ""
+                self.ai.fastHide()
+            }
         }
     }
     
@@ -704,6 +706,7 @@ extension LoginViewController {
 extension LoginViewController: SelectUserVCDelegate {
     func selected(user: String) {
         keyChainPassword(nick: user)
+        nicknameLogLabel.text = user
         textFieldValuesDict.updateValue(user, forKey: "log.user")
     }
     

@@ -9,8 +9,8 @@
 import Foundation
 
 struct Keys {
-    static let dbURL = "https://www.mishadovhiy.com/apps/budget-tracker-db/"
+    static let urlDomen = "https://www.mishadovhiy.com/apps/"
+    static let dbURL = Keys.urlDomen + "budget-tracker-db/"
     static let secretKey = "44fdcv8jf3"
-    
-    static let analyticsURL = "https://www.mishadovhiy.com/apps/other-apps-db/analyticsDB/"
+    static let analyticsURL = Keys.urlDomen + "apps/other-apps-db/analyticsDB/"
 }

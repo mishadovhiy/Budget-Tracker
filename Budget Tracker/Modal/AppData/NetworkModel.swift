@@ -466,7 +466,23 @@ struct DeleteFromDB {
         }
     }
 
-    
+    func deleteAccount(completion: @escaping (Bool) -> ()) {
+        if appData.username == "" {
+            completion(false)
+        } else {
+
+          /*  let data = "&Nickname=\(appData.username)" + "&CategoryId=\(transaction.categoryID)" + "&Amount=\(transaction.value)" + "&Date=\(transaction.date)" + "&Comment=\(transaction.comment)"
+            delete(dbFileURL: Keys.dbURL + "delete-NewTransaction.php", toDataString: data, error: { (error) in
+                if error {
+
+                    
+                }
+
+                
+                completion(error)
+            })*/
+        }
+    }
     
     private func delete(dbFileURL: String, toDataString: String, error: @escaping (Bool) -> ()) {
         let url = NSURL(string: dbFileURL)

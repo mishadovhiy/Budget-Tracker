@@ -29,20 +29,10 @@ class MoreOptionsData {
         let appData = AppData()
         //get screen data
 
-        let changeEmailAction = {
-            self.changeEmailTapped()
-        }
-        let logoutAction = {
-            self.vc.logout()
-            print("lohoyt pressed")
-        }
         let forgotPassword = {
             if appData.username != "" {
                 self.forgotPasswordTapped()
             } else {
-                
-                    
-                
                 let nextAction: (String) -> () = { (newvalue2) in
                     self.ai.show { _ in
                    
@@ -72,29 +62,23 @@ class MoreOptionsData {
             }
             
         }
-        let changePassword = {
-            self.changePasswordTapped()
-        }
-        
-        let transfareData = {
-            self.transfereData()
-        }
-        
+
         
         let loggedUserData = [
            // MoreVC.ScreenData(name: "Username", description: "", action: nil),
            // MoreVC.ScreenData(name: "Web purchase", description: "", action: nil),
            // MoreVC.ScreenData(name: "Device purchase", description: "", action: nil),
-            MoreVC.ScreenData(name: "Change Email".localize, description: vc.userEmail, action: changeEmailAction),
-            MoreVC.ScreenData(name: "Change password".localize, description: "", action: changePassword),
+            MoreVC.ScreenData(name: "Change Email".localize, description: vc.userEmail, action: changeEmailTapped),
+            MoreVC.ScreenData(name: "Change password".localize, description: "", action: changePasswordTapped),
             MoreVC.ScreenData(name: "Forgot password".localize, description: "", action: forgotPassword),
-            MoreVC.ScreenData(name: "Transfer data".localize, description: "", pro: appData.proEnabeled, action: transfareData),
-            MoreVC.ScreenData(name: "Log out".localize, description: "", distructive: true, showAI: false, action: logoutAction),
+            MoreVC.ScreenData(name: "Transfer data".localize, description: "", pro: appData.proEnabeled, action: transfereData),
+          //  MoreVC.ScreenData(name: "Delete account & data".localize, description: "", distructive: true, showAI: false, action: deleteAccountPressed),
+            MoreVC.ScreenData(name: "Log out".localize, description: "", distructive: true, showAI: false, action: logoutPressed),
         ]
         
         let notUserLogged = [
             //MoreVC.ScreenData(name: "Device purchase", description: appData.purchasedOnThisDevice ? "Yes":"No", action: nil),
-            MoreVC.ScreenData(name: "Transfer data".localize, description: "", pro: appData.proEnabeled, action: transfareData),
+            MoreVC.ScreenData(name: "Transfer data".localize, description: "", pro: appData.proEnabeled, action: transfereData),
             MoreVC.ScreenData(name: "Forgot password".localize, description: "", action: forgotPassword),
         ]
         
@@ -103,7 +87,23 @@ class MoreOptionsData {
     
     var forgotPasswordUsername = ""
     
+    func deleteAccountPressed() {
+        self.vc.ai.showAlert(buttons: (.init(title: "Calcel", style: .regular, close: true, action: nil), AlertViewLibrary.button.init(title: "Delete account", style: .error, close: true, action: {_ in
+            self.performDeleteAccount()
+        })), title: "Are you sure you want to delete Your Account And its content?", description: "This action cannot be undon")
+    }
     
+    private func performDeleteAccount() {
+        
+    }
+    
+    
+    func logoutPressed() {
+        self.vc.ai.showAlert(buttons: (.init(title: "Calcel", style: .regular, close: true, action: nil), AlertViewLibrary.button.init(title: "Logout", style: .error, close: true, action: {_ in
+            self.vc.logout()
+        })), title: "Are you sure you want to logout?", description: "")
+        
+    }
     
     func forgotPasswordTapped() {
      //   DispatchQueue.main.async {
