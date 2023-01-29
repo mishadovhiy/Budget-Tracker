@@ -169,11 +169,11 @@ class ViewController: SuperViewController {
         print("filterCalled")
         let showAll = appData.filter.showAll
         let tod = appData.filter.fromDate
-        let filterPeriod = (tod.month?.stringMonth ?? "-").capitalized + ", \(tod.year ?? 0)"
+//        let filterPeriod = (tod.month?.stringMonth ?? "-").capitalized + ", \(tod.year ?? 0)"
         DispatchQueue.main.async {
             //self.filterText = "Filtering".localize
             
-            self.filterText = (showAll ? "All transactions" : filterPeriod).localize
+            self.filterText = (showAll ? "All transactions" : appData.filter.periodText).localize
         }
         
         
@@ -192,10 +192,18 @@ class ViewController: SuperViewController {
             allDaysBetween()
         }
         let transactions = (data ?? tableData).sorted{ $0.dateFromString < $1.dateFromString }
+        
         let filtered = dataToDict(transactions)
         newTableData = dictToTable(filtered).sorted{
             Calendar.current.date(from: $0.date ) ?? Date.distantFuture >
                     Calendar.current.date(from: $1.date ) ?? Date.distantFuture
+        }
+        self.monthTransactions.removeAll()
+        newTableData.forEach { tr in
+            tr.transactions.forEach { transaction in
+                self.monthTransactions.append(transaction)
+            }
+            
         }
     }
 
@@ -263,6 +271,7 @@ class ViewController: SuperViewController {
     
 //MARK: - Other
     
+    var monthTransactions:[TransactionsStruct] = []
     var totalBalance = 0.0
     var daysBetween = [""]
     var selectedFromDayInt = 0
@@ -322,7 +331,9 @@ class ViewController: SuperViewController {
     }
 
 
+    var currentStatistic = false
     @IBAction func statisticLabelPressed(_ sender: UIButton) {
+        currentStatistic = true
         switch sender.tag {
         case 0: appData.expenseLabelPressed = true
         case 1: appData.expenseLabelPressed = false

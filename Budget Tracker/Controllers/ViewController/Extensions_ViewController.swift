@@ -396,15 +396,16 @@ extension ViewController {
                     label.text = "\(value)"
                     label.textColor = value >= 0 ? K.Colors.category : K.Colors.negative
                     let hide = newValue.perioudBalance == newValue.balance
-                    if label.superview?.isHidden ?? false != hide {
-                        UIView.animate(withDuration: 0.2) {
-                            label.superview?.isHidden = hide
+                    let hi:CGFloat = hide ? 0 : 1
+                    if (label.superview?.alpha ?? 0) != hi {
+                        UIView.animate(withDuration: 0.13) {
+                            label.superview?.alpha = hi
                         }
                     }
                     
                 }
                 for label in self.balanceLabels {
-                    let value = Int(newValue.balance)
+                    let value = Int(newValue.perioudBalance)
                     label.text = "\(value)"
                     label.textColor = value >= 0 ? K.Colors.category : K.Colors.negative
                 }
@@ -1143,7 +1144,9 @@ extension ViewController: TransitionVCProtocol {
             
         case "toStatisticVC":
             let vc = segue.destination as! StatisticVC
-            vc.dataFromMain = tableData
+            print(currentStatistic, " currentStatisticcurrentStatistic")
+            vc.dataFromMain = currentStatistic ? monthTransactions : apiTransactions //or apidata
+            currentStatistic = false
         case "toSingIn":
             let nav = segue.destination as! UINavigationController
             let vc = nav.topViewController as! LoginViewController

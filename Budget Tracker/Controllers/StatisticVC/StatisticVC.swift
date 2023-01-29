@@ -85,19 +85,21 @@ class StatisticVC: SuperViewController, CALayerDelegate {
         } else {
             segmentControll.selectedSegmentIndex = 1
         }
-        allData = createTableData()
+        let d = createTableData()
+        allData = d
         getMaxSum()
         initPlot()
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
     }
+    var selectedSegment = 0
     let db = DataBase()
     var maxValue = 0.0
     func createTableData() -> [GraphDataStruct] {
         maxValue = 0.0
-        allData = []
-        let data = Array(ViewController.shared?.tableData ?? [])
+        allData.removeAll()
+        let data = Array(dataFromMain)
      //   if segmentControll.selectedSegmentIndex == 0 {
             var resultDict: [String:[TransactionsStruct]] = [:]
             for i in 0..<data.count {
@@ -130,29 +132,29 @@ class StatisticVC: SuperViewController, CALayerDelegate {
                 
                 if appData.expenseLabelPressed {
                     
-                    if category.purpose != .income {
+                 //   if category.purpose != .income {
                         if value < 0 {
                             allData.append(GraphDataStruct(category: category, transactions: transactions, value: value))
                             totalAmount += value
                         }
                         
-                    }
+                  //  }
                 } else {
                     
-                    if category.purpose != .expense {
+              //      if category.purpose != .expense {
                         if value > 0 {
                             totalAmount += value
                             allData.append(GraphDataStruct(category: category, transactions: transactions, value: value))
                         }
                         
-                    }
+                 //   }
                 }
                 
             }
             
 
             DispatchQueue.main.async {
-                self.titleLabel.text = (appData.expenseLabelPressed ? "Expenses".localize : "Incomes".localize) + " " + "for".localize + " " + appData.filter.selectedPeroud
+                self.titleLabel.text = (appData.expenseLabelPressed ? "Expenses".localize : "Incomes".localize) + " " + "for".localize + " " + appData.filter.periodText.localize
                 self.totalLabel.text = "\(Int(totalAmount))"
             }
             ifNoData()
