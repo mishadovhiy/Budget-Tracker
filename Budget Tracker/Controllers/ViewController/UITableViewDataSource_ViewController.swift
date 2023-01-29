@@ -140,8 +140,8 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             return bigFr - 45
         } else {
             if newTableData.count == 0 && indexPath.section == 1{
-                
-                return tableView.layer.frame.height - (bigFr + 30)
+                let safe = AppDelegate.shared?.window?.safeAreaInsets.top ?? 0 + 20
+                return (tableView.layer.frame.height - (bigFr + (safe))).validate(min: 0)
             } else {
                 return UITableView.automaticDimension
             }

@@ -92,3 +92,10 @@ extension Int {
         
     }
 }
+
+
+extension CGFloat {
+    func validate(min:CGFloat) -> CGFloat {
+        return self >= min ? self : min
+    }
+}
