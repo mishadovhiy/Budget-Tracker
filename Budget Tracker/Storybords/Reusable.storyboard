@@ -226,11 +226,11 @@
                                 </constraints>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="KAA-zC-sm6">
-                                <rect key="frame" x="45" y="59" width="340" height="200"/>
+                                <rect key="frame" x="30" y="59" width="370" height="170"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="340" id="ZPW-zL-FvZ"/>
-                                    <constraint firstAttribute="height" constant="200" id="aYo-54-QTi"/>
+                                    <constraint firstAttribute="width" constant="370" id="ZPW-zL-FvZ"/>
+                                    <constraint firstAttribute="height" constant="170" id="aYo-54-QTi"/>
                                 </constraints>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Dae-od-sSh">
                                     <size key="itemSize" width="128" height="128"/>
@@ -240,17 +240,17 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CalendarCollectionCell" id="s9e-Kg-IWs" customClass="CalendarCollectionCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
+                                        <rect key="frame" x="0.0" y="-15" width="320" height="200"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="h5R-bX-zZq">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <subviews>
                                                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="9ly-Rq-Mty">
-                                                    <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
+                                                    <rect key="frame" x="-10" y="0.0" width="340" height="200"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="320" id="Wax-rF-6jH"/>
+                                                        <constraint firstAttribute="width" constant="340" id="Wax-rF-6jH"/>
                                                     </constraints>
                                                     <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="abK-8a-0Lp">
                                                         <size key="itemSize" width="128" height="128"/>
@@ -260,14 +260,14 @@
                                                     </collectionViewFlowLayout>
                                                     <cells>
                                                         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="CalendarCell" id="PEs-4q-g9E" customClass="CalendarCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="40" height="20"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="a9X-rk-5D6">
-                                                                <rect key="frame" x="0.0" y="0.0" width="40" height="20"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                 <subviews>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F7m-7h-PU1" userLabel="backgroundView" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="40" height="20"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="40" id="b0w-m0-u7H"/>
@@ -278,7 +278,7 @@
                                                                         </userDefinedRuntimeAttributes>
                                                                     </view>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Av7-iB-s9c">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="40" height="20"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
                                                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
                                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <nil key="highlightedColor"/>
@@ -297,7 +297,7 @@
                                                                 </constraints>
                                                             </collectionViewCellContentView>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <size key="customSize" width="40" height="20"/>
+                                                            <size key="customSize" width="20" height="20"/>
                                                             <connections>
                                                                 <outlet property="backgroundMainView" destination="F7m-7h-PU1" id="NAj-1G-SHf"/>
                                                                 <outlet property="dayLabel" destination="Av7-iB-s9c" id="i6O-JS-cJb"/>

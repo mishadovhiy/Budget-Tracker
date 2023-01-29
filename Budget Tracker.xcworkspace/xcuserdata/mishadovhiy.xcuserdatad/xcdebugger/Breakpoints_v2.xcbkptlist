@@ -686,8 +686,8 @@
             filePath = "Budget Tracker/Controllers/Reusable/CalendarControlVC/CalendarControlVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "105"
-            endingLineNumber = "105"
+            startingLineNumber = "95"
+            endingLineNumber = "95"
             landmarkName = "createCalendarData(_:animated:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -702,8 +702,8 @@
             filePath = "Budget Tracker/Controllers/ViewController/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "108"
-            endingLineNumber = "108"
+            startingLineNumber = "109"
+            endingLineNumber = "109"
             landmarkName = "viewDidLoad()"
             landmarkType = "7">
             <Locations>
@@ -738,6 +738,70 @@
                   offsetFromSymbolStart = "120">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6BCFF958-E2C4-427F-A61E-898440678AF7"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Budget Tracker/Controllers/Reusable/CalendarControlVC/CalendarControlVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "63"
+            endingLineNumber = "63"
+            landmarkName = "middleDate"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "6BCFF958-E2C4-427F-A61E-898440678AF7 - 5b1f02d7f2fbda46"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Budget_Tracker.CalendarControlVC.middleDate.setter : Swift.Optional&lt;Budget_Tracker.CalendarData&gt;"
+                  moduleName = "Budget Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/Controllers/Reusable/CalendarControlVC/CalendarControlVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "77"
+                  endingLineNumber = "77"
+                  offsetFromSymbolStart = "1004">
+               </Location>
+               <Location
+                  uuid = "6BCFF958-E2C4-427F-A61E-898440678AF7 - 5b1f02d7f2fbda46"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Budget_Tracker.CalendarControlVC.middleDate.setter : Swift.Optional&lt;Budget_Tracker.CalendarData&gt;"
+                  moduleName = "Budget Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/Controllers/Reusable/CalendarControlVC/CalendarControlVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "77"
+                  endingLineNumber = "77"
+                  offsetFromSymbolStart = "1060">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2077EF9A-795D-4515-909D-18510599DDAF"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Budget Tracker/Controllers/Reusable/CalendarControlVC/CalendarControlVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
+            landmarkName = "middleDate"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -12,6 +12,7 @@ extension ViewController {
     func scrollHead(_ scrollView: UIScrollView) {
         let offset = scrollView.contentOffset.y * -1
         let height = calendarContainer.frame.height * (-2)
+        self.bigCalcView.alpha = scrollView.contentOffset.y >= bigCalcView.frame.height ? 0 : 1
         if height <= offset {
             calendarContainer.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, offset <= 0 ? offset : 0, 0)
         } else {
@@ -578,13 +579,16 @@ extension ViewController {
         DispatchQueue.main.async {
             self.filterText = title
         }
+        apiLoading = true
         DispatchQueue.init(label: "download").async {
             LoadFromDB.shared.newCategories { categoryes, error in
+                
                 AppData.categoriesHolder = categoryes
                 if error == .none {
                     self.highesLoadedCatID = ((categoryes.sorted{ $0.id > $1.id }).first?.id ?? 0) + 1
                     LoadFromDB.shared.newTransactions { loadedData, error in
                         self.checkPurchase { _ in
+                            self.apiLoading = false
                             self.filter(data: loadedData)
                         }
                     }

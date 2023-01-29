@@ -694,10 +694,10 @@
                                         </prototypes>
                                     </tableView>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7wN-Jq-Vyf">
-                                        <rect key="frame" x="0.0" y="180" width="430" height="220"/>
+                                        <rect key="frame" x="10" y="180" width="410" height="190"/>
                                         <color key="backgroundColor" name="PrimaryBackgroundColor"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="220" id="vQe-Tn-2Ze"/>
+                                            <constraint firstAttribute="height" constant="190" id="vQe-Tn-2Ze"/>
                                         </constraints>
                                         <connections>
                                             <segue destination="XMI-7k-slH" kind="embed" id="OkU-ey-862"/>
@@ -1018,7 +1018,7 @@
                                     <constraint firstItem="i1T-0z-OZY" firstAttribute="leading" secondItem="0oV-VO-FeH" secondAttribute="trailing" constant="-50" id="eaK-Wq-2f4"/>
                                     <constraint firstItem="Kwg-kx-2vX" firstAttribute="width" secondItem="0oV-VO-FeH" secondAttribute="width" multiplier="1:1" id="fyo-nr-kwZ"/>
                                     <constraint firstItem="zua-Ep-o90" firstAttribute="top" secondItem="Bqc-vp-d9i" secondAttribute="bottom" constant="4" id="gYj-lw-GNi"/>
-                                    <constraint firstAttribute="trailing" secondItem="7wN-Jq-Vyf" secondAttribute="trailing" id="gqN-tD-el1"/>
+                                    <constraint firstAttribute="trailing" secondItem="7wN-Jq-Vyf" secondAttribute="trailing" constant="10" id="gqN-tD-el1"/>
                                     <constraint firstItem="zIg-fF-jEa" firstAttribute="top" secondItem="Bqc-vp-d9i" secondAttribute="bottom" constant="10" id="gt8-Tg-4ZS"/>
                                     <constraint firstAttribute="trailing" secondItem="zIg-fF-jEa" secondAttribute="trailing" constant="20" id="jtJ-wQ-izJ"/>
                                     <constraint firstAttribute="bottom" secondItem="Kwg-kx-2vX" secondAttribute="bottom" id="kQB-2h-7gD"/>
@@ -1028,7 +1028,7 @@
                                     <constraint firstItem="Bqc-vp-d9i" firstAttribute="top" secondItem="gtA-fF-esq" secondAttribute="top" id="mwK-oJ-75M"/>
                                     <constraint firstItem="0oV-VO-FeH" firstAttribute="leading" secondItem="gtA-fF-esq" secondAttribute="leading" id="nIM-jm-4YQ"/>
                                     <constraint firstAttribute="trailing" secondItem="zua-Ep-o90" secondAttribute="trailing" id="nVW-yi-yFE"/>
-                                    <constraint firstItem="7wN-Jq-Vyf" firstAttribute="leading" secondItem="gtA-fF-esq" secondAttribute="leading" id="uAS-Jb-bP5"/>
+                                    <constraint firstItem="7wN-Jq-Vyf" firstAttribute="leading" secondItem="gtA-fF-esq" secondAttribute="leading" constant="10" id="uAS-Jb-bP5"/>
                                     <constraint firstAttribute="bottom" secondItem="zua-Ep-o90" secondAttribute="bottom" id="uGK-31-CP2"/>
                                     <constraint firstItem="Kwg-kx-2vX" firstAttribute="leading" secondItem="gtA-fF-esq" secondAttribute="leading" id="xWr-Me-wJg"/>
                                 </constraints>
@@ -2357,7 +2357,7 @@
                                 </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="statisticCellIdent" id="czw-1t-hDS" customClass="StatisticCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="430.5" width="430" height="48"/>
+                                        <rect key="frame" x="0.0" y="408.5" width="430" height="48"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="czw-1t-hDS" id="DL1-ap-cmz">
                                             <rect key="frame" x="0.0" y="0.0" width="399.66666666666669" height="48"/>
@@ -4518,13 +4518,13 @@ AAAAAAIBAAAAAAAAAGEAAAAAAAAAAAAAAAAAAChAA
         </image>
         <image name="line.3.horizontal" width="13" height="7"/>
         <image name="paperplane.fill" catalog="system" width="128" height="119"/>
-        <image name="pencil" width="14" height="14"/>
         <image name="pencil" catalog="system" width="128" height="113"/>
+        <image name="pencil" width="14" height="14"/>
         <image name="repeat" catalog="system" width="128" height="98"/>
         <image name="scroll" width="14" height="14"/>
         <image name="square.and.arrow.down" catalog="system" width="121" height="128"/>
-        <image name="trash" catalog="system" width="117" height="128"/>
         <image name="trash" width="25" height="29"/>
+        <image name="trash" catalog="system" width="117" height="128"/>
         <image name="trash.fill" catalog="system" width="119" height="128"/>
         <image name="unknown" width="15" height="12"/>
         <namedColor name="CategoryColor">

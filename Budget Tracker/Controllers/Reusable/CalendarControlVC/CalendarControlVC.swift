@@ -23,6 +23,7 @@ class CalendarControlVC: UIViewController {
     var dateSelected:((_ date:DateComponents)->())?
     var monthChanged:((_ month:Int, _ year:Int)->())?
     var selectedDate:DateComponents?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         CalendarControlVC.shared = self
@@ -30,23 +31,8 @@ class CalendarControlVC: UIViewController {
         let swipeClose = UISwipeGestureRecognizer(target: self, action: #selector(swipeClose(_:)))
         self.view.addGestureRecognizer(swipeClose)
         DispatchQueue.init(label: "l", qos: .userInitiated).async {
-            let today = self.selectedDate ?? Date().toDateComponents()
+            let today = appData.filter.fromDate
             self.middleDate = .init(year: today.year ?? 0, month: today.month ?? 0)
-        }
-    }
-    
-    
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        UIView.animate(withDuration: 0.3) {
-            //self.view.backgroundColor = K.Colors.Interface.pimaryBackground.withAlphaComponent(0.7)
-        }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        UIView.animate(withDuration: 0.3) {
-            self.view.backgroundColor = .clear
         }
     }
     
@@ -68,13 +54,17 @@ class CalendarControlVC: UIViewController {
             return _middleDate
         }
         set {
+            let notChanged = _middleDate?.year == newValue?.year && _middleDate?.month == newValue?.month
             _middleDate = newValue
             if let val = newValue {
                 createCalendarData(val)
             }
-            if let action = monthChanged {
-                action(newValue?.year ?? 0, newValue?.month ?? 0)
+            if !notChanged {
+                if let action = monthChanged {
+                    action(newValue?.year ?? 0, newValue?.month ?? 0)
+                }
             }
+            
         }
     }
     

@@ -99,6 +99,7 @@ class ViewController: SuperViewController {
     var refreshData = false
     var lastWhiteBackheight = 0
     var openFiler = false
+    var apiLoading = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
