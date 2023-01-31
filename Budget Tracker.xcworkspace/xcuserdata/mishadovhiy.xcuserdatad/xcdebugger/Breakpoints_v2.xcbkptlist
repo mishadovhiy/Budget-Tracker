@@ -750,8 +750,8 @@
             filePath = "Budget Tracker/Controllers/Reusable/CalendarControlVC/CalendarControlVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
             landmarkName = "middleDate"
             landmarkType = "24">
             <Locations>
@@ -798,8 +798,8 @@
             filePath = "Budget Tracker/Controllers/Reusable/CalendarControlVC/CalendarControlVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "63"
-            endingLineNumber = "63"
+            startingLineNumber = "61"
+            endingLineNumber = "61"
             landmarkName = "middleDate"
             landmarkType = "24">
          </BreakpointContent>
@@ -817,22 +817,6 @@
             startingLineNumber = "100"
             endingLineNumber = "100"
             landmarkName = "createCalendarData(_:animated:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "E34C8FB5-623F-4146-9AE1-A2375D8F14B8"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Budget Tracker/Controllers/Reusable/CalendarControlVC/CalendarControlVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "170"
-            endingLineNumber = "170"
-            landmarkName = "scrollViewDidEndScrollingAnimation(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -910,8 +894,8 @@
             filePath = "Budget Tracker/Controllers/Reusable/CalendarControlVC/CalendarControlVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "203"
-            endingLineNumber = "203"
+            startingLineNumber = "202"
+            endingLineNumber = "202"
             landmarkName = "completeScrolling(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -926,8 +910,8 @@
             filePath = "Budget Tracker/Controllers/Reusable/CalendarControlVC/CalendarControlVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "198"
-            endingLineNumber = "198"
+            startingLineNumber = "197"
+            endingLineNumber = "197"
             landmarkName = "completeScrolling(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -977,6 +961,54 @@
             startingLineNumber = "342"
             endingLineNumber = "342"
             landmarkName = "statisticLabelPressed(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8B851CB8-EBA1-4897-AB21-FC44A1FD2385"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Budget Tracker/Controllers/Reusable/CalendarControlVC/CalendarControlVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "74"
+            endingLineNumber = "74"
+            landmarkName = "newMonth(current:i:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6326C63F-3426-4E59-9252-3E34D5290BC1"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Budget Tracker/Controllers/Reusable/CalendarControlVC/CalendarControlVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "77"
+            endingLineNumber = "77"
+            landmarkName = "newMonth(current:i:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "3C37776D-7E6A-4596-8324-4125C561A0A3"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Budget Tracker/Controllers/Reusable/CalendarControlVC/CalendarControlVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "158"
+            endingLineNumber = "158"
+            landmarkName = "scrollViewDidEndDragging(_:willDecelerate:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

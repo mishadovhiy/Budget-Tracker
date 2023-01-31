@@ -1122,6 +1122,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.7;
@@ -1129,7 +1130,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 7.7;
+				MARKETING_VERSION = 8;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
@@ -1151,6 +1152,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.7;
@@ -1158,7 +1160,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 7.7;
+				MARKETING_VERSION = 8;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;

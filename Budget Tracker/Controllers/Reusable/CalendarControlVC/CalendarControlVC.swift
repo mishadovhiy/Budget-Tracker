@@ -8,16 +8,14 @@
 import UIKit
 
 class CalendarControlVC: UIViewController {
-
+    
     @IBOutlet weak var monthView: TouchView!
     @IBOutlet weak var monthLabel: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var mainBackgroundView: UIView!
     
     static var shared: CalendarControlVC?
-    
     var years:(from:Int, to:Int) = (from:0,to:0)
-
     var tableData:[CalendarModel] = []
     var _middleDate:CalendarData?
     var dateSelected:((_ date:DateComponents)->())?
@@ -84,8 +82,10 @@ class CalendarControlVC: UIViewController {
     func createCalendarData(_ middle:CalendarData, animated:Bool = false) {
         var new:[CalendarModel] = []
         for i in 0..<3 {
-            new.append(.init(self.newMonth(current: middle, i: i)))
+            let neww:CalendarModel = .init(self.newMonth(current: middle, i: i))
+            new.append(neww)
         }
+        
         self.tableData = new
         DispatchQueue.main.async {
             if self.collectionView.delegate == nil {
@@ -95,16 +95,15 @@ class CalendarControlVC: UIViewController {
             self.collectionView.scrollToItem(at: .init(item: 1, section: 0), at: .centeredHorizontally, animated: animated)
             self.monthLabel.text = "\(middle.month.stringMonth.capitalized) \(middle.year)"
             
-            if !animated && !self.loaded {
+       //     if !animated && !self.loaded {
                 self.loaded = true
-            self.collectionView.reloadData()
-                //get middle date
-            }
+                self.collectionView.reloadData()
+         //   }
         }
         
     }
     
-
+    
     
     func daySelected(_ day:Int) {
         if let action = dateSelected,
@@ -137,14 +136,14 @@ class CalendarControlVC: UIViewController {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let scroll = scrollView.contentOffset.x
         let pos = getFromScroll(scroll)
-
+        
         if pos != scrollPos {
             scrollPos = pos
         }
         
     }
     
-
+    
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         if waitDeclar {
             waitDeclar = false
@@ -160,16 +159,16 @@ class CalendarControlVC: UIViewController {
         }
         
     }
-
+    
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-   //     if scrolled {
-            scrolled = false
-            self.middleDate = .init(year: tableData[selectedInt].year,
-                                    month: tableData[selectedInt].month)
-        self.collectionView.reloadData()
-            //get middle date
-     //   }
+        //     if scrolled {
+        scrolled = false
+        self.middleDate = .init(year: tableData[selectedInt].year,
+                                month: tableData[selectedInt].month)
+ //       self.collectionView.reloadData()
+        //get middle date
+        //   }
     }
     
     
@@ -220,8 +219,8 @@ extension CalendarControlVC {
         vc.modalPresentationStyle = .overFullScreen
         vc.dateSelected = selected
         vc.selectedDate = currentSelected
-     //   NavigationVC.shared?.present(vc, animated: true)
+        //   NavigationVC.shared?.present(vc, animated: true)
         
     }
-
+    
 }

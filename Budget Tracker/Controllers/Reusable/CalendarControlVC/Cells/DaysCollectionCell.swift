@@ -20,10 +20,13 @@ class CalendarCollectionCell: UICollectionViewCell {
     }
     
     
-    func set(model:CalendarModel, didSelect:@escaping (_ day:Int)->()) {
+    func set(model:CalendarModel, disp:Bool = false, didSelect:@escaping (_ day:Int)->()) {
         self.calendarModel = model
         self.didSelect = didSelect
-        self.collectionView.reloadData()
+        if disp {
+            self.collectionView.reloadData()
+
+        }
         
     }
     

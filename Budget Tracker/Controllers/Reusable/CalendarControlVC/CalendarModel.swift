@@ -38,7 +38,9 @@ class CalendarModel {
         
     }
     
-    
+    var description:String {
+        return "year:\(self.year), month:\(self.month), \ndays:\(self.days)"
+    }
     
     
     var year = 1996
