@@ -12,6 +12,19 @@ import Foundation
 
 
 class AppData {
+    var _filter:[String:Any]?
+    var filter:Filter {
+        get {
+            let dict = _filter ?? UserDefaults.standard.value(forKey: "Filter") as? [String : Any] ?? [:]
+            _filter = dict
+            return .init(dict: dict)
+        }
+        set {
+            _filter = newValue.dict
+            UserDefaults.standard.set(newValue.dict, forKey: "Filter")
+        }
+    }
+    
     var expenseLabelPressed = true//make only in vc
     var sendSavedData = false
     var needDownloadOnMainAppeare = false
@@ -231,167 +244,14 @@ class AppData {
     struct Objects {
         let datePicker = UIDatePicker()
     }
+
     
-    
-    //todo
-    var filter = Filter()//get from ud
-    struct Filter {
-        //add init from dict
-        var showAll:Bool {
-            get {
-                UserDefaults.standard.value(forKey: "showAlll") as? Bool ?? false
-            }
-            set {
-                UserDefaults.standard.setValue(newValue, forKey: "showAlll")
-            }
-        }
-        var from: String {
-            get {
-                UserDefaults.standard.value(forKey: "SortFromm") as? String ?? ""
-            }
-            set {
-                UserDefaults.standard.setValue(newValue, forKey: "SortFromm")
-            }
-        }
-        var to: String {
-            get {
-                UserDefaults.standard.value(forKey: "SortToo") as? String ?? ""
-            }
-            set {
-                UserDefaults.standard.setValue(newValue, forKey: "SortToo")
-            }
-        }
-        var selectedPeroud:String {
-            get {
-                UserDefaults.standard.value(forKey: "SortSelectedPeroudd") as? String ?? ""
-            }
-            set {
-                UserDefaults.standard.setValue(newValue, forKey: "SortSelectedPeroudd")
-            }
-        }
+    var filterObjects = FilterObjects()
+    struct FilterObjects {
         
-        var filteredData:[String: [String]] {
-            get {return UserDefaults.standard.value(forKey: "filterOptions") as? [String: [String]] ?? [:]
-            }
-            set {UserDefaults.standard.setValue(newValue, forKey: "filterOptions")
-            }
-        }
+        let currentDate = UIDatePicker()
         
-        var toDate:DateComponents {
-            return to.stringToCompIso()
-        }
-        var fromDate:DateComponents {
-            return from.stringToCompIso()
-        }
-        
-        var periodText:String {
-            let showAll = showAll
-            let tod = fromDate
-            return (tod.month?.stringMonth ?? "-").localize.capitalized + ", \(tod.year ?? 0)"
-        }
-        
-        func getLastDayOf(month: Int, year: Int) -> Int {
-            
-            let dateComponents = DateComponents(year: year, month: month)
-            let calendar = Calendar.current
-            let date = calendar.date(from: dateComponents)!
-
-            let range = calendar.range(of: .day, in: .month, for: date)!
-            return range.count
-        
-        }
-        
-        func getLastDayOf(fullDate: String) -> Int {
-            
-            if fullDate != "" {
-                let month = getMonthFromString(s: fullDate)
-                let year = getMonthFromString(s: fullDate)
-                
-                let dateComponents = DateComponents(year: year, month: month)
-                let calendar = Calendar.current
-                let date = calendar.date(from: dateComponents)!
-
-                let range = calendar.range(of: .day, in: .month, for: date)!
-                return range.count
-            } else {
-                return 28
-            }
-        
-        }
-        
-        
-        
-        func getToday(dateformatter: String = "dd.MM.yyyy") -> String {
-            
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = dateformatter
-            let results = dateFormatter.string(from: Date())
-            return results
-        }
-        
-        func makeTwo(n: Int) -> String {
-            if n < 10 {
-                return "0\(n)"
-            } else {
-                return "\(n)"
-            }
-        }
-        
-        func getDayFromString(s: String) -> Int {
-            
-            if s != "" {
-                var day = s
-                for _ in 0..<8 {
-                    day.removeLast()
-                }
-                return Int(day) ?? 23
-            } else {
-                return 11
-            }
-            
-        }
-        
-        
-        func getMonthFromString(s: String) -> Int {
-            
-            if s != "" {
-                var month = s
-                for _ in 0..<3 {
-                    month.removeFirst()
-                }
-                for _ in 0..<5 {
-                    month.removeLast()
-                }
-                return Int(month) ?? 11
-            } else {
-                return 11
-            }
-        }
-        
-        func getYearFromString(s: String) -> Int {
-            
-            if s != "" {
-                var year = s
-                for _ in 0..<6 {
-                    year.removeFirst()
-                }
-                return Int(year) ?? 1996
-                
-            } else {
-                return 1996
-            }
-
-        }
-        
-        
-        var filterObjects = FilterObjects()
-        struct FilterObjects {
-            
-            let currentDate = UIDatePicker()
-            
-        }
     }
-    
     
     
     func createFirstData(completion: @escaping () -> ()) {

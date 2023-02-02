@@ -85,6 +85,7 @@
 		8D834DA2297E05530056E686 /* TouchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D834DA1297E05530056E686 /* TouchView.swift */; };
 		8D8B6C3C245023D0007260A0 /* FilterTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8B6C3B245023D0007260A0 /* FilterTVC.swift */; };
 		8D8B6C3E245023EC007260A0 /* CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8B6C3D245023EC007260A0 /* CalendarVC.swift */; };
+		8DA77CF4298B687E00949D98 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA77CF3298B687E00949D98 /* Filter.swift */; };
 		8DADC8922810E30300CC66EF /* TransactionNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DADC8912810E30300CC66EF /* TransactionNav.swift */; };
 		8DB4DAC227FC10D000EAA56F /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB4DAC127FC10D000EAA56F /* Keys.swift */; };
 		8DB7C459284EA064001DBFB7 /* AlertViewLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 8DB7C458284EA064001DBFB7 /* AlertViewLibrary */; };
@@ -215,6 +216,7 @@
 		8D834DA1297E05530056E686 /* TouchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchView.swift; sourceTree = "<group>"; };
 		8D8B6C3B245023D0007260A0 /* FilterTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterTVC.swift; sourceTree = "<group>"; };
 		8D8B6C3D245023EC007260A0 /* CalendarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarVC.swift; sourceTree = "<group>"; };
+		8DA77CF3298B687E00949D98 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
 		8DADC8912810E30300CC66EF /* TransactionNav.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionNav.swift; sourceTree = "<group>"; };
 		8DB4DAC127FC10D000EAA56F /* Keys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		8DBA7E4C23F0316F00D8214C /* Budget Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Budget Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -358,6 +360,7 @@
 			children = (
 				8DD89D8623F1471400273904 /* AppData.swift */,
 				8D36724124D315BC00CE90A9 /* NetworkModel.swift */,
+				8DA77CF3298B687E00949D98 /* Filter.swift */,
 			);
 			path = AppData;
 			sourceTree = "<group>";
@@ -907,6 +910,7 @@
 				8B57837E275E6977007BA9EC /* SideBar.swift in Sources */,
 				8BFA15D427E8E87B0078856A /* LocalDataActionCell.swift in Sources */,
 				8BB75D4227F26CA000AE71A1 /* ReminderStruct.swift in Sources */,
+				8DA77CF4298B687E00949D98 /* Filter.swift in Sources */,
 				8BF63E8B276294F2002E8601 /* SelectValueVC.swift in Sources */,
 				8B26328227E677930086C3A8 /* Label.swift in Sources */,
 				8BF58D1D277C78B7005A7F38 /* ProViewVC.swift in Sources */,
