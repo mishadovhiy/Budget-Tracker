@@ -164,7 +164,12 @@ class ViewController: SuperViewController {
         
     }
     
-    
+    func filtered(_ data:[TransactionsStruct]) -> [TransactionsStruct] {
+        let tod = appData.filter.fromDate
+        return data.filter { transaction in
+            return (transaction.date.stringToCompIso().year ?? 1) == (tod.year ?? 0)
+        }
+    }
     var apiTransactions:[TransactionsStruct] = []
     func filter(data:[TransactionsStruct]? = nil) {
         completedFiltering = false
@@ -172,16 +177,14 @@ class ViewController: SuperViewController {
         let showAll = appData.filter.showAll
         let tod = appData.filter.fromDate
 //        let filterPeriod = (tod.month?.stringMonth ?? "-").capitalized + ", \(tod.year ?? 0)"
+        let all = self.filtered(apiTransactions)
         DispatchQueue.main.async {
             //self.filterText = "Filtering".localize
             
             self.filterText = (showAll ? "All transactions" : appData.filter.periodText).localize
         }
         
-        
-        let all = apiTransactions.filter { transaction in
-            return (transaction.date.stringToCompIso().year ?? 1) == (tod.year ?? 0)
-        }
+
         tableData = all
         prepareFilterOptions(all)
         
@@ -209,6 +212,7 @@ class ViewController: SuperViewController {
         }
     }
 
+    var dbTotal:Int = 0
     @objc func refresh(sender:AnyObject) {
         //add transaction
         //scrolltop (other, similier function) - to ask if user whants to refresh db

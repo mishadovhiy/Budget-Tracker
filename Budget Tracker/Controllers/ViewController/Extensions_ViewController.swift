@@ -398,7 +398,7 @@ extension ViewController {
                     let value = Int(newValue.perioudBalance)
                     label.text = "\(value)"
                     label.textColor = value >= 0 ? K.Colors.category : K.Colors.negative
-                    let hide = newValue.perioudBalance == newValue.balance
+                    let hide = Int(newValue.perioudBalance) == self.dbTotal || newValue.perioudBalance == 0
                     let hi:CGFloat = hide ? 0 : 1
                     if (label.superview?.alpha ?? 0) != hi {
                         UIView.animate(withDuration: 0.13) {
@@ -408,7 +408,7 @@ extension ViewController {
                     
                 }
                 for label in self.balanceLabels {
-                    let value = Int(newValue.perioudBalance)
+                    let value = self.dbTotal
                     label.text = "\(value)"
                     label.textColor = value >= 0 ? K.Colors.category : K.Colors.negative
                 }
@@ -531,7 +531,9 @@ extension ViewController {
     }
     
     func apiUpdated(_ loadedData: [TransactionsStruct]? = nil) {
-        let data = loadedData ?? db.transactions
+        let db = db.transactions
+        let data = loadedData ?? db
+        self.dbTotal = 0
         self.apiTransactions = data
         var resultt:[String:CGFloat] = [:]
         data.forEach { transaction in
@@ -541,6 +543,9 @@ extension ViewController {
             let val = (resultt[model] ?? 0)
             let new = val + (Double(transaction.value) ?? 0)
             resultt.updateValue(new, forKey: model)
+        }
+        db.forEach { value in
+            dbTotal += (Int(value.value) ?? 0)
         }
         CalendarControlVC.shared?.values = resultt
         DispatchQueue.main.async {
@@ -623,6 +628,13 @@ extension ViewController {
             }
         }
         balanceHelperView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(monthBalancePressed(_:))))
+        (
+            balanceHelperView as? TouchView
+        )?.touchAction = { pressed in
+            UIView.animate(withDuration: 0.3, animations: {
+                self.bigExpensesStack.backgroundColor = pressed ? K.Colors.darkTable?.withAlphaComponent(0.2) : .clear
+            })
+        }
         
     }
     func wrongPassword() {
