@@ -375,6 +375,14 @@ class TransitionVC: SuperViewController {
         
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        if self.commentTextField.isFirstResponder {
+            self.commentTextField.endEditing(true)
+            toggleAmountKeyboard(show: true)
+        }
+    }
+    
     func errorSaving() {
         var wasHidden = false
         let bounds = valueLabel.bounds
@@ -459,15 +467,19 @@ class TransitionVC: SuperViewController {
             self.categoryTextField.attributedPlaceholder = NSAttributedString(string: placeHolder, attributes: [NSAttributedString.Key.foregroundColor: K.Colors.textFieldPlaceholder])
         }
     }
-    //here
-    @IBAction func showPadPressed(_ sender: UIButton) {
-        DispatchQueue.main.async {
+    func toggleAmountKeyboard(show:Bool) {
+        if show {
             self.categoryTextField.endEditing(true)
             self.commentTextField.endEditing(true)
-            UIView.animate(withDuration: 0.2) {
-                self.numbarPadView.alpha = 1
-            }
         }
+        
+        UIView.animate(withDuration: 0.2) {
+            self.numbarPadView.alpha = show ? 1 : 0
+        }
+    }
+    
+    @IBAction func showPadPressed(_ sender: UIButton) {
+        toggleAmountKeyboard(show: true)
     }
     
     @IBAction func numberPressed(_ sender: UIButton) {
