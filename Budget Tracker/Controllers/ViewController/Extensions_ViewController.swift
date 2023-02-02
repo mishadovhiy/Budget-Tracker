@@ -1109,6 +1109,8 @@ extension ViewController: TransitionVCProtocol {
             let nav = segue.destination as! UINavigationController
             let vc = nav.topViewController as! TransitionVC
             vc.delegate = self
+            vc.dateSet = self.calendarSelectedDate
+            self.calendarSelectedDate = nil
             if let transaction = editingTransaction {
                 vc.editingDate = transaction.date
                 vc.editingValue = Double(transaction.value) ?? 0.0
@@ -1121,6 +1123,7 @@ extension ViewController: TransitionVCProtocol {
             print(currentStatistic, " currentStatisticcurrentStatistic")
             vc.dataFromMain = currentStatistic ? monthTransactions : apiTransactions //or apidata
             vc.fromsideBar = self.fromSideBar
+    
             currentStatistic = false
             self.fromSideBar = false
         case "toSingIn":

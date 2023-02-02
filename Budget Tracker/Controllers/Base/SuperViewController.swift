@@ -111,6 +111,14 @@ class SuperViewController: UIViewController {
         
     }
     
+    func vibrate() {
+        if #available(iOS 13.0, *) {
+            UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+        } else {
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        }
+    }
+    
     func dateExpired(_ string: String) -> Bool {//      MODIFY TO USE ISO
         let dateDate = stringToDate(s: string, fullDate: true)//remove!
         let difference = differenceFromNow(startDate: dateDate)

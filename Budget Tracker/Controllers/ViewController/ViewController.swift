@@ -127,7 +127,9 @@ class ViewController: SuperViewController {
                 }
             }
             v.dateSelected = { newDate in
-                //scroll
+                self.vibrate()
+                self.calendarSelectedDate = newDate.toShortString()
+                self.toAddTransaction()
             }
             
         } else {
@@ -139,6 +141,8 @@ class ViewController: SuperViewController {
         toggleSideBar(false, animated: false)
     }
 
+    var calendarSelectedDate:String?
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         sbvsLoaded()
