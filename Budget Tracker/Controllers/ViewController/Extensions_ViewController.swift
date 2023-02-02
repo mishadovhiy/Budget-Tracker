@@ -1063,7 +1063,7 @@ extension ViewController: TransitionVCProtocol {
     
     func prepareSegue(for segue: UIStoryboardSegue, sender: Any?) {
         self.sendError = false
-        toggleSideBar(false, animated: true)
+     //   toggleSideBar(false, animated: true)
         print("prepare")
         selectedCell = nil
         DispatchQueue.main.async {

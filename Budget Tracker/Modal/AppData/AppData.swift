@@ -287,7 +287,7 @@ class AppData {
         var periodText:String {
             let showAll = showAll
             let tod = fromDate
-            return (tod.month?.stringMonth ?? "-").capitalized + ", \(tod.year ?? 0)"
+            return (tod.month?.stringMonth ?? "-").localize.capitalized + ", \(tod.year ?? 0)"
         }
         
         func getLastDayOf(month: Int, year: Int) -> Int {
