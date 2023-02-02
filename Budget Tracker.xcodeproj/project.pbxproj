@@ -336,8 +336,6 @@
 			isa = PBXGroup;
 			children = (
 				8DBA7E5323F0316F00D8214C /* ViewController.swift */,
-				8D8B6C3B245023D0007260A0 /* FilterTVC.swift */,
-				8DD89D8223F1468E00273904 /* mainVCcell.swift */,
 				8DC033CB2985CA5A00CD98FF /* UITableViewDataSource_ViewController.swift */,
 				8D0EC25E2985DB9600EBD1ED /* Extensions_ViewController.swift */,
 			);
@@ -568,6 +566,7 @@
 			children = (
 				8BC31D7A27E3E5EA00FBC939 /* Button.swift */,
 				8BD3A3D827E4097400547022 /* View.swift */,
+				8DD89D8223F1468E00273904 /* mainVCcell.swift */,
 				8D834DA1297E05530056E686 /* TouchView.swift */,
 				8B26328127E677930086C3A8 /* Label.swift */,
 				8B26328327E67D1D0086C3A8 /* SegmentedControl.swift */,
@@ -633,6 +632,14 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		8DA77CF2298B44DA00949D98 /* FilterTVC */ = {
+			isa = PBXGroup;
+			children = (
+				8D8B6C3B245023D0007260A0 /* FilterTVC.swift */,
+			);
+			path = FilterTVC;
+			sourceTree = "<group>";
+		};
 		8DBA7E4323F0316F00D8214C = {
 			isa = PBXGroup;
 			children = (
@@ -693,6 +700,7 @@
 				8B26328D27E698C60086C3A8 /* Base */,
 				8B26328E27E699610086C3A8 /* ViewController */,
 				8B1E932027E970320031D36F /* TransactionVC */,
+				8DA77CF2298B44DA00949D98 /* FilterTVC */,
 				8BFA15CF27E8E82F0078856A /* CategoriesVC */,
 				8B78559A27F0B3AD00169A93 /* TransactionsVC */,
 				8B78559D27F0C9F900169A93 /* RemindersVC */,

@@ -375,7 +375,8 @@ extension ViewController {
                     addedAction(true)
                 }
                 if self.firstAppearence {
-                    
+                    self.firstAppearence = false
+                    self.downloadFromDB()
                 }
             }
         }
@@ -459,9 +460,9 @@ extension ViewController {
             self.mainTableView.addSubview(self.refreshControl)
         }
     }
-    func checkPurchase(completion:@escaping(Bool?)-> ()) {
+    func checkPurchase(completion:@escaping(Bool?)-> (), local:Bool = false) {
         let nick = appData.username
-        if nick == "" {
+        if nick == "" || local {
             completion(true)
             return
         }
@@ -547,7 +548,7 @@ extension ViewController {
         }
     }
     
-    func downloadFromDB(showError: Bool = false, title: String = "Downloading".localize) {
+    func downloadFromDB(showError: Bool = false, title: String = "Downloading".localize, local:Bool = false) {
         self.editingTransaction = nil
         self.sendError = false
         completedFiltering = false
@@ -558,18 +559,18 @@ extension ViewController {
         }
         apiLoading = true
         DispatchQueue.init(label: "download").async {
-            LoadFromDB.shared.newCategories { categoryes, error in
+            LoadFromDB.shared.newCategories(local:local) { categoryes, error in
                 
                 AppData.categoriesHolder = categoryes
                 if error == .none {
                     self.highesLoadedCatID = ((categoryes.sorted{ $0.id > $1.id }).first?.id ?? 0) + 1
-                    LoadFromDB.shared.newTransactions { loadedData, error in
+                    LoadFromDB.shared.newTransactions(completion:  { loadedData, error in
                         self.apiUpdated(loadedData)
-                        self.checkPurchase { _ in
+                        self.checkPurchase(completion:  { _ in
                             self.apiLoading = false
                             self.filter(data: loadedData)
-                        }
-                    }
+                        }, local:local)
+                    }, local:local)
                 } else {
                     self.filter()
                     if showError {
@@ -604,7 +605,7 @@ extension ViewController {
     }
     
     func updateUI() {
-        downloadFromDB()
+        downloadFromDB(local: true)
         self.mainTableView.delegate = self
         self.mainTableView.dataSource = self
         self.enableLocalDataPress = false

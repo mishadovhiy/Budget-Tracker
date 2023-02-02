@@ -53,9 +53,9 @@ struct LoadFromDB {
     
     
     
-    func newCategories(otherUser: String? = nil, saveLocally: Bool = true, completion: @escaping ([NewCategories], error) -> ()) {
+    func newCategories(otherUser: String? = nil, saveLocally: Bool = true, local:Bool = false, completion: @escaping ([NewCategories], error) -> ()) {
         let user = otherUser == nil ? appData.username : otherUser!
-        if user == "" {
+        if user == "" || local {
             let local = db.categories
             completion(local, .none)
         } else {
@@ -91,9 +91,9 @@ struct LoadFromDB {
     
     
     
-    func newTransactions(otherUser: String? = nil, saveLocally: Bool = true, completion: @escaping ([TransactionsStruct], error) -> ()) {
+    func newTransactions(otherUser: String? = nil, saveLocally: Bool = true, completion: @escaping ([TransactionsStruct], error) -> (), local:Bool = false) {
         let user = otherUser == nil ? appData.username : otherUser!
-        if user == "" {
+        if user == "" || local {
             let local = db.transactions
             completion(local, .none)
         } else {
