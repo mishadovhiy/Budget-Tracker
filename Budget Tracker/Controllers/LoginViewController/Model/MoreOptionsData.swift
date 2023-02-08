@@ -72,7 +72,7 @@ class MoreOptionsData {
             MoreVC.ScreenData(name: "Change password".localize, description: "", action: changePasswordTapped),
             MoreVC.ScreenData(name: "Forgot password".localize, description: "", action: forgotPassword),
             MoreVC.ScreenData(name: "Transfer data".localize, description: "", pro: appData.proEnabeled, action: transfereData),
-          //  MoreVC.ScreenData(name: "Delete account & data".localize, description: "", distructive: true, showAI: false, action: deleteAccountPressed),
+            MoreVC.ScreenData(name: "Delete account & data".localize, description: "", distructive: true, showAI: false, action: deleteAccountPressed),
             MoreVC.ScreenData(name: "Log out".localize, description: "", distructive: true, showAI: false, action: logoutPressed),
         ]
         
@@ -88,15 +88,51 @@ class MoreOptionsData {
     var forgotPasswordUsername = ""
     
     func deleteAccountPressed() {
-        self.vc.ai.showAlert(buttons: (.init(title: "Calcel", style: .regular, close: true, action: nil), AlertViewLibrary.button.init(title: "Delete account", style: .error, close: true, action: {_ in
+        self.vc.ai.showAlert(buttons: (.init(title: "Calcel", style: .regular, close: false, action: nil), AlertViewLibrary.button.init(title: "Delete account", style: .error, close: true, action: {_ in
             self.performDeleteAccount()
         })), title: "Are you sure you want to delete Your Account And its content?", description: "This action cannot be undon")
     }
     
     private func performDeleteAccount() {
         
+        
+        self.getUser { loadedUser in
+            if let user = loadedUser {
+                let toDataStringMian = "&Nickname=\(user[0])" + "&Email=\(user[1])" + "&Password=\(user[2])" + "&Registration_Date=\(user[3])"
+                let toDat = toDataStringMian + "&ProVersion=\(user[4])" + "&trialDate=\(user[5])"
+                let delete = DeleteFromDB()
+                delete.User(toDataString: toDat) { (errorr) in
+                    //delete transactions
+                    if errorr {
+                        self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
+                    } else {
+                        self.vc.logout()
+                        DispatchQueue.main.async {
+                            self.vc.newMessage.show(title:"Your account has been Deleted", type: .succsess)
+                        }
+                    }
+                }
+            }
+        }
     }
     
+    func getUser(completion:@escaping([String]?) -> ()) {
+        LoadFromDB.shared.Users { (loadedData, error) in
+            if error {
+                self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
+                completion(nil)
+            } else {
+                let name = appData.username
+                for i in 0..<loadedData.count {
+                    if loadedData[i][0] == name {
+                        completion(loadedData[i])
+                        return
+                    }
+                }
+                completion(nil)
+            }
+        }
+    }
     
     func logoutPressed() {
         self.vc.ai.showAlert(buttons: (.init(title: "Calcel", style: .regular, close: true, action: nil), AlertViewLibrary.button.init(title: "Logout", style: .error, close: true, action: {_ in

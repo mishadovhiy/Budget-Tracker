@@ -12,6 +12,7 @@ import UIKit
 struct localizationDictUA {
 
     static let dictUA: [String:String] = [
+        "Your account has been Deleted":"Вашi даннi видаленно!",
         "No Adds":"Без реклами",
         "Remove all ads":"Прибрати всю рекламу",
         "Set payment reminders for Debit": "Встaновлюй нагадування для Боргів",
