@@ -338,20 +338,22 @@ extension BuyProVC: SKPaymentTransactionObserver {
         self.showAlert(title: "Payment not found".localize, text: nil, error: true)
     }
 
+    func toDataString(save:Bool, user:[String]) -> String {
+        let toDataStringMian = "&Nickname=\(user[0])" + "&Email=\(user[1])" + "&Password=\(user[2])" + "&Registration_Date=\(user[3])"
+        return toDataStringMian + "&ProVersion=\(!save ? user[4] : "1")" + "&trialDate=\(user[5])"
+    }
+    
     func dbSavePurchase() {
 
         getUser { loadedUser in
             if let user = loadedUser {
-                let toDataStringMian = "&Nickname=\(user[0])" + "&Email=\(user[1])" + "&Password=\(user[2])" + "&Registration_Date=\(user[3])"
-                let dataStringSave = toDataStringMian + "&ProVersion=1" + "&trialDate=\(user[5])"
+            
                 let delete = DeleteFromDB()
-                let dataStringDelete = toDataStringMian
-
-                delete.User(toDataString: dataStringDelete) { (errorr) in
+                delete.User(toDataString: self.toDataString(save: false, user: user)) { (errorr) in
                     if errorr {
                         self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
                     } else {
-                        SaveToDB.shared.Users(toDataString: dataStringSave ) { (error) in
+                        SaveToDB.shared.Users(toDataString: self.toDataString(save: true, user: user)) { (error) in
                             if error {
                                 self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
                             } else {
@@ -374,6 +376,7 @@ extension BuyProVC: SKPaymentTransactionObserver {
         DispatchQueue.main.async {
             self.showPurchasedIndicator()
             self.showAlert(title: Text.success, text: "Pro version available across all your devices".localize, error: false, goHome: true)
+          //  UIApplication().endBackgroundTask()
         }
     }
     
