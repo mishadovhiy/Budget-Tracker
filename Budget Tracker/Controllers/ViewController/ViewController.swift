@@ -11,7 +11,8 @@ import UIKit
 let appData = AppData()
 
 class ViewController: SuperViewController {
-    
+    var touchingFromShow = false
+
     @IBOutlet weak var balanceHelperView: UIView!
     @IBOutlet weak var sideTableView: UITableView!
     @IBOutlet weak var pinchView: UIView!
@@ -46,6 +47,7 @@ class ViewController: SuperViewController {
     @IBOutlet weak var menuButton: UIButton!
     @IBOutlet weak var bigExpensesStack: UIStackView!
     
+    @IBOutlet weak var sideBarContentBlockerView: UIView!
     static var shared: ViewController?
     var fromSideBar = false
     var _notificationsCount = (0,0)
@@ -136,6 +138,7 @@ class ViewController: SuperViewController {
             fatalError()
         }
         pinchView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:))))
+        self.sideBarContentBlockerView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:))))
         ViewController.shared = self
         sideBar.load()
         toggleSideBar(false, animated: false)
@@ -150,7 +153,9 @@ class ViewController: SuperViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         AppDelegate.shared?.window?.backgroundColor = K.Colors.primaryBacground
-        safeArreaHelperView?.alpha = 1
+        UIView.animate(withDuration: 0.3) {
+            self.safeArreaHelperView?.alpha = 1
+        }
         super.viewWillDisappear(animated)
         
     }
@@ -255,7 +260,7 @@ class ViewController: SuperViewController {
     }
     
     @objc func mainContentTap(_ sender: UITapGestureRecognizer) {
-        toggleSideBar(false, animated: true)
+    //    toggleSideBar(false, animated: true)
     }
     
     @IBAction func menuPressed(_ sender: UIButton) {
@@ -268,7 +273,7 @@ class ViewController: SuperViewController {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if sideBarShowing {
-            toggleSideBar(false, animated: true)
+          //  toggleSideBar(false, animated: true)
             self.scrollHead(scrollView)
             return
         }

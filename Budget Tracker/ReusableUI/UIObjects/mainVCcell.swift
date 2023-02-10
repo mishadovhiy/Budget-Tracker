@@ -8,7 +8,7 @@
 
 import UIKit
 
-class mainVCcell: UITableViewCell {
+class mainVCcell: ClearCell {
     @IBOutlet weak var mainBackgroundView: UIView!
     @IBOutlet weak var categoryImage: UIImageView!
     @IBOutlet weak var commentImage: UIImageView!
@@ -26,6 +26,11 @@ class mainVCcell: UITableViewCell {
         let selected = UIView(frame: .zero)
         selected.backgroundColor = .clear
         self.selectedBackgroundView = selected
+        self.touchesBegunAction = { began in
+            UIView.animate(withDuration: 0.2, animations: {
+                self.mainBackgroundView.backgroundColor = (began ? K.Colors.link : K.Colors.darkTable) ?? K.Colors.darkTable!
+            })
+        }
     }
     
     var beginScrollPosition:CGFloat = 0

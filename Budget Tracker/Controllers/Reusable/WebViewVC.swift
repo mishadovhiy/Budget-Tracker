@@ -21,32 +21,29 @@ class WebViewVC: SuperViewController, UIScrollViewDelegate, WKNavigationDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         webView.scrollView.delegate = self
         title = screenTitle
         DispatchQueue.init(label: "loadHtmlData", qos: .userInteractive).async {
-            if let htmlData = self.htmlData {
-                if let html = self.unparseHTML(urlString: htmlData.url, from: "<!--\(htmlData.key)-->", to: "<!--/\(htmlData.key)-->") {
-                    
-                    print("loadedHTML:\n", html)
-                    DispatchQueue.main.async {
-                        self.webView.loadHTMLString(html, baseURL: nil)
-                        self.webView.isHidden = false
-                        self.screenAI.stopAnimating()
-                        self.screenAI.isHidden = true
-                        self.webView.scrollView.contentInset.bottom = AppDelegate.shared?.banner.size ?? 0
-                    }
-                } else {
-                    self.errorLoading()
+            if let htmlData = self.htmlData,
+               let html = self.unparseHTML(urlString: htmlData.url, from: "<!--\(htmlData.key)-->", to: "<!--/\(htmlData.key)-->")
+            {
+                print("loadedHTML:\n", html)
+                DispatchQueue.main.async {
+                    self.webView.loadHTMLString(html, baseURL: nil)
+                    self.webView.isHidden = false
+                    self.screenAI.stopAnimating()
+                    self.screenAI.isHidden = true
+                    self.webView.scrollView.contentInset.bottom = AppDelegate.shared?.banner.size ?? 0
                 }
             } else {
                 self.errorLoading()
             }
         }
         
-
+        
     }
-
+    
     
     
     
@@ -91,7 +88,7 @@ class WebViewVC: SuperViewController, UIScrollViewDelegate, WKNavigationDelegate
             })
         }
     }
-
+    
 }
 
 extension WebViewVC {

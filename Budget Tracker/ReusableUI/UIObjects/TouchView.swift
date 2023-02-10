@@ -12,7 +12,14 @@ class TouchView:View {
     var touchAction:((Bool)->())?
     var pressedAction:(()->())?
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        touchesBegun()
+        if launch == nil {
+            launch = self.backgroundColor
+            touchesBegun()
+        } else {
+            touchesBegun()
+        }
+        
+        
     }
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         touchesEnded()
@@ -21,15 +28,92 @@ class TouchView:View {
         }
     }
 
+    
+    override func touchesEstimatedPropertiesUpdated(_ touches: Set<UITouch>) {
+        touchesEnded()
+    }
+    
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         touchesEnded()
+        
     }
     override func resignFirstResponder() -> Bool {
         return super.resignFirstResponder()
     }
-    lazy var launch:(UIColor) = {
-        return (self.backgroundColor ?? .red)
-    }()
+    var launch:UIColor?
+    
+    func touchesEnded() {
+        print("etrfwdsacefr")
+
+        if let touchAction = touchAction {
+            touchAction(false)
+        } else {
+            defaultTouches(begun: false)
+        }
+    }
+    
+    func touchesBegun() {
+        if let touchAction = touchAction {
+            touchAction(true)
+        } else {
+            defaultTouches(begun: true)
+        }
+    }
+    
+    var pressedcolor:UIColor? = nil
+    @IBInspectable open var pressColor: UIColor? = nil {
+        didSet {
+            if let color = pressColor {
+                self.pressedcolor = color
+            }
+        }
+    }
+    
+    private func defaultTouches(begun:Bool) {
+        let darker = pressedcolor ?? (self.launch?.lighter() ?? .white)
+        UIView.animate(withDuration: 0.3) {
+            self.backgroundColor = begun ? darker : self.launch
+        }
+
+    }
+    
+
+}
+
+class TouchButton: Button {
+    var touchAction:((Bool)->())?
+    var pressedAction:(()->())?
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        if launch == nil {
+            launch = self.backgroundColor
+            touchesBegun()
+        } else {
+            touchesBegun()
+        }
+    }
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        touchesEnded()
+        
+    }
+
+    
+    override func touchesEstimatedPropertiesUpdated(_ touches: Set<UITouch>) {
+        super.touchesEstimatedPropertiesUpdated(touches)
+        touchesEnded()
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        touchesEnded()
+        
+    }
+    override func resignFirstResponder() -> Bool {
+        super.resignFirstResponder()
+        return super.resignFirstResponder()
+    }
+    var launch:UIColor?
     
     func touchesEnded() {
         if let touchAction = touchAction {
@@ -57,75 +141,11 @@ class TouchView:View {
     }
     
     private func defaultTouches(begun:Bool) {
-        let darker = pressedcolor ?? self.launch.lighter()
+        let darker = pressedcolor ?? (self.launch?.lighter() ?? .white)
+
         UIView.animate(withDuration: 0.3) {
             self.backgroundColor = begun ? darker : self.launch
         }
 
-    }
-    
-
-}
-
-
-extension UITapGestureRecognizer {
-    open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
-        if let touchView = self.view as? TouchView {
-            touchView.touchesEnded()
-            self.state = .ended
-        } else {
-            self.state = .ended
-        }
-    }
-
-
-    
-    open override func ignore(_ touch: UITouch, for event: UIEvent) {
-        super.ignore(touch, for: event)
-        if let touchView = self.view as? TouchView {
-            touchView.touchesEnded()
-        }
-    }
-    
-    open override func ignore(_ button: UIPress, for event: UIPressesEvent) {
-        super.ignore(button, for: event)
-        if let touchView = self.view as? TouchView {
-            touchView.touchesEnded()
-        }
-    }
-    
-}
-
-class InfoView:TouchView {
-    private var draweed = false
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        if !draweed {
-            draweed = true
-            
-            self.touchAction = didPress(_:)
-        }
-    }
-    
-    private var _infoTitle: String? = nil
-    @IBInspectable open var infoTitle: String? = nil {
-        didSet {
-            self._infoTitle = infoTitle
-        }
-    }
-    private var _infoSubTitle: String? = nil
-    @IBInspectable open var infoSubTitle: String? = nil {
-        didSet {
-            self._infoSubTitle = infoSubTitle
-        }
-    }
-    
-    private func didPress(_ begun:Bool) {
-        if ((infoTitle ?? "") != "" || (infoSubTitle ?? "") != "") && !begun {
-            AppDelegate.shared?.ai.showAlertWithOK(title: infoTitle?.localize, text: infoSubTitle?.localize, error: false, image: .init(named: "info"), okTitle: "Close".localize, hidePressed: nil)
-        }
-        UIView.animate(withDuration: 0.18) {
-            self.alpha = begun ? 0.8 : 1
-        }
     }
 }

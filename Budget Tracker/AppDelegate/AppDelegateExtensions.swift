@@ -92,11 +92,12 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         if !becameActive {
             becameActive = true
         } else {
-            let fiveMin = Double(60 * 5)
+            let fiveMin:Double = Double(60 * 5)
             if ti > fiveMin {
                 if appData.username != "" {
                     AppData.categoriesHolder = nil
-                    appData.needDownloadOnMainAppeare = true
+                    appData.needDownloadOnMainAppeare = false
+                    ViewController.shared?.downloadFromDB()
                 }
             }
         }

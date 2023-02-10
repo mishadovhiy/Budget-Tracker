@@ -11,8 +11,25 @@ import UIKit
 extension UITableViewCell {
     open override func draw(_ rect: CGRect) {
         super.draw(rect)
+        setSelectedColor(K.Colors.secondaryBackground2)
+    }
+
+    func setSelectedColor(_ color:UIColor) {
         let selected = UIView(frame: .zero)
-        selected.backgroundColor = K.Colors.secondaryBackground2
+        selected.backgroundColor = color
+        self.selectedBackgroundView = selected
+    }
+}
+
+extension UICollectionViewCell {
+    open override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        setSelectedColor(K.Colors.secondaryBackground2)
+    }
+
+    func setSelectedColor(_ color:UIColor) {
+        let selected = UIView(frame: .zero)
+        selected.backgroundColor = color
         self.selectedBackgroundView = selected
     }
 }

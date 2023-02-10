@@ -51,12 +51,22 @@ extension ViewController {
     
     func toggleSideBar(_ show: Bool, animated:Bool) {
         sideBarShowing = show
+       /* if !show {
+            UIView.animate(withDuration: 0.3, animations: {
+                self.sideBarContentBlockerView.alpha = 0
+            })
+        }*/
         DispatchQueue.main.async {
             let frame = self.sideBar.layer.frame
             UIView.animate(withDuration: animated ? 0.25 : 0) {
                 self.mainContentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
                 self.mainContentViewHelpher.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
             } completion: { _ in
+                UIView.animate(withDuration: 0.3, animations: {
+                    self.sideBarContentBlockerView.alpha = show ? 1 : 0
+
+                })
+                
                 self.sideBar.getData()
                 if self.firstLod {
                     self.firstLod = false
@@ -76,13 +86,27 @@ extension ViewController {
         }
     }
     func sideBarPinch(_ sender:UIPanGestureRecognizer) {
+        if sender.state == .began {
+            touchingFromShow = sideBarShowing
+        }
         let finger = sender.location(in: self.view)
+        let max:CGFloat = 250
+        let resultXPos = finger.x//!touchingFromShow ? finger.x : (max + finger.x)
+        let testCacl = resultXPos / max
+        let c = testCacl - CGFloat(Int(testCacl))
+        let resCalc = testCacl >= 1 ? 1 : testCacl
+        //Int(testCacl) >= 1 && !touchingFromShow ? 1 : c
+        print(resCalc, " testCacltestCacltestCacl")
+        print(testCacl, " hgyuikjnhgyujk")
+        self.sideBarContentBlockerView.alpha = resCalc
+        
         if sender.state == .began {
             sidescrolling = finger.x < 80
             wasShowingSideBar = sideBarShowing
         }
         if sidescrolling || sideBarShowing {
             if sender.state == .began || sender.state == .changed {
+                
                 let newPosition = finger.x
                 UIView.animate(withDuration: 0.1) {
                     self.mainContentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, newPosition, 0, 0)
@@ -93,7 +117,12 @@ extension ViewController {
                 if sender.state == .ended {
                     let toHide:CGFloat = wasShowingSideBar ? 200 : 80
                     toggleSideBar(finger.x > toHide ? true : false, animated: true)
+                    
+                    
                 }
+            }
+            if sender.state == .cancelled {
+                toggleSideBar(false, animated: true)
             }
         }
     }
@@ -335,6 +364,7 @@ extension ViewController {
     }
     
     func tableDataLoaded(_ newValue:[tableStuct]) {
+       
         if filterChanged {
             filterChanged = false
            // filter()
@@ -514,7 +544,9 @@ extension ViewController {
             self.downloadFromDB(title: "Fetching".localize)
         }
         let safeTop = self.view.safeAreaInsets.top
-        self.safeArreaHelperView?.alpha = 0
+        UIView.animate(withDuration: 0.3) {
+            self.safeArreaHelperView?.alpha = 0
+        }
         if !safeArreaHelperViewAdded {
             safeArreaHelperViewAdded = true
             if let window = AppDelegate.shared?.window {
@@ -550,6 +582,7 @@ extension ViewController {
         CalendarControlVC.shared?.values = resultt
         DispatchQueue.main.async {
             CalendarControlVC.shared?.collectionView.reloadData()
+            self.mainContentView.isUserInteractionEnabled = true
         }
     }
     
@@ -563,7 +596,7 @@ extension ViewController {
             self.filterText = title
         }
         apiLoading = true
-        DispatchQueue.init(label: "download").async {
+        DispatchQueue.init(label: "download", qos: .userInitiated).async {
             LoadFromDB.shared.newCategories(local:local) { categoryes, error in
                 
                 AppData.categoriesHolder = categoryes

@@ -12,7 +12,7 @@ struct LoadFromDB {
 
     static var shared = LoadFromDB()
     private func load(urlPath: String, completion: @escaping (NSArray, error?) -> ()) {
-
+print(urlPath, " urlPathurlPathurlPath")
         if let url: URL = URL(string: urlPath) {
             let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
                 
@@ -24,6 +24,7 @@ struct LoadFromDB {
                     do{
                         jsonResult = try JSONSerialization.jsonObject(with: data!, options:JSONSerialization.ReadingOptions.allowFragments) as! NSArray
                     } catch let error as NSError {
+                        print(error.description, " bhgcftyuijknbvgcfjhj")
                         completion([], .internet)
                         return
                     }

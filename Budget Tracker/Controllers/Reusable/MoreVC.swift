@@ -211,11 +211,20 @@ class MoreVC: SuperViewController, UITableViewDelegate, UITableViewDataSource {
 
 
 
-class DataOptionCell: UITableViewCell {
+class DataOptionCell: ClearCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var textField: UITextField!
     
     @IBOutlet weak var proView: UIView!
 
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        self.touchesBegunAction = { begun in
+            UIView.animate(withDuration: 0.2, animations: {
+                self.contentView.alpha = begun ? 0.8 : 1
+            })
+        }
+    }
+    
 }

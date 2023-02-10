@@ -72,6 +72,10 @@
 		8BFA15D127E8E8510078856A /* categoriesVCcell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFA15D027E8E8510078856A /* categoriesVCcell.swift */; };
 		8BFA15D427E8E87B0078856A /* LocalDataActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFA15D327E8E87B0078856A /* LocalDataActionCell.swift */; };
 		8D0EC25F2985DB9600EBD1ED /* Extensions_ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0EC25E2985DB9600EBD1ED /* Extensions_ViewController.swift */; };
+		8D163BA329944D2700EF6C2A /* UITapGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D163BA229944D2700EF6C2A /* UITapGestureRecognizer.swift */; };
+		8D163BA529944FA100EF6C2A /* ClearTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D163BA429944FA100EF6C2A /* ClearTableCell.swift */; };
+		8D163BA729944FD100EF6C2A /* TableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D163BA629944FD100EF6C2A /* TableCell.swift */; };
+		8D163BA9299466D900EF6C2A /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D163BA8299466D900EF6C2A /* UIColor.swift */; };
 		8D36724224D315BC00CE90A9 /* NetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D36724124D315BC00CE90A9 /* NetworkModel.swift */; };
 		8D39788F28083E81007A2C55 /* AppDelegateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D39788E28083E81007A2C55 /* AppDelegateExtensions.swift */; };
 		8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5206662421695200772CD5 /* StatisticBrain.swift */; };
@@ -203,6 +207,10 @@
 		8BFA15D027E8E8510078856A /* categoriesVCcell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = categoriesVCcell.swift; sourceTree = "<group>"; };
 		8BFA15D327E8E87B0078856A /* LocalDataActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalDataActionCell.swift; sourceTree = "<group>"; };
 		8D0EC25E2985DB9600EBD1ED /* Extensions_ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions_ViewController.swift; sourceTree = "<group>"; };
+		8D163BA229944D2700EF6C2A /* UITapGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITapGestureRecognizer.swift; sourceTree = "<group>"; };
+		8D163BA429944FA100EF6C2A /* ClearTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearTableCell.swift; sourceTree = "<group>"; };
+		8D163BA629944FD100EF6C2A /* TableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableCell.swift; sourceTree = "<group>"; };
+		8D163BA8299466D900EF6C2A /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		8D36724124D315BC00CE90A9 /* NetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkModel.swift; sourceTree = "<group>"; };
 		8D39788E28083E81007A2C55 /* AppDelegateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegateExtensions.swift; sourceTree = "<group>"; };
 		8D5206662421695200772CD5 /* StatisticBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticBrain.swift; sourceTree = "<group>"; };
@@ -493,11 +501,13 @@
 				8B52CC6627E3001B008D5348 /* UITableViewCell.swift */,
 				8B82A04027E2BDBD0011EC80 /* UITextField.swift */,
 				8B26328527E67E720086C3A8 /* UISegmentedControl.swift */,
+				8D163BA229944D2700EF6C2A /* UITapGestureRecognizer.swift */,
 				8B6BA98127E717850067FF58 /* Date.swift */,
 				8B26329727E6A4470086C3A8 /* DateComponents.swift */,
 				8B7855A127F1526F00169A93 /* UIView.swift */,
 				8B898CF327F3EB0800B66F79 /* UIDatePicker.swift */,
 				8B746ABD27F4039E0010F0A4 /* UINavigationController.swift */,
+				8D163BA8299466D900EF6C2A /* UIColor.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -573,6 +583,8 @@
 				8D834DA1297E05530056E686 /* TouchView.swift */,
 				8B26328127E677930086C3A8 /* Label.swift */,
 				8B26328327E67D1D0086C3A8 /* SegmentedControl.swift */,
+				8D163BA429944FA100EF6C2A /* ClearTableCell.swift */,
+				8D163BA629944FD100EF6C2A /* TableCell.swift */,
 			);
 			path = UIObjects;
 			sourceTree = "<group>";
@@ -879,6 +891,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D163BA729944FD100EF6C2A /* TableCell.swift in Sources */,
 				8BC8525027E28D0F00C5A3A4 /* UserSettings.swift in Sources */,
 				8DEB0CD928184FC0002D24D3 /* Cells.swift in Sources */,
 				8B4728BC27533A470078BD34 /* DataBase.swift in Sources */,
@@ -900,10 +913,12 @@
 				8D0EC25F2985DB9600EBD1ED /* Extensions_ViewController.swift in Sources */,
 				8BB75D4427F294DE00AE71A1 /* TransactionStruct.swift in Sources */,
 				8B52CC6727E3001B008D5348 /* UITableViewCell.swift in Sources */,
+				8D163BA9299466D900EF6C2A /* UIColor.swift in Sources */,
 				8B26328627E67E720086C3A8 /* UISegmentedControl.swift in Sources */,
 				8D39788F28083E81007A2C55 /* AppDelegateExtensions.swift in Sources */,
 				8BB75D4727F2952300AE71A1 /* CategoriesStruct.swift in Sources */,
 				8B746AC027F405970010F0A4 /* ReminderVCMethods.swift in Sources */,
+				8D163BA529944FA100EF6C2A /* ClearTableCell.swift in Sources */,
 				8B6B509927F3A69F0067C237 /* ReminderManager.swift in Sources */,
 				8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */,
 				8B91F09127E58EF900B74F5A /* Text.swift in Sources */,
@@ -912,6 +927,7 @@
 				8BB75D4227F26CA000AE71A1 /* ReminderStruct.swift in Sources */,
 				8DA77CF4298B687E00949D98 /* Filter.swift in Sources */,
 				8BF63E8B276294F2002E8601 /* SelectValueVC.swift in Sources */,
+				8D163BA329944D2700EF6C2A /* UITapGestureRecognizer.swift in Sources */,
 				8B26328227E677930086C3A8 /* Label.swift in Sources */,
 				8BF58D1D277C78B7005A7F38 /* ProViewVC.swift in Sources */,
 				8DD89D8E23F1495300273904 /* TransactionVC.swift in Sources */,
@@ -1131,7 +1147,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
@@ -1142,7 +1158,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 10;
+				MARKETING_VERSION = 11;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
@@ -1161,7 +1177,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
@@ -1172,7 +1188,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 10;
+				MARKETING_VERSION = 11;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;

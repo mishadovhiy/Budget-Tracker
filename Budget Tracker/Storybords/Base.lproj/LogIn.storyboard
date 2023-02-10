@@ -543,7 +543,7 @@
                                             <action selector="restorePressed:" destination="kvJ-6b-N85" eventType="touchUpInside" id="CLY-28-lkM"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0eE-EE-uOy" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0eE-EE-uOy" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                         <rect key="frame" x="10" y="90.666666666666629" width="380" height="45"/>
                                         <color key="backgroundColor" systemColor="tintColor"/>
                                         <constraints>
@@ -626,7 +626,7 @@
                                     <segue destination="hGQ-HN-1kF" kind="embed" id="a2F-6w-DJf"/>
                                 </connections>
                             </containerView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Qc-L7-jFd" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Qc-L7-jFd" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                 <rect key="frame" x="380" y="69" width="40" height="40"/>
                                 <color key="backgroundColor" red="0.18000000720000001" green="0.18000000720000001" blue="0.18000000720000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>

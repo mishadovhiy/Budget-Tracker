@@ -25,3 +25,18 @@ extension UINavigationController {
        
     }
 }
+
+class NavigationController: UINavigationController {
+    override func pushViewController(_ viewController: UIViewController, animated: Bool) {
+        super.pushViewController(viewController, animated: animated)
+    }
+    
+    override func popViewController(animated: Bool) -> UIViewController? {
+        super.popViewController(animated: animated)
+        return self.topViewController
+    }
+    override func popToRootViewController(animated: Bool) -> [UIViewController]? {
+        super.popToRootViewController(animated: animated)
+        return self.viewControllers
+    }
+}

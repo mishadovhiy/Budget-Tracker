@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ReminderCell: UITableViewCell {
+class ReminderCell: ClearCell {
 
     
     @IBOutlet weak var repeatedIndicator: UIImageView!
@@ -17,6 +17,7 @@ class ReminderCell: UITableViewCell {
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     
+    @IBOutlet weak var backView: View!
     @IBOutlet weak var unseenIndicator: View!
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var commentLabel: UILabel!
@@ -35,9 +36,15 @@ class ReminderCell: UITableViewCell {
         let selected = UIView(frame: .zero)
         selected.backgroundColor = .clear
         self.selectedBackgroundView = selected
+        self.touchesBegunAction = { began in
+                    UIView.animate(withDuration: 0.2, animations: {
+                        self.backView.backgroundColor = (began ? K.Colors.link : K.Colors.darkTable) ?? K.Colors.darkTable!
+                    })
+                }
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
         let touchView = touches.first?.view ?? UIView()
         if touchView != self.contentView {
             if !animating {

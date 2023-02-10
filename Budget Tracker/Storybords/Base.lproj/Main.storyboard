@@ -182,7 +182,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="430" height="0.0"/>
                                 <color key="backgroundColor" name="PrimaryBackgroundColor"/>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gtA-fF-esq">
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gtA-fF-esq">
                                 <rect key="frame" x="0.0" y="0.0" width="430" height="829"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zIg-fF-jEa" userLabel="bigCalcView">
@@ -394,7 +394,7 @@
                                             <constraint firstAttribute="trailing" secondItem="gle-MX-Tpe" secondAttribute="trailing" id="yt7-oZ-WBC"/>
                                         </constraints>
                                     </view>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="black" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="66" sectionFooterHeight="50" translatesAutoresizingMaskIntoConstraints="NO" id="4SO-16-o5D">
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="black" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="66" sectionFooterHeight="50" translatesAutoresizingMaskIntoConstraints="NO" id="4SO-16-o5D">
                                         <rect key="frame" x="0.0" y="50" width="430" height="779"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="separatorColor" name="darkSeparetor"/>
@@ -498,9 +498,9 @@
                                                                                     <constraints>
                                                                                         <constraint firstAttribute="width" constant="25" id="arU-lw-0XW"/>
                                                                                     </constraints>
-                                                                                    <imageReference key="image" image="unknown" symbolScale="large"/>
+                                                                                    <imageReference key="image" image="unknown" symbolScale="default"/>
                                                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font" scale="large">
-                                                                                        <fontDescription key="fontDescription" type="system" pointSize="35"/>
+                                                                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                                                     </preferredSymbolConfiguration>
                                                                                 </imageView>
                                                                             </subviews>
@@ -706,7 +706,7 @@
                                             <segue destination="XMI-7k-slH" kind="embed" id="OkU-ey-862"/>
                                         </connections>
                                     </containerView>
-                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0oV-VO-FeH" userLabel="CategoriesButton" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                                    <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0oV-VO-FeH" userLabel="CategoriesButton" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="60" height="44"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="eC5-QI-1eq"/>
@@ -716,6 +716,12 @@
                                         <state key="normal" image="line.3.horizontal"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="string" keyPath="titleWhenNoSymbols" value="⌘"/>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
+                                                <color key="value" name="SecondaryBacroundColor2"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="9"/>
+                                            </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="menuPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Ykl-aJ-O04"/>
@@ -905,7 +911,7 @@
                                             <constraint firstItem="EPl-ii-IZL" firstAttribute="top" secondItem="Bqc-vp-d9i" secondAttribute="top" constant="4" id="ucb-zi-pbT"/>
                                         </constraints>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zDz-M6-AUL" userLabel="AddTrancactionButton" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zDz-M6-AUL" userLabel="AddTrancactionButton" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                         <rect key="frame" x="380" y="0.0" width="40" height="40"/>
                                         <color key="backgroundColor" name="SecondaryBacroundColor"/>
                                         <constraints>
@@ -1004,6 +1010,10 @@
                                             <constraint firstAttribute="width" constant="60" id="spM-m5-4kV"/>
                                         </constraints>
                                     </view>
+                                    <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OFg-LF-7jQ">
+                                        <rect key="frame" x="10" y="0.0" width="420" height="829"/>
+                                        <color key="backgroundColor" red="0.21199999749660492" green="0.21199999749660492" blue="0.21199999749660492" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" name="PrimaryBackgroundColor"/>
                                 <constraints>
@@ -1013,6 +1023,7 @@
                                     <constraint firstItem="zDz-M6-AUL" firstAttribute="top" secondItem="gtA-fF-esq" secondAttribute="top" id="Hku-w9-rjv"/>
                                     <constraint firstItem="4SO-16-o5D" firstAttribute="top" secondItem="Bqc-vp-d9i" secondAttribute="bottom" constant="10" id="Is8-PA-mXk"/>
                                     <constraint firstItem="4SO-16-o5D" firstAttribute="top" secondItem="iaT-LQ-3u9" secondAttribute="bottom" constant="5" id="KX3-bw-SLF"/>
+                                    <constraint firstAttribute="bottom" secondItem="OFg-LF-7jQ" secondAttribute="bottom" id="L9z-gg-6pY"/>
                                     <constraint firstItem="zIg-fF-jEa" firstAttribute="top" secondItem="7wN-Jq-Vyf" secondAttribute="bottom" constant="25" id="PHh-Tr-IjN"/>
                                     <constraint firstAttribute="trailing" secondItem="zDz-M6-AUL" secondAttribute="trailing" constant="10" id="QHs-Q1-IX0"/>
                                     <constraint firstItem="iaT-LQ-3u9" firstAttribute="leading" secondItem="gtA-fF-esq" secondAttribute="leading" constant="60" id="TNU-KP-L77"/>
@@ -1023,6 +1034,7 @@
                                     <constraint firstAttribute="bottom" secondItem="4SO-16-o5D" secondAttribute="bottom" id="Zhn-TD-MW0"/>
                                     <constraint firstItem="0oV-VO-FeH" firstAttribute="top" secondItem="gtA-fF-esq" secondAttribute="top" id="bEr-ZR-KxD"/>
                                     <constraint firstItem="7wN-Jq-Vyf" firstAttribute="top" secondItem="zIg-fF-jEa" secondAttribute="bottom" constant="-5" id="drl-G6-58n"/>
+                                    <constraint firstItem="OFg-LF-7jQ" firstAttribute="leading" secondItem="gtA-fF-esq" secondAttribute="leading" constant="10" id="e8N-cE-b6S"/>
                                     <constraint firstItem="i1T-0z-OZY" firstAttribute="leading" secondItem="0oV-VO-FeH" secondAttribute="trailing" constant="-50" id="eaK-Wq-2f4"/>
                                     <constraint firstItem="Kwg-kx-2vX" firstAttribute="width" secondItem="0oV-VO-FeH" secondAttribute="width" multiplier="1:1" priority="1" id="fyo-nr-kwZ"/>
                                     <constraint firstItem="zua-Ep-o90" firstAttribute="top" secondItem="Bqc-vp-d9i" secondAttribute="bottom" constant="4" id="gYj-lw-GNi"/>
@@ -1036,7 +1048,9 @@
                                     <constraint firstItem="Bqc-vp-d9i" firstAttribute="top" secondItem="gtA-fF-esq" secondAttribute="top" id="mwK-oJ-75M"/>
                                     <constraint firstItem="0oV-VO-FeH" firstAttribute="leading" secondItem="gtA-fF-esq" secondAttribute="leading" id="nIM-jm-4YQ"/>
                                     <constraint firstAttribute="trailing" secondItem="zua-Ep-o90" secondAttribute="trailing" id="nVW-yi-yFE"/>
+                                    <constraint firstItem="OFg-LF-7jQ" firstAttribute="top" secondItem="gtA-fF-esq" secondAttribute="top" id="qTq-fN-Owy"/>
                                     <constraint firstItem="7wN-Jq-Vyf" firstAttribute="leading" secondItem="gtA-fF-esq" secondAttribute="leading" constant="10" id="uAS-Jb-bP5"/>
+                                    <constraint firstAttribute="trailing" secondItem="OFg-LF-7jQ" secondAttribute="trailing" id="uFa-p7-neP"/>
                                     <constraint firstAttribute="bottom" secondItem="zua-Ep-o90" secondAttribute="bottom" id="uGK-31-CP2"/>
                                     <constraint firstItem="ITl-82-VFp" firstAttribute="width" secondItem="E3U-sW-gjw" secondAttribute="width" multiplier="1.15385" id="v5m-JM-y4K"/>
                                     <constraint firstItem="ITl-82-VFp" firstAttribute="height" secondItem="E3U-sW-gjw" secondAttribute="height" multiplier="1.04167" id="xDL-XA-I6m"/>
@@ -1117,6 +1131,7 @@
                         <outlet property="perioudBalanceView" destination="ITM-V9-am7" id="pmF-KC-fQb"/>
                         <outlet property="pinchView" destination="Kwg-kx-2vX" id="dMA-ii-100"/>
                         <outlet property="sideBar" destination="v9F-6t-GpL" id="FUk-Ps-qXS"/>
+                        <outlet property="sideBarContentBlockerView" destination="OFg-LF-7jQ" id="j1C-TA-2CD"/>
                         <outlet property="sideTableView" destination="cxr-Go-fWV" id="mNE-kf-hhq"/>
                         <outlet property="unsendedDataLabel" destination="x8a-G7-gqu" id="rru-oY-PNz"/>
                         <outletCollection property="incomeLabels" destination="prR-dZ-II2" collectionClass="NSMutableArray" id="cL2-o0-OZQ"/>
@@ -1214,7 +1229,7 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="fCz-NT-Fys">
                                                     <rect key="frame" x="10" y="5" width="355" height="50.333333333333336"/>
                                                     <subviews>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2gi-j4-gOi" userLabel="saveLocallyView" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2gi-j4-gOi" userLabel="saveLocallyView" customClass="TouchView" customModule="Budget_Tracker" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="0.0" width="115" height="50.333333333333336"/>
                                                             <subviews>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="IID-xz-I6t">
@@ -1252,7 +1267,7 @@
                                                                 </userDefinedRuntimeAttribute>
                                                             </userDefinedRuntimeAttributes>
                                                         </view>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zxO-pc-xqr" userLabel="saveLocallyView" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zxO-pc-xqr" userLabel="saveLocallyView" customClass="TouchView" customModule="Budget_Tracker" customModuleProvider="target">
                                                             <rect key="frame" x="120" y="0.0" width="115" height="50.333333333333336"/>
                                                             <subviews>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="sJ9-vJ-GUw">
@@ -1290,7 +1305,7 @@
                                                                 </userDefinedRuntimeAttribute>
                                                             </userDefinedRuntimeAttributes>
                                                         </view>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jek-Fk-wgF" userLabel="saveLocallyView" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jek-Fk-wgF" userLabel="saveLocallyView" customClass="TouchView" customModule="Budget_Tracker" customModuleProvider="target">
                                                             <rect key="frame" x="240" y="0.0" width="115" height="50.333333333333336"/>
                                                             <subviews>
                                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="FGZ-wS-L5Z">
@@ -1394,7 +1409,7 @@
                                                                                         <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="oLb-gV-vE3">
                                                                                             <rect key="frame" x="187" y="0.0" width="96" height="50"/>
                                                                                             <subviews>
-                                                                                                <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yG8-rV-0Py" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                                                                                                <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yG8-rV-0Py" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                                                                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                                                                     <constraints>
                                                                                                         <constraint firstAttribute="width" constant="50" id="a4w-li-L6B"/>
@@ -1402,6 +1417,14 @@
                                                                                                     <color key="tintColor" name="balanceTitleColor"/>
                                                                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                                                                     <state key="normal" title="✕"/>
+                                                                                                    <userDefinedRuntimeAttributes>
+                                                                                                        <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
+                                                                                                            <color key="value" name="PrimaryBackgroundColor"/>
+                                                                                                        </userDefinedRuntimeAttribute>
+                                                                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                                            <real key="value" value="6"/>
+                                                                                                        </userDefinedRuntimeAttribute>
+                                                                                                    </userDefinedRuntimeAttributes>
                                                                                                     <connections>
                                                                                                         <action selector="cancelPressed:" destination="Ugt-jI-QpQ" eventType="touchUpInside" id="8Q0-dG-k2R"/>
                                                                                                     </connections>
@@ -1425,7 +1448,7 @@
                                                                                                         <constraint firstAttribute="trailing" secondItem="Upv-7e-7oJ" secondAttribute="trailing" id="Wez-br-pDP"/>
                                                                                                     </constraints>
                                                                                                 </view>
-                                                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xfe-uw-b7y">
+                                                                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xfe-uw-b7y" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                                                                     <rect key="frame" x="61" y="0.0" width="35" height="50"/>
                                                                                                     <constraints>
                                                                                                         <constraint firstAttribute="width" constant="35" id="z55-We-nK0"/>
@@ -1436,6 +1459,12 @@
                                                                                                     <state key="normal" title="✓"/>
                                                                                                     <userDefinedRuntimeAttributes>
                                                                                                         <userDefinedRuntimeAttribute type="string" keyPath="titleWhenNoSymbols" value="✓"/>
+                                                                                                        <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
+                                                                                                            <color key="value" name="PrimaryBackgroundColor"/>
+                                                                                                        </userDefinedRuntimeAttribute>
+                                                                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                                            <real key="value" value="6"/>
+                                                                                                        </userDefinedRuntimeAttribute>
                                                                                                     </userDefinedRuntimeAttributes>
                                                                                                     <connections>
                                                                                                         <action selector="sendPressed:" destination="Ugt-jI-QpQ" eventType="touchUpInside" id="hbU-o0-V7i"/>
@@ -1768,7 +1797,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="430" height="777"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c9d-cL-RPP" userLabel="doneButton" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c9d-cL-RPP" userLabel="doneButton" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                 <rect key="frame" x="380" y="10" width="40" height="40"/>
                                 <color key="backgroundColor" name="yellowColor"/>
                                 <constraints>
@@ -1790,7 +1819,7 @@
                                     <action selector="donePressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="zFM-q5-KYX"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ydl-Nt-YBv" userLabel="cancelButton" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ydl-Nt-YBv" userLabel="cancelButton" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                 <rect key="frame" x="10" y="10" width="40" height="40"/>
                                 <color key="backgroundColor" red="0.18000000720000001" green="0.18000000720000001" blue="0.18000000720000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -1878,7 +1907,7 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="Wsl-xB-XcD">
                                                 <rect key="frame" x="0.0" y="0.0" width="400" height="128"/>
                                                 <subviews>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pk9-BX-1S0" userLabel="cellView">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pk9-BX-1S0" userLabel="cellView" customClass="TouchView" customModule="Budget_Tracker" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="400" height="42"/>
                                                         <subviews>
                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="category" textAlignment="right" minimumFontSize="6" translatesAutoresizingMaskIntoConstraints="NO" id="kTT-Sl-tfE" userLabel="category Text Field" customClass="CustomTextField" customModule="Budget_Tracker" customModuleProvider="target">
@@ -1905,8 +1934,13 @@
                                                             <constraint firstItem="8lL-T5-97L" firstAttribute="top" secondItem="Pk9-BX-1S0" secondAttribute="top" id="tRw-BG-eFc"/>
                                                             <constraint firstAttribute="trailing" secondItem="kTT-Sl-tfE" secondAttribute="trailing" constant="5" id="zgb-O9-1D8"/>
                                                         </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                <real key="value" value="0.0"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
                                                     </view>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3QO-Fg-zuX" userLabel="cellView">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3QO-Fg-zuX" userLabel="cellView" customClass="TouchView" customModule="Budget_Tracker" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="43" width="400" height="42"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jBw-Wl-arg" userLabel="dateLabel" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
@@ -1932,8 +1966,13 @@
                                                             <constraint firstAttribute="bottom" secondItem="jBw-Wl-arg" secondAttribute="bottom" id="wxT-aP-Zx3"/>
                                                             <constraint firstItem="wMS-Hp-6gJ" firstAttribute="top" secondItem="3QO-Fg-zuX" secondAttribute="top" id="zCV-ru-fG9"/>
                                                         </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                <real key="value" value="0.0"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
                                                     </view>
-                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BCu-Ak-7J7" userLabel="repeatedView">
+                                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BCu-Ak-7J7" userLabel="repeatedView" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="85.666666666666686" width="400" height="0.0"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Monthly repeat" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JIF-7p-C1E" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
@@ -1956,8 +1995,13 @@
                                                             <constraint firstAttribute="trailing" secondItem="hjl-zB-vY5" secondAttribute="trailing" constant="5" id="UXv-ge-4IC"/>
                                                             <constraint firstItem="JIF-7p-C1E" firstAttribute="leading" secondItem="BCu-Ak-7J7" secondAttribute="leading" constant="4" id="WSc-SA-tzI"/>
                                                         </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                <real key="value" value="0.0"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
                                                     </view>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L8N-YR-jb6">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="L8N-YR-jb6" customClass="TouchView" customModule="Budget_Tracker" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="86" width="400" height="42"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="30" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="caA-os-alH">
@@ -1987,6 +2031,11 @@
                                                             <constraint firstItem="JSf-II-z0v" firstAttribute="leading" secondItem="L8N-YR-jb6" secondAttribute="leading" constant="5" id="o3j-kr-BIy"/>
                                                             <constraint firstItem="caA-os-alH" firstAttribute="top" secondItem="L8N-YR-jb6" secondAttribute="top" id="zD0-fq-CPh"/>
                                                         </constraints>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                <real key="value" value="0.0"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
                                                     </view>
                                                 </subviews>
                                             </stackView>
@@ -2029,40 +2078,64 @@
                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="fTj-Lv-ZTL">
                                                                 <rect key="frame" x="0.0" y="0.0" width="410" height="75"/>
                                                                 <subviews>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6QC-Nh-XH7">
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6QC-Nh-XH7" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="0.0" width="102.66666666666667" height="75"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                                         <state key="normal" title="7">
                                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
+                                                                                <color key="value" systemColor="tintColor"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                <real key="value" value="12"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
                                                                         <connections>
                                                                             <action selector="numberPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="0TM-0A-Gxp"/>
                                                                         </connections>
                                                                     </button>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jDM-Q8-4VJ">
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jDM-Q8-4VJ" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                                         <rect key="frame" x="102.66666666666669" y="0.0" width="102.33333333333331" height="75"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                                         <state key="normal" title="8">
                                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
+                                                                                <color key="value" systemColor="tintColor"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                <real key="value" value="12"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
                                                                         <connections>
                                                                             <action selector="numberPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="7ko-iZ-Cf1"/>
                                                                         </connections>
                                                                     </button>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9iz-tv-iMd">
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9iz-tv-iMd" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                                         <rect key="frame" x="204.99999999999997" y="0.0" width="102.66666666666666" height="75"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                                         <state key="normal" title="9">
                                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
+                                                                                <color key="value" systemColor="tintColor"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                <real key="value" value="12"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
                                                                         <connections>
                                                                             <action selector="numberPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="fLL-Gf-Am8"/>
                                                                         </connections>
                                                                     </button>
-                                                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JJR-Nl-rYc" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                                                                    <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JJR-Nl-rYc" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                                         <rect key="frame" x="307.66666666666669" y="0.0" width="102.33333333333331" height="75"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <state key="normal" image="chevron.backward" catalog="system">
@@ -2072,6 +2145,12 @@
                                                                         </state>
                                                                         <userDefinedRuntimeAttributes>
                                                                             <userDefinedRuntimeAttribute type="string" keyPath="titleWhenNoSymbols" value="⌫"/>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
+                                                                                <color key="value" name="SecondaryBacroundColor2"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                <real key="value" value="12"/>
+                                                                            </userDefinedRuntimeAttribute>
                                                                         </userDefinedRuntimeAttributes>
                                                                         <connections>
                                                                             <action selector="erasePressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="ZyX-Pf-wo9"/>
@@ -2082,46 +2161,76 @@
                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="RRW-CG-USi">
                                                                 <rect key="frame" x="0.0" y="75" width="410" height="75"/>
                                                                 <subviews>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jds-VY-N0Z">
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jds-VY-N0Z" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="0.0" width="102.66666666666667" height="75"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                                         <state key="normal" title="4">
                                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
+                                                                                <color key="value" systemColor="tintColor"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                <real key="value" value="12"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
                                                                         <connections>
                                                                             <action selector="numberPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="QIL-de-Lza"/>
                                                                         </connections>
                                                                     </button>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZDZ-cE-jf2">
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZDZ-cE-jf2" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                                         <rect key="frame" x="102.66666666666669" y="0.0" width="102.33333333333331" height="75"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                                         <state key="normal" title="5">
                                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
+                                                                                <color key="value" systemColor="tintColor"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                <real key="value" value="12"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
                                                                         <connections>
                                                                             <action selector="numberPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="9ol-tT-nrG"/>
                                                                         </connections>
                                                                     </button>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Jn-7a-agR">
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Jn-7a-agR" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                                         <rect key="frame" x="204.99999999999997" y="0.0" width="102.66666666666666" height="75"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                                         <state key="normal" title="6">
                                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
+                                                                                <color key="value" systemColor="tintColor"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                <real key="value" value="12"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
                                                                         <connections>
                                                                             <action selector="numberPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="k34-vH-mPK"/>
                                                                         </connections>
                                                                     </button>
-                                                                    <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1vj-92-UOQ" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                                                                    <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1vj-92-UOQ" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                                         <rect key="frame" x="307.66666666666669" y="0.0" width="102.33333333333331" height="75"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
                                                                         <state key="normal" title="C"/>
                                                                         <userDefinedRuntimeAttributes>
                                                                             <userDefinedRuntimeAttribute type="string" keyPath="titleWhenNoSymbols" value="C"/>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
+                                                                                <color key="value" name="SecondaryBacroundColor2"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                <real key="value" value="12"/>
+                                                                            </userDefinedRuntimeAttribute>
                                                                         </userDefinedRuntimeAttributes>
                                                                         <connections>
                                                                             <action selector="erasePressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="wa3-U1-3PC"/>
@@ -2137,35 +2246,59 @@
                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="8NR-4q-JwM">
                                                                 <rect key="frame" x="0.0" y="0.0" width="410" height="75"/>
                                                                 <subviews>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kdg-LE-BIm">
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kdg-LE-BIm" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="0.0" width="102.66666666666667" height="75"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                                         <state key="normal" title="1">
                                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
+                                                                                <color key="value" systemColor="tintColor"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                <real key="value" value="12"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
                                                                         <connections>
                                                                             <action selector="numberPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="c2x-aJ-0gI"/>
                                                                         </connections>
                                                                     </button>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CxJ-K9-I6v">
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CxJ-K9-I6v" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                                         <rect key="frame" x="102.66666666666669" y="0.0" width="102.33333333333331" height="75"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                                         <state key="normal" title="2">
                                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
+                                                                                <color key="value" systemColor="tintColor"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                <real key="value" value="12"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
                                                                         <connections>
                                                                             <action selector="numberPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="bn8-vM-4hA"/>
                                                                         </connections>
                                                                     </button>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hSo-nA-Zbw">
+                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hSo-nA-Zbw" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                                         <rect key="frame" x="204.99999999999997" y="0.0" width="102.66666666666666" height="75"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                                         <state key="normal" title="3">
                                                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
+                                                                                <color key="value" systemColor="tintColor"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                <real key="value" value="12"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
                                                                         <connections>
                                                                             <action selector="numberPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="BUN-db-D8I"/>
                                                                         </connections>
@@ -2182,13 +2315,21 @@
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QgF-cS-KdM">
                                                                         <rect key="frame" x="0.0" y="0.0" width="102.66666666666667" height="75"/>
                                                                         <subviews>
-                                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sug-Eq-lTO">
+                                                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sug-Eq-lTO" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                                                 <rect key="frame" x="0.0" y="0.0" width="102.66666666666667" height="75"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                 <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                                                 <state key="normal" title="0">
                                                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                 </state>
+                                                                                <userDefinedRuntimeAttributes>
+                                                                                    <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
+                                                                                        <color key="value" systemColor="tintColor"/>
+                                                                                    </userDefinedRuntimeAttribute>
+                                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                        <real key="value" value="12"/>
+                                                                                    </userDefinedRuntimeAttribute>
+                                                                                </userDefinedRuntimeAttributes>
                                                                                 <connections>
                                                                                     <action selector="numberPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="4gA-Yf-DbM"/>
                                                                                 </connections>
@@ -2239,7 +2380,7 @@
                                     <constraint firstAttribute="bottom" secondItem="dtl-DA-9aX" secondAttribute="bottom" id="m3b-Yt-6eK"/>
                                 </constraints>
                             </view>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2np-os-Y0H">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2np-os-Y0H" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                 <rect key="frame" x="60" y="10" width="40" height="40"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -2249,6 +2390,14 @@
                                 <color key="tintColor" systemColor="systemRedColor"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" image="trash.fill" catalog="system"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
+                                        <color key="value" name="SecondaryBacroundColor2"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="6"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="trashPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="3fb-xj-RLg"/>
                                 </connections>
@@ -2368,7 +2517,7 @@
                                 </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="statisticCellIdent" id="czw-1t-hDS" customClass="StatisticCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="430.5" width="430" height="48"/>
+                                        <rect key="frame" x="0.0" y="408.5" width="430" height="48"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="czw-1t-hDS" id="DL1-ap-cmz">
                                             <rect key="frame" x="0.0" y="0.0" width="399.66666666666669" height="48"/>
@@ -2601,7 +2750,7 @@
                                                 <stackView opaque="NO" alpha="0.0" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="HFp-oZ-7QB">
                                                     <rect key="frame" x="30" y="13.666666666666664" width="110" height="45"/>
                                                     <subviews>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FW8-0G-7Gd" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FW8-0G-7Gd" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="0.0" width="45" height="45"/>
                                                             <color key="backgroundColor" name="SecondaryBacroundColor"/>
                                                             <constraints>
@@ -2623,11 +2772,11 @@
                                                                 <action selector="deletePressed:" destination="Hww-YT-JUT" eventType="touchUpInside" id="XeR-H3-AQk"/>
                                                             </connections>
                                                         </button>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dKD-na-Qxv" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dKD-na-Qxv" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                             <rect key="frame" x="65" y="0.0" width="45" height="45"/>
                                                             <color key="backgroundColor" name="SecondaryBacroundColor"/>
                                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                            <state key="normal" image="pencil"/>
+                                                            <state key="normal" image="pencil.yellow"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="titleWhenNoSymbols" value="✏️"/>
                                                                 <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -2755,7 +2904,7 @@
                                                 <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="XRD-dz-Go1">
                                                     <rect key="frame" x="300" y="18" width="110" height="45"/>
                                                     <subviews>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vsx-oo-isP" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vsx-oo-isP" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="0.0" width="45" height="45"/>
                                                             <color key="backgroundColor" name="SecondaryBacroundColor"/>
                                                             <color key="tintColor" name="negativeColor"/>
@@ -2774,7 +2923,7 @@
                                                                 <action selector="doneDatePressed:" destination="Rha-KM-KqS" eventType="touchUpInside" id="McH-xR-IL1"/>
                                                             </connections>
                                                         </button>
-                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pK6-4E-O38" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pK6-4E-O38" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                             <rect key="frame" x="65" y="0.0" width="45" height="45"/>
                                                             <color key="backgroundColor" name="SecondaryBacroundColor"/>
                                                             <constraints>
@@ -2932,7 +3081,7 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="5TT-US-5Tm">
                                                 <rect key="frame" x="0.0" y="0.0" width="405" height="40"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gIt-0L-4IJ" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gIt-0L-4IJ" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
                                                         <color key="backgroundColor" systemColor="tintColor"/>
                                                         <constraints>
@@ -3076,7 +3225,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="ReminderCell" id="0VC-sg-p8P" customClass="ReminderCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="50" width="430" height="142"/>
+                                        <rect key="frame" x="0.0" y="28" width="430" height="142"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="0VC-sg-p8P" id="TYY-To-r2K">
                                             <rect key="frame" x="0.0" y="0.0" width="430" height="142"/>
@@ -3179,7 +3328,7 @@
                                                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Xpm-VN-McQ">
                                                                     <rect key="frame" x="5" y="0.0" width="106" height="30"/>
                                                                     <subviews>
-                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WI4-9c-ADb" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WI4-9c-ADb" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                                             <rect key="frame" x="0.0" y="0.0" width="106" height="30"/>
                                                                             <color key="backgroundColor" name="yellowColor"/>
                                                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
@@ -3229,7 +3378,7 @@
                                                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="03P-Lo-lY1">
                                                                     <rect key="frame" x="307" y="0.0" width="90" height="30"/>
                                                                     <subviews>
-                                                                        <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jaM-jn-Fof" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                                                                        <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jaM-jn-Fof" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                                             <rect key="frame" x="0.0" y="0.0" width="51" height="30"/>
                                                                             <color key="backgroundColor" name="SecondaryBacroundColor"/>
                                                                             <fontDescription key="fontDescription" type="system" weight="medium" pointSize="13"/>
@@ -3248,7 +3397,7 @@
                                                                                 <action selector="actionPressed:" destination="0VC-sg-p8P" eventType="touchUpInside" id="bUu-2Y-2gg"/>
                                                                             </connections>
                                                                         </button>
-                                                                        <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HCu-31-FZE" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                                                                        <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HCu-31-FZE" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                                             <rect key="frame" x="56" y="0.0" width="34" height="30"/>
                                                                             <color key="backgroundColor" name="SecondaryBacroundColor"/>
                                                                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
@@ -3347,6 +3496,7 @@
                                         <connections>
                                             <outlet property="actionsView" destination="QJo-NV-ygh" id="tod-bS-gsx"/>
                                             <outlet property="amountLabel" destination="wqt-dB-Hev" id="78U-c0-RQy"/>
+                                            <outlet property="backView" destination="Z80-lj-paH" id="TvM-m0-vLI"/>
                                             <outlet property="categoryLabel" destination="BwX-ep-M5D" id="BTU-IL-Gcb"/>
                                             <outlet property="commentLabel" destination="1ms-IH-hnB" id="EYV-Xs-9om"/>
                                             <outlet property="dateLabel" destination="8La-rA-VJH" id="KFT-S4-RDV"/>
@@ -3358,7 +3508,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="NoRemindersCell" id="JKn-bm-wcP" customClass="NoRemindersCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="192" width="430" height="26.333333969116211"/>
+                                        <rect key="frame" x="0.0" y="170" width="430" height="26.333333969116211"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="JKn-bm-wcP" id="U97-2I-zD1">
                                             <rect key="frame" x="0.0" y="0.0" width="430" height="26.333333969116211"/>
@@ -3396,7 +3546,7 @@
                     <navigationItem key="navigationItem" id="SFV-9J-3xV">
                         <barButtonItem key="rightBarButtonItem" style="plain" id="SIb-MU-MOc">
                             <inset key="largeContentSizeImageInsets" minX="0.0" minY="10" maxX="0.0" maxY="0.0"/>
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="aI2-8y-K70" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="aI2-8y-K70" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                 <rect key="frame" x="366" y="0.0" width="44" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="yellowColor"/>
@@ -3512,11 +3662,11 @@
             <objects>
                 <viewController storyboardIdentifier="CalendarVC" id="5n4-P6-pnR" customClass="CalendarVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="67i-SE-sWB">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="863"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="829"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ur5-R3-sfZ">
-                                <rect key="frame" x="10" y="124" width="410" height="50"/>
+                                <rect key="frame" x="10" y="65" width="410" height="50"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0U3-LJ-bys">
                                         <rect key="frame" x="0.0" y="0.0" width="60" height="50"/>
@@ -3567,7 +3717,7 @@
                                 </constraints>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rmd-nB-JWC">
-                                <rect key="frame" x="60" y="217.33333333333337" width="310" height="260"/>
+                                <rect key="frame" x="60" y="158.33333333333331" width="310" height="260"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="310" id="cus-cS-kD5"/>
@@ -3644,7 +3794,7 @@
                                 </cells>
                             </collectionView>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="278-rW-rj0" userLabel="headetView">
-                                <rect key="frame" x="0.0" y="59" width="430" height="50"/>
+                                <rect key="frame" x="0.0" y="0.0" width="430" height="50"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Calendar" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rGq-Aj-Zje" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
                                         <rect key="frame" x="55" y="16.333333333333329" width="320" height="27.666666666666671"/>
@@ -3661,7 +3811,7 @@
                                         <color key="textColor" name="balanceValueColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OgK-5z-ssL" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OgK-5z-ssL" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                         <rect key="frame" x="10" y="10" width="40" height="40"/>
                                         <color key="backgroundColor" red="0.18000000720000001" green="0.18000000720000001" blue="0.18000000720000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
@@ -3680,7 +3830,7 @@
                                             <action selector="closePressed:" destination="5n4-P6-pnR" eventType="touchUpInside" id="byL-vF-03s"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TGK-Ax-n0d" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TGK-Ax-n0d" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                         <rect key="frame" x="380" y="10" width="40" height="40"/>
                                         <color key="backgroundColor" name="yellowColor"/>
                                         <constraints>
@@ -3718,7 +3868,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mUw-Or-FG0">
-                                <rect key="frame" x="50" y="189" width="330" height="13.333333333333343"/>
+                                <rect key="frame" x="50" y="130" width="330" height="13.333333333333343"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="wQi-bJ-DxV">
                                         <rect key="frame" x="0.0" y="0.0" width="330" height="13.333333333333334"/>
@@ -3786,17 +3936,17 @@
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="InH-AG-csp" userLabel="timeViewStack View">
-                                <rect key="frame" x="62.666666666666657" y="477.33333333333326" width="305" height="385.66666666666674"/>
+                                <rect key="frame" x="62.666666666666657" y="418.33333333333337" width="305" height="410.66666666666663"/>
                                 <subviews>
                                     <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="h2d-GY-FrE">
-                                        <rect key="frame" x="0.0" y="0.0" width="305" height="385.66666666666669"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="305" height="410.66666666666669"/>
                                         <color key="tintColor" name="CategoryColor"/>
                                     </datePicker>
                                 </subviews>
                                 <color key="tintColor" name="CategoryColor"/>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="XFt-LS-Qbp">
-                                <rect key="frame" x="20" y="808" width="390" height="35"/>
+                                <rect key="frame" x="20" y="740" width="390" height="35"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j8N-A3-4Wm" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="100" height="35"/>
@@ -3875,7 +4025,7 @@
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="Evc-oG-Jzh">
                         <barButtonItem key="rightBarButtonItem" style="plain" id="IVV-dP-fLO">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="GhQ-Pl-q1R" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
-                                <rect key="frame" x="373" y="4" width="35" height="36"/>
+                                <rect key="frame" x="375" y="4" width="35" height="36"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="yellowColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
@@ -4138,7 +4288,7 @@
         <!--Navigation Controller-->
         <scene sceneID="Jp2-9w-8yR">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="fAO-8x-ux9" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="fAO-8x-ux9" customClass="NavigationController" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="GWk-gq-nU5"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" largeTitles="YES" id="6yA-bn-Whm">
@@ -4171,6 +4321,12 @@
         <designable name="1vj-92-UOQ">
             <size key="intrinsicContentSize" width="30" height="39"/>
         </designable>
+        <designable name="2Jn-7a-agR">
+            <size key="intrinsicContentSize" width="30" height="55"/>
+        </designable>
+        <designable name="2np-os-Y0H">
+            <size key="intrinsicContentSize" width="19" height="22"/>
+        </designable>
         <designable name="3wZ-MX-Xx8">
             <size key="intrinsicContentSize" width="19.333333333333332" height="13.333333333333334"/>
         </designable>
@@ -4183,6 +4339,9 @@
         <designable name="6PD-Ln-iux">
             <size key="intrinsicContentSize" width="23" height="13.333333333333334"/>
         </designable>
+        <designable name="6QC-Nh-XH7">
+            <size key="intrinsicContentSize" width="30" height="55"/>
+        </designable>
         <designable name="7DN-DG-lHp"/>
         <designable name="8Qd-Zo-Mqf">
             <size key="intrinsicContentSize" width="89.333333333333329" height="30"/>
@@ -4190,11 +4349,17 @@
         <designable name="8lL-T5-97L">
             <size key="intrinsicContentSize" width="63" height="18"/>
         </designable>
+        <designable name="9iz-tv-iMd">
+            <size key="intrinsicContentSize" width="30" height="55"/>
+        </designable>
         <designable name="BrR-tF-WZX">
             <size key="intrinsicContentSize" width="20.333333333333332" height="13.333333333333334"/>
         </designable>
         <designable name="CJF-1D-UVd">
             <size key="intrinsicContentSize" width="58" height="15.666666666666666"/>
+        </designable>
+        <designable name="CxJ-K9-I6v">
+            <size key="intrinsicContentSize" width="30" height="55"/>
         </designable>
         <designable name="FW8-0G-7Gd">
             <size key="intrinsicContentSize" width="25" height="29"/>
@@ -4222,6 +4387,9 @@
         </designable>
         <designable name="JQu-2B-c5Z">
             <size key="intrinsicContentSize" width="30" height="30"/>
+        </designable>
+        <designable name="Jds-VY-N0Z">
+            <size key="intrinsicContentSize" width="30" height="55"/>
         </designable>
         <designable name="NXe-cX-Hfu">
             <size key="intrinsicContentSize" width="76.666666666666671" height="26.333333333333332"/>
@@ -4256,6 +4424,9 @@
         <designable name="WI4-9c-ADb">
             <size key="intrinsicContentSize" width="106" height="16"/>
         </designable>
+        <designable name="ZDZ-cE-jf2">
+            <size key="intrinsicContentSize" width="30" height="55"/>
+        </designable>
         <designable name="ZwM-nG-kM6">
             <size key="intrinsicContentSize" width="26.666666666666668" height="12"/>
         </designable>
@@ -4266,7 +4437,7 @@
             <size key="intrinsicContentSize" width="30" height="36"/>
         </designable>
         <designable name="dKD-na-Qxv">
-            <size key="intrinsicContentSize" width="14" height="22"/>
+            <size key="intrinsicContentSize" width="310" height="310"/>
         </designable>
         <designable name="dSw-Y8-OrZ">
             <size key="intrinsicContentSize" width="23.666666666666668" height="18"/>
@@ -4283,6 +4454,9 @@
         <designable name="gwp-y1-Jmr">
             <size key="intrinsicContentSize" width="88.333333333333329" height="15.666666666666666"/>
         </designable>
+        <designable name="hSo-nA-Zbw">
+            <size key="intrinsicContentSize" width="30" height="55"/>
+        </designable>
         <designable name="ieF-m1-ryE">
             <size key="intrinsicContentSize" width="48" height="15.666666666666666"/>
         </designable>
@@ -4292,8 +4466,14 @@
         <designable name="jBw-Wl-arg">
             <size key="intrinsicContentSize" width="32.333333333333336" height="18"/>
         </designable>
+        <designable name="jDM-Q8-4VJ">
+            <size key="intrinsicContentSize" width="30" height="55"/>
+        </designable>
         <designable name="jaM-jn-Fof">
             <size key="intrinsicContentSize" width="51" height="16"/>
+        </designable>
+        <designable name="kdg-LE-BIm">
+            <size key="intrinsicContentSize" width="30" height="55"/>
         </designable>
         <designable name="l1D-Pu-GKB">
             <size key="intrinsicContentSize" width="49" height="16"/>
@@ -4313,6 +4493,9 @@
         <designable name="rol-B0-EZ3">
             <size key="intrinsicContentSize" width="26.333333333333332" height="12"/>
         </designable>
+        <designable name="sug-Eq-lTO">
+            <size key="intrinsicContentSize" width="30" height="55"/>
+        </designable>
         <designable name="t0B-hc-H7u">
             <size key="intrinsicContentSize" width="20.333333333333332" height="13.333333333333334"/>
         </designable>
@@ -4321,6 +4504,9 @@
         </designable>
         <designable name="vgm-Hu-adG">
             <size key="intrinsicContentSize" width="17.333333333333332" height="13.333333333333334"/>
+        </designable>
+        <designable name="xfe-uw-b7y">
+            <size key="intrinsicContentSize" width="30" height="34"/>
         </designable>
         <designable name="yG8-rV-0Py">
             <size key="intrinsicContentSize" width="30" height="34"/>
@@ -4337,10 +4523,10 @@
     </designables>
     <inferredMetricsTieBreakers>
         <segue reference="161-Ie-baa"/>
-        <segue reference="HlC-bb-GVq"/>
-        <segue reference="Ega-tn-GzY"/>
+        <segue reference="rIb-KG-K0i"/>
+        <segue reference="6Wq-Fx-QbE"/>
         <segue reference="U95-ph-p6h"/>
-        <segue reference="9VA-wc-3tg"/>
+        <segue reference="v2X-Of-iEX"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="airplane" width="19" height="17"/>
@@ -4530,7 +4716,7 @@ AAAAAAIBAAAAAAAAAGEAAAAAAAAAAAAAAAAAAChAA
         <image name="line.3.horizontal" width="13" height="7"/>
         <image name="paperplane.fill" catalog="system" width="128" height="119"/>
         <image name="pencil" catalog="system" width="128" height="113"/>
-        <image name="pencil" width="14" height="14"/>
+        <image name="pencil.yellow" width="310" height="310"/>
         <image name="repeat" catalog="system" width="128" height="98"/>
         <image name="scroll" width="14" height="14"/>
         <image name="square.and.arrow.down" catalog="system" width="121" height="128"/>

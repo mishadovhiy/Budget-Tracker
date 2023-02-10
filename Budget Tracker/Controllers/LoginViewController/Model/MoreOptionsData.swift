@@ -88,21 +88,18 @@ class MoreOptionsData {
     var forgotPasswordUsername = ""
     
     func deleteAccountPressed() {
-        self.vc.ai.showAlert(buttons: (.init(title: "Calcel", style: .regular, close: false, action: nil), AlertViewLibrary.button.init(title: "Delete account", style: .error, close: true, action: {_ in
+        self.vc.ai.showAlert(buttons: (.init(title: "Cancel", style: .regular, close: true, action: nil), AlertViewLibrary.button.init(title: "Delete account", style: .error, close: false, action: {_ in
             self.performDeleteAccount()
         })), title: "Are you sure you want to delete Your Account And its content?", description: "This action cannot be undon")
     }
     
     private func performDeleteAccount() {
-        
-        
         self.getUser { loadedUser in
             if let user = loadedUser {
                 let toDataStringMian = "&Nickname=\(user[0])" + "&Email=\(user[1])" + "&Password=\(user[2])" + "&Registration_Date=\(user[3])"
                 let toDat = toDataStringMian + "&ProVersion=\(user[4])" + "&trialDate=\(user[5])"
                 let delete = DeleteFromDB()
                 delete.User(toDataString: toDat) { (errorr) in
-                    //delete transactions
                     if errorr {
                         self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
                     } else {
@@ -135,7 +132,7 @@ class MoreOptionsData {
     }
     
     func logoutPressed() {
-        self.vc.ai.showAlert(buttons: (.init(title: "Calcel", style: .regular, close: true, action: nil), AlertViewLibrary.button.init(title: "Logout", style: .error, close: true, action: {_ in
+        self.vc.ai.showAlert(buttons: (.init(title: "Cancel", style: .regular, close: true, action: nil), AlertViewLibrary.button.init(title: "Logout", style: .error, close: false, action: {_ in
             self.vc.logout()
         })), title: "Are you sure you want to logout?", description: "")
         

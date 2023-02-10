@@ -274,7 +274,9 @@
                                                                             <constraint firstAttribute="width" constant="40" id="b0w-m0-u7H"/>
                                                                         </constraints>
                                                                         <userDefinedRuntimeAttributes>
-                                                                            <userDefinedRuntimeAttribute type="boolean" keyPath="isOval" value="YES"/>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                <real key="value" value="9"/>
+                                                                            </userDefinedRuntimeAttribute>
                                                                         </userDefinedRuntimeAttributes>
                                                                     </view>
                                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="gYo-k6-r5H">
@@ -298,12 +300,12 @@
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="trailing" secondItem="gYo-k6-r5H" secondAttribute="trailing" id="2HR-Wj-hFI"/>
+                                                                    <constraint firstItem="F7m-7h-PU1" firstAttribute="leading" secondItem="a9X-rk-5D6" secondAttribute="leading" id="5Ic-5d-T2E"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="F7m-7h-PU1" secondAttribute="trailing" id="9i3-dW-dTW"/>
                                                                     <constraint firstItem="gYo-k6-r5H" firstAttribute="leading" secondItem="a9X-rk-5D6" secondAttribute="leading" id="D1F-45-apg"/>
                                                                     <constraint firstItem="gYo-k6-r5H" firstAttribute="top" secondItem="a9X-rk-5D6" secondAttribute="top" constant="2" id="EZ8-o6-EYH"/>
-                                                                    <constraint firstAttribute="bottom" secondItem="F7m-7h-PU1" secondAttribute="bottom" id="Mmi-WV-wvm"/>
-                                                                    <constraint firstItem="F7m-7h-PU1" firstAttribute="leading" secondItem="a9X-rk-5D6" secondAttribute="leading" id="OtI-ud-ven"/>
-                                                                    <constraint firstItem="F7m-7h-PU1" firstAttribute="top" secondItem="a9X-rk-5D6" secondAttribute="top" id="bah-gi-oPh"/>
-                                                                    <constraint firstAttribute="trailing" secondItem="F7m-7h-PU1" secondAttribute="trailing" id="uLM-4f-Pma"/>
+                                                                    <constraint firstItem="F7m-7h-PU1" firstAttribute="top" secondItem="a9X-rk-5D6" secondAttribute="top" id="Kel-Rs-DHT"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="F7m-7h-PU1" secondAttribute="bottom" id="PAp-mM-gWk"/>
                                                                 </constraints>
                                                             </collectionViewCellContentView>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

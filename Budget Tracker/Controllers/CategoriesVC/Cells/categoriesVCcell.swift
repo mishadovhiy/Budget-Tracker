@@ -8,7 +8,7 @@
 
 import UIKit
 
-class categoriesVCcell: UITableViewCell {
+class categoriesVCcell: ClearCell {
     
     @IBOutlet weak var footerBackground: UIView!
     @IBOutlet weak var categoryNameLabel: UILabel!
@@ -46,6 +46,11 @@ class categoriesVCcell: UITableViewCell {
             drawed = true
             if !AppDelegate.shared!.symbolsAllowed {
                 iconimage.isHidden = true
+            }
+            self.touchesBegunAction = { began in
+                UIView.animate(withDuration: 0.2, animations: {
+                    self.footerBackground.backgroundColor = (began ? K.Colors.link : K.Colors.darkTable) ?? K.Colors.darkTable!
+                })
             }
         }
 

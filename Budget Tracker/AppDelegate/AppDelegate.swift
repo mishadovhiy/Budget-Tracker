@@ -96,13 +96,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     
     func applicationWillResignActive(_ application: UIApplication) {
         backgroundEnterDate = Date();
-        if UserSettings.Security.password != "" && !(passcodeLock.presenting) {
-            DispatchQueue.main.async {
-                self.window?.endEditing(true)
+        DispatchQueue(label: "local", qos: .userInitiated).async {
+            if UserSettings.Security.password != "" && !(self.passcodeLock.presenting) {
+                DispatchQueue.main.async {
+                    self.presentLock(passcode: false)
+                }
+                
             }
-            presentLock(passcode: false)
+            UserDefaults.standard.setValue(true, forKey: "BackgroundEntered")
         }
-        UserDefaults.standard.setValue(true, forKey: "BackgroundEntered")
+        
+        self.window?.endEditing(true)
+        if ViewController.shared?.sideBarShowing ?? false {
+            ViewController.shared?.toggleSideBar(false, animated: true)
+        }
     }
     
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
@@ -144,6 +151,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
 
     func applicationDidEnterBackground(_ application: UIApplication) {
         print(#function)
+        
     }
     
     
