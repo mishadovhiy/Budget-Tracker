@@ -678,9 +678,15 @@ extension LoginViewController {
        //     appData.password = ""
             lastSelectedDate = nil
             AppData.categoriesHolder = nil
-
             self.db.db.removeAll()
-            
+            //old db
+            UserDefaults.standard.setValue(nil, forKey: "lastSelected")
+            UserDefaults.standard.setValue(true, forKey: "checkTrialDate")
+            UserDefaults.standard.setValue(false, forKey: "trialPressed")
+            UserDefaults.standard.setValue(nil, forKey: "trialToExpireDays")
+            UserDefaults.standard.setValue(nil, forKey: "username")
+            UserDefaults.standard.setValue(nil, forKey: "password")
+            //
             DispatchQueue.main.async {
                 self.title = "Sign In".localize
                 self.passwordLabel.text = ""

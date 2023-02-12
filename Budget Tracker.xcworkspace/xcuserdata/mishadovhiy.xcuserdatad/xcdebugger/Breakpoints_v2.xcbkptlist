@@ -894,8 +894,8 @@
             filePath = "Budget Tracker/Controllers/ViewController/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "353"
-            endingLineNumber = "353"
+            startingLineNumber = "356"
+            endingLineNumber = "356"
             landmarkName = "statisticLabelPressed(_:)"
             landmarkType = "7">
          </BreakpointContent>

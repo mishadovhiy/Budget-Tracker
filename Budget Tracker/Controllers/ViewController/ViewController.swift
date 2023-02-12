@@ -319,6 +319,9 @@ class ViewController: SuperViewController {
                 DispatchQueue.main.async {
                     self.newMessage.show(title:appData.fromLoginVCMessage, type: .standart)
                     appData.fromLoginVCMessage = ""
+                    if self.sideBarShowing {
+                        self.toggleSideBar(false, animated: true)
+                    }
                 }
             }
         }
