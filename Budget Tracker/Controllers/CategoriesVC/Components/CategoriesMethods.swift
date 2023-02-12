@@ -355,40 +355,35 @@ extension CategoriesVC {
 
     var sortOption: SortOption {
         get {
-            let ud = UserDefaults.standard.value(forKey: "SortOption") as? [String:String] ?? [:]
-            switch ud[screenType.rawValue] {
-            case "id":
-                return .id
-            case "name":
-                return .name
-            case "transactionsCount":
-                return .transactionsCount
-            default :
-                return .id
-            }
+            let ud = db.viewControllers.sortOption
+            return .init(rawValue: ud[screenType.rawValue] ?? "") ?? .id
             
         }
         set {
-            var newString: String {
-                switch newValue {
-                case .id:
-                    return "id"
-                case .name:
-                    return "name"
-                case .transactionsCount:
-                    return "transactionsCount"
-                }
-            }
-            var ud = UserDefaults.standard.value(forKey: "SortOption") as? [String:String] ?? [:]
-            ud.updateValue(newString, forKey: screenType.rawValue)
-            UserDefaults.standard.setValue(ud, forKey: "SortOption")
+          //  var newString = newValue.rawValue
+  /*          var ud = db.viewControllers.sortOption
+            ud.updateValue(newString, forKey: screenType.rawValue)*/
+            db.viewControllers.sortOption.updateValue(newValue.rawValue, forKey: screenType.rawValue)
         }
     }
     
-    enum SortOption {
-        case id
-        case name
-        case transactionsCount
+    enum SortOption:String {
+        case id = "id"
+        case name = "name"
+        case transactionsCount = "transactionsCount"
+        
+        init?(rawValue: String) {
+            switch rawValue {
+            case "id":
+                self = .id
+            case "name":
+                self = .name
+            case "transactionsCount":
+                self = .transactionsCount
+            default :
+                self = .id
+            }
+        }
     }
     
     

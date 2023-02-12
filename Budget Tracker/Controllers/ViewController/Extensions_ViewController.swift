@@ -298,8 +298,6 @@ extension ViewController {
 
     func updateDataLabels(reloadAndAnimate: Bool = true, noData: Bool = false) {
    //     let unsendedCount = appData.unsendedData.count
-      //  let localCount = ((UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String:Any]] ?? []) + (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String:Any]] ?? [])).count
-   //     let hideUnsended = unsendedCount == 0 ? true : false
    //     let hideLocal = localCount == 0 ? true : false
         
         DispatchQueue.main.async {
@@ -648,15 +646,17 @@ extension ViewController {
         self.mainTableView.dataSource = self
         self.enableLocalDataPress = false
         
-        if appData.defaults.value(forKey: "firstLaunch") as? Bool ?? true {
-            appData.createFirstData {
-                self.prepareFilterOptions()
-                self.filter()
-                UserDefaults.standard.setValue(false, forKey: "firstLaunch")
-                DispatchQueue.main.async {
-                    self.newMessage.show(title: "Wellcome to Budget Tracker".localize, description: "Demo data has been created".localize, type: .standart)
-                    
-                    
+        DispatchQueue.init(label: "local", qos: .userInitiated).async {
+            if self.db.viewControllers.firstLaunch[.home] ?? false {
+                appData.createFirstData {
+                    self.prepareFilterOptions()
+                    self.filter()
+                    self.db.viewControllers.firstLaunch[.home] = false
+                    DispatchQueue.main.async {
+                        self.newMessage.show(title: "Wellcome to Budget Tracker".localize, description: "Demo data has been created".localize, type: .standart)
+                        
+                        
+                    }
                 }
             }
         }
@@ -693,11 +693,11 @@ extension ViewController {
         if dif.year == 0 && dif.month == 0 {
             if dif.day ?? 0 <= 7 {
                 appData.proTrial = true
-                UserDefaults.standard.setValue(dif.day ?? 0, forKey: "trialToExpireDays")
+                db.viewControllers.trial.expireDays = dif.day ?? 0
             } else {
                 appData.proTrial = false
-                UserDefaults.standard.setValue(false, forKey: "checkTrialDate")
-                if (UserDefaults.standard.value(forKey: "trialPressed") as? Bool ?? false) {
+                db.viewControllers.trial.checkTrial = false
+                if db.viewControllers.trial.trialPressed {
                     DispatchQueue.main.async {
                         self.newMessage.show(title: "Pro trial is over".localize, type: .standart)
                     }
@@ -706,8 +706,9 @@ extension ViewController {
             }
         } else {
             appData.proTrial = false
-            UserDefaults.standard.setValue(false, forKey: "checkTrialDate")
-            if (UserDefaults.standard.value(forKey: "trialPressed") as? Bool ?? false) {
+            db.viewControllers.trial.checkTrial = false
+
+            if db.viewControllers.trial.trialPressed {
                 DispatchQueue.main.async {
                     self.newMessage.show(title: "Pro trial is over".localize, type: .standart)
                 }
@@ -938,7 +939,7 @@ extension ViewController: TransitionVCProtocol {
                 
                 // let save = SaveToDB()
                 let delete = DeleteFromDB()
-                if let addCategory = db.categoryFrom(first["categoryNew"] ?? [:]) {
+                if let addCategory:NewCategories = .create(dict: first["categoryNew"] ?? [:]) {
                     if let highest = highesLoadedCatID {
                         var cat = addCategory
                         let newID = highest + 1
@@ -949,11 +950,11 @@ extension ViewController: TransitionVCProtocol {
                                 self.highesLoadedCatID! += 1
                                 var newTransactions: [[String:Any]] = []
                                 for i in 0..<unsended.count {
-                                    if let trans = self.db.transactionFrom(unsended[i]["transactionNew"]) {
+                                    if let trans:TransactionsStruct = .create(dictt: unsended[i]["transactionNew"]) {
                                         if trans.categoryID == "\(addCategory.id)" {
                                             var newTransaction = trans
                                             newTransaction.categoryID = "\(newID)"
-                                            newTransactions.append(self.db.transactionToDict(newTransaction))
+                                            newTransactions.append(newTransaction.dict)
                                             self.deleteUnsendedTransactions(id: "\(addCategory.id)")
                                         }
                                     }
@@ -983,7 +984,7 @@ extension ViewController: TransitionVCProtocol {
                         }
                     }
                 } else {
-                    if let deleteCategory = db.categoryFrom(first["deleteCategoryNew"] ?? [:]) {
+                    if let deleteCategory = NewCategories.create(dict: first["deleteCategoryNew"] ?? [:]) {
                         delete.CategoriesNew(category: deleteCategory, saveLocally: false) { error in
                             if !error {
                                 appData.unsendedData.removeFirst()
@@ -993,7 +994,7 @@ extension ViewController: TransitionVCProtocol {
                             }
                         }
                     } else {
-                        if let addTransaction = db.transactionFrom(first["transactionNew"] ?? [:]) {
+                        if let addTransaction = TransactionsStruct.create(dictt: first["transactionNew"] ?? [:]) {
                             SaveToDB.shared.newTransaction(addTransaction, saveLocally: false) { error in
                                 if !error {
                                     appData.unsendedData.removeFirst()
@@ -1003,7 +1004,7 @@ extension ViewController: TransitionVCProtocol {
                                 }
                             }
                         } else {
-                            if let deleteTransaction = db.transactionFrom(first["deleteTransactionNew"] ?? [:]) {
+                            if let deleteTransaction = TransactionsStruct.create(dictt: first["deleteTransactionNew"] ?? [:]) {
                                 delete.newTransaction(deleteTransaction, saveLocally: false) { error in
                                     if !error {
                                         appData.unsendedData.removeFirst()
@@ -1174,7 +1175,7 @@ extension ViewController: TransitionVCProtocol {
         let all = appData.unsendedData
         var resultt:[[String : [String : Any]]] = []
         for i in 0..<all.count {
-            if let transaction = db.transactionFrom(all[i]["transactionNew"]) {
+            if let transaction = TransactionsStruct.create(dictt: all[i]["transactionNew"]) {
                 if transaction.categoryID != id {
                     resultt.append(all[i])
                 }

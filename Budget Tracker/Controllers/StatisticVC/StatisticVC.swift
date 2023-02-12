@@ -39,9 +39,10 @@ class StatisticVC: SuperViewController, CALayerDelegate {
        // segmentControll.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white], for: .normal)
        // segmentControll.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "darkTableColor") ?? .black], for: .selected)
         
-        if appData.defaults.value(forKey: "StatisticVCFirstLaunch") as? Bool ?? false == false {
-            appData.defaults.setValue(true, forKey: "StatisticVCFirstLaunch")
-
+        DispatchQueue(label: "local", qos: .userInitiated).async {
+            if self.db.viewControllers.firstLaunch[.statistic] ?? false == false {
+                self.db.viewControllers.firstLaunch[.statistic] = true
+            }
         }
 
     }
@@ -95,7 +96,6 @@ class StatisticVC: SuperViewController, CALayerDelegate {
     }
     var fromsideBar = false
     var selectedSegment = 0
-    let db = DataBase()
     var maxValue = 0.0
     func createTableData() -> [GraphDataStruct] {
         maxValue = 0.0

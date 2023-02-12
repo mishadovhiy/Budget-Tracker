@@ -56,6 +56,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         return deviceType != .primary ? false : true
     }()
     
+    lazy var db:DataBase = {
+       return DataBase()
+    }()
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         AppDelegate.shared = self
         
@@ -63,9 +67,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         center.delegate = self
         
         let today = appData.filter.getToday()
-        let value = UserDefaults.standard.value(forKey: "lastLaunching") as? String ?? ""
+        let value = db.db["lastLaunching"] as? String ?? ""
         if value != today {
-            UserDefaults.standard.setValue(today, forKey: "lastLaunching")
+            db.db.updateValue(today, forKey: "lastLaunching")
             lastSelectedDate = nil
         }
 
@@ -103,7 +107,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
                 }
                 
             }
-            UserDefaults.standard.setValue(true, forKey: "BackgroundEntered")
+            self.db.db.updateValue(true, forKey: "BackgroundEntered")
         }
         
         self.window?.endEditing(true)
@@ -129,7 +133,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         print(#function)
 
         checkPasscodeTimout()
-        if let backgroundEntered = UserDefaults.standard.value(forKey: "BackgroundEntered") as? Bool {
+        if let backgroundEntered = db.db["BackgroundEntered"] as? Bool {
             if backgroundEntered != true {
                 if !appData.devMode {
                     //send crash
@@ -142,7 +146,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
                 }*/
             }
         }
-        UserDefaults.standard.setValue(false, forKey: "BackgroundEntered")
+        db.db.updateValue(false, forKey: "BackgroundEntered")
     }
     
     func applicationWillTerminate(_ application: UIApplication) {

@@ -46,7 +46,6 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     var screenDescription: String = ""
     var editingTfIndex: (Int?,Int?) = (nil,nil)
     var endAll = false
-    let db = DataBase()
     var defaultButtonInset: CGFloat = 0
     var tableContentOf:UIEdgeInsets = UIEdgeInsets.zero
     var keyHeight: CGFloat = 0.0

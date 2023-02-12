@@ -25,20 +25,20 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         
         let settingsCell:CellData = .init(name: "Settings".localize, value: "", segue: "toSettingsVC", image: "gearshape.fill")
         
-        
-        let catsCo = UserDefaults.standard.value(forKey: "categoriesDataNew") as? [[String:Any]] ?? []
+        let dbb = DataBase().db
+        let catsCo = dbb["categoriesDataNew"] as? [[String:Any]] ?? []
         
         var categories:[CellData] = [
             .init(name: "Categories".localize, value: "\(catsCo.count - debts)", segue: "toCategories", image: "folder.fill"),
             .init(name: "Debts".localize, value: "\(debts)", segue: "toDebts", image: "rectangle.3.group.fill", pro: nil, notifications: notifications.0)//!(pro) ? 3 : nil
         ]
-        let localCount = ((UserDefaults.standard.value(forKey: K.Keys.localTrancations) as? [[String:Any]] ?? []) + (UserDefaults.standard.value(forKey: K.Keys.localCategories) as? [[String:Any]] ?? [])).count
+        let localCount = ((dbb[K.Keys.localTrancations] as? [[String:Any]] ?? []) + (dbb[K.Keys.localCategories] as? [[String:Any]] ?? [])).count
         if localCount > 0 {
             categories.append(CellData(name: "Local Data".localize, value: "\(localCount)", segue: "toLocalData", image: "tray.fill"))
         }
         
         let statistic:CellData = .init(name: "Statistic".localize, value: "", segue: "toStatisticVC", image: "chart.pie.fill")
-        let trialDays = UserDefaults.standard.value(forKey: "trialToExpireDays") as? Int ?? 0
+        let trialDays = dbb["trialToExpireDays"] as? Int ?? 0
         let trialCell = CellData(name: "Trail till", value: "\(7 - trialDays)", segue: "toProVC", image: "clock.fill")
 
 

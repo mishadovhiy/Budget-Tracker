@@ -10,18 +10,15 @@ import UIKit
 import Foundation
 
 
-
 class AppData {
-    var _filter:[String:Any]?
+    let db = DataBase()
     var filter:Filter {
         get {
-            let dict = _filter ?? UserDefaults.standard.value(forKey: "Filter") as? [String : Any] ?? [:]
-            _filter = dict
+            let dict = db.db["Filter"] as? [String : Any] ?? [:]
             return .init(dict: dict)
         }
         set {
-            _filter = newValue.dict
-            UserDefaults.standard.set(newValue.dict, forKey: "Filter")
+            db.db.updateValue(newValue.dict, forKey: "Filter")
         }
     }
     
@@ -33,7 +30,7 @@ class AppData {
     
     static var linkColor: String {
         set {
-            UserDefaults.standard.setValue(newValue, forKey: "SelectedTintColor")
+            DataBase().db.updateValue(newValue, forKey: "SelectedTintColor")
             let color = colorNamed(newValue)
             DispatchQueue.main.async {
                 let window = AppDelegate.shared?.window ?? UIWindow()
@@ -41,11 +38,10 @@ class AppData {
             }
         }
         get {
-            return UserDefaults.standard.value(forKey: "SelectedTintColor") as? String ?? "Yellow"
+            return DataBase().db["SelectedTintColor"] as? String ?? "Yellow"
         }
     }
     
-    let defaults = UserDefaults.standard
     var safeArea: (CGFloat, CGFloat) = (0.0, 0.0)//0-bt  1-top
 
     var resultSafeArea: (CGFloat, CGFloat) {
@@ -58,10 +54,10 @@ class AppData {
     var forceNotPro: Bool? {
         get{
 
-            return defaults.value(forKey: "forcePro") as? Bool
+            return db.db["forcePro"] as? Bool
         }
         set(value){
-            defaults.set(value, forKey: "forcePro")
+            db.db.updateValue(value ?? false, forKey: "forcePro")
         }
     }
     
@@ -72,38 +68,38 @@ class AppData {
     
     var proVersion: Bool {
         get{
-            let result = !purchasedOnThisDevice ? (defaults.value(forKey: "proVersion") as? Bool ?? false) : purchasedOnThisDevice
+            let result = !purchasedOnThisDevice ? (db.db["proVersion"] as? Bool ?? false) : purchasedOnThisDevice
             return result
         }
         set(value){
-            defaults.set(value, forKey: "proVersion")
+            db.db.updateValue(value, forKey: "proVersion")
         }
     }
     
     var purchasedOnThisDevice: Bool {
         get{
-            return defaults.value(forKey: "purchasedOnThisDevice") as? Bool ?? false
+            return db.db["purchasedOnThisDevice"] as? Bool ?? false
         }
         set(value){
-            defaults.set(value, forKey: "purchasedOnThisDevice")
+            db.db.updateValue(value, forKey: "purchasedOnThisDevice")
         }
     }
     
     var trialDate: String {
         get{
-            return defaults.value(forKey: "trialDate") as? String ?? ""
+            return db.db["trialDate"] as? String ?? ""
         }
         set(value){
-            defaults.set(value, forKey: "trialDate")
+            db.db.updateValue(value, forKey: "trialDate")
         }
     }
     
     var proTrial: Bool {
         get{
-            return defaults.value(forKey: "proTrial") as? Bool ?? false
+            return db.db["proTrial"] as? Bool ?? false
         }
         set(value){
-            defaults.set(value, forKey: "proTrial")
+            db.db.updateValue(value, forKey: "proTrial")
         }
     }
     
@@ -150,11 +146,20 @@ class AppData {
     
     var username: String {
         get{
-            return UserDefaults.standard.value(forKey: "username") as? String ?? ""
+            if let user = db.db["username"] as? String {
+                return user
+            } else {
+                if let oldDB = UserDefaults.standard.value(forKey: "username") as? String {
+                    db.db.updateValue(oldDB, forKey: "username")
+                    return oldDB
+                } else {
+                    return ""
+                }
+            }
         }
         set(value){
             print("new username setted - \(value)")
-            UserDefaults.standard.set(value, forKey: "username")
+            db.db.updateValue(value, forKey: "username")
         }
     }
     
@@ -162,21 +167,39 @@ class AppData {
 
     var password: String {
         get{
-            return UserDefaults.standard.value(forKey: "password") as? String ?? ""
+            if let user = db.db["password"] as? String {
+                return user
+            } else {
+                if let oldDB = UserDefaults.standard.value(forKey: "password") as? String {
+                    db.db.updateValue(oldDB, forKey: "password")
+                    return oldDB
+                } else {
+                    return ""
+                }
+            }
         }
         set(value){
             print("new password setted - \(value)")
-            UserDefaults.standard.set(value, forKey: "password")
+            db.db.updateValue(value, forKey: "password")
         }
     }
     
     var userEmailHolder: String {
         get{
-            return UserDefaults.standard.value(forKey: "userEmailHolder") as? String ?? ""
+            if let user = db.db["userEmailHolder"] as? String {
+                return user
+            } else {
+                if let oldDB = UserDefaults.standard.value(forKey: "userEmailHolder") as? String {
+                    db.db.updateValue(oldDB, forKey: "userEmailHolder")
+                    return oldDB
+                } else {
+                    return ""
+                }
+            }
         }
         set(value){
             print("new password setted - \(value)")
-            UserDefaults.standard.set(value, forKey: "userEmailHolder")
+            db.db.updateValue(value, forKey: "userEmailHolder")
         }
     }
     
@@ -190,10 +213,10 @@ class AppData {
         //0 - type (delete transaction)
         //1 - toDataString
         get {
-            return defaults.value(forKey: "unsendedData") as? [[String: [String:Any]]] ?? []
+            return db.db[ "unsendedData"] as? [[String: [String:Any]]] ?? []
         }
         set(value){
-            defaults.set(value, forKey: "unsendedData")
+            db.db.updateValue(value, forKey: "unsendedData")
         }
     }
 
@@ -224,7 +247,7 @@ class AppData {
     ]
     
     var randomColorName: String {
-        return UserDefaults.standard.value(forKey: "SelectedTintColor") as? String ?? "yellowColor"
+        return DataBase().db["SelectedTintColor"] as? String ?? "yellowColor"
     }
     
     func stringDate(_ sender: UIDatePicker) -> String {
@@ -280,7 +303,7 @@ class AppData {
             .init(id: 16, name: "Public transport", icon: "bus", color: "BlueColor3", purpose: .expense),
             
         ]
-        let db = DataBase()
+        
         db.categories = categories
         db.transactions = transactions
         completion()

@@ -29,6 +29,32 @@ struct TransactionsStruct {
         let db = DataBase()
         return db.category(categoryID) ?? NewCategories(id: -1, name: "Unknown", icon: "", color: "", purpose: .expense)
     }
+    
+    static func create(dictt:[String:Any]?) -> TransactionsStruct? {
+        if let dict = dictt {
+            if let id = dict["CategoryId"] as? String {
+                let amount = dict["Amount"] as? String ?? ""
+                let date = dict["Date"] as? String ?? ""
+                let comment = dict["Comment"] as? String ?? ""
+                let reminder = dict["Reminder"] as? [String:Any] ?? [:]
+                return TransactionsStruct(value: amount, categoryID: id, date: date, comment: comment, reminder: reminder)
+            }
+        }
+        return nil
+    }
+    
+    var dict:[String:Any] {
+        var result:[String:Any] = [
+            "CategoryId":categoryID,
+            "Amount":value,
+            "Date":date,
+            "Comment":comment
+        ]
+        if let reminder = reminder {
+            result.updateValue(reminder, forKey: "Reminder")
+        }
+        return result
+    }
 }
 
 extension TransactionsStruct {

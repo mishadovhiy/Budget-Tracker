@@ -46,23 +46,26 @@ extension LoginViewController {
                                         self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
                                     }
                                 } else {
+                                    let dat = (self.db.transactions, self.db.categories)
+                                    self.userChanged()
                                     let prevUsere = appData.username
-                                    UserDefaults.standard.setValue(prevUsere, forKey: "prevUserName")
+                                    self.db.db.updateValue(prevUsere, forKey: "prevUserName")
                                     KeychainService.savePassword(service: "BudgetTrackerApp", account: name, data: password)
                                     appData.username = name
                                     appData.password = password
                                     appData.userEmailHolder = email
+                                    
                                     if prevUsere == "" && self.forceLoggedOutUser == "" {
                                         let db = DataBase()
-                                        db.localTransactions = db.transactions
-                                        db.localCategories = db.categories
+                                        db.localTransactions = dat.0
+                                        db.localCategories = dat.1
                                     }
                                     if self.forceLoggedOutUser == "" {
                                         self.forceLoggedOutUser = ""
                                         appData.fromLoginVCMessage = "Wellcome".localize + ", \(appData.username)"
                                     }
                                     
-                                    self.userChanged()
+                                    
                                     if self.fromPro || self.forceLoggedOutUser != "" {
                                         DispatchQueue.main.async {
                                                 self.dismiss(animated: true) {
@@ -156,17 +159,16 @@ extension LoginViewController {
                         }
                         let prevUserName = appData.username
                         
-                        appData.username = nickname
-                        appData.password = password
-                        appData.userEmailHolder = loadedData[i][DBEmailIndex]
+                        
                         if prevUserName != nickname {
+                            let dat = (db.categories, db.transactions)
                             userChanged()
-                            UserDefaults.standard.setValue(prevUserName, forKey: "prevUserName")
-
+                            db.db.updateValue(prevUserName, forKey: "prevUserName")
+                            
                             if prevUserName == "" && forceLoggedOutUser == "" {
                                 let db = DataBase()
-                                db.localCategories = db.categories
-                                db.localTransactions = db.transactions
+                                db.localCategories = dat.0
+                                db.localTransactions = dat.1
                                 
                             }
                             
@@ -175,7 +177,9 @@ extension LoginViewController {
                             }
                             
                         }
-                        
+                        appData.username = nickname
+                        appData.password = password
+                        appData.userEmailHolder = loadedData[i][DBEmailIndex]
                         
                         if !appData.purchasedOnThisDevice {
                             appData.proVersion = loadedData[i][4] == "1" ? true : appData.proVersion

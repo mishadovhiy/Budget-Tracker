@@ -13,6 +13,10 @@ class SuperViewController: UIViewController {
 
     lazy var newMessage = AppDelegate.shared!.newMessage
     lazy var ai = AppDelegate.shared!.ai
+    lazy var db:DataBase = {
+        return AppDelegate.shared?.db ?? DataBase()
+    }()
+    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         //screen rotation
     }

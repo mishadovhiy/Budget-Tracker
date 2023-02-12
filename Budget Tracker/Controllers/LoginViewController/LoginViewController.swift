@@ -9,7 +9,7 @@
 import UIKit
 
 class LoginViewController: SuperViewController {
-
+    
     @IBOutlet weak var usersButton: UIButton!
     @IBOutlet weak var logIn: UIStackView!
     @IBOutlet weak var createAcount: UIStackView!
@@ -289,17 +289,16 @@ class LoginViewController: SuperViewController {
         }
         let prevUserName = appData.username
         
-        appData.username = nickname
-        appData.password = password
-        appData.userEmailHolder = email
+        
         if prevUserName != nickname {
+            let dat = (self.db.categories, self.db.transactions)
             userChanged()
-            UserDefaults.standard.setValue(prevUserName, forKey: "prevUserName")
-
+            db.db.updateValue(prevUserName, forKey: "prevUserName")
+            
             if prevUserName == "" && forceLoggedOutUser == "" {
                 let db = DataBase()
-                db.localCategories = db.categories
-                db.localTransactions = db.transactions
+                db.localCategories = dat.0
+                db.localTransactions = dat.1
                 
             }
             
@@ -308,6 +307,9 @@ class LoginViewController: SuperViewController {
             }
             
         }
+        appData.username = nickname
+        appData.password = password
+        appData.userEmailHolder = email
         
         
         if !appData.purchasedOnThisDevice {
@@ -407,9 +409,9 @@ class LoginViewController: SuperViewController {
     var fromSettings = false
     var usernameHolder = ""
     override func viewWillDisappear(_ animated: Bool) {
-        let usernameHolder = UserDefaults.standard.value(forKey: "UsernameHolder") as? String
+        let usernameHolder = db.db["UsernameHolder"] as? String
         if usernameHolder != nil {
-            UserDefaults.standard.setValue(nil, forKey: "UsernameHolder")
+            db.db.removeValue(forKey: "UsernameHolder")
         }
         invalidateTimers()
         if fromSettings {
@@ -672,12 +674,13 @@ extension LoginViewController {
                 appData.proVersion = false
                 appData.proTrial = false
             }
-            appData.username = ""
-            appData.password = ""
+         //   appData.username = ""
+       //     appData.password = ""
             lastSelectedDate = nil
             AppData.categoriesHolder = nil
-            UserDefaults.standard.setValue(nil, forKey: "lastSelected")
 
+            self.db.db.removeAll()
+            
             DispatchQueue.main.async {
                 self.title = "Sign In".localize
                 self.passwordLabel.text = ""
@@ -725,10 +728,7 @@ extension LoginViewController {
             AppDelegate.shared?.center.removeAllDeliveredNotifications()
         }
         AppDelegate.shared?.notificationManager.deliveredNotificationIDs = []
-        UserDefaults.standard.setValue(nil, forKey: "lastSelected")
-        UserDefaults.standard.setValue(true, forKey: "checkTrialDate")
-        UserDefaults.standard.setValue(false, forKey: "trialPressed")
-        UserDefaults.standard.setValue(nil, forKey: "trialToExpireDays")
+        db.db.removeAll()
         appData.proTrial = false
     }
     @IBAction func moreButtonPressed(_ sender: UIButton) {//morepressed

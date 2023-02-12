@@ -73,7 +73,7 @@ print(urlPath, " urlPathurlPathurlPath")
                         jsonElement = jsonResult[i] as! NSDictionary
                         
                         if myNik == (jsonElement["Nickname"] as? String ?? "") {
-                            if let new = db.categoryFrom(jsonElement as! [String : Any]) {
+                            if let new = NewCategories.create(dict: jsonElement as? [String : Any] ?? [:]) {
                                 loadedData.append(new)
                             }
                             
@@ -111,7 +111,7 @@ print(urlPath, " urlPathurlPathurlPath")
                         jsonElement = jsonResult[i] as! NSDictionary
                         
                         if myNik == (jsonElement["Nickname"] as? String ?? "") {
-                            if let new = db.transactionFrom(jsonElement as! [String : Any]) {
+                            if let new = TransactionsStruct.create(dictt: jsonElement as? [String : Any] ?? [:]) {
                                 loadedData.append(new)
                             }
                             
@@ -229,7 +229,7 @@ struct SaveToDB {
             save(dbFileURL: Keys.dbURL + "new-NewTransaction.php", toDataString: data, error: { (error) in
                 if error {
                     if saveLocally {
-                        appData.unsendedData.append(["transactionNew": db.transactionToDict(transaction)])
+                        appData.unsendedData.append(["transactionNew": transaction.dict])
                     }
                     
                 }
@@ -268,7 +268,7 @@ struct SaveToDB {
             save(dbFileURL: Keys.dbURL + "new-NewCategory.php", toDataString: data, error: { (error) in
                 if error {
                     if saveLocally {
-                        appData.unsendedData.append(["categoryNew": db.categoryToDict(category)])
+                        appData.unsendedData.append(["categoryNew": category.dict])
                     }
                     
                 }
@@ -417,7 +417,7 @@ struct DeleteFromDB {
             delete(dbFileURL: Keys.dbURL + "delete-NewCategory.php", toDataString: data, error: { (error) in
                 if error {
                     if saveLocally {
-                        appData.unsendedData.append(["deleteCategoryNew": db.categoryToDict(category)])
+                        appData.unsendedData.append(["deleteCategoryNew": category.dict])
                     }
                     
                 }
@@ -454,7 +454,7 @@ struct DeleteFromDB {
             delete(dbFileURL: Keys.dbURL + "delete-NewTransaction.php", toDataString: data, error: { (error) in
                 if error {
                     if saveLocally {
-                        appData.unsendedData.append(["deleteTransactionNew": db.transactionToDict(transaction)])
+                        appData.unsendedData.append(["deleteTransactionNew": transaction.dict])
                     }
                     
                 }

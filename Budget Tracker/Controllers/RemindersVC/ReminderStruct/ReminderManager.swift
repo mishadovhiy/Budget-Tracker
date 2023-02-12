@@ -14,11 +14,11 @@ class ReminderManager {
     
     var reminders:[ReminderStruct] {
         get {
-            let data = UserDefaults.standard.value(forKey: "PaymentReminder") as? [[String:Any]] ?? []
+            let data = db.db["PaymentReminder"] as? [[String:Any]] ?? []
             var result:[ReminderStruct] = []
             for item in data {
                 
-                if let transaction = self.db.transactionFrom(item) {
+                if let transaction:TransactionsStruct = .create(dictt: item) {
                     result.append(.init(transaction: transaction, dict: item))
                 }
                 
@@ -30,10 +30,9 @@ class ReminderManager {
         set {
             var result:[[String:Any]] = []
             for val in newValue {
-                let new = self.db.transactionToDict(val.transaction)
-                result.append(new)
+                result.append(val.transaction.dict)
             }
-            UserDefaults.standard.setValue(result, forKey: "PaymentReminder")
+            db.db.updateValue(result, forKey: "PaymentReminder")
         }
     }
 

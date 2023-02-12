@@ -291,10 +291,7 @@ class ViewController: SuperViewController {
     var selectedToDayInt = 0
     var editingTransaction: TransactionsStruct?
     var prevSelectedPer = appData.filter.selectedPeroud
-    
-    lazy var db:DataBase = {
-        return DataBase()
-    }()
+
     
     var filterHelperView = UIView(frame: .zero)
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

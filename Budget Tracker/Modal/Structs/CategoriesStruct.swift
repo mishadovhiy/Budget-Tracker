@@ -41,6 +41,50 @@ struct NewCategories {
             return .debt
         }
     }
+    
+    static func create(dict:[String:Any]) -> NewCategories? {
+        if let id = dict["Id"] as? String {
+            
+            let name = dict["Name"] as? String ?? ""
+            let icon = dict["Icon"] as? String ?? ""
+            let color = dict["Color"] as? String ?? ""
+            let purpose = dict["Purpose"] as? String ?? ""
+            let amountToPay = dict["AmountToPay"] as? String ?? ""
+            let dueDate = dict["DueDate"] as? String ?? ""
+            
+            let purp = NewCategories.stringToPurpose(purpose)
+            var date: DateComponents? {
+                let dateCo = DateComponents()
+                return dueDate == "" ? nil : dateCo.stringToCompIso(s: dueDate)
+            }
+            return NewCategories(id: Int(id) ?? 0, name: name, icon: icon, color: color, purpose: purp, dueDate: date, amountToPay: Double(amountToPay))
+        }
+        
+        return nil
+    }
+    
+    
+    var dict:[String:Any] {
+        let category = self
+        var result:[String:Any] = [
+            "Name":category.name,
+            "Id":"\(category.id)",
+            "Icon":category.icon,
+            "Purpose":category.purpose.rawValue,
+            "Color":category.color
+        ]
+        
+        
+        if let date = category.dueDate {
+            result["DueDate"] = date.toIsoString()
+        }
+        
+        if let amount = category.amountToPay {
+            result["AmountToPay"] = "\(amount)"
+        }
+        
+        return result
+    }
 }
 
 struct DebtsStruct {

@@ -183,7 +183,6 @@ class HistoryVC: SuperViewController {
     let center = AppDelegate.shared!.center
     
 
-    let db = DataBase()
     func getDebtData() {
       //  if allowEditing {
             if let id = selectedCategory?.id {

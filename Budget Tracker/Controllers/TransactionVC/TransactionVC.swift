@@ -212,7 +212,6 @@ class TransitionVC: SuperViewController {
         }
     }
     
-    let db = DataBase()
     func getEditingdata() {
         var lastExpense: NewCategories {
             let all = Array(db.categories)

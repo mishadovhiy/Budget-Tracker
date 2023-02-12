@@ -42,6 +42,7 @@ class BuyProVC: SuperViewController {
     var proVProduct: SKProduct?
     
 
+    
     static var shared: BuyProVC?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,7 +54,7 @@ class BuyProVC: SuperViewController {
             self.purchasedIndicatorView.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
         }
         pageChanged(pageControll)
-        if let price = UserDefaults.standard.value(forKey: "productPrice") {
+        if let price = db.db["productPrice"] as? String {
             DispatchQueue.main.async {
                 self.priceLabel.text = "\(price)"
             }
@@ -160,7 +161,9 @@ class BuyProVC: SuperViewController {
     }
     
     @IBAction func tryFreePressed(_ sender: UIButton) {
-        UserDefaults.standard.setValue(true, forKey: "trialPressed")
+        DispatchQueue(label: "local", qos: .userInitiated).async {
+            self.db.viewControllers.trial.trialPressed = true
+        }
         if !appData.proVersion {
             if appData.username != "" {
                 self.ai.show { (_) in
@@ -323,7 +326,7 @@ extension BuyProVC: SKProductsRequestDelegate {
         if let product = response.products.first {
             print(product, "productproductproduct")
             proVProduct = product
-            UserDefaults.standard.setValue(product.price, forKey: "productPrice")
+            db.db.updateValue("\(product.price.doubleValue)", forKey: "productPrice")
             DispatchQueue.main.async {
                 self.priceLabel.text = "\(product.price)"
             }

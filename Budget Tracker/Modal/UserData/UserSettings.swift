@@ -13,10 +13,10 @@ struct UserSettings {
 
     static var dict:[String:Any] {
         get {
-            return UserDefaults.standard.value(forKey: "UserSettingsDict") as? [String:Any] ?? [:]
+            return DataBase().db["UserSettingsDict"] as? [String:Any] ?? [:]
         }
         set {
-            UserDefaults.standard.setValue(newValue, forKey: "UserSettingsDict")
+            DataBase().db.updateValue(newValue, forKey: "UserSettingsDict")
         }
     }
     

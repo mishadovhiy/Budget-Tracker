@@ -35,12 +35,12 @@ struct NotificationManager {
     
     var deliveredNotificationIDs: [String] {
         get {
-            let result = UserDefaults.standard.value(forKey: "deliveredNotificationIDs") as? [String]
+            let result = DataBase().db["deliveredNotificationIDs"] as? [String]
             print(result ?? ["-"], "deliveredNotificationIDs")
             return result ?? []
         }
         set {
-            UserDefaults.standard.setValue(newValue, forKey: "deliveredNotificationIDs")
+            DataBase().db.updateValue(newValue, forKey: "deliveredNotificationIDs")
             Notifications.getNotificationsNumber()
         }
     }

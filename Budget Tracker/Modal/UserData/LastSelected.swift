@@ -12,7 +12,7 @@ class LastSelected {
     private let mainKey = "lastSelected"
     
     private var dict: [String:String] {
-        return UserDefaults.standard.value(forKey: "lastSelected") as? [String:String] ?? [:]
+        return DataBase().db[mainKey] as? [String:String] ?? [:]
     }
     
 
@@ -20,7 +20,7 @@ class LastSelected {
         let key = settingTypeToString(setterType) + typeToString(valueType)
         var all = dict
         all.updateValue(value, forKey: key)
-        UserDefaults.standard.setValue(all, forKey: mainKey)
+        DataBase().db.updateValue(all, forKey: mainKey)
     }
     
     func gett(setterType: SettingTypeEnum = .SelectedTypeEnum, valueType: SelectedTypeEnum) -> String? {
@@ -63,7 +63,7 @@ class LastSelected {
     }
 
     func resetAll() {
-        UserDefaults.standard.setValue(nil, forKey: mainKey)
+        DataBase().db.removeValue(forKey: mainKey)
     }
     
 

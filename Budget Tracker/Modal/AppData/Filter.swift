@@ -22,52 +22,41 @@ extension AppData {
             }
             set {
                 dict.updateValue(newValue, forKey: "showAlll")
-//                UserDefaults.standard.setValue(newValue, forKey: "showAlll")
             }
         }
         var from: String {
             get {
                 return dict["SortFromm"] as? String ?? ""
-                //UserDefaults.standard.value(forKey: "SortFromm") as? String ?? ""
             }
             set {
                 dict.updateValue(newValue, forKey: "SortFromm")
 
-            //    UserDefaults.standard.setValue(newValue, forKey: "SortFromm")
             }
         }
         var to: String {
             get {
                 return dict["SortToo"] as? String ?? ""
-                //UserDefaults.standard.value(forKey: "SortToo") as? String ?? ""
             }
             set {
                 dict.updateValue(newValue, forKey: "SortToo")
 
-               // UserDefaults.standard.setValue(newValue, forKey: "SortToo")
             }
         }
         var selectedPeroud:String {
             get {
                 return dict["SortSelectedPeroudd"] as? String ?? ""
-                //UserDefaults.standard.value(forKey: "SortSelectedPeroudd") as? String ?? ""
             }
             set {
                 dict.updateValue(newValue, forKey: "SortSelectedPeroudd")
-
-               // UserDefaults.standard.setValue(newValue, forKey: "SortSelectedPeroudd")
             }
         }
         
         var filteredData:[String: [String]] {
             get {
                 return dict["filterOptions"] as? [String: [String]] ?? [:]
-                //return UserDefaults.standard.value(forKey: "filterOptions") as? [String: [String]] ?? [:]
             }
             set {
                 dict.updateValue(newValue, forKey: "filterOptions")
-
-                //UserDefaults.standard.setValue(newValue, forKey: "filterOptions")
             }
             
         }
