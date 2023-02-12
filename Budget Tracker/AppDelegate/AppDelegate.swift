@@ -117,7 +117,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }
     
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
-
+_db = nil
         AppData.categoriesHolder = nil
         if appData.devMode {
             DispatchQueue.main.async {

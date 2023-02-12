@@ -15,6 +15,7 @@ class RemindersVC: SuperViewController {
     static var shared:RemindersVC?
     lazy var reminders = ReminderManager()
     var fromAppDelegate = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         RemindersVC.shared = self
