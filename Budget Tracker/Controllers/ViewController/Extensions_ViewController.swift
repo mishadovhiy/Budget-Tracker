@@ -343,19 +343,21 @@ extension ViewController {
                 UIView.animate(withDuration: appeareAnimation ? 0.25 : 0) {
                     self.noDataView.frame = CGRect(x: 0, y: y, width: self.view.frame.width, height: self.view.frame.height - y)
                 } completion: { (_) in
-                    if self.mainTableView.visibleCells.count > 1 {
-                        self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
-                    }
+                    self.mainTableView.reloadData()
+             //       if self.mainTableView.visibleCells.count > 1 {
+                        
+                        //self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
+             //       }
                 }
             } else {
                 UIView.animate(withDuration: 0.25) {
                     self.noDataView.frame = CGRect(x: 0, y: self.view.frame.height, width: self.view.frame.width, height: self.view.frame.height / 2)
                 } completion: { (_) in
                     self.noDataView.isHidden = true
-                    if self.mainTableView.visibleCells.count > 1 {
+                  //  if self.mainTableView.visibleCells.count > 1 {
                     //    self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
                         self.mainTableView.reloadData()
-                    }
+                 //   }
                 }
             }
         }
@@ -1156,6 +1158,7 @@ extension ViewController: TransitionVCProtocol {
             let vc = segue.destination as! StatisticVC
             print(currentStatistic, " currentStatisticcurrentStatistic")
             vc.dataFromMain = currentStatistic ? monthTransactions : apiTransactions //or apidata
+            vc.isAll = !currentStatistic
             vc.fromsideBar = self.fromSideBar
     
             currentStatistic = false

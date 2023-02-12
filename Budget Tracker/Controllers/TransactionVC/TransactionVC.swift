@@ -213,7 +213,7 @@ class TransitionVC: SuperViewController {
     }
     
     func getEditingdata() {
-        var lastExpense: NewCategories {
+        /*var lastExpense: NewCategories {
             let all = Array(db.categories)
             for i in 0..<all.count {
                 if all[i].purpose == .expense {
@@ -222,7 +222,7 @@ class TransitionVC: SuperViewController {
             }
             return NewCategories(id: -1, name: "Uncategorized", icon: "", color: "", purpose: .expense)
         }
-        selectedCategory = db.category(editingCategory) ?? lastExpense
+        selectedCategory = db.category(editingCategory) ?? lastExpense*/
         if editingCategory != "" {
             
             print(selectedPurpose, "selectedPurpose")
@@ -431,10 +431,11 @@ class TransitionVC: SuperViewController {
         if !fromDebts {
             DispatchQueue.main.async {
                 self.categoryTextField.text = ""
-            }
+            }//here
             let lastSelectedID = appData.lastSelected.gett(valueType: sender.selectedSegmentIndex == 0 ? .expense : .income)
             if let cat = db.category(lastSelectedID ?? "") {
                 selectedCategory = cat
+                print("last selected cat: ", cat.name)
                 placeHolder = cat.name
             } else {
                 let defCat = db.categories.first ?? NewCategories(id: -1, name: "Unknown".localize, icon: "", color: "", purpose: sender.selectedSegmentIndex == 0 ? .expense : .income)

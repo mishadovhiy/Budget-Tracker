@@ -49,7 +49,7 @@ class categoriesVCcell: ClearCell {
             }
             self.touchesBegunAction = { began in
                 UIView.animate(withDuration: 0.2, animations: {
-                    self.footerBackground.backgroundColor = (began ? K.Colors.link : K.Colors.darkTable) ?? K.Colors.darkTable!
+                    self.footerBackground.backgroundColor = began ? K.Colors.link : K.Colors.secondaryBackground
                 })
             }
         }

@@ -449,14 +449,6 @@
 			path = AppSettings;
 			sourceTree = "<group>";
 		};
-		8B6BFB1D27F7CB8C00DD4CBC /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				8B6BFB1727F7C82B00DD4CBC /* CategoriesMethods.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
 		8B746AC127F405AA0010F0A4 /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -605,9 +597,10 @@
 			isa = PBXGroup;
 			children = (
 				8DD89D8F23F1496100273904 /* CategoriesVC.swift */,
+				8B6BFB1927F7CB7600DD4CBC /* AppearcenceExtensions.swift */,
+				8B6BFB1B27F7CB8600DD4CBC /* TableViewExtension.swift */,
+				8B6BFB1727F7C82B00DD4CBC /* CategoriesMethods.swift */,
 				8BFA15D227E8E8620078856A /* Cells */,
-				8DEB0CDC281851F0002D24D3 /* Extensions */,
-				8B6BFB1D27F7CB8C00DD4CBC /* Components */,
 			);
 			path = CategoriesVC;
 			sourceTree = "<group>";
@@ -741,15 +734,6 @@
 				8BB75D4527F294ED00AE71A1 /* Structs */,
 			);
 			path = Modal;
-			sourceTree = "<group>";
-		};
-		8DEB0CDC281851F0002D24D3 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				8B6BFB1927F7CB7600DD4CBC /* AppearcenceExtensions.swift */,
-				8B6BFB1B27F7CB8600DD4CBC /* TableViewExtension.swift */,
-			);
-			path = Extensions;
 			sourceTree = "<group>";
 		};
 		8DF9DCCE2815A87E00C7BFA0 /* adBannerView */ = {
@@ -1151,7 +1135,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
@@ -1181,7 +1165,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";

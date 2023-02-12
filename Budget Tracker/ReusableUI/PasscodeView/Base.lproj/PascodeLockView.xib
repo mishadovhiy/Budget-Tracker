@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -288,7 +288,7 @@
                 </stackView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <color key="backgroundColor" red="0.14901960784313725" green="0.14900000393390656" blue="0.14900000393390656" alpha="0.84999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.84999999999999998" colorSpace="custom" customColorSpace="displayP3"/>
             <constraints>
                 <constraint firstItem="BHZ-p6-0Jf" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="O5Y-n7-xVl"/>
                 <constraint firstItem="BHZ-p6-0Jf" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="tcL-3r-VSR"/>
@@ -311,9 +311,9 @@
         </designable>
     </designables>
     <resources>
-        <image name="delete.left.fill" catalog="system" width="128" height="104"/>
-        <image name="icBig" width="1240" height="1240"/>
-        <image name="lock.fill" catalog="system" width="128" height="128"/>
+        <image name="delete.left.fill" catalog="system" width="128" height="102"/>
+        <image name="icBig" width="180" height="180"/>
+        <image name="lock.fill" catalog="system" width="125" height="128"/>
         <namedColor name="CategoryColor">
             <color red="0.86699998378753662" green="0.86699998378753662" blue="0.86699998378753662" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

@@ -115,28 +115,7 @@ class ViewController: SuperViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUI()
-        if let v = CalendarControlVC.shared {
-            v.monthChanged = { year, month in
-                lastSelectedDate = nil
-                DispatchQueue.init(label: "local", qos: .userInitiated).async {
-                    appData.filter.showAll = false
-                    appData.filter.from = "\(appData.filter.makeTwo(n: 1)).\(appData.filter.makeTwo(n: month)).\(year)"
-                    appData.filter.to = "\(appData.filter.makeTwo(n: 31)).\(appData.filter.makeTwo(n: month)).\(year)"
-                    if !self.completedFiltering {
-                        self.filterChanged = true
-                    }
-                    self.filter()
-                }
-            }
-            v.dateSelected = { newDate in
-                self.vibrate()
-                self.calendarSelectedDate = newDate.toShortString()
-                self.toAddTransaction()
-            }
-            
-        } else {
-            fatalError()
-        }
+        
         pinchView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:))))
         self.sideBarContentBlockerView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:))))
         ViewController.shared = self
@@ -163,6 +142,27 @@ class ViewController: SuperViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         viewAppeared()
+        
+        if let v = CalendarControlVC.shared {
+            v.monthChanged = { year, month in
+                lastSelectedDate = nil
+                DispatchQueue.init(label: "local", qos: .userInitiated).async {
+                    appData.filter.showAll = false
+                    appData.filter.from = "\(appData.filter.makeTwo(n: 1)).\(appData.filter.makeTwo(n: month)).\(year)"
+                    appData.filter.to = "\(appData.filter.makeTwo(n: 31)).\(appData.filter.makeTwo(n: month)).\(year)"
+                    if !self.completedFiltering {
+                        self.filterChanged = true
+                    }
+                    self.filter()
+                }
+            }
+            v.dateSelected = { newDate in
+                self.vibrate()
+                self.calendarSelectedDate = newDate.toShortString()
+                self.toAddTransaction()
+            }
+            
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -191,7 +191,7 @@ class ViewController: SuperViewController {
         DispatchQueue.main.async {
             //self.filterText = "Filtering".localize
             
-            self.filterText = (showAll ? "All transactions" : appData.filter.periodText).localize
+            self.filterText = (showAll ? "All transactions".localize : appData.filter.periodText)
         }
         
 

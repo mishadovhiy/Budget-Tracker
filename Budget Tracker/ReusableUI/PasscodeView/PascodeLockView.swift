@@ -12,8 +12,8 @@ import AVFoundation
 class PascodeLockView: UIView, UITextFieldDelegate {
 
     //for app delegate only
-    let backgroundCol = UIColor(red: 38/255, green: 38/255, blue: 38/255, alpha: 0.98)
-    let lightBackground = UIColor(red: 38/255, green: 38/255, blue: 38/255, alpha: 0.85)
+    let backgroundCol = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.98)
+    let lightBackground = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.85)
     
     @IBOutlet private weak var textField: UITextField!
     @IBOutlet private weak var primaryStack: UIStackView!

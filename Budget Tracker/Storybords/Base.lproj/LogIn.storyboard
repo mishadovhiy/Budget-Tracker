@@ -31,19 +31,19 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="6S5-eJ-q0c">
-                                <rect key="frame" x="75" y="259" width="280" height="345"/>
+                                <rect key="frame" x="75" y="274" width="280" height="315"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Create an account" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="gLA-7i-pp5" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="280" height="45"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="280" height="40"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="45" id="iJV-yP-3iU"/>
+                                            <constraint firstAttribute="height" constant="40" id="iJV-yP-3iU"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="32"/>
                                         <color key="textColor" name="CategoryColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Choose a nickname" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="AgY-cd-By3">
-                                        <rect key="frame" x="0.0" y="60" width="280" height="45"/>
+                                        <rect key="frame" x="0.0" y="55" width="280" height="40"/>
                                         <color key="backgroundColor" name="darkTableColor"/>
                                         <accessibility key="accessibilityConfiguration" identifier="create.username"/>
                                         <color key="textColor" name="CategoryColor"/>
@@ -51,7 +51,7 @@
                                         <textInputTraits key="textInputTraits" keyboardAppearance="alert" returnKeyType="next"/>
                                     </textField>
                                     <textField opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter your email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gag-gr-8tT">
-                                        <rect key="frame" x="0.0" y="120" width="280" height="45"/>
+                                        <rect key="frame" x="0.0" y="110" width="280" height="40"/>
                                         <color key="backgroundColor" name="loginColor"/>
                                         <accessibility key="accessibilityConfiguration" identifier="create.email"/>
                                         <color key="textColor" name="CategoryColor"/>
@@ -59,7 +59,7 @@
                                         <textInputTraits key="textInputTraits" keyboardType="emailAddress" keyboardAppearance="alert" returnKeyType="next" textContentType="email"/>
                                     </textField>
                                     <textField opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="npv-KG-uXv">
-                                        <rect key="frame" x="0.0" y="180" width="280" height="45"/>
+                                        <rect key="frame" x="0.0" y="165" width="280" height="40"/>
                                         <color key="backgroundColor" name="loginColor"/>
                                         <accessibility key="accessibilityConfiguration" identifier="create.password"/>
                                         <color key="textColor" name="CategoryColor"/>
@@ -67,35 +67,57 @@
                                         <textInputTraits key="textInputTraits" keyboardAppearance="alert" returnKeyType="next" textContentType="password"/>
                                     </textField>
                                     <textField opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Confirm password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pu2-Hv-iJ4">
-                                        <rect key="frame" x="0.0" y="240" width="280" height="45"/>
+                                        <rect key="frame" x="0.0" y="220" width="280" height="40"/>
                                         <color key="backgroundColor" name="SecondaryBacroundColor"/>
                                         <accessibility key="accessibilityConfiguration" identifier="create.password.repeate"/>
                                         <color key="textColor" name="CategoryColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardAppearance="alert" returnKeyType="done" textContentType="password"/>
                                     </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BR7-eH-6Pc" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="300" width="280" height="45"/>
-                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
-                                        <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="10" maxY="0.0"/>
-                                        <state key="normal" title="Create"/>
-                                        <connections>
-                                            <action selector="createAccountPressed:" destination="sFP-r5-fKW" eventType="touchUpInside" id="ugO-aO-yNJ"/>
-                                        </connections>
-                                    </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hrx-eQ-ndU">
+                                        <rect key="frame" x="0.0" y="275" width="280" height="40"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BR7-eH-6Pc" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
+                                                <rect key="frame" x="202" y="6" width="78" height="28"/>
+                                                <color key="backgroundColor" systemColor="tintColor"/>
+                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                <color key="tintColor" systemColor="tintColor"/>
+                                                <inset key="contentEdgeInsets" minX="15" minY="5" maxX="15" maxY="5"/>
+                                                <state key="normal" title="Create">
+                                                    <color key="titleColor" name="CategoryColor"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="7"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
+                                                        <color key="value" name="darkTableColor"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="createAccountPressed:" destination="sFP-r5-fKW" eventType="touchUpInside" id="ugO-aO-yNJ"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="BR7-eH-6Pc" secondAttribute="trailing" id="Wh7-6m-P1p"/>
+                                            <constraint firstItem="BR7-eH-6Pc" firstAttribute="centerY" secondItem="hrx-eQ-ndU" secondAttribute="centerY" id="hIi-sI-ajx"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="280" id="f5S-S8-ZhD"/>
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="qqi-mE-aXa">
-                                <rect key="frame" x="75" y="319" width="280" height="225"/>
+                                <rect key="frame" x="75" y="329" width="280" height="205"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="T3U-LH-Rgs">
-                                        <rect key="frame" x="0.0" y="0.0" width="280" height="45"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="280" height="40"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Log in" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D9o-OF-iWv" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="0.0" width="280" height="45"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="280" height="40"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="32"/>
                                                 <color key="textColor" name="CategoryColor"/>
@@ -103,14 +125,14 @@
                                             </label>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="45" id="F1I-b8-QWk"/>
+                                            <constraint firstAttribute="height" constant="40" id="F1I-b8-QWk"/>
                                         </constraints>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="Mlm-GK-2QQ">
-                                        <rect key="frame" x="0.0" y="60" width="280" height="45"/>
+                                        <rect key="frame" x="0.0" y="55" width="280" height="40"/>
                                         <subviews>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Nickname" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="SIz-Iw-uxg">
-                                                <rect key="frame" x="0.0" y="0.0" width="280" height="45"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="280" height="40"/>
                                                 <color key="backgroundColor" name="SecondaryBacroundColor"/>
                                                 <accessibility key="accessibilityConfiguration" identifier="log.user"/>
                                                 <color key="textColor" name="CategoryColor"/>
@@ -118,7 +140,7 @@
                                                 <textInputTraits key="textInputTraits" keyboardAppearance="alert" returnKeyType="next"/>
                                             </textField>
                                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2FA-ty-Laz">
-                                                <rect key="frame" x="0.0" y="0.0" width="45" height="45"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="2FA-ty-Laz" secondAttribute="height" multiplier="1:1" id="JTh-Rl-RMm"/>
@@ -137,21 +159,44 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </stackView>
                                     <textField opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Teh-aO-0cJ">
-                                        <rect key="frame" x="0.0" y="120" width="280" height="45"/>
+                                        <rect key="frame" x="0.0" y="110" width="280" height="40"/>
                                         <color key="backgroundColor" name="SecondaryBacroundColor"/>
                                         <accessibility key="accessibilityConfiguration" identifier="log.password"/>
                                         <color key="textColor" name="CategoryColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardAppearance="alert" returnKeyType="done" secureTextEntry="YES" textContentType="password"/>
                                     </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z9u-BA-sZD" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="180" width="280" height="45"/>
-                                        <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="10" maxY="0.0"/>
-                                        <state key="normal" title="Log in"/>
-                                        <connections>
-                                            <action selector="logInPressed:" destination="sFP-r5-fKW" eventType="touchUpInside" id="1UQ-Id-FTV"/>
-                                        </connections>
-                                    </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JQi-hA-7c1">
+                                        <rect key="frame" x="0.0" y="165" width="280" height="40"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z9u-BA-sZD" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
+                                                <rect key="frame" x="207" y="6" width="73" height="28"/>
+                                                <color key="backgroundColor" systemColor="tintColor"/>
+                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                                <color key="tintColor" systemColor="tintColor"/>
+                                                <inset key="contentEdgeInsets" minX="15" minY="5" maxX="15" maxY="5"/>
+                                                <state key="normal" title="Log in">
+                                                    <color key="titleColor" name="CategoryColor"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="7"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
+                                                        <color key="value" name="darkTableColor"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="logInPressed:" destination="sFP-r5-fKW" eventType="touchUpInside" id="1UQ-Id-FTV"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="z9u-BA-sZD" secondAttribute="trailing" id="DGO-7g-Tz9"/>
+                                            <constraint firstItem="z9u-BA-sZD" firstAttribute="centerY" secondItem="JQi-hA-7c1" secondAttribute="centerY" id="mcG-Hq-QAq"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="280" id="ey0-FI-EDf"/>
@@ -709,6 +754,7 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="m9r-hd-Lnh">
                                 <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="separatorColor" name="darkSeparetor"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="TriggerSettingsCell" rowHeight="50" id="e4c-ci-wOD" customClass="TriggerSettingsCell" customModule="Budget_Tracker" customModuleProvider="target">
@@ -1090,7 +1136,7 @@
             <size key="intrinsicContentSize" width="30" height="36"/>
         </designable>
         <designable name="BR7-eH-6Pc">
-            <size key="intrinsicContentSize" width="58" height="18"/>
+            <size key="intrinsicContentSize" width="78" height="28"/>
         </designable>
         <designable name="D9o-OF-iWv">
             <size key="intrinsicContentSize" width="83.333333333333329" height="38.333333333333336"/>
@@ -1117,7 +1163,7 @@
             <size key="intrinsicContentSize" width="28" height="29"/>
         </designable>
         <designable name="z9u-BA-sZD">
-            <size key="intrinsicContentSize" width="52" height="18"/>
+            <size key="intrinsicContentSize" width="73" height="28"/>
         </designable>
     </designables>
     <inferredMetricsTieBreakers>
@@ -1137,22 +1183,25 @@
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="SecondaryBacroundColor">
-            <color red="0.098039215686274508" green="0.098039215686274508" blue="0.098039215686274508" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.078431372549019607" green="0.086274509803921567" blue="0.086274509803921567" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="backgroundColor">
-            <color red="0.86699998378753662" green="0.86699998378753662" blue="0.86699998378753662" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.078431372549019607" green="0.078431372549019607" blue="0.078431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="balanceTitleColor">
-            <color red="0.57999998331069946" green="0.57599997520446777" blue="0.57599997520446777" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.43384936467849" green="0.43384936467849" blue="0.43384936467849" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="balanceValueColor">
-            <color red="0.33700001239776611" green="0.33700001239776611" blue="0.33700001239776611" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.26729755509983411" green="0.26729755509983411" blue="0.26729755509983411" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <namedColor name="darkSeparetor">
+            <color red="0.13136881303022252" green="0.13136881303022252" blue="0.13136881303022252" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="darkTableColor">
-            <color red="0.098039215686274508" green="0.098039215686274508" blue="0.098039215686274508" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.078431372549019607" green="0.086274509803921567" blue="0.086274509803921567" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="loginColor">
-            <color red="0.81599998474121094" green="0.81599998474121094" blue="0.81599998474121094" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.12941176470588234" green="0.12941176470588234" blue="0.12941176470588234" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="negativeColor">
             <color red="0.87800002098083496" green="0.071000002324581146" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

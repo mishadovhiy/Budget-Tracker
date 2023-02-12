@@ -97,6 +97,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
     var fromsideBar = false
     var selectedSegment = 0
     var maxValue = 0.0
+    var isAll:Bool = false
     func createTableData() -> [GraphDataStruct] {
         maxValue = 0.0
         allData.removeAll()
@@ -154,8 +155,10 @@ class StatisticVC: SuperViewController, CALayerDelegate {
             }
             
 
+        
+        let textt = (isAll ? "All period" : appData.filter.periodText).localize
             DispatchQueue.main.async {
-                self.titleLabel.text = (appData.expenseLabelPressed ? "Expenses".localize : "Incomes".localize) + " " + "for".localize + " " + appData.filter.periodText.localize
+                self.titleLabel.text = (appData.expenseLabelPressed ? "Expenses".localize : "Incomes".localize) + " " + "for".localize + " " + textt
                 self.totalLabel.text = "\(Int(totalAmount))"
             }
             ifNoData()
