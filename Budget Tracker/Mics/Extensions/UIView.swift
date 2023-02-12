@@ -20,6 +20,36 @@ extension UIView {
         }
     }
     
+    func addBluer(frame:CGRect? = nil, style:UIBlurEffect.Style = (.init(rawValue: -1000) ?? .regular), insertAt:Int? = nil) -> UIVisualEffectView {
+        let blurEffect = UIBlurEffect(style: style)//prominent//dark//regular
+        let bluer = UIVisualEffectView(effect: blurEffect)
+        //bluer.frame = frame ?? .init(x: 0, y: 0, width: frame?.width ?? self.frame.width, height: frame?.height ?? self.frame.height)
+        // view.insertSubview(blurEffectView, at: 0)
+        let vibracity = UIVisualEffectView(effect: blurEffect)
+        // vibracity.contentView.addSubview()
+        bluer.contentView.addSubview(vibracity)
+        let constaints:[NSLayoutConstraint.Attribute : CGFloat] = [.leading:0, .top:0, .trailing:0, .bottom:0]
+        vibracity.addConstaits(constaints, superV: bluer)
+        if let at = insertAt {
+            self.insertSubview(bluer, at: at)
+        } else {
+            self.addSubview(bluer)
+        }
+        
+        bluer.addConstaits(constaints, superV: self)
+        
+        return bluer
+    }
+    func addConstaits(_ constants:[NSLayoutConstraint.Attribute:CGFloat], superV:UIView) {
+        let layout = superV
+        constants.forEach { (key, value) in
+            let keyNil = key == .height || key == .width
+            let item:Any? = keyNil ? nil : layout
+            superV.addConstraint(.init(item: self, attribute: key, relatedBy: .equal, toItem: item, attribute: key, multiplier: 1, constant: value))
+        }
+        self.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
 }
 
 extension CALayer {

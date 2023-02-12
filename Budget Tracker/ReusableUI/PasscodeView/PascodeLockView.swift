@@ -30,11 +30,15 @@ class PascodeLockView: UIView, UITextFieldDelegate {
             passcodeLock(passcodeEntered: enteredAction)
         }
     }
+    private var moved:Bool = false
     override func didMoveToWindow() {
         super.didMoveToWindow()
-        self.textField.delegate = self
+        if !moved {
+            moved = true
+            self.textField.delegate = self
+            let _ = self.addBluer(insertAt: 0)
+        }
         self.layer.zPosition = 1000
-        
     }
     
     
