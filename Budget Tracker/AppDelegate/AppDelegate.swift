@@ -12,7 +12,7 @@ import MessageViewLibrary
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate{
-
+    
     var window: UIWindow?
     static var shared:AppDelegate?
     let center = UNUserNotificationCenter.current()
@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     
     var backgroundEnterDate:Date?
     var becameActive = false
-
+    
     
     lazy var newMessage: MessageViewLibrary = {
         return MessageViewLibrary.instanceFromNib()
@@ -40,12 +40,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     lazy var banner: adBannerView = {
         return adBannerView.instanceFromNib() as! adBannerView
     }()
-
+    
     public lazy var deviceType:DeviceType = {
         if #available(iOS 13.0, *) {
-            #if !os(iOS)
+#if !os(iOS)
             return .mac
-            #endif
+#endif
             return .primary
         } else {
             return .underIos13
@@ -57,7 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }()
     
     lazy var db:DataBase = {
-       return DataBase()
+        return DataBase()
     }()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -72,7 +72,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
             db.db.updateValue(today, forKey: "lastLaunching")
             lastSelectedDate = nil
         }
-
+        
         Notifications.getNotificationsNumber()
         
         AppLocalization.launchedLocalization = AppLocalization.udLocalization ?? (NSLocale.current.languageCode ?? "-")
@@ -84,13 +84,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         return true
     }
     
-
+    
     func testAI() {
         self.ai.show { _ in
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
                 self.ai.showAlertWithOK(title: "sd", text: "sdsda", error: true, image: .init(named: "restorationCode")) { _ in
                     
-
+                    
                 }
             }
         }
@@ -99,6 +99,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     
     
     func applicationWillResignActive(_ application: UIApplication) {
+        _db = nil
         backgroundEnterDate = Date();
         DispatchQueue(label: "local", qos: .userInitiated).async {
             if UserSettings.Security.password != "" && !(self.passcodeLock.presenting) {
@@ -117,7 +118,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }
     
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
-_db = nil
+        _db = nil
         AppData.categoriesHolder = nil
         if appData.devMode {
             DispatchQueue.main.async {
@@ -128,10 +129,10 @@ _db = nil
         print(#function)
         
     }
-
+    
     func applicationDidBecomeActive(_ application: UIApplication) {
         print(#function)
-
+        
         checkPasscodeTimout()
         if let backgroundEntered = db.db["BackgroundEntered"] as? Bool {
             if backgroundEntered != true {
@@ -139,11 +140,11 @@ _db = nil
                     //send crash
                 }
                 
-  /*              if appData.devMode {
-                    DispatchQueue.main.async {
-                        self.ai.showAlertWithOK(title:"Crash detected", text:"Crash logs has been sent to developer", error: true)
-                    }
-                }*/
+                /*              if appData.devMode {
+                 DispatchQueue.main.async {
+                 self.ai.showAlertWithOK(title:"Crash detected", text:"Crash logs has been sent to developer", error: true)
+                 }
+                 }*/
             }
         }
         db.db.updateValue(false, forKey: "BackgroundEntered")
@@ -152,7 +153,7 @@ _db = nil
     func applicationWillTerminate(_ application: UIApplication) {
         print(#function)
     }
-
+    
     func applicationDidEnterBackground(_ application: UIApplication) {
         print(#function)
         
