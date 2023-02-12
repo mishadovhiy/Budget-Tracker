@@ -181,6 +181,7 @@ class ViewController: SuperViewController {
     }
     var apiTransactions:[TransactionsStruct] = []
     func filter(data:[TransactionsStruct]? = nil) {
+        print(Thread.isMainThread, " nhrtgerfwdqwsadsvfdghr")
         completedFiltering = false
         print("filterCalled")
         let showAll = appData.filter.showAll

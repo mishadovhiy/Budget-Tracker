@@ -32,9 +32,9 @@ print(urlPath, " urlPathurlPathurlPath")
                     completion(jsonResult, nil)
                 }
             }
-            DispatchQueue.main.async {
+      //      DispatchQueue.main.async {
                 task.resume()
-            }
+      //      }
         } else {
             completion([], .other)
         }
