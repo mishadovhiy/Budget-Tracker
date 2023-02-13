@@ -130,6 +130,7 @@ class TransitionVC: SuperViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         if !sbvsloded {
+            sbvsloded = true
             dateTextField.inputView = UIView(frame: .zero)
             dateTextField.isUserInteractionEnabled = false
             dateTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(datePressed)))
@@ -323,27 +324,53 @@ class TransitionVC: SuperViewController {
         }
         
     }
+    private func quite() {
+        DispatchQueue.main.async {
+            self.dismiss(animated: true) {
+               
+            }
+        }
+    }
     func addNew(value: String, category: String, date: String, comment: String) {
         donePressed = true
         print("addNew called", value)
         DispatchQueue.main.async {
             UIImpactFeedbackGenerator().impactOccurred()
             self.checkDate(date: date) { _ in
-                self.dismiss(animated: true) {
-                    DispatchQueue.init(label: "download").async {
-                    if self.editingDate != "" {
-                        let new = TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)
-                        let was = TransactionsStruct(value: "\(Int(self.editingValue))", categoryID: self.editingCategory, date: self.editingDate, comment: self.editingComment)
-                        self.delegate?.editTransaction(new, was: was, reminderTime: self.reminder_Time, repeated: self.reminder_Repeated, idx: self.idxHolder)
+                DispatchQueue.init(label: "download").async {
+                if self.editingDate != "" {
+                    let new = TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)
+                    let was = TransactionsStruct(value: "\(Int(self.editingValue))", categoryID: self.editingCategory, date: self.editingDate, comment: self.editingComment)
+                    self.delegate?.editTransaction(new, was: was, reminderTime: self.reminder_Time, repeated: self.reminder_Repeated, idx: self.idxHolder)
+                    self.quite()
+
+                    
+                } else {
+                    if self.paymentReminderAdding {
+                        let time = self.reminder_Time
+                        let dateCo = time?.createDateComp(date: date, time: time)
+                        if dateCo?.expired ?? true {
+                            DispatchQueue.main.async {
+                                self.newMessage.show(title:"Wrong date", type: .error)
+                            }
+                        } else {
+                            self.quite()
+
+                            self.delegate?.addNewTransaction(value: value, category: category, date: date, comment: comment, reminderTime: self.reminder_Time, repeated: self.reminder_Repeated)
+                        }
                     } else {
+                        self.quite()
                         self.delegate?.addNewTransaction(value: value, category: category, date: date, comment: comment, reminderTime: self.reminder_Time, repeated: self.reminder_Repeated)
                     }
-                    }
+                
                 }
+                }
+                
             }
             
         }
     }
+    
     
     @objc func valueLabelColor() {
         valueLabel.textColor = K.Colors.category
@@ -355,9 +382,10 @@ class TransitionVC: SuperViewController {
     
     @IBOutlet weak var repeateSwitch: UISwitch!
     @IBAction func donePressed(_ sender: UIButton) {
-     //   selectedCategory
+     //   selectedCategory//here
         let newDate = self.displeyingTransaction.date == "" ? defaultDate : self.displeyingTransaction.date
-        
+        print("newDate:", newDate)
+        print("egrfwd ", self.displeyingTransaction.date)
         if let category = selectedCategory {
             DispatchQueue.main.async {
                 if self.valueLabel.text != "0" {
@@ -609,6 +637,7 @@ extension TransitionVC: CalendarVCProtocol {
         }
         lastSelectedDate = newDate
         displeyingTransaction.date = newDate
+        print(displeyingTransaction.date, " newDatenewDatenewDate")
     }
     
     

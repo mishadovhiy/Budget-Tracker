@@ -58,7 +58,8 @@ extension ViewController {
         }*/
         DispatchQueue.main.async {
             let frame = self.sideBar.layer.frame
-            UIView.animate(withDuration: animated ? 0.25 : 0) {
+            //UIView.animate(withDuration: animated ? 0.25 : 0) {
+            UIView.animate(withDuration: 0.58, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .allowAnimatedContent) {
                 self.mainContentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
                 self.mainContentViewHelpher.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
             } completion: { _ in
@@ -545,7 +546,8 @@ extension ViewController {
         }
         let safeTop = self.view.safeAreaInsets.top
         UIView.animate(withDuration: 0.3) {
-            self.safeArreaHelperView?.alpha = 0
+            self.safeArreaHelperView?.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, self.safeArreaHelperViewCalc * -1, 0)
+           // self.safeArreaHelperView?.alpha = 0
         }
         if !safeArreaHelperViewAdded {
             safeArreaHelperViewAdded = true
@@ -553,15 +555,18 @@ extension ViewController {
                 DispatchQueue.main.async {
                     let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: safeTop))
                     self.safeArreaHelperView = view
-                    self.safeArreaHelperView?.alpha = 0
+                    
                     view.backgroundColor = K.Colors.primaryBacground
                     window.addSubview(self.safeArreaHelperView!)
+                    self.safeArreaHelperView?.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, self.safeArreaHelperViewCalc * -1, 0)
                 }
             }
         }
         appData.safeArea = (safeTop, self.view.safeAreaInsets.bottom)
     }
-    
+    var safeArreaHelperViewCalc:CGFloat {
+        return self.view.safeAreaInsets.top + (safeArreaHelperView?.frame.height ?? 0)
+    }
     func apiUpdated(_ loadedData: [TransactionsStruct]? = nil) {
         let db = db.transactions
         let data = loadedData ?? db
@@ -592,9 +597,9 @@ extension ViewController {
         completedFiltering = false
         
         lastSelectedDate = nil
-        DispatchQueue.main.async {
+   //     DispatchQueue.main.async {
             self.filterText = title
-        }
+     //   }
         apiLoading = true
         DispatchQueue.init(label: "download", qos: .userInitiated).async {
             LoadFromDB.shared.newCategories(local:local) { categoryes, error in
@@ -782,9 +787,9 @@ extension ViewController: TransitionVCProtocol {
         }
         
         if new.value != "" && new.date != "" {
-            DispatchQueue.main.async {
+           // DispatchQueue.main.async {
                 self.filterText = "Adding".localize
-            }
+            //}
             //let save = SaveToDB()
             SaveToDB.shared.newTransaction(TransactionsStruct(value: new.value, categoryID: "\(new.category.id)", date: new.date, comment: new.comment)) { error in
                 self.apiUpdated()
@@ -934,9 +939,9 @@ extension ViewController: TransitionVCProtocol {
                 startedSendingUnsended = true
                 updateDataLabels(reloadAndAnimate: false)
                 if self._filterText != "Sending".localize {
-                    DispatchQueue.main.async {
+              //      DispatchQueue.main.async {
                         self.filterText = "Sending".localize
-                    }
+                //    }
                 }
                 
                 // let save = SaveToDB()
@@ -1031,9 +1036,9 @@ extension ViewController: TransitionVCProtocol {
                     //update labels
                     updateDataLabels(reloadAndAnimate: false)
                     if self._filterText != "Sending".localize {
-                        DispatchQueue.main.async {
+                     //   DispatchQueue.main.async {
                             self.filterText = "Sending"
-                        }
+                       // }
                     }
                     let save = SaveToDB()
                     if let category = db.localCategories.first {

@@ -64,6 +64,25 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         
     }
     
+    func userNotificationCenter(_ center: UNUserNotificationCenter, openSettingsFor notification: UNNotification?) {
+        let isDebts = notification?.request.identifier.contains("Debts")
+        let categpryID = notification?.request.content.threadIdentifier
+        
+        if isDebts ?? false {
+            if let cat = categpryID {
+                DispatchQueue.init(label: "local", qos: .userInitiated).async {
+                    LoadFromDB.shared.newCategories { categories, error in
+                        self.showHistory(categpry: cat.replacingOccurrences(of: "Debts", with: ""))
+                    }
+                }
+            } else {
+                self.newMessage.show(title:"Category not found".localize, type: .error)
+            }
+            
+        } else {
+            self.showPaymentReminders()
+        }
+    }
     
     
     func showPaymentReminders() {

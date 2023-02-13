@@ -71,9 +71,9 @@ class ReminderManager {
         let body = "Amount".localize + ": " + transaction.value
 
         if let date = newReminder.time {
-            if date.expired {
+           /* if date.expired {
                 completionn(false)
-            } else {
+            } else {*/
                 if let id = newReminder.id {
                     notifications.addLocalNotification(date: date, title: title, id: id, body: body) { added in
                         if added {
@@ -89,7 +89,7 @@ class ReminderManager {
                     completionn(false)
                 }
                 
-            }
+        //    }
             
         } else {
             completionn(false)

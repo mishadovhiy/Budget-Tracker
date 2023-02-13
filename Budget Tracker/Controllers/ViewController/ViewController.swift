@@ -132,9 +132,7 @@ class ViewController: SuperViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         AppDelegate.shared?.window?.backgroundColor = K.Colors.primaryBacground
-        UIView.animate(withDuration: 0.3) {
-            self.safeArreaHelperView?.alpha = 1
-        }
+        
         super.viewWillDisappear(animated)
         
     }
@@ -188,11 +186,11 @@ class ViewController: SuperViewController {
         let tod = appData.filter.fromDate
 //        let filterPeriod = (tod.month?.stringMonth ?? "-").capitalized + ", \(tod.year ?? 0)"
         let all = self.filtered(apiTransactions)
-        DispatchQueue.main.async {
+     //   DispatchQueue.main.async {
             //self.filterText = "Filtering".localize
             
             self.filterText = (showAll ? "All transactions".localize : appData.filter.periodText)
-        }
+   //     }
         
 
         tableData = all
@@ -295,6 +293,10 @@ class ViewController: SuperViewController {
     
     var filterHelperView = UIView(frame: .zero)
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        UIView.animate(withDuration: 0.19) {
+           // self.safeArreaHelperView?.alpha = 1
+            self.safeArreaHelperView?.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+        }
         self.prepareSegue(for: segue, sender: sender)
  
     }
