@@ -107,7 +107,7 @@ extension WebViewVC {
 @font-face{font-family:'Open Sans', sans-serif;font-display:swap;}
 *{box-sizing:border-box;padding:0;margin:0}
 
-body{ background: #3A3A3A; padding-left: 10px; padding-right: 10px; }
+body{ background: #000000; padding-left: 10px; padding-right: 10px; }
 p, h2, h1, h3, h4, h5, ul, li{ color: #EBE9E9; font-family:'Open Sans',sans-serif; }
 p{font-size: 14px;line-height:1.65;}
 h2{ margin-top: 35px; margin-bottom: 5px; }

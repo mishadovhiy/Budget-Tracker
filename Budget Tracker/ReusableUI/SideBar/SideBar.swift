@@ -102,6 +102,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         if let proID = tableData[indexPath.section].section[indexPath.row].pro {
             appData.presentBuyProVC(selectedProduct: proID)
         } else {
@@ -119,7 +120,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
                 }
             }
         }
-        tableView.reloadData()
+        
         
     }
     
