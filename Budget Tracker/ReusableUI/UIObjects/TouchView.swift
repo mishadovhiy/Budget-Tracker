@@ -71,9 +71,9 @@ class TouchView:View {
     
     private func defaultTouches(begun:Bool) {
         let darker = pressedcolor ?? (self.launch?.lighter() ?? .white)
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.3, delay: 0, options: [.allowUserInteraction], animations: {
             self.backgroundColor = begun ? darker : self.launch
-        }
+        })
 
     }
     
@@ -143,9 +143,13 @@ class TouchButton: Button {
     private func defaultTouches(begun:Bool) {
         let darker = pressedcolor ?? (self.launch?.lighter() ?? .white)
 
-        UIView.animate(withDuration: 0.3) {
+       /* UIView.animate(withDuration: 0.3) {
             self.backgroundColor = begun ? darker : self.launch
-        }
+        }*/
+        UIView.animate(withDuration: 0.3, delay: 0, options: [.allowUserInteraction], animations: {
+            self.backgroundColor = begun ? darker : self.launch
+        })
 
+        
     }
 }

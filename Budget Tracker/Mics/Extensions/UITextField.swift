@@ -9,6 +9,10 @@
 import UIKit
 
 extension UITextField {
+    open override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        self.undoManager?.removeAllActions()
+    }
     func setPaddings(_ amount:CGFloat){
         DispatchQueue.main.async {
             let leftView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.size.height))

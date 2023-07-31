@@ -212,7 +212,7 @@ class CalendarControlVC: UIViewController {
 
 extension CalendarControlVC {
     
-    static func present(currentSelected:DateComponents? = nil, selected:@escaping (_ date:DateComponents)->()) {
+    static func configure(currentSelected:DateComponents? = nil, selected:@escaping (_ date:DateComponents)->()) -> CalendarControlVC {
         let storyboard = UIStoryboard(name: "Reusable", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "CalendarControlVC") as! CalendarControlVC
         vc.modalTransitionStyle = .coverVertical

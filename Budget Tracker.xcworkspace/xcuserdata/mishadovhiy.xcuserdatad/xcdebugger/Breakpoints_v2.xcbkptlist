@@ -1116,9 +1116,9 @@
             filePath = "Budget Tracker/ReusableUI/UIObjects/TouchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "25"
-            endingLineNumber = "25"
-            landmarkName = "touchesEnded(_:with:)"
+            startingLineNumber = "20"
+            endingLineNumber = "20"
+            landmarkName = "touchesBegan(_:with:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1132,9 +1132,9 @@
             filePath = "Budget Tracker/ReusableUI/UIObjects/TouchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
-            landmarkName = "resignFirstResponder()"
+            startingLineNumber = "36"
+            endingLineNumber = "36"
+            landmarkName = "touchesCancelled(_:with:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1148,9 +1148,9 @@
             filePath = "Budget Tracker/ReusableUI/UIObjects/TouchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
-            landmarkName = "touchesCancelled(_:with:)"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
+            landmarkName = "touchesEstimatedPropertiesUpdated(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1164,9 +1164,9 @@
             filePath = "Budget Tracker/ReusableUI/UIObjects/TouchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "38"
-            endingLineNumber = "38"
-            landmarkName = "touchesCancelled(_:with:)"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
+            landmarkName = "touchesEstimatedPropertiesUpdated(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1180,9 +1180,9 @@
             filePath = "Budget Tracker/ReusableUI/UIObjects/TouchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "33"
-            endingLineNumber = "33"
-            landmarkName = "touchesEstimatedPropertiesUpdated(_:)"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
+            landmarkName = "touchesEnded(_:with:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1212,8 +1212,8 @@
             filePath = "Budget Tracker/ReusableUI/UIObjects/TouchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
+            startingLineNumber = "46"
+            endingLineNumber = "46"
             landmarkName = "touchesEnded()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1228,8 +1228,8 @@
             filePath = "Budget Tracker/ReusableUI/UIObjects/TouchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "51"
-            endingLineNumber = "51"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
             landmarkName = "touchesEnded()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1244,10 +1244,10 @@
             filePath = "Budget Tracker/ReusableUI/UIObjects/TouchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "88"
-            endingLineNumber = "88"
-            landmarkName = "touchesBegan(_:with:)"
-            landmarkType = "7">
+            startingLineNumber = "85"
+            endingLineNumber = "85"
+            landmarkName = "TouchButton"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1260,10 +1260,10 @@
             filePath = "Budget Tracker/ReusableUI/UIObjects/TouchView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "147"
-            endingLineNumber = "147"
-            landmarkName = "defaultTouches(begun:)"
-            landmarkType = "7">
+            startingLineNumber = "141"
+            endingLineNumber = "141"
+            landmarkName = "pressColor"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1728,6 +1728,102 @@
             endingLineNumber = "143"
             landmarkName = "viewWillLayoutSubviews()"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4DA6FA77-A52C-4156-9DE8-18C45D29CDBD"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Budget Tracker/ReusableUI/UIObjects/TouchView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "75"
+            endingLineNumber = "75"
+            landmarkName = "defaultTouches(begun:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9396C986-F365-412F-A21D-53C416042402"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Budget Tracker/ReusableUI/UIObjects/TouchView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "56"
+            endingLineNumber = "56"
+            landmarkName = "touchesBegun()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CD71A0CD-430D-41F7-A4A0-A44F8A034E0B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Budget Tracker/ReusableUI/UIObjects/TouchView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "127"
+            endingLineNumber = "127"
+            landmarkName = "touchesBegun()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9EAB08EE-F23C-48CD-88CF-2F3370AC0ACF"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Budget Tracker/ReusableUI/UIObjects/TouchView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "146"
+            endingLineNumber = "146"
+            landmarkName = "defaultTouches(begun:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "9EAB08EE-F23C-48CD-88CF-2F3370AC0ACF - 66ce8fb9f45779cb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Budget_Tracker.TouchButton.defaultTouches(begun: Swift.Bool) -&gt; ()"
+                  moduleName = "Budget Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/ReusableUI/UIObjects/TouchView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "146"
+                  endingLineNumber = "146"
+                  offsetFromSymbolStart = "436">
+               </Location>
+               <Location
+                  uuid = "9EAB08EE-F23C-48CD-88CF-2F3370AC0ACF - 196a3050e7233dae"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in Budget_Tracker.TouchButton.defaultTouches(begun: Swift.Bool) -&gt; ()"
+                  moduleName = "Budget Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/ReusableUI/UIObjects/TouchView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "147"
+                  endingLineNumber = "147"
+                  offsetFromSymbolStart = "64">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
