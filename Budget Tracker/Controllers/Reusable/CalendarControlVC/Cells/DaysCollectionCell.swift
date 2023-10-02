@@ -8,9 +8,12 @@
 import UIKit
 
 class CalendarCollectionCell: UICollectionViewCell {
+    let selectedColor:UIColor = K.Colors.link
+    var higlightDate:DateComponents?
     var calendarModel:CalendarModel?
     var didSelect:((_ day:Int)->())?
 
+    var vc:CalendarControlVC?
     @IBOutlet weak var collectionView: UICollectionView!
     
     override func draw(_ rect: CGRect) {
@@ -20,7 +23,9 @@ class CalendarCollectionCell: UICollectionViewCell {
     }
     
     
-    func set(model:CalendarModel, disp:Bool = false, didSelect:@escaping (_ day:Int)->()) {
+    func set(model:CalendarModel, higlightDate:DateComponents?, vc:CalendarControlVC?, disp:Bool = false, didSelect:@escaping (_ day:Int)->()) {
+        self.higlightDate = higlightDate
+        self.vc = vc
         self.calendarModel = model
         self.didSelect = didSelect
         if disp {

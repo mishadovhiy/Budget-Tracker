@@ -47,7 +47,7 @@ class TransitionVC: SuperViewController {
     @IBOutlet weak var numbarPadView: UIView!
     @IBOutlet weak var valueLabel: UILabel!
     @IBOutlet weak var minusPlusLabel: UILabel!
-    @IBOutlet weak var commentTextField: UITextField!
+    @IBOutlet weak var commentTextField: TextField!
     @IBOutlet weak var commentCountLabel: UILabel!
     var paymentReminderAdding = false
     var pressedValue = "0"
@@ -67,9 +67,6 @@ class TransitionVC: SuperViewController {
     
     var pressedValueArrey: [String] =  []
 
-    
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -225,8 +222,7 @@ class TransitionVC: SuperViewController {
         }
         selectedCategory = db.category(editingCategory) ?? lastExpense*/
         if editingCategory != "" {
-            
-            print(selectedPurpose, "selectedPurpose")
+            selectedCategory = DataBase().category(self.editingCategory)
             purposeSwitcher.selectedSegmentIndex = selectedPurpose != nil ? selectedPurpose! : 0
             purposeSwitched(purposeSwitcher)
             DispatchQueue.main.async {
@@ -235,7 +231,6 @@ class TransitionVC: SuperViewController {
             
         }
         if editingDate != "" {
-            //here
             self.dateChanged = true
             displeyingTransaction.date = editingDate
             if editingValue > 0.0 {
@@ -382,7 +377,6 @@ class TransitionVC: SuperViewController {
     
     @IBOutlet weak var repeateSwitch: UISwitch!
     @IBAction func donePressed(_ sender: UIButton) {
-     //   selectedCategory//here
         let newDate = self.displeyingTransaction.date == "" ? defaultDate : self.displeyingTransaction.date
         print("newDate:", newDate)
         print("egrfwd ", self.displeyingTransaction.date)
@@ -459,7 +453,7 @@ class TransitionVC: SuperViewController {
         if !fromDebts {
             DispatchQueue.main.async {
                 self.categoryTextField.text = ""
-            }//here
+            }
             let lastSelectedID = appData.lastSelected.gett(valueType: sender.selectedSegmentIndex == 0 ? .expense : .income)
             if let cat = db.category(lastSelectedID ?? "") {
                 selectedCategory = cat
@@ -492,7 +486,7 @@ class TransitionVC: SuperViewController {
         }
         
         DispatchQueue.main.async {
-            self.categoryTextField.attributedPlaceholder = NSAttributedString(string: placeHolder, attributes: [NSAttributedString.Key.foregroundColor: K.Colors.textFieldPlaceholder])
+            self.categoryTextField.placeholder = placeHolder
         }
     }
     func toggleAmountKeyboard(show:Bool) {
@@ -622,7 +616,16 @@ class CustomTextField: UITextField {
         return enableLongPressActions
     }
     
-    
+    override var placeholder: String? {
+        get { return super.placeholder }
+        set {
+            super.placeholder = newValue
+            DispatchQueue.main.async {
+                self.attributedPlaceholder = NSAttributedString(string: newValue ?? "", attributes: [NSAttributedString.Key.foregroundColor: K.Colors.textFieldPlaceholder])
+            }
+
+        }
+    }
 }
 
 extension TransitionVC: CalendarVCProtocol {
@@ -632,12 +635,15 @@ extension TransitionVC: CalendarVCProtocol {
         dateChanged = true
         let compDate = date.stringToCompIso()
         let newDate = compDate.toShortString() ?? date
+        let timeString = paymentReminderAdding ? (", " + (time?.timeString ?? "")) : ""
         DispatchQueue.main.async {
-            self.dateTextField.text = newDate
+            self.dateTextField.text = newDate + timeString
         }
         lastSelectedDate = newDate
         displeyingTransaction.date = newDate
         print(displeyingTransaction.date, " newDatenewDatenewDate")
+        print(time, " timetimetimetimetimetime")
+
     }
     
     

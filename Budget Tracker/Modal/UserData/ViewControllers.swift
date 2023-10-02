@@ -15,6 +15,15 @@ extension DataBase {
             self.dict = dict
         }
 
+        var ignoredActionTypes:[String] {
+            get {
+                return dict["ignoredActionTypes"] as? [String] ?? []
+            }
+            set {
+                dict.updateValue(newValue, forKey: "ignoredActionTypes")
+            }
+        }
+        
         var firstLaunch:[FirstLaunchVcs: Bool] {
             get {
                 let ud = dict["firstLaunch"] as? [String: Bool] ?? [:]

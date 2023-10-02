@@ -10,6 +10,7 @@ import UIKit
 
 class categoriesVCcell: ClearCell {
     
+    @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet weak var footerBackground: UIView!
     @IBOutlet weak var categoryNameLabel: UILabel!
     @IBOutlet weak var qntLabel: UILabel!
@@ -26,7 +27,7 @@ class categoriesVCcell: ClearCell {
     @IBOutlet weak var buttonsSeparetor: UIView!
     
     @IBOutlet weak var editingStack: UIStackView!
-    @IBOutlet weak var newCategoryTF: UITextField!
+    @IBOutlet weak var newCategoryTF: TextField!
     
     
     
@@ -79,6 +80,17 @@ class categoriesVCcell: ClearCell {
         }
 
         currentCategory = category
+        let hasProgress = currentCategory?.category.purpose != .debt && currentCategory?.category.monthLimit != nil
+        progressView.isHidden = !(hasProgress && currentCategory?.editing == nil)
+        let manag = TransactionsManager()
+        manag.daysBetween = (currentCategory?.category.transactions ?? []).compactMap({ $0.date })
+        let total = manag.total(transactions: currentCategory?.category.transactions ?? [])
+      //  let percent
+        let percent = total.positive / (currentCategory?.category.monthLimit ?? 0)
+        progressView.progress = Float(percent)
+        progressView.tintColor = .init(named: currentCategory?.category.color ?? "") ?? K.Colors.link
+        print(percent, " rgtefwde")
+      //  let progress =
         if index != nil {
             self.newCategoryTF.delegate = self
             self.newCategoryTF.addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
@@ -88,9 +100,12 @@ class categoriesVCcell: ClearCell {
             }
             
         }
-        let defPlaceHolder = "New category".localize
-        newCategoryTF.placeholder = index != nil ? (CategoriesVC.shared?.tableData[index!.section].data[index!.row].category.name ?? defPlaceHolder) : defPlaceHolder
-        newCategoryTF.setPlaceHolderColor(K.Colors.textFieldPlaceholder)
+        if ((CategoriesVC.shared?.tableData.count ?? 0) - 1) >= (index?.section ?? 0) && index != nil && (CategoriesVC.shared?.tableData[index!.section].data.count ?? 0) - 1 >= index!.row {
+            let defPlaceHolder = "New category".localize
+            newCategoryTF.placeholder = index != nil ? (CategoriesVC.shared?.tableData[index!.section].data[index!.row].category.name ?? defPlaceHolder) : defPlaceHolder
+            newCategoryTF.setPlaceHolderColor(K.Colors.textFieldPlaceholder)
+        }
+        
         
     }
     

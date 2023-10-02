@@ -20,6 +20,7 @@ extension CategoriesVC {
         DispatchQueue.init(label: "dbLoad", qos: .userInteractive).async {
             if !self.fromSettings {
                 self.categories = self.db.categories
+                self.allCategoriesHolder = self.categories
             } else {
                 if self.screenType == .categories || self.screenType == .debts {
                     AppDelegate.shared?.notificationManager.loadNotifications { unsees in
@@ -302,18 +303,11 @@ extension CategoriesVC {
         if searchText == "" {
             return fromHolder ? allCategoriesHolder : _categories
         } else {
+            print(fromHolder, " tyrhtgerfegt")
             let data = fromHolder ? allCategoriesHolder : _categories
-            var resultt:[NewCategories] = []
-            for i in 0..<data.count {
-                    let name = data[i].name.uppercased()
-                    print(name, "name")
-                    let text = searchText.uppercased()
-                    if name.contains(text) {
-                        resultt.append(data[i])
-                    }
-            }
-            return resultt
-
+            return data.filter({
+                return $0.name.uppercased().contains(searchText.uppercased())
+            })
         }
     }
     

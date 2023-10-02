@@ -19,13 +19,13 @@ class LoginViewController: SuperViewController {
     @IBOutlet weak var logInButton: UIButton!
     @IBOutlet weak var createAccButton: UIButton!
     
-    @IBOutlet weak var nicknameLabelCreate: UITextField!
-    @IBOutlet weak var emailLabel: UITextField!
-    @IBOutlet weak var passwordLabel: UITextField!
-    @IBOutlet weak var confirmPasswordLabel: UITextField!
+    @IBOutlet weak var nicknameLabelCreate: TextField!
+    @IBOutlet weak var emailLabel: TextField!
+    @IBOutlet weak var passwordLabel: TextField!
+    @IBOutlet weak var confirmPasswordLabel: TextField!
     
-    @IBOutlet weak var nicknameLogLabel: UITextField!
-    @IBOutlet weak var passwordLogLabel: UITextField!
+    @IBOutlet weak var nicknameLogLabel: TextField!
+    @IBOutlet weak var passwordLogLabel: TextField!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet var titleLabels: [UILabel]!
     
@@ -170,24 +170,21 @@ class LoginViewController: SuperViewController {
         
         if !sbvsLoaded {
             sbvsLoaded = true
-            DispatchQueue.main.async {
-
+            var i = 0
+            textfields.forEach({
+                $0.delegate = self
+                $0.addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
+                $0.layer.masksToBounds = true
+                $0.layer.cornerRadius = 6
                 
-                let tfs = Array(self.textfields)
-                for i in 0..<tfs.count {
-                    tfs[i].delegate = self
-                    tfs[i].addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
-                    tfs[i].layer.masksToBounds = true
-                    tfs[i].layer.cornerRadius = 6
-                    
-                    tfs[i].setPaddings(5)
-                    tfs[i].placeholder = self.placeHolder[i]
-                    tfs[i].setPlaceHolderColor(K.Colors.textFieldPlaceholder)
-                    tfs[i].tag = i
-                    self.textFieldToID.updateValue("\(i)", forKey: tfs[i].accessibilityIdentifier ?? "")
-                }
-            }
-            
+                $0.setPaddings(5)
+                $0.placeholder = self.placeHolder[i]
+                $0.setPlaceHolderColor(K.Colors.textFieldPlaceholder)
+                $0.tag = i
+                self.textFieldToID.updateValue("\(i)", forKey: $0.accessibilityIdentifier ?? "")
+                i += 1
+
+            })
         }
         
     }
@@ -453,21 +450,19 @@ class LoginViewController: SuperViewController {
     var forceLoggedOutUser = ""
     var obthervValues = false
     func showWrongFields() {
-    //test if working
-        for i in 0..<self.textfields.count {
-            DispatchQueue.main.async {
-                if self.textfields[i] == self.emailLabel {
-                    if self.emailLabel.text != "" {
-                        UIView.animate(withDuration: 0.3) {
-                            self.textfields[i].backgroundColor = !(self.emailLabel.text ?? "").contains("@") ? K.Colors.negative : K.Colors.secondaryBackground
-                        }
+        textfields.forEach({ tf in
+            if tf == self.emailLabel {
+                if self.emailLabel.text != "" {
+                    UIView.animate(withDuration: 0.3) {
+                        tf.backgroundColor = !(self.emailLabel.text ?? "").contains("@") ? K.Colors.negative : .clear
                     }
                 }
-                UIView.animate(withDuration: 0.3) {
-                    self.textfields[i].backgroundColor = self.textfields[i].text == "" ? K.Colors.negative : K.Colors.secondaryBackground
-                }
             }
-        }
+            UIView.animate(withDuration: 0.3) {
+                tf.backgroundColor = tf.text == "" ? K.Colors.negative : .clear
+        
+            }
+        })
         
     }
     
@@ -534,7 +529,7 @@ class LoginViewController: SuperViewController {
         }
         
         for i in 0..<textfields.count {
-            textfields[i].backgroundColor = K.Colors.secondaryBackground
+            textfields[i].backgroundColor = .clear
         }
         obthervValues = false
         
@@ -611,7 +606,6 @@ class LoginViewController: SuperViewController {
          //  message.hideMessage()
         
         textFieldValuesDict.updateValue(textField.text ?? "", forKey: textField.accessibilityIdentifier ?? "")
-        print(textFieldValuesDict)
            if obthervValues {
                showWrongFields()
            }

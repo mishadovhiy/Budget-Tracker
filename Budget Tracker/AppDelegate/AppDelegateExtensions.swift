@@ -12,22 +12,18 @@ import AlertViewLibrary
 
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        self.openNotification(response.notification)
+    }
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        let categpryID = notification.request.content.threadIdentifier
         let notificationText = notification.request.content.body
         let notificationTitle = notification.request.content.title
         notificationManager.deliveredNotificationIDs.append(notification.request.identifier)
-        let isDebts = notification.request.identifier.contains("Debts")
         let okButton:AlertViewLibrary.button = .init(title: "Close", style: .regular, close:true, action: nil)
         let showButton = AlertViewLibrary.button(title: "Show", style: .link, close: false) { _ in
             
-            if isDebts {
-                LoadFromDB.shared.newCategories { categories, error in
-                    self.showHistory(categpry: categpryID.replacingOccurrences(of: "Debts", with: ""))
-                }
-            } else {
-                self.showPaymentReminders()
-            }
+            self.openNotification(notification)
             
         }
         DispatchQueue.main.async {
@@ -37,6 +33,19 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         
     }
     
+    
+    func openNotification(_ notification:UNNotification) {
+        let isDebts = notification.request.identifier.contains("Debts")
+        let categpryID = notification.request.content.threadIdentifier
+
+        if isDebts {
+            LoadFromDB.shared.newCategories { categories, error in
+                self.showHistory(categpry: categpryID.replacingOccurrences(of: "Debts", with: ""))
+            }
+        } else {
+            self.showPaymentReminders()
+        }
+    }
     
     func showHistory(categpry: String) {
         let db = DataBase()
@@ -62,6 +71,11 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         }
         
         
+    }
+        
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        print(url, " gvchjn")
+        return true
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, openSettingsFor notification: UNNotification?) {

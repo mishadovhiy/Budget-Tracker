@@ -64,7 +64,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         searchBar.delegate = self
         
         selectingIconFor = (nil,nil)
-
+        
         var strTitle:String {
             switch screenType {
             case .localData:
@@ -179,7 +179,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         }
         set {
             _allCategoriesHolder = newValue
-            AppData.categoriesHolder = newValue
+            if fromSettings {
+                AppData.categoriesHolder = newValue
+            }
         }
     }
     
@@ -219,5 +221,13 @@ extension CategoriesVC: IconsVCDelegate {
         iconSelected(img: img, color: color)
     }
 
+}
+
+extension CategoriesVC {
+    static func configure() -> CategoriesVC {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "CategoriesVC") as! CategoriesVC
+        return vc
+    }
 }
 

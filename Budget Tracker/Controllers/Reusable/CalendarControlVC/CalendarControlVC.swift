@@ -14,7 +14,6 @@ class CalendarControlVC: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var mainBackgroundView: UIView!
     
-    static var shared: CalendarControlVC?
     var years:(from:Int, to:Int) = (from:0,to:0)
     var tableData:[CalendarModel] = []
     var _middleDate:CalendarData?
@@ -22,10 +21,10 @@ class CalendarControlVC: UIViewController {
     var monthChanged:((_ month:Int, _ year:Int)->())?
     var selectedDate:DateComponents?
     var values:[String:CGFloat] = [:]
+    var higlightSelected:Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        CalendarControlVC.shared = self
         monthView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.monthPressed(_:))))
         let swipeClose = UISwipeGestureRecognizer(target: self, action: #selector(swipeClose(_:)))
         self.view.addGestureRecognizer(swipeClose)
@@ -104,7 +103,7 @@ class CalendarControlVC: UIViewController {
     }
     
     
-    
+    var selectedDateComponent:DateComponents?
     func daySelected(_ day:Int) {
         if let action = dateSelected,
            let mid = middleDate
@@ -112,6 +111,8 @@ class CalendarControlVC: UIViewController {
             let dateComp = DateComponents(year: mid.year,
                                           month: mid.month,
                                           day: day)
+            self.selectedDateComponent = dateComp
+            self.collectionView.reloadData()
             action(dateComp)
         }
     }
@@ -212,13 +213,20 @@ class CalendarControlVC: UIViewController {
 
 extension CalendarControlVC {
     
-    static func configure(currentSelected:DateComponents? = nil, selected:@escaping (_ date:DateComponents)->()) -> CalendarControlVC {
+    static func configure(currentSelected:DateComponents? = nil, selected: ((_ date:DateComponents)->())? = nil) -> CalendarControlVC {
         let storyboard = UIStoryboard(name: "Reusable", bundle: nil)
+
         let vc = storyboard.instantiateViewController(withIdentifier: "CalendarControlVC") as! CalendarControlVC
-        vc.modalTransitionStyle = .coverVertical
-        vc.modalPresentationStyle = .overFullScreen
         vc.dateSelected = selected
         vc.selectedDate = currentSelected
+        return vc
+    }
+    
+    static func present(currentSelected:DateComponents? = nil, selected:@escaping (_ date:DateComponents)->()) {
+        let vc = CalendarControlVC.configure(currentSelected: currentSelected, selected: selected)
+        vc.modalTransitionStyle = .coverVertical
+        vc.modalPresentationStyle = .overFullScreen
+        AppDelegate.shared?.present(vc: vc)
         //   NavigationVC.shared?.present(vc, animated: true)
         
     }

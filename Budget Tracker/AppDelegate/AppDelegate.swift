@@ -72,7 +72,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
             db.db.updateValue(today, forKey: "lastLaunching")
             lastSelectedDate = nil
         }
-        
+        UNUserNotificationCenter.current().delegate = self
         Notifications.getNotificationsNumber()
         
         AppLocalization.launchedLocalization = AppLocalization.udLocalization ?? (NSLocale.current.languageCode ?? "-")
@@ -81,25 +81,84 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         if !appData.proEnabeled {
             banner.createBanner()
         }
+        
+        
+        setQuickActions()
         return true
     }
     
-    
-    func testAI() {
-        self.ai.show { _ in
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
-                self.ai.showAlertWithOK(title: "sd", text: "sdsda", error: true, image: .init(named: "restorationCode")) { _ in
-                    
-                    
+    func setQuickActions() {
+        DispatchQueue(label: "db", qos: .userInitiated).async {
+            let ignored = DataBase().viewControllers.ignoredActionTypes
+            var res: [UIApplicationShortcutItem] = []
+            ShortCodeItem.allCases.forEach({
+                if !ignored.contains($0.rawValue) {
+                    res.append(.init(type: $0.rawValue, localizedTitle: $0.item.title, localizedSubtitle: $0.item.subtitle, icon: .init(templateImageName: $0.item.icon)))
                 }
+            })
+            DispatchQueue.main.async {
+                UIApplication.shared.shortcutItems = res
+
             }
         }
-        
     }
     
+    enum ShortCodeItem:String {
+        case addTransaction = "addTransaction"
+        case addReminder = "addReminder"
+        case monthlyLimits = "monthlyLimits"
+        
+        static var allCases:[ShortCodeItem] = [.addTransaction, .addReminder, .monthlyLimits]
+        var item:Item {
+            switch self {
+            case .addTransaction:
+                return .init(title: "Add Transaction", subtitle: "", icon: "plusLined")
+            case .addReminder:
+                return .init(title: "Add Reminder", subtitle: "", icon: "reminder")
+            case .monthlyLimits:
+                return .init(title: "Spending limits", subtitle: "", icon: "monthlyLimits")
+            }
+        }
+        struct Item {
+            let title:String
+            let subtitle:String
+            let icon:String
+        }
+    }
+    
+    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
+        guard let type = ShortCodeItem.init(rawValue: shortcutItem.type) else {
+            print("unrecognized item pressed")
+            return
+        }
+        var vc:UIViewController?
+        switch type {
+        case .addTransaction:
+            vc = TransactionNav.configure()
+        case .addReminder:
+            self.showPaymentReminders()
+            return
+        case .monthlyLimits:
+            let vcc = CategoriesVC.configure()
+            vc = NavigationController(rootViewController: vcc)
+        }
+        if let vc = vc {
+            self.present(vc: vc)
+        }
+    }
+
+    func present(vc:UIViewController, completion:(()->())? = nil) {
+        if let presenting = window?.rootViewController?.presentedViewController {
+            presenting.dismiss(animated: true, completion: {
+                self.present(vc: vc, completion: completion)
+            })
+        } else {
+            window?.rootViewController?.present(vc, animated: true, completion: completion)
+        }
+    }
     
     func applicationWillResignActive(_ application: UIApplication) {
-        _db = nil
+        DataBase._db = nil
         backgroundEnterDate = Date();
         DispatchQueue(label: "local", qos: .userInitiated).async {
             if UserSettings.Security.password != "" && !(self.passcodeLock.presenting) {
@@ -118,7 +177,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }
     
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
-        _db = nil
+        DataBase._db = nil
         AppData.categoriesHolder = nil
         if appData.devMode {
             DispatchQueue.main.async {
@@ -159,7 +218,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         
     }
     
-    
+
 }
 
 protocol AppDelegateProtocol {

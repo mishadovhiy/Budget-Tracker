@@ -8,7 +8,6 @@
 
 import UIKit
 import PDFKit
-import CoreGraphics
 
 struct ManagerPDF {
     private var vc:UIViewController
@@ -34,8 +33,8 @@ struct ManagerPDF {
     
     private func createPDF() -> PDFDocument? {
         let pdfDocument = PDFDocument()
-        let text = dictionaryToString(dict)
-        guard let page = generator.createPDFPage(fromText: text)
+        let text = UnparcePDF().dictionaryToString(dict)
+        guard let page = generator.createPDFPage(fromAttributes: .init(attributedString: text))
         else {
             showError(title: "Error converting to pdf image")
             return nil
@@ -44,76 +43,6 @@ struct ManagerPDF {
         return pdfDocument
     }
     
-    private func dictionaryToString(_ dictionary: [String: Any]) -> String {
-        var text = ""
-        print(dictionary, " bjkljkgrrfedmn")
-        dictionary.forEach({
-            if let val = $0.value as? [String:Any] {
-                val.forEach({
-                    text += self.row(($0.key, $0.value))
-                })
-            } else if let val = $0.value as? [[String:Any]] {
-                val.forEach({
-                    $0.forEach({
-                        text += self.row(($0.key, $0.value))
-                    })
-                })
-            } else {
-                text += self.row(($0.key, $0.value))
-            }
-        })
-        
-        return text
-    }
-    
-    private func row(_ dict:(String, Any)) -> String {
-        var res:String = ""
-        if let newdict = dict.1 as? [String:Any] {
-            res += "\(dict.0)"
-            newdict.forEach {
-                res += self.row(($0.key, $0.value))
-            }
-        } else { /*else if let newArr = dict.1 as? [[String:Any]] {
-            res += "\(dict.0)"
-            newArr.forEach({
-                $0.forEach({
-                    res += self.row(($0.key, $0.value))
-                })
-            })
-        } else {*/
-            let keys = ["name", "transactions"]
-            if keys.contains(dict.0) {
-                res = "\(dict.0): \(dict.1)\n"
-            }
-            
-        }
-        return res
-    }
-    
     let generator:PagePDF = .init()
 }
 
-
-struct PagePDF {
-    
-    func createPDFPage(fromText text: String) -> PDFPage? {
-        let pageRect = CGRect(x: 0, y: 0, width: 612, height: 792)
-        let pdfData = NSMutableData()
-        UIGraphicsBeginPDFContextToData(pdfData, pageRect, [:])
-        UIGraphicsBeginPDFPageWithInfo(pageRect, nil)
-        
-        let textFont = UIFont.systemFont(ofSize: 12.0)
-        let textAttributes: [NSAttributedString.Key: Any] = [.font: textFont]
-        
-        let textRect = CGRect(x: 50, y: 50, width: 512, height: 692)
-        text.draw(in: textRect, withAttributes: textAttributes)
-        UIGraphicsEndPDFContext()
-        if pdfData.length > 0 {
-            return PDFDocument(data: pdfData as Data)?.page(at: 0)
-        } else {
-            print("PDF data is empty")
-            return nil
-        }
-        
-    }
-}

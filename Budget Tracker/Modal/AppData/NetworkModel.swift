@@ -28,7 +28,6 @@ print(urlPath, " urlPathurlPathurlPath")
                         completion([], .internet)
                         return
                     }
-
                     completion(jsonResult, nil)
                 }
             }
@@ -83,6 +82,7 @@ print(urlPath, " urlPathurlPathurlPath")
                     if otherUser == nil && saveLocally {
                         db.categories = loadedData
                     }
+                    print(loadedData, " newCategoriesnewCategoriesnewCategories")
                     completion(loadedData, .none)
                 }
             }
@@ -252,6 +252,8 @@ struct SaveToDB {
             var amount:String {
                 if let amount = category.amountToPay {
                     return "&AmountToPay=\(amount)"
+                } else if let amount = category.monthLimit {
+                    return "&AmountToPay=\(amount)"
                 }
                 return ""
             }
@@ -399,6 +401,8 @@ struct DeleteFromDB {
             let pupose = category.purpose.rawValue
             var amount:String {
                 if let amount = category.amountToPay {
+                    return "&AmountToPay=\(amount)"
+                } else if let amount = category.monthLimit {
                     return "&AmountToPay=\(amount)"
                 }
                 return ""

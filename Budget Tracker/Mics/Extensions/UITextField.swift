@@ -25,9 +25,7 @@ extension UITextField {
     }
     
     func setPlaceHolderColor(_ color:UIColor) {
-        DispatchQueue.main.async {
             self.attributedPlaceholder = NSAttributedString(string: self.placeholder ?? "", attributes: [NSAttributedString.Key.foregroundColor: color])
-        }
     }
     
     

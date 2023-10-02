@@ -52,6 +52,17 @@ class SuperViewController: UIViewController {
     
     
     
+    func createCalendar(_ container:UIView, currentSelected:DateComponents?, selected:((_ date:DateComponents)->())? = nil) -> CalendarControlVC? {
+        let vc = CalendarControlVC.configure(currentSelected: currentSelected, selected: selected)
+        print(currentSelected, " gertgrw")
+        addChild(vc)
+        guard let childView = vc.view else { return nil }
+        container.addSubview(childView)
+        childView.addConstaits([.left:0, .right:0, .top:0, .bottom:0], superV: container)
+        vc.didMove(toParent: self)
+        return vc
+    }
+    
     
     
     func stringToDate(s: String, fullDate: Bool) -> Date {//==false

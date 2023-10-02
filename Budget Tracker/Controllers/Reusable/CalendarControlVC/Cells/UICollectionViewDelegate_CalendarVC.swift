@@ -27,16 +27,20 @@ extension CalendarCollectionCell:UICollectionViewDelegate, UICollectionViewDataS
         cell.dayLabel.textColor = color
         */
         
-        let d = CalendarControlVC.shared?.middleDate
+        let dayOpt = vc?.middleDate
         let today = Date().toDateComponents()
-        let isToday = today.year == d?.year && today.month == d?.month && today.day == Int(day)
+        let isToday = today.year == dayOpt?.year && today.month == dayOpt?.month && today.day == Int(day)
         cell.dayLabel.textColor = isToday ? .red : .white
-        let selectedMonth = CalendarControlVC.shared?.selectedDate
-        let value = CalendarControlVC.shared?.values["\(d?.year ?? 0).\(d?.month ?? 0).\(day)"]
+        let selectedMonth = vc?.selectedDate
+        let value = vc?.values["\(dayOpt?.year ?? 0).\(dayOpt?.month ?? 0).\(day)"]
         let plus = (value ?? 0) > 0 ? "+" : ""
         cell.valueLabel.text = value == nil ? " " : "\(plus)\(Int(Double(value ?? 0)))"
-        let isSelected = calendarModel?.month ?? -1 == selectedMonth?.month ?? -1 && calendarModel?.year ?? -1 == selectedMonth?.year ?? -1 && days[indexPath.row] == selectedMonth?.day ?? -1
-        cell.backgroundMainView.backgroundColor = isSelected ? .red: .clear
+        let selectedDate = higlightDate ?? selectedMonth
+        let isSelected = calendarModel?.month ?? -1 == selectedDate?.month ?? -1 && calendarModel?.year ?? -1 == selectedDate?.year ?? -1 && days[indexPath.row] == selectedDate?.day ?? -1
+        if isSelected {
+            print("isSelectedisSelected ", indexPath.row)
+        }
+        cell.backgroundMainView.backgroundColor = isSelected ? selectedColor : .clear
 
         return cell
     }

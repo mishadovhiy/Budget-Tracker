@@ -17,6 +17,7 @@ struct NewCategories {
     let purpose: CategoryPurpose
     var dueDate: DateComponents?
     var amountToPay: Double? = nil
+    var monthLimit:Double? = nil
 
     var transactions: [TransactionsStruct] {
         let db = DataBase()
@@ -57,7 +58,7 @@ struct NewCategories {
                 let dateCo = DateComponents()
                 return dueDate == "" ? nil : dateCo.stringToCompIso(s: dueDate)
             }
-            return NewCategories(id: Int(id) ?? 0, name: name, icon: icon, color: color, purpose: purp, dueDate: date, amountToPay: Double(amountToPay))
+            return NewCategories(id: Int(id) ?? 0, name: name, icon: icon, color: color, purpose: purp, dueDate: date, amountToPay: purp == .debt ? Double(amountToPay) : nil, monthLimit: purp != .debt ? Double(amountToPay) : nil)
         }
         
         return nil
@@ -79,7 +80,7 @@ struct NewCategories {
             result["DueDate"] = date.toIsoString()
         }
         
-        if let amount = category.amountToPay {
+        if let amount = (category.amountToPay ?? category.monthLimit) {
             result["AmountToPay"] = "\(amount)"
         }
         

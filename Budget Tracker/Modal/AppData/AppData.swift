@@ -394,26 +394,9 @@ extension AppData {
     
     func present(vc:UIViewController, completion:((Bool)->())? = nil) {
         DispatchQueue.main.async {
-            let window = AppDelegate.shared?.window ?? UIWindow()
-            if let rootVC = window.rootViewController {
-                let presentt = {
-                  //  rootVC.presentedViewController
-                    rootVC.present(vc, animated: true, completion: {
-                        if let completion = completion {
-                            completion(true)
-                        }
-                    })
-                }
-                if let presenting = rootVC.presentedViewController {
-                    presenting.dismiss(animated: true, completion: presentt)
-                } else {
-                    presentt()
-                }
-                
-                
-            } else {
-                AppDelegate.shared?.ai.showAlertWithOK(title: "Error", text: Text.Error.internetDescription, error: true, hidePressed: completion)
-            }
+            AppDelegate.shared?.present(vc: vc, completion: {
+                completion?(true)
+            })
         }
     }
     

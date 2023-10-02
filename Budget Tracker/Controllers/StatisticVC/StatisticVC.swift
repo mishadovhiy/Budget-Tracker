@@ -17,12 +17,11 @@ class StatisticVC: SuperViewController, CALayerDelegate {
     @IBOutlet weak var titleLabel: UILabel!
     var allData = [GraphDataStruct]()
 
-    
+    var pdf:ManagerPDF?
     var dataFromMain: [TransactionsStruct] = []
     var sum = 0.0
     override func viewDidLoad() {
         super.viewDidLoad()
-
         updateUI()
 
     }
@@ -75,6 +74,13 @@ class StatisticVC: SuperViewController, CALayerDelegate {
             let results = ((100 * n) / biggest)
             return results
         } else { return 0.0 }
+    }
+    @IBAction func sharePressed(_ sender: Any) {
+        let dict:[[String:Any]] = allData.compactMap({
+            return $0.dict
+        })
+        pdf = .init(dict: ["Budget Tracker":dict], pageTitle: "some title", vc: self)
+        pdf?.exportPDF()
     }
     
     func updateUI() {
@@ -397,5 +403,13 @@ struct GraphDataStruct {
     var category: NewCategories
     var transactions: [TransactionsStruct]
     var value: Double
+    
+    var dict:[String:Any] {
+        return [
+            "category": category.dict,
+            "transactions": transactions.compactMap({$0.dictLocal}),
+            "value":value
+        ]
+    }
 }
 

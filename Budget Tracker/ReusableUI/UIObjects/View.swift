@@ -13,9 +13,7 @@ class View: UIView {
     
     @IBInspectable open var cornerRadius: CGFloat = 0 {
         didSet {
-            DispatchQueue.main.async {
-                self.layer.cornerRadius = self.cornerRadius
-            }
+            self.layer.cornerRadius = self.cornerRadius
         }
     }
     
@@ -55,9 +53,7 @@ class View: UIView {
     @IBInspectable open var linkBackground:Bool = false {
         didSet {
             if linkBackground {
-                DispatchQueue.main.async {
-                    self.backgroundColor = self.tintColor.withAlphaComponent(0.15)
-                }
+                self.backgroundColor = self.tintColor.withAlphaComponent(0.15)
             }
         }
     }

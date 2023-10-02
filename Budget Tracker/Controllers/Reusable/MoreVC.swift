@@ -214,7 +214,7 @@ class MoreVC: SuperViewController, UITableViewDelegate, UITableViewDataSource {
 class DataOptionCell: ClearCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
-    @IBOutlet weak var textField: UITextField!
+    @IBOutlet weak var textField: TextField!
     
     @IBOutlet weak var proView: UIView!
 

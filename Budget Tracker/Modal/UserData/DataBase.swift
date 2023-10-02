@@ -8,23 +8,23 @@
 
 import UIKit
 import Foundation
-var _db:[String:Any]?
+
 
 class DataBase {
-    
+    static var _db:[String:Any]?
     var db:[String:Any] {
         get {
-            if let db = _db {
+            if let db = DataBase._db {
                 return db
             } else {
                 let v = UserDefaults.standard.value(forKey: "DataBase") as? [String:Any] ?? [:]
-                _db = v
+                DataBase._db = v
                 return v
             }
             
         }
         set {
-            _db = newValue
+            DataBase._db = newValue
             UserDefaults.standard.setValue(newValue, forKey: "DataBase")
         }
     }

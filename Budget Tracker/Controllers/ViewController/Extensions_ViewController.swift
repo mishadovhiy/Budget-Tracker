@@ -234,67 +234,8 @@ extension ViewController {
         return (result, Int(amount))
     }
 
-    func dictToTable(_ dict:[String:[TransactionsStruct]]) -> [tableStuct] {
-        return dict.compactMap { (key: String, value: [TransactionsStruct]) in
-            let co = DateComponents()
-            let transactions = value.sorted { Double($0.value) ?? 0.0 < Double($1.value) ?? 0.0 }
-            let date = co.stringToDateComponent(s: key)
-            let amount = Int(amountForTransactions(transactions))
-            return .init(date:  date, amount: amount, transactions: transactions)
-        }
-    }
-    func dataToDict(_ transactions:[TransactionsStruct]) -> [String:[TransactionsStruct]] {
-        var result:[String:[TransactionsStruct]] = [:]
-        var i = 0
-        let totalCount = transactions.count
-        for trans in transactions {
-            self.calculations.balance += (Double(trans.value) ?? 0.0)
-            dataTaskCount = (i, totalCount)
-            i += 1
-            print(i)
-            if filterChanged {
-                return [:]
-            }
-            if trans.category.purpose != .debt {
-                if containsDay(curDay: trans.date) {
-                    var transForDay = result[trans.date] ?? []
-                    transForDay.append(trans)
-                    result.updateValue(transForDay, forKey: trans.date)
-                    
-                }
-            }
-        }
-        return result
-    }
     
-    private func amountForTransactions(_ transactions:[TransactionsStruct]) -> Double {
-        var result:Double = 0
-        var calcs:Calculations = .init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)
-        for transaction in transactions {
-            let amount = (Double(transaction.value) ?? 0.0)
-            result += amount
-            
-            if amount > 0 {
-                calcs.income += amount
-            } else {
-                calcs.expenses += amount
-            }
-            calcs.perioudBalance += amount
-            
-        }
-        let currentCalcs = calculations
-        calculations = .init(expenses: currentCalcs.expenses + calcs.expenses, income: currentCalcs.income + calcs.income, balance: calculations.balance, perioudBalance: currentCalcs.perioudBalance + calcs.perioudBalance)
-        return result
-    }
-    private func containsDay(curDay:String) -> Bool {
-        if appData.filter.showAll {
-            return true
-        } else {
-            return daysBetween.contains(curDay)
-
-        }
-        
-    }
+   
     
 
     func updateDataLabels(reloadAndAnimate: Bool = true, noData: Bool = false) {
@@ -366,8 +307,8 @@ extension ViewController {
     
     func tableDataLoaded(_ newValue:[tableStuct]) {
        
-        if filterChanged {
-            filterChanged = false
+        if transactionManager?.filterChanged ?? false{
+            transactionManager?.filterChanged = false
            // filter()
             
         } else {
@@ -418,6 +359,8 @@ extension ViewController {
         get { return _calculations }
         set {
             _calculations = newValue
+            print(newValue, " tgrfeweertgref")
+            transactionManager?.calculation = newValue
             DispatchQueue.main.async {
                 for label in self.self.ecpensesLabels {
                     label.text = "\(Int(newValue.expenses))"
@@ -584,9 +527,9 @@ extension ViewController {
         db.forEach { value in
             dbTotal += (Int(value.value) ?? 0)
         }
-        CalendarControlVC.shared?.values = resultt
+        calendar?.values = resultt
         DispatchQueue.main.async {
-            CalendarControlVC.shared?.collectionView.reloadData()
+            self.calendar?.collectionView.reloadData()
             self.mainContentView.isUserInteractionEnabled = true
         }
     }
@@ -648,6 +591,8 @@ extension ViewController {
     }
     
     func updateUI() {
+        self.calendar = self.createCalendar(calendarContainer, currentSelected: nil, selected: self.dateSelected(_:))
+        calendar?.monthChanged = self.monthSelected(_:_:)
         downloadFromDB(local: true)
         self.mainTableView.delegate = self
         self.mainTableView.dataSource = self
@@ -727,6 +672,7 @@ extension ViewController {
     var dataTaskCount: (Int, Int)? {
         get { return nil }
         set {
+            self.transactionManager?.dataTaskCount = newValue
             if let new = newValue {
                 let statusText = new.0 > 0 ? "\(new.0)/\(new.1)" : ""
                 DispatchQueue.main.async {
@@ -833,7 +779,7 @@ extension ViewController: TransitionVCProtocol {
             var monthA: Int = getMonthFrom(string: appData.filter.from)
             var yearA: Int = getYearFrom(string: appData.filter.from)
             
-            daysBetween = [appData.filter.from]
+            transactionManager?.daysBetween = [appData.filter.from]
             for _ in 0..<amount {
                 dayA += 1
                 if dayA == 32 {
@@ -845,15 +791,15 @@ extension ViewController: TransitionVCProtocol {
                     }
                 }
                 let new: String = "\(AppData.makeTwo(n: dayA)).\(AppData.makeTwo(n: monthA)).\(AppData.makeTwo(n: yearA))"
-                daysBetween.append(new) // was bellow break: last day in month wasnt displeying
+                transactionManager?.daysBetween.append(new) // was bellow break: last day in month wasnt displeying
                 if new == appData.filter.to {
                     break
                 }
                 
             }
         } else {
-            daysBetween.removeAll()
-            daysBetween.append(appData.filter.from)
+            transactionManager?.daysBetween.removeAll()
+            transactionManager?.daysBetween.append(appData.filter.from)
         }
         
     }

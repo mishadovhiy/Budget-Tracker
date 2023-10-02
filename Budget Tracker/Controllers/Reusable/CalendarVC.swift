@@ -14,6 +14,8 @@ protocol CalendarVCProtocol {
 
 class CalendarVC: SuperViewController {
     
+    @IBOutlet weak var monthLabel: UILabel!
+    @IBOutlet weak var calendarContainerView: UIView!
     //@IBOutlet weak var commentTextField: UITextField!
     //  @IBOutlet weak var reminderTimeLabel: UILabel!
     @IBOutlet weak var timePicker: UIDatePicker!
@@ -23,18 +25,15 @@ class CalendarVC: SuperViewController {
     var vcHeaderData: headerData?
     
     @IBOutlet weak var headerView: UIView!
-    @IBOutlet weak var collectionView: UICollectionView!
    // @IBOutlet weak var textField: UITextField!
     
-    @IBOutlet weak var textField: UITextField!
+//    @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var endButton: UIButton!
     @IBOutlet weak var buttonsStack: UIStackView!
     @IBOutlet weak var doneButton: UIButton!
     
-    @IBOutlet var weekDayLabels: [UILabel]!
-    @IBOutlet weak var weekDaySeparetorView: UIView!
-    
+
     var delegate: CalendarVCProtocol?
     var canSelectOnlyOne = false
     var selectedFrom = ""
@@ -64,14 +63,27 @@ class CalendarVC: SuperViewController {
         let height = self.view.frame.height
         startButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, height + self.startButton.layer.frame.height, 0)
         endButton.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, height + self.endButton.layer.frame.height, 0)
-        textField.layer.masksToBounds = true
-        textField.layer.cornerRadius = 5
-            textField.setPaddings(5)
+//        textField.layer.masksToBounds = true
+//        textField.layer.cornerRadius = 5
+//            textField.setPaddings(5)
         }
     }
+    
+    
+    var calendarVC:CalendarControlVC?
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        print(selectedFrom, " gterg4")
+        let date = self.dateFrom(sting: self.selectedFrom)?.toDateComponents()
+        calendarVC = createCalendar(calendarContainerView, currentSelected: date, selected: self.dateSelectedContainer(_:))
+        calendarVC?.monthChanged = { year, month in
+          //  let date = self.dateFrom(sting: "0.\(month.makeTwo()).\(year)")
+            DispatchQueue.main.async {
+                self.monthLabel.text = month.stringMonth + ", \(year)"
+            }
+        }
+        calendarVC?.higlightSelected = true
+        self.monthLabel.text = date == nil ? "" : (date?.month?.stringMonth ?? "-") + ", \(date?.year ?? 0)"
         if let pickerDate = datePickerDate {
             timePicker.alpha = 1
             timePicker.addTarget(self, action: #selector(dateSelected(_:)), for: .valueChanged)
@@ -152,9 +164,9 @@ class CalendarVC: SuperViewController {
                     doneButtonIsActive()
                     ifEndInvisible()
 
-                    DispatchQueue.main.async {
+         /*           DispatchQueue.main.async {
                         self.collectionView.reloadData()
-                    }
+                    }*/
                 } else {
                     selectedFrom = appData.filter.from
                     year = getYearFrom(string: selectedFrom)
@@ -163,9 +175,9 @@ class CalendarVC: SuperViewController {
                     doneIsActive = true
                     doneButtonIsActive()
                     ifEndInvisible()
-                    DispatchQueue.main.async {
-                        self.collectionView.reloadData()
-                    }
+//                    DispatchQueue.main.async {
+//                        self.collectionView.reloadData()
+//                    }
                 }
                 
                 
@@ -193,8 +205,8 @@ class CalendarVC: SuperViewController {
     
     let today = appData.filter.getToday()
     func updaiteUI() {
-        collectionView.delegate = self
-        collectionView.dataSource = self
+//        collectionView.delegate = self
+//        collectionView.dataSource = self
         let swipeLeft:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(swipeForward))
         swipeLeft.direction = .left;
         let swipeRight:UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(swipeBack))
@@ -236,9 +248,9 @@ class CalendarVC: SuperViewController {
         for i in 0..<numDays {
             days.append(i+1)
         }
-        DispatchQueue.main.async {
-            self.textField.text = "\(self.returnMonth(self.month)), \(self.year)"
-        }
+//        DispatchQueue.main.async {
+//            self.textField.text = "\(self.returnMonth(self.month)), \(self.year)"
+//        }
         
         
     }
@@ -272,9 +284,9 @@ class CalendarVC: SuperViewController {
             setYear()
             getDays()
         }
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
-        }
+//        DispatchQueue.main.async {
+//            self.collectionView.reloadData()
+//        }
         
         if selectedFrom != "" || selectedTo != "" {
             goButtonsTitle()
@@ -287,10 +299,10 @@ class CalendarVC: SuperViewController {
         month = month + 1
         setYear()
         getDays()
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
-        }
-        
+//        DispatchQueue.main.async {
+//            self.collectionView.reloadData()
+//        }
+//        
         if selectedFrom != "" || selectedTo != "" {
             goButtonsTitle()
         }
@@ -301,9 +313,9 @@ class CalendarVC: SuperViewController {
         month = month - 1
         setYear()
         getDays()
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
-        }
+//        DispatchQueue.main.async {
+//            self.collectionView.reloadData()
+//        }
         
         if selectedFrom != "" || selectedTo != "" {
             goButtonsTitle()
@@ -350,13 +362,13 @@ class CalendarVC: SuperViewController {
         
     }
     
-    func removeSelected(cell: CVCell) {
+    func removeSelected(cellType: String) {
         DispatchQueue.main.async {
-            if self.selectedTo == cell.cellTypeLabel.text {
+            if self.selectedTo == cellType {
                 self.selectedTo = ""
                 self.selectedToDayInt = 0
             }
-            if self.selectedFrom == cell.cellTypeLabel.text {
+            if self.selectedFrom == cellType {
                 if self.selectedTo != "" {
                     self.selectedFrom = self.selectedTo
                     self.selectedFromDayInt = self.selectedToDayInt
@@ -378,8 +390,13 @@ class CalendarVC: SuperViewController {
     func dateFrom(sting: String) -> Date? {
         print("dateFrom", sting)
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.mm.yyyy"
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        dateFormatter.locale = .init(identifier: "en_US")
+        dateFormatter.timeZone = .init(identifier: "America/New_York")
         let date = dateFormatter.date(from: sting)
+        
+        print("datedatedate", date)
+
         return date
     }
     
@@ -506,9 +523,9 @@ class CalendarVC: SuperViewController {
             year = getYearFrom(string: selectedTo)
         }
         getDays()
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
-        }
+//        DispatchQueue.main.async {
+//            self.collectionView.reloadData()
+//        }
         
         goButtonsTitle()
     }
@@ -676,6 +693,8 @@ class CalendarVC: SuperViewController {
         
     }
     
+    
+    
     var upToFour = (0,0)
     
     func containdInBetween(date: String) -> Bool {
@@ -691,112 +710,31 @@ class CalendarVC: SuperViewController {
         return result
     }
     
-    
-    
-}
-
-
-// collection
-extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return days.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView
-            .dequeueReusableCell(withReuseIdentifier: K.collectionCell, for: indexPath) as! CVCell
-        if indexPath.row == 0 {
-            upToFour = (0,0)
-        }
-        if upToFour.0 == 5 && upToFour.1 == 0 {
-            upToFour = (0, 1)
-        }
-        if upToFour.0 == 2 && upToFour.1 == 1 {
-            upToFour = (0,0)
-        }
-        print(upToFour, "upToFourupToFour")
-
-        cell.dayLabel.text = days[indexPath.row] != 0 ? "\(days[indexPath.row])" : ""
-        
-        let dayCell = AppData.makeTwo(n: days[indexPath.row])
-        let monthCell = AppData.makeTwo(n: month)
-        let yearCell = AppData.makeTwo(n: year)
-        cell.dayLabel.alpha = 1
-        cell.cellTypeLabel.text = "\(dayCell).\(monthCell).\(yearCell)"
-
-        DispatchQueue.main.async {
-            if self.selectedTo == "\(dayCell).\(monthCell).\(yearCell)" || self.selectedFrom == "\(dayCell).\(monthCell).\(yearCell)" {//|| self.containdInBetween(date: "\(dayCell).\(monthCell).\(yearCell)")
-                cell.backgroundCell.backgroundColor = K.Colors.link
-                cell.dayLabel.textColor = K.Colors.category//self.darkAppearence ? K.Colors.category : UIColor(named: "darkTableColor")
-            }else {
-                cell.backgroundCell.backgroundColor = self.view.backgroundColor //self.darkAppearence ? UIColor(named: "darkTableColor") : K.Colors.background
-                cell.dayLabel.textColor = K.Colors.category//self.darkAppearence ? K.Colors.category : UIColor(named: "darkTableColor")
-            }
-        }
-        
-       /* DispatchQueue.main.async {
-            for i in 0..<self.daysBetween.count {
-                if self.daysBetween[i] == cell.cellTypeLabel.text {
-                    cell.backgroundCell.backgroundColor = K.Colors.separetor
-                    cell.dayLabel.alpha = 0.2
-                }
-            }
-        }*/
-
-        
-        cell.dayLabel.alpha = upToFour.1 == 1 ? 0.3 : 1
-        if cell.cellTypeLabel.text == today {
-            DispatchQueue.main.async {
-                cell.dayLabel.textColor = K.Colors.negative
-                cell.dayLabel.alpha = 1
-            }
-        }
-        upToFour = (upToFour.0 + 1, upToFour.1)
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        DispatchQueue.main.async {
-            UIImpactFeedbackGenerator().impactOccurred()
-        }
-        let cell = collectionView.cellForItem(at: indexPath) as! CVCell
-        let dayCell = AppData.makeTwo(n: days[indexPath.row])
-        let monthCell = AppData.makeTwo(n: month)
-        let yearCell = AppData.makeTwo(n: year)
+    func dateSelectedContainer(_ date:DateComponents) {
+        let dayCell = date.day?.makeTwo() ?? "-"
+        let monthCell = date.month?.makeTwo() ?? "-"
+        let yearCell = date.year?.makeTwo() ?? "-"
+        let newSelected = "\(dayCell).\(monthCell).\(yearCell)"
         if needPressDone {
-            if cell.cellTypeLabel.text == selectedFrom || cell.cellTypeLabel.text == selectedTo {
-              /*  DispatchQueue.main.async {
-                    UIView.animate(withDuration: 0.3) {
-                        self.reminderTimeLabel.isHidden = true
-                        self.timePicker.alpha = 0.3
-                    }
-                }*/
-                removeSelected(cell: cell)
+            if newSelected == selectedFrom || newSelected == selectedTo {
+                removeSelected(cellType: newSelected)
             } else {
                 if selectedFrom == "" {
-                    
-                   /* DispatchQueue.main.async {
-                        UIView.animate(withDuration: 0.3) {
-                            self.reminderTimeLabel.isHidden = false
-                            self.timePicker.alpha = 1
-                        }
-                    }*/
-                    selectedFrom = "\(dayCell).\(monthCell).\(yearCell)"
-                    selectedFromDayInt = indexPath.row + 1
+                    selectedFrom = newSelected
+                    selectedFromDayInt = date.day ?? 0
                 } else {
                     if canSelectOnlyOne {
-                        selectedFrom = "\(dayCell).\(monthCell).\(yearCell)"
-                        selectedFromDayInt = indexPath.row + 1
+                        selectedFrom = newSelected
+                        selectedFromDayInt = date.day ?? 0
                     } else {
-                        selectedTo = "\(dayCell).\(monthCell).\(yearCell)"
-                        selectedToDayInt = indexPath.row + 1
+                        selectedTo = newSelected
+                        selectedToDayInt = date.day ?? 0
                     }
                     
                 }
                 ifToSmaller()
             }
             doneButtonIsActive()
-            
             DispatchQueue.init(label: "reloadCollection").async {
                 self.ifToSmaller()
                 if self.selectedFrom != "" && self.selectedTo != "" {
@@ -817,59 +755,21 @@ extension CalendarVC: UICollectionViewDelegate, UICollectionViewDataSource{
                 }
                 
                 
-                DispatchQueue.main.async {
-                    self.collectionView.reloadData()
-                }
+//                DispatchQueue.main.async {
+//                    self.collectionView.reloadData()
+//                }
             }
+        } else if delegate != nil && !needPressDone {
+            delegate?.dateSelected(date: newSelected, time: nil)
+            navigationController?.popToRootViewController(animated: true)
         } else {
-            if delegate != nil {
-                let day = cell.cellTypeLabel.text
-                if needPressDone {
-                    
-                } else {
-                    if let result = day {
-                        delegate?.dateSelected(date: result, time: nil)
-                        navigationController?.popToRootViewController(animated: true)
-                    }
-                }
-            }
+            delegate?.dateSelected(date: newSelected, time: nil)
         }
-
     }
-    
-    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-    
-        if selectedFrom != "" {
-            let text = "\(returnMonth((getMonthFrom(string: selectedFrom)))), \(getYearFrom(string: selectedFrom))"
-            
-            if textField.text == text {
-                toggleButton(b: startButton, hidden: true)
-            } else {
-                toggleButton(b: startButton, hidden: false)
-            }
-        } else {
-            toggleButton(b: startButton, hidden: true)
-        }
-        
-        if selectedTo != "" {
-            let text = "\(returnMonth((getMonthFrom(string: selectedTo)))), \(getYearFrom(string: selectedTo))"
-            
-            if textField.text == text {
-                toggleButton(b: endButton, hidden: true)
-            } else {
-                toggleButton(b: endButton, hidden: false)
-            }
-        } else {
-            toggleButton(b: endButton, hidden: true)
-        }
 
-    }
-    
-   
-    
-    
     
 }
+
 
 
 

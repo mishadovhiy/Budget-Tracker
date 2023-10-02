@@ -8,8 +8,6 @@
 
 import UIKit
 
-
-
 class DebtDescriptionCell: UITableViewCell {
     
     @IBOutlet weak var AlertDateStack: UIStackView!
@@ -21,9 +19,31 @@ class DebtDescriptionCell: UITableViewCell {
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var expiredDaysCount: UILabel!
     @IBOutlet weak var expiredStack: UIStackView!
+    @IBOutlet weak var changeButton: UIButton!
+    @IBOutlet weak var doneButton: UIButton!
     
+    var removeAction:(() -> ())?
+    var changeAction:(() -> ())?
     var cellPressed = false
     var _expired = false
+    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        changeButton.layer.cornerRadius = changeButton.layer.frame.width / 2
+        doneButton.layer.cornerRadius = doneButton.layer.frame.width / 2
+        
+    }
+    
+    @IBAction func changeDatePressed(_ sender: Any) {
+        self.removeAction?()
+    }
+    
+    @IBAction func doneDatePressed(_ sender: Any) {
+        AppDelegate.shared?.ai.show { _ in
+            self.changeAction?()
+        }
+    }
+    
     var expired:Bool {
         get {
             return _expired
@@ -35,39 +55,4 @@ class DebtDescriptionCell: UITableViewCell {
             }
         }
     }
-
-//    private let ai = AppDelegate.shared?.ai ?? IndicatorView.instanceFromNib() as! IndicatorView
-    
-    var removeAction:(() -> ())?
-    @IBAction func changeDatePressed(_ sender: Any) {//remove
-     //   DispatchQueue.main.async {
-          //  self.ai.show() { _ in
-                if let funcc = self.removeAction {
-                    funcc()
-                }
-           // }
-     //   }
-        
-
-    }
-    @IBOutlet weak var changeButton: UIButton!
-    @IBOutlet weak var doneButton: UIButton!
-    
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        changeButton.layer.cornerRadius = changeButton.layer.frame.width / 2
-        doneButton.layer.cornerRadius = doneButton.layer.frame.width / 2
-        
-    }
-    
-    var changeAction:(() -> ())?
-    @IBAction func doneDatePressed(_ sender: Any) {//change
-        AppDelegate.shared?.ai.show { _ in
-            if let funcc = self.changeAction {
-                funcc()
-            }
-        }
-    }
-    
-
 }

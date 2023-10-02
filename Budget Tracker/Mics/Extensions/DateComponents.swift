@@ -57,6 +57,14 @@ extension DateComponents {
         return nil
     }
     
+    var timeString:String {
+        return "\(hour?.makeTwo() ?? "01"):\(minute?.makeTwo() ?? "01")"
+    }
+    
+    var textDate:String {
+        return "\((self.month?.stringMonth ?? "").capitalized) \(self.day?.makeTwo() ?? "-"), \(self.year ?? 0)"
+    }
+    
     func toShortString(dateFormat:String="dd.MM.yyyy") -> String? {
         let day = AppData.makeTwo(int: self.day)
         let month = AppData.makeTwo(int: self.month)
@@ -103,11 +111,6 @@ extension DateComponents {
         }
     }
     
-    
-    var stringTime:String? {
-        let hour = AppData.makeTwo(n: self.hour)
-        let second = AppData.makeTwo(n: self.minute)
-        return "\(hour):\(second)"
-    }
+
 
 }

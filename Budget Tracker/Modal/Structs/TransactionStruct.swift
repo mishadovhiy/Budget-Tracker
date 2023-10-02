@@ -55,6 +55,19 @@ struct TransactionsStruct {
         }
         return result
     }
+    
+    var dictLocal:[String:Any] {
+        var result:[String:Any] = [
+            "CategoryId":categoryID,
+            "Amount":value,
+            "Date":date.stringToCompIso().textDate,
+            "Comment":comment
+        ]
+        if let reminder = reminder {
+            result.updateValue(reminder, forKey: "Reminder")
+        }
+        return result
+    }
 }
 
 extension TransactionsStruct {

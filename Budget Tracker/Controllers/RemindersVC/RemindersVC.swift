@@ -84,7 +84,7 @@ extension RemindersVC:UITableViewDelegate, UITableViewDataSource {
             let date = data.time
             cell.dayNumLabel.text = "\(AppData.makeTwo(n: date?.day))"
             cell.dateLabel.text = (date?.stringMonth ?? "") + "\n\(date?.year ?? 0)"
-            cell.timeLabel.text = date?.stringTime
+            cell.timeLabel.text = date?.timeString
             cell.expiredLabel.isHidden = !(date?.expired ?? false)
             cell.commentLabel.text = data.transaction.comment
             cell.categoryLabel.text = data.transaction.category.name

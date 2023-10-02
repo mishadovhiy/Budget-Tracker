@@ -26,6 +26,15 @@ extension UITableView {
             self.layer.shadowRadius = radius
         }
     }
+    func registerCell(_ types:[XibCell]) {
+        types.forEach({
+            self.register(UINib(nibName: $0.rawValue, bundle: nil), forCellReuseIdentifier: $0.rawValue)
+        })
+    }
+    
+    enum XibCell:String {
+        case amount = "AmountToPayCell"
+    }
     
 }
 

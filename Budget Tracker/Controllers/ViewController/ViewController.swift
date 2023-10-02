@@ -93,7 +93,7 @@ class ViewController: SuperViewController {
     var highesLoadedCatID: Int?
     var added = false
     var allData: [[TransactionsStruct]] = []
-    
+    var calendar:CalendarControlVC?
     var unsavedTransactionsCount = 0
     var selectedCell: IndexPath? = nil
     var animateCellWillAppear = true
@@ -103,7 +103,6 @@ class ViewController: SuperViewController {
     var lastWhiteBackheight = 0
     var openFiler = false
     var apiLoading = true
-    var filterChanged = false
     var newTableData: [tableStuct] {
         get { return _TableData }
         set {
@@ -114,6 +113,10 @@ class ViewController: SuperViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        transactionManager = .init()
+        transactionManager?.taskChanged = {
+            self.dataTaskCount = $0
+        }
         updateUI()
         
         pinchView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:))))
@@ -140,27 +143,25 @@ class ViewController: SuperViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         viewAppeared()
-        
-        if let v = CalendarControlVC.shared {
-            v.monthChanged = { year, month in
-                lastSelectedDate = nil
-                DispatchQueue.init(label: "local", qos: .userInitiated).async {
-                    appData.filter.showAll = false
-                    appData.filter.from = "\(appData.filter.makeTwo(n: 1)).\(appData.filter.makeTwo(n: month)).\(year)"
-                    appData.filter.to = "\(appData.filter.makeTwo(n: 31)).\(appData.filter.makeTwo(n: month)).\(year)"
-                    if !self.completedFiltering {
-                        self.filterChanged = true
-                    }
-                    self.filter()
-                }
+    }
+    
+    func monthSelected(_ year:Int, _ month:Int) {
+        lastSelectedDate = nil
+        DispatchQueue.init(label: "local", qos: .userInitiated).async {
+            appData.filter.showAll = false
+            appData.filter.from = "\(1.makeTwo()).\(month.makeTwo()).\(year)"
+            appData.filter.to = "\(31.makeTwo()).\(month.makeTwo()).\(year)"
+            if !self.completedFiltering {
+                self.transactionManager?.filterChanged = true
             }
-            v.dateSelected = { newDate in
-                self.vibrate()
-                self.calendarSelectedDate = newDate.toShortString()
-                self.toAddTransaction()
-            }
-            
+            self.filter()
         }
+    }
+    
+    func dateSelected(_ newDate:DateComponents) {
+        self.vibrate()
+        self.calendarSelectedDate = newDate.toShortString()
+        self.toAddTransaction()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -171,28 +172,15 @@ class ViewController: SuperViewController {
         
     }
     
-    func filtered(_ data:[TransactionsStruct]) -> [TransactionsStruct] {
-        let tod = appData.filter.fromDate
-        return data.filter { transaction in
-            return (transaction.date.stringToCompIso().year ?? 1) == (tod.year ?? 0)
-        }
-    }
+    var transactionManager:TransactionsManager?
+    
     var apiTransactions:[TransactionsStruct] = []
     func filter(data:[TransactionsStruct]? = nil) {
-        print(Thread.isMainThread, " nhrtgerfwdqwsadsvfdghr")
         completedFiltering = false
         print("filterCalled")
         let showAll = appData.filter.showAll
-        let tod = appData.filter.fromDate
-//        let filterPeriod = (tod.month?.stringMonth ?? "-").capitalized + ", \(tod.year ?? 0)"
-        let all = self.filtered(apiTransactions)
-     //   DispatchQueue.main.async {
-            //self.filterText = "Filtering".localize
-            
-            self.filterText = (showAll ? "All transactions".localize : appData.filter.periodText)
-   //     }
-        
-
+        let all = transactionManager?.filtered(apiTransactions) ?? []
+        self.filterText = (showAll ? "All transactions".localize : appData.filter.periodText)
         tableData = all
         prepareFilterOptions(all)
         
@@ -204,17 +192,12 @@ class ViewController: SuperViewController {
         if !appData.filter.showAll {
             allDaysBetween()
         }
-        let transactions = (data ?? tableData).sorted{ $0.dateFromString < $1.dateFromString }
-        
-        let filtered = dataToDict(transactions)
-        newTableData = dictToTable(filtered).sorted{
-            Calendar.current.date(from: $0.date ) ?? Date.distantFuture >
-                    Calendar.current.date(from: $1.date ) ?? Date.distantFuture
-        }
+        newTableData = transactionManager?.new(transactions: all) ?? []
+        self.calculations = transactionManager!.calculation!
         self.monthTransactions.removeAll()
-        newTableData.forEach { tr in
-            tr.transactions.forEach { transaction in
-                self.monthTransactions.append(transaction)
+        newTableData.forEach {
+            $0.transactions.forEach {
+                self.monthTransactions.append($0)
             }
             
         }
@@ -284,7 +267,6 @@ class ViewController: SuperViewController {
     
     var monthTransactions:[TransactionsStruct] = []
     var totalBalance = 0.0
-    var daysBetween = [""]
     var selectedFromDayInt = 0
     var selectedToDayInt = 0
     var editingTransaction: TransactionsStruct?
@@ -399,22 +381,6 @@ class ViewController: SuperViewController {
     }
     
     @IBAction func filterPressed(_ sender: UIButton) {
-      /*  DispatchQueue.main.async {
-            UIView.animate(withDuration: 0.3) {
-                self.filterTextLabel.alpha = 0.2
-            }
-            self.performSegue(withIdentifier: "toFiterVC", sender: self)
-        }*/
-     //   if self._filterText == "Filter".localize + ": \(appData.filter.selectedPeroud)" {
-      /*  } else {
-            DispatchQueue.main.async {
-                self.openFiler = true
-                UIImpactFeedbackGenerator().impactOccurred()
-                UIView.animate(withDuration: 0.23) {
-                    self.filterTextLabel.alpha = 1
-                }
-            }
-        }*/
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {

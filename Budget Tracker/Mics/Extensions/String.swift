@@ -15,6 +15,17 @@ extension String {
     }
     
     
+    func calculate(font:UIFont? = nil, inWindth:CGFloat? = nil) -> CGSize {
+        let fontSize = font ?? UIFont.systemFont(ofSize: 16.0)
+        let defaultWidth = AppDelegate.shared?.window?.frame.width ?? 100
+        let textAttributes: [NSAttributedString.Key: Any] = [.font: fontSize]
+        let attributedText = NSAttributedString(string: self, attributes: textAttributes)
+
+        let boundingRect = attributedText.boundingRect(with: CGSize(width: inWindth ?? defaultWidth, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, context: nil)
+
+        return CGSize(width: ceil(boundingRect.size.width), height: ceil(boundingRect.size.height))
+
+    }
 
     
     func slice(from: String, to: String) -> String? {
@@ -35,7 +46,40 @@ extension String {
 
 
 extension String {
-    //time
+    var isAllNumbers:Bool {
+        var result = true
+        self.forEach {
+            if !$0.isNumber {
+                result = false
+            }
+        }
+        return result
+    }
+    
+    var isAllLetters:Bool {
+        var ok = true
+        self.forEach({
+            if !$0.isLetter {
+                ok = false
+            }
+        })
+        return ok
+    }
+    
+    var isAllEnglishLetters:Bool {
+        var ok = true
+        self.forEach({
+            if !$0.isLetter {
+                ok = false
+            }
+            if ok, let sc = $0.unicodeScalars.first,
+               !CharacterSet.letters.contains(sc)
+            {
+                ok = false
+            }
+        })
+        return ok
+    }
     func stringToCompIso(dateFormat:String="dd.MM.yyyy") -> DateComponents {
         if let date = self.iso8601withFractionalSeconds {
             return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
@@ -80,7 +124,7 @@ extension Int {
         guard let res = months[self] else {
             return "\(self)"
         }
-        return res.localize
+        return res.localize.capitalized
     }
     
     func makeTwo() -> String {
@@ -99,3 +143,14 @@ extension CGFloat {
         return self >= min ? self : min
     }
 }
+
+extension Double {
+    var positive:Double {
+        if self <= 0 {
+            return self * -1
+        } else {
+            return self
+        }
+    }
+}
+

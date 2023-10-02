@@ -12,8 +12,8 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
         switch section {
-        case 1: return selectedCategory?.purpose != .debt ? 0 : 1
-        case 0: return selectedCategory?.amountToPay != nil || amountToPayEditing ? 1 : 0
+        case 1: return 1//selectedCategory?.purpose != .debt ? 0 : 1
+        case 0: return (selectedCategory?.amountToPay ?? selectedCategory?.monthLimit) != nil || amountToPayEditing ? 1 : 0
         case 2: return historyDataStruct.count == 0 ? 1 : historyDataStruct.count
         default:
             return 0
@@ -80,41 +80,12 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             return cell
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "AmountToPayCell") as! AmountToPayCell
-    
-            let amToPay = Int(selectedCategory?.amountToPay ?? 0.0)
-            
-            let progress = amToPay == 0 ? 0 : (totalExpenses * -1) / (selectedCategory?.amountToPay ?? 0.0)
-            print(progress)
-       //     let hideButtons = calendarAmountPressed.1 ? (amountToPayEditing ? true : (selectedCategory?.amountToPay == nil ? true : false)) : true
-            
-            let removeAmountAction = {
-                self.removeAmountToPay()
-            }
-            
-            cell.deleteFunc = removeAmountAction
-            
-            let changeFunc = {
-     //           cell.amountToPayTextField.tag = self.amountToPayTFTag
-                self.amountToPayEditing = true
-              //  self.calendarAmountPressed = (false,false)
-
-            }
-           // if self.amountToPayEditing {
-            cell.editingStack.alpha = calendarAmountPressed.1 ?? false ? 1 : 0
-           // }
-            cell.changeFunc = changeFunc
-            cell.isEdit = amountToPayEditing
-          //  cell.amountToPayTextField.delegate = self
-            let tEx = Int(totalExpenses)
-            cell.totalLabel.text = "\(tEx * (-1))"
-            cell.restAmountLabel.text = "\(amToPay + tEx)"
-            cell.amountToPayLabel.text = "\(amToPay)"
-            cell.progressBar.progress = Float(progress)
-            cell.progressBar.progressTintColor = AppData.colorNamed(selectedCategory?.color)
-            cell.progressBar.isHidden = amToPay == 0
-      //      cell.amountToPayTextField.isHidden = !amountToPayEditing
-  //          cell.amountToPayLabel.isHidden = amountToPayEditing
-           // cell.editingStack.isHidden = !(calendarAmountPressed.0 ?? false)
+            cell.set(selectedCategory, 
+                     changeAmountState: calendarAmountPressed,
+                     catTotal: selectedCategory?.purpose == .debt ? totalExpenses : thisMonthTotal,
+                     isEditing: amountToPayEditing,
+                     changePressed: {self.amountToPayEditing = true},
+                     removePressed: removeAmountToPay)
             return cell
             
             
@@ -168,10 +139,9 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
                 switch self.mainType {
                 case .localData, .allData:
-                    if let cat = self.selectedCategory {
+                    if let _ = self.selectedCategory {
                         self.db.deleteTransaction(transaction: self.historyDataStruct[indexPath.row], local: true)
                         self.historyDataStruct.remove(at: indexPath.row)
-                       //here self.historyDataStruct = self.db.transactions(for: cat, local: true)
                         self.totalSumm = Int(self.totalSum())
                         DispatchQueue.main.async {
                             self.tableView.reloadData()
@@ -183,8 +153,10 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                     delete.newTransaction(self.historyDataStruct[indexPath.row]) { _ in
                         self.historyDataStruct.remove(at: indexPath.row)
                         self.totalSumm = Int(self.totalSum())
+                        
                         DispatchQueue.main.async {
-                            self.tableView.reloadData()
+                            self.calcMonthlyLimits()
+                            //self.tableView.reloadData()
                         }
                     }
                 default :
@@ -197,7 +169,6 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             deleteAction.backgroundColor = K.Colors.primaryBacground
             return historyDataStruct.count == 0 ? nil : UISwipeActionsConfiguration(actions: allowEditing && mainType != .unsaved ? [deleteAction] : [])
         } else {
-            //check if debts has total amount
             return nil
         }
     }
@@ -211,37 +182,19 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
         }
         
         if mainType  == .db {
-            if indexPath.section == 0 {
-               /* DispatchQueue.main.async {
-                    if self.selectedCategory?.purpose != .debt {
-                        return
-                    }
-                    if self.selectedCategory?.amountToPay ?? 0.0 != 0.0 && !self.calendarAmountPressed.1 {
-                        let isPressed = self.calendarAmountPressed.1 ? false : true
-                        print(isPressed, "isPressedisPressedisPressed")
-                        self.calendarAmountPressed = (false, isPressed)
-                        tableView.reloadData()
-                    } else {
-                        self.calendarAmountPressed = (false,false)
-                        tableView.reloadData()
-                    }
-                }*/
-            } else {
-                if indexPath.section == 1 {
-                    if self.selectedCategory?.dueDate != nil && !self.calendarAmountPressed.0 {
-                        let isPressed = calendarAmountPressed.0 ? false : true
-                        print(isPressed, "isPressedisPressedisPressed")
-                        calendarAmountPressed = (isPressed, false)
-                        tableView.reloadData()
-                    } else {
-                        calendarAmountPressed = (false,false)
-                        tableView.reloadData()
-                    }
+            if indexPath.section == 1 {
+                if self.selectedCategory?.dueDate != nil && !self.calendarAmountPressed.0 {
+                    let isPressed = calendarAmountPressed.0 ? false : true
+                    print(isPressed, "isPressedisPressedisPressed")
+                    calendarAmountPressed = (isPressed, false)
+                    tableView.reloadData()
                 } else {
                     calendarAmountPressed = (false,false)
                     tableView.reloadData()
                 }
-                
+            } else {
+                calendarAmountPressed = (false,false)
+                tableView.reloadData()
             }
         }
     }
@@ -282,7 +235,8 @@ extension HistoryVC: TransitionVCProtocol {
                             self.historyDataStruct = self.db.transactions(for: category)
                             self.totalSumm = Int(self.totalSum())
                             DispatchQueue.main.async {
-                                self.tableView.reloadData()
+                                self.calcMonthlyLimits()
+                               // self.tableView.reloadData()
                             }
                         }
 

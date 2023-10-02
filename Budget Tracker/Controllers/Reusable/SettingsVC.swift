@@ -13,10 +13,10 @@ class SettingsVC: SuperViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var tableData:[TableData]  = []
-    
+    var additionalData:[TableData]?
 
     func loadData() {
-        let dataModel = AppSettingsData(vc: self)
+        let dataModel = AppSettingsData(vc: self, data: additionalData)
         tableData = dataModel.getData()
         DispatchQueue.main.async {
             self.tableView.reloadData()
@@ -212,4 +212,14 @@ class TriggerSettingsCell: UITableViewCell {
         }
     }
     @IBOutlet weak var valueSwitcher: UISwitch!
+}
+
+
+extension SettingsVC {
+    static func configure(additionalData:[TableData]? = nil) -> SettingsVC {
+        let storyboard = UIStoryboard(name: "LogIn", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "SettingsVC") as! SettingsVC
+        vc.additionalData = additionalData
+        return vc
+    }
 }

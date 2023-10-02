@@ -12,18 +12,25 @@ import UIKit
 
 class AppSettingsData {
     
+    private var specialData:[SettingsVC.TableData]? = nil
     let vc:SettingsVC
-    init(vc:SettingsVC) {
+    init(vc:SettingsVC, data:[SettingsVC.TableData]? = nil) {
         self.vc = vc
+        self.specialData = data
     }
     
     func getData() -> [SettingsVC.TableData] {
-        let data = [
-            SettingsVC.TableData(sectionTitle: "Appearance".localize, cells: appearenceSection()),
-            SettingsVC.TableData(sectionTitle: "Security".localize, cells: privacySection()),
-            SettingsVC.TableData(sectionTitle: "", cells: otherSection())
-        ]
-        return data
+        if let data = specialData {
+            return data
+        } else {
+            let data = [
+                SettingsVC.TableData(sectionTitle: "Appearance".localize, cells: appearenceSection()),
+                SettingsVC.TableData(sectionTitle: "Security".localize, cells: privacySection()),
+                SettingsVC.TableData(sectionTitle: "", cells: otherSection())
+            ]
+            return data
+        }
+        
     }
     
     
@@ -132,6 +139,27 @@ class AppSettingsData {
         
         })
         
+        let appShortcodes = SettingsVC.StandartCell(title: "Application ShortCode Actions", action: {
+            let ignoring = DataBase().viewControllers.ignoredActionTypes
+            let cells:[SettingsVC.TriggerCell] = AppDelegate.ShortCodeItem.allCases.compactMap({ item in
+                return .init(title: item.item.title, isOn: !ignoring.contains(item.rawValue), action: { isOn in
+                    DispatchQueue(label: "db", qos: .userInitiated).async {
+                        if isOn {
+                            DataBase().viewControllers.ignoredActionTypes.removeAll(where: {$0.contains(item.rawValue)})
+                        } else {
+                            DataBase().viewControllers.ignoredActionTypes.append(item.rawValue)
+                        }
+                        DispatchQueue.main.async {
+                            AppDelegate.shared?.setQuickActions()
+                        }
+                    }
+                })
+            })
+            
+            self.vc.navigationController!.pushViewController(SettingsVC.configure(additionalData: [.init(sectionTitle: "Quick homescreen actions", cells: cells)]), animated: true)
+            
+        })
+        
         let pprivacyTitle = "Privacy policy".localize
         let privacy = SettingsVC.StandartCell(title: pprivacyTitle, action: {
             DispatchQueue.main.async {
@@ -148,9 +176,9 @@ class AppSettingsData {
         })
 
         if appData.devMode {
-            return [supportCell, privacy, devSupport, otherCell, testPro]
+            return [supportCell, privacy, devSupport, otherCell, testPro, appShortcodes]
         } else {
-            return [supportCell, privacy, devSupport, otherCell]
+            return [supportCell, privacy, devSupport, otherCell, appShortcodes]
         }
 
     }
@@ -210,3 +238,4 @@ extension AppSettingsData {
         self.vc.toEnterValue(data: screenData)
     }
 }
+
