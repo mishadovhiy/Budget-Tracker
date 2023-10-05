@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -62,7 +62,7 @@
 		8BC8525027E28D0F00C5A3A4 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BC8524F27E28D0F00C5A3A4 /* UserSettings.swift */; };
 		8BD17F7027F54B6C008D9D57 /* NoRemindersCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD17F6F27F54B6B008D9D57 /* NoRemindersCell.swift */; };
 		8BD2E77C25B8622100D4DFBF /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */; };
-		8BD3A3D927E4097400547022 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD3A3D827E4097400547022 /* View.swift */; };
+		8BD3A3D927E4097400547022 /* BasicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD3A3D827E4097400547022 /* BasicView.swift */; };
 		8BE60E5927726EA8007B7FB3 /* LastSelected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE60E5827726EA8007B7FB3 /* LastSelected.swift */; };
 		8BF58D1D277C78B7005A7F38 /* ProViewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF58D1C277C78B7005A7F38 /* ProViewVC.swift */; };
 		8BF58D1F277C793D005A7F38 /* BuyPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF58D1E277C793D005A7F38 /* BuyPageVC.swift */; };
@@ -89,6 +89,14 @@
 		8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5206662421695200772CD5 /* StatisticBrain.swift */; };
 		8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D52066824216A2900772CD5 /* StatisticVC.swift */; };
 		8D52066B24216A6200772CD5 /* HistoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D52066A24216A6200772CD5 /* HistoryVC.swift */; };
+		8D5C62542ACF4FA2005D68B0 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D5C62532ACF4FA2005D68B0 /* WidgetKit.framework */; };
+		8D5C62562ACF4FA2005D68B0 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D5C62552ACF4FA2005D68B0 /* SwiftUI.framework */; };
+		8D5C62592ACF4FA2005D68B0 /* BudgetTrackerCalendatWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5C62582ACF4FA2005D68B0 /* BudgetTrackerCalendatWidgetBundle.swift */; };
+		8D5C625B2ACF4FA2005D68B0 /* BudgetTrackerCalendatWidgetLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5C625A2ACF4FA2005D68B0 /* BudgetTrackerCalendatWidgetLiveActivity.swift */; };
+		8D5C625D2ACF4FA2005D68B0 /* BudgetTrackerCalendatWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5C625C2ACF4FA2005D68B0 /* BudgetTrackerCalendatWidget.swift */; };
+		8D5C625F2ACF4FA2005D68B0 /* AppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5C625E2ACF4FA2005D68B0 /* AppIntent.swift */; };
+		8D5C62612ACF4FA5005D68B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D5C62602ACF4FA5005D68B0 /* Assets.xcassets */; };
+		8D5C62652ACF4FA5005D68B0 /* BudgetTrackerCalendatWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8D5C62522ACF4FA2005D68B0 /* BudgetTrackerCalendatWidgetExtension.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8D834D9C297E03D60056E686 /* CalendarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D834D96297E03D60056E686 /* CalendarModel.swift */; };
 		8D834D9D297E03D60056E686 /* UICollectionViewDelegate_CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D834D98297E03D60056E686 /* UICollectionViewDelegate_CalendarVC.swift */; };
 		8D834D9E297E03D60056E686 /* DaysCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D834D99297E03D60056E686 /* DaysCollectionCell.swift */; };
@@ -125,6 +133,16 @@
 		8DF9DCD42815AAD000C7BFA0 /* ExtensionGADBannerViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF9DCD32815AAD000C7BFA0 /* ExtensionGADBannerViewDelegate.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		8D5C62632ACF4FA5005D68B0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8DBA7E4423F0316F00D8214C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8D5C62512ACF4FA2005D68B0;
+			remoteInfo = BudgetTrackerCalendatWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		8BA57844261F617700C48524 /* Embed Watch Content */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -134,6 +152,17 @@
 			files = (
 			);
 			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8D5C62672ACF4FA5005D68B0 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				8D5C62652ACF4FA5005D68B0 /* BudgetTrackerCalendatWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		8DB7C441284E8D1B001DBFB7 /* Embed Frameworks */ = {
@@ -207,7 +236,7 @@
 		8BC8524F27E28D0F00C5A3A4 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		8BD17F6F27F54B6B008D9D57 /* NoRemindersCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoRemindersCell.swift; sourceTree = "<group>"; };
 		8BD2E77B25B8622100D4DFBF /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		8BD3A3D827E4097400547022 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
+		8BD3A3D827E4097400547022 /* BasicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicView.swift; sourceTree = "<group>"; };
 		8BE60E5827726EA8007B7FB3 /* LastSelected.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastSelected.swift; sourceTree = "<group>"; };
 		8BF58D1C277C78B7005A7F38 /* ProViewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProViewVC.swift; sourceTree = "<group>"; };
 		8BF58D1E277C793D005A7F38 /* BuyPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyPageVC.swift; sourceTree = "<group>"; };
@@ -234,6 +263,16 @@
 		8D5206662421695200772CD5 /* StatisticBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticBrain.swift; sourceTree = "<group>"; };
 		8D52066824216A2900772CD5 /* StatisticVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticVC.swift; sourceTree = "<group>"; };
 		8D52066A24216A6200772CD5 /* HistoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryVC.swift; sourceTree = "<group>"; };
+		8D5C62522ACF4FA2005D68B0 /* BudgetTrackerCalendatWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BudgetTrackerCalendatWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D5C62532ACF4FA2005D68B0 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		8D5C62552ACF4FA2005D68B0 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		8D5C62582ACF4FA2005D68B0 /* BudgetTrackerCalendatWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetTrackerCalendatWidgetBundle.swift; sourceTree = "<group>"; };
+		8D5C625A2ACF4FA2005D68B0 /* BudgetTrackerCalendatWidgetLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetTrackerCalendatWidgetLiveActivity.swift; sourceTree = "<group>"; };
+		8D5C625C2ACF4FA2005D68B0 /* BudgetTrackerCalendatWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetTrackerCalendatWidget.swift; sourceTree = "<group>"; };
+		8D5C625E2ACF4FA2005D68B0 /* AppIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntent.swift; sourceTree = "<group>"; };
+		8D5C62602ACF4FA5005D68B0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8D5C62622ACF4FA5005D68B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8D5C62662ACF4FA5005D68B0 /* BudgetTrackerCalendatWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BudgetTrackerCalendatWidgetExtension.entitlements; sourceTree = "<group>"; };
 		8D834D96297E03D60056E686 /* CalendarModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarModel.swift; sourceTree = "<group>"; };
 		8D834D98297E03D60056E686 /* UICollectionViewDelegate_CalendarVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UICollectionViewDelegate_CalendarVC.swift; sourceTree = "<group>"; };
 		8D834D99297E03D60056E686 /* DaysCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DaysCollectionCell.swift; sourceTree = "<group>"; };
@@ -271,6 +310,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		8D5C624F2ACF4FA2005D68B0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D5C62562ACF4FA2005D68B0 /* SwiftUI.framework in Frameworks */,
+				8D5C62542ACF4FA2005D68B0 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8DBA7E4923F0316F00D8214C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -296,6 +344,8 @@
 				8B633131260FDB3900D9E117 /* StoreKit.framework */,
 				8DECAFC02460461F0041B734 /* CloudKit.framework */,
 				5F84A1AEB24B0EC857F848E0 /* Pods_Budget_Tracker.framework */,
+				8D5C62532ACF4FA2005D68B0 /* WidgetKit.framework */,
+				8D5C62552ACF4FA2005D68B0 /* SwiftUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -592,7 +642,7 @@
 			isa = PBXGroup;
 			children = (
 				8BC31D7A27E3E5EA00FBC939 /* Button.swift */,
-				8BD3A3D827E4097400547022 /* View.swift */,
+				8BD3A3D827E4097400547022 /* BasicView.swift */,
 				8DD89D8223F1468E00273904 /* mainVCcell.swift */,
 				8D834DA1297E05530056E686 /* TouchView.swift */,
 				8B26328127E677930086C3A8 /* Label.swift */,
@@ -688,6 +738,19 @@
 			path = AppDelegate;
 			sourceTree = "<group>";
 		};
+		8D5C62572ACF4FA2005D68B0 /* BudgetTrackerCalendatWidget */ = {
+			isa = PBXGroup;
+			children = (
+				8D5C62582ACF4FA2005D68B0 /* BudgetTrackerCalendatWidgetBundle.swift */,
+				8D5C625A2ACF4FA2005D68B0 /* BudgetTrackerCalendatWidgetLiveActivity.swift */,
+				8D5C625C2ACF4FA2005D68B0 /* BudgetTrackerCalendatWidget.swift */,
+				8D5C625E2ACF4FA2005D68B0 /* AppIntent.swift */,
+				8D5C62602ACF4FA5005D68B0 /* Assets.xcassets */,
+				8D5C62622ACF4FA5005D68B0 /* Info.plist */,
+			);
+			path = BudgetTrackerCalendatWidget;
+			sourceTree = "<group>";
+		};
 		8D834D95297E03D60056E686 /* CalendarControlVC */ = {
 			isa = PBXGroup;
 			children = (
@@ -719,7 +782,9 @@
 		8DBA7E4323F0316F00D8214C = {
 			isa = PBXGroup;
 			children = (
+				8D5C62662ACF4FA5005D68B0 /* BudgetTrackerCalendatWidgetExtension.entitlements */,
 				8DBA7E4E23F0316F00D8214C /* Budget Tracker */,
+				8D5C62572ACF4FA2005D68B0 /* BudgetTrackerCalendatWidget */,
 				8DBA7E4D23F0316F00D8214C /* Products */,
 				86F76BBA55B21BFA5830DEF2 /* Pods */,
 				12BEBFEE107B283AE300DAF3 /* Frameworks */,
@@ -730,6 +795,7 @@
 			isa = PBXGroup;
 			children = (
 				8DBA7E4C23F0316F00D8214C /* Budget Tracker.app */,
+				8D5C62522ACF4FA2005D68B0 /* BudgetTrackerCalendatWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -816,6 +882,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		8D5C62512ACF4FA2005D68B0 /* BudgetTrackerCalendatWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8D5C626A2ACF4FA5005D68B0 /* Build configuration list for PBXNativeTarget "BudgetTrackerCalendatWidgetExtension" */;
+			buildPhases = (
+				8D5C624E2ACF4FA2005D68B0 /* Sources */,
+				8D5C624F2ACF4FA2005D68B0 /* Frameworks */,
+				8D5C62502ACF4FA2005D68B0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BudgetTrackerCalendatWidgetExtension;
+			productName = BudgetTrackerCalendatWidgetExtension;
+			productReference = 8D5C62522ACF4FA2005D68B0 /* BudgetTrackerCalendatWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		8DBA7E4B23F0316F00D8214C /* Budget Tracker */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8DBA7E6323F0317100D8214C /* Build configuration list for PBXNativeTarget "Budget Tracker" */;
@@ -827,10 +910,12 @@
 				91E877923E02E04E742F617F /* [CP] Embed Pods Frameworks */,
 				8BA57844261F617700C48524 /* Embed Watch Content */,
 				8DB7C441284E8D1B001DBFB7 /* Embed Frameworks */,
+				8D5C62672ACF4FA5005D68B0 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				8D5C62642ACF4FA5005D68B0 /* PBXTargetDependency */,
 			);
 			name = "Budget Tracker";
 			packageProductDependencies = (
@@ -847,10 +932,13 @@
 		8DBA7E4423F0316F00D8214C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1230;
+				LastSwiftUpdateCheck = 1500;
 				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = "Misha Dovhiy";
 				TargetAttributes = {
+					8D5C62512ACF4FA2005D68B0 = {
+						CreatedOnToolsVersion = 15.0;
+					};
 					8DBA7E4B23F0316F00D8214C = {
 						CreatedOnToolsVersion = 11.3.1;
 						LastSwiftMigration = 1320;
@@ -858,7 +946,7 @@
 				};
 			};
 			buildConfigurationList = 8DBA7E4723F0316F00D8214C /* Build configuration list for PBXProject "Budget Tracker" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -876,11 +964,20 @@
 			projectRoot = "";
 			targets = (
 				8DBA7E4B23F0316F00D8214C /* Budget Tracker */,
+				8D5C62512ACF4FA2005D68B0 /* BudgetTrackerCalendatWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		8D5C62502ACF4FA2005D68B0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D5C62612ACF4FA5005D68B0 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8DBA7E4A23F0316F00D8214C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -943,6 +1040,17 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		8D5C624E2ACF4FA2005D68B0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D5C625B2ACF4FA2005D68B0 /* BudgetTrackerCalendatWidgetLiveActivity.swift in Sources */,
+				8D5C625F2ACF4FA2005D68B0 /* AppIntent.swift in Sources */,
+				8D5C62592ACF4FA2005D68B0 /* BudgetTrackerCalendatWidgetBundle.swift in Sources */,
+				8D5C625D2ACF4FA2005D68B0 /* BudgetTrackerCalendatWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8DBA7E4823F0316F00D8214C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1020,7 +1128,7 @@
 				8B78559C27F0C9F200169A93 /* RemindersVC.swift in Sources */,
 				8B91F08E27E587A800B74F5A /* MoreOptionsData.swift in Sources */,
 				8B52DFEA2750232D00595A0C /* NumbersView.swift in Sources */,
-				8BD3A3D927E4097400547022 /* View.swift in Sources */,
+				8BD3A3D927E4097400547022 /* BasicView.swift in Sources */,
 				8B78559F27F0CA2A00169A93 /* ReminderCell.swift in Sources */,
 				8D08FD532AC9CCE000BA0222 /* TransactionsManager.swift in Sources */,
 				8D834DA0297E03D60056E686 /* CalendarControlVC.swift in Sources */,
@@ -1050,6 +1158,15 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8D5C62642ACF4FA5005D68B0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilter = ios;
+			target = 8D5C62512ACF4FA2005D68B0 /* BudgetTrackerCalendatWidgetExtension */;
+			targetProxy = 8D5C62632ACF4FA5005D68B0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		8B331AF927E4105C0093BF72 /* LogIn.storyboard */ = {
@@ -1087,6 +1204,79 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		8D5C62682ACF4FA5005D68B0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_ENTITLEMENTS = BudgetTrackerCalendatWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FQA2XH9ZUM;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BudgetTrackerCalendatWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BudgetTrackerCalendatWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2023 Misha Dovhiy. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker.BudgetTrackerCalendatWidget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8D5C62692ACF4FA5005D68B0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_ENTITLEMENTS = BudgetTrackerCalendatWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = FQA2XH9ZUM;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BudgetTrackerCalendatWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BudgetTrackerCalendatWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2023 Misha Dovhiy. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker.BudgetTrackerCalendatWidget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		8DBA7E6123F0317100D8214C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1207,26 +1397,27 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4495115F0F67B3D07EA6B233 /* Pods-Budget Tracker.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.7;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 15;
+				MARKETING_VERSION = 26;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTS_MACCATALYST = YES;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6";
@@ -1237,26 +1428,27 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 60EB2258A12489890A827616 /* Pods-Budget Tracker.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12;
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 14.7;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 15;
+				MARKETING_VERSION = 26;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTS_MACCATALYST = YES;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,6";
 			};
@@ -1265,6 +1457,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		8D5C626A2ACF4FA5005D68B0 /* Build configuration list for PBXNativeTarget "BudgetTrackerCalendatWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8D5C62682ACF4FA5005D68B0 /* Debug */,
+				8D5C62692ACF4FA5005D68B0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		8DBA7E4723F0316F00D8214C /* Build configuration list for PBXProject "Budget Tracker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

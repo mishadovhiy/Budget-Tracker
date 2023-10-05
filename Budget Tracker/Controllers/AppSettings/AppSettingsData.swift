@@ -176,7 +176,7 @@ class AppSettingsData {
         })
 
         if appData.devMode {
-            return [supportCell, privacy, devSupport, otherCell, testPro, appShortcodes]
+            return [supportCell, privacy, devSupport, otherCell, appShortcodes]
         } else {
             return [supportCell, privacy, devSupport, otherCell, appShortcodes]
         }

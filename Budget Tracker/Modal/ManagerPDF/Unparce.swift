@@ -17,15 +17,16 @@ extension ManagerPDF {
             array.forEach({
                 let date = $0["Date"] as? String ?? "Unknown date"
                 let amount = $0["Amount"] as? String ?? "-"
-               // let comment = ""//(($0["Comment"] as? String) ?? "") != "" ? "(\($0["Comment"] ?? ""))" : ""
+                let comment = (($0["Comment"] as? String) ?? "") != "" ? "\($0["Comment"] ?? "")" : ""
                 text.append(.init(string: "\(amount)", attributes: [.foregroundColor:self.color,
                     .font:UIFont.systemFont(ofSize: 12, weight: .light
                                            )]))
-                text.append(.init(string: " (\(date))\n", attributes: [
+                text.append(.init(string: " (\(date)) \(comment)\n", attributes: [
                     .font: UIFont.systemFont(ofSize: 9, weight: .light),
                     .foregroundColor:K.Colors.balanceT!.cgColor
                                            
                 ]))
+                
             })
             return text
         }
@@ -55,7 +56,7 @@ extension ManagerPDF {
                         text.append(cat)
                         text.append(.init(string: "\n"))
                         text.append(trans)
-                        text.append(.init(string: "Total: \(val ?? "")\n\n", attributes: [
+                        text.append(.init(string: "Total: \(val ?? "")\n\n\n", attributes: [
                             .font:UIFont.systemFont(ofSize: 9, weight: .light), .foregroundColor:self.color]))
                     })
                 } else {

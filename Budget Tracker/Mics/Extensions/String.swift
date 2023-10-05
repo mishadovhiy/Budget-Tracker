@@ -154,3 +154,26 @@ extension Double {
     }
 }
 
+
+extension NSAttributedString {
+    func adjustSpacing(toMaxWidth maxWidth: CGFloat, usingFont font: UIFont) -> NSAttributedString {
+        
+        let attributes: [NSAttributedString.Key: Any] = [.font: font]
+        
+        let mutableString = NSMutableAttributedString(attributedString: self)
+        
+        while true {
+            let currentWidth = mutableString.boundingRect(with: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, context: nil).width
+            
+            if currentWidth >= maxWidth {
+                break
+            }
+            
+            // This example adds spaces between words. You may need to refine this based on your needs.
+            let range = NSRange(location: 0, length: mutableString.length)
+            mutableString.mutableString.replaceOccurrences(of: " ", with: "  ", options: .literal, range: range) // replace each space with two spaces
+        }
+        
+        return mutableString
+    }
+}

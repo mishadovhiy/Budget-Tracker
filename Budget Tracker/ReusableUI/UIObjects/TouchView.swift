@@ -8,7 +8,7 @@
 import UIKit
 
 
-class TouchView:View {
+class TouchView:BasicView {
     var touchAction:((Bool)->())?
     var pressedAction:(()->())?
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_72" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -266,7 +266,7 @@
                                                                 <rect key="frame" x="0.0" y="0.0" width="20" height="29"/>
                                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                                 <subviews>
-                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F7m-7h-PU1" userLabel="backgroundView" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
+                                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="F7m-7h-PU1" userLabel="backgroundView" customClass="BasicView" customModule="Budget_Tracker" customModuleProvider="target">
                                                                         <rect key="frame" x="0.0" y="0.0" width="20" height="29"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <constraints>
@@ -306,6 +306,7 @@
                                                                     <constraint firstItem="gYo-k6-r5H" firstAttribute="top" secondItem="a9X-rk-5D6" secondAttribute="top" constant="2" id="EZ8-o6-EYH"/>
                                                                     <constraint firstItem="F7m-7h-PU1" firstAttribute="top" secondItem="a9X-rk-5D6" secondAttribute="top" id="Kel-Rs-DHT"/>
                                                                     <constraint firstAttribute="bottom" secondItem="F7m-7h-PU1" secondAttribute="bottom" id="PAp-mM-gWk"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="gYo-k6-r5H" secondAttribute="bottom" constant="-2" id="xg4-7e-RD4"/>
                                                                 </constraints>
                                                             </collectionViewCellContentView>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

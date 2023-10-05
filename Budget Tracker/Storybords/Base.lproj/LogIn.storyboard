@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_72" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -15,7 +14,7 @@
             <objects>
                 <viewController storyboardIdentifier="LoginViewController" id="sFP-r5-fKW" customClass="LoginViewController" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4dJ-R2-Goj">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="922"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nzU-3z-m92">
@@ -321,7 +320,7 @@
             <objects>
                 <viewController storyboardIdentifier="EnterValueVC" id="g3f-NZ-v6H" customClass="EnterValueVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WCz-zX-LTb">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="922"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="top" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="in9-wI-9lJ">
@@ -556,7 +555,7 @@
                                     <constraint firstItem="UsQ-pR-A8z" firstAttribute="leading" secondItem="xHS-Su-KKU" secondAttribute="leading" constant="10" id="ypu-MN-YDU"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hqm-2b-6Ca" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hqm-2b-6Ca" customClass="BasicView" customModule="Budget_Tracker" customModuleProvider="target">
                                 <rect key="frame" x="15" y="747.33333333333337" width="400" height="145.66666666666663"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Price" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mGf-Yr-mD9" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
@@ -611,7 +610,7 @@
                                             <action selector="buyPressed:" destination="kvJ-6b-N85" eventType="touchUpInside" id="oA9-8N-GP5"/>
                                         </connections>
                                     </button>
-                                    <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jsy-xP-qYg" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
+                                    <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jsy-xP-qYg" customClass="BasicView" customModule="Budget_Tracker" customModuleProvider="target">
                                         <rect key="frame" x="3" y="-7" width="68.666666666666671" height="17.666666666666668"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Purchased" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KM9-E0-LBj">
@@ -779,7 +778,7 @@
                                                         <action selector="switchChanged:" destination="e4c-ci-wOD" eventType="valueChanged" id="fYB-lY-VHk"/>
                                                     </connections>
                                                 </switch>
-                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RcZ-t3-NCU" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
+                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RcZ-t3-NCU" customClass="BasicView" customModule="Budget_Tracker" customModuleProvider="target">
                                                     <rect key="frame" x="340" y="15" width="40" height="20"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PRO" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vt0-6P-gIb">
@@ -835,7 +834,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="359.66666666666669" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rhw-Hs-S6x" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
+                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rhw-Hs-S6x" customClass="BasicView" customModule="Budget_Tracker" customModuleProvider="target">
                                                     <rect key="frame" x="309.66666666666669" y="15" width="40" height="20"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PRO" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NIl-HH-CGZ">
@@ -873,7 +872,7 @@
                                                             <color key="textColor" name="CategoryColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n8k-go-PEX" customClass="View" customModule="Budget_Tracker" customModuleProvider="target">
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n8k-go-PEX" customClass="BasicView" customModule="Budget_Tracker" customModuleProvider="target">
                                                             <rect key="frame" x="325.66666666666669" y="7" width="16" height="16"/>
                                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                             <constraints>
@@ -933,7 +932,7 @@
             <objects>
                 <viewController storyboardIdentifier="SelectUserVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="kne-Xe-qMY" customClass="SelectValueVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Sm2-bc-4ZW">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="922"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="grt-Yf-BXz">
@@ -998,7 +997,7 @@
             <objects>
                 <viewController storyboardIdentifier="SupportVC" id="jK4-6n-PTZ" customClass="SupportVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="r3J-vh-ddV">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="922"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="dqN-ls-1aB">
@@ -1128,44 +1127,6 @@
             <point key="canvasLocation" x="10549" y="-417"/>
         </scene>
     </scenes>
-    <designables>
-        <designable name="0eE-EE-uOy">
-            <size key="intrinsicContentSize" width="69" height="35"/>
-        </designable>
-        <designable name="1Qc-L7-jFd">
-            <size key="intrinsicContentSize" width="30" height="36"/>
-        </designable>
-        <designable name="BR7-eH-6Pc">
-            <size key="intrinsicContentSize" width="78" height="28"/>
-        </designable>
-        <designable name="D9o-OF-iWv">
-            <size key="intrinsicContentSize" width="83.333333333333329" height="38.333333333333336"/>
-        </designable>
-        <designable name="EPo-FY-C8b">
-            <size key="intrinsicContentSize" width="21" height="22"/>
-        </designable>
-        <designable name="GX0-5m-kFZ">
-            <size key="intrinsicContentSize" width="54" height="27"/>
-        </designable>
-        <designable name="HpS-9h-MF7">
-            <size key="intrinsicContentSize" width="59.666666666666664" height="34.333333333333336"/>
-        </designable>
-        <designable name="gLA-7i-pp5">
-            <size key="intrinsicContentSize" width="250.66666666666666" height="38.333333333333336"/>
-        </designable>
-        <designable name="mGf-Yr-mD9">
-            <size key="intrinsicContentSize" width="53.333333333333336" height="27.666666666666668"/>
-        </designable>
-        <designable name="oVB-D9-t7E">
-            <size key="intrinsicContentSize" width="102" height="27"/>
-        </designable>
-        <designable name="xd0-Jd-gZM">
-            <size key="intrinsicContentSize" width="27.666666666666668" height="29"/>
-        </designable>
-        <designable name="z9u-BA-sZD">
-            <size key="intrinsicContentSize" width="73" height="28"/>
-        </designable>
-    </designables>
     <inferredMetricsTieBreakers>
         <segue reference="jP6-jS-NGM"/>
         <segue reference="v5h-7J-ubq"/>

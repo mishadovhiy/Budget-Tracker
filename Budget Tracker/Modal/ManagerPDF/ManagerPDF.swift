@@ -31,9 +31,13 @@ struct ManagerPDF {
         vc.presentShareVC(with: [pdfData])
     }
     
+    func pdfString() -> NSAttributedString {
+        return UnparcePDF().dictionaryToString(dict)
+    }
+    
     private func createPDF() -> PDFDocument? {
         let pdfDocument = PDFDocument()
-        let text = UnparcePDF().dictionaryToString(dict)
+        let text = pdfString()
         guard let page = generator.createPDFPage(fromAttributes: .init(attributedString: text))
         else {
             showError(title: "Error converting to pdf image")

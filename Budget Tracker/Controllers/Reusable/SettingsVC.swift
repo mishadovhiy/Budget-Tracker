@@ -193,8 +193,8 @@ extension SettingsVC {
 
 class StandartSettingsCell: UITableViewCell {
     
-    @IBOutlet weak var proView: View!
-    @IBOutlet weak var colorView: View!
+    @IBOutlet weak var proView: BasicView!
+    @IBOutlet weak var colorView: BasicView!
     @IBOutlet weak var nameLabel: UILabel!
 }
 
@@ -202,7 +202,7 @@ class TriggerSettingsCell: UITableViewCell {
     
     var switchedAction:((Bool) -> ())?
     
-    @IBOutlet weak var proView: View!
+    @IBOutlet weak var proView: BasicView!
     @IBOutlet weak var nameLabel: UILabel!
     @IBAction func switchChanged(_ sender: UISwitch) {
         if let isON = switchedAction {

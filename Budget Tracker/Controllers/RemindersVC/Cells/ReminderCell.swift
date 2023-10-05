@@ -17,8 +17,8 @@ class ReminderCell: ClearCell {
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     
-    @IBOutlet weak var backView: View!
-    @IBOutlet weak var unseenIndicator: View!
+    @IBOutlet weak var backView: BasicView!
+    @IBOutlet weak var unseenIndicator: BasicView!
     @IBOutlet weak var categoryLabel: UILabel!
     @IBOutlet weak var commentLabel: UILabel!
     @IBOutlet weak var amountLabel: UILabel!

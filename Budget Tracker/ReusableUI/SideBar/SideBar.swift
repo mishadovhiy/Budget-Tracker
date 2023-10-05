@@ -146,8 +146,8 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
 class SideBardCell: UITableViewCell {
     
     @IBOutlet weak var notificationsLabel: UILabel!
-    @IBOutlet weak var notificationsView: View!
-    @IBOutlet weak var proView: View!
+    @IBOutlet weak var notificationsView: BasicView!
+    @IBOutlet weak var proView: BasicView!
     @IBOutlet weak var optionIcon: UIImageView!
     @IBOutlet weak var valueLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!

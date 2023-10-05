@@ -38,7 +38,7 @@ class ViewController: SuperViewController {
     @IBOutlet var balanceLabels: [UILabel]!
     @IBOutlet var perioudBalanceLabels: [UILabel]!
     @IBOutlet weak var bigCalcView: UIView!
-    @IBOutlet weak var notificationsView: View!
+    @IBOutlet weak var notificationsView: BasicView!
     @IBOutlet weak var notificationsLabel: UILabel!
     
     @IBOutlet weak var calendarContainer: UIView!

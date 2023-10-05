@@ -9,7 +9,7 @@
 import UIKit
 
 @IBDesignable
-class View: UIView {
+class BasicView: UIView {
     
     @IBInspectable open var cornerRadius: CGFloat = 0 {
         didSet {

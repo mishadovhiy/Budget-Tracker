@@ -62,6 +62,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         AppDelegate.shared = self
+#if !os(iOS)
+        print("werewrrge")
+
+#endif
+#if os(iOS)
+        print("sfdererw")
+#endif
+
         
         window?.tintColor = AppData.colorNamed(AppData.linkColor)
         center.delegate = self
@@ -86,46 +94,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         setQuickActions()
         return true
     }
-    
-    func setQuickActions() {
-        DispatchQueue(label: "db", qos: .userInitiated).async {
-            let ignored = DataBase().viewControllers.ignoredActionTypes
-            var res: [UIApplicationShortcutItem] = []
-            ShortCodeItem.allCases.forEach({
-                if !ignored.contains($0.rawValue) {
-                    res.append(.init(type: $0.rawValue, localizedTitle: $0.item.title, localizedSubtitle: $0.item.subtitle, icon: .init(templateImageName: $0.item.icon)))
-                }
-            })
-            DispatchQueue.main.async {
-                UIApplication.shared.shortcutItems = res
-
-            }
-        }
-    }
-    
-    enum ShortCodeItem:String {
-        case addTransaction = "addTransaction"
-        case addReminder = "addReminder"
-        case monthlyLimits = "monthlyLimits"
-        
-        static var allCases:[ShortCodeItem] = [.addTransaction, .addReminder, .monthlyLimits]
-        var item:Item {
-            switch self {
-            case .addTransaction:
-                return .init(title: "Add Transaction", subtitle: "", icon: "plusLined")
-            case .addReminder:
-                return .init(title: "Add Reminder", subtitle: "", icon: "reminder")
-            case .monthlyLimits:
-                return .init(title: "Spending limits", subtitle: "", icon: "monthlyLimits")
-            }
-        }
-        struct Item {
-            let title:String
-            let subtitle:String
-            let icon:String
-        }
-    }
-    
+            
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
         guard let type = ShortCodeItem.init(rawValue: shortcutItem.type) else {
             print("unrecognized item pressed")
@@ -144,16 +113,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         }
         if let vc = vc {
             self.present(vc: vc)
-        }
-    }
-
-    func present(vc:UIViewController, completion:(()->())? = nil) {
-        if let presenting = window?.rootViewController?.presentedViewController {
-            presenting.dismiss(animated: true, completion: {
-                self.present(vc: vc, completion: completion)
-            })
-        } else {
-            window?.rootViewController?.present(vc, animated: true, completion: completion)
         }
     }
     
@@ -193,20 +152,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         print(#function)
         
         checkPasscodeTimout()
-        if let backgroundEntered = db.db["BackgroundEntered"] as? Bool {
-            if backgroundEntered != true {
-                if !appData.devMode {
-                    //send crash
-                }
-                
-                /*              if appData.devMode {
-                 DispatchQueue.main.async {
-                 self.ai.showAlertWithOK(title:"Crash detected", text:"Crash logs has been sent to developer", error: true)
-                 }
-                 }*/
-            }
+        DispatchQueue(label: "db", qos: .userInitiated).async {
+            self.db.db.updateValue(false, forKey: "BackgroundEntered")
         }
-        db.db.updateValue(false, forKey: "BackgroundEntered")
     }
     
     func applicationWillTerminate(_ application: UIApplication) {
@@ -218,12 +166,60 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         
     }
     
+    func present(vc:UIViewController, completion:(()->())? = nil) {
+        if let presenting = window?.rootViewController?.presentedViewController {
+            presenting.dismiss(animated: true, completion: {
+                self.present(vc: vc, completion: completion)
+            })
+        } else {
+            window?.rootViewController?.present(vc, animated: true, completion: completion)
+        }
+    }
 
+    func setQuickActions() {
+        DispatchQueue(label: "db", qos: .userInitiated).async {
+            let ignored = DataBase().viewControllers.ignoredActionTypes
+            var res: [UIApplicationShortcutItem] = []
+            ShortCodeItem.allCases.forEach({
+                if !ignored.contains($0.rawValue) {
+                    res.append(.init(type: $0.rawValue, localizedTitle: $0.item.title, localizedSubtitle: $0.item.subtitle, icon: .init(templateImageName: $0.item.icon)))
+                }
+            })
+            DispatchQueue.main.async {
+                UIApplication.shared.shortcutItems = res
+
+            }
+        }
+    }
 }
 
 protocol AppDelegateProtocol {
     func resighnActive()
 }
 
+extension AppDelegate {
+    enum ShortCodeItem:String {
+        case addTransaction = "addTransaction"
+        case addReminder = "addReminder"
+        case monthlyLimits = "monthlyLimits"
+        
+        static var allCases:[ShortCodeItem] = [.addTransaction, .addReminder, .monthlyLimits]
+        var item:Item {
+            switch self {
+            case .addTransaction:
+                return .init(title: "Add Transaction", subtitle: "", icon: "plusLined")
+            case .addReminder:
+                return .init(title: "Add Reminder", subtitle: "", icon: "reminder")
+            case .monthlyLimits:
+                return .init(title: "Spending limits", subtitle: "", icon: "monthlyLimits")
+            }
+        }
+        struct Item {
+            let title:String
+            let subtitle:String
+            let icon:String
+        }
+    }
+}
 
 
