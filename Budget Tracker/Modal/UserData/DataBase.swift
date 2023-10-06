@@ -141,6 +141,8 @@ class DataBase {
     
     var transactions:[TransactionsStruct] {
         get {
+            let t = UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")?.value(forKey: "transactionsDataNew") as? [[String:Any]] ?? []
+            print(t.count, " yhtrgefd")
             let all = db[transactionsKey] as? [[String:Any]] ?? []
             let result = dictToTransactions(all: all)
             return result
@@ -148,6 +150,8 @@ class DataBase {
         set {
             let result = transactionsToDict(newValue: newValue)
             db.updateValue(result, forKey: transactionsKey)
+            print(result.count, " rhtgerfweg")
+            UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")?.setValue(result, forKey: "transactionsDataNew")
         }
     }
     var localTransactions:[TransactionsStruct] {
