@@ -25,23 +25,8 @@ struct BudgetTrackerCalendatWidgetEntryView : View {
             Text("count: \(entry.transactions.count)\nloaded:\(entry.isLoaded.description)\n\(data)")
             
         }
-        .onAppear(perform: {//not called in widgetKit
-            fetchDB()
-        })
     }
-    
-    
-    func fetchDB() {
-        DispatchQueue(label: "db", qos: .userInitiated).async {
-            let dbDict = UserDefaults.standard.value(forKey: "DataBase") as? [String:Any] ?? [:]
-            let transactionsDict = dbDict["transactionsDataNew"] as? [[String:Any]] ?? []
-            print(transactionsDict, " jutyhrtgrfethrytj")
-            DispatchQueue.main.async {
-                self.data = "\(transactionsDict.count)"
-            }
-        }
-    }
-    
+
     
 }
 
@@ -51,11 +36,7 @@ struct Provider: AppIntentTimelineProvider {
     }
 
     func snapshot(for configuration: ConfigurationAppIntent, in context: Context) async -> SimpleEntry {
-        //load from db
-        //            UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")?.setValue(result, forKey: "transactionsDataNew")
-  //      let t = UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")?.value(forKey: "transactionsDataNew") as? [[String:Any]] ?? []
         let dbDict = UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")?.value(forKey: "transactionsDataNew") as? [[String:Any]] ?? []
-        //UserDefaults.standard.value(forKey: "DataBase") as? [String:Any] ?? [:]
         print(dbDict.count, " trgeegr")
         return SimpleEntry(transactions: dbDict, isLoaded:true, date: Date(), configuration: configuration)
         
@@ -64,12 +45,10 @@ struct Provider: AppIntentTimelineProvider {
     func timeline(for configuration: ConfigurationAppIntent, in context: Context) async -> Timeline<SimpleEntry> {
         var entries: [SimpleEntry] = []
 
-        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
         let currentDate = Date()
         for hourOffset in 0 ..< 5 {
             let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
             let entry = await snapshot(for: configuration, in: context)
-            //SimpleEntry(transactions: [], date: entryDate, configuration: configuration)
             entries.append(entry)
         }
 

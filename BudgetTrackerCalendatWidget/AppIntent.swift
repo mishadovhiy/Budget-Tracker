@@ -8,7 +8,6 @@
 
 import WidgetKit
 import AppIntents
-import Intents
 
 struct ConfigurationAppIntent: WidgetConfigurationIntent {
     static var title: LocalizedStringResource = "Configuration"
@@ -17,6 +16,5 @@ struct ConfigurationAppIntent: WidgetConfigurationIntent {
     // An example configurable parameter.
     @Parameter(title: "Favorite Emo ji", default: "😃")
     var favoriteEmoji: String
-  //  var transactions:String
 }
 
