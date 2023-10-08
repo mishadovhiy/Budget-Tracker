@@ -157,10 +157,10 @@ class TransitionVC: SuperViewController {
         }
 
         delegates(fields: [categoryTextField, dateTextField, commentTextField])
-        appData.objects.datePicker.datePickerMode = .date
         pressedValue = "0"
 
         DispatchQueue.main.async {
+            self.appData.objects.datePicker.datePickerMode = .date
             self.valueLabel.text = self.pressedValue
             
         }
@@ -658,33 +658,37 @@ extension TransitionVC: CategoriesVCProtocol {
             if !fromDebts {
                 purposeSwitcher.selectedSegmentIndex = category.purpose == .expense ? 0 : 1
                 purposeSwitched(purposeSwitcher)
-                switch category.purpose {
-                case .expense:
-                    appData.lastSelected.sett(value: "\(category.id)", valueType: .expense)
-                case .income:
-                    appData.lastSelected.sett(value: "\(category.id)", valueType: .income)
-                case .debt:
-                    appData.lastSelected.sett(value: "\(category.id)", valueType: .debt)
+                DispatchQueue(label: "db", qos: .userInitiated).async {
+                    switch category.purpose {
+                    case .expense:
+                        self.appData.lastSelected.sett(value: "\(category.id)", valueType: .expense)
+                    case .income:
+                        self.appData.lastSelected.sett(value: "\(category.id)", valueType: .income)
+                    case .debt:
+                        self.appData.lastSelected.sett(value: "\(category.id)", valueType: .debt)
 
+                    }
                 }
             } else {
-                appData.lastSelected.sett(value: "\(category.id)", valueType: .debt)
-                selectedCategory = category
-                DispatchQueue.main.async {
-                    
-                    if self.pressedValue == "" || self.pressedValue == "0" {
+                DispatchQueue(label: "db", qos: .userInitiated).async {
+                    self.appData.lastSelected.sett(value: "\(category.id)", valueType: .debt)
+                    self.selectedCategory = category
+                    DispatchQueue.main.async {
+                        
+                        if self.pressedValue == "" || self.pressedValue == "0" {
+                        }
+                       // self.valueLabel.text = "\(amount < 0 ? amount * (-1) : amount)"
+                     //   self.minusPlusLabel.alpha = 1
+                       // self.purposeSwitcher.selectedSegmentIndex = amount * (-1) < 0 ? 0 : 1
+                      //  self.purposeSwitched(self.purposeSwitcher)
+                        
+                        let selectedSeg = self.purposeSwitcher.selectedSegmentIndex
+                        let value = selectedSeg == 0 ? "\(Double(self.valueLabel.text ?? "") ?? 0.0)" : self.valueLabel.text ?? ""
+                        print(amount, "resultresultresultresult")
+                        print(selectedSeg)
+                        print(value, "selectedSegselectedSegselectedSeg")
+                        
                     }
-                   // self.valueLabel.text = "\(amount < 0 ? amount * (-1) : amount)"
-                 //   self.minusPlusLabel.alpha = 1
-                   // self.purposeSwitcher.selectedSegmentIndex = amount * (-1) < 0 ? 0 : 1
-                  //  self.purposeSwitched(self.purposeSwitcher)
-                    
-                    let selectedSeg = self.purposeSwitcher.selectedSegmentIndex
-                    let value = selectedSeg == 0 ? "\(Double(self.valueLabel.text ?? "") ?? 0.0)" : self.valueLabel.text ?? ""
-                    print(amount, "resultresultresultresult")
-                    print(selectedSeg)
-                    print(value, "selectedSegselectedSegselectedSeg")
-                    
                 }
             }
             selectedCategory = category

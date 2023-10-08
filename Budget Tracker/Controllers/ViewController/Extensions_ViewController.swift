@@ -509,7 +509,7 @@ extension ViewController {
                 }
             }
         }
-        appData.safeArea = (safeTop, self.view.safeAreaInsets.bottom)
+      //  appData.safeArea = (safeTop, self.view.safeAreaInsets.bottom)
     }
     var safeArreaHelperViewCalc:CGFloat {
         return self.view.safeAreaInsets.top + (safeArreaHelperView?.frame.height ?? 0)

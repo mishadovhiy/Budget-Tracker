@@ -42,7 +42,11 @@ class AppData {
         }
     }
     
-    var safeArea: (CGFloat, CGFloat) = (0.0, 0.0)//0-bt  1-top
+    var safeArea: (CGFloat, CGFloat) {
+        let safe = UIApplication.shared.keyWindow?.safeAreaInsets ?? .zero
+        return (safe.top, safe.bottom)
+    }
+    
 
     var resultSafeArea: (CGFloat, CGFloat) {
         let btn = safeArea.0 + (AppDelegate.shared?.banner.size ?? 0)
@@ -409,7 +413,7 @@ extension AppData {
             vccc.tableData = data
             vccc.navigationController?.setNavigationBarHidden(true, animated: false)
             let cellHeight = 50
-            let contentHeight = (data.count) * cellHeight
+            let contentHeight = data.count * cellHeight
             let safeAt = self.resultSafeArea.1
             let safebt = self.resultSafeArea.0 + 10
             let window = AppDelegate.shared?.window ?? UIWindow()
