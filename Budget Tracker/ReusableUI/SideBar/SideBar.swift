@@ -15,7 +15,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
     func getData(){
         let db = DataBase()
         let debts = db.debts.count
-        let pro = appData.proEnabeled
+      //  let pro = appData.proEnabeled
         let notifications = Notifications.notificationsCount
         
         var accpuntCell:CellData {
@@ -73,11 +73,14 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func load() {
-        DispatchQueue.main.async {
-            ViewController.shared?.sideTableView.delegate = self
-            ViewController.shared?.sideTableView.dataSource = self
+        if ViewController.shared?.sideTableView.delegate == nil {
+                ViewController.shared?.sideTableView.delegate = self
+                ViewController.shared?.sideTableView.dataSource = self
         }
-        getData()
+        
+        DispatchQueue(label: "db", qos: .userInitiated).async {
+            self.getData()
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -142,6 +145,10 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         var notifications:Int = 0
         var selectAction:(()->())? = nil
         
+    }
+    
+    func newNotificationCount() {
+        load()
     }
 }
 

@@ -590,6 +590,7 @@ extension ViewController {
                     }
                     
                 }
+                self.sideBar.newNotificationCount()
             }
         }
     }

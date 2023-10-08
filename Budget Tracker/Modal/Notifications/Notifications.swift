@@ -33,7 +33,7 @@ struct Notifications {
     }
     
     static func getNotificationsNumber() {
-        DispatchQueue.main.async {
+    //    DispatchQueue.main.async {
             AppDelegate.shared?.center.getDeliveredNotifications { notifications in
                 var ids = AppDelegate.shared?.notificationManager.deliveredNotificationIDs ?? []
                 for notification in notifications {
@@ -49,14 +49,14 @@ struct Notifications {
                     }
                 }
                 print(notificationsCount, "notificationsCountnotificationsCountnotificationsCount")
-                DispatchQueue.main.async {
+             //   DispatchQueue.main.async {
                     UIApplication.shared.applicationIconBadgeNumber = ids.count
                     ViewController.shared?.notificationsCount = notificationsCount
                     Notifications.notificationsCount = notificationsCount
                     
-                }
+             //   }
             }
-        }
+      //  }
     }
     
     static var notificationsCount = (0,0)
