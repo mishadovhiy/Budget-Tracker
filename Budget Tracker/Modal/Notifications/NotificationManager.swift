@@ -40,7 +40,9 @@ struct NotificationManager {
             return result ?? []
         }
         set {
-            DataBase().db.updateValue(newValue, forKey: "deliveredNotificationIDs")
+            DispatchQueue(label: "db", qos: .userInitiated).async {
+                DataBase().db.updateValue(newValue, forKey: "deliveredNotificationIDs")
+            }
             Notifications.getNotificationsNumber()
         }
     }

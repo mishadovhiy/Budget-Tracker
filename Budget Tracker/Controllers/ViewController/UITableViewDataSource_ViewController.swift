@@ -152,7 +152,9 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
 
         if transactionAdded {
             transactionAdded = false
-            filter()
+            DispatchQueue(label: "db", qos: .userInitiated).async {
+                self.filter()
+            }
         }
         if indexPath.section == 0 {
             DispatchQueue.main.async {

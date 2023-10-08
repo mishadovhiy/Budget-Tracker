@@ -357,7 +357,9 @@ extension CategoriesVC {
           //  var newString = newValue.rawValue
   /*          var ud = db.viewControllers.sortOption
             ud.updateValue(newString, forKey: screenType.rawValue)*/
-            db.viewControllers.sortOption.updateValue(newValue.rawValue, forKey: screenType.rawValue)
+            DispatchQueue(label: "db", qos: .userInitiated).async {
+                self.db.viewControllers.sortOption.updateValue(newValue.rawValue, forKey: self.screenType.rawValue)
+            }
         }
     }
     

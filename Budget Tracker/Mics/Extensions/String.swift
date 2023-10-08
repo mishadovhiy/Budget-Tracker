@@ -152,6 +152,11 @@ extension Double {
             return self
         }
     }
+    
+    func string(_ decimals:Int = 2) -> String {
+        return String(format: "%.\(decimals)f", self)
+
+    }
 }
 
 

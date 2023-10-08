@@ -28,7 +28,7 @@ class RemindersVC: SuperViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
     
-    lazy var today = appData.filter.getToday()
+    lazy var today = AppDelegate.shared?.appData.filter.getToday() ?? ""
     var editingReminder:Int?
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

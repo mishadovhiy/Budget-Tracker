@@ -9,7 +9,9 @@
 import UIKit
 
 struct LoadFromDB {
-
+    var appData:AppData {
+        return AppDelegate.shared?.appData ?? .init()
+    }
     static var shared = LoadFromDB()
     private func load(urlPath: String, completion: @escaping (NSArray, error?) -> ()) {
 print(urlPath, " urlPathurlPathurlPath")
@@ -27,6 +29,13 @@ print(urlPath, " urlPathurlPathurlPath")
                         print(error.description, " bhgcftyuijknbvgcfjhj")
                         completion([], .internet)
                         return
+                    }
+                    print(Thread.isMainThread, " apithreaddd")
+                    if Thread.isMainThread {
+                        print("!!!!!!!!!!!errororor api")
+                        if (AppDelegate.shared?.appData.devMode ?? false) {
+                            AppDelegate.shared?.newMessage.show(title:"fatal error, from main", type: .error)
+                        }
                     }
                     completion(jsonResult, nil)
                 }
@@ -210,6 +219,9 @@ print(urlPath, " urlPathurlPathurlPath")
 
 
 struct SaveToDB {
+    var appData:AppData {
+        return AppDelegate.shared?.appData ?? .init()
+    }
     let db = DataBase()
     enum dataType {
         case transactions
@@ -337,7 +349,13 @@ struct SaveToDB {
                 } else {
                     if let unwrappedData = data {
                         let returnedData = NSString(data: unwrappedData, encoding: String.Encoding.utf8.rawValue)
-
+                        print(Thread.isMainThread, " apithreaddd")
+                        if Thread.isMainThread {
+                            print("!!!!!!!!!!!errororor api")
+                            if (AppDelegate.shared?.appData.devMode ?? false) {
+                                AppDelegate.shared?.newMessage.show(title:"fatal error, from main", type: .error)
+                            }
+                        }
                         if returnedData == "1" {
                             print("save: sended \(dataToSend)")
                             error(false)
@@ -384,6 +402,9 @@ struct SaveToDB {
 
 
 struct DeleteFromDB {
+    var appData:AppData {
+        return AppDelegate.shared?.appData ?? .init()
+    }
     let db = DataBase()
     static var shared = DeleteFromDB()
     
@@ -510,6 +531,13 @@ struct DeleteFromDB {
                         return
                         
                     } else {
+                        print(Thread.isMainThread, " apithreaddd")
+                        if Thread.isMainThread {
+                            print("!!!!!!!!!!!errororor api")
+                            if (AppDelegate.shared?.appData.devMode ?? false) {
+                                AppDelegate.shared?.newMessage.show(title:"fatal error, from main", type: .error)
+                            }
+                        }
                         if let unwrappedData = data {
                             let returnedData = NSString(data: unwrappedData, encoding: String.Encoding.utf8.rawValue)
                             if returnedData == "1" {

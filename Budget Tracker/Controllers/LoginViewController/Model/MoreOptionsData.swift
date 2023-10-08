@@ -22,7 +22,7 @@ class MoreOptionsData {
         print("deiniteeed")
     }
     lazy var ai = AppDelegate.shared!.ai
-    func get() -> [MoreVC.ScreenData] {
+    func get(isPro:Bool) -> [MoreVC.ScreenData] {
         wrongCodeCount = 0
         forgotPasswordUsername = ""
      //   hideKeyboard()
@@ -71,14 +71,14 @@ class MoreOptionsData {
             MoreVC.ScreenData(name: "Change Email".localize, description: vc.userEmail, action: changeEmailTapped),
             MoreVC.ScreenData(name: "Change password".localize, description: "", action: changePasswordTapped),
             MoreVC.ScreenData(name: "Forgot password".localize, description: "", action: forgotPassword),
-            MoreVC.ScreenData(name: "Transfer data".localize, description: "", pro: appData.proEnabeled, action: transfereData),
+            MoreVC.ScreenData(name: "Transfer data".localize, description: "", pro: isPro, action: transfereData),
             MoreVC.ScreenData(name: "Delete account & data".localize, description: "", distructive: true, showAI: false, action: deleteAccountPressed),
             MoreVC.ScreenData(name: "Log out".localize, description: "", distructive: true, showAI: false, action: logoutPressed),
         ]
         
         let notUserLogged = [
             //MoreVC.ScreenData(name: "Device purchase", description: appData.purchasedOnThisDevice ? "Yes":"No", action: nil),
-            MoreVC.ScreenData(name: "Transfer data".localize, description: "", pro: appData.proEnabeled, action: transfereData),
+            MoreVC.ScreenData(name: "Transfer data".localize, description: "", pro: isPro, action: transfereData),
             MoreVC.ScreenData(name: "Forgot password".localize, description: "", action: forgotPassword),
         ]
         
@@ -113,13 +113,17 @@ class MoreOptionsData {
         }
     }
     
+    var appData:AppData {
+        return AppDelegate.shared?.appData ?? .init()
+    }
+    
     func getUser(completion:@escaping([String]?) -> ()) {
         LoadFromDB.shared.Users { (loadedData, error) in
             if error {
                 self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
                 completion(nil)
             } else {
-                let name = appData.username
+                let name = self.appData.username
                 for i in 0..<loadedData.count {
                     if loadedData[i][0] == name {
                         completion(loadedData[i])
@@ -148,10 +152,10 @@ class MoreOptionsData {
                             self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
                         }
                     } else {
-                        if appData.username != "" {
+                        if self.appData.username != "" {
                             var emailToSend = ""
                             for i in 0..<users.count {
-                                if users[i][0] == appData.username {
+                                if users[i][0] == self.appData.username {
                                     emailToSend = users[i][1]
                                     break
                                 }
@@ -194,14 +198,14 @@ class MoreOptionsData {
                 } else {
                     var emailToSend = ""
                     for i in 0..<users.count {
-                        if users[i][0] == appData.username {
+                        if users[i][0] == self.appData.username {
                             emailToSend = users[i][1]
                             break
                         }
                     }
 
                     self.aiRestorationCode(email: emailToSend) { okPressed in
-                        self.sendRestorationCode(toChange: .changePassword)
+                        self.sendRestorationCode(toChange: .changeEmail)
                     }
 
                 }
@@ -318,9 +322,14 @@ class MoreOptionsData {
                    // EnterValueVC.shared?.clearAll(animated: true)
                 } else {
 
-                    let newUser = self.forgotPasswordUsername == "" ? appData.username : self.forgotPasswordUsername
-                    appData.username = newUser
-                    self.cangePasswordDB(username: newUser, newPassword: new)
+                    let newUser = self.forgotPasswordUsername == "" ? self.appData.username : self.forgotPasswordUsername
+                    DispatchQueue(label: "db", qos: .userInitiated).async {
+                        self.appData.username = newUser
+                        DispatchQueue.main.async {
+                            self.cangePasswordDB(username: newUser, newPassword: new)
+                        }
+                    }
+                    
                 }
             }
             let screenDataRep = EnterValueVC.EnterValueVCScreenData(taskName: "Change password".localize, title: "Repeat password".localize, placeHolder: "Password".localize, nextAction: repeatPasAction, screenType: .password)
@@ -525,7 +534,7 @@ class MoreOptionsData {
         } else {
 
             let nextAction: (String) -> () = { (newvalue) in
-                if appData.username != "" {
+                if self.appData.username != "" {
                     self.ai.show(title: nil) { _ in
                     //    let load = LoadFromDB()
                         LoadFromDB.shared.Users { (users, error) in
@@ -605,8 +614,8 @@ class MoreOptionsData {
                                     self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
                                 }
                             } else {
-                                appData.username = userData[0]
-                                appData.password = newPassword
+                                self.appData.username = userData[0]
+                                self.appData.password = newPassword
                                 KeychainService.updatePassword(service: "BudgetTrackerApp", account: userData[0], data: newPassword)
                                 //EnterValueVC.shared?.closeVC(closeMessage: "Your password has been changed")
                                 self.toEnterValue(data: nil)
@@ -633,7 +642,7 @@ class MoreOptionsData {
                         self.showAlert(title: "Passwords not match".localize + "!", text: nil, error: true)
                   //      EnterValueVC.shared?.clearAll(animated: true)
                     } else {
-                        self.cangePasswordDB(username: appData.username, newPassword: new)
+                        self.cangePasswordDB(username: self.appData.username, newPassword: new)
                     }
                 }
                 let screenDataRep = EnterValueVC.EnterValueVCScreenData(taskName: "Change password".localize, title: "Repeat password".localize, placeHolder: "Password".localize, nextAction: repeatPasAction, screenType: .password)

@@ -48,15 +48,17 @@ class BuyProVC: SuperViewController {
         super.viewDidLoad()
         BuyProVC.shared = self
         DispatchQueue.main.async {
-            if appData.proVersion || appData.proTrial || appData.trialDate != "" {
+            if self.appData.proVersion || self.appData.proTrial || self.appData.trialDate != "" {
                 self.tryFree.alpha = 0
             }
             self.purchasedIndicatorView.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
         }
         pageChanged(pageControll)
-        if let price = db.db["productPrice"] as? String {
-            DispatchQueue.main.async {
-                self.priceLabel.text = "\(price)"
+        DispatchQueue(label: "db", qos: .userInitiated).async {
+            if let price = DataBase().db["productPrice"] as? String {
+                DispatchQueue.main.async {
+                    self.priceLabel.text = "\((Double(price)?.string()) ?? "")"
+                }
             }
         }
 
@@ -148,7 +150,7 @@ class BuyProVC: SuperViewController {
                 self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
                 completion(nil)
             } else {
-                let name = appData.username
+                let name = self.appData.username
                 for i in 0..<loadedData.count {
                     if loadedData[i][0] == name {
                         completion(loadedData[i])
@@ -226,8 +228,8 @@ class BuyProVC: SuperViewController {
                     self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
                 } else {
                     DispatchQueue.main.async {
-                        appData.proTrial = true
-                        appData.trialDate = today
+                        self.appData.proTrial = true
+                        self.appData.trialDate = today
                         self.showAlert(title: Text.success, text: "Trial has been started successfully".localize, error: false, goHome: true)
 
                     }
@@ -326,9 +328,12 @@ extension BuyProVC: SKProductsRequestDelegate {
         if let product = response.products.first {
             print(product, "productproductproduct")
             proVProduct = product
-            db.db.updateValue("\(product.price.doubleValue)", forKey: "productPrice")
-            DispatchQueue.main.async {
-                self.priceLabel.text = "\(product.price)"
+            DispatchQueue(label: "db", qos: .userInitiated).async {
+                DataBase().db.updateValue("\(product.price.doubleValue)", forKey: "productPrice")
+                print(product.price, " rgfergtbhgref")
+                DispatchQueue.main.async {
+                    self.priceLabel.text = "\(product.price.doubleValue.string())"
+                }
             }
         }
     }
@@ -395,9 +400,10 @@ extension BuyProVC: SKPaymentTransactionObserver {
                     paymentQueueResponded = true
                     SKPaymentQueue.default().finishTransaction(transaction)
                     SKPaymentQueue.default().remove(self)
-                    appData.proVersion = true
-                    appData.purchasedOnThisDevice = true
+                    
                     DispatchQueue.init(label: "DB").async {
+                        self.appData.proVersion = true
+                        self.appData.purchasedOnThisDevice = true
                         self.dbSavePurchase()
                     }
                 }

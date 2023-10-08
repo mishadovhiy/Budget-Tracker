@@ -58,7 +58,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                 vc.historyDataStruct = db.transactions(for: categoryy)
                 vc.selectedCategory = categoryy
                 vc.fromCategories = true
-                appData.present(vc: navController) { _ in
+                self.appData.present(vc: navController) { _ in
                     self.ai.fastHide()
                 }
                 
@@ -105,7 +105,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             let vc = strorybpard.instantiateViewController(withIdentifier: "RemindersVC") as! RemindersVC
             vc.fromAppDelegate = true
             let nav = UINavigationController(rootViewController: vc)
-            appData.present(vc: nav) { _ in
+            self.appData.present(vc: nav) { _ in
                 self.ai.fastHide()
             }
             

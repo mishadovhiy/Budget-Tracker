@@ -28,7 +28,7 @@ class adBannerView: UIView {
                 let adSize = GADAdSizeFromCGSize(CGSize(width: screenWidth, height: height))
                 self.size = height
                 let bannerView = GADBannerView(adSize: adSize)
-                bannerView.adUnitID = appData.devMode ? "ca-app-pub-3940256099942544/2934735716" : "ca-app-pub-5463058852615321/8457751935"
+                bannerView.adUnitID = (AppDelegate.shared?.appData.devMode ?? false) ? "ca-app-pub-3940256099942544/2934735716" : "ca-app-pub-5463058852615321/8457751935"
                 bannerView.rootViewController = AppDelegate.shared?.window?.rootViewController
                 bannerView.load(GADRequest())
                 bannerView.delegate = self
@@ -47,18 +47,20 @@ class adBannerView: UIView {
         
         var go:Bool {
             if #available(iOS 13.0, *) {
-                return force && !appData.proEnabeled
+                return force && !(AppDelegate.shared?.appData.proEnabeled ?? false)
             } else {
-                return !appData.proEnabeled
+                return !(AppDelegate.shared?.appData.proEnabeled ?? false)
             }
         }
-        if go {
-            adHidden = false
-            DispatchQueue.main.async {
-                self.isHidden = false
-                UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0, options: .allowAnimatedContent) {
-                    //self.alpha = 1
-                    self.backgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+        DispatchQueue(label: "db", qos: .userInitiated).async {
+            if go {
+                self.adHidden = false
+                DispatchQueue.main.async {
+                    self.isHidden = false
+                    UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0, options: .allowAnimatedContent) {
+                        //self.alpha = 1
+                        self.backgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+                    }
                 }
             }
         }
@@ -68,7 +70,7 @@ class adBannerView: UIView {
         
         var go:Bool {
             if #available(iOS 13.0, *) {
-                return (remove || appData.proEnabeled || ios13Hide) && !adHidden
+                return (remove || (AppDelegate.shared?.appData.proEnabeled ?? false) || ios13Hide) && !adHidden
             } else {
                 return true
             }
@@ -125,7 +127,7 @@ class adBannerView: UIView {
     
     
     @IBAction private func closePressed(_ sender: UIButton) {
-        appData.presentBuyProVC(selectedProduct: 2)
+        AppDelegate.shared?.appData.presentBuyProVC(selectedProduct: 2)
     }
     
     

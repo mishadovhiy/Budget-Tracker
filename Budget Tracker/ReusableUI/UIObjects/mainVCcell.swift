@@ -129,7 +129,6 @@ class calcCell: UITableViewCell {
     @IBOutlet weak var unsesndedTransactionsLabel: UILabel!
     @IBOutlet weak var savedTransactionsLabel: UILabel!
     @IBOutlet weak var prevAcountDataLabel: UILabel!
-    
 
     func setup(calculations: (Double, Double, Double, Double)) {
        // let unsendedCount = (appData.defaults.value(forKey: "unsavedTransactions") as? [[String]] ?? []) + (appData.defaults.value(forKey: "unsavedCategories") as? [[String]] ?? [])

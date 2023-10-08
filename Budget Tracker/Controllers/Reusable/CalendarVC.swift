@@ -148,12 +148,12 @@ class CalendarVC: SuperViewController {
         super.viewDidAppear(true)
         if delegate == nil {
             if ifCustom {
-                if appData.filter.from != appData.filter.to {
-                    selectedFrom = appData.filter.from
-                    selectedTo = appData.filter.to
+                if AppDelegate.shared?.appData.filter.from != AppDelegate.shared?.appData.filter.to {
+                    selectedFrom = AppDelegate.shared?.appData.filter.from ?? ""
+                    selectedTo = AppDelegate.shared?.appData.filter.to ?? ""
                     print(selectedTo, "selectedToselectedToselectedTo")
-                    selectedFromDayInt = appData.filter.getDayFromString(s: selectedFrom)
-                    selectedToDayInt = appData.filter.getDayFromString(s: selectedTo)
+                    selectedFromDayInt = AppDelegate.shared?.appData.filter.getDayFromString(s: selectedFrom) ?? 0
+                    selectedToDayInt = AppDelegate.shared?.appData.filter.getDayFromString(s: selectedTo) ?? 0
                     ifToSmaller()
                     
                     year = getYearFrom(string: selectedFrom)
@@ -168,7 +168,7 @@ class CalendarVC: SuperViewController {
                         self.collectionView.reloadData()
                     }*/
                 } else {
-                    selectedFrom = appData.filter.from
+                    selectedFrom = AppDelegate.shared?.appData.filter.from ?? ""
                     year = getYearFrom(string: selectedFrom)
                     month = getMonthFrom(string: selectedFrom)
                     getDays()
@@ -203,7 +203,7 @@ class CalendarVC: SuperViewController {
         }
     }
     
-    let today = appData.filter.getToday()
+    let today = AppDelegate.shared?.appData.filter.getToday() ?? ""
     func updaiteUI() {
 //        collectionView.delegate = self
 //        collectionView.dataSource = self
@@ -215,8 +215,9 @@ class CalendarVC: SuperViewController {
         view.addGestureRecognizer(swipeRight)
 
         print(selectedFrom, "selectedFromselectedFromselectedFromselectedFrom")
-        year = appData.filter.getYearFromString(s: selectedFrom == "" ? today : selectedFrom)
-        month = appData.filter.getMonthFromString(s: selectedFrom == "" ? today : selectedFrom)
+        let data = AppDelegate.shared?.appData ?? .init()
+        year = data.filter.getYearFromString(s: selectedFrom == "" ? today : selectedFrom)
+        month = data.filter.getMonthFromString(s: selectedFrom == "" ? today : selectedFrom)
         getDays()
         doneButtonIsActive()
 
@@ -408,9 +409,9 @@ class CalendarVC: SuperViewController {
             
             if getYearFrom(string: selectedTo) == getYearFrom(string: selectedFrom) && (getMonthFrom(string: selectedTo) == getMonthFrom(string: selectedFrom)) {
                 
-                let dayFrom = appData.filter.getDayFromString(s: selectedFrom)
+                let dayFrom = AppDelegate.shared?.appData.filter.getDayFromString(s: selectedFrom) ?? 0
                 print(dayFrom, "dayFromdayFromdayFromdayFromdayFrom")
-                let dayTo = appData.filter.getDayFromString(s: selectedTo)
+                let dayTo = AppDelegate.shared?.appData.filter.getDayFromString(s: selectedTo) ?? 0
                 let between = (dayTo - dayFrom) - 1
                 var start = dayFrom + daystoWeekStart
                 for _ in 0..<between {
@@ -636,24 +637,25 @@ class CalendarVC: SuperViewController {
             }
         } else {
             if ifCustom == false {
-                appData.filter.from = ""
-                appData.filter.to = ""
+                AppDelegate.shared?.appData.filter.from = ""
+                AppDelegate.shared?.appData.filter.to = ""
                 DispatchQueue.main.async {
                     self.performSegue(withIdentifier: K.calendarClosed, sender: self)
                 }
                 
             } else {
-                let day = appData.filter.getDayFromString(s: selectedFrom)
-                let month = appData.filter.getMonthFromString(s: selectedFrom)
-                let year = appData.filter.getYearFromString(s: selectedFrom)
-                let dayTo = appData.filter.getDayFromString(s: selectedTo)
-                let monthTo = appData.filter.getMonthFromString(s: selectedTo)
-                let yearTo = appData.filter.getYearFromString(s: selectedTo)
+                let data = AppDelegate.shared?.appData ?? .init()
+                let day = data.filter.getDayFromString(s: selectedFrom)
+                let month = data.filter.getMonthFromString(s: selectedFrom)
+                let year = data.filter.getYearFromString(s: selectedFrom)
+                let dayTo = data.filter.getDayFromString(s: selectedTo)
+                let monthTo = data.filter.getMonthFromString(s: selectedTo)
+                let yearTo = data.filter.getYearFromString(s: selectedTo)
                 let strOf = "of".localize
                 if yearTo == year {
-                    appData.filter.selectedPeroud = "\(returnMonth(month)), \(day) → \(returnMonth(monthTo)), \(dayTo) \(strOf) \(yearTo)"
+                    AppDelegate.shared?.appData.filter.selectedPeroud = "\(returnMonth(month)), \(day) → \(returnMonth(monthTo)), \(dayTo) \(strOf) \(yearTo)"
                 } else {
-                    appData.filter.selectedPeroud = "\(returnMonth(month)), \(day) \(strOf) \(year) → \(returnMonth(monthTo)), \(dayTo) \(strOf) \(yearTo)"
+                    AppDelegate.shared?.appData.filter.selectedPeroud = "\(returnMonth(month)), \(day) \(strOf) \(year) → \(returnMonth(monthTo)), \(dayTo) \(strOf) \(yearTo)"
                 }
                 self.dismiss(animated: true, completion: nil)
             }
@@ -668,8 +670,8 @@ class CalendarVC: SuperViewController {
                 UIImpactFeedbackGenerator().impactOccurred()
             }
             if doneIsActive {
-                appData.filter.from = selectedFrom == "" ? selectedTo : selectedFrom
-                appData.filter.to = selectedTo == "" ? selectedFrom : selectedTo
+                AppDelegate.shared?.appData.filter.from = selectedFrom == "" ? selectedTo : selectedFrom
+                AppDelegate.shared?.appData.filter.to = selectedTo == "" ? selectedFrom : selectedTo
                 DispatchQueue.main.async {
                     self.performSegue(withIdentifier: K.calendarClosed, sender: self)
                 }

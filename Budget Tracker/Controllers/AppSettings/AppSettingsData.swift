@@ -50,8 +50,12 @@ class AppSettingsData {
             let langs = ["eng", "ua"]
             let colorSetted: (Int) -> () = { (newValue) in
                 AppLocalization.launchedLocalization = langs[newValue]
-                AppLocalization.udLocalization = langs[newValue]
-                self.vc.loadData()
+                DispatchQueue(label: "db", qos: .userInitiated).async {
+                    AppLocalization.udLocalization = langs[newValue]
+                    DispatchQueue.main.async {
+                        self.vc.loadData()
+                    }
+                }
             }
             
             self.vc.toChooseIn(data: langs, title:"Language".localize , selectedAction: colorSetted)
@@ -171,11 +175,11 @@ class AppSettingsData {
         })
         
         
-        let testPro:SettingsVC.TriggerCell = SettingsVC.TriggerCell(title: "forceNotPro", isOn: appData.forceNotPro ?? false, pro: nil, action: { (newValue) in
-            appData.forceNotPro = newValue ? true : nil
+        let testPro:SettingsVC.TriggerCell = SettingsVC.TriggerCell(title: "forceNotPro", isOn: AppDelegate.shared?.appData.forceNotPro ?? false, pro: nil, action: { (newValue) in
+            AppDelegate.shared?.appData.forceNotPro = newValue ? true : nil
         })
 
-        if appData.devMode {
+        if AppDelegate.shared?.appData.devMode ?? false {
             return [supportCell, privacy, devSupport, otherCell, appShortcodes]
         } else {
             return [supportCell, privacy, devSupport, otherCell, appShortcodes]
@@ -193,19 +197,35 @@ extension AppSettingsData {
 
     func passcodeSitched(isON:Bool) {
         if !isON {
-            if UserSettings.Security.password != "" {
-                self.getUserPasscode {
-                    UserSettings.Security.password = ""
+            DispatchQueue(label: "db", qos: .userInitiated).async {
+                if UserSettings.Security.password != "" {
+                    DispatchQueue.main.async {
+                        self.getUserPasscode {
+                            DispatchQueue(label: "db", qos: .userInitiated).async {
+                                UserSettings.Security.password = ""
+                                DispatchQueue.main.async {
+                                    self.vc.loadData()
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                DispatchQueue.main.async {
                     self.vc.loadData()
                 }
             }
-            self.vc.loadData()
+            
             
         } else {
             self.vc.loadData()
             self.createPassword { newValue in
-                UserSettings.Security.password = newValue
-                self.vc.loadData()
+                DispatchQueue(label: "db", qos: .userInitiated).async {
+                    UserSettings.Security.password = newValue
+                    DispatchQueue.main.async {
+                        self.vc.loadData()
+                    }
+                }
             }
             
         }

@@ -220,11 +220,11 @@ class FilterTVC: SuperViewController {
     @IBAction func unwindCalendarClosed(segue: UIStoryboardSegue) {
         
         DispatchQueue.global(qos: .userInteractive).async {
-            if appData.filter.from == "" || appData.filter.to == "" {
+            if self.appData.filter.from == "" || AppDelegate.shared?.appData.filter.to == "" {
                 self.defaultFilter()
-                appData.filter.selectedPeroud = "\(self.buttonTitle[1])"
+                self.appData.filter.selectedPeroud = "\(self.buttonTitle[1])"
                 ifCustom = false
-                appData.filter.showAll = false
+                self.appData.filter.showAll = false
                 DispatchQueue.main.async {
                     self.tableview.reloadData()
                 }

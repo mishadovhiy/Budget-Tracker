@@ -38,7 +38,7 @@ class IconsVC: SuperViewController {
     }
     
     lazy var coloresStrTemporary:[String] = {
-        return screenType == .colorsOnly ? appData.screenColors : appData.categoryColors
+        return (screenType == .colorsOnly ? AppDelegate.shared?.appData.screenColors : AppDelegate.shared?.appData.categoryColors) ?? []
     }()
     
     var selectedColorId:Int = 0
@@ -177,7 +177,7 @@ extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
             let imgName = iconsData[selectedIconIndex!.section].data[selectedIconIndex!.row]
            // let colorName = coloresStrTemporary[selectedColorId]
             print(imgName)
-            if appData.devMode {
+            if AppDelegate.shared?.appData.devMode ?? false {
                 DispatchQueue.main.async {
                     AppDelegate.shared?.newMessage.show(title:imgName, type: .standart)
                 }

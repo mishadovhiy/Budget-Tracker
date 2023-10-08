@@ -70,7 +70,7 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
             let vc = storyboard.instantiateViewController(withIdentifier: "EnterValueVC") as! EnterValueVC
             vc.textFieldValue = defaultValue
             vc.screenData = data
-            vc.minValue = data.screenType == .code ? 4 : (data.screenType != .string ? 4 : 1)
+            vc.minValue = data.screenType == .code ? 4 : 1
             nav.pushViewController(vc, animated: true)
         }
 
@@ -178,6 +178,7 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
     }
     
     private func validateValue() -> Bool {
+        print(enteringValue.count, " fgvhbunjkmjygtfyrtguhijo")
         if enteringValue.count >= minValue {
             switch screenData?.screenType {
             case .email:
@@ -187,8 +188,10 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
             default:
                 return true
             }
+        } else {
+            return false
         }
-        return false
+        
     }
     
     

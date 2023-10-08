@@ -62,7 +62,7 @@ class AppData {
     }
     
     var proEnabeled:Bool {
-        let result = appData.proTrial || appData.proVersion
+        let result = proTrial || proVersion
         return devMode ? !(forceNotPro ?? !result) : result
     }
     
@@ -114,8 +114,8 @@ class AppData {
     func emailFromLoadedDataPurch(_ data:[[String]]) -> String? {
         //get user email
         //loadedData.append([name, email, password, registrationDate, pro, trialDate])
-        if !appData.purchasedOnThisDevice {
-            let currnt = appData.username
+        if !purchasedOnThisDevice {
+            let currnt = username
             var emailOptional:String?
             for i in 0..<data.count {
                 if data[i][0] == currnt {
@@ -134,7 +134,7 @@ class AppData {
                         }
                     }
                 }
-                appData.proVersion = dbPurch
+                proVersion = dbPurch
                 print("dbPurch:", dbPurch)
                 return email
             }
@@ -410,8 +410,8 @@ extension AppData {
             vccc.navigationController?.setNavigationBarHidden(true, animated: false)
             let cellHeight = 50
             let contentHeight = (data.count) * cellHeight
-            let safeAt = appData.resultSafeArea.1
-            let safebt = appData.resultSafeArea.0 + 10
+            let safeAt = self.resultSafeArea.1
+            let safebt = self.resultSafeArea.0 + 10
             let window = AppDelegate.shared?.window ?? UIWindow()
             let screenHeight = window.frame.height
             let additionalMargin:CGFloat = safeAt > 0 ? 45 : 40

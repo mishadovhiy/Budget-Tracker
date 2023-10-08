@@ -230,7 +230,7 @@ class HistoryVC: SuperViewController {
             let keyboardHeight = keyboardRectangle.height
             if keyboardHeight > 1.0 {
                 DispatchQueue.main.async {
-                    self.tableView.contentInset.bottom = keyboardHeight - appData.resultSafeArea.1
+                    self.tableView.contentInset.bottom = keyboardHeight - self.appData.resultSafeArea.1
                     
                 }
             }

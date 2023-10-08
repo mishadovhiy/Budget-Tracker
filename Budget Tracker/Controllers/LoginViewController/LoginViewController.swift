@@ -414,7 +414,7 @@ class LoginViewController: SuperViewController {
         if fromSettings {
             DispatchQueue.main.async {
                 let window = AppDelegate.shared?.window ?? UIWindow()
-                self.helperNavView?.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: appData.resultSafeArea.0)
+                self.helperNavView?.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: self.appData.resultSafeArea.0)
                 window.addSubview(self.helperNavView ?? UIView())
             }
         }
@@ -664,9 +664,9 @@ class LoginViewController: SuperViewController {
 extension LoginViewController {
     func logout() {
         DispatchQueue(label: "local", qos: .userInitiated).async {
-            if !appData.purchasedOnThisDevice {
-                appData.proVersion = false
-                appData.proTrial = false
+            if !self.appData.purchasedOnThisDevice {
+                self.appData.proVersion = false
+                self.appData.proTrial = false
             }
          //   appData.username = ""
        //     appData.password = ""
@@ -732,9 +732,14 @@ extension LoginViewController {
         appData.proTrial = false
     }
     @IBAction func moreButtonPressed(_ sender: UIButton) {//morepressed
-        let data = MoreOptionsData(vc: self)
-        appData.presentMoreVC(currentVC: self, data: data.get(), proIndex: 1)
-        hideKeyboard()
+        DispatchQueue(label: "db", qos: .userInitiated).async {
+            let pro = self.appData.proEnabeled
+            DispatchQueue.main.async {
+                let data = MoreOptionsData(vc: self)
+                self.appData.presentMoreVC(currentVC: self, data: data.get(isPro: self.appData.proEnabeled), proIndex: 1)
+                self.hideKeyboard()
+            }
+        }
     }
     
     

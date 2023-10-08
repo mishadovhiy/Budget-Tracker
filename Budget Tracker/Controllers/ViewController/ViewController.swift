@@ -8,8 +8,6 @@
 
 import UIKit
 
-let appData = AppData()
-
 class ViewController: SuperViewController {
     var touchingFromShow = false
 
@@ -148,9 +146,9 @@ class ViewController: SuperViewController {
     func monthSelected(_ year:Int, _ month:Int) {
         lastSelectedDate = nil
         DispatchQueue.init(label: "local", qos: .userInitiated).async {
-            appData.filter.showAll = false
-            appData.filter.from = "\(1.makeTwo()).\(month.makeTwo()).\(year)"
-            appData.filter.to = "\(31.makeTwo()).\(month.makeTwo()).\(year)"
+            AppDelegate.shared?.appData.filter.showAll = false
+            AppDelegate.shared?.appData.filter.from = "\(1.makeTwo()).\(month.makeTwo()).\(year)"
+            AppDelegate.shared?.appData.filter.to = "\(31.makeTwo()).\(month.makeTwo()).\(year)"
             if !self.completedFiltering {
                 self.transactionManager?.filterChanged = true
             }
@@ -165,7 +163,7 @@ class ViewController: SuperViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        print("today is", appData.filter.getToday())
+        print("today is", AppDelegate.shared?.appData.filter.getToday())
         AppDelegate.shared?.window?.backgroundColor = .clear
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         super.viewWillAppear(animated)
@@ -178,18 +176,19 @@ class ViewController: SuperViewController {
     func filter(data:[TransactionsStruct]? = nil) {
         completedFiltering = false
         print("filterCalled")
-        let showAll = appData.filter.showAll
+        let showAll = AppDelegate.shared?.appData.filter.showAll ?? false
         let all = transactionManager?.filtered(apiTransactions) ?? []
-        self.filterText = (showAll ? "All transactions".localize : appData.filter.periodText)
+        self.filterText = (showAll ? "All transactions".localize : (AppDelegate.shared?.appData.filter.periodText ?? ""))
         tableData = all
         prepareFilterOptions(all)
         
         calculations = .init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)
         dataTaskCount = (0,0)
         animateCellWillAppear = true
-        appData.filter.selectedPeroud = appData.filter.selectedPeroud != "" ? appData.filter.selectedPeroud : "This Month"
+        let selectedPeriud = AppDelegate.shared?.appData.filter.selectedPeroud ?? ""
+        AppDelegate.shared?.appData.filter.selectedPeroud = selectedPeriud != "" ? selectedPeriud : "This Month"
         
-        if !appData.filter.showAll {
+        if !showAll {
             allDaysBetween()
         }
         newTableData = transactionManager?.new(transactions: all) ?? []
@@ -208,9 +207,9 @@ class ViewController: SuperViewController {
         //add transaction
         //scrolltop (other, similier function) - to ask if user whants to refresh db
         forseSendUnsendedData = true
-        if appData.username != "" {
+        if AppDelegate.shared?.appData.username != "" {
             if refreshData {
-                if appData.username != "" {
+                if AppDelegate.shared?.appData.username != "" {
                     self.downloadFromDB(showError: true)
                 } else {
                     self.filter()
@@ -270,7 +269,7 @@ class ViewController: SuperViewController {
     var selectedFromDayInt = 0
     var selectedToDayInt = 0
     var editingTransaction: TransactionsStruct?
-    var prevSelectedPer = appData.filter.selectedPeroud
+    var prevSelectedPer:String?
 
     
     var filterHelperView = UIView(frame: .zero)
@@ -292,17 +291,17 @@ class ViewController: SuperViewController {
             DispatchQueue.main.async {
                 self.dataCountLabel.text = ""
             }
-            if appData.needFullReload {
-                appData.needFullReload = false
+            if (AppDelegate.shared?.appData.needFullReload ?? false) {
+                AppDelegate.shared?.appData.needFullReload = false
                 self.toggleNoData(show: true, text: "Loading".localize, fromTop: true, appeareAnimation: false, addButtonHidden: true)
             }
             self.downloadFromDB()
             
-            if appData.fromLoginVCMessage != "" {
-                print("appData.fromLoginVCMessage", appData.fromLoginVCMessage)
+            if AppDelegate.shared?.appData.fromLoginVCMessage != "" {
+                print("appData.fromLoginVCMessage", AppDelegate.shared?.appData.fromLoginVCMessage ?? "-")
                 DispatchQueue.main.async {
-                    self.newMessage.show(title:appData.fromLoginVCMessage, type: .standart)
-                    appData.fromLoginVCMessage = ""
+                    self.newMessage.show(title:AppDelegate.shared?.appData.fromLoginVCMessage ?? "", type: .standart)
+                    AppDelegate.shared?.appData.fromLoginVCMessage = ""
                     if self.sideBarShowing {
                         self.toggleSideBar(false, animated: true)
                     }
@@ -320,9 +319,8 @@ class ViewController: SuperViewController {
                     self.filterTextLabel.alpha = 1
                 }
             }
-            if self.prevSelectedPer != appData.filter.selectedPeroud {
+            if self.prevSelectedPer != AppDelegate.shared?.appData.filter.selectedPeroud {
                 self.filter()
-                print("unwindToFilter filter: \(appData.filter.selectedPeroud)")
             }
         }
     }
@@ -339,9 +337,9 @@ class ViewController: SuperViewController {
     @IBAction func statisticLabelPressed(_ sender: UIButton) {
         currentStatistic = true
         switch sender.tag {
-        case 0: appData.expenseLabelPressed = true
-        case 1: appData.expenseLabelPressed = false
-        default: appData.expenseLabelPressed = true
+        case 0: AppDelegate.shared?.appData.expenseLabelPressed = true
+        case 1: AppDelegate.shared?.appData.expenseLabelPressed = false
+        default: AppDelegate.shared?.appData.expenseLabelPressed = true
         }
         DispatchQueue.main.async {
             self.performSegue(withIdentifier: K.statisticSeque, sender: self)
@@ -349,7 +347,7 @@ class ViewController: SuperViewController {
     }
 
     @objc func savedTransPressed(_ sender: UITapGestureRecognizer) {
-        if !appData.sendSavedData {
+        if !(AppDelegate.shared?.appData.sendSavedData ?? true) {
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: "toUnsendedVC", sender: self)
             }
@@ -368,13 +366,13 @@ class ViewController: SuperViewController {
     }
     
     @objc func incomePressed(_ sender: UITapGestureRecognizer) {
-        appData.expenseLabelPressed = false
+        AppDelegate.shared?.appData.expenseLabelPressed = false
         DispatchQueue.main.async {
             self.performSegue(withIdentifier: "toStatisticVC", sender: self)
         }
     }
     @objc func expensesPressed(_ sender: UITapGestureRecognizer) {
-        appData.expenseLabelPressed = true
+        AppDelegate.shared?.appData.expenseLabelPressed = true
         DispatchQueue.main.async {
             self.performSegue(withIdentifier: "toStatisticVC", sender: self)
         }

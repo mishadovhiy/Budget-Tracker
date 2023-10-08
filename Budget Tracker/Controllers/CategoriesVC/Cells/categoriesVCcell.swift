@@ -58,7 +58,7 @@ class categoriesVCcell: ClearCell {
 
     }
     
-    func lo(index:IndexPath?, footer: Int?) {
+    func set(index:IndexPath?, footer: Int?) {
         indexPath = index
         footerSection = footer
 
@@ -71,7 +71,7 @@ class categoriesVCcell: ClearCell {
                         }
                     }
                 } else {
-                    if let footer = footer {
+                    if let footer = footer, data.count - 1 >= footer, data.count != 0 {
                         return data[footer].newCategory
                     }
                 }

@@ -9,6 +9,7 @@
 import UIKit
 import AlertViewLibrary
 import MessageViewLibrary
+//import BackgroundTasks
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate{
@@ -17,7 +18,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     static var shared:AppDelegate?
     let center = UNUserNotificationCenter.current()
     lazy var notificationManager = NotificationManager()
-    
     
     var backgroundEnterDate:Date?
     var becameActive = false
@@ -59,42 +59,63 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     lazy var db:DataBase = {
         return DataBase()
     }()
-    
+    let appData = AppData()
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         AppDelegate.shared = self
-#if !os(iOS)
-        print("werewrrge")
-
-#endif
-#if os(iOS)
-        print("sfdererw")
-#endif
-
         
-        window?.tintColor = AppData.colorNamed(AppData.linkColor)
-        center.delegate = self
-        
-        let today = appData.filter.getToday()
-        let value = db.db["lastLaunching"] as? String ?? ""
-        if value != today {
-            db.db.updateValue(today, forKey: "lastLaunching")
-            lastSelectedDate = nil
+        DispatchQueue(label: "db", qos: .userInitiated).async {
+            let tint = AppData.linkColor
+            let today = self.appData.filter.getToday()
+            let value = self.db.db["lastLaunching"] as? String ?? ""
+            if value != today {
+                self.db.db.updateValue(today, forKey: "lastLaunching")
+                lastSelectedDate = nil
+            }
+            let pro = self.appData.proEnabeled
+            let localization = AppLocalization.udLocalization ?? (NSLocale.current.languageCode ?? "-")
+            DispatchQueue.main.async {
+                self.window?.tintColor = AppData.colorNamed(tint)
+                self.center.delegate = self
+                UNUserNotificationCenter.current().delegate = self
+                Notifications.getNotificationsNumber()
+                
+                AppLocalization.launchedLocalization = localization
+                print("LOCALIZATION: ", AppLocalization.launchedLocalization)
+                
+                if !pro {
+                    self.banner.createBanner()
+                }
+                self.setQuickActions()
+            }
         }
-        UNUserNotificationCenter.current().delegate = self
-        Notifications.getNotificationsNumber()
-        
-        AppLocalization.launchedLocalization = AppLocalization.udLocalization ?? (NSLocale.current.languageCode ?? "-")
-        print("LOCALIZATION: ", AppLocalization.launchedLocalization)
-        
-        if !appData.proEnabeled {
-            banner.createBanner()
-        }
-        
-        
-        setQuickActions()
+      /*  if #available(iOS 13.0, *) {
+            BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.dovhiy.Developer.Budget-Tracker.transactions.backgroundRefresh", using: nil) { task in
+                self.performBackgroundFetch { error in
+                    self.scheduleAppRefresh()
+                    task.setTaskCompleted(success: true)
+                }
+            }
+            self.scheduleAppRefresh()
+        } else {
+            UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+
+        }*/
         return true
     }
-            
+           
+   /* @available(iOS 13.0, *)
+    func scheduleAppRefresh() {
+        let request = BGAppRefreshTaskRequest(identifier: "com.dovhiy.Developer.Budget-Tracker.transactions.backgroundRefresh")
+        request.earliestBeginDate = Date(timeIntervalSinceNow: 60 * 1)
+
+        do {
+            try BGTaskScheduler.shared.submit(request)
+        } catch {
+            print("Error scheduling background refresh: \(error)")
+        }
+    }*/
+    
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
         guard let type = ShortCodeItem.init(rawValue: shortcutItem.type) else {
             print("unrecognized item pressed")
@@ -165,6 +186,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         print(#function)
         
     }
+    
+    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        print("performFetchWithCompletionHandlerperformFetchWithCompletionHandler")
+        performBackgroundFetch {
+            completionHandler($0 ? .failed : .newData)
+        }
+    }
+    
+    func performBackgroundFetch(completion:((_ error:Bool)->())? = nil) {
+        print("performBackgroundFetchperformBackgroundFetch")
+        DispatchQueue(label: "api", qos: .userInitiated).async {
+            LoadFromDB().newTransactions(completion: { _,error  in
+                DispatchQueue.main.async {
+                    completion?(error != .none)
+                }
+            })
+        }
+    }
+    
     
     func present(vc:UIViewController, completion:(()->())? = nil) {
         if let presenting = window?.rootViewController?.presentedViewController {

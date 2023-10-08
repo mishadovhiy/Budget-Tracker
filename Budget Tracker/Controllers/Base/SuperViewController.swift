@@ -16,7 +16,9 @@ class SuperViewController: UIViewController {
     lazy var db:DataBase = {
         return AppDelegate.shared?.db ?? DataBase()
     }()
-    
+    var appData:AppData {
+        return AppDelegate.shared?.appData ?? .init()
+    }
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         //screen rotation
     }

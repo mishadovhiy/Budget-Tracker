@@ -56,7 +56,7 @@ extension CategoriesVC {
                 }
 
                 let deleteAction = {
-                    appData.needDownloadOnMainAppeare = true
+                    self.appData.needDownloadOnMainAppeare = true
                     self.db.localCategories = []
                     self.db.localTransactions = []
                 //    DispatchQueue.main.async {
@@ -64,8 +64,8 @@ extension CategoriesVC {
                   //  }
                 }
                 let sendAll = {
-                    appData.needDownloadOnMainAppeare = true
-                    appData.sendSavedData = true
+                    self.appData.needDownloadOnMainAppeare = true
+                    self.appData.sendSavedData = true
                         self.navigationController?.popToRootViewController(animated: true)
                 }
                 
@@ -83,7 +83,7 @@ extension CategoriesVC {
                     let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent, for: indexPath) as! categoriesVCcell
                     
                     let index = IndexPath(row: indexPath.row, section: indexPath.section - sectionsBeforeData)
-                    cell.lo(index: index, footer: nil)
+                    cell.set(index: index, footer: nil)
 
                     let category = tableData[index.section].data[indexPath.row]
 
@@ -192,7 +192,7 @@ extension CategoriesVC {
         //show only footer
         let category = tableData[sect].newCategory.category
             cell.footerHelperBottomView.isHidden = false
-        cell.lo(index: nil, footer: sect)
+        cell.set(index: nil, footer: sect)
         cell.newCategoryTF.text = category.name
             if (AppDelegate.shared?.symbolsAllowed ?? false) {
                 cell.iconimage.image = AppData.iconSystemNamed(category.icon)

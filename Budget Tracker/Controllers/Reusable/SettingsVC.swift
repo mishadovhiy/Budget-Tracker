@@ -88,8 +88,10 @@ class SettingsVC: SuperViewController {
 
 extension SettingsVC: IconsVCDelegate {
     func selected(img: String, color: String) {
-        AppData.linkColor = color
-        self.loadData()
+        DispatchQueue(label: "db", qos: .userInitiated).async {
+            AppData.linkColor = color
+            self.loadData()
+        }
     }
     
     
@@ -141,14 +143,14 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         if let standartData = tableData[indexPath.section].cells[indexPath.row] as? StandartCell {
             if let proID = standartData.pro {
-                appData.presentBuyProVC(selectedProduct: proID)
+                AppDelegate.shared?.appData.presentBuyProVC(selectedProduct: proID)
             } else {
                 standartData.action()
             }
         } else {
             if let trigger = tableData[indexPath.section].cells[indexPath.row] as? TriggerCell {
                 if let proID = trigger.pro {
-                    appData.presentBuyProVC(selectedProduct: proID)
+                    AppDelegate.shared?.appData.presentBuyProVC(selectedProduct: proID)
                 }
             }
         }

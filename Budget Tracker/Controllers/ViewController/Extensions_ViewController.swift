@@ -338,7 +338,7 @@ extension ViewController {
                     self.updateDataLabels(noData: newValue.count == 0)
                 }
                 self.tableActionActivityIndicator.removeFromSuperview()
-                if appData.username != "" {
+                if self.appData.username != "" {
                     self.sendUnsaved()
                 }
                 if let _ = self.newTransaction {
@@ -439,24 +439,24 @@ extension ViewController {
         }
     }
     func checkPurchase(completion:@escaping(Bool?)-> (), local:Bool = false) {
-        let nick = appData.username
+        let nick = self.appData.username
         if nick == "" || local {
             completion(true)
             return
         }
         LoadFromDB.shared.Users { (loadedData, error) in
             if !error {
-                let checkPassword = LoadFromDB.checkPassword(from: loadedData, nickname: appData.username, password: appData.password)
+                let checkPassword = LoadFromDB.checkPassword(from: loadedData, nickname: self.appData.username, password: self.appData.password)
                 let wrongPassword = checkPassword.0
                 if let userData = checkPassword.1 {
                     if wrongPassword {
                         self.wrongPassword()
                         completion(false)
                     } else {
-                        let _ = appData.emailFromLoadedDataPurch(loadedData)
-                        appData.trialDate = userData[5]
-                        if !appData.purchasedOnThisDevice && !appData.proVersion {
-                            print("checkPurchase appData.proVersion", appData.proVersion)
+                        let _ = self.appData.emailFromLoadedDataPurch(loadedData)
+                        self.appData.trialDate = userData[5]
+                        if !self.appData.purchasedOnThisDevice && !self.appData.proVersion {
+                            print("checkPurchase appData.proVersion", self.appData.proVersion)
                             if userData[5] != "" {
                                 self.checkProTrial()
                             }
@@ -604,7 +604,7 @@ extension ViewController {
         
         DispatchQueue.init(label: "local", qos: .userInitiated).async {
             if self.db.viewControllers.firstLaunch[.home] ?? false {
-                appData.createFirstData {
+                self.appData.createFirstData {
                     self.prepareFilterOptions()
                     self.filter()
                     self.db.viewControllers.firstLaunch[.home] = false
@@ -874,8 +874,8 @@ extension ViewController: TransitionVCProtocol {
         let errorAction = {
             self.sendError = true
             self.startedSendingUnsended = false
-            if appData.sendSavedData {
-                appData.sendSavedData = false
+            if self.appData.sendSavedData {
+                self.appData.sendSavedData = false
                 //show message error, try again later
                 DispatchQueue.main.async {
                     self.newMessage.show(title:"Error sending data".localize, description: "Try again later".localize, type: .error)
@@ -883,7 +883,7 @@ extension ViewController: TransitionVCProtocol {
             }
             self.filter()
         }
-        let unsended = appData.unsendedData
+        let unsended = self.appData.unsendedData
         if unsended.count > 0 {
             if let first = unsended.first {
                 startedSendingUnsended = true
@@ -903,7 +903,7 @@ extension ViewController: TransitionVCProtocol {
                         cat.id = newID
                         SaveToDB.shared.newCategories(cat, saveLocally: false) { error in
                             if !error {
-                                appData.unsendedData.removeFirst()
+                                self.appData.unsendedData.removeFirst()
                                 self.highesLoadedCatID! += 1
                                 var newTransactions: [[String:Any]] = []
                                 for i in 0..<unsended.count {
@@ -918,7 +918,7 @@ extension ViewController: TransitionVCProtocol {
                                 }
                                 
                                 for i in 0..<newTransactions.count {
-                                    appData.unsendedData.append(["transactionNew":newTransactions[i]])
+                                    self.appData.unsendedData.append(["transactionNew":newTransactions[i]])
                                 }
                                 self.sendUnsaved()
                             } else {
@@ -944,7 +944,7 @@ extension ViewController: TransitionVCProtocol {
                     if let deleteCategory = NewCategories.create(dict: first["deleteCategoryNew"] ?? [:]) {
                         delete.CategoriesNew(category: deleteCategory, saveLocally: false) { error in
                             if !error {
-                                appData.unsendedData.removeFirst()
+                                self.appData.unsendedData.removeFirst()
                                 self.sendUnsaved()
                             } else {
                                 errorAction()
@@ -954,7 +954,7 @@ extension ViewController: TransitionVCProtocol {
                         if let addTransaction = TransactionsStruct.create(dictt: first["transactionNew"] ?? [:]) {
                             SaveToDB.shared.newTransaction(addTransaction, saveLocally: false) { error in
                                 if !error {
-                                    appData.unsendedData.removeFirst()
+                                    self.appData.unsendedData.removeFirst()
                                     self.sendUnsaved()
                                 } else {
                                     errorAction()
@@ -964,7 +964,7 @@ extension ViewController: TransitionVCProtocol {
                             if let deleteTransaction = TransactionsStruct.create(dictt: first["deleteTransactionNew"] ?? [:]) {
                                 delete.newTransaction(deleteTransaction, saveLocally: false) { error in
                                     if !error {
-                                        appData.unsendedData.removeFirst()
+                                        self.appData.unsendedData.removeFirst()
                                         self.sendUnsaved()
                                     }else {
                                         errorAction()
@@ -1076,22 +1076,24 @@ extension ViewController: TransitionVCProtocol {
             vc.screenType = segue.identifier == "toLocalData" ? .localData : .categories
             vc.fromSettings = true
         case "toFiterVC":
-            self.mainTableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
-            prevSelectedPer = appData.filter.selectedPeroud
             let vc = segue.destination as? FilterTVC
-            vc?.months = appData.filter.filteredData["months"] ?? []
-            vc?.years = appData.filter.filteredData["years"] ?? []
-            DispatchQueue.main.async {
-                let filterFrame = self.filterView.frame//self.filterAndCalcFrameHolder.0
-                let superFilter = self.filterView.superview?.frame ?? .zero
-                let helperFrame = self.mainContentViewHelpher.frame
-                let vcFrame = CGRect(x: filterFrame.minX + superFilter.minX, y: filterFrame.minY + superFilter.minY + helperFrame.height, width: filterFrame.width - 10, height: filterFrame.width)
-                vc?.frame = vcFrame
-                self.filterHelperView.frame = CGRect(x: filterFrame.minX + superFilter.minX, y: vcFrame.minY, width: vcFrame.width - 10, height: vcFrame.height)
-                self.filterHelperView.alpha = 0
-                Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { (_) in
-                    UIView.animate(withDuration: 0.6) {
-                        self.filterHelperView.alpha = 1
+            self.mainTableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+            DispatchQueue(label: "db", qos: .userInitiated).async {
+                self.prevSelectedPer = self.appData.filter.selectedPeroud
+                vc?.months = self.appData.filter.filteredData["months"] ?? []
+                vc?.years = self.appData.filter.filteredData["years"] ?? []
+                DispatchQueue.main.async {
+                    let filterFrame = self.filterView.frame//self.filterAndCalcFrameHolder.0
+                    let superFilter = self.filterView.superview?.frame ?? .zero
+                    let helperFrame = self.mainContentViewHelpher.frame
+                    let vcFrame = CGRect(x: filterFrame.minX + superFilter.minX, y: filterFrame.minY + superFilter.minY + helperFrame.height, width: filterFrame.width - 10, height: filterFrame.width)
+                    vc?.frame = vcFrame
+                    self.filterHelperView.frame = CGRect(x: filterFrame.minX + superFilter.minX, y: vcFrame.minY, width: vcFrame.width - 10, height: vcFrame.height)
+                    self.filterHelperView.alpha = 0
+                    Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { (_) in
+                        UIView.animate(withDuration: 0.6) {
+                            self.filterHelperView.alpha = 1
+                        }
                     }
                 }
             }
@@ -1121,10 +1123,12 @@ extension ViewController: TransitionVCProtocol {
         case "toSingIn":
             let nav = segue.destination as! UINavigationController
             let vc = nav.topViewController as! LoginViewController
-            appData.username = ""
-            appData.password = ""
-            vc.forceLoggedOutUser = forceLoggedOutUser
-            vc.messagesFromOtherScreen = "Your password has been changed".localize
+            DispatchQueue(label: "db",  qos: .userInitiated).async {
+                self.appData.username = ""
+                self.appData.password = ""
+                vc.forceLoggedOutUser = self.forceLoggedOutUser
+                vc.messagesFromOtherScreen = "Your password has been changed".localize
+            }
         default: return
         }
     }

@@ -24,7 +24,6 @@ struct BudgetTrackerCalendatWidgetAttributes: ActivityAttributes {
 struct BudgetTrackerCalendatWidgetLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: BudgetTrackerCalendatWidgetAttributes.self) { context in
-            // Lock screen/banner UI goes here
             VStack {
                 Text("Hello \(context.state.emoji)")
             }

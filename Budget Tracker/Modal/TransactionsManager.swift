@@ -26,7 +26,7 @@ class TransactionsManager {
     func total(transactions:[TransactionsStruct]) -> Double {
         var res:Double = 0
         let new = transactions
-        let thisMonth = String(appData.filter.getToday().dropFirst().dropFirst())
+        let thisMonth = String((AppDelegate.shared?.appData.filter.getToday() ?? "").dropFirst().dropFirst())
         let allForThisMonth = new.filter({
             return $0.date.contains(thisMonth)
         })
@@ -38,7 +38,7 @@ class TransactionsManager {
     }
     
     func filtered(_ data:[TransactionsStruct]) -> [TransactionsStruct] {
-        let today = appData.filter.fromDate
+        let today = (AppDelegate.shared?.appData.filter.fromDate ?? DateComponents())
         return data.filter { transaction in
             return (transaction.date.stringToCompIso().year ?? 1) == (today.year ?? 0)
         }
@@ -70,7 +70,7 @@ class TransactionsManager {
     
     
     private func containsDay(curDay:String) -> Bool {
-        if appData.filter.showAll {
+        if (AppDelegate.shared?.appData.filter.showAll ?? false) {
             return true
         } else {
             return daysBetween.contains(curDay)

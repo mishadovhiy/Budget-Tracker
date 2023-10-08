@@ -306,19 +306,19 @@
                                                                 <rect key="frame" x="0.0" y="0.0" width="390" height="50"/>
                                                                 <subviews>
                                                                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4d7-Fl-6zl" customClass="BasicView" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="4" height="35"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="321" height="35"/>
                                                                         <subviews>
                                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="Bpw-oX-ZtL">
-                                                                                <rect key="frame" x="2" y="0.0" width="0.0" height="33"/>
+                                                                                <rect key="frame" x="2" y="0.0" width="317" height="33"/>
                                                                                 <subviews>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Data from" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tWb-PR-x7Z">
-                                                                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="33"/>
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="277" height="33"/>
                                                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                                         <color key="textColor" name="balanceTitleColor"/>
                                                                                         <nil key="highlightedColor"/>
                                                                                     </label>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="flQ-Ba-Szl">
-                                                                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="33"/>
+                                                                                        <rect key="frame" x="277" y="0.0" width="40" height="33"/>
                                                                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
                                                                                         <color key="textColor" name="balanceTitleColor"/>
                                                                                         <nil key="highlightedColor"/>
@@ -341,18 +341,19 @@
                                                                         </userDefinedRuntimeAttributes>
                                                                     </view>
                                                                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TlO-Ln-54D" customClass="BasicView" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="4" height="2"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="321" height="2"/>
                                                                         <subviews>
                                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="meX-ga-QXR">
-                                                                                <rect key="frame" x="2" y="0.0" width="0.0" height="0.0"/>
+                                                                                <rect key="frame" x="2" y="0.0" width="317" height="0.0"/>
                                                                                 <subviews>
-                                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Unsaved Data:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gwp-y1-Jmr" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
+                                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unsaved Data:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gwp-y1-Jmr" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="277" height="0.0"/>
                                                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                                         <color key="textColor" name="balanceTitleColor"/>
                                                                                         <nil key="highlightedColor"/>
                                                                                     </label>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x8a-G7-gqu">
-                                                                                        <rect key="frame" x="0.0" y="0.0" width="40" height="0.0"/>
+                                                                                        <rect key="frame" x="277" y="0.0" width="40" height="0.0"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" constant="40" id="p2J-PH-vuc"/>
                                                                                         </constraints>
@@ -2646,7 +2647,7 @@
                             </connections>
                         </segmentedControl>
                         <barButtonItem key="rightBarButtonItem" title="share" style="plain" id="h6I-pJ-oGC">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="KvP-WS-BeQ">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="KvP-WS-BeQ">
                                 <rect key="frame" x="299.33333333333331" y="5" width="110.66666666666669" height="34.333333333333336"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Button"/>
@@ -4376,7 +4377,7 @@ AAAAAAIBAAAAAAAAAGEAAAAAAAAAAAAAAAAAAChAA
         <image name="trash.fill" catalog="system" width="117" height="128"/>
         <image name="unknown" width="15" height="12"/>
         <namedColor name="CategoryColor">
-            <color red="0.86699998378753662" green="0.86699998378753662" blue="0.86699998378753662" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.15700000524520874" green="0.15700000524520874" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="PrimaryBackgroundColor">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -4394,7 +4395,7 @@ AAAAAAIBAAAAAAAAAGEAAAAAAAAAAAAAAAAAAChAA
             <color red="0.078000001609325409" green="0.078000001609325409" blue="0.078000001609325409" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="balanceTitleColor">
-            <color red="0.43399998545646667" green="0.43399998545646667" blue="0.43399998545646667" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <color red="0.15700000524520874" green="0.15700000524520874" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="balanceValueColor">
             <color red="0.2669999897480011" green="0.2669999897480011" blue="0.2669999897480011" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>

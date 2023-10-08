@@ -19,12 +19,26 @@ class DataBase {
             } else {
                 let v = UserDefaults.standard.value(forKey: "DataBase") as? [String:Any] ?? [:]
                 DataBase._db = v
+                print(Thread.isMainThread, " dbgetThread")
+                if Thread.isMainThread {
+                    if (AppDelegate.shared?.appData.devMode ?? false) {
+                        AppDelegate.shared?.newMessage.show(title:"fatal error, from main", type: .error)
+                    }
+                    print("!!!!!!!!!!!errororor")
+                }
                 return v
             }
             
         }
         set {
             DataBase._db = newValue
+            print(Thread.isMainThread, " dbsetThread")
+            if Thread.isMainThread {
+                print("!!!!!!!!!!!errororor set")
+                if (AppDelegate.shared?.appData.devMode ?? false) {
+                    AppDelegate.shared?.newMessage.show(title:"fatal error, from main", type: .error)
+                }
+            }
             UserDefaults.standard.setValue(newValue, forKey: "DataBase")
         }
     }

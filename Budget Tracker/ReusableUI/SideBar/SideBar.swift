@@ -9,7 +9,9 @@
 import UIKit
 
 class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
-    
+    var appData:AppData {
+        AppDelegate.shared?.appData ?? .init()
+    }
     func getData(){
         let db = DataBase()
         let debts = db.debts.count

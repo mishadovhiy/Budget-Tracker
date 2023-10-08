@@ -29,7 +29,7 @@ class CalendarControlVC: UIViewController {
         let swipeClose = UISwipeGestureRecognizer(target: self, action: #selector(swipeClose(_:)))
         self.view.addGestureRecognizer(swipeClose)
         DispatchQueue.init(label: "l", qos: .userInitiated).async {
-            let today = appData.filter.fromDate
+            let today = AppDelegate.shared?.appData.filter.fromDate ?? DateComponents()
             self.middleDate = .init(year: today.year ?? 0, month: today.month ?? 0)
         }
     }
