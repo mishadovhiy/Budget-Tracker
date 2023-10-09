@@ -83,8 +83,12 @@ class AppSettingsData {
                 
                 self.getUserPasscode {
                     self.createPassword { newValue in
-                        UserSettings.Security.password = newValue
-                        self.vc.loadData()
+                        DispatchQueue(label: "db", qos: .userInitiated).async {
+                            UserSettings.Security.password = newValue
+                            DispatchQueue.main.async {
+                                self.vc.loadData()
+                            }
+                        }
                     }
                 }
             })
@@ -98,9 +102,12 @@ class AppSettingsData {
                 let vcTitle = timeoutText
                 
                 self.vc.toChooseIn(data: timoutOptions, title: vcTitle) { newValue in
-                    
-                    UserSettings.Security.timeOut = timoutOptions[newValue]
-                    self.vc.loadData()
+                    DispatchQueue(label: "db", qos: .userInitiated).async {
+                        UserSettings.Security.timeOut = timoutOptions[newValue]
+                        DispatchQueue.main.async {
+                            self.vc.loadData()
+                        }
+                    }
                 }
             })
             

@@ -512,14 +512,6 @@
 			path = SupportVC;
 			sourceTree = "<group>";
 		};
-		8B6BA97C27E6E5360067FF58 /* AppSettings */ = {
-			isa = PBXGroup;
-			children = (
-				8B6BA97827E6E2500067FF58 /* AppSettingsData.swift */,
-			);
-			path = AppSettings;
-			sourceTree = "<group>";
-		};
 		8B746AC127F405AA0010F0A4 /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -631,7 +623,7 @@
 			children = (
 				8D834D95297E03D60056E686 /* CalendarControlVC */,
 				8D8B6C3D245023EC007260A0 /* CalendarVC.swift */,
-				8BF63E8E2762C83F002E8601 /* SettingsVC.swift */,
+				8D519D382AD352BE00DBAD18 /* SettingsVC */,
 				8BF63E8A276294F2002E8601 /* SelectValueVC.swift */,
 				8B52DFEB27504D2900595A0C /* IconsVC.swift */,
 				8B5F342B26FB2D97000DDCAF /* EnterValueVC.swift */,
@@ -739,6 +731,15 @@
 				8D39788E28083E81007A2C55 /* AppDelegateExtensions.swift */,
 			);
 			path = AppDelegate;
+			sourceTree = "<group>";
+		};
+		8D519D382AD352BE00DBAD18 /* SettingsVC */ = {
+			isa = PBXGroup;
+			children = (
+				8BF63E8E2762C83F002E8601 /* SettingsVC.swift */,
+				8B6BA97827E6E2500067FF58 /* AppSettingsData.swift */,
+			);
+			path = SettingsVC;
 			sourceTree = "<group>";
 		};
 		8D5C62572ACF4FA2005D68B0 /* BudgetTrackerCalendatWidget */ = {
@@ -850,7 +851,6 @@
 				8B78559A27F0B3AD00169A93 /* TransactionsVC */,
 				8B78559D27F0C9F900169A93 /* RemindersVC */,
 				8B91F08F27E58B6100B74F5A /* StatisticVC */,
-				8B6BA97C27E6E5360067FF58 /* AppSettings */,
 				8B91F08C27E5873900B74F5A /* LoginViewController */,
 				8B4D33BB27825F6D00B83D8A /* BuyPro */,
 				8B6BA97B27E6E46A0067FF58 /* SupportVC */,
@@ -1406,7 +1406,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
@@ -1416,7 +1416,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 32;
+				MARKETING_VERSION = 34;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1437,7 +1437,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
@@ -1447,7 +1447,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 32;
+				MARKETING_VERSION = 34;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

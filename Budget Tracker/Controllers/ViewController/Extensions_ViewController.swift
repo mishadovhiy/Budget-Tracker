@@ -103,10 +103,10 @@ extension ViewController {
             touchingFromShow = sideBarShowing
         }
         let finger = sender.location(in: self.view)
-        let max:CGFloat = 250
+        let max:CGFloat = sideBar.frame.width - 10
         let resultXPos = finger.x
         let testCacl = resultXPos / max
-        let c = testCacl - CGFloat(Int(testCacl))
+       // let c = testCacl - CGFloat(Int(testCacl))
         let resCalc = testCacl >= 1 ? 1 : testCacl
         self.sideBarContentBlockerView.alpha = resCalc
         
@@ -116,7 +116,7 @@ extension ViewController {
         }
         if sidescrolling || sideBarShowing {
             if sender.state == .began || sender.state == .changed {
-                let maximum = max + 20
+                let maximum = max + 30
                 let newPosition = finger.x >= maximum ? maximum : (finger.x <= 0 ? 0 : finger.x)
                 UIView.animate(withDuration: 0.1, delay: 0, options: .allowUserInteraction, animations: {
                     self.mainContentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, newPosition, 0, 0)
@@ -127,8 +127,6 @@ extension ViewController {
                 if sender.state == .ended {
                     let toHide:CGFloat = wasShowingSideBar ? 200 : 80
                     toggleSideBar(finger.x > toHide ? true : false, animated: true)
-                    
-                    
                 }
             }
             if sender.state == .cancelled {
