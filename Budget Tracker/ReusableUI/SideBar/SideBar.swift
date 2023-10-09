@@ -164,7 +164,7 @@ class SideBardCell: UITableViewCell {
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         let selected = UIView(frame: .zero)
-        selected.backgroundColor = K.Colors.primaryBacground
+        selected.backgroundColor = K.Colors.sectionBackground
         self.selectedBackgroundView = selected
 
         if !(AppDelegate.shared?.symbolsAllowed ?? false) {

@@ -171,7 +171,7 @@ extension AppDelegate: AlertViewProtocol {
     func aiAppearence() -> AIAppearence {
         let texts:AIAppearence.Text = .init(loading: "Loading".localize, done: "Done".localize, internetError: (title: "Internet error".localize, description: "Try again later".localize), error: "Error".localize, okButton: "OK".localize, success: "Success".localize)
         
-        let view = K.Colors.primaryBacground
+        let view = K.Colors.background ?? .red
         
         let background = UIColor.black
         
@@ -189,7 +189,10 @@ extension AppDelegate: AlertViewProtocol {
         let separetor = (K.Colors.separetor ?? .red).withAlphaComponent(0.5)
         
         let colors:AIAppearence.Colors = .init(accent: accent, normal: normal, buttom: buttom, texts: textsColor, separetor: separetor)
-        return .init(text: texts, colors: colors)
+        var new:AIAppearence = .init(text: texts, colors: colors)
+        new.zPosition = 1001
+
+        return new
     }
     
     func aiNotShowingCondition() -> Bool {

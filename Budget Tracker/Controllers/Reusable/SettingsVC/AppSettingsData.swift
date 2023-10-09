@@ -26,7 +26,8 @@ class AppSettingsData {
             let data = [
                 SettingsVC.TableData(sectionTitle: "Appearance".localize, cells: appearenceSection()),
                 SettingsVC.TableData(sectionTitle: "Security".localize, cells: privacySection()),
-                SettingsVC.TableData(sectionTitle: "", cells: otherSection())
+                SettingsVC.TableData(sectionTitle: "", cells: otherSection()),
+                SettingsVC.TableData(sectionTitle: "", cells: urlSection())
             ]
             return data
         }
@@ -112,26 +113,14 @@ class AppSettingsData {
     }
     
     
-    func otherSection() -> [Any] {
-        
-        let otherCell = SettingsVC.StandartCell(title: "Access settings".localize, description: "", showIndicator: false, action: {
-            DispatchQueue.main.async {
-                if let url = URL(string: UIApplication.openSettingsURLString) {
-                    UIApplication.shared.open(url, options: [:]) { _ in
-                        
-                    }
-                }
-            }
-        })
-        
-        
-        let supportCell = SettingsVC.StandartCell(title: "Support".localize, action: {
+    func urlSection() -> [Any] {
+        let supportCell = SettingsVC.StandartCell(title: "Write to App Support".localize, action: {
             DispatchQueue.main.async {
                 self.vc.performSegue(withIdentifier: "toSupport", sender: self.vc)
             }
         })
         
-        let devSupport = SettingsVC.StandartCell(title: "App website".localize, showIndicator: false, action: {
+        let devSupport = SettingsVC.StandartCell(title: "App website".localize, action: {
             let urlString = "https://mishadovhiy.com/#budget"
             if let url = URL(string: urlString) {
                 DispatchQueue.main.async {
@@ -142,6 +131,39 @@ class AppSettingsData {
             }
         
         })
+        
+        let pprivacyTitle = "Privacy policy".localize
+        let privacy = SettingsVC.StandartCell(title: pprivacyTitle, action: {
+            DispatchQueue.main.async {
+                if let nav = self.vc.navigationController {
+                    WebViewVC.shared.presentScreen(in: nav, data: .init(url: "https://mishadovhiy.com/apps/previews/budget.html", key: "Privacy".localize), screenTitle: pprivacyTitle)
+                }
+            }
+            
+        })
+        let appUrl:SettingsVC.StandartCell = .init(title: "App store", action: {
+            guard let url:URL = .init(string: "https://apps.apple.com/us/app/budget-traker/id1511515117") else { return}
+            UIApplication.shared.open(url)
+        
+        })
+        return [supportCell, privacy, devSupport, appUrl]
+    }
+    
+    func otherSection() -> [Any] {
+        
+        let otherCell = SettingsVC.StandartCell(title: "Access settings".localize, description: "", action: {
+            DispatchQueue.main.async {
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url, options: [:]) { _ in
+                        
+                    }
+                }
+            }
+        })
+        
+        
+        
+        
         
         let appShortcodes = SettingsVC.StandartCell(title: "Application ShortCode Actions", action: {
             let ignoring = DataBase().viewControllers.ignoredActionTypes
@@ -164,26 +186,19 @@ class AppSettingsData {
             
         })
         
-        let pprivacyTitle = "Privacy policy".localize
-        let privacy = SettingsVC.StandartCell(title: pprivacyTitle, action: {
-            DispatchQueue.main.async {
-                if let nav = self.vc.navigationController {
-                    WebViewVC.shared.presentScreen(in: nav, data: .init(url: "https://mishadovhiy.com/apps/previews/budget.html", key: "Privacy".localize), screenTitle: pprivacyTitle)
-                }
-            }
-            
-        })
+        
         
         
         let testPro:SettingsVC.TriggerCell = SettingsVC.TriggerCell(title: "forceNotPro", isOn: AppDelegate.shared?.appData.forceNotPro ?? false, pro: nil, action: { (newValue) in
             AppDelegate.shared?.appData.forceNotPro = newValue ? true : nil
         })
 
+        
+        var cells = [otherCell, appShortcodes]
         if AppDelegate.shared?.appData.devMode ?? false {
-            return [supportCell, privacy, devSupport, otherCell, appShortcodes]
-        } else {
-            return [supportCell, privacy, devSupport, otherCell, appShortcodes]
+            //cells.append
         }
+        return cells
 
     }
 }

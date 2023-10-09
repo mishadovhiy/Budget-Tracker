@@ -247,13 +247,14 @@ class LoginViewController: SuperViewController {
                             
                         } else {
                             self.actionButtonsEnabled = true
+                            self.obthervValues = true
                             DispatchQueue.main.async {
                                 self.newMessage.show(title: "All fields are required".localize, type: .error)
                                 self.ai.fastHide()
-                                
+                                self.showWrongFields()
                             }
-                            self.obthervValues = true
-                            self.showWrongFields()
+                            
+                            
                         }
                     }
                 } else {
@@ -566,10 +567,10 @@ class LoginViewController: SuperViewController {
                     if dif < 20 {
                             UIView.animate(withDuration: 0.3) {
                                 if self.selectedScreen == .createAccount {
-                                    self.logIn.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, dif - 50, 0)
+                                    self.logIn.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, (dif - 100), 0)
                                 } else {
                                     if self.selectedScreen == .singIn {
-                                        self.createAcount.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, dif - 50, 0)
+                                        self.createAcount.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, (dif - 50), 0)
                                     }
                                 }
                                

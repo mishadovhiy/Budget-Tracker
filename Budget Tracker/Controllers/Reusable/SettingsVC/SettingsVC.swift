@@ -16,10 +16,12 @@ class SettingsVC: SuperViewController {
     var additionalData:[TableData]?
 
     func loadData() {
-        let dataModel = AppSettingsData(vc: self, data: additionalData)
-        tableData = dataModel.getData()
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
+        DispatchQueue(label: "db", qos: .userInitiated).async {
+            let dataModel = AppSettingsData(vc: self, data: self.additionalData)
+            self.tableData = dataModel.getData()
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
         }
     }
     

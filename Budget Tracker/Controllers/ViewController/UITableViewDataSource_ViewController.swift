@@ -92,6 +92,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             cell.yearLabel.text = "\(date.year ?? 0)"
             let v = cell.contentView
             cell.mainView.layer.cornerRadius = 15
+         //   cell.mainView.layer.cornerRadius(at: .top, value: 15)
             let newViewFrame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: v.frame.height)//cell.mainView?.frame.width + 6
             v.frame = .init(x: 0, y: 0, width: newViewFrame.width, height: v.frame.height)
             let newView = UIView(frame: newViewFrame)

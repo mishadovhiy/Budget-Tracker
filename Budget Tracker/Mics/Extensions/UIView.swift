@@ -53,6 +53,29 @@ extension UIView {
 }
 
 extension CALayer {
+    enum CornerPosition {
+        case top
+        case btn
+        case left
+        case right
+    }
+    func cornerRadius(at:CornerPosition, value:CGFloat?) {
+        switch at {
+        case .top:
+            self.cornerRadius = value ?? (self.frame.height / 2)
+            self.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        case .btn:
+            self.cornerRadius = value ?? (self.frame.height / 2)
+            self.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+        case .left:
+            self.cornerRadius = value ?? (self.frame.height / 2)
+            self.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+        case .right:
+            self.cornerRadius = value ?? (self.frame.height / 2)
+            self.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner]
+        }
+    }
+    
     enum KeyPath:String {
         case height = "bounds.size.height"
         case background = "backgroundColor"

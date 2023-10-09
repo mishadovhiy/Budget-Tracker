@@ -46,6 +46,7 @@ extension CategoriesVC {
                 }
             } else {
                 allCategoriesHolder = db.categories
+                _categories = allCategoriesHolder
                 categories = categoriesContains(searchingText)
             }
             

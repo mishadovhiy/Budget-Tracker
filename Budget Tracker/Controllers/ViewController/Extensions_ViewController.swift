@@ -59,6 +59,12 @@ extension ViewController {
         DispatchQueue.main.async {
             let frame = self.sideBar.layer.frame
             //UIView.animate(withDuration: animated ? 0.25 : 0) {
+            if show {
+                UIView.animate(withDuration: 0.3, delay: 0, options: .allowUserInteraction, animations: {
+                    self.sideBarContentBlockerView.alpha = show ? 1 : 0
+
+                })
+            }
             UIView.animate(withDuration: 0.58, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: [.allowAnimatedContent, .allowUserInteraction]) {
                 self.mainContentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
                 self.mainContentViewHelpher.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
@@ -67,11 +73,13 @@ extension ViewController {
                     self.sideBarContentBlockerView.alpha = show ? 1 : 0
 
                 })*/
-                UIView.animate(withDuration: 0.3, delay: 0, options: .allowUserInteraction, animations: {
-                    self.sideBarContentBlockerView.alpha = show ? 1 : 0
+                if !show {
+                    UIView.animate(withDuration: 0.3, delay: 0, options: .allowUserInteraction, animations: {
+                        self.sideBarContentBlockerView.alpha = show ? 1 : 0
 
-                })
-                
+                    })
+                    
+                }
                 self.sideBar.getData()
                 if self.firstLod {
                     self.firstLod = false
@@ -96,13 +104,10 @@ extension ViewController {
         }
         let finger = sender.location(in: self.view)
         let max:CGFloat = 250
-        let resultXPos = finger.x//!touchingFromShow ? finger.x : (max + finger.x)
+        let resultXPos = finger.x
         let testCacl = resultXPos / max
         let c = testCacl - CGFloat(Int(testCacl))
         let resCalc = testCacl >= 1 ? 1 : testCacl
-        //Int(testCacl) >= 1 && !touchingFromShow ? 1 : c
-        print(resCalc, " testCacltestCacltestCacl")
-        print(testCacl, " hgyuikjnhgyujk")
         self.sideBarContentBlockerView.alpha = resCalc
         
         if sender.state == .began {
@@ -111,8 +116,8 @@ extension ViewController {
         }
         if sidescrolling || sideBarShowing {
             if sender.state == .began || sender.state == .changed {
-                
-                let newPosition = finger.x
+                let maximum = max + 20
+                let newPosition = finger.x >= maximum ? maximum : (finger.x <= 0 ? 0 : finger.x)
                 UIView.animate(withDuration: 0.1, delay: 0, options: .allowUserInteraction, animations: {
                     self.mainContentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, newPosition, 0, 0)
                     self.mainContentViewHelpher.layer.transform = CATransform3DTranslate(CATransform3DIdentity, newPosition, 0, 0)

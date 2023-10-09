@@ -256,8 +256,13 @@ struct SaveToDB {
     //param: dont append and dont send to unsended when toDataString!= nil
     func newCategories(_ category: NewCategories, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {
         if appData.username == "" {
-            db.categories.append(category)
-            completion(false)
+            DispatchQueue(label: "db", qos: .userInitiated).async {
+                self.db.categories.append(category)
+                DispatchQueue.main.async {
+                    completion(false)
+                }
+            }
+            
         } else {
             let pupose = category.purpose.rawValue
             
@@ -466,7 +471,9 @@ struct DeleteFromDB {
                 deleted = true
             }
         }
-        db.categories = new
+        DispatchQueue(label: "db", qos: .userInitiated).async {
+            self.db.categories = new
+        }
     }
     
     func newTransaction(_ transaction: TransactionsStruct, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {

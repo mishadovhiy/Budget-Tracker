@@ -28,9 +28,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }()
     
     lazy var ai: AlertViewLibrary = {
-        var appearence:AIAppearence = aiAppearence()
-        appearence.zPosition = 1001
-        let ai = AlertViewLibrary.instanceFromNib(appearence)
+        let ai = AlertViewLibrary.instanceFromNib(aiAppearence())
         ai.notShowingCondition = aiNotShowingCondition
         return ai
     }()
@@ -159,9 +157,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
         DataBase._db = nil
         AppData.categoriesHolder = nil
-        if appData.devMode {
-            DispatchQueue.main.async {
-                self.ai.showAlertWithOK(title: "Memory warning!", error: true)
+        DispatchQueue(label: "db", qos: .userInitiated).async {
+            if self.appData.devMode {
+                DispatchQueue.main.async {
+                    self.ai.showAlertWithOK(title: "Memory warning!", error: true)
+                }
             }
         }
         

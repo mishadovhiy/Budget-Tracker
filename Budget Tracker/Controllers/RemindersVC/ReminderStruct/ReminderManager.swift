@@ -62,7 +62,9 @@ class ReminderManager {
             }
             
          }
-        self.reminders = result
+        DispatchQueue(label: "db", qos: .userInitiated).async {
+            self.reminders = result
+        }
     }
     
     func saveReminder(transaction:TransactionsStruct, newReminder:ReminderStruct, completionn: @escaping (Bool) -> ()) {

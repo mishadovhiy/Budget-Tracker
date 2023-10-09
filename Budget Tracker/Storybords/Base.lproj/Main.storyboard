@@ -144,7 +144,7 @@
                                                         <constraint firstItem="cyz-Xc-1ne" firstAttribute="top" secondItem="4D3-uy-0g7" secondAttribute="top" constant="10" id="oa8-m0-CpR"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
-                                                <color key="backgroundColor" name="SecondaryBacroundColor3"/>
+                                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <connections>
                                                     <outlet property="nameLabel" destination="s5l-04-T2o" id="p8s-h7-Tdy"/>
                                                     <outlet property="notificationsLabel" destination="Fmu-LD-Ntr" id="NUg-Iy-ZOi"/>
@@ -166,7 +166,7 @@
                                         </prototypes>
                                     </tableView>
                                 </subviews>
-                                <color key="backgroundColor" name="SecondaryBacroundColor3"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="cxr-Go-fWV" firstAttribute="top" secondItem="v9F-6t-GpL" secondAttribute="top" id="0k8-yB-Wzm"/>
                                     <constraint firstAttribute="bottom" secondItem="cxr-Go-fWV" secondAttribute="bottom" id="3ut-f7-Vzj"/>
@@ -1078,7 +1078,7 @@
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" name="SecondaryBacroundColor3"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Aut-cX-vhd" secondAttribute="trailing" constant="50" id="3wV-OH-fwr"/>
                             <constraint firstItem="Aut-cX-vhd" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="AVr-PA-I2G"/>
@@ -1655,8 +1655,8 @@
                             <constraint firstItem="UzW-vR-Z71" firstAttribute="centerY" secondItem="m5f-dV-6zU" secondAttribute="centerY" id="Tvn-OG-Ls6"/>
                             <constraint firstItem="SQF-Ky-vUp" firstAttribute="trailing" secondItem="56v-i7-otg" secondAttribute="trailing" id="b4m-OW-yfZ"/>
                             <constraint firstItem="SQF-Ky-vUp" firstAttribute="trailing" secondItem="kTa-v1-Lr8" secondAttribute="trailing" id="e08-LO-Nim"/>
+                            <constraint firstAttribute="bottom" secondItem="kTa-v1-Lr8" secondAttribute="bottom" id="fF1-Cl-tUu"/>
                             <constraint firstAttribute="bottom" secondItem="56v-i7-otg" secondAttribute="bottom" id="fhx-oR-ZJH"/>
-                            <constraint firstItem="SQF-Ky-vUp" firstAttribute="bottom" secondItem="kTa-v1-Lr8" secondAttribute="bottom" id="nbh-Ff-Jv5"/>
                             <constraint firstItem="kTa-v1-Lr8" firstAttribute="leading" secondItem="SQF-Ky-vUp" secondAttribute="leading" id="ofx-vM-coA"/>
                             <constraint firstItem="UzW-vR-Z71" firstAttribute="centerX" secondItem="m5f-dV-6zU" secondAttribute="centerX" id="p1y-aJ-iad"/>
                             <constraint firstItem="kTa-v1-Lr8" firstAttribute="top" secondItem="SQF-Ky-vUp" secondAttribute="top" id="sAP-68-fDW"/>
@@ -2696,11 +2696,11 @@
             <objects>
                 <viewController storyboardIdentifier="HistoryVC" id="Zmr-vi-AsB" customClass="HistoryVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4Hr-9J-3zH">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="777"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="922"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nMe-Ik-tvJ">
-                                <rect key="frame" x="0.0" y="0.0" width="430" height="777"/>
+                                <rect key="frame" x="0.0" y="0.0" width="430" height="922"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="scrollIndicatorInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="50"/>
                                 <color key="separatorColor" name="darkTableColor"/>
@@ -2955,7 +2955,7 @@
                                 </prototypes>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4la-rP-xjs">
-                                <rect key="frame" x="0.0" y="698" width="430" height="45"/>
+                                <rect key="frame" x="0.0" y="877" width="430" height="45"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Od4-nZ-9oi">
                                         <rect key="frame" x="15" y="0.0" width="405" height="40"/>
@@ -3544,7 +3544,7 @@
             <objects>
                 <viewController storyboardIdentifier="CalendarVC" id="5n4-P6-pnR" customClass="CalendarVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="67i-SE-sWB">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="866"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="922"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="278-rW-rj0" userLabel="headetView">
@@ -3622,17 +3622,17 @@
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="InH-AG-csp" userLabel="timeViewStack View">
-                                <rect key="frame" x="55" y="355" width="320" height="511"/>
+                                <rect key="frame" x="55" y="355" width="320" height="567"/>
                                 <subviews>
                                     <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="h2d-GY-FrE">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="511"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="567"/>
                                         <color key="tintColor" name="CategoryColor"/>
                                     </datePicker>
                                 </subviews>
                                 <color key="tintColor" name="CategoryColor"/>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="XFt-LS-Qbp">
-                                <rect key="frame" x="20" y="811" width="390" height="35"/>
+                                <rect key="frame" x="20" y="867" width="390" height="35"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j8N-A3-4Wm" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="100" height="35"/>
@@ -3726,7 +3726,7 @@
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="Evc-oG-Jzh">
                         <barButtonItem key="rightBarButtonItem" style="plain" id="IVV-dP-fLO">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="GhQ-Pl-q1R" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
-                                <rect key="frame" x="375" y="10" width="35" height="36"/>
+                                <rect key="frame" x="375" y="4" width="35" height="36"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="yellowColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
@@ -4177,8 +4177,8 @@
     </designables>
     <inferredMetricsTieBreakers>
         <segue reference="IMh-Gb-0ws"/>
-        <segue reference="rIb-KG-K0i"/>
-        <segue reference="6Wq-Fx-QbE"/>
+        <segue reference="HlC-bb-GVq"/>
+        <segue reference="Ega-tn-GzY"/>
         <segue reference="U95-ph-p6h"/>
         <segue reference="N0q-Op-l1q"/>
     </inferredMetricsTieBreakers>
@@ -4388,9 +4388,6 @@ AAAAAAIBAAAAAAAAAGEAAAAAAAAAAAAAAAAAAChAA
         <namedColor name="SecondaryBacroundColor2">
             <color red="0.125" green="0.125" blue="0.125" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="SecondaryBacroundColor3">
-            <color red="0.067000001668930054" green="0.067000001668930054" blue="0.067000001668930054" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-        </namedColor>
         <namedColor name="backgroundColor">
             <color red="0.078000001609325409" green="0.078000001609325409" blue="0.078000001609325409" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -4419,10 +4416,10 @@ AAAAAAIBAAAAAAAAAGEAAAAAAAAAAAAAAAAAAChAA
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="tintColor">
-            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

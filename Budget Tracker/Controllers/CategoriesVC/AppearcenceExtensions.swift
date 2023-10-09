@@ -219,18 +219,18 @@ extension CategoriesVC {
                         return .income
                     case .debt:
                         return .debt
-                    default:
-                        return .expense
                     }
                 }
 
-                if img != "" {
-                    appData.lastSelected.sett(value: img, setterType: .icon, valueType: valType)
-                    tableData[selectingFooter].newCategory.category.icon = img
-                }
-                if color != "" {
-                    appData.lastSelected.sett(value: color, setterType: .color, valueType: valType)
-                    tableData[selectingFooter].newCategory.category.color = color
+                DispatchQueue(label: "db", qos: .userInitiated).async {
+                    if img != "" {
+                        self.appData.lastSelected.sett(value: img, setterType: .icon, valueType: valType)
+                        self.tableData[selectingFooter].newCategory.category.icon = img
+                    }
+                    if color != "" {
+                        self.appData.lastSelected.sett(value: color, setterType: .color, valueType: valType)
+                        self.tableData[selectingFooter].newCategory.category.color = color
+                    }
                 }
                 
             }

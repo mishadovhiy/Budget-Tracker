@@ -19,29 +19,31 @@ class adBannerView: UIView {
     var adNotReceved = true
     
     public func createBanner() {
-        
+        GADMobileAds.sharedInstance().requestConfiguration.testDeviceIdentifiers = [ "f0009f4e48ef4bf48e18712f3560ef92" ]
         GADMobileAds.sharedInstance().start { status in
-            DispatchQueue.main.async {
-                let window = AppDelegate.shared?.window ?? UIWindow()
-                let height = self.backgroundView.frame.height
-                let screenWidth:CGFloat = window.frame.width > 330 ? 320 : 300
-                let adSize = GADAdSizeFromCGSize(CGSize(width: screenWidth, height: height))
-                self.size = height
-                let bannerView = GADBannerView(adSize: adSize)
-                bannerView.adUnitID = (AppDelegate.shared?.appData.devMode ?? false) ? "ca-app-pub-3940256099942544/2934735716" : "ca-app-pub-5463058852615321/8457751935"
-                bannerView.rootViewController = AppDelegate.shared?.window?.rootViewController
-                bannerView.load(GADRequest())
-                bannerView.delegate = self
-                self.adStack.addArrangedSubview(bannerView)
-                self.addConstants(window)
-                self.adStack.layer.cornerRadius = 4
-                self.adStack.layer.masksToBounds = true
-                self.layer.zPosition = 999
-                self.backgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, window.frame.height, 0)
-            }
+            print(Thread.isMainThread, " createBannercreateBanner")
+            let window = AppDelegate.shared?.window ?? UIWindow()
+            let height = self.backgroundView.frame.height
+            let screenWidth:CGFloat = window.frame.width > 330 ? 320 : 300
+            let adSize = GADAdSizeFromCGSize(CGSize(width: screenWidth, height: height))
+            self.size = height
+            let bannerView = GADBannerView(adSize: adSize)
+            bannerView.adUnitID = (AppDelegate.shared?.appData.devMode ?? false) ? "ca-app-pub-3940256099942544/2934735716" : "ca-app-pub-5463058852615321/8457751935"
+            bannerView.rootViewController = AppDelegate.shared?.window?.rootViewController
+            
+            bannerView.delegate = self
+            self.adStack.addArrangedSubview(bannerView)
+            self.addConstants(window)
+            self.adStack.layer.cornerRadius = 4
+            self.adStack.layer.masksToBounds = true
+            self.layer.zPosition = 999
+            self.backgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, window.frame.height, 0)
+            bannerView.load(GADRequest())
+            //   }
         }
     }
-
+    
+    
     
     public func appeare(force:Bool = false) {
         
@@ -80,7 +82,7 @@ class adBannerView: UIView {
             DispatchQueue.main.async {
                 let window = AppDelegate.shared?.window ?? UIWindow()
                 UIView.animate(withDuration: 0.3) {
-                   // self.alpha = 0
+                    // self.alpha = 0
                     self.backgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, window.frame.height, 0)
                 } completion: { _ in
                     self.isHidden = true
@@ -153,7 +155,7 @@ class adBannerView: UIView {
         super.init(coder: aDecoder)
     }
     
-
+    
 }
 
 

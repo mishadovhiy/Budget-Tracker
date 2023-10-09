@@ -49,12 +49,12 @@ struct Notifications {
                     }
                 }
                 print(notificationsCount, "notificationsCountnotificationsCountnotificationsCount")
-             //   DispatchQueue.main.async {
+                DispatchQueue.main.async {
                     UIApplication.shared.applicationIconBadgeNumber = ids.count
                     ViewController.shared?.notificationsCount = notificationsCount
                     Notifications.notificationsCount = notificationsCount
                     
-             //   }
+                }
             }
       //  }
     }

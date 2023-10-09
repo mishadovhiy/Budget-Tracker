@@ -11,7 +11,7 @@ import GoogleMobileAds
 
 extension adBannerView:GADBannerViewDelegate {
     func bannerViewDidReceiveAd(_ bannerView: GADBannerView) {
-      print("bannerViewDidReceiveAd")
+        print(#function)
         if adHidden && adNotReceved {
             adNotReceved = false
             appeare(force: true)
@@ -19,23 +19,23 @@ extension adBannerView:GADBannerViewDelegate {
     }
 
     func bannerView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) {
-      print("bannerView:didFailToReceiveAdWithError: \(error.localizedDescription)")
+      print("\(#function): \(error.localizedDescription)")
         
     }
 
     func bannerViewDidRecordImpression(_ bannerView: GADBannerView) {
-      print("bannerViewDidRecordImpression")
+      print(#function)
     }
 
     func bannerViewWillPresentScreen(_ bannerView: GADBannerView) {
-      print("bannerViewWillPresentScreen")
+      print(#function)
     }
 
     func bannerViewWillDismissScreen(_ bannerView: GADBannerView) {
-      print("bannerViewWillDIsmissScreen")
+      print(#function)
     }
 
     func bannerViewDidDismissScreen(_ bannerView: GADBannerView) {
-      print("bannerViewDidDismissScreen")
+      print(#function)
     }
 }

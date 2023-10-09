@@ -13,9 +13,11 @@ class SuperViewController: UIViewController {
 
     lazy var newMessage = AppDelegate.shared!.newMessage
     lazy var ai = AppDelegate.shared!.ai
-    lazy var db:DataBase = {
+    var db:DataBase {
         return AppDelegate.shared?.db ?? DataBase()
-    }()
+        //AppDelegate.shared?.appData.db ?? DataBase()
+        
+    }
     var appData:AppData {
         return AppDelegate.shared?.appData ?? .init()
     }
