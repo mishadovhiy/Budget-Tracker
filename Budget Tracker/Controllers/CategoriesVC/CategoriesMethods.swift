@@ -61,7 +61,7 @@ extension CategoriesVC {
         }
         
     }
-    func deteteCategory(at: IndexPath) {
+    func deteteCategory(at: IndexPath, reload:Bool = false) {
         let delete = DeleteFromDB()
         delete.CategoriesNew(category: tableData[at.section].data[at.row].category) { _ in
             AppData.categoriesHolder = nil
@@ -72,6 +72,9 @@ extension CategoriesVC {
             DispatchQueue.main.async {
                 self.searchBar.endEditing(true)
                 self.searchBar.text = ""
+                if reload {
+                    self.loadTableData(loadFromUD: false)
+                }
             }
         }
     }

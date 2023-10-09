@@ -57,11 +57,13 @@ extension CategoriesVC {
 
                 let deleteAction = {
                     self.appData.needDownloadOnMainAppeare = true
-                    self.db.localCategories = []
-                    self.db.localTransactions = []
-                //    DispatchQueue.main.async {
-                        self.navigationController?.popToRootViewController(animated: true)
-                  //  }
+                    DispatchQueue(label: "db", qos: .userInitiated).async {
+                        self.db.localCategories = []
+                        self.db.localTransactions = []
+                        DispatchQueue.main.async {
+                            self.navigationController?.popToRootViewController(animated: true)
+                        }
+                    }
                 }
                 let sendAll = {
                     self.appData.needDownloadOnMainAppeare = true
@@ -252,7 +254,7 @@ extension CategoriesVC {
             //self.tableActionActivityIndicator.startAnimating()
           //  DispatchQueue.main.async {
             self.ai.show(title: "Deleting".localize, notShowIfLoggedUser: true) { _ in
-                    self.deteteCategory(at: IndexPath(row: indexPath.row, section: indexPath.section - self.sectionsBeforeData))
+                    self.deteteCategory(at: IndexPath(row: indexPath.row, section: indexPath.section - self.sectionsBeforeData), reload: true)
                 }
           //  }
         }

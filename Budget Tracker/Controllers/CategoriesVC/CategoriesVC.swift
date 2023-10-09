@@ -82,7 +82,6 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         loadTableData()
     }
     override func viewWillAppear(_ animated: Bool) {
-        toHistory = false
         navigationController?.setNavigationBarHidden(false, animated: true)
         AppDelegate.shared?.banner.setBackground(clear: false)
     }
@@ -105,9 +104,13 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             }
 
         if !appeareDidCall {
+            toHistory = false
             appeareDidCall = true
         } else {
             loadTableData(loadFromUD: true)
+            if toHistory {
+                toHistory = false
+            }
         }
 
         self.tableView.contentInset.bottom = self.defaultTableInset
@@ -163,7 +166,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             vc.fromCategories = true
             vc.allowEditing = screenType != .localData ? (selectedCategory?.purpose == .debt ? true : false) : (transfaringCategories == nil ? true : false)
             vc.mainType = screenType != .localData ? .db : transfaringCategories == nil ? .localData : .unsaved
-
+            vc.edited = {
+               // self.loadTableData(loadFromUD: false)
+            }
         case "selectIcon":
             let vc = segue.destination as! IconsVC
             vc.delegate = self

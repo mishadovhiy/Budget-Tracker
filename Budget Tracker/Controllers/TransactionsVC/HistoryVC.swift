@@ -245,6 +245,7 @@ class HistoryVC: SuperViewController {
             
         }
     }
+    var edited:(()->())?
     var _totalSumm: Int  = 0
     var totalSumm: Int {
         get {
@@ -334,6 +335,7 @@ class HistoryVC: SuperViewController {
                 var newCategory = category
                 newCategory.dueDate = fullDate == "" ? nil : newDate
                 SaveToDB.shared.newCategories(newCategory) { _ in
+                    self.changed = true
                     self.selectedCategory = newCategory
                     DispatchQueue.main.async {
                         self.ai.fastHide { (_) in
@@ -395,6 +397,7 @@ class HistoryVC: SuperViewController {
                 }
                 
                 SaveToDB.shared.newCategories(newCategory) { _ in
+                    self.changed = true
                     self.selectedCategory = newCategory
                     completion(nil)
                 }
@@ -415,10 +418,11 @@ class HistoryVC: SuperViewController {
     var calendarAmountPressed = (false, false)
     
     
-    
+    var changed:Bool = false
     func sendAmountToPay(_ text: String) {
         if let _ = Double(text) {
             self.ai.show(title: "Sending".localize) { _ in
+                self.changed = true
                 self.changeAmountToPay(enteredAmount: text) { (_) in
                     self.amountToPayEditing = false
                     self.ai.fastHide { (_) in
