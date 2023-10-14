@@ -17,7 +17,8 @@ class DataBase {
             if let db = DataBase._db {
                 return db
             } else {
-                let v = UserDefaults.standard.value(forKey: "DataBase") as? [String:Any] ?? [:]
+                //let v = UserDefaults.standard.value(forKey: "DataBase") as? [String:Any] ?? [:]
+                let v = AppDelegate.shared?.coreDataManager?.fetch(.general)?.data?.toDict ?? [:]
                 DataBase._db = v
                 print(Thread.isMainThread, " dbgetThread")
                 if Thread.isMainThread {
@@ -39,8 +40,61 @@ class DataBase {
                     AppDelegate.shared?.newMessage.show(title:"fatal error, from main", type: .error)
                 }
             }
-            UserDefaults.standard.setValue(newValue, forKey: "DataBase")
+           // UserDefaults.standard.setValue(newValue, forKey: "DataBase")
+            if let core:Data = .create(from: newValue) {
+                print("updating core data")
+                AppDelegate.shared?.coreDataManager?.update(.init(db: core))
+            }
         }
+    }
+    
+    var appUrl:String? {
+      /*  get {
+            return db["appUrl"] as? String ?? [:]
+        }
+        set {
+            if let new = newValue {
+                
+            } ele {
+                
+            }
+            db.updateValue(newValue, forKey: "appUrl")
+        }*/
+        get {
+            return ""
+        }
+        set {
+            print(newValue)
+        }
+    }
+    
+    func removeAll() {
+        
+        let holder = self
+
+        lastSelectedDate = nil
+        AppData.categoriesHolder = nil
+        self.db.removeAll()
+       
+        //old db
+        UserDefaults.standard.setValue(nil, forKey: "lastSelected")
+        UserDefaults.standard.setValue(true, forKey: "checkTrialDate")
+        UserDefaults.standard.setValue(false, forKey: "trialPressed")
+        UserDefaults.standard.setValue(nil, forKey: "trialToExpireDays")
+        UserDefaults.standard.setValue(nil, forKey: "username")
+        UserDefaults.standard.setValue(nil, forKey: "password")
+        self.appUrl = holder.appUrl
+        self.viewControllers = holder.viewControllers
+        self.db.updateValue(holder.db["lastSelected"] as? [String:String] ?? [:], forKey: "lastSelected")
+    }
+    
+    func checkDBUpdated() -> Bool {
+        if let oldDB = UserDefaults.standard.value(forKey: "DataBase") as? [String:Any] {
+            UserDefaults.standard.removeObject(forKey: "DataBase")
+            self.db = oldDB
+            return false
+        }
+        return true
     }
     
     var viewControllers:ViewControllers {

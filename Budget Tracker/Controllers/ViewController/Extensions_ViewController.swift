@@ -1103,6 +1103,7 @@ extension ViewController: TransitionVCProtocol {
             }
             
         case "goToEditVC":
+           // self.navigationController?.delegate = transactionManager
             let nav = segue.destination as! UINavigationController
             let vc = nav.topViewController as! TransitionVC
             vc.delegate = self

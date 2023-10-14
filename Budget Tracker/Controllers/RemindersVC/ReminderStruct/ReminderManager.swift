@@ -15,14 +15,6 @@ class ReminderManager {
     var reminders:[ReminderStruct] {
         get {
             var data = db.db["PaymentReminder"] as? [[String:Any]] ?? []
-            if data.count == 0 {
-                if db.db["remindersTransfared"] as? Bool ?? false == false {
-                    data = UserDefaults.standard.value(forKey: "PaymentReminder") as? [[String:Any]] ?? []
-                    db.db.updateValue(data, forKey: "PaymentReminder")
-                    db.db.updateValue(true, forKey: "remindersTransfared")
-                }
-                
-            }
             var result:[ReminderStruct] = []
             for item in data {
                 

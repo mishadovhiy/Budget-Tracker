@@ -172,7 +172,6 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         case "selectIcon":
             let vc = segue.destination as! IconsVC
             vc.delegate = self
-
         default:
             break
         }

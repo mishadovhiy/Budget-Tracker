@@ -62,10 +62,7 @@ extension CategoriesVC {
             if show  {
                 self.editingTfIndex = (nil,nil)
              //   DispatchQueue.main.async {
-                    if let editTF = self.editingTF {
-                        self.editingTF = nil
-                        editTF.endEditing(true)
-                    }
+                self.hideAll(keepIcons: true)
             //    }
             } else {
                 if self.editingTF == nil {
@@ -115,12 +112,14 @@ extension CategoriesVC {
             
         }
     }
-    func hideAll() {
-        if showingIcons {
+    func hideAll(keepIcons:Bool = false) {
+        if showingIcons && !keepIcons {
             toggleIcons(show: false, animated: true, category: nil)
         }
         
-             if searchBar.isFirstResponder {
+        AppDelegate.shared?.window?.endEditing(true)
+        self.editingTF = nil
+            /* if searchBar.isFirstResponder {
                  DispatchQueue.main.async {
                      self.searchBar.endEditing(true)
                  }
@@ -132,7 +131,7 @@ extension CategoriesVC {
                     editing.endEditing(true)
                     
                 }
-            }
+            }*/
 
     }
     func toHistory(index: IndexPath) {

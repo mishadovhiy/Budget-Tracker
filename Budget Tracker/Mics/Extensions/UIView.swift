@@ -51,7 +51,25 @@ extension UIView {
     }
     
 }
-
+extension UIView {
+    func removeWithAnimation(animation:CGFloat = 0.11, complation:(()->())? = nil) {
+        UIView.animate(withDuration: animation, animations: {
+            self.alpha = 0
+        }) { _ in
+            self.isHidden = true
+            
+            if let com = complation {
+                com()
+            }
+            self.removeFromSuperview()
+        }
+    }
+    func hideWithAnimation(_ hidden:Bool, animation:CGFloat = 0.11) {
+        UIView.animate(withDuration: animation, animations: {
+            self.isHidden = hidden
+        })
+    }
+}
 extension CALayer {
     enum CornerPosition {
         case top

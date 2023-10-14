@@ -9,7 +9,7 @@
 import UIKit
 
 class LastSelected {
-    private let mainKey = "lastSelected"
+    let mainKey = "lastSelected"
     
     private var dict: [String:String] {
         return DataBase().db[mainKey] as? [String:String] ?? [:]

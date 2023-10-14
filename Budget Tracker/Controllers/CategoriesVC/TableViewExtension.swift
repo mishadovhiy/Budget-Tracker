@@ -246,6 +246,25 @@ extension CategoriesVC {
         return view
     }
     }
+    
+    /*func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        
+        if let cell = tableView.dequeueReusableCell(withIdentifier: K.catCellIdent, for: indexPath) as? categoriesVCcell
+        {
+            let currentCategory = tableData[indexPath.section - sectionsBeforeData].data[indexPath.row]
+            let hasProgress = currentCategory.category.purpose != .debt && currentCategory.category.monthLimit != nil
+
+            let hideprogress = !(hasProgress && currentCategory.editing == nil)
+            cell.progressView.isHidden = hideprogress
+            if !hideprogress {
+                let val = Float(currentCategory.progress ?? 0)
+                print(val, " egrwfereg")
+                cell.progressView.setProgress(val, animated: true)
+                
+            }
+            
+        }
+    }*/
 
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {

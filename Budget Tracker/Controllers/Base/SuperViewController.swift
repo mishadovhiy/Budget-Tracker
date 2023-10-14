@@ -21,6 +21,8 @@ class SuperViewController: UIViewController {
     var appData:AppData {
         return AppDelegate.shared?.appData ?? .init()
     }
+    var popupVCpanGesture:PanViewController?
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         //screen rotation
     }

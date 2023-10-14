@@ -13,6 +13,9 @@ import UserNotifications
 var transactionAdded = false
 
 class HistoryVC: SuperViewController {
+   /* typealias TransitionComponents = (albumCoverImageView: UIImageView?, albumNameLabel: UILabel?)
+    public var transitionComponents = TransitionComponents(albumCoverImageView: nil, albumNameLabel: nil)
+    private let transitionAppearenceManager = AnimatedTransitioningManager(duration: 0.3)*/
     
     @IBOutlet weak var addTransButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
@@ -293,6 +296,8 @@ class HistoryVC: SuperViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "toTransVC":
+          //  self.navigationController?.delegate = transitionAppearenceManager
+
             toAddVC = true
             let nav = segue.destination as! UINavigationController
             let vc = nav.topViewController as! TransitionVC

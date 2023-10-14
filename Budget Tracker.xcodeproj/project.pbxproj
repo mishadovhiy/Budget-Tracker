@@ -84,7 +84,6 @@
 		8D163BA529944FA100EF6C2A /* ClearTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D163BA429944FA100EF6C2A /* ClearTableCell.swift */; };
 		8D163BA729944FD100EF6C2A /* TableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D163BA629944FD100EF6C2A /* TableCell.swift */; };
 		8D163BA9299466D900EF6C2A /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D163BA8299466D900EF6C2A /* UIColor.swift */; };
-		8D1685822AD042D1007D55F7 /* SwiftUIshared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1685812AD042D1007D55F7 /* SwiftUIshared.swift */; };
 		8D36724224D315BC00CE90A9 /* NetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D36724124D315BC00CE90A9 /* NetworkModel.swift */; };
 		8D39788F28083E81007A2C55 /* AppDelegateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D39788E28083E81007A2C55 /* AppDelegateExtensions.swift */; };
 		8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5206662421695200772CD5 /* StatisticBrain.swift */; };
@@ -98,6 +97,10 @@
 		8D5C625F2ACF4FA2005D68B0 /* AppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5C625E2ACF4FA2005D68B0 /* AppIntent.swift */; };
 		8D5C62612ACF4FA5005D68B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D5C62602ACF4FA5005D68B0 /* Assets.xcassets */; };
 		8D5C62652ACF4FA5005D68B0 /* BudgetTrackerCalendatWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8D5C62522ACF4FA2005D68B0 /* BudgetTrackerCalendatWidgetExtension.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8D7FCA772ADAF02200B108A6 /* CoreDataDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7FCA762ADAF02200B108A6 /* CoreDataDBManager.swift */; };
+		8D7FCA792ADAF05300B108A6 /* AnimatedTransitioningManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7FCA782ADAF05300B108A6 /* AnimatedTransitioningManager.swift */; };
+		8D7FCA7B2ADAF05C00B108A6 /* PanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7FCA7A2ADAF05C00B108A6 /* PanViewController.swift */; };
+		8D7FCA7E2ADAF28B00B108A6 /* LocalDataBase.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8D7FCA7C2ADAF28B00B108A6 /* LocalDataBase.xcdatamodeld */; };
 		8D834D9C297E03D60056E686 /* CalendarModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D834D96297E03D60056E686 /* CalendarModel.swift */; };
 		8D834D9D297E03D60056E686 /* UICollectionViewDelegate_CalendarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D834D98297E03D60056E686 /* UICollectionViewDelegate_CalendarVC.swift */; };
 		8D834D9E297E03D60056E686 /* DaysCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D834D99297E03D60056E686 /* DaysCollectionCell.swift */; };
@@ -123,6 +126,7 @@
 		8DD89D8C23F1485700273904 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8B23F1485700273904 /* Constants.swift */; };
 		8DD89D8E23F1495300273904 /* TransactionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8D23F1495300273904 /* TransactionVC.swift */; };
 		8DD89D9023F1496100273904 /* CategoriesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8F23F1496100273904 /* CategoriesVC.swift */; };
+		8DE693C22AD4A12C008501B0 /* SelectValueCollectionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE693C12AD4A12C008501B0 /* SelectValueCollectionVC.swift */; };
 		8DE94B702850336800ADF861 /* MessageViewLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 8DE94B6F2850336800ADF861 /* MessageViewLibrary */; };
 		8DEB0CD928184FC0002D24D3 /* DebtDescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEB0CD828184FC0002D24D3 /* DebtDescriptionCell.swift */; };
 		8DEB0CDB28184FEA002D24D3 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEB0CDA28184FEA002D24D3 /* Extensions.swift */; };
@@ -259,7 +263,6 @@
 		8D163BA429944FA100EF6C2A /* ClearTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearTableCell.swift; sourceTree = "<group>"; };
 		8D163BA629944FD100EF6C2A /* TableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableCell.swift; sourceTree = "<group>"; };
 		8D163BA8299466D900EF6C2A /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
-		8D1685812AD042D1007D55F7 /* SwiftUIshared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIshared.swift; sourceTree = "<group>"; };
 		8D36724124D315BC00CE90A9 /* NetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkModel.swift; sourceTree = "<group>"; };
 		8D39788E28083E81007A2C55 /* AppDelegateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegateExtensions.swift; sourceTree = "<group>"; };
 		8D5206662421695200772CD5 /* StatisticBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticBrain.swift; sourceTree = "<group>"; };
@@ -275,6 +278,10 @@
 		8D5C62602ACF4FA5005D68B0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8D5C62622ACF4FA5005D68B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D5C62662ACF4FA5005D68B0 /* BudgetTrackerCalendatWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BudgetTrackerCalendatWidgetExtension.entitlements; sourceTree = "<group>"; };
+		8D7FCA762ADAF02200B108A6 /* CoreDataDBManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataDBManager.swift; sourceTree = "<group>"; };
+		8D7FCA782ADAF05300B108A6 /* AnimatedTransitioningManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatedTransitioningManager.swift; sourceTree = "<group>"; };
+		8D7FCA7A2ADAF05C00B108A6 /* PanViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanViewController.swift; sourceTree = "<group>"; };
+		8D7FCA7D2ADAF28B00B108A6 /* LocalDataBase.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LocalDataBase.xcdatamodel; sourceTree = "<group>"; };
 		8D834D96297E03D60056E686 /* CalendarModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarModel.swift; sourceTree = "<group>"; };
 		8D834D98297E03D60056E686 /* UICollectionViewDelegate_CalendarVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UICollectionViewDelegate_CalendarVC.swift; sourceTree = "<group>"; };
 		8D834D99297E03D60056E686 /* DaysCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DaysCollectionCell.swift; sourceTree = "<group>"; };
@@ -300,6 +307,7 @@
 		8DD89D8B23F1485700273904 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		8DD89D8D23F1495300273904 /* TransactionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionVC.swift; sourceTree = "<group>"; };
 		8DD89D8F23F1496100273904 /* CategoriesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesVC.swift; sourceTree = "<group>"; };
+		8DE693C12AD4A12C008501B0 /* SelectValueCollectionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectValueCollectionVC.swift; sourceTree = "<group>"; };
 		8DEB0CD828184FC0002D24D3 /* DebtDescriptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebtDescriptionCell.swift; sourceTree = "<group>"; };
 		8DEB0CDA28184FEA002D24D3 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		8DEB0CDD28188762002D24D3 /* Public.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Public.swift; sourceTree = "<group>"; };
@@ -439,7 +447,6 @@
 			isa = PBXGroup;
 			children = (
 				8DD89D8623F1471400273904 /* AppData.swift */,
-				8D1685812AD042D1007D55F7 /* SwiftUIshared.swift */,
 				8D36724124D315BC00CE90A9 /* NetworkModel.swift */,
 				8DA77CF3298B687E00949D98 /* Filter.swift */,
 			);
@@ -466,6 +473,7 @@
 		8B3F919827D31C4000BE826C /* UserData */ = {
 			isa = PBXGroup;
 			children = (
+				8D7FCA762ADAF02200B108A6 /* CoreDataDBManager.swift */,
 				8B4728BB27533A470078BD34 /* DataBase.swift */,
 				8B35DA6525C6F124008A8719 /* Keychain.swift */,
 				8BE60E5827726EA8007B7FB3 /* LastSelected.swift */,
@@ -629,6 +637,7 @@
 				8B5F342B26FB2D97000DDCAF /* EnterValueVC.swift */,
 				8B2A4D71271439520085E0F0 /* MoreVC.swift */,
 				8B6BA97F27E716220067FF58 /* WebViewVC.swift */,
+				8DE693C12AD4A12C008501B0 /* SelectValueCollectionVC.swift */,
 			);
 			path = Reusable;
 			sourceTree = "<group>";
@@ -808,6 +817,7 @@
 			isa = PBXGroup;
 			children = (
 				8B331B0C27E415440093BF72 /* Info.plist */,
+				8D7FCA7C2ADAF28B00B108A6 /* LocalDataBase.xcdatamodeld */,
 				8DECAFBF2460461C0041B734 /* Budget Tracker.entitlements */,
 				8D39788D28083E5B007A2C55 /* AppDelegate */,
 				8BC1B23A27D3136C002C1E38 /* ReusableUI */,
@@ -867,6 +877,8 @@
 				8B5434FB27ED83AC00417141 /* Notifications */,
 				8BB75D4527F294ED00AE71A1 /* Structs */,
 				8D08FD522AC9CCDF00BA0222 /* TransactionsManager.swift */,
+				8D7FCA782ADAF05300B108A6 /* AnimatedTransitioningManager.swift */,
+				8D7FCA7A2ADAF05C00B108A6 /* PanViewController.swift */,
 				8D08FD562ACA18BE00BA0222 /* ManagerPDF */,
 			);
 			path = Modal;
@@ -1060,10 +1072,12 @@
 			files = (
 				8D163BA729944FD100EF6C2A /* TableCell.swift in Sources */,
 				8BC8525027E28D0F00C5A3A4 /* UserSettings.swift in Sources */,
+				8D7FCA7E2ADAF28B00B108A6 /* LocalDataBase.xcdatamodeld in Sources */,
 				8DEB0CD928184FC0002D24D3 /* DebtDescriptionCell.swift in Sources */,
 				8B4728BC27533A470078BD34 /* DataBase.swift in Sources */,
 				8B26329627E6A32E0086C3A8 /* UIViewController.swift in Sources */,
 				8B26327E27E66B060086C3A8 /* AppLocalization.swift in Sources */,
+				8D7FCA772ADAF02200B108A6 /* CoreDataDBManager.swift in Sources */,
 				8B331B0B27E4128B0093BF72 /* String.swift in Sources */,
 				8DEB0CDE28188762002D24D3 /* Public.swift in Sources */,
 				8B6BA98227E717850067FF58 /* Date.swift in Sources */,
@@ -1099,14 +1113,15 @@
 				8BF63E8B276294F2002E8601 /* SelectValueVC.swift in Sources */,
 				8D163BA329944D2700EF6C2A /* UITapGestureRecognizer.swift in Sources */,
 				8B26328227E677930086C3A8 /* Label.swift in Sources */,
+				8DE693C22AD4A12C008501B0 /* SelectValueCollectionVC.swift in Sources */,
 				8BF58D1D277C78B7005A7F38 /* ProViewVC.swift in Sources */,
 				8DD89D8E23F1495300273904 /* TransactionVC.swift in Sources */,
 				8D8B6C3E245023EC007260A0 /* CalendarVC.swift in Sources */,
+				8D7FCA7B2ADAF05C00B108A6 /* PanViewController.swift in Sources */,
 				8DF9DCD02815A89400C7BFA0 /* adBannerView.swift in Sources */,
 				8B746ABE27F4039E0010F0A4 /* UINavigationController.swift in Sources */,
 				8DBA7E5423F0316F00D8214C /* ViewController.swift in Sources */,
 				8DF9DCD42815AAD000C7BFA0 /* ExtensionGADBannerViewDelegate.swift in Sources */,
-				8D1685822AD042D1007D55F7 /* SwiftUIshared.swift in Sources */,
 				8BD2E77C25B8622100D4DFBF /* LoginViewController.swift in Sources */,
 				8B26328427E67D1D0086C3A8 /* SegmentedControl.swift in Sources */,
 				8B35DA6625C6F124008A8719 /* Keychain.swift in Sources */,
@@ -1117,6 +1132,7 @@
 				8B6BA98027E716220067FF58 /* WebViewVC.swift in Sources */,
 				8DADC8922810E30300CC66EF /* TransactionNav.swift in Sources */,
 				8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */,
+				8D7FCA792ADAF05300B108A6 /* AnimatedTransitioningManager.swift in Sources */,
 				8D834D9E297E03D60056E686 /* DaysCollectionCell.swift in Sources */,
 				8BF63E8F2762C83F002E8601 /* SettingsVC.swift in Sources */,
 				8B20751227D9A7AF00CF2172 /* PascodeLockView.swift in Sources */,
@@ -1521,6 +1537,19 @@
 			productName = MessageViewLibrary;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		8D7FCA7C2ADAF28B00B108A6 /* LocalDataBase.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				8D7FCA7D2ADAF28B00B108A6 /* LocalDataBase.xcdatamodel */,
+			);
+			currentVersion = 8D7FCA7D2ADAF28B00B108A6 /* LocalDataBase.xcdatamodel */;
+			path = LocalDataBase.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 8DBA7E4423F0316F00D8214C /* Project object */;
 }

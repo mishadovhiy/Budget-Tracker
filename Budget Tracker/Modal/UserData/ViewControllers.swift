@@ -43,7 +43,7 @@ extension DataBase {
         }
         
         enum FirstLaunchVcs:String {
-        case home, statistic
+        case home, statistic, categories
         }
         
         var trial:Trial {

@@ -81,16 +81,18 @@ class categoriesVCcell: ClearCell {
 
         currentCategory = category
         let hasProgress = currentCategory?.category.purpose != .debt && currentCategory?.category.monthLimit != nil
-        progressView.isHidden = !(hasProgress && currentCategory?.editing == nil)
-        let manag = TransactionsManager()
-        manag.daysBetween = (currentCategory?.category.transactions ?? []).compactMap({ $0.date })
-        let total = manag.total(transactions: currentCategory?.category.transactions ?? [])
-      //  let percent
-        let percent = total.positive / (currentCategory?.category.monthLimit ?? 0)
-        progressView.progress = Float(percent)
+        let hideprogress = !(hasProgress && currentCategory?.editing == nil)
+        progressView.isHidden = hideprogress
+        if !hideprogress {
+            let val = Float(currentCategory?.progress ?? 0)
+            print(val, " egrwfereg")
+                self.progressView.progress = val
+            
+        } else {
+                self.progressView.progress = 0
+        }
         progressView.tintColor = .init(named: currentCategory?.category.color ?? "") ?? K.Colors.link
-        print(percent, " rgtefwde")
-      //  let progress =
+        
         if index != nil {
             self.newCategoryTF.delegate = self
             self.newCategoryTF.addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)

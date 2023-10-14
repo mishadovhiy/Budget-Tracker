@@ -153,12 +153,7 @@ class AppData {
             if let user = db.db["username"] as? String {
                 return user
             } else {
-                if let oldDB = UserDefaults.standard.value(forKey: "username") as? String {
-                    db.db.updateValue(oldDB, forKey: "username")
-                    return oldDB
-                } else {
-                    return ""
-                }
+                return ""
             }
         }
         set(value){
@@ -174,12 +169,7 @@ class AppData {
             if let user = db.db["password"] as? String {
                 return user
             } else {
-                if let oldDB = UserDefaults.standard.value(forKey: "password") as? String {
-                    db.db.updateValue(oldDB, forKey: "password")
-                    return oldDB
-                } else {
-                    return ""
-                }
+                return ""
             }
         }
         set(value){
@@ -193,12 +183,7 @@ class AppData {
             if let user = db.db["userEmailHolder"] as? String {
                 return user
             } else {
-                if let oldDB = UserDefaults.standard.value(forKey: "userEmailHolder") as? String {
-                    db.db.updateValue(oldDB, forKey: "userEmailHolder")
-                    return oldDB
-                } else {
-                    return ""
-                }
+                return ""
             }
         }
         set(value){

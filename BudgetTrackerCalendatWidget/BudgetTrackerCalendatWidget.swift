@@ -172,11 +172,9 @@ struct Provider: AppIntentTimelineProvider {
         var entries: [SimpleEntry] = []
         
         //let currentDate = Date()
-        for _ in 0 ..< 5 {
-            //   let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = await snapshot(for: configuration, in: context)
-            entries.append(entry)
-        }
+        let entry = await snapshot(for: configuration, in: context)
+        entries.append(entry)
+        
         let nextUpdateDate = Calendar.current.date(byAdding: .minute, value: 1, to: Date())!
         
         return Timeline(entries: entries, policy: .atEnd)

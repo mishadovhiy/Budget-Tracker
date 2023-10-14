@@ -9,6 +9,10 @@
 import UIKit
 
 class ViewController: SuperViewController {
+   /* typealias TransitionComponents = (albumCoverImageView: UIImageView?, albumNameLabel: UILabel?)
+    public var transitionComponents = TransitionComponents(albumCoverImageView: nil, albumNameLabel: nil)
+    private let transitionAppearenceManager = AnimatedTransitioningManager(duration: 0.3)*/
+    
     var touchingFromShow = false
 
     @IBOutlet weak var balanceHelperView: UIView!
@@ -167,7 +171,8 @@ class ViewController: SuperViewController {
         AppDelegate.shared?.window?.backgroundColor = .clear
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         super.viewWillAppear(animated)
-        
+        navigationController?.delegate = nil
+
     }
     
     var transactionManager:TransactionsManager?

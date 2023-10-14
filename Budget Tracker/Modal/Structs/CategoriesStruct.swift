@@ -24,6 +24,17 @@ struct NewCategories {
         return db.transactions(for: self)
     }
     
+    var monthlyProgress:CGFloat? {
+        if monthLimit == nil {
+            return nil
+        }
+        let manag = TransactionsManager()
+        manag.daysBetween = (transactions).compactMap({ $0.date })
+        let total = manag.total(transactions: transactions)
+        let percent = total.positive / (monthLimit ?? 0)
+        print(percent, " efweefrv cat ", name)
+        return percent
+    }
     
     enum CategoryPurpose:String {
         case expense = "Expenses"

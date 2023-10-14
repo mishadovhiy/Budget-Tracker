@@ -230,7 +230,9 @@ extension CategoriesVC {
 
                 }
 
-                data.append(ScreenCategory(category: newValue[i], transactions: transactions))
+                
+                
+                data.append(ScreenCategory(category: newValue[i], transactions: transactions, progress: newValue[i].monthlyProgress))
                 
                 let newD = sort(data)
                 resultDict.updateValue(newD, forKey: strPurpose)
@@ -330,6 +332,7 @@ extension CategoriesVC {
         var proLocked: Bool = false
         var showDisclosure:Bool = true
         var editing:NewCategories? = nil
+        var progress:CGFloat?//gerfwda
     }
 }
 
