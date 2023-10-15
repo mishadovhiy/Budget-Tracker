@@ -482,9 +482,10 @@ extension ViewController {
     }
     
     func viewAppeared() {
+        navigationController?.delegate = nil
         self.notificationsCount = Notifications.notificationsCount
         //    self.mainTableView.contentInset.top = self.calendarContainer.frame.height
-        mainTableView.contentOffset.y = 0
+//        mainTableView.contentOffset.y = 0
         if self.ai.isShowing {
             DispatchQueue.main.async {
                 self.ai.fastHide()
@@ -599,7 +600,7 @@ extension ViewController {
     }
     
     func updateUI() {
-        self.calendar = self.createCalendar(calendarContainer, currentSelected: nil, selected: self.dateSelected(_:))
+        self.calendar = self.createCalendar(calendarContainer, currentSelected: nil, selected: {_ in}, cellSelected: dateSelectedCell(_:_:))
         calendar?.monthChanged = self.monthSelected(_:_:)
         downloadFromDB(local: true)
         self.mainTableView.delegate = self
@@ -831,10 +832,35 @@ extension ViewController: TransitionVCProtocol {
             "years":years
         ]
     }
-    func toAddTransaction() {
-        editingTransaction = nil
+    func toAddTransaction(editing:Bool = false, pressedView:UIView? = nil, canDivid:Bool = true, isCalendar:Bool = false) {
+        if !editing {
+            editingTransaction = nil
+        }
         DispatchQueue.main.async {
-            self.performSegue(withIdentifier: "goToEditVC", sender: self)
+         //  self.performSegue(withIdentifier: "goToEditVC", sender: self)
+            if !isCalendar {
+                self.navigationController?.delegate = self.transitionAppearenceManager
+                self.transitionAppearenceManager.beginTransactionPressedView = pressedView ?? self.addTransitionButton
+                self.transitionAppearenceManager.canDivideFrame = canDivid
+            } else {
+                self.navigationController?.delegate = nil
+            }
+            
+            let vc = TransitionVC.configure()
+            vc.delegate = self
+            vc.dateSet = self.calendarSelectedDate
+            self.calendarSelectedDate = nil
+            if let transaction = self.editingTransaction {
+                vc.editingDate = transaction.date
+                vc.editingValue = Double(transaction.value) ?? 0.0
+                vc.editingCategory = transaction.categoryID
+                vc.editingComment = transaction.comment
+            }
+            if isCalendar {
+                self.present(TransactionNav.configure(vc), animated: true)
+            } else {
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
         }
     }
     
@@ -1103,7 +1129,7 @@ extension ViewController: TransitionVCProtocol {
             }
             
         case "goToEditVC":
-           // self.navigationController?.delegate = transactionManager
+        //    self.navigationController?.delegate = transitionAppearenceManager
             let nav = segue.destination as! UINavigationController
             let vc = nav.topViewController as! TransitionVC
             vc.delegate = self

@@ -84,14 +84,10 @@ class StatisticVC: SuperViewController, CALayerDelegate {
     }
     
     func updateUI() {
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
         sum = 0.0
-        tableView.delegate = self
-        tableView.dataSource = self
-        if appData.expenseLabelPressed == true {
-            segmentControll.selectedSegmentIndex = 0
-        } else {
-            segmentControll.selectedSegmentIndex = 1
-        }
+        segmentControll.selectedSegmentIndex = appData.expenseLabelPressed ? 0 : 1
         let d = createTableData()
         allData = d
         getMaxSum()

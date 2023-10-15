@@ -11,12 +11,17 @@ import Foundation
 
 protocol IconsVCDelegate {
     func selected(img:String, color:String)
+    func categorySelected(_ category:NewCategories)
 }
 
 
 class IconsVC: SuperViewController {
+    @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var collectionView: UICollectionView!
     var delegate:IconsVCDelegate?
+    @IBAction func closePressed(_ sender: Any) {
+        closeAction?()
+    }
     let icons = Icons()
     lazy var iconsData:[Icons.IconsData] = {
         if screenType == .colorsOnly {
@@ -25,16 +30,17 @@ class IconsVC: SuperViewController {
             return icons.icons
         }
     }()
-
+    var closeAction:(()->())?
     static var shared:IconsVC?
     var selectedIconName = ""
     var selectedColorName = ""
-    
+    var defaultCategories:[NewCategories] = []
     var screenType:ScreenType = .all
     enum ScreenType {
         case all
         case iconsOnly
         case colorsOnly
+        case defaultCategories
     }
     
     lazy var coloresStrTemporary:[String] = {
@@ -84,7 +90,9 @@ class IconsVC: SuperViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         title = screenType == .colorsOnly ? "Primary color".localize : "Set icon".localize
-        
+        if closeAction != nil {
+            closeButton.isHidden = false
+        }
         
     }
     
@@ -102,15 +110,23 @@ class IconsVC: SuperViewController {
 extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return iconsData.count + 1
+        if screenType == .defaultCategories {
+            return 1
+        } else {
+            return iconsData.count + 1
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if screenType == .defaultCategories {
+            return defaultCategories.count
+        } else {
+            let colorsSection = coloresStrTemporary.count//(screenType == .all || screenType == .colorsOnly) ? colors.count : 0
+            let iconsSection = section == 0 ? 0 : iconsData[section - 1].data.count//(screenType == .all || screenType == .iconsOnly) ? (section == 1 ? iconsData[section - 1].data.count : 0) : 0
+            
+            return section == 0 ? colorsSection : iconsSection
+        }
         
-        let colorsSection = coloresStrTemporary.count//(screenType == .all || screenType == .colorsOnly) ? colors.count : 0
-        let iconsSection = section == 0 ? 0 : iconsData[section - 1].data.count//(screenType == .all || screenType == .iconsOnly) ? (section == 1 ? iconsData[section - 1].data.count : 0) : 0
-        
-        return section == 0 ? colorsSection : iconsSection
     }
     
     
@@ -137,7 +153,11 @@ extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
+        if screenType == .defaultCategories {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "IconsCategoryCell", for: indexPath) as! IconsCategoryCell
+            cell.set(category: defaultCategories[indexPath.row])
+            return cell
+        }
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "IconsVCColorCell", for: indexPath) as! IconsVCColorCell
             
@@ -164,7 +184,9 @@ extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
         
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.section == 0 {
+        if screenType == .defaultCategories {
+            delegate?.categorySelected(defaultCategories[indexPath.row])
+        } else if indexPath.section == 0 {
             selectedColorId = indexPath.row
     
             let imgName = selectedIconIndex == nil ? "" : iconsData[selectedIconIndex!.section].data[selectedIconIndex!.row]
@@ -176,7 +198,7 @@ extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
             selectedIconIndex = IndexPath(row: indexPath.row, section: indexPath.section - 1)
             let imgName = iconsData[selectedIconIndex!.section].data[selectedIconIndex!.row]
            // let colorName = coloresStrTemporary[selectedColorId]
-            print(imgName)
+            print(imgName, " ihuyttfgvhbj")
 
             selectedIconName = imgName
             delegate?.selected(img: imgName, color: selectedColorName)
@@ -258,3 +280,20 @@ class CollectionIconsHeader: UICollectionReusableView {
 }
 
 
+
+
+class IconsCategoryCell:ClearCollectionCell {
+    @IBOutlet weak var catImageView: UIImageView!
+    @IBOutlet weak var catNameLabel: UILabel!
+    func set(category:NewCategories) {
+        catNameLabel.text = category.name
+        catImageView.image = AppData.iconSystemNamed(category.icon)
+            //.init(named: category.icon)
+        catImageView.tintColor = AppData.colorNamed(category.color)
+        touchesBegunAction = { begun in
+            UIView.animate(withDuration: 0.15, delay: 0, options: .allowUserInteraction, animations: {
+                self.catNameLabel.superview?.superview?.backgroundColor = begun ? K.Colors.link : K.Colors.darkSeparetor
+            })
+        }
+    }
+}

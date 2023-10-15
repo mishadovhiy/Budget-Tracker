@@ -124,7 +124,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         var vc:UIViewController?
         switch type {
         case .addTransaction:
-            vc = TransactionNav.configure()
+            vc = TransactionNav.configure(TransitionVC.configure())
         case .addReminder:
             self.showPaymentReminders()
             return

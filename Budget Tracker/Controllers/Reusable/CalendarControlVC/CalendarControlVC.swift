@@ -22,7 +22,7 @@ class CalendarControlVC: UIViewController {
     var selectedDate:DateComponents?
     var values:[String:CGFloat] = [:]
     var higlightSelected:Bool = false
-    
+    var cellSelected:((_ day:DateComponents, _ cell:CalendarCell)->())? = nil
     override func viewDidLoad() {
         super.viewDidLoad()
         monthView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.monthPressed(_:))))
@@ -114,6 +114,19 @@ class CalendarControlVC: UIViewController {
             self.selectedDateComponent = dateComp
             self.collectionView.reloadData()
             action(dateComp)
+        }
+    }
+    
+    func daySelectedCell(_ day:Int, cell:CalendarCell) {
+        if let action = cellSelected,
+           let mid = middleDate
+        {
+            let dateComp = DateComponents(year: mid.year,
+                                          month: mid.month,
+                                          day: day)
+            self.selectedDateComponent = dateComp
+            self.collectionView.reloadData()
+            action(dateComp, cell)
         }
     }
     

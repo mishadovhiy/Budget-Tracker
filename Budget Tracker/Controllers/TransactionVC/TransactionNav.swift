@@ -29,9 +29,11 @@ class TransactionNav: UINavigationController {
 }
 
 extension TransactionNav {
-    static func configure() -> TransactionNav {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+    static func configure(_ root:UIViewController) -> TransactionNav {
+        /*let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "transactionsVCNav") as! TransactionNav
-        return vc
+        return vc*/
+        let nav = TransactionNav(rootViewController: root)
+        return nav
     }
 }

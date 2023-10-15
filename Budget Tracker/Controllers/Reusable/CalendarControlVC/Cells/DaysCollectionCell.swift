@@ -12,6 +12,7 @@ class CalendarCollectionCell: UICollectionViewCell {
     var higlightDate:DateComponents?
     var calendarModel:CalendarModel?
     var didSelect:((_ day:Int)->())?
+    var didSelectCell:((_ day:Int, _ cell:CalendarCell)->())?
 
     var vc:CalendarControlVC?
     @IBOutlet weak var collectionView: UICollectionView!
@@ -23,11 +24,15 @@ class CalendarCollectionCell: UICollectionViewCell {
     }
     
     
-    func set(model:CalendarModel, higlightDate:DateComponents?, vc:CalendarControlVC?, disp:Bool = false, didSelect:@escaping (_ day:Int)->()) {
+    func set(model:CalendarModel, higlightDate:DateComponents?, vc:CalendarControlVC?, disp:Bool = false, didSelect:@escaping (_ day:Int)->(), cellSelectedAction:((_ day:Int, _ cell:CalendarCell)->())? = nil) {
         self.higlightDate = higlightDate
         self.vc = vc
         self.calendarModel = model
-        self.didSelect = didSelect
+        if let action = cellSelectedAction {
+            didSelectCell = action
+        } else {
+            self.didSelect = didSelect
+        }
         if disp {
             self.collectionView.reloadData()
 

@@ -46,4 +46,20 @@ extension UIViewController {
     }
     
     
+    static var panIndicatorLayerName:String = "PanIndicatorViewPrimary"
+    
+    func createPanIndicator() {
+        if !self.view.subviews.contains(where: {$0.layer.name == UIViewController.panIndicatorLayerName}) {
+            let view = UIView()
+            view.isUserInteractionEnabled = false
+            view.backgroundColor = .white.withAlphaComponent(0.4)
+            view.layer.cornerRadius = 2
+            view.layer.name = UIViewController.panIndicatorLayerName
+            view.alpha = 0.1
+            self.view.addSubview(view)
+           // let topMinus = self.navigationController?.navigationBar.frame.height ?? 0
+            view.addConstaits([.top: view.safeAreaInsets.top + 10, .centerX:0, .width:45, .height:4], superV: self.view)
+        }
+        
+    }
 }

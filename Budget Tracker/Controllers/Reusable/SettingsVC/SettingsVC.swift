@@ -89,10 +89,15 @@ class SettingsVC: SuperViewController {
 
 
 extension SettingsVC: IconsVCDelegate {
+    func categorySelected(_ category: NewCategories) {
+        
+    }
+    
     func selected(img: String, color: String) {
         DispatchQueue(label: "db", qos: .userInitiated).async {
             AppData.linkColor = color
             self.loadData()
+            self.navigationController?.popViewController(animated: true)
         }
     }
     

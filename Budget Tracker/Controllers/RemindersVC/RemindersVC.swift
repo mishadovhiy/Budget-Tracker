@@ -9,7 +9,10 @@
 import UIKit
 
 class RemindersVC: SuperViewController {
-
+    typealias TransitionComponents = (albumCoverImageView: UIImageView?, albumNameLabel: UILabel?)
+    public var transitionComponents = TransitionComponents(albumCoverImageView: nil, albumNameLabel: nil)
+    let transitionAppearenceManager = AnimatedTransitioningManager(duration: 0.34)
+    
     var tableData:[ReminderStruct] = []
     @IBOutlet weak var tableView: UITableView!
     static var shared:RemindersVC?
@@ -22,39 +25,43 @@ class RemindersVC: SuperViewController {
         loadData()
         title = "Payment reminders ".localize
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
+
     }
-    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        navigationController?.delegate = nil
+    }
     lazy var today = AppDelegate.shared?.appData.filter.getToday() ?? ""
     var editingReminder:Int?
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segue.identifier {
-        case "goToEditVC":
-            Notifications.requestNotifications()
-            let nav = segue.destination as! UINavigationController
-            let vc = nav.topViewController as! TransitionVC
-            vc.delegate = self
-            vc.paymentReminderAdding = true
-            if let row = editingReminder {
-                editingReminder = nil
-                let data = tableData[row]
-                vc.reminder_Repeated = data.repeated
-                vc.reminder_Time = data.time
-                let normalDate = data.transaction.date.stringToCompIso()
-                vc.editingDate = normalDate.toShortString() ?? ""
-                vc.editingValue = Double(data.transaction.value) ?? 0.0
-                vc.editingCategory = data.transaction.categoryID
-                vc.editingComment = data.transaction.comment
-                vc.idxHolder = row
-            }
-        default:
-            break
+    @IBOutlet weak var addTransactionButton: TouchButton!
+    @IBAction func addTransactionPressed(_ sender: Any) {
+        Notifications.requestNotifications()
+        let vc = TransitionVC.configure()
+        vc.delegate = self
+        vc.paymentReminderAdding = true
+        if let row = editingReminder {
+            editingReminder = nil
+            let data = tableData[row]
+            vc.reminder_Repeated = data.repeated
+            vc.reminder_Time = data.time
+            let normalDate = data.transaction.date.stringToCompIso()
+            vc.editingDate = normalDate.toShortString() ?? ""
+            vc.editingValue = Double(data.transaction.value) ?? 0.0
+            vc.editingCategory = data.transaction.categoryID
+            vc.editingComment = data.transaction.comment
+            vc.idxHolder = row
         }
+        navigationController?.delegate = transitionAppearenceManager
+        transitionAppearenceManager.beginTransactionPressedView = addTransactionButton
+
+        self.navigationController?.pushViewController(vc, animated: true)
     }
+
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if (scrollView.contentOffset.y < -100.0) && fromAppDelegate {

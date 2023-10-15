@@ -60,9 +60,8 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         if indexPath.section != 0 && newTableData.count != 0 {
             if newTableData[indexPath.section-1].transactions.count != indexPath.row {
                 self.editingTransaction = self.newTableData[indexPath.section - 1].transactions[indexPath.row]
-                DispatchQueue.main.async {
-                    self.performSegue(withIdentifier: "goToEditVC", sender: self)
-                }
+                let cell = tableView.cellForRow(at: indexPath) as! mainVCcell
+                self.toAddTransaction(editing: true, pressedView: cell.contentView)
             }
             
         }

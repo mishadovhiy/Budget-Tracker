@@ -125,9 +125,9 @@ extension CategoriesVC {
         }
         
     }
-    func addCategoryPerform(section:Int) {
+    func addCategoryPerform(section:Int, category:ScreenCategory? = nil) {
             UIImpactFeedbackGenerator().impactOccurred()
-            let category = self.tableData[section].newCategory
+            let category = category ?? self.tableData[section].newCategory
             if category.category.name != "" {
                 self.ai.show(title:"Saving".localize, notShowIfLoggedUser: true) { _ in
                     DispatchQueue.main.async {

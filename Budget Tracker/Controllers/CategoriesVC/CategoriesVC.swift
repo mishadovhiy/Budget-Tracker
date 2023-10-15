@@ -54,7 +54,8 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     var appeareDidCall = false
     var unseenIDs:[String] = []
     var wasEdited = false
-    
+    @IBOutlet weak var moreNavButton: Button!
+    var toSelectCategory = false
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.placeholder = "Category search".localize
@@ -152,8 +153,25 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     }()
     
     @IBAction func morePressed(_ sender: UIButton) {
-        showMoreVC()
+        if screenType == .debts {
+            showMoreVC()
+        } else {
+            showMoreOptions()
+        }
+        
     }
+    
+    func showMoreOptions() {
+        appData.presentMoreVC(currentVC: self, data: [
+            .init(name: "Sort", description: "", showAI:false, action: showMoreVC),
+            .init(name: "Default cetrgories", description: "", showAI:false, action: {
+                self.toSelectCategory = true
+                self.toggleIcons(show: true, animated: true, category: .create(dict: [:]))
+            })
+        ])
+
+    }
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
@@ -172,6 +190,10 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         case "selectIcon":
             let vc = segue.destination as! IconsVC
             vc.delegate = self
+            vc.screenType = toSelectCategory ? .defaultCategories : .iconsOnly
+            vc.closeAction = {
+                self.toggleIcons(show: false, animated: true, category: nil)
+            }
         default:
             break
         }
@@ -221,6 +243,11 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
 
 
 extension CategoriesVC: IconsVCDelegate {
+    func categorySelected(_ category: NewCategories) {
+        print("dfsdafdbgvfcd")
+        addCategoryPerform(section: category.purpose == .expense ? 0 : 1, category: .init(category: category, transactions: []))
+    }
+    
     func selected(img: String, color: String) {
         iconSelected(img: img, color: color)
     }

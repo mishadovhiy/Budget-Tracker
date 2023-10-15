@@ -78,7 +78,6 @@ class categoriesVCcell: ClearCell {
             }
             return CategoriesVC.ScreenCategory(category: NewCategories(id: -2, name: "-", icon: "", color: "", purpose: CategoriesVC.shared?.screenType == .debts ? .debt : .expense), transactions: [])
         }
-
         currentCategory = category
         let hasProgress = currentCategory?.category.purpose != .debt && currentCategory?.category.monthLimit != nil
         let hideprogress = !(hasProgress && currentCategory?.editing == nil)

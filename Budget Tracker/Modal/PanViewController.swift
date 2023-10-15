@@ -18,7 +18,7 @@ class PanViewController {
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(pinched(_:)))
         gesture.name = "PanViewControllerUIPanGestureRecognizer"
         vc.view.addGestureRecognizer(gesture)
-    //    vc.createPanIndicator()
+        vc.createPanIndicator()
     }
        
     deinit {
@@ -53,7 +53,7 @@ class PanViewController {
                 let percent = percentCalc <= 0 ? 0 : (percentCalc >= 1 ? 1 : percentCalc)
                 print(newPosition, " pinched ", percent)
                 self.vc.view.layer.cornerRadius = 140 * percent
-           ///     self.vc.view.layer.move(.top, value: newResultPosition > 0 ? newResultPosition : (newResultPosition / 15))
+                self.vc.view.layer.move(.top, value: newResultPosition > 0 ? newResultPosition : (newResultPosition / 15))
                 if stateChanged && percent >= 0.1 {
               ///      vc.vibrate(style: .soft)
                 }
@@ -70,7 +70,7 @@ class PanViewController {
     private func toggleView(show:Bool, animated:Bool = true, completion:((_ show:Bool)->())? = nil) {
         
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .allowUserInteraction, animations: {
-      //      self.vc.view.layer.move(.top, value: show ? 0 : self.properies.toHideVC)
+            self.vc.view.layer.move(.top, value: show ? 0 : self.properies.toHideVC)
         }, completion: { _ in
             if !show {
                 self.properies.vcShowing = false
@@ -97,13 +97,13 @@ class PanViewController {
     
     
     private func touches(_ begun:Bool) {
-    /*    let panIndocator = vc.view.subviews.first(where: {
+        let panIndocator = vc.view.subviews.first(where: {
             $0.layer.name == UIViewController.panIndicatorLayerName
         })
         UIView.animate(withDuration: 0.38, animations: {
             panIndocator?.alpha = begun ? 0.3 : 0.1
             self.vc.view.layer.cornerRadius = 0
-        })*/
+        })
     }
 
     

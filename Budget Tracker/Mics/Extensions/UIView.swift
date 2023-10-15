@@ -93,7 +93,19 @@ extension CALayer {
             self.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner]
         }
     }
+    enum MoveDirection {
+        case top
+        case left
+    }
     
+    func move(_ direction:MoveDirection, value:CGFloat) {
+        switch direction {
+        case .top:
+            self.transform = CATransform3DTranslate(CATransform3DIdentity, 0, value, 0)
+        case .left:
+            self.transform = CATransform3DTranslate(CATransform3DIdentity, value, 0, 0)
+        }
+    }
     enum KeyPath:String {
         case height = "bounds.size.height"
         case background = "backgroundColor"

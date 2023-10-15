@@ -13,9 +13,10 @@ import UserNotifications
 var transactionAdded = false
 
 class HistoryVC: SuperViewController {
-   /* typealias TransitionComponents = (albumCoverImageView: UIImageView?, albumNameLabel: UILabel?)
+    typealias TransitionComponents = (albumCoverImageView: UIImageView?, albumNameLabel: UILabel?)
     public var transitionComponents = TransitionComponents(albumCoverImageView: nil, albumNameLabel: nil)
-    private let transitionAppearenceManager = AnimatedTransitioningManager(duration: 0.3)*/
+    let transitionAppearenceManager = AnimatedTransitioningManager(duration: 0.34)
+    
     
     @IBOutlet weak var addTransButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
@@ -139,11 +140,7 @@ class HistoryVC: SuperViewController {
     
     
     var fromStatistic = false
-    
-    override func viewWillAppear(_ animated: Bool) {
-        navigationController?.setNavigationBarHidden(false, animated: true)
-        
-    }
+
     
     @IBOutlet weak var footerStack: UIStackView!
     func addBennerHelper() {
@@ -162,11 +159,17 @@ class HistoryVC: SuperViewController {
             }
         }
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: true)
+
+    }
     var helperViewAdded = false
     var bottomTableInsert:CGFloat = 50
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        
+        navigationController?.delegate = nil
+        print(navigationController?.navigationBar.frame.height ?? 0, " trgefrrtfvd")
         if !helperViewAdded {
             helperViewAdded = true
             addBennerHelper()
@@ -287,9 +290,15 @@ class HistoryVC: SuperViewController {
     }
     
     @IBAction func toTransPressed(_ sender: UIButton) {
-        DispatchQueue.main.async {
-            self.performSegue(withIdentifier: "toTransVC", sender: self)
-        }
+        let vc = TransitionVC.configure()
+        toAddVC = true
+        vc.delegate = self
+        vc.fromDebts = fromCategories ? true : false
+        vc.editingCategory = "\(self.selectedCategory?.id ?? 0)"
+        vc.selectedPurpose = selectedPurposeH
+        transitionAppearenceManager.beginTransactionPressedView = addTransButton
+        navigationController?.delegate = transitionAppearenceManager
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     var selectedPurposeH: Int?
@@ -298,13 +307,7 @@ class HistoryVC: SuperViewController {
         case "toTransVC":
           //  self.navigationController?.delegate = transitionAppearenceManager
 
-            toAddVC = true
-            let nav = segue.destination as! UINavigationController
-            let vc = nav.topViewController as! TransitionVC
-            vc.delegate = self
-            vc.fromDebts = fromCategories ? true : false
-            vc.editingCategory = "\(self.selectedCategory?.id ?? 0)"
-            vc.selectedPurpose = selectedPurposeH
+            break
         case "toCalendar":
             let vc = segue.destination as! CalendarVC
             vc.delegate = self

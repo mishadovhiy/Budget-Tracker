@@ -29,7 +29,7 @@ class TransitionVC: SuperViewController {
     @IBAction func trashPressed(_ sender: UIButton) {
         donePressed = true
         DispatchQueue.main.async {
-            self.dismiss(animated: true) {
+            self.dismissVC() {
                 DispatchQueue.init(label: "reload").async {
                     self.delegate?.deletePressed()
                 }
@@ -51,10 +51,17 @@ class TransitionVC: SuperViewController {
     @IBOutlet weak var commentCountLabel: UILabel!
     var paymentReminderAdding = false
     var pressedValue = "0"
-
+    var dismissTransitionHolder:AnimatedTransitioningManager?
     var selectedPurpose: Int?
     var delegate:TransitionVCProtocol?;
-    
+    func dismissVC(complation:(()->())? = nil) {
+        if self.navigationController is TransactionNav {
+            self.dismiss(animated: true, completion: complation)
+        } else {
+            self.navigationController?.delegate = dismissTransitionHolder
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
     var editingDateHolder = ""
     var editingCategoryHolder = ""
     var editingValueHolder = 0.0
@@ -71,6 +78,8 @@ class TransitionVC: SuperViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
+        dismissTransitionHolder = self.navigationController?.delegate as? AnimatedTransitioningManager
         updateUI()
         purposeSwitcher.selectedSegmentIndex = 0
         purposeSwitched(purposeSwitcher)
@@ -80,16 +89,12 @@ class TransitionVC: SuperViewController {
     }
 
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        navigationController?.setNavigationBarHidden(true, animated: true)
-    }
+
+    var panMahanger:PanViewController?
+
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        navigationController?.delegate = nil
         switch segue.identifier {
         case "toCalendar":
             let vc = segue.destination as! CalendarVC
@@ -320,9 +325,7 @@ class TransitionVC: SuperViewController {
     }
     private func quite() {
         DispatchQueue.main.async {
-            self.dismiss(animated: true) {
-               
-            }
+            self.dismissVC()
         }
     }
     func addNew(value: String, category: String, date: String, comment: String) {
@@ -430,9 +433,8 @@ class TransitionVC: SuperViewController {
     }
     
     @IBAction func cancelPressed(_ sender: UIButton) {
-
         DispatchQueue.main.async {
-            self.dismiss(animated: true) {
+            self.dismissVC() {
                 DispatchQueue.init(label: "reload").async {
                     if self.editingDate != "" {
                         self.delegate?.quiteTransactionVC(reload: true)
@@ -442,9 +444,20 @@ class TransitionVC: SuperViewController {
             }
         }
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: true)
+
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
+        if !(navigationController is TransactionNav) && panMahanger == nil {
+            panMahanger = .init(vc: self)
+        } else {
+            
+        }
      //   purposeSwitcher.tintColor = K.Colors.category
     }
     @IBAction func purposeSwitched(_ sender: UISegmentedControl) {
@@ -699,4 +712,12 @@ extension TransitionVC: CategoriesVCProtocol {
     }
     
     
+}
+
+extension TransitionVC {
+    static func configure() -> TransitionVC {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "TransitionVC") as! TransitionVC
+        return vc
+    }
 }

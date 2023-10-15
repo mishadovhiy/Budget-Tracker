@@ -34,6 +34,15 @@ extension CategoriesVC {
         }
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        if screenType != .debts {
+            moreNavButton.setTitle("", for: .normal)
+            if #available(iOS 13.0, *) {
+                moreNavButton.setImage(.init(systemName: "ellipsis")!, for: .normal)
+            } else {
+                moreNavButton.setTitle("・・・", for: .normal)
+            }
+            
+        }
     }
     
     func addRefreshControll() {
@@ -46,9 +55,19 @@ extension CategoriesVC {
     
     func toggleIcons(show:Bool, animated: Bool, category: NewCategories?) {
         showingIcons = show
+        if toSelectCategory && show {
+            toSelectCategory = false
+            IconsVC.shared?.defaultCategories = defaultCategories
+            IconsVC.shared?.screenType = .defaultCategories
+        } else {
+            IconsVC.shared?.screenType = .all
+        }
         if show {
             self.tableView.addGestureRecognizer(viewTap)
+            
+            
         } else {
+            self.toSelectCategory = false
             self.selectingIconFor = (nil, nil)
             if editingTF == nil {
                 DispatchQueue.main.async {
@@ -65,10 +84,10 @@ extension CategoriesVC {
                 self.hideAll(keepIcons: true)
             //    }
             } else {
-                if self.editingTF == nil {
+                if self.editingTF == nil && IconsVC.shared?.screenType != .defaultCategories && self.selectingIconFor == (nil, nil) {
                     self.tableView.contentInset.bottom = 0// self.defaultButtonInset
                 }
-            }//here
+            }
             UIView.animate(withDuration: animated ? 0.3 : 0) {
                 self.iconsContainer.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, show ? 0 : containerHeight + (self.appData.resultSafeArea.0 + self.appData.resultSafeArea.1 + 50), 0)
             } completion: { _ in
@@ -105,7 +124,7 @@ extension CategoriesVC {
                 }
                 
             } else {
-                if showingIcons {
+                if showingIcons && IconsVC.shared?.screenType != .defaultCategories {
                     toggleIcons(show: false, animated: false, category: nil)
                 }
             }
@@ -334,6 +353,20 @@ extension CategoriesVC {//textField
         let section = textField.tag
         addCategoryPerform(section: section)
         return true
+    }
+    
+    
+    var defaultCategories:[NewCategories] {
+        return [
+            .init(id: -4, name: "Work", icon: "briefcase.fill", color: "BlueColor", purpose: .income),
+            .init(id: -5, name: "Project #1", icon: "globe.americas.fill", color: "PinkColor-1", purpose: .income),
+            .init(id: -3, name: "Groceries", icon: "takeoutbag.and.cup.and.straw.fill", color: "OrangeColor-1", purpose: .expense),
+            .init(id: -6, name: "Health", icon: "bandage.fill", color: "yellowColor2", purpose: .expense),
+            .init(id: -7, name: "Bills", icon: "flame.fill", color: "RedColor", purpose: .expense),
+            .init(id: -8, name: "Entertainment", icon: "gamecontroller.fill", color: "PinkColor", purpose: .expense),
+            .init(id: -9, name: "Clothes", icon: "tshirt.fill", color: "BlueColor3", purpose: .expense),
+            .init(id: -10, name: "Transport", icon: "car.fill", color: "PinkColor-1", purpose: .expense),
+        ]
     }
 }
 
