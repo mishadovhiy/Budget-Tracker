@@ -11,7 +11,7 @@ import UIKit
 class RemindersVC: SuperViewController {
     typealias TransitionComponents = (albumCoverImageView: UIImageView?, albumNameLabel: UILabel?)
     public var transitionComponents = TransitionComponents(albumCoverImageView: nil, albumNameLabel: nil)
-    let transitionAppearenceManager = AnimatedTransitioningManager(duration: 0.34)
+    let transitionAppearenceManager = AnimatedTransitioningManager(duration: 0.28)
     
     var tableData:[ReminderStruct] = []
     @IBOutlet weak var tableView: UITableView!
@@ -58,6 +58,7 @@ class RemindersVC: SuperViewController {
         }
         navigationController?.delegate = transitionAppearenceManager
         transitionAppearenceManager.beginTransactionPressedView = addTransactionButton
+        transitionAppearenceManager.canDivideFrame = false
 
         self.navigationController?.pushViewController(vc, animated: true)
     }

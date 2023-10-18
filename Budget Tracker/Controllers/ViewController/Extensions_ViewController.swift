@@ -600,7 +600,7 @@ extension ViewController {
     }
     
     func updateUI() {
-        self.calendar = self.createCalendar(calendarContainer, currentSelected: nil, selected: {_ in}, cellSelected: dateSelectedCell(_:_:))
+        self.calendar = self.createCalendar(calendarContainer, currentSelected: nil, selected: dateSelected(_:), cellSelected: dateSelectedCell(_:_:))
         calendar?.monthChanged = self.monthSelected(_:_:)
         downloadFromDB(local: true)
         self.mainTableView.delegate = self
@@ -838,6 +838,12 @@ extension ViewController: TransitionVCProtocol {
         }
         DispatchQueue.main.async {
          //  self.performSegue(withIdentifier: "goToEditVC", sender: self)
+//            self.sendError = false
+//         //   toggleSideBar(false, animated: true)
+//            self.selectedCell = nil
+//            if self.refreshControl.isRefreshing {
+//                self.refreshControl.endRefreshing()
+//            }
             if !isCalendar {
                 self.navigationController?.delegate = self.transitionAppearenceManager
                 self.transitionAppearenceManager.beginTransactionPressedView = pressedView ?? self.addTransitionButton
@@ -859,6 +865,7 @@ extension ViewController: TransitionVCProtocol {
             if isCalendar {
                 self.present(TransactionNav.configure(vc), animated: true)
             } else {
+
                 self.navigationController?.pushViewController(vc, animated: true)
             }
         }

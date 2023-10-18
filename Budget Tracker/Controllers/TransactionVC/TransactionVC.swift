@@ -60,6 +60,7 @@ class TransitionVC: SuperViewController {
         } else {
             self.navigationController?.delegate = dismissTransitionHolder
             self.navigationController?.popViewController(animated: true)
+            complation?()
         }
     }
     var editingDateHolder = ""
@@ -437,7 +438,7 @@ class TransitionVC: SuperViewController {
             self.dismissVC() {
                 DispatchQueue.init(label: "reload").async {
                     if self.editingDate != "" {
-                        self.delegate?.quiteTransactionVC(reload: true)
+                        self.delegate?.quiteTransactionVC(reload: false)
                     }
                 }
                 
@@ -448,7 +449,17 @@ class TransitionVC: SuperViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: true)
+        if !(navigationController is TransactionNav) {
+            AppDelegate.shared?.banner.hide(ios13Hide:true)
+        }
 
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if !(navigationController is TransactionNav) {
+            AppDelegate.shared?.banner.appeare(force:true)
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {

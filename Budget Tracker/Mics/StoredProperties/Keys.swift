@@ -13,4 +13,5 @@ struct Keys {
     static let dbURL = Keys.urlDomen + "budget-tracker-db/"
     static let secretKey = "44fdcv8jf3"
     static let analyticsURL = Keys.urlDomen + "apps/other-apps-db/analyticsDB/"
+    static let appstoreURL = "https://apps.apple.com/app/budget-traker/id1511515117"
 }

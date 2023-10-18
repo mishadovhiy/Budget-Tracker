@@ -149,7 +149,7 @@ class AppSettingsData {
             
         })
         let appUrl:SettingsVC.StandartCell = .init(title: "App store", action: {
-            guard let url:URL = .init(string: "https://apps.apple.com/us/app/budget-traker/id1511515117") else { return}
+            guard let url:URL = .init(string: Keys.appstoreURL) else { return}
             UIApplication.shared.open(url)
         
         })

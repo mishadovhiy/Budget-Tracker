@@ -15,7 +15,7 @@ extension CalendarControlVC:UICollectionViewDelegate, UICollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CalendarCollectionCell", for: indexPath) as! CalendarCollectionCell
-        cell.set(model: tableData[indexPath.row], higlightDate: higlightSelected ? selectedDateComponent : nil, vc: self, disp: true, didSelect: daySelected(_:), cellSelectedAction: daySelectedCell(_:cell:))
+        cell.set(model: tableData[indexPath.row], higlightDate: higlightSelected ? selectedDateComponent : nil, vc: self, disp: true, didSelect: daySelected(_:), cellSelectedAction: cellSelected == nil ? nil : daySelectedCell(_:cell:))
         
         return cell
     }

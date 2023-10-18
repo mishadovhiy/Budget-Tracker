@@ -109,14 +109,21 @@ private extension AnimatedTransitioningManager {
             toFrame1.size = .init(width: toFrame1.size.width, height: toFrame1.size.height + barHeight)
          //   toFrame1.size = toView.frame.size
             toView.frame = fromFrame
-            toView.backgroundColor = K.Colors.link
+            toView.backgroundColor = K.Colors.link.withAlphaComponent(0.2)
         }
         
 print(toFrame1, "rfgytrfe")
+        
+        if isPresenting && fromFrame.minY <= 130 {
+            UIView.animate(withDuration: duration / 1.5, animations: {
+                let window = UIApplication.shared.keyWindow?.frame ?? .zero
+                toView.frame.origin = .init(x: window.width / 4, y: window.height / 4)
+            })
+        }
         let animator = UIViewPropertyAnimator(duration: duration, curve: .easeInOut) {
             if !isPresenting {
                 fromView.frame = fromFrame
-                fromView.backgroundColor = K.Colors.link
+                fromView.backgroundColor = K.Colors.link.withAlphaComponent(0.2)
                 fromView.subviews.forEach({$0.alpha = 0})
                 fromView.layer.cornerRadius = toAnimated.layer.cornerRadius
             } else {

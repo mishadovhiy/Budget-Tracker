@@ -11,7 +11,7 @@ import UIKit
 class ViewController: SuperViewController {
     typealias TransitionComponents = (albumCoverImageView: UIImageView?, albumNameLabel: UILabel?)
     public var transitionComponents = TransitionComponents(albumCoverImageView: nil, albumNameLabel: nil)
-    let transitionAppearenceManager = AnimatedTransitioningManager(duration: 0.34)
+    let transitionAppearenceManager = AnimatedTransitioningManager(duration: 0.267)
     
     var touchingFromShow = false
 
@@ -112,7 +112,6 @@ class ViewController: SuperViewController {
             tableDataLoaded(newValue)
         }
     }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         transactionManager = .init()
@@ -165,12 +164,13 @@ class ViewController: SuperViewController {
     func dateSelected(_ newDate:DateComponents) {
         self.vibrate()
         self.calendarSelectedDate = newDate.toShortString()
-        self.toAddTransaction()
+        self.toAddTransaction(pressedView: calendarContainer, isCalendar: true)
+
     }
     func dateSelectedCell(_ newDate:DateComponents, _ cell:CalendarCell) {
-        self.vibrate()
+    /*    self.vibrate()
         self.calendarSelectedDate = newDate.toShortString()
-        self.toAddTransaction(pressedView: calendarContainer, canDivid: true, isCalendar: true)
+        self.toAddTransaction(pressedView: calendarContainer, canDivid: true, isCalendar: true)*/
     }
     
     override func viewWillAppear(_ animated: Bool) {

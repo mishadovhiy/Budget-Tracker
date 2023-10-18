@@ -101,7 +101,17 @@ class IconsVC: SuperViewController {
     }
     
 
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        print(scrollView.contentOffset.y)
+        
+    }
     
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if -83 >= scrollView.contentOffset.y && closeAction != nil {
+            closeAction?()
+        }
+        print(scrollView.contentOffset.y, " efrgetr")
+    }
     
     let collectionHeaderID = "MyHeaderFooterClass"
     

@@ -11,12 +11,13 @@ import PDFKit
 import CoreGraphics
 
 struct PagePDF {
-    
     func createPDFPage(fromText text: String) -> PDFPage? {
+        let pageWidth = ManagerPDF.pageWidth
+        let contentWidth = pageWidth + 80
         let textFont = UIFont.systemFont(ofSize: 12.0)
-        let textSizeCalc = text.calculate(font: textFont, inWindth: 512)
-        let textHeight = textSizeCalc.height >= 692 ? textSizeCalc.height : 692
-        let pageRect = CGRect(x: 0, y: 0, width: 612, height: textHeight + 100)
+        let textSizeCalc = text.calculate(font: textFont, inWindth: pageWidth - 100)
+        let textHeight = textSizeCalc.height >= contentWidth ? textSizeCalc.height : contentWidth
+        let pageRect = CGRect(x: 0, y: 0, width: pageWidth, height: textHeight + 100)
         let textAttributes: [NSAttributedString.Key: Any] = [.font: textFont]
         let atr = NSAttributedString(string: text, attributes: textAttributes)
         let nsStr = NSAttributedString(attributedString: atr)
@@ -26,7 +27,7 @@ struct PagePDF {
         UIGraphicsBeginPDFPageWithInfo(pageRect, nil)
         
         
-        let textRect = CGRect(x: 50, y: 50, width: 512, height: textHeight)
+        let textRect = CGRect(x: 50, y: 50, width: pageWidth - 100, height: textHeight)
         mut.draw(in: textRect)
         UIGraphicsEndPDFContext()
         if pdfData.length > 0 {
@@ -38,11 +39,13 @@ struct PagePDF {
         
     }
     
-    func createPDFPage(fromAttributes text: NSMutableAttributedString) -> PDFPage? {
-        let textFont = UIFont.systemFont(ofSize: 13.0)
-        let textSizeCalc = text.string.calculate(font: textFont, inWindth: 512)
-        let textHeight = (textSizeCalc.height) >= 692 ? (textSizeCalc.height) : 692
-        let pageRect = CGRect(x: 0, y: 0, width: 612, height: textHeight + 100)
+    func createPDFPage(fromAttributes text: NSMutableAttributedString, textHeight:CGFloat) -> PDFPage? {
+        let textFont = UIFont.systemFont(ofSize: 65.0)
+        let pageWidth = ManagerPDF.pageWidth
+        let contentWidth = pageWidth + 80
+        let textSizeCalc = textHeight//text.string.calculate(font: textFont, inWindth: pageWidth - 100)
+        let textHeight = (textSizeCalc) >= contentWidth ? textSizeCalc : contentWidth
+        let pageRect = CGRect(x: 0, y: 0, width: pageWidth, height: textHeight + 100)
     
         let pdfData = NSMutableData()
         UIGraphicsBeginPDFContextToData(pdfData, pageRect, [:])
@@ -51,7 +54,7 @@ struct PagePDF {
         context?.setFillColor((K.Colors.background ?? .red).cgColor)
             context?.fill(pageRect)
         
-        let textRect = CGRect(x: 50, y: 50, width: 512, height: textHeight)
+        let textRect = CGRect(x: 50, y: 50, width: pageWidth - 100, height: textHeight)
         text.draw(in: textRect)
         UIGraphicsEndPDFContext()
         if pdfData.length > 0 {

@@ -28,11 +28,12 @@ class CalendarCollectionCell: UICollectionViewCell {
         self.higlightDate = higlightDate
         self.vc = vc
         self.calendarModel = model
-        if let action = cellSelectedAction {
+        /*if let action = cellSelectedAction {
             didSelectCell = action
         } else {
             self.didSelect = didSelect
-        }
+        }*/
+        self.didSelect = didSelect
         if disp {
             self.collectionView.reloadData()
 

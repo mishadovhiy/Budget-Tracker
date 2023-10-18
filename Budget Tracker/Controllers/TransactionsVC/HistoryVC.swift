@@ -15,7 +15,7 @@ var transactionAdded = false
 class HistoryVC: SuperViewController {
     typealias TransitionComponents = (albumCoverImageView: UIImageView?, albumNameLabel: UILabel?)
     public var transitionComponents = TransitionComponents(albumCoverImageView: nil, albumNameLabel: nil)
-    let transitionAppearenceManager = AnimatedTransitioningManager(duration: 0.34)
+    let transitionAppearenceManager = AnimatedTransitioningManager(duration: 0.28)
     
     
     @IBOutlet weak var addTransButton: UIButton!

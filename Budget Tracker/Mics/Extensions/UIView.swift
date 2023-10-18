@@ -9,7 +9,13 @@
 import UIKit
 
 extension UIView {
-
+    var toImage: UIImage {
+        let renderer = UIGraphicsImageRenderer(size: bounds.size)
+        return renderer.image { (context) in
+            layer.render(in: context.cgContext)
+        }
+        
+    }
     
     func shadow(opasity:Float = 0.6, black:Bool = false) {
         DispatchQueue.main.async {
@@ -137,7 +143,7 @@ extension CALayer {
             }
         }
     }
-
+    
     enum AnimationKey:String {
         case general = "backgroundpress"
         case general1 = "backgroundpress1"
@@ -150,7 +156,7 @@ extension CALayer {
                           duration:CGFloat = 0.5,
                           completion:(()->())? = nil
     ) {
-     //   self.removeAnimation(forKey: key.rawValue)
+        //   self.removeAnimation(forKey: key.rawValue)
         let animation = CABasicAnimation(keyPath: key.rawValue)
         animation.fromValue = key.from(self)
         animation.toValue = to ?? key.to(self)
@@ -181,7 +187,7 @@ extension CALayer {
         ], color: color ?? K.Colors.separetor, opacity: opasity)
     }
     
-     func createPath(_ lines:[CGPoint]) -> UIBezierPath {
+    func createPath(_ lines:[CGPoint]) -> UIBezierPath {
         let linePath = UIBezierPath()
         var liness = lines
         guard let lineFirst = liness.first else { return .init() }

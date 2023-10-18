@@ -1175,11 +1175,11 @@
             <objects>
                 <viewController storyboardIdentifier="CategoriesVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="cP3-cv-3dE" customClass="CategoriesVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="m5f-dV-6zU">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="777"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="814"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="black" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="60" translatesAutoresizingMaskIntoConstraints="NO" id="kTa-v1-Lr8">
-                                <rect key="frame" x="0.0" y="0.0" width="430" height="743"/>
+                                <rect key="frame" x="0.0" y="0.0" width="430" height="814"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="separatorColor" name="darkSeparetor"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -1635,14 +1635,14 @@
                                 </prototypes>
                             </tableView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="UzW-vR-Z71">
-                                <rect key="frame" x="205" y="378.66666666666663" width="20" height="20"/>
+                                <rect key="frame" x="205" y="397" width="20" height="20"/>
                                 <color key="color" name="CategoryColor"/>
                             </activityIndicatorView>
                             <containerView hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="56v-i7-otg">
-                                <rect key="frame" x="0.0" y="377" width="430" height="400"/>
+                                <rect key="frame" x="0.0" y="514" width="430" height="300"/>
                                 <color key="backgroundColor" name="balanceTitleColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="400" id="x0e-ki-C50"/>
+                                    <constraint firstAttribute="height" constant="300" id="x0e-ki-C50"/>
                                 </constraints>
                                 <connections>
                                     <segue destination="h1L-PQ-b3Z" kind="embed" identifier="selectIcon" id="U95-ph-p6h"/>
@@ -1667,7 +1667,7 @@
                         <nil key="title"/>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="YNw-pl-3cq">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="qT6-jw-Pe1" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
-                                <rect key="frame" x="282" y="0.0" width="128" height="44"/>
+                                <rect key="frame" x="282" y="6" width="128" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1700,11 +1700,11 @@
             <objects>
                 <viewController storyboardIdentifier="IconsVC" id="h1L-PQ-b3Z" customClass="IconsVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Nwp-Nb-GTI">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="400"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="300"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Arh-nB-5Oe">
-                                <rect key="frame" x="5" y="5" width="420" height="390"/>
+                                <rect key="frame" x="5" y="5" width="420" height="290"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="8cc-4e-emd">
                                     <size key="itemSize" width="40" height="40"/>
@@ -1862,7 +1862,7 @@
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="uXk-Ar-jF4"/>
-                        <color key="backgroundColor" name="SecondaryBacroundColor2"/>
+                        <color key="backgroundColor" name="SecondaryBacroundColor"/>
                         <constraints>
                             <constraint firstItem="uXk-Ar-jF4" firstAttribute="trailing" secondItem="Arh-nB-5Oe" secondAttribute="trailing" constant="5" id="3aO-Tp-76e"/>
                             <constraint firstItem="Arh-nB-5Oe" firstAttribute="leading" secondItem="uXk-Ar-jF4" secondAttribute="leading" constant="5" id="V9Z-ET-bmK"/>
@@ -2725,11 +2725,20 @@
                             </connections>
                         </segmentedControl>
                         <barButtonItem key="rightBarButtonItem" title="share" style="plain" id="h6I-pJ-oGC">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="KvP-WS-BeQ">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="KvP-WS-BeQ" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
                                 <rect key="frame" x="299.33333333333331" y="5" width="110.66666666666669" height="34.333333333333336"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Create PDF"/>
+                                <color key="backgroundColor" name="AccentColor"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Export PDF"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="linkBackground" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="sharePressed:" destination="U5Q-a5-Vkx" eventType="touchUpInside" id="cYC-C6-wtc"/>
                                 </connections>
@@ -3623,7 +3632,7 @@
             <objects>
                 <viewController storyboardIdentifier="CalendarVC" id="5n4-P6-pnR" customClass="CalendarVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="67i-SE-sWB">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="922"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="866"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="278-rW-rj0" userLabel="headetView">
@@ -3701,17 +3710,17 @@
                                 </constraints>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="InH-AG-csp" userLabel="timeViewStack View">
-                                <rect key="frame" x="55" y="355" width="320" height="567"/>
+                                <rect key="frame" x="55" y="355" width="320" height="511"/>
                                 <subviews>
                                     <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" style="wheels" translatesAutoresizingMaskIntoConstraints="NO" id="h2d-GY-FrE">
-                                        <rect key="frame" x="0.0" y="0.0" width="320" height="567"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="511"/>
                                         <color key="tintColor" name="CategoryColor"/>
                                     </datePicker>
                                 </subviews>
                                 <color key="tintColor" name="CategoryColor"/>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="XFt-LS-Qbp">
-                                <rect key="frame" x="20" y="867" width="390" height="35"/>
+                                <rect key="frame" x="20" y="811" width="390" height="35"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j8N-A3-4Wm" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="100" height="35"/>
@@ -3805,7 +3814,7 @@
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="Evc-oG-Jzh">
                         <barButtonItem key="rightBarButtonItem" style="plain" id="IVV-dP-fLO">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="GhQ-Pl-q1R" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
-                                <rect key="frame" x="375" y="4" width="35" height="36"/>
+                                <rect key="frame" x="375" y="10" width="35" height="36"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="yellowColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
@@ -4199,6 +4208,9 @@
         <designable name="gIt-0L-4IJ">
             <size key="intrinsicContentSize" width="30" height="48"/>
         </designable>
+        <designable name="gve-Pc-cyc">
+            <size key="intrinsicContentSize" width="70" height="28"/>
+        </designable>
         <designable name="gwp-y1-Jmr">
             <size key="intrinsicContentSize" width="88.333333333333329" height="15.666666666666666"/>
         </designable>
@@ -4256,10 +4268,10 @@
     </designables>
     <inferredMetricsTieBreakers>
         <segue reference="IMh-Gb-0ws"/>
-        <segue reference="HlC-bb-GVq"/>
-        <segue reference="Ega-tn-GzY"/>
+        <segue reference="rIb-KG-K0i"/>
+        <segue reference="6Wq-Fx-QbE"/>
         <segue reference="U95-ph-p6h"/>
-        <segue reference="RlV-WA-O6N"/>
+        <segue reference="N0q-Op-l1q"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="airplane" width="19" height="17"/>

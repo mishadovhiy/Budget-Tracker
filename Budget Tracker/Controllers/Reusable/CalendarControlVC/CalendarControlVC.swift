@@ -129,7 +129,6 @@ class CalendarControlVC: UIViewController {
             action(dateComp, cell)
         }
     }
-    
     func calendarMonthChanged(appeared:Bool, plus:Bool = true) {
         collectionView.scrollToItem(at: .init(item: !plus ? 0 : 2, section: 0), at: .centeredHorizontally, animated: true)
     }

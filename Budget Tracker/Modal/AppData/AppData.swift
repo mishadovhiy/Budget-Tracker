@@ -228,12 +228,10 @@ class AppData {
 
 
     let categoryColors = [
-        "BlueColor", "BlueColor2", "BlueColor3", "GreenColor", "GreenColor-2", "yellowColor2", "OrangeColor", "yellowColor", "OrangeColor-1", "pinkColor2", "PinkColor-1", "PinkColor", "RedColor"
+        "BlueColor", "BlueColor2", "BlueColor3", "GreenColor", "GreenColor-2", "yellowColor2", "OrangeColor", "yellowColor", "OrangeColor-1", "pinkColor2", "PinkColor-1", "PinkColor", "RedColor", "Brown"
     ]
     
-    let screenColors = [
-        "BlueColor", "BlueColor2", "BlueColor3", "GreenColor", "GreenColor-2", "yellowColor2", "OrangeColor", "yellowColor", "OrangeColor-1", "pinkColor2", "PinkColor-1", "PinkColor", "RedColor"
-    ]
+    lazy var screenColors = categoryColors
     
     var randomColorName: String {
         return DataBase().db["SelectedTintColor"] as? String ?? "yellowColor"

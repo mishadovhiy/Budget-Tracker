@@ -51,11 +51,7 @@ extension CalendarCollectionCell:UICollectionViewDelegate, UICollectionViewDataS
         if day != 0 {
             if let daySelected = didSelect {
                 daySelected(day)
-            } else if let cellSelected = didSelectCell {
-                let cellR = collectionView.cellForItem(at: indexPath) as! CalendarCell
-                collectionView.cellForItem(at: indexPath)
-                cellSelected(day, cellR)
-            }
+            } 
         }
         
 

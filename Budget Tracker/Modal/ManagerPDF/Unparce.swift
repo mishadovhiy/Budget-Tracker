@@ -9,90 +9,175 @@
 import Foundation
 import UIKit
 
-extension ManagerPDF {
-    struct UnparcePDF {
-        private func transactions(_ value:Any?) -> NSAttributedString {
-            let array = value as? [[String:Any]] ?? []
-            let text:NSMutableAttributedString = .init(string: "")
-            array.forEach({
-                let date = $0["Date"] as? String ?? "Unknown date"
-                let amount = $0["Amount"] as? String ?? "-"
-                let comment = (($0["Comment"] as? String) ?? "") != "" ? "\($0["Comment"] ?? "")" : ""
-                text.append(.init(string: "\(amount)", attributes: [.foregroundColor:self.color,
-                    .font:UIFont.systemFont(ofSize: 12, weight: .light
-                                           )]))
-                text.append(.init(string: " (\(date)) \(comment)\n", attributes: [
-                    .font: UIFont.systemFont(ofSize: 9, weight: .light),
-                    .foregroundColor:K.Colors.balanceT!.cgColor
-                                           
-                ]))
-                
-            })
-            return text
-        }
-        
-        private func category(_ value:Any?) -> NSAttributedString {
-            return .init(string: ((value as? [String:Any])?["Name"] as? String ?? "Unknown Category").uppercased(), attributes: [.font:UIFont.systemFont(ofSize: 18, weight: .bold), .foregroundColor:self.color])
-        }
-        
-        func dictionaryToString(_ dictionary:[String:Any]) -> NSAttributedString {
-            let text:NSMutableAttributedString = .init(string: "Transaction History\n", attributes: [.font:UIFont.systemFont(ofSize: 28, weight: .bold), .foregroundColor:self.color])
-                /*    text.append(.init(string: "From", attributes: [
-                .font:UIFont.systemFont(ofSize: 14, weight: .light), .foregroundColor:self.color
-            ]))*/
-            text.append(.init(string: "From Budget Tracker App\n\n\n", attributes: [
-                .font:UIFont.systemFont(ofSize: 14, weight: .bold), .foregroundColor:self.color
-            ]))
-            dictionary.forEach({
-                if let val = $0.value as? [String:Any] {
-                    val.forEach({
-                        text.append(self.row(($0.key, $0.value)))
-                    })
-                } else if let val = $0.value as? [[String:Any]] {
-                    val.forEach({
-                        let cat = self.category($0["category"])
-                        let val = $0["value"]
-                        let trans = self.transactions($0["transactions"])
-                        text.append(cat)
-                        text.append(.init(string: "\n"))
-                        text.append(trans)
-                        text.append(.init(string: "Total: \(val ?? "")\n\n\n", attributes: [
-                            .font:UIFont.systemFont(ofSize: 9, weight: .light), .foregroundColor:self.color]))
-                    })
-                } else {
+
+struct UnparcePDF {
+    func dictionaryToString(_ dictionary:[String:Any]) -> (NSAttributedString, CGFloat) {
+        let text:NSMutableAttributedString = .init(attributedString: documentHeader)
+        var height:CGFloat = 130
+        dictionary.forEach({
+            if let val = $0.value as? [String:Any] {
+                val.forEach({
                     text.append(self.row(($0.key, $0.value)))
-                }
-            })
-            text.append(.init(string: "\n"))
-            let attach = NSTextAttachment()
-            attach.image = .init(named: "icBig")
-            attach.bounds = .init(x: 50, y: 50, width: 40, height: 40)
-        
-            let str = NSAttributedString(attachment: attach)
-            text.append(str)
-            
-            return text
-        }
-        
-        var color:AnyObject {
-            return (K.Colors.category ?? .white).cgColor
-        }
-        
-        private func row(_ dict:(String, Any)) -> NSAttributedString {
-            let res:NSMutableAttributedString = .init(string: "")
-            if let newdict = dict.1 as? [String:Any] {
-                res.append(.init(string: "\(dict.0)", attributes: [.font:UIFont.systemFont(ofSize: 9, weight: .light), .foregroundColor:self.color]))
-                newdict.forEach {
-                    res.append(self.row(($0.key, $0.value)))
-                }
+                })
+            } else if let val = $0.value as? [[String:Any]] {
+                val.forEach({
+                    let transactions = self.transactions($0["transactions"])
+                    height += transactions.1
+                    height += 105
+                    text.append(self.category($0["category"]))
+                    text.append(.init(string: "\n"))
+                    text.append(transactions.0)
+                    text.append(self.total("\($0["value"] as? Double ?? 0)"))
+                    text.append(.init(string: "\n"))
+                })
             } else {
-                let keys = ["name", "transactions", "category", "value", "Name"]
-                if keys.contains(dict.0) {
-                    res.append(.init(string: "\(dict.0): \(dict.1)\n", attributes: [.font:UIFont.systemFont(ofSize: 9, weight: .light), .foregroundColor:self.color]))
-                }
-                
+                text.append(self.row(($0.key, $0.value)))
             }
-            return res
+        })
+        text.append(footer)
+        height += 140
+        return (text, height)
+    }
+    
+    private var documentHeader: NSMutableAttributedString {
+        let text:NSMutableAttributedString = .init(string: "")
+        let attachment = NSTextAttachment()
+        attachment.image = .init(named: "icBig")
+        attachment.bounds = .init(x: 0, y: -8, width: 40, height: 40)
+        text.append(.init(attachment: attachment))
+
+        text.append(.init(string: "  Transactions History ", attributes: [.font:UIFont.systemFont(ofSize: 28, weight: .bold), .foregroundColor:self.color]))
+        text.append(.init(string: "From Budget Tracker", attributes: [
+            .font:UIFont.systemFont(ofSize: 12, weight: .bold),
+            .foregroundColor:K.Colors.balanceT?.cgColor
+        ]))
+
+        text.append(.init(string: "\n\n\n\n\n"))
+
+        return text
+    }
+    
+    private var footer:NSMutableAttributedString {
+        let text:NSMutableAttributedString = .init(string: "")
+        let view = UIView(frame:.init(origin: .zero, size: .init(width: ManagerPDF.pageWidth, height: 90)))
+        let imageView:UIImageView = .init(image: Keys.appstoreURL.createQR())
+        imageView.frame.size = .init(width: 90, height: 90)
+        imageView.layer.cornerRadius = 6
+        view.addSubview(imageView)
+        let labelFrame:CGRect = .init(origin: .init(x: 100, y: 0), size: .init(width: 400, height: 60))
+        let label = UILabel(frame: labelFrame)
+        label.text = "Created with"
+        label.textColor = K.Colors.link
+        label.font = .systemFont(ofSize: 12, weight: .medium)
+        view.addSubview(label)
+        let label2 = UILabel(frame: .init(origin: .init(x: labelFrame.minX, y: labelFrame.minY + 15), size: labelFrame.size))
+        label2.text = "Budget Tracker"
+        label2.textColor = UIColor(cgColor: color as! CGColor)
+        label2.font = .systemFont(ofSize: 30, weight: .black)
+        view.addSubview(label2)
+        let attachment = NSTextAttachment()
+        attachment.image = view.toImage
+        text.append(.init(attachment: attachment))
+        return text
+        
+    }
+    
+    private func transactions(_ value:Any?) -> (NSMutableAttributedString, CGFloat) {
+        let array = value as? [[String:Any]] ?? []
+        let text:NSMutableAttributedString = .init(string: "")
+        var count:CGFloat = 0
+        array.forEach({
+            count += 45
+            let attachment = NSTextAttachment()
+            attachment.image = transactionView($0).toImage
+            text.append(.init(attachment: attachment))
+        })
+        return (text, count)
+    }
+    
+    private func total(_ value:String?) -> NSMutableAttributedString {
+        let attachment = NSTextAttachment()
+        attachment.image = totalsView(value ?? "-").toImage
+        return .init(attachment: attachment)
+    }
+    
+    private func category(_ value:Any?) -> NSAttributedString {
+        return .init(string: ((value as? [String:Any])?["Name"] as? String ?? "Unknown Category").uppercased(), attributes: [.font:UIFont.systemFont(ofSize: 18, weight: .bold), .foregroundColor:self.color])
+    }
+    
+    let color:AnyObject = (K.Colors.category ?? .white).cgColor
+    
+    private func row(_ dict:(String, Any)) -> NSAttributedString {
+        let res:NSMutableAttributedString = .init(string: "")
+        if let newdict = dict.1 as? [String:Any] {
+            res.append(.init(string: "\(dict.0)", attributes: [.font:UIFont.systemFont(ofSize: 9, weight: .light), .foregroundColor:self.color]))
+            newdict.forEach {
+                res.append(self.row(($0.key, $0.value)))
+            }
+        } else {
+            let keys = ["name", "transactions", "category", "value", "Name"]
+            if keys.contains(dict.0) {
+                res.append(.init(string: "\(dict.0): \(dict.1)\n", attributes: [.font:UIFont.systemFont(ofSize: 9, weight: .light), .foregroundColor:self.color]))
+            }
+            
+        }
+        return res
+    }
+}
+
+
+private extension UnparcePDF {
+    func totalsView(_ value:String) -> UIView {
+        let view = UIView()
+        let size:CGSize = .init(width: ManagerPDF.pageWidth - 100, height: 80)
+        view.frame.size = size
+        let label = UILabel()
+        label.frame.size = .init(width: size.width, height: 40)
+        let string:NSMutableAttributedString = .init(string: "Total: ", attributes: [
+            .font: UIFont.systemFont(ofSize: 12, weight: .regular),
+            .foregroundColor: self.color
+        ])
+        string.append(.init(string: value, attributes: [
+            .font: UIFont.systemFont(ofSize: 14, weight: .semibold),
+            .foregroundColor: self.color
+        ]))
+        label.attributedText = string
+        view.addSubview(label)
+        return view
+    }
+    
+    func transactionView(_ dict:[String:Any]) -> UIView {
+        let transaction = TransactionsStruct.create(dictt: dict)
+        let view = UIView()
+        let size:CGSize = .init(width: ManagerPDF.pageWidth - 100, height: 40)
+        view.frame.size = size
+        let dateLabel = UILabel(frame: .init(origin: .zero, size: size))
+        dateLabel.text = transaction?.date ?? ""
+        dateLabel.textAlignment = .left
+        dateLabel.textColor = K.Colors.balanceT
+        dateLabel.font = .systemFont(ofSize: 9, weight: .regular)
+        view.addSubview(dateLabel)
+        
+        let valueLabel = UILabel(frame: .init(origin: .zero, size: size))
+        valueLabel.text = transaction?.value ?? ""
+        valueLabel.textAlignment = .right
+        valueLabel.textColor = .init(cgColor: color as! CGColor)
+        valueLabel.font = .systemFont(ofSize: 12, weight: .semibold)
+        view.addSubview(valueLabel)
+        dotts(in: view, size: size)
+        return view
+    }
+    
+    private func dotts(in view:UIView, size:CGSize) {
+        let separetor = 3
+        for i in 0..<(Int(size.width) / separetor) {
+            let dotWidth:CGFloat = 3
+            let dott = UIView(frame: .init(x: ((CGFloat(separetor) + dotWidth) * CGFloat(i)), y: size.height - 1, width: dotWidth, height: 0.8))
+            dott.backgroundColor = K.Colors.balanceT
+            dott.layer.cornerRadius = 0.5
+            view.addSubview(dott)
         }
     }
 }
+
+

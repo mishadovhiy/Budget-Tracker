@@ -76,11 +76,13 @@ class StatisticVC: SuperViewController, CALayerDelegate {
         } else { return 0.0 }
     }
     @IBAction func sharePressed(_ sender: Any) {
-        let dict:[[String:Any]] = allData.compactMap({
-            return $0.dict
-        })
+        let data = allData
+//        for _ in 0..<50 {
+//            allData.forEach({data.append($0)})
+//        }
+        let dict:[[String:Any]] = data.compactMap({ $0.dict})
         pdf = .init(dict: ["Budget Tracker":dict], pageTitle: "some title", vc: self)
-        pdf?.exportPDF()
+        pdf?.exportPDF(sender: sender as! UIButton)
     }
     
     func updateUI() {
@@ -88,8 +90,8 @@ class StatisticVC: SuperViewController, CALayerDelegate {
         self.tableView.dataSource = self
         sum = 0.0
         segmentControll.selectedSegmentIndex = appData.expenseLabelPressed ? 0 : 1
-        let d = createTableData()
-        allData = d
+        let data = createTableData()
+        allData = data
         getMaxSum()
         initPlot()
         DispatchQueue.main.async {

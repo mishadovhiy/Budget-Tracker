@@ -18,27 +18,33 @@ struct ManagerPDF {
         self.pageTitle = pageTitle
         self.vc = vc
     }
+    
+    static let pageWidth:CGFloat = 612
     private func showError(title:String, description:String? = nil) {
         AppDelegate.shared?.newMessage.show(title:title, description: description, type: .error)
         
     }
-    func exportPDF() {
+    func exportPDF(sender:UIView) {
         guard let pdf = createPDF(),
               let pdfData = pdf.dataRepresentation() else {
             showError(title: "Error creating PDF")
             return
         }
-        vc.presentShareVC(with: [pdfData])
+        vc.presentShareVC(with: [pdfData], sender:sender)
     }
     
-    func pdfString() -> NSAttributedString {
+    func pdfString() -> (NSAttributedString, CGFloat) {
         return UnparcePDF().dictionaryToString(dict)
     }
     
+    func test() -> NSAttributedString {
+        return pdfString().0
+    }
+
     private func createPDF() -> PDFDocument? {
         let pdfDocument = PDFDocument()
         let text = pdfString()
-        guard let page = generator.createPDFPage(fromAttributes: .init(attributedString: text))
+        guard let page = generator.createPDFPage(fromAttributes: .init(attributedString: text.0), textHeight: text.1)
         else {
             showError(title: "Error converting to pdf image")
             return nil
