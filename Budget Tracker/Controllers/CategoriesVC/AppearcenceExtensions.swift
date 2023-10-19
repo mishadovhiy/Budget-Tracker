@@ -277,14 +277,7 @@ extension CategoriesVC {//keyboard
         }
     }
     
-    func kayboardAppeared(_ keyboardHeight:CGFloat) {
-        DispatchQueue.main.async {
-            let height:CGFloat = keyboardHeight - self.appData.resultSafeArea.1 - self.defaultButtonInset
-            let cellEditing = (self.editingTF?.layer.name?.contains("cell") ?? false) || self.selectingIconFor.0 != nil
-            self.tableView.contentInset.bottom = height + (cellEditing ? (self.regFooterHeight * (-1)) : 0)
-
-        }
-    }
+    
     @objc func keyboardWillHide(_ notification: Notification) {
         editingTfIndex = (nil,nil)
         if !showingIcons {

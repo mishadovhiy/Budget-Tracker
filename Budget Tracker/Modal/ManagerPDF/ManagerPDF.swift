@@ -13,10 +13,11 @@ struct ManagerPDF {
     private var vc:UIViewController
     private var pageTitle:String
     private var dict:[String:Any]
-    init(dict: [String : Any], pageTitle:String, vc:UIViewController) {
+    init(dict: [String : Any], pageTitle:String, vc:UIViewController, data:AdditionalPDFData) {
         self.dict = dict
         self.pageTitle = pageTitle
         self.vc = vc
+        self.additionalData = data
     }
     
     static let pageWidth:CGFloat = 612
@@ -24,6 +25,7 @@ struct ManagerPDF {
         AppDelegate.shared?.newMessage.show(title:title, description: description, type: .error)
         
     }
+    let additionalData:AdditionalPDFData
     func exportPDF(sender:UIView) {
         guard let pdf = createPDF(),
               let pdfData = pdf.dataRepresentation() else {
@@ -34,7 +36,7 @@ struct ManagerPDF {
     }
     
     func pdfString() -> (NSAttributedString, CGFloat) {
-        return UnparcePDF().dictionaryToString(dict)
+        return UnparcePDF().dictionaryToString(dict, data: additionalData)
     }
     
     func test() -> NSAttributedString {
@@ -54,5 +56,13 @@ struct ManagerPDF {
     }
     
     let generator:PagePDF = .init()
+    
+    struct AdditionalPDFData {
+        let duration:String
+        /**
+         - expenses, income, etc
+         */
+        let type:String
+    }
 }
 

@@ -81,7 +81,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
 //            allData.forEach({data.append($0)})
 //        }
         let dict:[[String:Any]] = data.compactMap({ $0.dict})
-        pdf = .init(dict: ["Budget Tracker":dict], pageTitle: "some title", vc: self)
+        pdf = .init(dict: ["Budget Tracker":dict], pageTitle: "some title", vc: self, data: .init(duration: appData.filter.periodText, type: segmentControll.selectedSegmentIndex == 0 ? "Expenses" : "Incomes"))
         pdf?.exportPDF(sender: sender as! UIButton)
     }
     
@@ -128,7 +128,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
             }
         var totalAmount = 0.0
             for (key, value) in resultDict {
-                let transactions = resultDict[key] ?? []
+                let transactions = (resultDict[key] ?? []).sorted{$0.dateFromString < $1.dateFromString}
                 
                 let category = db.category(key) ?? (NewCategories(id: -1, name: "Unknown".localize, icon: "", color: "", purpose: .debt))
                 var value = 0.0

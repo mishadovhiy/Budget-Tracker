@@ -252,6 +252,14 @@ extension CategoriesVC: IconsVCDelegate {
         iconSelected(img: img, color: color)
     }
 
+    func kayboardAppeared(_ keyboardHeight:CGFloat) {
+        DispatchQueue.main.async {
+            let height:CGFloat = keyboardHeight - self.appData.resultSafeArea.1 - self.defaultButtonInset
+            let cellEditing = (self.editingTF?.layer.name?.contains("cell") ?? false) || self.selectingIconFor.0 != nil
+            self.tableView.contentInset.bottom = height + (cellEditing ? (self.regFooterHeight * (-1)) : 0)
+
+        }
+    }
 }
 
 extension CategoriesVC {

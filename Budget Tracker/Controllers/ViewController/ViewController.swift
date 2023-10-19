@@ -128,7 +128,7 @@ class ViewController: SuperViewController {
         self.mainTableView.contentInset.bottom = AppDelegate.shared?.banner.size ?? 0
       //  AppDelegate.shared?.banner.bannerSizePublisher.subscribe(Subscribers.Assign(object: mainTableView, keyPath: \.contentInset.bottom))
         AppDelegate.shared?.banner.valuePublisher.sink(receiveValue: {
-            self.mainTableView.contentInset.top = $0
+            self.mainTableView.contentInset.bottom = $0
         }).store(in: &cancellableHolder)
     }
 

@@ -11,9 +11,9 @@ import UIKit
 
 
 struct UnparcePDF {
-    func dictionaryToString(_ dictionary:[String:Any]) -> (NSAttributedString, CGFloat) {
-        let text:NSMutableAttributedString = .init(attributedString: documentHeader)
-        var height:CGFloat = 130
+    func dictionaryToString(_ dictionary:[String:Any], data:ManagerPDF.AdditionalPDFData) -> (NSAttributedString, CGFloat) {
+        let text:NSMutableAttributedString = .init(attributedString: documentHeader(data: data))
+        var height:CGFloat = 170
         dictionary.forEach({
             if let val = $0.value as? [String:Any] {
                 val.forEach({
@@ -39,7 +39,7 @@ struct UnparcePDF {
         return (text, height)
     }
     
-    private var documentHeader: NSMutableAttributedString {
+    private func documentHeader(data:ManagerPDF.AdditionalPDFData) -> NSMutableAttributedString {
         let text:NSMutableAttributedString = .init(string: "")
         let attachment = NSTextAttachment()
         attachment.image = .init(named: "icBig")
@@ -47,8 +47,12 @@ struct UnparcePDF {
         text.append(.init(attachment: attachment))
 
         text.append(.init(string: "  Transactions History ", attributes: [.font:UIFont.systemFont(ofSize: 28, weight: .bold), .foregroundColor:self.color]))
-        text.append(.init(string: "From Budget Tracker", attributes: [
+        text.append(.init(string: "From Budget Tracker\n\n", attributes: [
             .font:UIFont.systemFont(ofSize: 12, weight: .bold),
+            .foregroundColor:K.Colors.balanceT?.cgColor
+        ]))
+        text.append(.init(string: data.type.capitalized + " for " + data.duration, attributes: [
+            .font:UIFont.systemFont(ofSize: 10, weight: .bold),
             .foregroundColor:K.Colors.balanceT?.cgColor
         ]))
 
@@ -157,6 +161,16 @@ private extension UnparcePDF {
         dateLabel.textColor = K.Colors.balanceT
         dateLabel.font = .systemFont(ofSize: 9, weight: .regular)
         view.addSubview(dateLabel)
+        
+        if transaction?.comment != "" {
+            let commentLabel = UILabel(frame: .init(origin: .init(x: 80, y: 0), size: .init(width: ManagerPDF.pageWidth / 2, height: size.height)))
+            commentLabel.text = transaction?.comment
+            commentLabel.textAlignment = .left
+            commentLabel.textColor = K.Colors.balanceT
+            commentLabel.font = .systemFont(ofSize: 9, weight: .regular)
+            view.addSubview(commentLabel)
+        }
+        
         
         let valueLabel = UILabel(frame: .init(origin: .zero, size: size))
         valueLabel.text = transaction?.value ?? ""
