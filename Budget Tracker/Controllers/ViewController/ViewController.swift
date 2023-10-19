@@ -348,21 +348,43 @@ class ViewController: SuperViewController {
     @objc func monthBalancePressed(_ sender:UITapGestureRecognizer) {
         currentStatistic = true
         if canTouchHandleTap {
-            self.performSegue(withIdentifier: K.statisticSeque, sender: self)
+            toStatistic(thisMonth: true, isExpenses: true)
         }
+    }
+    
+    func toStatistic(thisMonth:Bool, isExpenses:Bool) {
+        let vc = StatisticVC.configure(data: currentStatistic ? monthTransactions : apiTransactions)
+        vc.expensesPressed = true
+        print(currentStatistic, " currentStatisticcurrentStatistic")
+        vc.isAll = !currentStatistic
+        vc.fromsideBar = self.fromSideBar
+
+        currentStatistic = false
+        self.fromSideBar = false
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    
+    func toCategories(type:CategoriesVC.ScreenType = .categories, fromSettings:Bool? = nil) {
+        let vc = CategoriesVC.configure(type: type)
+        vc.fromSettings = true
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     var currentStatistic = false
     @IBAction func statisticLabelPressed(_ sender: UIButton) {
         currentStatistic = true
-        switch sender.tag {
-        case 0: AppDelegate.shared?.appData.expenseLabelPressed = true
-        case 1: AppDelegate.shared?.appData.expenseLabelPressed = false
-        default: AppDelegate.shared?.appData.expenseLabelPressed = true
-        }
+        
         DispatchQueue.main.async {
-            self.performSegue(withIdentifier: K.statisticSeque, sender: self)
+            var expenses = true
+            switch sender.tag {
+            case 0: expenses = true
+            case 1: expenses = false
+            default: expenses = true
+            }
+            self.toStatistic(thisMonth: true, isExpenses: expenses)
         }
+        
     }
 
     @objc func savedTransPressed(_ sender: UITapGestureRecognizer) {
@@ -378,23 +400,14 @@ class ViewController: SuperViewController {
     }
     
     @objc func addTransButtonPressed(_ sender: UIButton) {
-        print("addtrans")
-        DispatchQueue.main.async {
-            self.performSegue(withIdentifier: "goToEditVC", sender: self)
-        }
+        toAddTransaction(editing: false, pressedView: sender, isCalendar: false)
     }
     
     @objc func incomePressed(_ sender: UITapGestureRecognizer) {
-        AppDelegate.shared?.appData.expenseLabelPressed = false
-        DispatchQueue.main.async {
-            self.performSegue(withIdentifier: "toStatisticVC", sender: self)
-        }
+        toStatistic(thisMonth: true, isExpenses: false)
     }
     @objc func expensesPressed(_ sender: UITapGestureRecognizer) {
-        AppDelegate.shared?.appData.expenseLabelPressed = true
-        DispatchQueue.main.async {
-            self.performSegue(withIdentifier: "toStatisticVC", sender: self)
-        }
+        toStatistic(thisMonth: true, isExpenses: true)
     }
     
     @IBAction func filterPressed(_ sender: UIButton) {

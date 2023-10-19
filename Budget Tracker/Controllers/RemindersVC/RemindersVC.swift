@@ -140,5 +140,11 @@ extension RemindersVC :TransitionVCProtocol {
     
 }
 
+extension RemindersVC {
+    static func configure() -> RemindersVC {
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "RemindersVC") as! RemindersVC
+        return vc
+    }
+}
 
 

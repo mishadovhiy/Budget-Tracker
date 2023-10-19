@@ -146,3 +146,11 @@ class SupportVC: SuperViewController, UITextViewDelegate {
     }
 
 }
+
+extension SupportVC {
+    static func configure() -> SupportVC {
+        let vc = UIStoryboard(name: "LogIn", bundle: nil).instantiateViewController(withIdentifier: "SupportVC") as! SupportVC
+        return vc
+        
+    }
+}

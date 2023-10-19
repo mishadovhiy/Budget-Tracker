@@ -123,7 +123,7 @@ class AppSettingsData {
     func urlSection() -> [Any] {
         let supportCell = SettingsVC.StandartCell(title: "Write to App Support".localize, action: {
             DispatchQueue.main.async {
-                self.vc.performSegue(withIdentifier: "toSupport", sender: self.vc)
+                self.vc.navigationController?.pushViewController(SupportVC.configure(), animated: true)
             }
         })
         

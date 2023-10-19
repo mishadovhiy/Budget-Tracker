@@ -446,10 +446,10 @@
             filePath = "Budget Tracker/Modal/AppData/AppData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "194"
-            endingLineNumber = "194"
-            landmarkName = "AppData"
-            landmarkType = "3">
+            startingLineNumber = "193"
+            endingLineNumber = "193"
+            landmarkName = "userEmailHolder"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -910,8 +910,8 @@
             filePath = "Budget Tracker/Controllers/ViewController/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "357"
-            endingLineNumber = "357"
+            startingLineNumber = "376"
+            endingLineNumber = "376"
             landmarkName = "statisticLabelPressed(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1292,8 +1292,8 @@
             filePath = "Budget Tracker/Controllers/ViewController/Extensions_ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1098"
-            endingLineNumber = "1098"
+            startingLineNumber = "1090"
+            endingLineNumber = "1090"
             landmarkName = "prepareSegue(for:sender:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1830,8 +1830,8 @@
             filePath = "Budget Tracker/Controllers/TransactionVC/TransactionVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "484"
-            endingLineNumber = "484"
+            startingLineNumber = "468"
+            endingLineNumber = "468"
             landmarkName = "purposeSwitched(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1942,8 +1942,8 @@
             filePath = "Budget Tracker/Controllers/TransactionVC/TransactionVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "386"
-            endingLineNumber = "386"
+            startingLineNumber = "370"
+            endingLineNumber = "370"
             landmarkName = "donePressed(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1958,8 +1958,8 @@
             filePath = "Budget Tracker/Controllers/TransactionVC/TransactionVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "240"
-            endingLineNumber = "240"
+            startingLineNumber = "224"
+            endingLineNumber = "224"
             landmarkName = "getEditingdata()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1974,8 +1974,8 @@
             filePath = "Budget Tracker/Controllers/TransactionVC/TransactionVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "274"
-            endingLineNumber = "274"
+            startingLineNumber = "258"
+            endingLineNumber = "258"
             landmarkName = "getEditingdata()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1990,8 +1990,8 @@
             filePath = "Budget Tracker/Controllers/TransactionVC/TransactionVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "145"
-            endingLineNumber = "145"
+            startingLineNumber = "119"
+            endingLineNumber = "119"
             landmarkName = "viewWillLayoutSubviews()"
             landmarkType = "7">
          </BreakpointContent>
@@ -2516,8 +2516,8 @@
             filePath = "Budget Tracker/Controllers/TransactionVC/TransactionVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "666"
-            endingLineNumber = "666"
+            startingLineNumber = "650"
+            endingLineNumber = "650"
             landmarkName = "dateSelected(date:time:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -3946,8 +3946,8 @@
             filePath = "Budget Tracker/Modal/AppData/AppData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "407"
-            endingLineNumber = "407"
+            startingLineNumber = "406"
+            endingLineNumber = "406"
             landmarkName = "presentMoreVC(currentVC:data:proIndex:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -3962,8 +3962,8 @@
             filePath = "Budget Tracker/Modal/AppData/AppData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "409"
-            endingLineNumber = "409"
+            startingLineNumber = "408"
+            endingLineNumber = "408"
             landmarkName = "presentMoreVC(currentVC:data:proIndex:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -4381,22 +4381,6 @@
             endingLineNumber = "262"
             landmarkName = "CategoriesVC"
             landmarkType = "21">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "9FB9DCD9-C45C-44B1-BD23-90D312BF6063"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Budget Tracker/Controllers/ViewController/Extensions_ViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1140"
-            endingLineNumber = "1140"
-            landmarkName = "prepareSegue(for:sender:)"
-            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -4973,54 +4957,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "A0364E7A-2883-4583-B6D7-EF790A0CB893"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Budget Tracker/Controllers/ViewController/Extensions_ViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "845"
-            endingLineNumber = "845"
-            landmarkName = "toAddTransaction(editing:pressedView:canDivid:isCalendar:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "A0364E7A-2883-4583-B6D7-EF790A0CB893 - 49cbf936938e757b"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in Budget_Tracker.ViewController.toAddTransaction(editing: Swift.Bool, pressedView: Swift.Optional&lt;__C.UIView&gt;, canDivid: Swift.Bool, isCalendar: Swift.Bool) -&gt; ()"
-                  moduleName = "Budget Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/Controllers/ViewController/Extensions_ViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "844"
-                  endingLineNumber = "844"
-                  offsetFromSymbolStart = "576">
-               </Location>
-               <Location
-                  uuid = "A0364E7A-2883-4583-B6D7-EF790A0CB893 - 49cbf936938e7518"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in Budget_Tracker.ViewController.toAddTransaction(editing: Swift.Bool, pressedView: Swift.Optional&lt;__C.UIView&gt;, canDivid: Swift.Bool, isCalendar: Swift.Bool) -&gt; ()"
-                  moduleName = "Budget Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/Controllers/ViewController/Extensions_ViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "847"
-                  endingLineNumber = "847"
-                  offsetFromSymbolStart = "120">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "693D6BC5-4C6A-403B-86D9-92F26E584D3B"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -5124,8 +5060,8 @@
             filePath = "Budget Tracker/Controllers/TransactionVC/TransactionVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "343"
-            endingLineNumber = "343"
+            startingLineNumber = "327"
+            endingLineNumber = "327"
             landmarkName = "addNew(value:category:date:comment:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5140,8 +5076,8 @@
             filePath = "Budget Tracker/Controllers/TransactionVC/TransactionVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "333"
-            endingLineNumber = "333"
+            startingLineNumber = "317"
+            endingLineNumber = "317"
             landmarkName = "addNew(value:category:date:comment:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5156,8 +5092,8 @@
             filePath = "Budget Tracker/Controllers/TransactionVC/TransactionVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "393"
-            endingLineNumber = "393"
+            startingLineNumber = "377"
+            endingLineNumber = "377"
             landmarkName = "donePressed(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5172,8 +5108,8 @@
             filePath = "Budget Tracker/Controllers/TransactionVC/TransactionVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "395"
-            endingLineNumber = "395"
+            startingLineNumber = "379"
+            endingLineNumber = "379"
             landmarkName = "donePressed(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5188,8 +5124,8 @@
             filePath = "Budget Tracker/Controllers/TransactionVC/TransactionVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "384"
-            endingLineNumber = "384"
+            startingLineNumber = "368"
+            endingLineNumber = "368"
             landmarkName = "donePressed(_:)"
             landmarkType = "7">
          </BreakpointContent>

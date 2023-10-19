@@ -263,9 +263,10 @@ extension CategoriesVC: IconsVCDelegate {
 }
 
 extension CategoriesVC {
-    static func configure() -> CategoriesVC {
+    static func configure(type:ScreenType = .categories) -> CategoriesVC {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "CategoriesVC") as! CategoriesVC
+        vc.screenType = type
         return vc
     }
 }

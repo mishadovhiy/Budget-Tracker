@@ -838,13 +838,6 @@ extension ViewController: TransitionVCProtocol {
             editingTransaction = nil
         }
         DispatchQueue.main.async {
-         //  self.performSegue(withIdentifier: "goToEditVC", sender: self)
-//            self.sendError = false
-//         //   toggleSideBar(false, animated: true)
-//            self.selectedCell = nil
-//            if self.refreshControl.isRefreshing {
-//                self.refreshControl.endRefreshing()
-//            }
             if !isCalendar {
                 self.navigationController?.delegate = self.transitionAppearenceManager
                 self.transitionAppearenceManager.beginTransactionPressedView = pressedView ?? self.addTransitionButton
@@ -866,7 +859,6 @@ extension ViewController: TransitionVCProtocol {
             if isCalendar {
                 self.present(TransactionNav.configure(vc), animated: true)
             } else {
-
                 self.navigationController?.pushViewController(vc, animated: true)
             }
         }
@@ -1105,14 +1097,6 @@ extension ViewController: TransitionVCProtocol {
             //     let nav = segue.destination as! UINavigationController
             let vc = segue.destination as! RemindersVC
             
-        case "toDebts":
-            let vc = segue.destination as! CategoriesVC
-            vc.fromSettings = true
-            vc.screenType = .debts
-        case "toCategories", "toLocalData":
-            let vc = segue.destination as! CategoriesVC
-            vc.screenType = segue.identifier == "toLocalData" ? .localData : .categories
-            vc.fromSettings = true
         case "toFiterVC":
             let vc = segue.destination as? FilterTVC
             self.mainTableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
@@ -1136,29 +1120,7 @@ extension ViewController: TransitionVCProtocol {
                 }
             }
             
-        case "goToEditVC":
-        //    self.navigationController?.delegate = transitionAppearenceManager
-            let nav = segue.destination as! UINavigationController
-            let vc = nav.topViewController as! TransitionVC
-            vc.delegate = self
-            vc.dateSet = self.calendarSelectedDate
-            self.calendarSelectedDate = nil
-            if let transaction = editingTransaction {
-                vc.editingDate = transaction.date
-                vc.editingValue = Double(transaction.value) ?? 0.0
-                vc.editingCategory = transaction.categoryID
-                vc.editingComment = transaction.comment
-            }
-            
-        case "toStatisticVC":
-            let vc = segue.destination as! StatisticVC
-            print(currentStatistic, " currentStatisticcurrentStatistic")
-            vc.dataFromMain = currentStatistic ? monthTransactions : apiTransactions //or apidata
-            vc.isAll = !currentStatistic
-            vc.fromsideBar = self.fromSideBar
-    
-            currentStatistic = false
-            self.fromSideBar = false
+
         case "toSingIn":
             let nav = segue.destination as! UINavigationController
             let vc = nav.topViewController as! LoginViewController

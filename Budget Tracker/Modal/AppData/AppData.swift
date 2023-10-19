@@ -22,7 +22,6 @@ class AppData {
         }
     }
     
-    var expenseLabelPressed = true//make only in vc
     var sendSavedData = false
     var needDownloadOnMainAppeare = false
     var needFullReload = false

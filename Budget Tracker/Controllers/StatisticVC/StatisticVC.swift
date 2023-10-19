@@ -102,6 +102,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
     var selectedSegment = 0
     var maxValue = 0.0
     var isAll:Bool = false
+    var expensesPressed = true
     func createTableData() -> [GraphDataStruct] {
         maxValue = 0.0
         allData.removeAll()
@@ -411,3 +412,12 @@ struct GraphDataStruct {
     }
 }
 
+
+extension StatisticVC {
+    static func configure(data:[TransactionsStruct]) -> StatisticVC {
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "StatisticVC") as! StatisticVC
+        vc.dataFromMain = data
+        return vc
+        
+    }
+}

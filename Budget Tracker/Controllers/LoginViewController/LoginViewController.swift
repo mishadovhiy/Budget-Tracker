@@ -734,3 +734,11 @@ extension LoginViewController {
     
     
 }
+
+extension LoginViewController {
+    static func configure() -> LoginViewController {
+        let vc = UIStoryboard(name: "LogIn", bundle: nil).instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
+        return vc
+        
+    }
+}

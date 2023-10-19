@@ -94,32 +94,6 @@ class TransitionVC: SuperViewController {
     var panMahanger:PanViewController?
 
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        navigationController?.delegate = nil
-        switch segue.identifier {
-        case "toCalendar":
-            let vc = segue.destination as! CalendarVC
-            vc.delegate = self
-      //      vc.darkAppearence = true
-            vc.selectedFrom = displeyingTransaction.date == "" ? self.defaultDate : displeyingTransaction.date
-
-            if paymentReminderAdding {
-                vc.datePickerDate = reminder_Time?.toIsoString() ?? ""
-                vc.selectingDate = false
-                vc.needPressDone = true
-                vc.canSelectOnlyOne = true
-            }
-
-        case "toCategories":
-            let vc = segue.destination as! CategoriesVC
-            vc.delegate = self
-        //    vc.darkAppearence = true
-            vc.hideTitle = true
-
-        default:
-            print("segue default")
-        }
-    }
     
     var dateSet:String?
     
@@ -174,16 +148,26 @@ class TransitionVC: SuperViewController {
     
     @objc func datePressed(_ sender: UITapGestureRecognizer) {
         print("datePressed")
-        DispatchQueue.main.async {
-            self.performSegue(withIdentifier: "toCalendar", sender: self)
+        let vc = CalendarVC.configure()
+        vc.delegate = self
+  //      vc.darkAppearence = true
+        vc.selectedFrom = displeyingTransaction.date == "" ? self.defaultDate : displeyingTransaction.date
+
+        if paymentReminderAdding {
+            vc.datePickerDate = reminder_Time?.toIsoString() ?? ""
+            vc.selectingDate = false
+            vc.needPressDone = true
+            vc.canSelectOnlyOne = true
         }
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc func categoryPressed(_ sender: UITapGestureRecognizer) {
         print("toCategories")
-        DispatchQueue.main.async {
-            self.performSegue(withIdentifier: "toCategories", sender: self)
-        }
+        let vc = CategoriesVC.configure(type: .categories)
+        vc.delegate = self
+        vc.hideTitle = true
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     

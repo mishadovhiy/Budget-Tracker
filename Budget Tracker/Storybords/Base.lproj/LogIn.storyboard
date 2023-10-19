@@ -321,11 +321,11 @@
             <objects>
                 <viewController storyboardIdentifier="EnterValueVC" id="g3f-NZ-v6H" customClass="EnterValueVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WCz-zX-LTb">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="922"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="top" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="in9-wI-9lJ">
-                                <rect key="frame" x="75" y="386.33333333333331" width="280" height="149.66666666666669"/>
+                                <rect key="frame" x="75" y="391.33333333333331" width="280" height="149.66666666666669"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleAspectFit" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="wfW-zS-Z3i">
                                         <rect key="frame" x="0.0" y="0.0" width="231.33333333333334" height="49.333333333333336"/>
@@ -490,7 +490,7 @@
         <!--Buy ProVC-->
         <scene sceneID="nnp-cs-xmp">
             <objects>
-                <viewController storyboardIdentifier="BuyProVC" id="kvJ-6b-N85" customClass="BuyProVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="BuyProVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="kvJ-6b-N85" customClass="BuyProVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="RDr-oq-czX">
                         <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1167,7 +1167,7 @@
         </designable>
     </designables>
     <inferredMetricsTieBreakers>
-        <segue reference="jP6-jS-NGM"/>
+        <segue reference="L2Z-z7-BqA"/>
         <segue reference="v5h-7J-ubq"/>
     </inferredMetricsTieBreakers>
     <resources>
@@ -1186,7 +1186,7 @@
             <color red="0.078000001609325409" green="0.086000002920627594" blue="0.086000002920627594" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="balanceTitleColor">
-            <color red="0.15700000524520874" green="0.15700000524520874" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <color red="0.43399998545646667" green="0.43399998545646667" blue="0.43399998545646667" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="balanceValueColor">
             <color red="0.2669999897480011" green="0.2669999897480011" blue="0.2669999897480011" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -1207,7 +1207,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="tintColor">
-            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

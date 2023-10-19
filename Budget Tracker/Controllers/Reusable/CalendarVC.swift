@@ -773,5 +773,10 @@ class CalendarVC: SuperViewController {
 }
 
 
-
+extension CalendarVC {
+    static func configure() -> CalendarVC {
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "CalendarVC") as! CalendarVC
+        return vc
+    }
+}
 

@@ -19,36 +19,49 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         let notifications = Notifications.notificationsCount
         
         var accpuntCell:CellData {
-            var accountSegue:String {
-                return "toAccount"
-            }
-            return CellData(name: "Account".localize, value: appData.username == "" ? "Log in".localize : appData.username, segue: accountSegue, image: "person.fill")
+            return CellData(name: "Account".localize, value: appData.username == "" ? "Log in".localize : appData.username, segue: "", image: "person.fill", selectAction: {
+                ViewController.shared?.navigationController?.pushViewController(LoginViewController.configure(), animated: true)
+            })
         }
         
-        let settingsCell:CellData = .init(name: "Settings".localize, value: "", segue: "toSettingsVC", image: "gearshape.fill")
+        let settingsCell:CellData = .init(name: "Settings".localize, value: "", segue: "", image: "gearshape.fill", selectAction: {
+            ViewController.shared?.navigationController?.pushViewController(SettingsVC.configure(), animated: true)
+        })
         
         let dbb = DataBase().db
         let catsCo = dbb["categoriesDataNew"] as? [[String:Any]] ?? []
         
         var categories:[CellData] = [
-            .init(name: "Categories".localize, value: "\(catsCo.count - debts)", segue: "toCategories", image: "folder.fill"),
-            .init(name: "Debts".localize, value: "\(debts)", segue: "toDebts", image: "rectangle.3.group.fill", pro: nil, notifications: notifications.0)//!(pro) ? 3 : nil
+            .init(name: "Categories".localize, value: "\(catsCo.count - debts)", segue: "", image: "folder.fill", selectAction: {
+                ViewController.shared?.toCategories()
+            }),
+            .init(name: "Debts".localize, value: "\(debts)", segue: "", image: "rectangle.3.group.fill", pro: nil, notifications: notifications.0, selectAction: {
+                ViewController.shared?.toCategories(type: .debts)
+            })//!(pro) ? 3 : nil
         ]
         let localCount = ((dbb[K.Keys.localTrancations] as? [[String:Any]] ?? []) + (dbb[K.Keys.localCategories] as? [[String:Any]] ?? [])).count
         if localCount > 0 {
-            categories.append(CellData(name: "Local Data".localize, value: "\(localCount)", segue: "toLocalData", image: "tray.fill"))
+            categories.append(CellData(name: "Local Data".localize, value: "\(localCount)", segue: "", image: "tray.fill", selectAction: {
+                ViewController.shared?.toCategories(type: .localData)
+            }))
         }
         
-        let statistic:CellData = .init(name: "Statistic".localize, value: "", segue: "toStatisticVC", image: "chart.pie.fill")
+        let statistic:CellData = .init(name: "Statistic".localize, value: "", segue: "", image: "chart.pie.fill", selectAction: {
+            ViewController.shared?.toStatistic(thisMonth: false, isExpenses: true)
+        })
         let trialDays = dbb["trialToExpireDays"] as? Int ?? 0
-        let trialCell = CellData(name: "Trail till", value: "\(7 - trialDays)", segue: "toProVC", image: "clock.fill")
+        let trialCell = CellData(name: "Trail till", value: "\(7 - trialDays)", segue: "", image: "clock.fill", selectAction: {
+            AppDelegate.shared?.present(vc: BuyProVC.configure())
+        })
 
 
         var accountSection:[CellData] {
             return trialDays == 0 ? [accpuntCell, settingsCell] : [accpuntCell, settingsCell, trialCell]
         }
         
-        let upcommingRemiders:CellData = .init(name: "Payment reminders".localize, value: "", segue: "toReminders", image: "bell.fill", pro: nil, notifications: notifications.1)//!(pro) ? 0 : nil
+        let upcommingRemiders:CellData = .init(name: "Payment reminders".localize, value: "", segue: "", image: "bell.fill", pro: nil, notifications: notifications.1, selectAction: {
+            ViewController.shared?.navigationController?.pushViewController(RemindersVC.configure(), animated: true)
+        })//!(pro) ? 0 : nil
         
         tableData = [
             .init(section: accountSection, title: "", hidden: false),

@@ -429,3 +429,10 @@ extension BuyProVC: SKPaymentTransactionObserver {
     }
 }
 
+
+
+extension BuyProVC {
+    static func configure() -> BuyProVC {
+        return UIStoryboard(name: "LogIn", bundle: nil).instantiateViewController(withIdentifier: "BuyProVC") as! BuyProVC
+    }
+}
