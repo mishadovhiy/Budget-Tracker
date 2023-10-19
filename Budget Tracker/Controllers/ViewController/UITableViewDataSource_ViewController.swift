@@ -15,7 +15,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             return 1
             
         } else {
-            return newTableData.count == 0 ? 1 : newTableData[section - 1].transactions.count + 1
+            return newTableData.count == 0 ? 1 : newTableData[section - 1].transactions.count //+ 1
         }
     }
     
@@ -33,14 +33,14 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "mainVCemptyCell", for: indexPath) as! mainVCemptyCell
                 return cell
             } else {
-                if newTableData[indexPath.section - 1].transactions.count == indexPath.row {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "mainFooterCell") as! mainFooterCell
+               /* if newTableData[indexPath.section - 1].transactions.count == indexPath.row {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "mainFooterCell", for: indexPath) as! mainFooterCell
                     cell.totalLabel.text = "\(newTableData[indexPath.section - 1].amount)"
                     
                     cell.separatorInset.left = tableView.frame.width / 2
                     cell.separatorInset.right = tableView.frame.width / 2
                     return cell
-                } else {
+                } else {*/
                     let transactionsCell = tableView.dequeueReusableCell(withIdentifier: K.mainCellIdent, for: indexPath) as! mainVCcell
                     transactionsCell.isUserInteractionEnabled = true
                     transactionsCell.contentView.isUserInteractionEnabled = true
@@ -48,7 +48,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                     transactionsCell.setupCell(data, i: indexPath.row, tableData: tableData, selectedCell: selectedCell, indexPath: indexPath)
                     return transactionsCell
                 }
-            }
+        //    }
             
             
         }
@@ -58,7 +58,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section != 0 && newTableData.count != 0 {
-            if newTableData[indexPath.section-1].transactions.count != indexPath.row {
+            if newTableData[indexPath.section-1].transactions.count - 1 >= indexPath.row {
                 self.editingTransaction = self.newTableData[indexPath.section - 1].transactions[indexPath.row]
                 let cell = tableView.cellForRow(at: indexPath) as! mainVCcell
                 self.toAddTransaction(editing: true, pressedView: cell.contentView)
@@ -89,17 +89,15 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             cell.dateLabel.text = "\(AppData.makeTwo(n: date.day ?? 0))"
             cell.monthLabel.text =  date.stringMonth
             cell.yearLabel.text = "\(date.year ?? 0)"
-            let v = cell.contentView
-            cell.mainView.layer.cornerRadius = 15
-         //   cell.mainView.layer.cornerRadius(at: .top, value: 15)
-            let newViewFrame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: v.frame.height)//cell.mainView?.frame.width + 6
-            v.frame = .init(x: 0, y: 0, width: newViewFrame.width, height: v.frame.height)
-            let newView = UIView(frame: newViewFrame)
+            let contentView = cell.contentView
+         //   cell.mainView.layer.cornerRadius = 15
+            cell.mainView.layer.cornerRadius(at: .top, value: tableCorners)
+            /*let newView = UIView(frame: newViewFrame)
             let helperTopView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: newViewFrame.height / 2))
             helperTopView.backgroundColor = K.Colors.primaryBacground
             newView.addSubview(helperTopView)
-            newView.addSubview(v)
-            return newView
+            newView.addSubview(v)*/
+            return contentView
         }
         
 
@@ -107,7 +105,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section != 0 || newTableData.count != 0 {
-            return 60 - 15
+            return UITableView.automaticDimension
         } else {
             return 0
         }
@@ -137,7 +135,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let bigFr = bigCalcView.layer.frame.height + self.calendarContainer.frame.height
         if indexPath.section == 0 && indexPath.row == 0 {
-            return bigFr - 45
+            return bigFr //- 45
         } else {
             if newTableData.count == 0 && indexPath.section == 1{
                 let safe = AppDelegate.shared?.window?.safeAreaInsets.top ?? 0 + 20
@@ -168,5 +166,26 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
             }
         }
         
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        if section == 0 || newTableData.count == 0 {
+            return nil
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "mainFooterCell") as! mainFooterCell
+            cell.totalLabel.text = "\(newTableData[section - 1].amount)"
+            cell.cornerView.layer.cornerRadius(at: .btn, value: tableCorners)
+            cell.separatorInset.left = tableView.frame.width / 2
+            cell.separatorInset.right = tableView.frame.width / 2
+            return cell.contentView
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        if section == 0 || newTableData.count == 0 {
+            return 0
+        } else {
+            return 53//UITableView.automaticDimension
+        }
     }
 }

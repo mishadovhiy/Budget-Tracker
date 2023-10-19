@@ -8,6 +8,7 @@
 
 import UIKit
 import GoogleMobileAds
+import Combine
 
 class adBannerView: UIView {
     
@@ -103,15 +104,16 @@ class adBannerView: UIView {
     }
     
     
-    
-    
-    
+
+    let valuePublisher = PassthroughSubject<CGFloat, Never>()
+
     var size:CGFloat {
         get {
             return adHidden ? 0 : _size
         }
         set {
             _size = newValue
+            self.valuePublisher.send(newValue)
         }
     }
     
@@ -157,6 +159,5 @@ class adBannerView: UIView {
     
     
 }
-
 
 

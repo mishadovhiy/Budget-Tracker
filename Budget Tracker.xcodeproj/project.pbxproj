@@ -133,6 +133,7 @@
 		8DEB0CDE28188762002D24D3 /* Public.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEB0CDD28188762002D24D3 /* Public.swift */; };
 		8DEB0CE0281887E0002D24D3 /* UITextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEB0CDF281887E0002D24D3 /* UITextFieldDelegate.swift */; };
 		8DECAFC12460461F0041B734 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DECAFC02460461F0041B734 /* CloudKit.framework */; };
+		8DF479DE2ADF105A0092746E /* AttributedStringTestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF479DD2ADF105A0092746E /* AttributedStringTestVC.swift */; };
 		8DF9DCCD2815A87400C7BFA0 /* adBannerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DF9DCCC2815A87400C7BFA0 /* adBannerView.xib */; };
 		8DF9DCD02815A89400C7BFA0 /* adBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF9DCCF2815A89400C7BFA0 /* adBannerView.swift */; };
 		8DF9DCD42815AAD000C7BFA0 /* ExtensionGADBannerViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF9DCD32815AAD000C7BFA0 /* ExtensionGADBannerViewDelegate.swift */; };
@@ -314,6 +315,7 @@
 		8DEB0CDF281887E0002D24D3 /* UITextFieldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldDelegate.swift; sourceTree = "<group>"; };
 		8DECAFBF2460461C0041B734 /* Budget Tracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Budget Tracker.entitlements"; sourceTree = "<group>"; };
 		8DECAFC02460461F0041B734 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		8DF479DD2ADF105A0092746E /* AttributedStringTestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringTestVC.swift; sourceTree = "<group>"; };
 		8DF9DCCC2815A87400C7BFA0 /* adBannerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = adBannerView.xib; sourceTree = "<group>"; };
 		8DF9DCCF2815A89400C7BFA0 /* adBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = adBannerView.swift; sourceTree = "<group>"; };
 		8DF9DCD32815AAD000C7BFA0 /* ExtensionGADBannerViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionGADBannerViewDelegate.swift; sourceTree = "<group>"; };
@@ -635,6 +637,7 @@
 				8BF63E8A276294F2002E8601 /* SelectValueVC.swift */,
 				8B52DFEB27504D2900595A0C /* IconsVC.swift */,
 				8B5F342B26FB2D97000DDCAF /* EnterValueVC.swift */,
+				8DF479DD2ADF105A0092746E /* AttributedStringTestVC.swift */,
 				8B2A4D71271439520085E0F0 /* MoreVC.swift */,
 				8B6BA97F27E716220067FF58 /* WebViewVC.swift */,
 				8DE693C12AD4A12C008501B0 /* SelectValueCollectionVC.swift */,
@@ -1118,6 +1121,7 @@
 				8DD89D8E23F1495300273904 /* TransactionVC.swift in Sources */,
 				8D8B6C3E245023EC007260A0 /* CalendarVC.swift in Sources */,
 				8D7FCA7B2ADAF05C00B108A6 /* PanViewController.swift in Sources */,
+				8DF479DE2ADF105A0092746E /* AttributedStringTestVC.swift in Sources */,
 				8DF9DCD02815A89400C7BFA0 /* adBannerView.swift in Sources */,
 				8B746ABE27F4039E0010F0A4 /* UINavigationController.swift in Sources */,
 				8DBA7E5423F0316F00D8214C /* ViewController.swift in Sources */,
@@ -1422,17 +1426,17 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 34;
+				MARKETING_VERSION = 34.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1453,17 +1457,17 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 34;
+				MARKETING_VERSION = 34.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

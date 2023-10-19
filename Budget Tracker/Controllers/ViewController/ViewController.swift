@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import Combine
 class ViewController: SuperViewController {
     typealias TransitionComponents = (albumCoverImageView: UIImageView?, albumNameLabel: UILabel?)
     public var transitionComponents = TransitionComponents(albumCoverImageView: nil, albumNameLabel: nil)
@@ -66,7 +66,6 @@ class ViewController: SuperViewController {
     var newTransaction: TransactionsStruct?
     var highliteCell: IndexPath?
     var tableDHolder: [tableStuct] = []
-    let tableCorners: CGFloat = 22
     var forseSendUnsendedData = true
     var addTransFrame = CGRect.zero
     var enableLocalDataPress = false
@@ -79,7 +78,7 @@ class ViewController: SuperViewController {
     var tableData:[TransactionsStruct] = []
     var _TableData: [tableStuct] = []
     var completedFiltering = false
-    
+    let tableCorners:CGFloat = 15
     var actionAfterAdded:((Bool) -> ())?
     var firstAppearence = true
     var _calculations:Calculations = .init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)
@@ -125,8 +124,15 @@ class ViewController: SuperViewController {
         ViewController.shared = self
         sideBar.load()
         toggleSideBar(false, animated: false)
+        
+        self.mainTableView.contentInset.bottom = AppDelegate.shared?.banner.size ?? 0
+      //  AppDelegate.shared?.banner.bannerSizePublisher.subscribe(Subscribers.Assign(object: mainTableView, keyPath: \.contentInset.bottom))
+        AppDelegate.shared?.banner.valuePublisher.sink(receiveValue: {
+            self.mainTableView.contentInset.top = $0
+        }).store(in: &cancellableHolder)
     }
 
+    var cancellableHolder = Set<AnyCancellable>()
     var calendarSelectedDate:String?
     
     override func viewDidLayoutSubviews() {
@@ -144,6 +150,7 @@ class ViewController: SuperViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         viewAppeared()
+        AppDelegate.shared?.banner.setBackground(clear: false)
     }
     
     func monthSelected(_ year:Int, _ month:Int) {

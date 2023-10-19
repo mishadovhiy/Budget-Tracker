@@ -96,8 +96,10 @@ extension SettingsVC: IconsVCDelegate {
     func selected(img: String, color: String) {
         DispatchQueue(label: "db", qos: .userInitiated).async {
             AppData.linkColor = color
-            self.loadData()
-            self.navigationController?.popViewController(animated: true)
+            DispatchQueue.main.async {
+                self.navigationController?.popViewController(animated: true)
+                self.loadData()
+            }
         }
     }
     

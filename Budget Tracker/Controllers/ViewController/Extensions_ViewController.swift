@@ -324,12 +324,13 @@ extension ViewController {
             self.completedFiltering = true
           //  let from = appData.filter.fromDate
           //  let showAll = appData.filter.showAll
-            //here
             DispatchQueue.main.async {
                 self.mainTableView.reloadData()
                 if self.refreshControl.isRefreshing {
                     self.refreshControl.endRefreshing()
                 }
+                
+                //here //c
                 self.toggleNoData(show: false, addButtonHidden: true)
          //       let filterPeriod = (from.month?.stringMonth ?? "-").capitalized + ", \(from.year ?? 0)"
              //   self.filterText = (showAll ? "All transactions" : filterPeriod).localize
