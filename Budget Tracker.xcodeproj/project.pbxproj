@@ -126,6 +126,7 @@
 		8DD89D8C23F1485700273904 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8B23F1485700273904 /* Constants.swift */; };
 		8DD89D8E23F1495300273904 /* TransactionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8D23F1495300273904 /* TransactionVC.swift */; };
 		8DD89D9023F1496100273904 /* CategoriesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8F23F1496100273904 /* CategoriesVC.swift */; };
+		8DE481B72AE42ABA00A74542 /* UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE481B62AE42ABA00A74542 /* UILabel.swift */; };
 		8DE693C22AD4A12C008501B0 /* SelectValueCollectionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE693C12AD4A12C008501B0 /* SelectValueCollectionVC.swift */; };
 		8DE94B702850336800ADF861 /* MessageViewLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 8DE94B6F2850336800ADF861 /* MessageViewLibrary */; };
 		8DEB0CD928184FC0002D24D3 /* DebtDescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEB0CD828184FC0002D24D3 /* DebtDescriptionCell.swift */; };
@@ -308,6 +309,7 @@
 		8DD89D8B23F1485700273904 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		8DD89D8D23F1495300273904 /* TransactionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionVC.swift; sourceTree = "<group>"; };
 		8DD89D8F23F1496100273904 /* CategoriesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesVC.swift; sourceTree = "<group>"; };
+		8DE481B62AE42ABA00A74542 /* UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabel.swift; sourceTree = "<group>"; };
 		8DE693C12AD4A12C008501B0 /* SelectValueCollectionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectValueCollectionVC.swift; sourceTree = "<group>"; };
 		8DEB0CD828184FC0002D24D3 /* DebtDescriptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebtDescriptionCell.swift; sourceTree = "<group>"; };
 		8DEB0CDA28184FEA002D24D3 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
@@ -430,6 +432,7 @@
 				8DBA7E5323F0316F00D8214C /* ViewController.swift */,
 				8DC033CB2985CA5A00CD98FF /* UITableViewDataSource_ViewController.swift */,
 				8D0EC25E2985DB9600EBD1ED /* Extensions_ViewController.swift */,
+				8B26328C27E6986F0086C3A8 /* SideBar */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -568,6 +571,7 @@
 				8B5434F727ED80F400417141 /* UITableView.swift */,
 				8B52CC6627E3001B008D5348 /* UITableViewCell.swift */,
 				8B82A04027E2BDBD0011EC80 /* UITextField.swift */,
+				8DE481B62AE42ABA00A74542 /* UILabel.swift */,
 				8B26328527E67E720086C3A8 /* UISegmentedControl.swift */,
 				8D163BA229944D2700EF6C2A /* UITapGestureRecognizer.swift */,
 				8B6BA98127E717850067FF58 /* Date.swift */,
@@ -619,7 +623,6 @@
 			isa = PBXGroup;
 			children = (
 				8BC31D7D27E3E60600FBC939 /* UIObjects */,
-				8B26328C27E6986F0086C3A8 /* SideBar */,
 				8B26328927E6980F0086C3A8 /* NumbdersView */,
 				8B26328B27E6985B0086C3A8 /* PasscodeView */,
 				8DF9DCCE2815A87E00C7BFA0 /* adBannerView */,
@@ -1155,6 +1158,7 @@
 				8BD3A3D927E4097400547022 /* BasicView.swift in Sources */,
 				8B78559F27F0CA2A00169A93 /* ReminderCell.swift in Sources */,
 				8D08FD532AC9CCE000BA0222 /* TransactionsManager.swift in Sources */,
+				8DE481B72AE42ABA00A74542 /* UILabel.swift in Sources */,
 				8D834DA0297E03D60056E686 /* CalendarControlVC.swift in Sources */,
 				8DEB0CDB28184FEA002D24D3 /* Extensions.swift in Sources */,
 				8DB4DAC227FC10D000EAA56F /* Keys.swift in Sources */,

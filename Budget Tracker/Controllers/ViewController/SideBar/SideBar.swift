@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import PassKit
 
 class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
     var appData:AppData {
@@ -62,18 +63,51 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         let upcommingRemiders:CellData = .init(name: "Payment reminders".localize, value: "", segue: "", image: "bell.fill", pro: nil, notifications: notifications.1, selectAction: {
             ViewController.shared?.navigationController?.pushViewController(RemindersVC.configure(), animated: true)
         })//!(pro) ? 0 : nil
-        
+        let applePay:CellData = .init(name: "apple pay".localize, value: "", segue: "", image: "chart.pie.fill", selectAction: applePayPressed)
         tableData = [
             .init(section: accountSection, title: "", hidden: false),
             .init(section: categories, title: "", hidden: false),
             .init(section: [upcommingRemiders], title: "", hidden: false),
-            .init(section: [statistic], title: "", hidden: false),
+            .init(section: [statistic, applePay], title: "", hidden: false),
         ]
         DispatchQueue.main.async {
             ViewController.shared?.sideTableView.reloadData()
         }
         
     }
+    
+    func applePayPressed() {
+        if PKPassLibrary.isPassLibraryAvailable() {
+            PKPassLibrary.requestAutomaticPassPresentationSuppression(responseHandler: { results in
+                if results == .success || results == .alreadyPresenting {
+                    self.loadAppleTransactions()
+                } else if results == .notSupported {
+                    AppDelegate.shared?.ai.showAlertWithOK(title:"Not supported", error: true)
+                } else {
+                    AppDelegate.shared?.ai.showAlert(buttons: (.init(title: "Cancel", style: .regular, close: true, action: nil), .init(title: "To Settings", style: .link, action: { _ in
+                        AppData.toDeviceSettings()
+                    })), title: "\(results)", description: "Access denied")
+                }
+            })
+            
+        }
+    }
+    
+    func loadAppleTransactions() {
+        print("loadAppleTransactions")
+        let passLibrary = PKPassLibrary()
+        let passes = passLibrary.passes()
+        for pass in passes {
+            if let paymentPass = pass as? PKPaymentPass {
+                // Access transaction data from the paymentPass
+                let transactions = paymentPass
+            //    for transaction in transactions {
+                    // Process transaction data
+            //    }
+            }
+        }
+    }
+    
     
     var tableData:[TableData] = []
 

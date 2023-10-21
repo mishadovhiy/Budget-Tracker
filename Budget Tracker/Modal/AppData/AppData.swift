@@ -147,6 +147,14 @@ class AppData {
     }
     
     
+    static func toDeviceSettings() {
+        if let url = URL(string: UIApplication.openSettingsURLString) {
+            UIApplication.shared.open(url, options: [:]) { _ in
+                
+            }
+        }
+    }
+    
     var username: String {
         get{
             if let user = db.db["username"] as? String {

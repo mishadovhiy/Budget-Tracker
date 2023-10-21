@@ -373,8 +373,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t5p-0E-DTn">
-                                <rect key="frame" x="0.0" y="59" width="430" height="839"/>
+                            <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t5p-0E-DTn">
+                                <rect key="frame" x="0.0" y="59.000000000000007" width="430" height="20.333333333333336"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -383,7 +383,6 @@
                         <viewLayoutGuide key="safeArea" id="PpG-vV-JRk"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="PpG-vV-JRk" firstAttribute="bottom" secondItem="t5p-0E-DTn" secondAttribute="bottom" id="Hmt-zo-Z7K"/>
                             <constraint firstItem="PpG-vV-JRk" firstAttribute="trailing" secondItem="t5p-0E-DTn" secondAttribute="trailing" id="JdL-29-fqV"/>
                             <constraint firstItem="t5p-0E-DTn" firstAttribute="top" secondItem="PpG-vV-JRk" secondAttribute="top" id="eCE-GY-it3"/>
                             <constraint firstItem="t5p-0E-DTn" firstAttribute="leading" secondItem="PpG-vV-JRk" secondAttribute="leading" id="fAb-CE-xzO"/>

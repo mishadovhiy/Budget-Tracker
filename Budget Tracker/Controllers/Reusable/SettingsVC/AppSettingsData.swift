@@ -159,13 +159,7 @@ class AppSettingsData {
     func otherSection() -> [Any] {
         
         let otherCell = SettingsVC.StandartCell(title: "Access settings".localize, description: "", action: {
-            DispatchQueue.main.async {
-                if let url = URL(string: UIApplication.openSettingsURLString) {
-                    UIApplication.shared.open(url, options: [:]) { _ in
-                        
-                    }
-                }
-            }
+            AppData.toDeviceSettings()
         })
         
         

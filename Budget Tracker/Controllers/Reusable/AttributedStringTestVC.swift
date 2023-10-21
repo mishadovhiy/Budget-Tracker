@@ -10,60 +10,77 @@ import UIKit
 
 class AttributedStringTestVC:UIViewController {
     @IBOutlet weak var attributeLabel: UILabel!
-    var string:NSAttributedString = .init(string: "")
+    var pdfData:ManagerPDF?
+    var appearedPdfData:ManagerPDF?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        createAttachment()
+        appearedPdfData = pdfData
+        updatePDF()
     }
     
-    func createAttachment() {
-        
-        let mutating:NSMutableAttributedString = .init(attributedString: string)
-        
-        let dataCount = 40
-        for i in 0..<dataCount {
-            let attachment = NSTextAttachment()
-            attachment.image = createView("egrfe \(i)").toImage
-            mutating.append(.init(attachment: attachment))
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        updateNavButtons()
+    }
+    
+    func updatePDF() {
+        let atr:NSMutableAttributedString = .init(attributedString: pdfData?.pdfString(fromCreate: isEditing).0 ?? .init())
+        attributeLabel.fadeTransition(0.3)
+        attributeLabel.attributedText = atr
+    }
+    
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        updateNavButtons()
+        updatePDF()
+    }
+    
+    func updateNavButtons() {
+        var results:[UIBarButtonItem] = []
+        if !isEditing {
+            results.append(.init(title: "Edit", style: .done, target: nil, action: #selector(editingPressed)))
+            results.append(.init(title: "Save", style: .done, target: nil, action: #selector(savePressed)))
+            results.append(.init(title: "Export", style: .done, target: nil, action: #selector(exportPressed)))
+            
+        } else {
+            results.append(.init(title: "done", style: .done, target: nil, action: #selector(doneEditingPressed)))
         }
-
-        attributeLabel.attributedText = mutating
-
+        self.navigationController?.navigationItem.rightBarButtonItems = results
     }
     
-    func createView(_ text:String) -> UIView {
-        let view = UIView()
-        let size:CGSize = .init(width: 650, height: 40)
-        view.frame.size = size
-        view.backgroundColor = .blue
-        let label = UILabel(frame: .init(origin: .zero, size: size))
-        label.text = text
-        label.textAlignment = .left
-        label.textColor = .white
-        label.font = .systemFont(ofSize: 20, weight: .black)
-        view.addSubview(label)
-        let separetor = 3
-        for i in 0..<(Int(size.width) / separetor) {
-            let dotWidth:CGFloat = 3
-            let dott = UIView(frame: .init(x: ((CGFloat(separetor) + dotWidth) * CGFloat(i)), y: size.height - 1, width: dotWidth, height: 0.8))
-            dott.backgroundColor = .white.withAlphaComponent(0.5)
-            dott.layer.cornerRadius = 0.5
-            view.addSubview(dott)
+    @objc func exportPressed() {
+        pdfData?.exportPDF(sender: self.navigationController?.view ?? .init())
+    }
+    
+    @objc func savePressed() {
+        
+    }
+    
+    @objc func doneEditingPressed() {
+        setEditing(false, animated: true)
+    }
+    
+    @objc func editingPressed() {
+        setEditing(true, animated: true)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        if let url = attributeLabel.linkPressed(at: touches) {
+            pdfData?.additionalData.append(.init(custom: .init()))
+            updatePDF()
+            print(url, " ynhtbgrvfec")
         }
-        return view
     }
-    
-
-    
 }
 
-extension AttributedStringTestVC {
-    static func configure(_ string:NSAttributedString) -> AttributedStringTestVC {
-        let storyboard = UIStoryboard(name: "Reusable", bundle: nil)
 
+extension AttributedStringTestVC {
+    static func configure(pdf:ManagerPDF?) -> AttributedStringTestVC {
+        let storyboard = UIStoryboard(name: "Reusable", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "AttributedStringTestVC") as! AttributedStringTestVC
-        vc.string = string
+        vc.pdfData = pdf
         return vc
     }
 }

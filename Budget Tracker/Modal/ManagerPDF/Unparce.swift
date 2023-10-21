@@ -11,9 +11,15 @@ import UIKit
 
 
 struct UnparcePDF {
-    func dictionaryToString(_ dictionary:[String:Any], data:ManagerPDF.AdditionalPDFData) -> (NSAttributedString, CGFloat) {
-        let text:NSMutableAttributedString = .init(attributedString: documentHeader(data: data))
-        var height:CGFloat = 170
+    let manager:ManagerPDF
+    func dictionaryToString(_ dictionary:[String:Any], data:[ManagerPDF.AdditionalPDFData], fromCreate:Bool = false) -> (NSAttributedString, CGFloat) {
+        var height:CGFloat = 0
+        let text:NSMutableAttributedString = .init(attributedString: .init(string: ""))
+        data.forEach({
+            let header = documentHeader(data: $0)
+            text.append(header)
+            height += 170
+        })
         dictionary.forEach({
             if let val = $0.value as? [String:Any] {
                 val.forEach({
@@ -46,12 +52,16 @@ struct UnparcePDF {
         attachment.bounds = .init(x: 0, y: -8, width: 40, height: 40)
         text.append(.init(attachment: attachment))
 
-        text.append(.init(string: "  Transactions History ", attributes: [.font:UIFont.systemFont(ofSize: 28, weight: .bold), .foregroundColor:self.color]))
+        text.append(.init(string: "  Transactions History ", attributes: [
+            .font:UIFont.systemFont(ofSize: 28, weight: .bold),
+            .foregroundColor:self.color,
+            .link: URL(string: "https://mishadovhiy.com")!
+        ]))
         text.append(.init(string: "From Budget Tracker\n\n", attributes: [
             .font:UIFont.systemFont(ofSize: 12, weight: .bold),
-            .foregroundColor:K.Colors.balanceT?.cgColor
+            .foregroundColor:(K.Colors.balanceT ?? .red).cgColor
         ]))
-        text.append(.init(string: data.type.capitalized + " for " + data.duration, attributes: [
+        text.append(.init(string: (data.defaultHeader?.type.capitalized ?? "") + " for " + (data.defaultHeader?.duration ?? ""), attributes: [
             .font:UIFont.systemFont(ofSize: 10, weight: .bold),
             .foregroundColor:K.Colors.balanceT?.cgColor
         ]))

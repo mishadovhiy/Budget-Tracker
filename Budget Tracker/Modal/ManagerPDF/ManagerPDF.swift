@@ -3,7 +3,7 @@
 //  Budget Tracker
 //
 //  Created by Misha Dovhiy on 01.10.2023.
-//  Copyright © 2023 Misha Dovhiy. All rights reserved.
+//  Copyright © 2023 Misha . All rights reserved.
 //
 
 import UIKit
@@ -13,19 +13,19 @@ struct ManagerPDF {
     private var vc:UIViewController
     private var pageTitle:String
     private var dict:[String:Any]
-    init(dict: [String : Any], pageTitle:String, vc:UIViewController, data:AdditionalPDFData) {
+    init(dict: [String : Any], pageTitle:String, vc:UIViewController, data:[AdditionalPDFData]) {
         self.dict = dict
         self.pageTitle = pageTitle
         self.vc = vc
         self.additionalData = data
     }
+    var additionalData:[AdditionalPDFData]
     
     static let pageWidth:CGFloat = 612
     private func showError(title:String, description:String? = nil) {
         AppDelegate.shared?.newMessage.show(title:title, description: description, type: .error)
         
     }
-    let additionalData:AdditionalPDFData
     func exportPDF(sender:UIView) {
         guard let pdf = createPDF(),
               let pdfData = pdf.dataRepresentation() else {
@@ -35,8 +35,8 @@ struct ManagerPDF {
         vc.presentShareVC(with: [pdfData], sender:sender)
     }
     
-    func pdfString() -> (NSAttributedString, CGFloat) {
-        return UnparcePDF().dictionaryToString(dict, data: additionalData)
+    func pdfString(fromCreate:Bool = false) -> (NSAttributedString, CGFloat) {
+        return UnparcePDF(manager: self).dictionaryToString(dict, data: additionalData, fromCreate: fromCreate)
     }
     
     func test() -> NSAttributedString {
@@ -56,13 +56,28 @@ struct ManagerPDF {
     }
     
     let generator:PagePDF = .init()
-    
-    struct AdditionalPDFData {
-        let duration:String
-        /**
-         - expenses, income, etc
-         */
-        let type:String
-    }
+
 }
 
+
+
+extension ManagerPDF {
+    struct AdditionalPDFData {
+        var custom:Custom?
+        var defaultHeader:DefaultHeader?
+        
+        struct Custom {
+            var image:Data? = nil
+            var title:String? = nil
+            var description:String? = nil
+        }
+
+        struct DefaultHeader {
+            let duration:String
+            /**
+             - expenses, income, etc
+             */
+            let type:String
+        }
+    }
+}

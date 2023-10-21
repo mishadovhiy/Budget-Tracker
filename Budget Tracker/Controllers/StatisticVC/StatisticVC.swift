@@ -81,15 +81,16 @@ class StatisticVC: SuperViewController, CALayerDelegate {
 //            allData.forEach({data.append($0)})
 //        }
         let dict:[[String:Any]] = data.compactMap({ $0.dict})
-        pdf = .init(dict: ["Budget Tracker":dict], pageTitle: "some title", vc: self, data: .init(duration: appData.filter.periodText, type: segmentControll.selectedSegmentIndex == 0 ? "Expenses" : "Incomes"))
-        pdf?.exportPDF(sender: sender as! UIButton)
-    }
+        pdf = .init(dict: ["Budget Tracker":dict], pageTitle: "", vc: self, data: [.init(defaultHeader: .init(duration: appData.filter.periodText, type: isAll ? "All time" : (segmentControll.selectedSegmentIndex == 0 ? "Expenses" : "Incomes")))])
+        self.navigationController?.pushViewController(AttributedStringTestVC.configure(pdf: pdf), animated: true)
+       // pdf?.exportPDF(sender: sender as! UIButton)
+    } 
     
     func updateUI() {
         self.tableView.delegate = self
         self.tableView.dataSource = self
         sum = 0.0
-        segmentControll.selectedSegmentIndex = appData.expenseLabelPressed ? 0 : 1
+        segmentControll.selectedSegmentIndex = expensesPressed ? 0 : 1
         let data = createTableData()
         allData = data
         getMaxSum()
@@ -113,7 +114,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
                 var newTransactions = resultDict["\(data[i].categoryID)"] ?? []
                 newTransactions.append(data[i])
                 let intValue = Double(data[i].value) ?? 0
-                if appData.expenseLabelPressed {
+                if expensesPressed {
                     if intValue < 0 {
                         maxValue = intValue < maxValue ? intValue : maxValue
                     }
@@ -137,7 +138,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
                     value += (Double(transactions[n].value) ?? 0.0)
                 }
                 
-                if appData.expenseLabelPressed {
+                if expensesPressed {
                     
                  //   if category.purpose != .income {
                         if value < 0 {
@@ -163,11 +164,11 @@ class StatisticVC: SuperViewController, CALayerDelegate {
         
         let textt = (isAll ? "All period" : appData.filter.periodText).localize
             DispatchQueue.main.async {
-                self.titleLabel.text = (self.appData.expenseLabelPressed ? "Expenses".localize : "Incomes".localize) + " " + "for".localize + " " + textt
+                self.titleLabel.text = (self.expensesPressed ? "Expenses".localize : "Incomes".localize) + " " + "for".localize + " " + textt
                 self.totalLabel.text = "\(Int(totalAmount))"
             }
             ifNoData()
-        return allData.sorted(by: { appData.expenseLabelPressed ? $1.value > $0.value : $1.value < $0.value})
+        return allData.sorted(by: { self.expensesPressed ? $1.value > $0.value : $1.value < $0.value})
 
         
     }
@@ -188,7 +189,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
     }
     
     @IBAction func selectedSegment(_ sender: UISegmentedControl) {
-        appData.expenseLabelPressed = sender.selectedSegmentIndex == 1 ? false : true
+        expensesPressed = sender.selectedSegmentIndex == 1 ? false : true
         allData = createTableData()
         sum = 0.0
         getMaxSum()
