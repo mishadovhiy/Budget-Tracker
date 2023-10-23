@@ -12,13 +12,15 @@ import UIKit
 
 struct UnparcePDF {
     let manager:ManagerPDF
-    func dictionaryToString(_ dictionary:[String:Any], data:[ManagerPDF.AdditionalPDFData], fromCreate:Bool = false) -> (NSAttributedString, CGFloat) {
+    
+    func dictionaryToString(_ dictionary:[String:Any], data:[ManagerPDF.AdditionalPDFData], fromCreate:Bool = false) -> ([NSAttributedString], CGFloat) {
         var height:CGFloat = 0
-        let text:NSMutableAttributedString = .init(attributedString: .init(string: ""))
+        var text:[NSAttributedString] = []
+        //NSMutableAttributedString = .init(attributedString: .init(string: ""))
         data.forEach({
             let header = documentHeader(data: $0)
             text.append(header)
-            height += 170
+            height += ($0.height ?? 170)
         })
         dictionary.forEach({
             if let val = $0.value as? [String:Any] {
@@ -63,17 +65,16 @@ struct UnparcePDF {
         ]))
         text.append(.init(string: (data.defaultHeader?.type.capitalized ?? "") + " for " + (data.defaultHeader?.duration ?? ""), attributes: [
             .font:UIFont.systemFont(ofSize: 10, weight: .bold),
-            .foregroundColor:K.Colors.balanceT?.cgColor
+            .foregroundColor:(K.Colors.balanceT ?? .red).cgColor
         ]))
 
         text.append(.init(string: "\n\n\n\n\n"))
-
         return text
     }
     
     private var footer:NSMutableAttributedString {
         let text:NSMutableAttributedString = .init(string: "")
-        let view = UIView(frame:.init(origin: .zero, size: .init(width: ManagerPDF.pageWidth, height: 90)))
+        let view = UIView(frame:.init(origin: .zero, size: .init(width: manager.pageWidth, height: 90)))
         let imageView:UIImageView = .init(image: Keys.appstoreURL.createQR())
         imageView.frame.size = .init(width: 90, height: 90)
         imageView.layer.cornerRadius = 6
@@ -143,7 +144,7 @@ struct UnparcePDF {
 private extension UnparcePDF {
     func totalsView(_ value:String) -> UIView {
         let view = UIView()
-        let size:CGSize = .init(width: ManagerPDF.pageWidth - 100, height: 80)
+        let size:CGSize = .init(width: manager.pageWidth - 100, height: 80)
         view.frame.size = size
         let label = UILabel()
         label.frame.size = .init(width: size.width, height: 40)
@@ -163,7 +164,7 @@ private extension UnparcePDF {
     func transactionView(_ dict:[String:Any]) -> UIView {
         let transaction = TransactionsStruct.create(dictt: dict)
         let view = UIView()
-        let size:CGSize = .init(width: ManagerPDF.pageWidth - 100, height: 40)
+        let size:CGSize = .init(width: manager.pageWidth - 100, height: 40)
         view.frame.size = size
         let dateLabel = UILabel(frame: .init(origin: .zero, size: size))
         dateLabel.text = transaction?.date ?? ""
@@ -173,7 +174,7 @@ private extension UnparcePDF {
         view.addSubview(dateLabel)
         
         if transaction?.comment != "" {
-            let commentLabel = UILabel(frame: .init(origin: .init(x: 80, y: 0), size: .init(width: ManagerPDF.pageWidth / 2, height: size.height)))
+            let commentLabel = UILabel(frame: .init(origin: .init(x: 80, y: 0), size: .init(width: manager.pageWidth / 2, height: size.height)))
             commentLabel.text = transaction?.comment
             commentLabel.textAlignment = .left
             commentLabel.textColor = K.Colors.balanceT

@@ -11,8 +11,7 @@ import PDFKit
 import CoreGraphics
 
 struct PagePDF {
-    func createPDFPage(fromText text: String) -> PDFPage? {
-        let pageWidth = ManagerPDF.pageWidth
+    func createPDFPage(fromText text: String, pageWidth:CGFloat) -> PDFPage? {
         let contentWidth = pageWidth + 80
         let textFont = UIFont.systemFont(ofSize: 12.0)
         let textSizeCalc = text.calculate(font: textFont, inWindth: pageWidth - 100)
@@ -39,9 +38,8 @@ struct PagePDF {
         
     }
     
-    func createPDFPage(fromAttributes text: NSMutableAttributedString, textHeight:CGFloat) -> PDFPage? {
-        let textFont = UIFont.systemFont(ofSize: 65.0)
-        let pageWidth = ManagerPDF.pageWidth
+    func createPDFPage(fromAttributes text: NSMutableAttributedString, textHeight:CGFloat, pageWidth:CGFloat) -> PDFPage? {
+       // let textFont = UIFont.systemFont(ofSize: 65.0)
         let contentWidth = pageWidth + 80
         let textSizeCalc = textHeight//text.string.calculate(font: textFont, inWindth: pageWidth - 100)
         let textHeight = (textSizeCalc) >= contentWidth ? textSizeCalc : contentWidth

@@ -14,7 +14,7 @@ struct LoadFromDB {
     }
     static var shared = LoadFromDB()
     private func load(urlPath: String, completion: @escaping (NSArray, error?) -> ()) {
-print(urlPath, " urlPathurlPathurlPath")
+        print(urlPath, " urlPathurlPathurlPath")
         if let url: URL = URL(string: urlPath) {
             let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
                 

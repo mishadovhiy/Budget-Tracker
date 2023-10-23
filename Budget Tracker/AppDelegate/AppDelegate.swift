@@ -15,7 +15,7 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate{
     
     var window: UIWindow?
-    static var shared:AppDelegate?
+    weak static var shared:AppDelegate?
     let center = UNUserNotificationCenter.current()
     lazy var notificationManager = NotificationManager()
     

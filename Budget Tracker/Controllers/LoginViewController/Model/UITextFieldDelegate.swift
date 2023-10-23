@@ -13,7 +13,7 @@ extension LoginViewController: UITextFieldDelegate {
     
     func checkUsers(for email: String, password:String, completion: @escaping (Bool) -> ()) {
       //  DispatchQueue.main.async {
-        //    self.ai.show { _ in
+        //    self.ai?.show { _ in
         
                 self.enteredEmailUsers.removeAll()
                 var resultUsers: [String] = []
@@ -85,7 +85,7 @@ extension LoginViewController: UITextFieldDelegate {
         let labelID = textField.accessibilityIdentifier ?? ""
         let emptyError = {
             DispatchQueue.main.async {
-                self.newMessage.show(title:"All fields are required".localize, type: .error)
+                self.newMessage?.show(title:"All fields are required".localize, type: .error)
             }
         }
         if let text = textFieldValuesDict[labelID] {
@@ -98,7 +98,7 @@ extension LoginViewController: UITextFieldDelegate {
                         self.createAccountPressed(self.createAccButton!)
                     } else {
                         DispatchQueue.main.async {
-                            self.newMessage.show(title: "Passwords not match".localize, type: .error)
+                            self.newMessage?.show(title: "Passwords not match".localize, type: .error)
                         }
                     }
                     goNext = nil
@@ -120,7 +120,7 @@ extension LoginViewController: UITextFieldDelegate {
                     if !self.validateEmail(text) {
                         goNext = nil
                         DispatchQueue.main.async {
-                            self.newMessage.show(title: "Enter valid email".localize, type: .error)
+                            self.newMessage?.show(title: "Enter valid email".localize, type: .error)
                             return
                         }
                     }

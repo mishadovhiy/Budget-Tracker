@@ -17,7 +17,6 @@ class StatisticVC: SuperViewController, CALayerDelegate {
     @IBOutlet weak var titleLabel: UILabel!
     var allData = [GraphDataStruct]()
 
-    var pdf:ManagerPDF?
     var dataFromMain: [TransactionsStruct] = []
     var sum = 0.0
     override func viewDidLoad() {
@@ -81,10 +80,9 @@ class StatisticVC: SuperViewController, CALayerDelegate {
 //            allData.forEach({data.append($0)})
 //        }
         let dict:[[String:Any]] = data.compactMap({ $0.dict})
-        pdf = .init(dict: ["Budget Tracker":dict], pageTitle: "", vc: self, data: [.init(defaultHeader: .init(duration: appData.filter.periodText, type: isAll ? "All time" : (segmentControll.selectedSegmentIndex == 0 ? "Expenses" : "Incomes")))])
-        self.navigationController?.pushViewController(AttributedStringTestVC.configure(pdf: pdf), animated: true)
-       // pdf?.exportPDF(sender: sender as! UIButton)
-    } 
+        var pdf:ManagerPDF = .init(dict: ["Budget Tracker":dict], pageTitle: "", vc: self, data: [.init(defaultHeader: .init(duration: appData.filter.periodText, type: isAll ? "All time" : (segmentControll.selectedSegmentIndex == 0 ? "Expenses" : "Incomes")))])
+        pdf.exportPDF(sender: sender as! UIButton)
+    }
     
     func updateUI() {
         self.tableView.delegate = self

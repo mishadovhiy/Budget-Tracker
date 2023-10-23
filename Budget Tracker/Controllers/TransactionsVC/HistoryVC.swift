@@ -96,7 +96,7 @@ class HistoryVC: SuperViewController {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
                 // self.tableView.scrollToRow(at: IndexPath(row: 0, section: 2), at: .bottom, animated: true)
-                self.ai.fastHide()
+                self.ai?.fastHide()
             }
         }
         
@@ -115,7 +115,7 @@ class HistoryVC: SuperViewController {
     }
     
     
-    static var shared: HistoryVC?
+    weak static var shared: HistoryVC?
     @IBOutlet weak var totalPeriodLabel: UILabel!
     @IBOutlet weak var totalLabel: UILabel!
     var svsloaded = false
@@ -346,7 +346,7 @@ class HistoryVC: SuperViewController {
                     self.changed = true
                     self.selectedCategory = newCategory
                     DispatchQueue.main.async {
-                        self.ai.fastHide { (_) in
+                        self.ai?.fastHide { (_) in
                             self.tableView.reloadData()
                         }
                         
@@ -429,11 +429,11 @@ class HistoryVC: SuperViewController {
     var changed:Bool = false
     func sendAmountToPay(_ text: String) {
         if let _ = Double(text) {
-            self.ai.show(title: "Sending".localize) { _ in
+            self.ai?.show(title: "Sending".localize) { _ in
                 self.changed = true
                 self.changeAmountToPay(enteredAmount: text) { (_) in
                     self.amountToPayEditing = false
-                    self.ai.fastHide { (_) in
+                    self.ai?.fastHide { (_) in
                         
                         DispatchQueue.main.async {
                           //  self.tableView.reloadData()

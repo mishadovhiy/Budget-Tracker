@@ -7,21 +7,17 @@
 //
 
 import UIKit
-import UserNotifications
 
 class SuperViewController: UIViewController {
 
-    lazy var newMessage = AppDelegate.shared!.newMessage
-    lazy var ai = AppDelegate.shared!.ai
+    weak var newMessage = AppDelegate.shared?.newMessage
+    weak var ai = AppDelegate.shared?.ai
     var db:DataBase {
         return AppDelegate.shared?.db ?? DataBase()
-        //AppDelegate.shared?.appData.db ?? DataBase()
-        
     }
     var appData:AppData {
         return AppDelegate.shared?.appData ?? .init()
     }
-    var popupVCpanGesture:PanViewController?
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         //screen rotation
@@ -31,20 +27,36 @@ class SuperViewController: UIViewController {
     lazy var defaultTableInset = AppDelegate.shared?.banner.size ?? 0
     
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         definesPresentationContext = true
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.view.endEditing(true)
+        print(navigationController?.viewControllers.count, " hygterfwed")
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        if waitingToDisapeare {
+            waitingToDisapeare = false
+            self.viewDidDismiss()
+        }
     }
 
-    
+    func viewDidDismiss() {
+        print("fedwe")
+        newMessage = nil
+        ai = nil
+    }
  
+    private var waitingToDisapeare = false
+    func navigationPopVC() {
+        waitingToDisapeare = true
+    }
     
     
     func getMonthFrom(string: String) -> Int {
@@ -133,6 +145,8 @@ class SuperViewController: UIViewController {
         
         
     }
+    
+    
     
     func vibrate() {
         if #available(iOS 13.0, *) {

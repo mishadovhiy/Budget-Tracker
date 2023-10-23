@@ -12,14 +12,14 @@ class SelectValueVC: SuperViewController, UITableViewDelegate, UITableViewDataSo
     
     @IBOutlet weak var tableView: UITableView!
     
-    static var shared = SelectValueVC()
+    weak static var shared:SelectValueVC?
     var users:[String] = []
     var delegate: SelectUserVCDelegate?
     var titleText:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        SelectValueVC.shared = self
         AppDelegate.shared!.ai.fastHide()
         title = titleText
         tableView.delegate = self

@@ -88,7 +88,7 @@ class MoreOptionsData {
     var forgotPasswordUsername = ""
     
     func deleteAccountPressed() {
-        self.vc.ai.showAlert(buttons: (.init(title: "Cancel", style: .regular, close: true, action: nil), AlertViewLibrary.button.init(title: "Delete account", style: .error, close: false, action: {_ in
+        self.vc.ai?.showAlert(buttons: (.init(title: "Cancel", style: .regular, close: true, action: nil), AlertViewLibrary.button.init(title: "Delete account", style: .error, close: false, action: {_ in
             self.performDeleteAccount()
         })), title: "Are you sure you want to delete Your Account And its content?", description: "This action cannot be undon")
     }
@@ -105,7 +105,7 @@ class MoreOptionsData {
                     } else {
                         self.vc.logout()
                         DispatchQueue.main.async {
-                            self.vc.newMessage.show(title:"Your account has been Deleted", type: .succsess)
+                            self.vc.newMessage?.show(title:"Your account has been Deleted", type: .succsess)
                         }
                     }
                 }
@@ -136,7 +136,7 @@ class MoreOptionsData {
     }
     
     func logoutPressed() {
-        self.vc.ai.showAlert(buttons: (.init(title: "Cancel", style: .regular, close: true, action: nil), AlertViewLibrary.button.init(title: "Logout", style: .error, close: false, action: {_ in
+        self.vc.ai?.showAlert(buttons: (.init(title: "Cancel", style: .regular, close: true, action: nil), AlertViewLibrary.button.init(title: "Logout", style: .error, close: false, action: {_ in
             self.vc.logout()
         })), title: "Are you sure you want to logout?", description: "")
         

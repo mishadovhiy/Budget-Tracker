@@ -68,7 +68,7 @@ class LoginViewController: SuperViewController {
         let resultTitle = title ?? (error ? "Error".localize : "Success".localize)
         
         DispatchQueue.main.async {
-            self.ai.showAlertWithOK(title: resultTitle, text: text, error: error) { _ in
+            self.ai?.showAlertWithOK(title: resultTitle, text: text, error: error) { _ in
                 if goToLogin {
                     DispatchQueue.main.async {
                         self.navigationController?.popViewController(animated: true)
@@ -229,7 +229,7 @@ class LoginViewController: SuperViewController {
             UIImpactFeedbackGenerator().impactOccurred()
         }
 
-        self.ai.show(title: "Logging in".localize) { (_) in
+        self.ai?.show(title: "Logging in".localize) { (_) in
             self.hideKeyboard()
             LoadFromDB.shared.Users { (loadedData, Error) in
                 if !Error {
@@ -249,8 +249,8 @@ class LoginViewController: SuperViewController {
                             self.actionButtonsEnabled = true
                             self.obthervValues = true
                             DispatchQueue.main.async {
-                                self.newMessage.show(title: "All fields are required".localize, type: .error)
-                                self.ai.fastHide()
+                                self.newMessage?.show(title: "All fields are required".localize, type: .error)
+                                self.ai?.fastHide()
                                 self.showWrongFields()
                             }
                             
@@ -316,12 +316,12 @@ class LoginViewController: SuperViewController {
         if fromPro || self.forceLoggedOutUser != "" {
             DispatchQueue.main.async {
                 self.dismiss(animated: true) {
-                    self.ai.fastHide()
+                    self.ai?.fastHide()
                 }
             }
         } else {
             DispatchQueue.main.async {
-                self.ai.fastHide { _ in
+                self.ai?.fastHide { _ in
                     self.performSegue(withIdentifier: "homeVC", sender: self)
                 }
             }
@@ -343,16 +343,16 @@ class LoginViewController: SuperViewController {
                 self.actionButtonsEnabled = true
                 let messageTitle = "Wrong".localize + " " + "password".localize
                 DispatchQueue.main.async {
-                    self.newMessage.show(title: messageTitle, type: .error)
-                    self.ai.fastHide()
+                    self.newMessage?.show(title: messageTitle, type: .error)
+                    self.ai?.fastHide()
                 }
             }
         } else {
             self.actionButtonsEnabled = true
             DispatchQueue.main.async {
                 DispatchQueue.main.async {
-                    self.newMessage.show(title: "User not found".localize, type: .error)
-                    self.ai.fastHide()
+                    self.newMessage?.show(title: "User not found".localize, type: .error)
+                    self.ai?.fastHide()
                 }
             }
         }
@@ -367,7 +367,7 @@ class LoginViewController: SuperViewController {
         }
 
 
-        self.ai.show(title: "Creating".localize) { (_) in
+        self.ai?.show(title: "Creating".localize) { (_) in
             self.hideKeyboard()
             LoadFromDB.shared.Users { (loadedData, Error) in
                 if !Error {
@@ -539,7 +539,7 @@ class LoginViewController: SuperViewController {
             let message = messagesFromOtherScreen
             messagesFromOtherScreen = ""
             DispatchQueue.main.async {
-                self.newMessage.show(title: message, type: .error)
+                self.newMessage?.show(title: message, type: .error)
             }
         }
         
@@ -675,7 +675,7 @@ extension LoginViewController {
                 self.passwordLabel.text = ""
                 self.passwordLogLabel.text = ""
                 self.nicknameLogLabel.text = ""
-                self.ai.fastHide()
+                self.ai?.fastHide()
             }
         }
     }

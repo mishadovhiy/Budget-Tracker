@@ -470,7 +470,7 @@ extension ViewController {
                     
                 } else {
                     DispatchQueue.main.async {
-                        self.newMessage.show(title:"User not found".localize, type: .error)
+                        self.newMessage?.show(title:"User not found".localize, type: .error)
                     }
                     completion(nil)
                 }
@@ -487,9 +487,9 @@ extension ViewController {
         self.notificationsCount = Notifications.notificationsCount
         //    self.mainTableView.contentInset.top = self.calendarContainer.frame.height
 //        mainTableView.contentOffset.y = 0
-        if self.ai.isShowing {
+        if self.ai?.isShowing ?? false {
             DispatchQueue.main.async {
-                self.ai.fastHide()
+                self.ai?.fastHide()
             }
         }
         if appData.needDownloadOnMainAppeare {
@@ -570,7 +570,7 @@ extension ViewController {
                     self.filter()
                     if showError {
                         DispatchQueue.main.async {
-                            self.newMessage.show(type: .internetError)
+                            self.newMessage?.show(type: .internetError)
                         }
                     }
                     
@@ -615,7 +615,7 @@ extension ViewController {
                     self.filter()
                     self.db.viewControllers.firstLaunch[.home] = false
                     DispatchQueue.main.async {
-                        self.newMessage.show(title: "Wellcome to Budget Tracker".localize, description: "Demo data has been created".localize, type: .standart)
+                        self.newMessage?.show(title: "Wellcome to Budget Tracker".localize, description: "Demo data has been created".localize, type: .standart)
                         
                         
                     }
@@ -661,7 +661,7 @@ extension ViewController {
                 db.viewControllers.trial.checkTrial = false
                 if db.viewControllers.trial.trialPressed {
                     DispatchQueue.main.async {
-                        self.newMessage.show(title: "Pro trial is over".localize, type: .standart)
+                        self.newMessage?.show(title: "Pro trial is over".localize, type: .standart)
                     }
                 }
                 
@@ -672,7 +672,7 @@ extension ViewController {
 
             if db.viewControllers.trial.trialPressed {
                 DispatchQueue.main.async {
-                    self.newMessage.show(title: "Pro trial is over".localize, type: .standart)
+                    self.newMessage?.show(title: "Pro trial is over".localize, type: .standart)
                 }
             }
             
@@ -716,7 +716,7 @@ extension ViewController: TransitionVCProtocol {
             }
         } else {
             DispatchQueue.main.async {
-                self.newMessage.show(title:"Error deleting transaction".localize, description: "Try again".localize, type: .error)
+                self.newMessage?.show(title:"Error deleting transaction".localize, description: "Try again".localize, type: .error)
             }
         }
     }
@@ -908,7 +908,7 @@ extension ViewController: TransitionVCProtocol {
                 self.appData.sendSavedData = false
                 //show message error, try again later
                 DispatchQueue.main.async {
-                    self.newMessage.show(title:"Error sending data".localize, description: "Try again later".localize, type: .error)
+                    self.newMessage?.show(title:"Error sending data".localize, description: "Try again later".localize, type: .error)
                 }
             }
             self.filter()

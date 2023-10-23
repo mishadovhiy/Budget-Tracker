@@ -33,7 +33,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
                         DispatchQueue.main.async {
                             self.center.removePendingNotificationRequests(withIdentifiers: [id])
                             self.tableView.reloadData()
-                          //  self.ai.fastHide()
+                          //  self.ai?.fastHide()
                         }
     }
     
@@ -123,7 +123,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
     
     func removeAmountToPay() {
         self.changeAmountToPay(enteredAmount: "") { (_) in
-            self.ai.fastHide { (_) in
+            self.ai?.fastHide { (_) in
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
@@ -255,7 +255,7 @@ extension HistoryVC: TransitionVCProtocol {
 extension HistoryVC: CalendarVCProtocol {
     
     func dateSelected(date: String, time: DateComponents?) {
-            self.ai.show { (_) in
+            self.ai?.show { (_) in
                 let id = "Debts\(self.selectedCategory?.id ?? 0)"
                 self.center.removePendingNotificationRequests(withIdentifiers: [id])
                 let fullDate = "\(date) \(AppData.makeTwo(n: time?.hour ?? 0)):\(AppData.makeTwo(n: time?.minute ?? 0)):\(AppData.makeTwo(n: time?.second ?? 0))"
@@ -273,7 +273,7 @@ extension HistoryVC: CalendarVCProtocol {
                                 self.changeDueDate(fullDate: isoFullString)
                                 if !added {
                                     DispatchQueue.main.async {
-                                        self.newMessage.show(title:"Local notification not added".localize, type: .error)
+                                        self.newMessage?.show(title:"Local notification not added".localize, type: .error)
                                     }
                                 }
                             }
@@ -281,15 +281,15 @@ extension HistoryVC: CalendarVCProtocol {
                           } else {
                             self.changeDueDate(fullDate: isoFullString)
                             DispatchQueue.main.async {
-                                self.newMessage.show(title:"Local notification not added".localize, type: .error)
+                                self.newMessage?.show(title:"Local notification not added".localize, type: .error)
                             }
                         }
                         
                     } else {
                         let errorText = "Error".localize + " " + "adding".localize + " " + "Due date".localize
-                        self.ai.fastHide { _ in
+                        self.ai?.fastHide { _ in
                             DispatchQueue.main.async {
-                                self.newMessage.show(title: errorText, type: .error)
+                                self.newMessage?.show(title: errorText, type: .error)
                             }
                         }
                         
@@ -300,9 +300,9 @@ extension HistoryVC: CalendarVCProtocol {
                 
                 else {
                     let errorText = "Error".localize + " " + "adding".localize + " " + "Due date".localize
-                    self.ai.fastHide { _ in
+                    self.ai?.fastHide { _ in
                         DispatchQueue.main.async {
-                            self.newMessage.show(title:errorText, type: .error)
+                            self.newMessage?.show(title:errorText, type: .error)
                         }
                     }
                 }

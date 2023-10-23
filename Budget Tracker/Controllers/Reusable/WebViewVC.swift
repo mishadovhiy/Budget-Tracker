@@ -16,12 +16,12 @@ class WebViewVC: SuperViewController, UIScrollViewDelegate, WKNavigationDelegate
     
     var screenTitle:String = ""
     public var htmlData: HtmlData?
-    static var shared = WebViewVC()
+    weak static var shared:WebViewVC?
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        WebViewVC.shared = self
         webView.scrollView.delegate = self
         title = screenTitle
         DispatchQueue.init(label: "loadHtmlData", qos: .userInteractive).async {
@@ -32,8 +32,8 @@ class WebViewVC: SuperViewController, UIScrollViewDelegate, WKNavigationDelegate
                 DispatchQueue.main.async {
                     self.webView.loadHTMLString(html, baseURL: nil)
                     self.webView.isHidden = false
-                    self.screenAI.stopAnimating()
-                    self.screenAI.isHidden = true
+                    self.screenAI?.stopAnimating()
+                    self.screenAI?.isHidden = true
                     self.webView.scrollView.contentInset.bottom = AppDelegate.shared?.banner.size ?? 0
                 }
             } else {

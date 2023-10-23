@@ -15,7 +15,7 @@ class RemindersVC: SuperViewController {
     
     var tableData:[ReminderStruct] = []
     @IBOutlet weak var tableView: UITableView!
-    static var shared:RemindersVC?
+    weak static var shared:RemindersVC?
     lazy var reminders = ReminderManager()
     var fromAppDelegate = false
     

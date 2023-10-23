@@ -21,32 +21,39 @@ struct ManagerPDF {
     }
     var additionalData:[AdditionalPDFData]
     
-    static let pageWidth:CGFloat = 612
+    let pageWidth:CGFloat = 612
     private func showError(title:String, description:String? = nil) {
-        AppDelegate.shared?.newMessage.show(title:title, description: description, type: .error)
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.newMessage.show(title:title, description: description, type: .error)
         
     }
-    func exportPDF(sender:UIView) {
+    mutating func exportPDF(sender:UIView) {
         guard let pdf = createPDF(),
               let pdfData = pdf.dataRepresentation() else {
             showError(title: "Error creating PDF")
             return
         }
-        vc.presentShareVC(with: [pdfData], sender:sender)
+        vc.navigationController?.pushViewController(AttributedStringTestVC.configure(pdf: self), animated: true)
+       // vc.presentShareVC(with: [pdfData], sender:sender)
     }
     
     func pdfString(fromCreate:Bool = false) -> (NSAttributedString, CGFloat) {
-        return UnparcePDF(manager: self).dictionaryToString(dict, data: additionalData, fromCreate: fromCreate)
+        let res:NSMutableAttributedString = .init(attributedString: .init(string: ""))
+        let data = UnparcePDF(manager: self).dictionaryToString(dict, data: additionalData, fromCreate: fromCreate)
+        data.0.forEach({
+            res.append($0)
+        })
+        return (res, data.1)
     }
     
-    func test() -> NSAttributedString {
-        return pdfString().0
+    func test() -> [NSAttributedString] {
+        return UnparcePDF(manager: self).dictionaryToString(dict, data: additionalData, fromCreate: true).0
     }
 
-    private func createPDF() -> PDFDocument? {
+    private mutating func createPDF() -> PDFDocument? {
         let pdfDocument = PDFDocument()
         let text = pdfString()
-        guard let page = generator.createPDFPage(fromAttributes: .init(attributedString: text.0), textHeight: text.1)
+        guard let page = generator.createPDFPage(fromAttributes: .init(attributedString: text.0), textHeight: text.1, pageWidth: pageWidth)
         else {
             showError(title: "Error converting to pdf image")
             return nil
@@ -55,7 +62,7 @@ struct ManagerPDF {
         return pdfDocument
     }
     
-    let generator:PagePDF = .init()
+    lazy var generator:PagePDF = .init()
 
 }
 
@@ -65,7 +72,7 @@ extension ManagerPDF {
     struct AdditionalPDFData {
         var custom:Custom?
         var defaultHeader:DefaultHeader?
-        
+        var height:CGFloat? = nil
         struct Custom {
             var image:Data? = nil
             var title:String? = nil

@@ -15,7 +15,7 @@ protocol CategoriesVCProtocol {
 
 class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var tableView: UITableView!
-    var refreshControl = UIRefreshControl()
+    weak var refreshControl:UIRefreshControl?
     var hideTitle = false
     var fromSettings = false
     var delegate: CategoriesVCProtocol?
@@ -25,7 +25,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
     var transfaringCategories: LoginViewController.TransferingData?
     let selectionBacground = UIColor(red: 32/255, green: 32/255, blue: 32/255, alpha: 1)
-    static var shared:CategoriesVC?
+    weak static var shared:CategoriesVC?
     var _categories:[NewCategories] = []
     var _tableData:[ScreenDataStruct] = []
     var screenType: ScreenType = .categories
@@ -37,7 +37,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     var selectedCategory: NewCategories?
     let sectionsBeforeData = 2
     let regFooterHeight:CGFloat = 50
-    var editingTF: UITextField?
+    weak var editingTF: UITextField?
     var _selectingIconFor:(IndexPath?, Int?)
     var prevSwowingIcons:IndexPath?
     let footerHeight:CGFloat = 40
@@ -124,7 +124,19 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         AppDelegate.shared?.banner.setBackground(clear: true)
     }
     
+    override func viewDidDismiss() {
+        super.viewDidDismiss()
+        refreshControl = nil
+        editingTF = nil
+        CategoriesVC.shared = nil
+        historyDataStruct.removeAll()
+        _categories.removeAll()
+        _tableData.removeAll()
+        
+    }
+    
     override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         if !toHistory {
             if fromSettings {
                 if !wasEdited {
@@ -218,16 +230,16 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         set {
             _tableData = newValue
             DispatchQueue.main.async {
-                self.ai.fastHide()
-                if self.refreshControl.isRefreshing {
-                    self.refreshControl.endRefreshing()
+                self.ai?.fastHide()
+                if self.refreshControl?.isRefreshing ?? false {
+                    self.refreshControl?.endRefreshing()
                 }
                 if self.tableView.alpha != 1 {
-                    if self.screenAI.isAnimating {
-                        self.screenAI.stopAnimating()
+                    if self.screenAI?.isAnimating ?? false {
+                        self.screenAI?.stopAnimating()
                     }
-                    if self.screenAI.isHidden != true {
-                        self.screenAI.isHidden = true
+                    if self.screenAI?.isHidden != true {
+                        self.screenAI?.isHidden = true
                     }
                     self.moreButton.isEnabled = true
                     UIView.animate(withDuration: 0.2) {

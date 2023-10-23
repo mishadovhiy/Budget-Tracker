@@ -15,7 +15,7 @@ class BuyProVC: SuperViewController {
     func showAlert(title:String,text:String?, error: Bool, goHome: Bool = false) {
         paymentQueueResponded = true
         DispatchQueue.main.async {
-            self.ai.showAlertWithOK(title: title, text: text, error: error) { _ in
+            self.ai?.showAlertWithOK(title: title, text: text, error: error) { _ in
                 if goHome {
                     DispatchQueue.main.async {
                         self.performSegue(withIdentifier: "homeVC", sender: self)
@@ -43,7 +43,7 @@ class BuyProVC: SuperViewController {
     
 
     
-    static var shared: BuyProVC?
+    weak static var shared: BuyProVC?
     override func viewDidLoad() {
         super.viewDidLoad()
         BuyProVC.shared = self
@@ -168,7 +168,7 @@ class BuyProVC: SuperViewController {
         }
         if !appData.proVersion {
             if appData.username != "" {
-                self.ai.show { (_) in
+                self.ai?.show { (_) in
                     self.getUser { loadedData in
                         if let data = loadedData {
                             if data[5] != "" {
@@ -191,7 +191,7 @@ class BuyProVC: SuperViewController {
                 }
                 
             } else {
-                let firstButton = self.ai.prebuild_closeButton(title: "Close".localize, style: .error)
+                let firstButton = self.ai!.prebuild_closeButton(title: "Close".localize, style: .error)
                 let secondButton:AlertViewLibrary.button? = .init(title: "Sign in".localize, style: .regular, close: true) { _ in
                     DispatchQueue.main.async {
                         self.performSegue(withIdentifier: "toSingIn", sender: self)
@@ -199,7 +199,7 @@ class BuyProVC: SuperViewController {
                 }
                 
                 DispatchQueue.main.async {
-                    self.ai.showAlert(buttons: (firstButton, secondButton), title: "Sign in required".localize, type: .standard)
+                    self.ai!.showAlert(buttons: (firstButton, secondButton), title: "Sign in required".localize, type: .standard)
                 }
             }
         }
@@ -255,7 +255,7 @@ class BuyProVC: SuperViewController {
                 }
             } else {
 
-                self.ai.show { (_) in
+                self.ai?.show { (_) in
                     guard let myProduct = self.proVProduct else {
                         self.showAlert(title: "Error".localize, text: "Permission denied".localize, error: true)
                         return
@@ -277,7 +277,7 @@ class BuyProVC: SuperViewController {
             }
         } else {
             DispatchQueue.main.async {
-                self.newMessage.show(title: "You have already purchased pro version".localize, type: .error)
+                self.newMessage?.show(title: "You have already purchased pro version".localize, type: .error)
             }
         }
         
@@ -292,7 +292,7 @@ class BuyProVC: SuperViewController {
             SKPaymentQueue.default().restoreCompletedTransactions()
             SKPaymentQueue.default().add(self)
 
-            self.ai.show { (_) in
+            self.ai?.show { (_) in
                 self.restoreRequest.delegate = self
                 self.restoreRequest.start()
             }
@@ -419,7 +419,7 @@ extension BuyProVC: SKPaymentTransactionObserver {
                 break
             default:
                 DispatchQueue.main.async {
-                    self.ai.fastHide() { (_) in
+                    self.ai?.fastHide() { (_) in
                         SKPaymentQueue.default().finishTransaction(transaction)
                         SKPaymentQueue.default().remove(self)
                     }

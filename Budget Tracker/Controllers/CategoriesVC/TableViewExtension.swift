@@ -272,7 +272,7 @@ extension CategoriesVC {
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete".localize) {  (contextualAction, view, boolValue) in
             //self.tableActionActivityIndicator.startAnimating()
           //  DispatchQueue.main.async {
-            self.ai.show(title: "Deleting".localize, notShowIfLoggedUser: true) { _ in
+            self.ai?.show(title: "Deleting".localize, notShowIfLoggedUser: true) { _ in
                     self.deteteCategory(at: IndexPath(row: indexPath.row, section: indexPath.section - self.sectionsBeforeData), reload: true)
                 }
           //  }
@@ -280,7 +280,7 @@ extension CategoriesVC {
         let localDeleteAction = UIContextualAction(style: .destructive, title: "Delete".localize) {  (contextualAction, view, boolValue) in
             //self.tableActionActivityIndicator.startAnimating()
           //  DispatchQueue.main.async {
-            self.ai.show(title: "Deleting".localize, notShowIfLoggedUser: true) { _ in
+            self.ai?.show(title: "Deleting".localize, notShowIfLoggedUser: true) { _ in
                     let id = self.tableData[indexPath.section - self.sectionsBeforeData].data[indexPath.row].category.id
                     self.db.deleteCategory(id: "\(id)", local: true)
                     self.loadData()

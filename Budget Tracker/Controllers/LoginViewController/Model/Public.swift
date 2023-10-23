@@ -32,7 +32,7 @@ extension LoginViewController {
                                 self.emailLabel.becomeFirstResponder()
                             }
                             DispatchQueue.main.async {
-                                self.ai.showAlert(buttons: (firstButton, nil), title: "Enter valid email address".localize, description: "With correct email address you could restore your password in the future".localize, type: .error)
+                                self.ai?.showAlert(buttons: (firstButton, nil), title: "Enter valid email address".localize, description: "With correct email address you could restore your password in the future".localize, type: .error)
                                 
                             }
 
@@ -69,12 +69,12 @@ extension LoginViewController {
                                     if self.fromPro || self.forceLoggedOutUser != "" {
                                         DispatchQueue.main.async {
                                                 self.dismiss(animated: true) {
-                                                    self.ai.fastHide()
+                                                    self.ai?.fastHide()
                                                 }
                                         }
                                     } else {
                                         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
-                                            self.ai.fastHide { _ in
+                                            self.ai?.fastHide { _ in
                                                 self.performSegue(withIdentifier: "homeVC", sender: self)
                                             }
                                         }
@@ -83,23 +83,23 @@ extension LoginViewController {
                             }
                         }
                     } else {
-                        self.ai.fastHide()
+                        self.ai?.fastHide()
                         if let emailLimit = emailLimitOp {
                             if emailLimit == .totalError {
                                 DispatchQueue.main.async {
-                                    self.newMessage.show(title: "You have reached the maximum amount of usernames".localize, type: .error)
+                                    self.newMessage?.show(title: "You have reached the maximum amount of usernames".localize, type: .error)
                                 }
                             } else {
                                 AppDelegate.shared?.appData.presentBuyProVC(selectedProduct: 3)
                                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                                    self.newMessage.show(title: "You have reached the maximum amount of usernames".localize, description: "Update to Pro".localize + " " + "to create new username".localize, type: .standart)
+                                    self.newMessage?.show(title: "You have reached the maximum amount of usernames".localize, description: "Update to Pro".localize + " " + "to create new username".localize, type: .standart)
                                 }
                             }
                             
                         } else {
                             self.actionButtonsEnabled = true
                             DispatchQueue.main.async {
-                                self.newMessage.show(title: "Username".localize + " '\(name)' " + "already exists".localize, type: .error)
+                                self.newMessage?.show(title: "Username".localize + " '\(name)' " + "already exists".localize, type: .error)
                             }
                         }
                         
@@ -111,16 +111,16 @@ extension LoginViewController {
                     self.showWrongFields()
 
                   //  DispatchQueue.main.async {
-                    self.newMessage.show(title: "All fields are required".localize, type: .error)
-                        self.ai.fastHide()
+                    self.newMessage?.show(title: "All fields are required".localize, type: .error)
+                        self.ai?.fastHide()
                  //   }
                   
                 }
             } else {
                 self.actionButtonsEnabled = true
          //       DispatchQueue.main.async {
-                self.newMessage.show(title: "Passwords not match".localize, type: .error)
-                    self.ai.fastHide()
+                self.newMessage?.show(title: "Passwords not match".localize, type: .error)
+                    self.ai?.fastHide()
               //  }
             }
      //   }
@@ -145,8 +145,8 @@ extension LoginViewController {
                         self.actionButtonsEnabled = true
                         let messageTitle = "Wrong".localize + " " + "password".localize
                         DispatchQueue.main.async {
-                            self.newMessage.show(title: messageTitle, type: .error)
-                            self.ai.fastHide()
+                            self.newMessage?.show(title: messageTitle, type: .error)
+                            self.ai?.fastHide()
                         }
                         return
                     } else {
@@ -187,12 +187,12 @@ extension LoginViewController {
                         if fromPro || self.forceLoggedOutUser != "" {
                             DispatchQueue.main.async {
                                 self.dismiss(animated: true) {
-                                    self.ai.fastHide()
+                                    self.ai?.fastHide()
                                 }
                             }
                         } else {
                             DispatchQueue.main.async {
-                                self.ai.fastHide { _ in
+                                self.ai?.fastHide { _ in
                                     self.performSegue(withIdentifier: "homeVC", sender: self)
                                 }
                             }
@@ -207,8 +207,8 @@ extension LoginViewController {
             self.actionButtonsEnabled = true
             DispatchQueue.main.async {
                 DispatchQueue.main.async {
-                    self.newMessage.show(title: "User not found".localize, type: .error)
-                    self.ai.fastHide()
+                    self.newMessage?.show(title: "User not found".localize, type: .error)
+                    self.ai?.fastHide()
                 }
 
             }

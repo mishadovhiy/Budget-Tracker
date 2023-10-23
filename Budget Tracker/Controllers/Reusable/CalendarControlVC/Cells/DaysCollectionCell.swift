@@ -10,11 +10,11 @@ import UIKit
 class CalendarCollectionCell: UICollectionViewCell {
     let selectedColor:UIColor = K.Colors.link
     var higlightDate:DateComponents?
-    var calendarModel:CalendarModel?
+    weak var calendarModel:CalendarModel?
     var didSelect:((_ day:Int)->())?
     var didSelectCell:((_ day:Int, _ cell:CalendarCell)->())?
 
-    var vc:CalendarControlVC?
+    weak var vc:CalendarControlVC?
     @IBOutlet weak var collectionView: UICollectionView!
     
     override func draw(_ rect: CGRect) {

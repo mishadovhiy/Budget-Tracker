@@ -50,7 +50,7 @@ class ViewController: SuperViewController {
     @IBOutlet weak var bigExpensesStack: UIStackView!
     
     @IBOutlet weak var sideBarContentBlockerView: UIView!
-    static var shared: ViewController?
+    weak static var shared: ViewController?
     var fromSideBar = false
     var _notificationsCount = (0,0)
     var sidescrolling = false
@@ -319,7 +319,7 @@ class ViewController: SuperViewController {
             if AppDelegate.shared?.appData.fromLoginVCMessage != "" {
                 print("appData.fromLoginVCMessage", AppDelegate.shared?.appData.fromLoginVCMessage ?? "-")
                 DispatchQueue.main.async {
-                    self.newMessage.show(title:AppDelegate.shared?.appData.fromLoginVCMessage ?? "", type: .standart)
+                    self.newMessage?.show(title:AppDelegate.shared?.appData.fromLoginVCMessage ?? "", type: .standart)
                     AppDelegate.shared?.appData.fromLoginVCMessage = ""
                     if self.sideBarShowing {
                         self.toggleSideBar(false, animated: true)

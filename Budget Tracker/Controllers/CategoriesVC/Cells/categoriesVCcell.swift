@@ -175,20 +175,13 @@ class categoriesVCcell: ClearCell {
                 CategoriesVC.shared?.selectingIconFor = (nil, nil)
                 CategoriesVC.shared?.editingTfIndex = (nil, nil)
                 CategoriesVC.shared?.tableView.reloadData()
-                CategoriesVC.shared?.ai.fastHide()
+                CategoriesVC.shared?.ai?.fastHide()
             }
         }
     }
     
     
-    private let db = DataBase()
-    
-    
-    
-    
-    
     private func saveCategory(_ category: CategoriesVC.ScreenCategory) {
-
         if category.editing != nil {
             if let index = indexPath {
                 if let editingValue = category.editing {
@@ -202,7 +195,7 @@ class categoriesVCcell: ClearCell {
                                 CategoriesVC.shared?.editingTF?.endEditing(true)
                                 CategoriesVC.shared?.editingTF = nil
                                 CategoriesVC.shared?.tableView.reloadData()
-                                CategoriesVC.shared?.ai.fastHide()
+                                CategoriesVC.shared?.ai?.fastHide()
                             }
                         }
                     }
@@ -217,7 +210,7 @@ class categoriesVCcell: ClearCell {
     
     
     @IBAction func sendPressed(_ sender: UIButton) {
-            CategoriesVC.shared?.ai.show(title:"Saving", notShowIfLoggedUser: true) { _ in
+            CategoriesVC.shared?.ai?.show(title:"Saving", notShowIfLoggedUser: true) { _ in
                 if let currentCategory = self.currentCategory {
                     if currentCategory.editing?.name != "" {
                         self.saveCategory(currentCategory)

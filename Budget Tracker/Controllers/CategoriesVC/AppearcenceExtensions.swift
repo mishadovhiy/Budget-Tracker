@@ -47,8 +47,9 @@ extension CategoriesVC {
     
     func addRefreshControll() {
         DispatchQueue.main.async {
-            self.refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
-            self.tableView.addSubview(self.refreshControl)
+            self.refreshControl = .init()
+            self.refreshControl?.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
+            self.tableView.addSubview(self.refreshControl!)
         }
     }
     

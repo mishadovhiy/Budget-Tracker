@@ -31,7 +31,7 @@ class IconsVC: SuperViewController {
         }
     }()
     var closeAction:(()->())?
-    static var shared:IconsVC?
+    weak static var shared:IconsVC?
     var selectedIconName = ""
     var selectedColorName = ""
     var defaultCategories:[NewCategories] = []

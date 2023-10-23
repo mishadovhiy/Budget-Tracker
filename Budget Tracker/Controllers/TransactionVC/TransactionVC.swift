@@ -57,10 +57,12 @@ class TransitionVC: SuperViewController {
     func dismissVC(complation:(()->())? = nil) {
         if self.navigationController is TransactionNav {
             self.dismiss(animated: true, completion: complation)
+            viewDidDismiss()
         } else {
             self.navigationController?.delegate = dismissTransitionHolder
             self.navigationController?.popViewController(animated: true)
             complation?()
+            viewDidDismiss()
         }
     }
     var editingDateHolder = ""
@@ -89,7 +91,12 @@ class TransitionVC: SuperViewController {
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 
-    
+    override func viewDidDismiss() {
+        super.viewDidDismiss()
+        dismissTransitionHolder = nil
+        panMahanger = nil
+        delegate = nil
+    }
 
     var panMahanger:PanViewController?
 
@@ -121,10 +128,7 @@ class TransitionVC: SuperViewController {
             self.dateTextField.setPlaceHolderColor(K.Colors.textFieldPlaceholder)
             self.commentTextField.placeholder = "Short comment".localize
             self.commentTextField.setPlaceHolderColor(K.Colors.textFieldPlaceholder)
-            if #available(iOS 13.4, *) {
-                appData.objects.datePicker.preferredDatePickerStyle = .wheels
-            }
-            
+
         }
     }
     
@@ -139,7 +143,7 @@ class TransitionVC: SuperViewController {
         pressedValue = "0"
 
         DispatchQueue.main.async {
-            self.appData.objects.datePicker.datePickerMode = .date
+                ///self.appData.objects.datePicker.datePickerMode = .date
             self.valueLabel.text = self.pressedValue
             
         }
@@ -295,12 +299,12 @@ class TransitionVC: SuperViewController {
                     completion(true)
                 } else {
                     DispatchQueue.main.async {
-                        self.newMessage.show(title:"Day can't be older than today".localize, type: .error)
+                        self.newMessage?.show(title:"Day can't be older than today".localize, type: .error)
                     }
                 }
             } else {
                 DispatchQueue.main.async {
-                    self.newMessage.show(title:"Set reminder date".localize, type: .error)
+                    self.newMessage?.show(title:"Set reminder date".localize, type: .error)
                 }
             }
         } else {
@@ -333,7 +337,7 @@ class TransitionVC: SuperViewController {
                         let dateCo = time?.createDateComp(date: date, time: time)
                         if dateCo?.expired ?? true {
                             DispatchQueue.main.async {
-                                self.newMessage.show(title:"Wrong date", type: .error)
+                                self.newMessage?.show(title:"Wrong date", type: .error)
                             }
                         } else {
                             self.quite()

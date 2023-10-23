@@ -15,9 +15,15 @@ extension UITableViewCell {
     }
 
     func setSelectedColor(_ color:UIColor) {
-        let selected = UIView(frame: .zero)
-        selected.backgroundColor = color
-        self.selectedBackgroundView = selected
+        if self.selectedBackgroundView?.layer.name != "setSelectedColor" {
+            let selected = UIView(frame: .zero)
+            selected.layer.name = "setSelectedColor"
+            selected.backgroundColor = color
+            self.selectedBackgroundView = selected
+        } else {
+            self.selectedBackgroundView?.backgroundColor = color
+        }
+    
     }
 }
 

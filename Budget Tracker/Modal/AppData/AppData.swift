@@ -252,25 +252,6 @@ class AppData {
     }
     
     
-    
-
-
-    
-    
-    var objects = Objects()
-    struct Objects {
-        let datePicker = UIDatePicker()
-    }
-
-    
-    var filterObjects = FilterObjects()
-    struct FilterObjects {
-        
-        let currentDate = UIDatePicker()
-        
-    }
-    
-    
     func createFirstData(completion: @escaping () -> ()) {
         let thisMonth = filter.getToday(dateformatter: "01.MM.yyyy")
         let thisYear = filter.getToday(dateformatter: "01.01.yyyy")

@@ -19,7 +19,7 @@ extension RemindersVC {
     
     
     func addReminder(wasStringID:Int?, transaction:TransactionsStruct, reminderTime: DateComponents?, repeated: Bool?) {
-      //  ai.show { _ in
+      //  ai?.show { _ in
             if let wasID = wasStringID {
                 self.reminders.deleteReminder(id: self.tableData[wasID].id ?? "")
             }
@@ -33,7 +33,7 @@ extension RemindersVC {
                 self.loadData()
                 if !added {
                     DispatchQueue.main.async {
-                        self.newMessage.show(title: "Error creating reminder".localize, type: .error)
+                        self.newMessage?.show(title: "Error creating reminder".localize, type: .error)
                     }
                 }
             }
@@ -63,7 +63,7 @@ extension RemindersVC {
                 self.tableView.dataSource = self
             }
             self.tableView.reloadData()
-            self.ai.fastHide()
+            self.ai?.fastHide()
         }
     }
 
@@ -75,12 +75,12 @@ extension RemindersVC {
     
     func addTransaction(idx:Int) {
         let reminder = tableData[idx]
-        ai.show { _ in
+        ai?.show { _ in
             self.addNextReminder(reminder: reminder) { added in
                 let completion:(Bool) -> () = { _ in
                     self.loadData()
                     DispatchQueue.main.async {
-                        self.newMessage.show(title: Text.success, description: "Transaction has been added!".localize, type: .succsess)
+                        self.newMessage?.show(title: Text.success, description: "Transaction has been added!".localize, type: .succsess)
                     }
                 }
                 ViewController.shared?.actionAfterAdded = completion
@@ -106,7 +106,7 @@ extension RemindersVC {
                     if addded {
                         completion(true)
                     } else {
-                        self.ai.showAlertWithOK(title: "Error adding reminder", text: nil, error: true)
+                        self.ai?.showAlertWithOK(title: "Error adding reminder", text: nil, error: true)
                     }
                 }
 

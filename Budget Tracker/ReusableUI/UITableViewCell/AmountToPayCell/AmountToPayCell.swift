@@ -169,7 +169,7 @@ class AmountToPayCell: UITableViewCell {
     @IBAction func changePressed(_ sender: UIButton) {
         if isEdit {
             //  DispatchQueue.main.async {
-            HistoryVC.shared?.ai.show(title: "Sending".localize, completion: { _ in
+            HistoryVC.shared?.ai?.show(title: "Sending".localize, completion: { _ in
                 self.isEdit = false
                 self.showEdit(false, hideStack: true) { _ in
                     let text = self.amountToPayTextField.text ?? ""
@@ -202,7 +202,7 @@ class AmountToPayCell: UITableViewCell {
         if !isEdit {
             if let funcc = deleteFunc {
                 //    DispatchQueue.main.async {
-                HistoryVC.shared?.ai.show(title: "Deleting".localize, completion: { _ in
+                HistoryVC.shared?.ai?.show(title: "Deleting".localize, completion: { _ in
                     self.showEdit(new, hideStack: true) { _ in
                         funcc()
                         

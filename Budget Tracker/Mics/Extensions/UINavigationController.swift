@@ -30,11 +30,21 @@ class NavigationController: UINavigationController {
     override func pushViewController(_ viewController: UIViewController, animated: Bool) {
         super.pushViewController(viewController, animated: animated)
     }
-    
+
     override func popViewController(animated: Bool) -> UIViewController? {
+        var holder = self.viewControllers
         super.popViewController(animated: animated)
+        viewControllers.forEach({ vc in
+            holder.removeAll(where: {vc == $0})
+        })
+        holder.forEach({
+            if let vc = $0 as? SuperViewController {
+                vc.navigationPopVC()
+            }
+        })
         return self.topViewController
     }
+    
     override func popToRootViewController(animated: Bool) -> [UIViewController]? {
         super.popToRootViewController(animated: animated)
         return self.viewControllers
