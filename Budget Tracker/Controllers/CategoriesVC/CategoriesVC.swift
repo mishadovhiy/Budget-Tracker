@@ -15,7 +15,7 @@ protocol CategoriesVCProtocol {
 
 class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var tableView: UITableView!
-    weak var refreshControl:UIRefreshControl?
+    var refreshControl:UIRefreshControl?
     var hideTitle = false
     var fromSettings = false
     var delegate: CategoriesVCProtocol?
@@ -126,6 +126,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
     override func viewDidDismiss() {
         super.viewDidDismiss()
+        refreshControl?.removeFromSuperview()
         refreshControl = nil
         editingTF = nil
         CategoriesVC.shared = nil

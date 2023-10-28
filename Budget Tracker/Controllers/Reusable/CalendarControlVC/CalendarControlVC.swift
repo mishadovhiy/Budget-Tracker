@@ -85,7 +85,7 @@ class CalendarControlVC: UIViewController {
             let neww:CalendarModel = .init(self.newMonth(current: middle, i: i))
             new.append(neww)
         }
-        
+        self.tableData.removeAll()
         self.tableData = new
         DispatchQueue.main.async {
             if self.collectionView.delegate == nil {

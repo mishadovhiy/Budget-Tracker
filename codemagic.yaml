@@ -1,0 +1,9 @@
+workflows:
+  Budget-Tracker:
+    scripts:
+      - name: say hello
+        script: echo "Hello Codemagician!"
+    publishing:
+        email:
+            recipients:
+                - hi@mishadovhiy.com

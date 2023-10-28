@@ -29,8 +29,6 @@ struct CalendarData:Hashable, Identifiable {
 
 class CalendarModel {
     
-    
-    
     init(_ data:CalendarData) {
         self.year = data.year
         self.month = data.month

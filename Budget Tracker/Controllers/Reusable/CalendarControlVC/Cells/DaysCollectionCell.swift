@@ -8,7 +8,7 @@
 import UIKit
 
 class CalendarCollectionCell: UICollectionViewCell {
-    let selectedColor:UIColor = K.Colors.link
+  //  let selectedColor:UIColor = K.Colors.link
     var higlightDate:DateComponents?
     weak var calendarModel:CalendarModel?
     var didSelect:((_ day:Int)->())?

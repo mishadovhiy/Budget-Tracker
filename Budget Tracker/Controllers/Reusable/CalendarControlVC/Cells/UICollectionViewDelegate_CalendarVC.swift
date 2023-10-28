@@ -11,7 +11,6 @@ extension CalendarCollectionCell:UICollectionViewDelegate, UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return calendarModel?.days.count ?? 0
     }
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView
             .dequeueReusableCell(withReuseIdentifier: "CalendarCell", for: indexPath) as! CalendarCell
@@ -40,7 +39,7 @@ extension CalendarCollectionCell:UICollectionViewDelegate, UICollectionViewDataS
         if isSelected {
             print("isSelectedisSelected ", indexPath.row)
         }
-        cell.backgroundMainView.backgroundColor = isSelected ? selectedColor : .clear
+        cell.backgroundMainView.backgroundColor = isSelected ?  K.Colors.link : .clear
 
         return cell
     }
