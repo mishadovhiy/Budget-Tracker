@@ -30,7 +30,6 @@ struct LoadFromDB {
                         completion([], .internet)
                         return
                     }
-                    print(Thread.isMainThread, " apithreaddd")
                     if Thread.isMainThread {
                         print("!!!!!!!!!!!errororor api")
                         if (AppDelegate.shared?.appData.devMode ?? false) {

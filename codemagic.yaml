@@ -3,7 +3,10 @@ workflows:
     scripts:
       - name: say hello
         script: echo "Hello Codemagician!"
+      - name: Build bt
+      
     publishing:
         email:
             recipients:
                 - hi@mishadovhiy.com
+                - mishadovhiy@gmail.com

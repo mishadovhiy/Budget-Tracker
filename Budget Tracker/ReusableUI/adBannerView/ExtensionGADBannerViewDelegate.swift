@@ -39,3 +39,4 @@ extension adBannerView:GADBannerViewDelegate {
       print(#function)
     }
 }
+

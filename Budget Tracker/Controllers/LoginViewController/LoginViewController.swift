@@ -61,6 +61,7 @@ class LoginViewController: SuperViewController {
                 }
             }
         }
+        self.additionalSafeAreaInsets.bottom = AppDelegate.shared?.banner.size ?? 0
     }
     
     func showAlert(title:String? = nil,text:String? = nil, error: Bool, goToLogin: Bool = false) {
@@ -193,7 +194,7 @@ class LoginViewController: SuperViewController {
     
     
     override func viewDidDisappear(_ animated: Bool) {
-        AppDelegate.shared?.banner.appeare(force: true)
+      //  AppDelegate.shared?.banner.appeare(force: true)
         DispatchQueue.main.async {
             self.helperNavView?.removeFromSuperview()
         }
@@ -202,7 +203,7 @@ class LoginViewController: SuperViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: true)
-        AppDelegate.shared?.banner.hide(ios13Hide: true)
+     //   AppDelegate.shared?.banner.hide(ios13Hide: true)
     }
     
     var actionButtonsEnabled : Bool {
@@ -313,6 +314,7 @@ class LoginViewController: SuperViewController {
         if !appData.purchasedOnThisDevice {
             appData.proVersion = isPro == "1" ? true : appData.proVersion
         }
+        appData.needDownloadOnMainAppeare = true
         if fromPro || self.forceLoggedOutUser != "" {
             DispatchQueue.main.async {
                 self.dismiss(animated: true) {

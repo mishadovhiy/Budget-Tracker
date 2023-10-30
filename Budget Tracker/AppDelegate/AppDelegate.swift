@@ -61,6 +61,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     let appData = AppData()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        print(UIDevice.current.identifierForVendor?.uuidString, " ikhujygthvbjnk")
         AppDelegate.shared = self
         coreDataManager = .init(persistentContainer: persistentContainer, appDelegate: self)
         DispatchQueue(label: "db", qos: .userInitiated).async {

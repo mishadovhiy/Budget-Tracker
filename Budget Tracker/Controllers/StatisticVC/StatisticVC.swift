@@ -8,6 +8,7 @@
 
 import UIKit
 import CorePlot
+import GoogleMobileAds
 
 var filterAndGoToStatistic: IndexPath?
 class StatisticVC: SuperViewController, CALayerDelegate {
@@ -410,6 +411,18 @@ struct GraphDataStruct {
         ]
     }
 }
+
+
+extension StatisticVC:GADFullScreenContentDelegate {
+    func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
+        AppDelegate.shared?.banner.adDidDismissFullScreenContent(ad)
+        
+    }
+    func adDidPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
+        AppDelegate.shared?.banner.adDidPresentFullScreenContent(ad)
+    }
+}
+
 
 
 extension StatisticVC {

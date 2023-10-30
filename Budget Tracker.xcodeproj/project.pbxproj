@@ -97,6 +97,7 @@
 		8D5C625F2ACF4FA2005D68B0 /* AppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5C625E2ACF4FA2005D68B0 /* AppIntent.swift */; };
 		8D5C62612ACF4FA5005D68B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D5C62602ACF4FA5005D68B0 /* Assets.xcassets */; };
 		8D5C62652ACF4FA5005D68B0 /* BudgetTrackerCalendatWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8D5C62522ACF4FA2005D68B0 /* BudgetTrackerCalendatWidgetExtension.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8D6F947F2AEF15DC00103763 /* MessageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6F947E2AEF15DC00103763 /* MessageContent.swift */; };
 		8D7FCA772ADAF02200B108A6 /* CoreDataDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7FCA762ADAF02200B108A6 /* CoreDataDBManager.swift */; };
 		8D7FCA792ADAF05300B108A6 /* AnimatedTransitioningManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7FCA782ADAF05300B108A6 /* AnimatedTransitioningManager.swift */; };
 		8D7FCA7B2ADAF05C00B108A6 /* PanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7FCA7A2ADAF05C00B108A6 /* PanViewController.swift */; };
@@ -280,6 +281,7 @@
 		8D5C62602ACF4FA5005D68B0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8D5C62622ACF4FA5005D68B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D5C62662ACF4FA5005D68B0 /* BudgetTrackerCalendatWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BudgetTrackerCalendatWidgetExtension.entitlements; sourceTree = "<group>"; };
+		8D6F947E2AEF15DC00103763 /* MessageContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContent.swift; sourceTree = "<group>"; };
 		8D7FCA762ADAF02200B108A6 /* CoreDataDBManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataDBManager.swift; sourceTree = "<group>"; };
 		8D7FCA782ADAF05300B108A6 /* AnimatedTransitioningManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimatedTransitioningManager.swift; sourceTree = "<group>"; };
 		8D7FCA7A2ADAF05C00B108A6 /* PanViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PanViewController.swift; sourceTree = "<group>"; };
@@ -452,7 +454,6 @@
 			isa = PBXGroup;
 			children = (
 				8DD89D8623F1471400273904 /* AppData.swift */,
-				8D36724124D315BC00CE90A9 /* NetworkModel.swift */,
 				8DA77CF3298B687E00949D98 /* Filter.swift */,
 			);
 			path = AppData;
@@ -615,6 +616,7 @@
 			children = (
 				8BB75D4327F294DE00AE71A1 /* TransactionStruct.swift */,
 				8BB75D4627F2952300AE71A1 /* CategoriesStruct.swift */,
+				8D6F947E2AEF15DC00103763 /* MessageContent.swift */,
 			);
 			path = Structs;
 			sourceTree = "<group>";
@@ -878,6 +880,7 @@
 		8DD89D8823F1471900273904 /* Modal */ = {
 			isa = PBXGroup;
 			children = (
+				8D36724124D315BC00CE90A9 /* NetworkModel.swift */,
 				8B26329027E69AE10086C3A8 /* AppData */,
 				8B3F919827D31C4000BE826C /* UserData */,
 				8B5434FB27ED83AC00417141 /* Notifications */,
@@ -1174,6 +1177,7 @@
 				8D52066B24216A6200772CD5 /* HistoryVC.swift in Sources */,
 				8DD2D2CD2998902E0098C106 /* ViewControllers.swift in Sources */,
 				8BD17F7027F54B6C008D9D57 /* NoRemindersCell.swift in Sources */,
+				8D6F947F2AEF15DC00103763 /* MessageContent.swift in Sources */,
 				8BF63E8D27629D14002E8601 /* SupportVC.swift in Sources */,
 				8DD89D8C23F1485700273904 /* Constants.swift in Sources */,
 				8B5434FA27ED838F00417141 /* Notifications.swift in Sources */,
@@ -1435,7 +1439,7 @@
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1466,7 +1470,7 @@
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_UISupportsDocumentBrowser = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

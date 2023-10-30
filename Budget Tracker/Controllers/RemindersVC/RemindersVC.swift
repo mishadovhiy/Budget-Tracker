@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import GoogleMobileAds
 
 class RemindersVC: SuperViewController {
     typealias TransitionComponents = (albumCoverImageView: UIImageView?, albumNameLabel: UILabel?)
@@ -37,9 +38,7 @@ class RemindersVC: SuperViewController {
     }
     lazy var today = AppDelegate.shared?.appData.filter.getToday() ?? ""
     var editingReminder:Int?
-    
-    @IBOutlet weak var addTransactionButton: TouchButton!
-    @IBAction func addTransactionPressed(_ sender: Any) {
+    func performAddReminder() {
         Notifications.requestNotifications()
         let vc = TransitionVC.configure()
         vc.delegate = self
@@ -61,6 +60,14 @@ class RemindersVC: SuperViewController {
         transitionAppearenceManager.canDivideFrame = false
 
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+    @IBOutlet weak var addTransactionButton: TouchButton!
+    @IBAction func addTransactionPressed(_ sender: Any) {
+        AppDelegate.shared?.banner.toggleFullScreenAdd(self, type: .paymentReminder, loaded: {
+            $0?.fullScreenContentDelegate = self
+        }, completion: {
+            self.performAddReminder()
+        })
     }
 
     
@@ -139,6 +146,18 @@ extension RemindersVC :TransitionVCProtocol {
     
     
 }
+
+
+extension RemindersVC:GADFullScreenContentDelegate {
+    func adDidPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
+        AppDelegate.shared?.banner.adDidPresentFullScreenContent(ad)
+    }
+    func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
+        AppDelegate.shared?.banner.adDidDismissFullScreenContent(ad)
+    }
+    
+}
+
 
 extension RemindersVC {
     static func configure() -> RemindersVC {

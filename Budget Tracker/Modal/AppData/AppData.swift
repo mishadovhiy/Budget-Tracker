@@ -75,7 +75,14 @@ class AppData {
             return result
         }
         set(value){
+            let was = !purchasedOnThisDevice ? (db.db["proVersion"] as? Bool ?? false) : purchasedOnThisDevice
             db.db.updateValue(value, forKey: "proVersion")
+            if was && !value {
+                AppDelegate.shared?.banner.createBanner()
+            } else if !was && value {
+                AppDelegate.shared?.banner.hide(remove: true, ios13Hide: true)
+            }
+            
         }
     }
     
@@ -200,9 +207,21 @@ class AppData {
     }
     
     var devMode:Bool {
-        return userEmailHolder.contains("dovhiy.com")
+        if userEmailHolder.contains("dovhiy.com") {
+            return true
+        } else {
+            let id = UIDevice.current.identifierForVendor?.uuidString ?? ""
+            if testIds.contains(id) {
+                return true
+            } else {
+                return false
+            }
+        }
     }
     
+    let testIds:[String] = [
+        "092BAEA3-9810-4A80-ADEF-53ABC78F9CA0"
+    ]
 
 
     var unsendedData:[[String: [String:Any]]] {

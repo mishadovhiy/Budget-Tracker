@@ -26,21 +26,13 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if indexPath.section == 0 {
-            let calculationCell = tableView.dequeueReusableCell(withIdentifier: "calcCell") as? calcCell
+            let calculationCell = tableView.dequeueReusableCell(withIdentifier: "calcCell", for: indexPath) as? calcCell
             return calculationCell ?? UITableViewCell()
         } else {
             if newTableData.count == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "mainVCemptyCell", for: indexPath) as! mainVCemptyCell
                 return cell
             } else {
-               /* if newTableData[indexPath.section - 1].transactions.count == indexPath.row {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "mainFooterCell", for: indexPath) as! mainFooterCell
-                    cell.totalLabel.text = "\(newTableData[indexPath.section - 1].amount)"
-                    
-                    cell.separatorInset.left = tableView.frame.width / 2
-                    cell.separatorInset.right = tableView.frame.width / 2
-                    return cell
-                } else {*/
                     let transactionsCell = tableView.dequeueReusableCell(withIdentifier: K.mainCellIdent, for: indexPath) as! mainVCcell
                     transactionsCell.isUserInteractionEnabled = true
                     transactionsCell.contentView.isUserInteractionEnabled = true
@@ -48,7 +40,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
                     transactionsCell.setupCell(data, i: indexPath.row, tableData: tableData, selectedCell: selectedCell, indexPath: indexPath)
                     return transactionsCell
                 }
-        //    }
             
             
         }

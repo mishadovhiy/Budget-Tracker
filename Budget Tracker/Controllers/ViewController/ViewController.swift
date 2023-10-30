@@ -126,13 +126,20 @@ class ViewController: SuperViewController {
         toggleSideBar(false, animated: false)
         
         self.mainTableView.contentInset.bottom = AppDelegate.shared?.banner.size ?? 0
-      //  AppDelegate.shared?.banner.bannerSizePublisher.subscribe(Subscribers.Assign(object: mainTableView, keyPath: \.contentInset.bottom))
-        AppDelegate.shared?.banner.valuePublisher.sink(receiveValue: {
-            self.mainTableView.contentInset.bottom = $0
-        }).store(in: &cancellableHolder)
+        if #available(iOS 13.0, *) {
+            BannerPublisher.valuePublisher.sink(receiveValue: {
+                self.bannerUpdated($0)
+            }).store(in: &BannerPublisher.cancellableHolder)
+        }
+        
+        
     }
-
-    var cancellableHolder = Set<AnyCancellable>()
+    
+    
+    func bannerUpdated(_ value:CGFloat) {
+        self.mainTableView.contentInset.bottom = value
+    }
+    
     var calendarSelectedDate:String?
     
     override func viewDidLayoutSubviews() {

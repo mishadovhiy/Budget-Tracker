@@ -8,8 +8,9 @@
 
 import UIKit
 import PDFKit
+import GoogleMobileAds
 
-struct ManagerPDF {
+class ManagerPDF {
     private var vc:UIViewController
     private var pageTitle:String
     private var dict:[String:Any]
@@ -27,15 +28,21 @@ struct ManagerPDF {
         appDelegate.newMessage.show(title:title, description: description, type: .error)
         
     }
-    mutating func exportPDF(sender:UIView) {
-        guard let pdf = createPDF(),
-              let pdfData = pdf.dataRepresentation() else {
-            showError(title: "Error creating PDF")
-            return
-        }
-        vc.navigationController?.pushViewController(AttributedStringTestVC.configure(pdf: self), animated: true)
-       // vc.presentShareVC(with: [pdfData], sender:sender)
+    func exportPDF(sender:UIView) {
+
+        AppDelegate.shared?.banner.toggleFullScreenAdd(self.vc, type: .pdf, loaded: {
+            $0?.fullScreenContentDelegate = self.vc as! GADFullScreenContentDelegate
+        }, completion: {
+            guard let pdf = self.createPDF(),
+                  let pdfData = pdf.dataRepresentation() else {
+                self.showError(title: "Error creating PDF")
+                return
+            }
+            self.vc.presentShareVC(with: [pdfData], sender:sender)
+        })
+        
     }
+
     
     func pdfString(fromCreate:Bool = false) -> (NSAttributedString, CGFloat) {
         let res:NSMutableAttributedString = .init(attributedString: .init(string: ""))
@@ -50,7 +57,7 @@ struct ManagerPDF {
         return UnparcePDF(manager: self).dictionaryToString(dict, data: additionalData, fromCreate: true).0
     }
 
-    private mutating func createPDF() -> PDFDocument? {
+    private func createPDF() -> PDFDocument? {
         let pdfDocument = PDFDocument()
         let text = pdfString()
         guard let page = generator.createPDFPage(fromAttributes: .init(attributedString: text.0), textHeight: text.1, pageWidth: pageWidth)
@@ -88,3 +95,5 @@ extension ManagerPDF {
         }
     }
 }
+
+

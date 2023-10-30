@@ -22,8 +22,6 @@ protocol TransitionVCProtocol {
 }
 
 class TransitionVC: SuperViewController {
-    var reminder_Repeated:Bool?
-    var reminder_Time:DateComponents?
     @IBOutlet weak var removeLastButton: UIButton!
     @IBOutlet weak var removeAllButton: UIButton!
     @IBAction func trashPressed(_ sender: UIButton) {
@@ -49,22 +47,13 @@ class TransitionVC: SuperViewController {
     @IBOutlet weak var minusPlusLabel: UILabel!
     @IBOutlet weak var commentTextField: TextField!
     @IBOutlet weak var commentCountLabel: UILabel!
+    var dismissTransitionHolder:AnimatedTransitioningManager?
+    var delegate:TransitionVCProtocol?
+    var reminder_Repeated:Bool?
+    var reminder_Time:DateComponents?
+    var selectedPurpose: Int?
     var paymentReminderAdding = false
     var pressedValue = "0"
-    var dismissTransitionHolder:AnimatedTransitioningManager?
-    var selectedPurpose: Int?
-    var delegate:TransitionVCProtocol?;
-    func dismissVC(complation:(()->())? = nil) {
-        if self.navigationController is TransactionNav {
-            self.dismiss(animated: true, completion: complation)
-            viewDidDismiss()
-        } else {
-            self.navigationController?.delegate = dismissTransitionHolder
-            self.navigationController?.popViewController(animated: true)
-            complation?()
-            viewDidDismiss()
-        }
-    }
     var editingDateHolder = ""
     var editingCategoryHolder = ""
     var editingValueHolder = 0.0
@@ -76,6 +65,28 @@ class TransitionVC: SuperViewController {
     var editingComment = ""
     
     var pressedValueArrey: [String] =  []
+
+    var dateSet:String?
+    var dateChanged = false
+    var sbvsloded = false
+    var idxHolder:Int?
+    var donePressed = false
+    var selectedCategory: NewCategories?
+    var fromDebts = false
+    
+    var calendarSelectedTime:DateComponents?
+    func dismissVC(complation:(()->())? = nil) {
+        self.navigationController?.delegate = dismissTransitionHolder
+
+        if self.navigationController is TransactionNav {
+            self.dismiss(animated: true, completion: complation)
+            viewDidDismiss()
+        } else {
+            self.navigationController?.popViewController(animated: true)
+            complation?()
+            viewDidDismiss()
+        }
+    }
 
     
     override func viewDidLoad() {
@@ -96,20 +107,16 @@ class TransitionVC: SuperViewController {
         dismissTransitionHolder = nil
         panMahanger = nil
         delegate = nil
+        dateSet = nil
     }
 
     var panMahanger:PanViewController?
 
-    
-    
-    var dateSet:String?
-    
     lazy var defaultDate:String = {
         return dateSet ?? (lastSelectedDate ?? (AppDelegate.shared?.appData.filter.from ?? ""))
     }()
     @IBOutlet weak var doneButton: UIButton!
-    var dateChanged = false
-    var sbvsloded = false
+
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         if !sbvsloded {
@@ -163,6 +170,7 @@ class TransitionVC: SuperViewController {
             vc.needPressDone = true
             vc.canSelectOnlyOne = true
         }
+        self.navigationController?.delegate = nil
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -171,6 +179,7 @@ class TransitionVC: SuperViewController {
         let vc = CategoriesVC.configure(type: .categories)
         vc.delegate = self
         vc.hideTitle = true
+        self.navigationController?.delegate = nil
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -286,8 +295,6 @@ class TransitionVC: SuperViewController {
             self.reminder_Repeated = sender.isOn
         }
     }
-    var idxHolder:Int?
-    var donePressed = false
     func checkDate(date:String, completion:(Bool)->()) {
         if idxHolder != nil {
             if let time = self.reminder_Time {
@@ -453,7 +460,9 @@ class TransitionVC: SuperViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if !(navigationController is TransactionNav) && panMahanger == nil {
-            panMahanger = .init(vc: self)
+            panMahanger = .init(vc: self, dismissAction: {
+                self.navigationController?.delegate = self.dismissTransitionHolder
+            })
         } else {
             
         }
@@ -563,13 +572,6 @@ class TransitionVC: SuperViewController {
             minusPlusLabel.alpha = 0
         }
     }
-    var selectedCategory: NewCategories?
-    var fromDebts = false
-    
-    var calendarSelectedTime:DateComponents?
-    
-    
-    
     
     @objc func keyboardWillHide(_ notification: Notification) {
         DispatchQueue.main.async {

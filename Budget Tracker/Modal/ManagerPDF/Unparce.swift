@@ -18,7 +18,7 @@ struct UnparcePDF {
         var text:[NSAttributedString] = []
         //NSMutableAttributedString = .init(attributedString: .init(string: ""))
         data.forEach({
-            let header = documentHeader(data: $0)
+            let header = documentHeader(data: $0, fromCreate: true)
             text.append(header)
             height += ($0.height ?? 170)
         })
@@ -47,18 +47,21 @@ struct UnparcePDF {
         return (text, height)
     }
     
-    private func documentHeader(data:ManagerPDF.AdditionalPDFData) -> NSMutableAttributedString {
+    private func documentHeader(data:ManagerPDF.AdditionalPDFData, fromCreate:Bool = false) -> NSMutableAttributedString {
         let text:NSMutableAttributedString = .init(string: "")
         let attachment = NSTextAttachment()
         attachment.image = .init(named: "icBig")
         attachment.bounds = .init(x: 0, y: -8, width: 40, height: 40)
         text.append(.init(attachment: attachment))
 
-        text.append(.init(string: "  Transactions History ", attributes: [
+        var attributes:[NSAttributedString.Key : Any] = [
             .font:UIFont.systemFont(ofSize: 28, weight: .bold),
             .foregroundColor:self.color,
-            .link: URL(string: "https://mishadovhiy.com")!
-        ]))
+        ]
+        if fromCreate {
+            attributes.updateValue(URL(string: "https://mishadovhiy.com")!, forKey: .link)
+        }
+        text.append(.init(string: "  Transactions History ", attributes: attributes))
         text.append(.init(string: "From Budget Tracker\n\n", attributes: [
             .font:UIFont.systemFont(ofSize: 12, weight: .bold),
             .foregroundColor:(K.Colors.balanceT ?? .red).cgColor

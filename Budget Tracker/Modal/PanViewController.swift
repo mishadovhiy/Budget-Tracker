@@ -12,8 +12,9 @@ class PanViewController {
     private let vc:UIViewController
     var delegate:PanViewControllerProtocol?
     private var properies:ScrollProperties = .init()
-
-    init(vc:UIViewController) {
+    var dismissAction:(()->())? = nil
+    init(vc:UIViewController, dismissAction:(()->())? = nil) {
+        self.dismissAction = dismissAction
         self.vc = vc
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(pinched(_:)))
         gesture.name = "PanViewControllerUIPanGestureRecognizer"
@@ -25,6 +26,8 @@ class PanViewController {
         let gesture = vc.view.gestureRecognizers?.first(where: {$0.name == "PanViewControllerUIPanGestureRecognizer"})
         gesture?.delegate = nil
         gesture?.isEnabled = false
+        delegate = nil
+        dismissAction = nil
     }
     
     @objc private func pinched(_ sender:UIPanGestureRecognizer) {
@@ -91,6 +94,7 @@ class PanViewController {
     
     
     private func dismissVC(completion:(()->())? = nil) {
+        dismissAction?()
         vc.navigationController?.popViewController(animated: true)
         completion?()
     }

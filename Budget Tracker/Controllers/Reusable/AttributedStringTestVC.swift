@@ -10,7 +10,7 @@ import UIKit
 
 class AttributedStringTestVC:UIViewController {
     @IBOutlet weak var attributeLabel: UILabel!
-    var pdfData:ManagerPDF?
+    weak var pdfData:ManagerPDF?
     var appearedPdfData:ManagerPDF?
     
     override func viewDidLoad() {

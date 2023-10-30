@@ -19,8 +19,12 @@ class adBannerView: UIView {
     var adHidden = true
     var adNotReceved = true
     
+    private var id:String {
+        (AppDelegate.shared?.appData.devMode ?? false) ? "ca-app-pub-3940256099942544/2934735716" : "ca-app-pub-5463058852615321/8457751935"
+    }
+    
     public func createBanner() {
-        GADMobileAds.sharedInstance().requestConfiguration.testDeviceIdentifiers = [ "f0009f4e48ef4bf48e18712f3560ef92" ]
+
         GADMobileAds.sharedInstance().start { status in
             print(Thread.isMainThread, " createBannercreateBanner")
             let window = AppDelegate.shared?.window ?? UIWindow()
@@ -29,8 +33,8 @@ class adBannerView: UIView {
             let adSize = GADAdSizeFromCGSize(CGSize(width: screenWidth, height: height))
             self.size = height
             let bannerView = GADBannerView(adSize: adSize)
-            bannerView.adUnitID = (AppDelegate.shared?.appData.devMode ?? false) ? "ca-app-pub-3940256099942544/2934735716" : "ca-app-pub-5463058852615321/8457751935"
-            bannerView.rootViewController = AppDelegate.shared?.window?.rootViewController
+            bannerView.adUnitID = self.id
+            bannerView.rootViewController =  AppDelegate.shared?.window?.rootViewController
             
             bannerView.delegate = self
             self.adStack.addArrangedSubview(bannerView)
@@ -105,7 +109,7 @@ class adBannerView: UIView {
     
     
 
-    let valuePublisher = PassthroughSubject<CGFloat, Never>()
+    
 
     var size:CGFloat {
         get {
@@ -113,7 +117,11 @@ class adBannerView: UIView {
         }
         set {
             _size = newValue
-            self.valuePublisher.send(newValue)
+            if #available(iOS 13.0, *) {
+                BannerPublisher.valuePublisher.send(newValue)
+            } else {
+                ViewController.shared?.bannerUpdated(newValue)
+            }
         }
     }
     
@@ -127,7 +135,78 @@ class adBannerView: UIView {
     }
     
     
+    private var showedBanner:[FullScreenBanner:Date] = [:]
     
+    func toggleFullScreenAdd(_ vc:UIViewController, type:FullScreenBanner, loaded:@escaping(GADFullScreenPresentingAd?)->(), completion:@escaping()->()) {
+        bannerCanShow(vc, type: type) { show in
+            if show {
+                AppDelegate.shared?.ai.showAlert(buttons: (.init(title: "Watch ad", style: .link, close: true, action: {_ in
+                    self.bannerShowCompletion = completion
+                    self.presentFullScreen(vc, loaded: loaded)
+                  //  completion()
+                }), .init(title: "Close", style: .regular, close: true, action:nil)), title: type.alertMessage.title, description: type.alertMessage.description)
+            } else {
+                completion()
+            }
+        }
+        
+    }
+
+    private func presentFullScreen(_ vc:UIViewController, loaded:@escaping(GADFullScreenPresentingAd?)->()) {
+        //here
+        rootVC = vc
+        let windowSize = AppDelegate.shared?.window?.frame.size ?? .zero
+        let size:CGSize = .init(width: windowSize.width, height: windowSize.height - size)
+        let adView = GADBannerView(adSize: .init(size: size, flags: 0))
+        adView.layer.name = "GADInterstitialAd"
+        adView.rootViewController = vc
+        
+     //   adView.delegate = self
+        adView.adUnitID = id
+        adView.load(GADRequest())
+        adView.frame = .init(origin: .zero, size: size)
+        vc.view.addSubview(adView)
+        GADInterstitialAd.load(withAdUnitID: "ca-app-pub-5463058852615321/8167495597", request: GADRequest()) { ad, error in
+            loaded(ad)
+            if error != nil {
+                print(error)
+            }
+         //   ad?.fullScreenContentDelegate = vc
+
+            ad?.present(fromRootViewController: vc)
+        }
+    }
+    
+    private var bannerShowCompletion:(()->())?
+    private func bannerCanShow(_ vc: UIViewController,type:FullScreenBanner, completion:@escaping(_ show:Bool)->()) {
+        DispatchQueue(label: "db",  qos: .userInitiated).async {
+            if !(AppDelegate.shared?.appData.proEnabeled ?? false) {
+                if let from = self.showedBanner[type] {
+                    let now = Date()
+                    let dif = now.timeIntervalSince(from)
+                    if dif >= Double(30) {
+                        DispatchQueue.main.async {
+                            completion(true)
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            completion(false)
+                        }
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        completion(true)
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    completion(false)
+                }
+            }
+        }
+        
+        
+    }
     
     
     @IBAction private func closePressed(_ sender: UIButton) {
@@ -156,8 +235,58 @@ class adBannerView: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-    
-    
+    private var presentingFullType:FullScreenBanner?
+    private weak var rootVC:UIViewController?
+}
+
+
+
+extension adBannerView {
+    func adDidPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
+        print("df")
+        
+        AppDelegate.shared?.ai.fastHide()
+    }
+    func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
+        print("adDidDismissFullScreenContent")
+        bannerShowCompletion?()
+        bannerShowCompletion = nil
+        if let type = presentingFullType {
+            self.showedBanner.updateValue(Date(), forKey: type)
+            presentingFullType = nil
+
+        }
+        //here
+      //  rootVC?.view.subviews.first(where: {$0.layer.name == "GADInterstitialAd"})?.removeFromSuperview()
+      //  rootVC = nil
+    }
+}
+
+
+
+
+
+
+
+@available(iOS 13.0, *)
+struct BannerPublisher {
+    static var valuePublisher = PassthroughSubject<CGFloat, Never>()
+    static var cancellableHolder = Set<AnyCancellable>()
+}
+
+
+enum FullScreenBanner {
+    case pdf
+    case paymentReminder
+    var alertMessage:MessageContent {
+        switch self {
+        case .pdf:
+            return .init(title: "Watch Ad needed", description: "to create PDF you have to watch 10 seconds ad")
+        case .paymentReminder:
+            return .init(title: "Watch Ad needed", description: "to add new Payment Reminder you have to watch 10 seconds ad")
+
+        }
+    }
 }
 
 
