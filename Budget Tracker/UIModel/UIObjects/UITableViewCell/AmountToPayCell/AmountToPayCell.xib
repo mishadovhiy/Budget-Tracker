@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="AmountToPayCell" id="Wn8-CL-B9W" customClass="AmountToPayCell" customModule="Budget_Tracker" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="430" height="101.33333587646484"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Wn8-CL-B9W" id="ruS-OD-qyb">
+                <rect key="frame" x="0.0" y="0.0" width="430" height="101.33333587646484"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="RIs-q4-Lzo">
+                        <rect key="frame" x="10" y="67.333333333333329" width="410" height="4"/>
+                    </progressView>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="ZcA-dk-rpj">
+                        <rect key="frame" x="334" y="15.000000000000004" width="86" height="42.333333333333343"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Amount to pay:" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i32-ai-m3A" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="86" height="14.333333333333334"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" name="balanceTitleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bkt-tZ-yEK">
+                                <rect key="frame" x="0.0" y="14.333333333333332" width="86" height="27.999999999999996"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="23"/>
+                                <color key="textColor" name="CategoryColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dTi-Kg-qO3" customClass="NumbersTF" customModule="Budget_Tracker" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="42.333333333333336" width="86" height="0.0"/>
+                                <color key="backgroundColor" name="SecondaryBacroundColor"/>
+                                <color key="textColor" name="CategoryColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <textInputTraits key="textInputTraits" keyboardAppearance="alert" returnKeyType="go"/>
+                            </textField>
+                        </subviews>
+                    </stackView>
+                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="2bw-1u-xoW">
+                        <rect key="frame" x="354" y="73.333333333333329" width="66" height="14.333333333333329"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rest:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kDo-He-wkJ" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="28.666666666666668" height="14.333333333333334"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" name="balanceTitleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eir-EW-N8s">
+                                <rect key="frame" x="33.666666666666686" y="0.0" width="32.333333333333343" height="14.333333333333334"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
+                                <color key="textColor" name="balanceTitleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                    </stackView>
+                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="5Zk-7u-3XN">
+                        <rect key="frame" x="10" y="73.333333333333329" width="106.33333333333333" height="14.333333333333329"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total payed:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z8I-jm-9W0" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="69" height="14.333333333333334"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" name="balanceTitleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sAJ-EP-dQ7">
+                                <rect key="frame" x="74" y="0.0" width="32.333333333333343" height="14.333333333333334"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="12"/>
+                                <color key="textColor" name="balanceTitleColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                    </stackView>
+                    <stackView opaque="NO" alpha="0.0" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="qqV-nd-vIi">
+                        <rect key="frame" x="30" y="13.666666666666664" width="110" height="45"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t7f-La-naQ" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="45" height="45"/>
+                                <color key="backgroundColor" name="SecondaryBacroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="t7f-La-naQ" secondAttribute="height" multiplier="1:1" id="ghN-Df-hac"/>
+                                </constraints>
+                                <color key="tintColor" name="negativeColor"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="trash"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="titleWhenNoSymbols" value="🗑"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="23"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                        <real key="value" value="0.10000000000000001"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="deletePressed:" destination="Wn8-CL-B9W" eventType="touchUpInside" id="Y0R-0a-MC6"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iUx-gF-x24" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
+                                <rect key="frame" x="65" y="0.0" width="45" height="45"/>
+                                <color key="backgroundColor" name="SecondaryBacroundColor"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="pencil.yellow"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="titleWhenNoSymbols" value="✏️"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="23"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                        <real key="value" value="0.10000000000000001"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="changePressed:" destination="Wn8-CL-B9W" eventType="touchUpInside" id="2WS-5P-GQx"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="45" id="JvU-9B-3ZI"/>
+                        </constraints>
+                    </stackView>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                <constraints>
+                    <constraint firstItem="5Zk-7u-3XN" firstAttribute="leading" secondItem="ruS-OD-qyb" secondAttribute="leading" constant="10" id="Lob-bP-Yrd"/>
+                    <constraint firstItem="qqV-nd-vIi" firstAttribute="centerY" secondItem="ZcA-dk-rpj" secondAttribute="centerY" id="MEx-C7-JHD"/>
+                    <constraint firstItem="RIs-q4-Lzo" firstAttribute="leading" secondItem="ruS-OD-qyb" secondAttribute="leading" constant="10" id="Nd7-bf-BIV"/>
+                    <constraint firstAttribute="trailing" secondItem="2bw-1u-xoW" secondAttribute="trailing" constant="10" id="ONR-97-KzZ"/>
+                    <constraint firstAttribute="trailing" secondItem="ZcA-dk-rpj" secondAttribute="trailing" constant="10" id="YvQ-Bf-blj"/>
+                    <constraint firstItem="RIs-q4-Lzo" firstAttribute="top" secondItem="ZcA-dk-rpj" secondAttribute="bottom" constant="10" id="bw8-5D-eyb"/>
+                    <constraint firstItem="qqV-nd-vIi" firstAttribute="leading" secondItem="ruS-OD-qyb" secondAttribute="leadingMargin" constant="10" id="gsX-pS-L9t"/>
+                    <constraint firstAttribute="bottom" secondItem="RIs-q4-Lzo" secondAttribute="bottom" constant="30" id="haq-AO-M52"/>
+                    <constraint firstAttribute="trailing" secondItem="RIs-q4-Lzo" secondAttribute="trailing" constant="10" id="reA-l7-swt"/>
+                    <constraint firstItem="2bw-1u-xoW" firstAttribute="top" secondItem="RIs-q4-Lzo" secondAttribute="bottom" constant="2" id="t0E-b4-rtV"/>
+                    <constraint firstItem="ZcA-dk-rpj" firstAttribute="top" secondItem="ruS-OD-qyb" secondAttribute="top" constant="15" id="xjf-Ty-KVp"/>
+                    <constraint firstItem="5Zk-7u-3XN" firstAttribute="top" secondItem="RIs-q4-Lzo" secondAttribute="bottom" constant="2" id="yog-nO-FOz"/>
+                </constraints>
+            </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <connections>
+                <outlet property="amountTitleLabel" destination="i32-ai-m3A" id="UU2-By-KOa"/>
+                <outlet property="amountToPayLabel" destination="Bkt-tZ-yEK" id="Gpp-vm-BEy"/>
+                <outlet property="amountToPayTextField" destination="dTi-Kg-qO3" id="UWD-ZQ-WQ5"/>
+                <outlet property="changeButton" destination="iUx-gF-x24" id="Qbf-OH-a4S"/>
+                <outlet property="deleteButton" destination="t7f-La-naQ" id="lW4-nw-hfL"/>
+                <outlet property="editingStack" destination="qqV-nd-vIi" id="BeH-ET-fIm"/>
+                <outlet property="progressBar" destination="RIs-q4-Lzo" id="rFr-Rs-If2"/>
+                <outlet property="restAmountLabel" destination="Eir-EW-N8s" id="VZg-mH-Xfa"/>
+                <outlet property="restTitleLabel" destination="kDo-He-wkJ" id="Jee-L7-Jlr"/>
+                <outlet property="totalLabel" destination="sAJ-EP-dQ7" id="RRL-hK-rYM"/>
+                <outlet property="totalNameLabel" destination="Z8I-jm-9W0" id="vGO-y2-Hk9"/>
+            </connections>
+            <point key="canvasLocation" x="17" y="-49"/>
+        </tableViewCell>
+    </objects>
+    <designables>
+        <designable name="Z8I-jm-9W0">
+            <size key="intrinsicContentSize" width="69" height="14.333333333333334"/>
+        </designable>
+        <designable name="i32-ai-m3A">
+            <size key="intrinsicContentSize" width="86" height="14.333333333333334"/>
+        </designable>
+        <designable name="iUx-gF-x24">
+            <size key="intrinsicContentSize" width="310" height="310"/>
+        </designable>
+        <designable name="kDo-He-wkJ">
+            <size key="intrinsicContentSize" width="28.666666666666668" height="14.333333333333334"/>
+        </designable>
+        <designable name="t7f-La-naQ">
+            <size key="intrinsicContentSize" width="25" height="29"/>
+        </designable>
+    </designables>
+    <resources>
+        <image name="pencil.yellow" width="310" height="310"/>
+        <image name="trash" width="25" height="29"/>
+        <namedColor name="CategoryColor">
+            <color red="0.86699998378753662" green="0.86699998378753662" blue="0.86699998378753662" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="SecondaryBacroundColor">
+            <color red="0.078000001609325409" green="0.086000002920627594" blue="0.086000002920627594" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <namedColor name="balanceTitleColor">
+            <color red="0.43399998545646667" green="0.43399998545646667" blue="0.43399998545646667" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <namedColor name="negativeColor">
+            <color red="0.87800002098083496" green="0.071000002324581146" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>

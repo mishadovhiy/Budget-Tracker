@@ -34,6 +34,7 @@ extension UITableView {
     
     enum XibCell:String {
         case amount = "AmountToPayCell"
+        case switcher = "SwitchCell"
     }
     
 }

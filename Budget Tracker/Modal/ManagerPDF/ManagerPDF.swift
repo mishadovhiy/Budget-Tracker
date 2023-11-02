@@ -21,7 +21,6 @@ class ManagerPDF {
         self.additionalData = data
     }
     var additionalData:[AdditionalPDFData]
-    
     let pageWidth:CGFloat = 612
     private func showError(title:String, description:String? = nil) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -31,14 +30,17 @@ class ManagerPDF {
     func exportPDF(sender:UIView) {
 
         AppDelegate.shared?.banner.toggleFullScreenAdd(self.vc, type: .pdf, loaded: {
-            $0?.fullScreenContentDelegate = self.vc as! GADFullScreenContentDelegate
+            (self.vc as? StatisticVC)?.fullScrAd = $0
+            (self.vc as? StatisticVC)?.fullScrAd?.fullScreenContentDelegate = self.vc as! any GADFullScreenContentDelegate
         }, completion: {
             guard let pdf = self.createPDF(),
                   let pdfData = pdf.dataRepresentation() else {
                 self.showError(title: "Error creating PDF")
                 return
             }
-            self.vc.presentShareVC(with: [pdfData], sender:sender)
+            let newVC = AttributedStringTestVC.configure(pdf: self)
+            self.vc.navigationController?.pushViewController(newVC, animated: true)
+           // self.vc.presentShareVC(with: [pdfData], sender:sender)
         })
         
     }
@@ -84,6 +86,8 @@ extension ManagerPDF {
             var image:Data? = nil
             var title:String? = nil
             var description:String? = nil
+            
+            
         }
 
         struct DefaultHeader {

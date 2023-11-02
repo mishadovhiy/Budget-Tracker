@@ -64,6 +64,9 @@ class AppData {
         }
     }
     
+    /**
+     - to check pro version
+     */
     var proEnabeled:Bool {
         let result = proTrial || proVersion
         return devMode ? !(forceNotPro ?? !result) : result
@@ -220,7 +223,8 @@ class AppData {
     }
     
     let testIds:[String] = [
-        "092BAEA3-9810-4A80-ADEF-53ABC78F9CA0"
+        "092BAEA3-9810-4A80-ADEF-53ABC78F9CA0",
+        "C2F525EB-3192-4483-9F29-50F1DA63BECF"
     ]
 
 
