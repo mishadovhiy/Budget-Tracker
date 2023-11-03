@@ -16,7 +16,7 @@ class adBannerView: UIView {
     var fullScreenDelegates:[String:FullScreenDelegate] = [:]
     @IBOutlet weak var backgroundView: UIView!
     @IBOutlet private weak var adStack: UIStackView!
-    let videoShowDelay:Double = 20
+    let videoShowDelay:Double = 3 * 60
     var _size:CGFloat = 0
     var adHidden = true
     var adNotReceved = true
@@ -166,7 +166,10 @@ class adBannerView: UIView {
     }
     
     
-    private var showedBanner:[FullScreenBanner:Date] = [:]
+    //private var showedBanner:[FullScreenBanner:Date] = [:]
+    private var showedBanner:Date?
+
+    
     
     private func presentFullScreen(_ vc:UIViewController, loaded:@escaping(GADFullScreenPresentingAd?)->()) {
         //here
@@ -185,7 +188,7 @@ class adBannerView: UIView {
     func bannerCanShow(type:FullScreenBanner, completion:@escaping(_ show:Bool)->()) {
         DispatchQueue(label: "db",  qos: .userInitiated).async {
             if !(AppDelegate.shared?.appData.proEnabeled ?? false) {
-                if let from = self.showedBanner[type] {
+                if let from = self.showedBanner {
                     let now = Date()
                     let dif = now.timeIntervalSince(from)
                     if dif >= self.videoShowDelay {
@@ -244,6 +247,7 @@ class adBannerView: UIView {
     private var showedBannerTime:Data?
     private func adWatched() -> Bool {
         //10
+        //showedBannerTime
         return true
     }
 }
@@ -268,7 +272,8 @@ extension adBannerView {
         }
        
         if let type = presentingFullType {
-            self.showedBanner.updateValue(Date(), forKey: type)
+            //self.showedBanner.updateValue(Date(), forKey: type)
+            self.showedBanner = Date()
             if self.adWatched() {
                 self.fullScreenDelegates.forEach({
                     $0.value.toggleAdView(false)
