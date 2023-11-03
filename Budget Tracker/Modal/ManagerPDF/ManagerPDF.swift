@@ -27,21 +27,28 @@ class ManagerPDF {
         appDelegate.newMessage.show(title:title, description: description, type: .error)
         
     }
-    func exportPDF(sender:UIView) {
-
-        AppDelegate.shared?.banner.toggleFullScreenAdd(self.vc, type: .pdf, loaded: {
-            (self.vc as? StatisticVC)?.fullScrAd = $0
-            (self.vc as? StatisticVC)?.fullScrAd?.fullScreenContentDelegate = self.vc as! any GADFullScreenContentDelegate
-        }, completion: {
-            guard let pdf = self.createPDF(),
-                  let pdfData = pdf.dataRepresentation() else {
-                self.showError(title: "Error creating PDF")
-                return
-            }
+    func exportPDF(sender:UIView, toEdit:Bool = true) {
+        
+        guard let pdf = self.createPDF(),
+              let pdfData = pdf.dataRepresentation() else {
+            self.showError(title: "Error creating PDF")
+            return
+        }
+        if !toEdit {
+            self.vc.navigationController?.popViewController(animated: true)
+            AppDelegate.shared?.banner.toggleFullScreenAdd(self.vc, type: .pdf, loaded: {
+                (self.vc as? StatisticVC)?.fullScrAd = $0
+                (self.vc as? StatisticVC)?.fullScrAd?.fullScreenContentDelegate = self.vc as! any GADFullScreenContentDelegate
+            }, closed: {
+            //    self.vc.navigationController?.topViewController?.presentShareVC(with: [pdfData], sender: sender)
+                self.vc.presentShareVC(with: [pdfData], sender:sender)
+            })
+            
+        } else {
             let newVC = AttributedStringTestVC.configure(pdf: self)
             self.vc.navigationController?.pushViewController(newVC, animated: true)
-           // self.vc.presentShareVC(with: [pdfData], sender:sender)
-        })
+        }
+        
         
     }
 

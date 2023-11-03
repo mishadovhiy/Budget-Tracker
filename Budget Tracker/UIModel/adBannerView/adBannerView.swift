@@ -48,14 +48,25 @@ class adBannerView: UIView {
         }
     }
     
-    func toggleFullScreenAdd(_ vc:UIViewController, type:FullScreenBanner, loaded:@escaping(GADFullScreenPresentingAd?)->(), completion:@escaping()->()) {
+    var smallAddHideHolder:Bool = true
+    func toggleFullScreenAdd(_ vc:UIViewController, type:FullScreenBanner, loaded:@escaping(GADFullScreenPresentingAd?)->(), closed:@escaping()->()) {
         bannerCanShow(type: type) { show in
             if show {
-                self.bannerShowCompletion = completion
+                self.bannerShowCompletion = closed
                 self.presentingFullType = type
-                self.presentFullScreen(vc, loaded: loaded)
+                if !self.adHidden {
+                    self.smallAddHideHolder = self.adHidden
+                    self.hide(ios13Hide: true, completion: {
+                        self.presentFullScreen(vc, loaded: loaded)
+                    })
+                } else {
+                    self.smallAddHideHolder = self.adHidden
+                    self.presentFullScreen(vc, loaded: loaded)
+
+                }
+                
             } else {
-                completion()
+                closed()
             }
         }
         
@@ -63,7 +74,7 @@ class adBannerView: UIView {
 
     
     
-    public func appeare(force:Bool = false) {
+    public func appeare(force:Bool = false, completion:(()->())? = nil) {
         
         var go:Bool {
             if #available(iOS 13.0, *) {
@@ -77,16 +88,20 @@ class adBannerView: UIView {
                 self.adHidden = false
                 DispatchQueue.main.async {
                     self.isHidden = false
-                    UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0, options: .allowAnimatedContent) {
+                    UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.85, initialSpringVelocity: 0, options: .allowAnimatedContent, animations: {
                         //self.alpha = 1
                         self.backgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
-                    }
+                    }, completion: {_ in
+                        completion?()
+                    })
                 }
+            } else {
+                completion?()
             }
         }
     }
     
-    public func hide(remove:Bool = false, ios13Hide:Bool = false) {
+    public func hide(remove:Bool = false, ios13Hide:Bool = false, completion:(()->())? = nil) {
         
         var go:Bool {
             if #available(iOS 13.0, *) {
@@ -107,8 +122,11 @@ class adBannerView: UIView {
                     if remove {
                         self.removeAd()
                     }
+                    completion?()
                 }
             }
+        } else {
+            completion?()
         }
     }
     
@@ -239,8 +257,16 @@ extension adBannerView {
     }
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
         print("adDidDismissFullScreenContent")
-        bannerShowCompletion?()
+        let holderCompletion = bannerShowCompletion
         bannerShowCompletion = nil
+        if !smallAddHideHolder {
+            self.appeare(force: true) {
+                holderCompletion?()
+            }
+        } else {
+            holderCompletion?()
+        }
+       
         if let type = presentingFullType {
             self.showedBanner.updateValue(Date(), forKey: type)
             if self.adWatched() {

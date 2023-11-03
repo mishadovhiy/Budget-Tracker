@@ -2711,7 +2711,7 @@
                             </connections>
                         </segmentedControl>
                         <barButtonItem key="rightBarButtonItem" title="share" style="plain" id="h6I-pJ-oGC">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="KvP-WS-BeQ" customClass="AdsButton" customModule="Budget_Tracker" customModuleProvider="target">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="KvP-WS-BeQ" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                 <rect key="frame" x="299.33333333333331" y="5" width="110.66666666666669" height="34.333333333333336"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" name="AccentColor"/>

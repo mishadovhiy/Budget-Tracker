@@ -84,7 +84,7 @@ class RemindersVC: SuperViewController {
         AppDelegate.shared?.banner.toggleFullScreenAdd(self, type: .paymentReminder, loaded: {
             self.interstitial = $0
             self.interstitial?.fullScreenContentDelegate = self
-        }, completion: {
+        }, closed: {
             self.performAddReminder()
         })
     }

@@ -8,22 +8,43 @@
 
 import UIKit
 
-class AttributedStringTestVC:UIViewController {
+class AttributedStringTestVC:SuperViewController {
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var attributeLabel: UILabel!
-    weak var pdfData:ManagerPDF?
+    var pdfData:ManagerPDF?
+    @IBOutlet weak var exportPdfButton: AdsButton!
     var appearedPdfData:ManagerPDF?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(pdfData, " grefrwed")
         appearedPdfData = pdfData
         updatePDF()
         createSettingsContainer()
+        AppDelegate.shared?.banner.fullScreenDelegates.updateValue(self, forKey: self.restorationIdentifier!)
+
     }
     
+    
+    
+    override func viewDidDismiss() {
+        super.viewDidDismiss()
+        AppDelegate.shared?.banner.fullScreenDelegates.removeValue(forKey: self.restorationIdentifier!)
+        pdfData = nil
+        appearedPdfData = nil
+
+    }
+    var firstAppeared = false
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         updateNavButtons()
+        if !firstAppeared {
+            firstAppeared = true
+            AppDelegate.shared?.banner.bannerCanShow(type: .pdf, completion: {
+                self.exportPdfButton.toggleAdView(show: $0)
+            })
+            
+        }
     }
     
     func updatePDF() {
@@ -98,32 +119,12 @@ class AttributedStringTestVC:UIViewController {
     }
     
     func updateNavButtons() {
-        var results:[UIBarButtonItem] = []
-        if !isEditing {
-            results.append(.init(title: "Edit", style: .done, target: nil, action: #selector(editingPressed)))
-            results.append(.init(title: "Save", style: .done, target: nil, action: #selector(savePressed)))
-            results.append(.init(title: "Export", style: .done, target: nil, action: #selector(exportPressed)))
-            
-        } else {
-            results.append(.init(title: "done", style: .done, target: nil, action: #selector(doneEditingPressed)))
-        }
-        self.navigationController?.navigationItem.rightBarButtonItems = results
-    }
-    
-    @objc func exportPressed() {
-        pdfData?.exportPDF(sender: self.navigationController?.view ?? .init())
-    }
-    
-    @objc func savePressed() {
         
     }
-    
-    @objc func doneEditingPressed() {
-        setEditing(false, animated: true)
-    }
-    
-    @objc func editingPressed() {
-        setEditing(true, animated: true)
+
+    @IBAction func exportPdfPressed(_ sender: Any) {
+        pdfData!.exportPDF(sender: self.navigationController?.view ?? .init(), toEdit: false)
+
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -136,6 +137,11 @@ class AttributedStringTestVC:UIViewController {
     }
 }
 
+extension AttributedStringTestVC:FullScreenDelegate {
+    func toggleAdView(_ show: Bool) {
+        exportPdfButton.toggleAdView(show: show)
+    }
+}
 
 extension AttributedStringTestVC {
     static func configure(pdf:ManagerPDF?) -> AttributedStringTestVC {

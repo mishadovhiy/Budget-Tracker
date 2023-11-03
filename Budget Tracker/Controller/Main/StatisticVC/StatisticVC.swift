@@ -12,7 +12,7 @@ import GoogleMobileAds
 
 var filterAndGoToStatistic: IndexPath?
 class StatisticVC: SuperViewController, CALayerDelegate {
-    @IBOutlet weak var createPdfButton: AdsButton!
+    @IBOutlet weak var createPdfButton: TouchButton!
     @IBOutlet weak var hostView: CPTGraphHostingView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentControll: UISegmentedControl!
@@ -26,7 +26,6 @@ class StatisticVC: SuperViewController, CALayerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUI()
-        AppDelegate.shared?.banner.fullScreenDelegates.updateValue(self, forKey: self.restorationIdentifier!)
 
     }
     
@@ -41,13 +40,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
             updateUI()
             
         }
-        if !firstAppeared {
-            firstAppeared = true
-            AppDelegate.shared?.banner.bannerCanShow(type: .pdf, completion: {
-                self.createPdfButton.toggleAdView(show: $0)
-            })
-            
-        }
+        
        // segmentControll.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: K.Colors.balanceV ?? .white], for: .normal)
        // segmentControll.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor(named: "darkTableColor") ?? .black], for: .selected)
         
@@ -94,7 +87,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
 //            allData.forEach({data.append($0)})
 //        }
         let dict:[[String:Any]] = data.compactMap({ $0.dict})
-        var pdf:ManagerPDF = .init(dict: ["Budget Tracker":dict], pageTitle: "", vc: self, data: [.init(defaultHeader: .init(duration: appData.filter.periodText, type: isAll ? "All time" : (segmentControll.selectedSegmentIndex == 0 ? "Expenses" : "Incomes")))])
+        let pdf:ManagerPDF = .init(dict: ["Budget Tracker":dict], pageTitle: "", vc: self, data: [.init(defaultHeader: .init(duration: appData.filter.periodText, type: isAll ? "All time" : (segmentControll.selectedSegmentIndex == 0 ? "Expenses" : "Incomes")))])
         pdf.exportPDF(sender: sender as! UIButton)
     }
     
@@ -213,11 +206,8 @@ class StatisticVC: SuperViewController, CALayerDelegate {
         }
         hideandShowGrapg()
     }
-    override func viewDidDismiss() {
-        super.viewDidDismiss()
-        AppDelegate.shared?.banner.fullScreenDelegates.removeValue(forKey: self.restorationIdentifier!)
 
-    }
+    
     @IBAction func clodePressed(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
@@ -440,11 +430,7 @@ extension StatisticVC:GADFullScreenContentDelegate {
     }
 }
 
-extension StatisticVC:FullScreenDelegate {
-    func toggleAdView(_ show: Bool) {
-        createPdfButton.toggleAdView(show: show)
-    }
-}
+
 
 
 extension StatisticVC {

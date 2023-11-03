@@ -374,7 +374,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t5p-0E-DTn">
-                                <rect key="frame" x="0.0" y="59.000000000000007" width="430" height="20.333333333333336"/>
+                                <rect key="frame" x="0.0" y="103" width="430" height="20.333333333333329"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -395,14 +395,29 @@
                             <constraint firstAttribute="bottom" secondItem="fnn-Q2-90r" secondAttribute="bottom" id="sQX-rs-Tiw"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="DQG-zR-UeB">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="ims-UX-AAS">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="d9Q-Qs-93K" customClass="AdsButton" customModule="Budget_Tracker" customModuleProvider="target">
+                                <rect key="frame" x="315" y="5.6666666666666679" width="95" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Export"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Export"/>
+                                <connections>
+                                    <action selector="exportPdfPressed:" destination="mUO-Zs-kQa" eventType="touchUpInside" id="IzL-kc-NTY"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="attributeLabel" destination="t5p-0E-DTn" id="HGY-C3-Qpy"/>
                         <outlet property="containerView" destination="fnn-Q2-90r" id="7ja-oW-IXb"/>
+                        <outlet property="exportPdfButton" destination="d9Q-Qs-93K" id="m5S-p6-r16"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zKQ-PW-edk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3637" y="819"/>
+            <point key="canvasLocation" x="4534.8837209302328" y="818.88412017167389"/>
         </scene>
         <!--Select Value CollectionVC-->
         <scene sceneID="ijs-w8-pav">
@@ -442,6 +457,24 @@
             </objects>
             <point key="canvasLocation" x="4675" y="108"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="7Dk-IS-KGp">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Xqx-ES-aFD" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Whf-Vk-cFu">
+                        <rect key="frame" x="0.0" y="59" width="430" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="mUO-Zs-kQa" kind="relationship" relationship="rootViewController" id="UX5-1u-F3F"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HrV-s4-Vfp" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3636.2790697674418" y="818.88412017167389"/>
+        </scene>
     </scenes>
     <designables>
         <designable name="EEe-TY-xAJ">
@@ -455,6 +488,9 @@
         </designable>
         <designable name="T04-sT-3MF">
             <size key="intrinsicContentSize" width="27.333333333333332" height="15.666666666666666"/>
+        </designable>
+        <designable name="d9Q-Qs-93K">
+            <size key="intrinsicContentSize" width="74" height="34.333333333333336"/>
         </designable>
         <designable name="j4h-St-yMg">
             <size key="intrinsicContentSize" width="31" height="15.666666666666666"/>
