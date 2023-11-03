@@ -58,27 +58,36 @@ class AttributedStringTestVC:SuperViewController {
     
     
     func createPreferencesData() -> [SelectValueVC.SelectValueSections] {
-        var header: [SelectValueVC.SelectValueStruct] = (self.pdfData?.additionalData ?? []).compactMap({
-            .init(name: $0.custom?.title ?? "-")
+        var header: [SelectValueVC.SelectValueStruct] = (self.pdfData?.additionalData.headers ?? []).compactMap({
+            return .init(name: $0.custom?.title ?? "")
         })
         header.append(.init(name: "Remove header", switcher: .init(isOn: false, switched: {
-            if $0 {
-                if !(self.pdfData?.additionalData.contains(where: {$0.custom != nil}) ?? false) {
-                    self.pdfData?.additionalData.insert(.init(custom: .init()), at: 0)
-                }
-            } else {
-                self.pdfData?.additionalData.removeAll(where: {$0.defaultHeader != nil})
-
-            }
+            self.pdfData?.additionalData.defaultHeader = $0
             self.reloadTable()
         })))
         header.append(.init(name: "Add header", regular: .init(didSelect: {
-            self.toEnterValue("Enter new header")
+            self.toEnterValue("Enter new header", nextPressed: {
+                self.pdfData?.additionalData.headers.append(.init(custom: .init(title:$0)))
+
+            })
+        })))
+        var footers: [SelectValueVC.SelectValueStruct] = (self.pdfData?.additionalData.footers ?? []).compactMap({
+            return .init(name: $0.custom?.title ?? "")
+        })
+        footers.append(.init(name: "Remove footer", switcher: .init(isOn: false, switched: {
+            self.pdfData?.additionalData.defaultFooter = $0
+            self.reloadTable()
+        })))
+        footers.append(.init(name: "Add footer", regular: .init(didSelect: {
+            self.toEnterValue("Enter new footer", nextPressed: {
+                self.pdfData?.additionalData.footers.append(.init(custom: .init(title:$0)))
+
+            })
         })))
         return [
             .init(sectionName: "Header", cells: header),
             .init(sectionName: "Transaction", cells: []),
-            .init(sectionName: "Footer", cells: [])
+            .init(sectionName: "Footer", cells: footers)
         ]
     }
     
@@ -96,11 +105,10 @@ class AttributedStringTestVC:SuperViewController {
     }
 
     
-    func toEnterValue(_ title:String) {
+    func toEnterValue(_ title:String, nextPressed:@escaping(_ string:String)->()) {
         let vc = EnterValueVC.configure()
         vc.screenData = .init(taskName: "", title: title, placeHolder: "", nextAction: {
-            //get topVC tfHeight
-            self.pdfData?.additionalData.append(.init(custom: .init(title:$0)))
+            nextPressed($0)
             self.settingsNav?.popViewController(animated: true)
             self.reloadTable()
         }, screenType: .string)
@@ -127,14 +135,6 @@ class AttributedStringTestVC:SuperViewController {
 
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        if let url = attributeLabel.linkPressed(at: touches) {
-            pdfData?.additionalData.append(.init(custom: .init()))
-            updatePDF()
-            print(url, " ynhtbgrvfec")
-        }
-    }
 }
 
 extension AttributedStringTestVC:FullScreenDelegate {

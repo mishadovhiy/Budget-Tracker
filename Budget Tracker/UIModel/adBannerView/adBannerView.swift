@@ -271,7 +271,7 @@ extension adBannerView {
             holderCompletion?()
         }
        
-        if let type = presentingFullType {
+        if let _ = presentingFullType {
             //self.showedBanner.updateValue(Date(), forKey: type)
             self.showedBanner = Date()
             if self.adWatched() {

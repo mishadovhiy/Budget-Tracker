@@ -14,13 +14,13 @@ class ManagerPDF {
     private var vc:UIViewController
     private var pageTitle:String
     private var dict:[String:Any]
-    init(dict: [String : Any], pageTitle:String, vc:UIViewController, data:[AdditionalPDFData]) {
+    init(dict: [String : Any], pageTitle:String, vc:UIViewController, data:PdfData) {
         self.dict = dict
         self.pageTitle = pageTitle
         self.vc = vc
         self.additionalData = data
     }
-    var additionalData:[AdditionalPDFData]
+    var additionalData:PdfData = .init(headers: [], footers: [])
     let pageWidth:CGFloat = 612
     private func showError(title:String, description:String? = nil) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -62,9 +62,9 @@ class ManagerPDF {
         return (res, data.1)
     }
     
-    func test() -> [NSAttributedString] {
-        return UnparcePDF(manager: self).dictionaryToString(dict, data: additionalData, fromCreate: true).0
-    }
+//    func test() -> [NSAttributedString] {
+//        return UnparcePDF(manager: self).dictionaryToString(dict, data: additionalData, fromCreate: true).0
+//    }
 
     private func createPDF() -> PDFDocument? {
         let pdfDocument = PDFDocument()
@@ -85,6 +85,13 @@ class ManagerPDF {
 
 
 extension ManagerPDF {
+    struct PdfData {
+        var defaultHeaderData:AdditionalPDFData.DefaultHeader? = nil
+        var defaultHeader:Bool = true
+        var headers:[AdditionalPDFData]
+        var defaultFooter:Bool = true
+        var footers:[AdditionalPDFData]
+    }
     struct AdditionalPDFData {
         var custom:Custom?
         var defaultHeader:DefaultHeader?
@@ -93,8 +100,6 @@ extension ManagerPDF {
             var image:Data? = nil
             var title:String? = nil
             var description:String? = nil
-            
-            
         }
 
         struct DefaultHeader {

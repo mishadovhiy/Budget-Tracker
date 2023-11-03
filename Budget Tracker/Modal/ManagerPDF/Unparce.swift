@@ -13,15 +13,22 @@ import UIKit
 struct UnparcePDF {
     let manager:ManagerPDF
     
-    func dictionaryToString(_ dictionary:[String:Any], data:[ManagerPDF.AdditionalPDFData], fromCreate:Bool = false) -> ([NSAttributedString], CGFloat) {
+    func dictionaryToString(_ dictionary:[String:Any], data:ManagerPDF.PdfData, fromCreate:Bool = false) -> ([NSAttributedString], CGFloat) {
         var height:CGFloat = 0
         var text:[NSAttributedString] = []
-        //NSMutableAttributedString = .init(attributedString: .init(string: ""))
-        data.forEach({
-            let header = documentHeader(data: $0, fromCreate: true)
+        if data.defaultHeader {
+            let header = documentHeader(data: .init(defaultHeader: data.defaultHeaderData!), fromCreate: true)
             text.append(header)
-            height += ($0.height ?? 170)
+            height += 145
+        }
+        data.headers.forEach({
+            let header = customHeader(data: $0)
+            text.append(header.0)
+            text.append(.init(string: "\n"))
+            height += (header.1)
         })
+        text.append(.init(string: "\n\n\n"))
+        height += 40
         dictionary.forEach({
             if let val = $0.value as? [String:Any] {
                 val.forEach({
@@ -42,8 +49,29 @@ struct UnparcePDF {
                 text.append(self.row(($0.key, $0.value)))
             }
         })
-        text.append(footer)
-        height += 140
+        if data.defaultFooter {
+            text.append(footer)
+            height += 140
+        }
+        
+        data.footers.forEach({
+            let header = customHeader(data: $0)
+            text.append(header.0)
+            text.append(.init(string: "\n"))
+            height += (header.1)
+        })
+        return (text, height)
+    }
+    
+    private func customHeader(data:ManagerPDF.AdditionalPDFData) -> (NSMutableAttributedString, CGFloat) {
+        let text:NSMutableAttributedString = .init(string: "")
+        let attributes:[NSAttributedString.Key : Any] = [
+            .font:UIFont.systemFont(ofSize: 12, weight: .bold),
+            .foregroundColor:self.color,
+        ]
+        text.append(.init(string: data.custom?.title ?? "-", attributes: attributes))
+        let height = text.string.calculate(font: .systemFont(ofSize: 12, weight: .bold), inWindth: manager.pageWidth).height
+        print(text.string, " gerfeefwrgef ", height)
         return (text, height)
     }
     
@@ -70,8 +98,7 @@ struct UnparcePDF {
             .font:UIFont.systemFont(ofSize: 10, weight: .bold),
             .foregroundColor:(K.Colors.balanceT ?? .red).cgColor
         ]))
-
-        text.append(.init(string: "\n\n\n\n\n"))
+        text.append(.init(string: "\n"))
         return text
     }
     

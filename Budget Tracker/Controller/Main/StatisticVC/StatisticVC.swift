@@ -83,11 +83,11 @@ class StatisticVC: SuperViewController, CALayerDelegate {
     }
     @IBAction func sharePressed(_ sender: Any) {
         let data = allData
-//        for _ in 0..<50 {
-//            allData.forEach({data.append($0)})
-//        }
+
         let dict:[[String:Any]] = data.compactMap({ $0.dict})
-        let pdf:ManagerPDF = .init(dict: ["Budget Tracker":dict], pageTitle: "", vc: self, data: [.init(defaultHeader: .init(duration: appData.filter.periodText, type: isAll ? "All time" : (segmentControll.selectedSegmentIndex == 0 ? "Expenses" : "Incomes")))])
+        let type = isAll ? "All time" : (segmentControll.selectedSegmentIndex == 0 ? "Expenses" : "Incomes")
+        let pdf:ManagerPDF = .init(dict: ["Budget Tracker":dict], pageTitle: "", vc: self, data: .init(defaultHeaderData:.init(duration: appData.filter.periodText, type: type), headers: [], footers: []))
+
         pdf.exportPDF(sender: sender as! UIButton)
     }
     
