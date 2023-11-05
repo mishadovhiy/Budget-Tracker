@@ -113,10 +113,85 @@ extension DataBase {
             }
         }
 
-        
-        
+        struct PDFProperties {
+            var dict:[String:Any]
+            init(dict: [String:Any]) {
+                self.dict = dict
+            }
+            
+            var text:PdfTextProperties? {
+                get {
+                    return .init(dict: dict["PdfTextProperties"] as? [String:Any] ?? [:])
+                }
+                set {
+                    if let value = newValue {
+                        dict.updateValue(value, forKey: "PdfTextProperties")
+                    } else {
+                        dict.removeValue(forKey: "PdfTextProperties")
+                    }
+                }
+            }
+        }
         
     }
 }
 
+struct PdfTextProperties {
+    var dict:[String:Any]
+    init(dict: [String:Any]) {
+        self.dict = dict
+    }
+    
+    var alighment:TextAlighment {
+        get {
+            return .init(rawValue: dict["alighment"] as! String) ?? .left
+        }
+        set {
+            dict.updateValue(newValue, forKey: "alighment")
+        }
+    }
+    
+    var textColor:String? {
+        get {
+            return dict["textColor"] as? String
+        }
+        set {
+            if let value = newValue {
+                dict.updateValue(value, forKey: "textColor")
+            } else {
+                dict.removeValue(forKey: "textColor")
+            }
+        }
+    }
+
+    var textSize:TextSize {
+        get {
+            return .init(rawValue: dict["textSize"] as! String) ?? .small
+        }
+        set {
+            dict.updateValue(newValue, forKey: "textSize")
+        }
+    }
+    
+    
+    enum TextSize:String {
+        case small
+        case big
+    }
+    enum TextAlighment:String {
+        case center, right, left
+        static let allCases:[TextAlighment] = [.center, .right, .left]
+        
+        var textAligment:NSTextAlignment {
+            switch self {
+            case .center:
+                return .center
+            case .right:
+                return .right
+            case .left:
+                return .left
+            }
+        }
+    }
+}
 

@@ -38,7 +38,7 @@ struct PagePDF {
         
     }
     
-    func createPDFPage(fromAttributes text: NSMutableAttributedString, textHeight:CGFloat, pageWidth:CGFloat) -> PDFPage? {
+    func createPDFPage(fromAttributes text: NSMutableAttributedString, textHeight:CGFloat, pageWidth:CGFloat, background:CGColor) -> PDFPage? {
        // let textFont = UIFont.systemFont(ofSize: 65.0)
         let contentWidth = pageWidth + 80
         let textSizeCalc = textHeight//text.string.calculate(font: textFont, inWindth: pageWidth - 100)
@@ -49,7 +49,7 @@ struct PagePDF {
         UIGraphicsBeginPDFContextToData(pdfData, pageRect, [:])
         UIGraphicsBeginPDFPageWithInfo(pageRect, nil)
         let context = UIGraphicsGetCurrentContext()
-        context?.setFillColor((K.Colors.background ?? .red).cgColor)
+        context?.setFillColor(background)
             context?.fill(pageRect)
         
         let textRect = CGRect(x: 50, y: 50, width: pageWidth - 100, height: textHeight)

@@ -152,8 +152,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         }
         
         self.window?.endEditing(true)
-        if ViewController.shared?.sideBarShowing ?? false {
-            ViewController.shared?.toggleSideBar(false, animated: true)
+        if HomeVC.shared?.sideBarShowing ?? false {
+            HomeVC.shared?.toggleSideBar(false, animated: true)
         }
     }
     

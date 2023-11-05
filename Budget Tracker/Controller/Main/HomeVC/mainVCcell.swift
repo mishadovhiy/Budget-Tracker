@@ -67,7 +67,7 @@ class mainVCcell: ClearCell {
         
         let value = String(format:"%.0f", Double(data.value) ?? 0.0)
         valueLabel.text = Double(data.value) ?? 0.0 > 0.0 ? "+\(value)" : value
-        let category = ViewController.shared?.db.category(data.categoryID)
+        let category = HomeVC.shared?.db.category(data.categoryID)
         if AppDelegate.shared!.symbolsAllowed {
             categoryImage.image = AppData.iconSystemNamed(category?.icon)
         } else {

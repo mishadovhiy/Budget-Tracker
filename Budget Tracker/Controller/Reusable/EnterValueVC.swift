@@ -25,14 +25,15 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
     @IBOutlet weak var userNameTitleLabel: UILabel!
     @IBOutlet weak private var userNameLabel: UILabel!
 
-    
+    var selectionStackData:[SelectionStackView.SelectionData]?
+    weak var selectionStackView:SelectionStackView?
     override func viewDidLoad() {
         super.viewDidLoad()
         
         valueTextField.addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
         valueTextField.delegate = self
         updateScreen()
-        
+        loadUI()
         
     }
 
@@ -63,7 +64,7 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
     
     var textFieldValue:String?
     
-    public func presentScreen(in nav:UINavigationController, with data: EnterValueVCScreenData, defaultValue:String? = nil) {
+    static func presentScreen(in nav:UINavigationController, with data: EnterValueVCScreenData, defaultValue:String? = nil) {
 
         DispatchQueue.main.async {
             let storyboard = UIStoryboard(name: "LogIn", bundle: nil)
@@ -153,9 +154,12 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
     }
     
 
+    func loadUI() {
+        if let selectionStackData = selectionStackData {
+            selectionStackView = .create(self.view, data: selectionStackData)
+        }
+    }
     
-    
-    static var shared:EnterValueVC = EnterValueVC()
     
     
     

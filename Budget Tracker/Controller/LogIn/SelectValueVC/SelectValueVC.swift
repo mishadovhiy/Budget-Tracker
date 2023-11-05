@@ -16,7 +16,7 @@ class SelectValueVC: SuperViewController {
     var tableData:[SelectValueSections] = []
     var delegate: SelectUserVCDelegate?
     var titleText:String?
-    
+    var corneredTable:Bool = false
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.registerCell([.switcher])

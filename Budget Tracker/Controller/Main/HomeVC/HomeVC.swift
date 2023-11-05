@@ -8,7 +8,7 @@
 
 import UIKit
 import Combine
-class ViewController: SuperViewController {
+class HomeVC: SuperViewController {
     typealias TransitionComponents = (albumCoverImageView: UIImageView?, albumNameLabel: UILabel?)
     public var transitionComponents = TransitionComponents(albumCoverImageView: nil, albumNameLabel: nil)
     let transitionAppearenceManager = AnimatedTransitioningManager(duration: 0.267)
@@ -50,7 +50,7 @@ class ViewController: SuperViewController {
     @IBOutlet weak var bigExpensesStack: UIStackView!
     
     @IBOutlet weak var sideBarContentBlockerView: UIView!
-    weak static var shared: ViewController?
+    weak static var shared: HomeVC?
     var fromSideBar = false
     var _notificationsCount = (0,0)
     var sidescrolling = false
@@ -121,7 +121,7 @@ class ViewController: SuperViewController {
         
         pinchView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:))))
         self.sideBarContentBlockerView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:))))
-        ViewController.shared = self
+        HomeVC.shared = self
         sideBar.load()
         toggleSideBar(false, animated: false)
         

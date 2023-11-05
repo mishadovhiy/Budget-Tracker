@@ -26,7 +26,7 @@ final class AnimatedTransitioningManager: NSObject, UIViewControllerAnimatedTran
               let toVC = transitionContext.viewController(forKey: .to) else {
             fatalError()
         }
-        if let homeVC = fromVC as? ViewController ?? toVC as? ViewController,
+        if let homeVC = fromVC as? HomeVC ?? toVC as? HomeVC,
            let transactionVC = toVC as? TransitionVC ?? fromVC as? TransitionVC {
             self.transactionPerform(homeVC: homeVC, transactionVC: transactionVC, using: transitionContext)
         } else if let homeVC = fromVC as? HistoryVC ?? toVC as? HistoryVC,
@@ -55,8 +55,8 @@ private extension AnimatedTransitioningManager {
         var viewFrame:CGRect? = nil
     }
     
-    func transactionPerform(homeVC:ViewController, transactionVC:TransitionVC, using transitionContext: UIViewControllerContextTransitioning) {
-        let show = (transitionContext.viewController(forKey: .from) as? ViewController) != nil
+    func transactionPerform(homeVC:HomeVC, transactionVC:TransitionVC, using transitionContext: UIViewControllerContextTransitioning) {
+        let show = (transitionContext.viewController(forKey: .from) as? HomeVC) != nil
         let plusButton = homeVC.addTransitionButton
         presentImageVC(.init(animatedView: show ? transactionVC.valueLabel : homeVC.addTransitionButton, primatyView: show ? transactionVC.view : homeVC.view), from: .init(animatedView: show ? plusButton : plusButton, primatyView: show ? homeVC.view : transactionVC.view), with: transitionContext, isPresenting: show)
     }

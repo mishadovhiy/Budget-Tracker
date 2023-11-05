@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="fAO-8x-ux9">
     <device id="retina6_72" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
@@ -15,9 +14,9 @@
         <!--Home-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController storyboardIdentifier="ViewController" id="BYZ-38-t0r" customClass="ViewController" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ViewController" id="BYZ-38-t0r" customClass="HomeVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="777"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0IY-8A-3Cd">
@@ -306,19 +305,19 @@
                                                                 <rect key="frame" x="0.0" y="0.0" width="390" height="50"/>
                                                                 <subviews>
                                                                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4d7-Fl-6zl" customClass="BasicView" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="4" height="35"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="321" height="35"/>
                                                                         <subviews>
                                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="Bpw-oX-ZtL">
-                                                                                <rect key="frame" x="2" y="0.0" width="0.0" height="33"/>
+                                                                                <rect key="frame" x="2" y="0.0" width="317" height="33"/>
                                                                                 <subviews>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Data from" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tWb-PR-x7Z">
-                                                                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="33"/>
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="277" height="33"/>
                                                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                                         <color key="textColor" name="balanceTitleColor"/>
                                                                                         <nil key="highlightedColor"/>
                                                                                     </label>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="flQ-Ba-Szl">
-                                                                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="33"/>
+                                                                                        <rect key="frame" x="277" y="0.0" width="40" height="33"/>
                                                                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
                                                                                         <color key="textColor" name="balanceTitleColor"/>
                                                                                         <nil key="highlightedColor"/>
@@ -341,18 +340,19 @@
                                                                         </userDefinedRuntimeAttributes>
                                                                     </view>
                                                                     <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TlO-Ln-54D" customClass="BasicView" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="4" height="2"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="321" height="2"/>
                                                                         <subviews>
                                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="meX-ga-QXR">
-                                                                                <rect key="frame" x="2" y="0.0" width="0.0" height="0.0"/>
+                                                                                <rect key="frame" x="2" y="0.0" width="317" height="0.0"/>
                                                                                 <subviews>
-                                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Unsaved Data:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gwp-y1-Jmr" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
+                                                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unsaved Data:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gwp-y1-Jmr" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
+                                                                                        <rect key="frame" x="0.0" y="0.0" width="277" height="0.0"/>
                                                                                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                                                         <color key="textColor" name="balanceTitleColor"/>
                                                                                         <nil key="highlightedColor"/>
                                                                                     </label>
                                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x8a-G7-gqu">
-                                                                                        <rect key="frame" x="0.0" y="0.0" width="40" height="0.0"/>
+                                                                                        <rect key="frame" x="277" y="0.0" width="40" height="0.0"/>
                                                                                         <constraints>
                                                                                             <constraint firstAttribute="width" constant="40" id="p2J-PH-vuc"/>
                                                                                         </constraints>
@@ -1874,7 +1874,7 @@
             <objects>
                 <viewController storyboardIdentifier="TransitionVC" id="o1K-SN-bUx" customClass="TransitionVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="405-H3-8an">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="814"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c9d-cL-RPP" userLabel="doneButton" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
@@ -2769,7 +2769,7 @@
             <objects>
                 <viewController storyboardIdentifier="HistoryVC" id="Zmr-vi-AsB" customClass="HistoryVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4Hr-9J-3zH">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="922"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nMe-Ik-tvJ">
@@ -3618,7 +3618,7 @@
             <objects>
                 <viewController storyboardIdentifier="CalendarVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="5n4-P6-pnR" customClass="CalendarVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="67i-SE-sWB">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="922"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="278-rW-rj0" userLabel="headetView">
@@ -4081,180 +4081,6 @@
             <point key="canvasLocation" x="-1169.1588785046729" y="-23.326133909287257"/>
         </scene>
     </scenes>
-    <designables>
-        <designable name="0oV-VO-FeH">
-            <size key="intrinsicContentSize" width="13" height="22"/>
-        </designable>
-        <designable name="1vj-92-UOQ">
-            <size key="intrinsicContentSize" width="30" height="39"/>
-        </designable>
-        <designable name="2Jn-7a-agR">
-            <size key="intrinsicContentSize" width="30" height="55"/>
-        </designable>
-        <designable name="2np-os-Y0H">
-            <size key="intrinsicContentSize" width="19" height="22"/>
-        </designable>
-        <designable name="5Bz-pA-1Zk">
-            <size key="intrinsicContentSize" width="226.66666666666666" height="26.333333333333332"/>
-        </designable>
-        <designable name="6QC-Nh-XH7">
-            <size key="intrinsicContentSize" width="30" height="55"/>
-        </designable>
-        <designable name="7DN-DG-lHp"/>
-        <designable name="8Qd-Zo-Mqf">
-            <size key="intrinsicContentSize" width="89.333333333333329" height="30"/>
-        </designable>
-        <designable name="8lL-T5-97L">
-            <size key="intrinsicContentSize" width="63" height="18"/>
-        </designable>
-        <designable name="9iz-tv-iMd">
-            <size key="intrinsicContentSize" width="30" height="55"/>
-        </designable>
-        <designable name="CJF-1D-UVd">
-            <size key="intrinsicContentSize" width="58" height="15.666666666666666"/>
-        </designable>
-        <designable name="CxJ-K9-I6v">
-            <size key="intrinsicContentSize" width="30" height="55"/>
-        </designable>
-        <designable name="GhQ-Pl-q1R">
-            <size key="intrinsicContentSize" width="30" height="36"/>
-        </designable>
-        <designable name="HCu-31-FZE">
-            <size key="intrinsicContentSize" width="34" height="16"/>
-        </designable>
-        <designable name="HRs-9q-ZqI">
-            <size key="intrinsicContentSize" width="47" height="15.666666666666666"/>
-        </designable>
-        <designable name="IhO-B5-kQQ">
-            <size key="intrinsicContentSize" width="45.333333333333336" height="13.333333333333334"/>
-        </designable>
-        <designable name="JIF-7p-C1E">
-            <size key="intrinsicContentSize" width="103.66666666666667" height="18"/>
-        </designable>
-        <designable name="JJR-Nl-rYc">
-            <size key="intrinsicContentSize" width="15" height="20.333333333333332"/>
-        </designable>
-        <designable name="JQu-2B-c5Z">
-            <size key="intrinsicContentSize" width="30" height="30"/>
-        </designable>
-        <designable name="Jds-VY-N0Z">
-            <size key="intrinsicContentSize" width="30" height="55"/>
-        </designable>
-        <designable name="KvP-WS-BeQ">
-            <size key="intrinsicContentSize" width="79" height="30"/>
-        </designable>
-        <designable name="NXe-cX-Hfu">
-            <size key="intrinsicContentSize" width="76.666666666666671" height="26.333333333333332"/>
-        </designable>
-        <designable name="O46-Bh-qBM">
-            <size key="intrinsicContentSize" width="174.66666666666666" height="30"/>
-        </designable>
-        <designable name="OgK-5z-ssL">
-            <size key="intrinsicContentSize" width="30" height="36"/>
-        </designable>
-        <designable name="OyJ-pP-66Q">
-            <size key="intrinsicContentSize" width="78.333333333333329" height="13.333333333333334"/>
-        </designable>
-        <designable name="QH9-Ow-4a2">
-            <size key="intrinsicContentSize" width="44.333333333333336" height="15.666666666666666"/>
-        </designable>
-        <designable name="TGK-Ax-n0d">
-            <size key="intrinsicContentSize" width="30" height="36"/>
-        </designable>
-        <designable name="TTP-GQ-6kd">
-            <size key="intrinsicContentSize" width="33.333333333333336" height="15.666666666666666"/>
-        </designable>
-        <designable name="VZM-jH-tpn">
-            <size key="intrinsicContentSize" width="38.333333333333336" height="13.333333333333334"/>
-        </designable>
-        <designable name="Vsx-oo-isP">
-            <size key="intrinsicContentSize" width="19" height="22"/>
-        </designable>
-        <designable name="W31-Wn-OVi">
-            <size key="intrinsicContentSize" width="50.333333333333336" height="13.333333333333334"/>
-        </designable>
-        <designable name="WI4-9c-ADb">
-            <size key="intrinsicContentSize" width="106" height="16"/>
-        </designable>
-        <designable name="ZDZ-cE-jf2">
-            <size key="intrinsicContentSize" width="30" height="55"/>
-        </designable>
-        <designable name="ZwM-nG-kM6">
-            <size key="intrinsicContentSize" width="26.666666666666668" height="12"/>
-        </designable>
-        <designable name="aI2-8y-K70">
-            <size key="intrinsicContentSize" width="30" height="48"/>
-        </designable>
-        <designable name="c9d-cL-RPP">
-            <size key="intrinsicContentSize" width="30" height="36"/>
-        </designable>
-        <designable name="dSw-Y8-OrZ">
-            <size key="intrinsicContentSize" width="23.666666666666668" height="18"/>
-        </designable>
-        <designable name="daM-fM-aqs">
-            <size key="intrinsicContentSize" width="34" height="36"/>
-        </designable>
-        <designable name="gIt-0L-4IJ">
-            <size key="intrinsicContentSize" width="30" height="48"/>
-        </designable>
-        <designable name="gve-Pc-cyc">
-            <size key="intrinsicContentSize" width="70" height="28"/>
-        </designable>
-        <designable name="gwp-y1-Jmr">
-            <size key="intrinsicContentSize" width="88.333333333333329" height="15.666666666666666"/>
-        </designable>
-        <designable name="hSo-nA-Zbw">
-            <size key="intrinsicContentSize" width="30" height="55"/>
-        </designable>
-        <designable name="ieF-m1-ryE">
-            <size key="intrinsicContentSize" width="48" height="15.666666666666666"/>
-        </designable>
-        <designable name="j8N-A3-4Wm">
-            <size key="intrinsicContentSize" width="36" height="30"/>
-        </designable>
-        <designable name="jBw-Wl-arg">
-            <size key="intrinsicContentSize" width="32.333333333333336" height="18"/>
-        </designable>
-        <designable name="jDM-Q8-4VJ">
-            <size key="intrinsicContentSize" width="30" height="55"/>
-        </designable>
-        <designable name="jaM-jn-Fof">
-            <size key="intrinsicContentSize" width="51" height="16"/>
-        </designable>
-        <designable name="kdg-LE-BIm">
-            <size key="intrinsicContentSize" width="30" height="55"/>
-        </designable>
-        <designable name="pK6-4E-O38">
-            <size key="intrinsicContentSize" width="17.333333333333332" height="22"/>
-        </designable>
-        <designable name="qT6-jw-Pe1">
-            <size key="intrinsicContentSize" width="30" height="30"/>
-        </designable>
-        <designable name="rGq-Aj-Zje">
-            <size key="intrinsicContentSize" width="94.666666666666671" height="27.666666666666668"/>
-        </designable>
-        <designable name="rol-B0-EZ3">
-            <size key="intrinsicContentSize" width="26.333333333333332" height="12"/>
-        </designable>
-        <designable name="sug-Eq-lTO">
-            <size key="intrinsicContentSize" width="30" height="55"/>
-        </designable>
-        <designable name="uIj-ta-GpH">
-            <size key="intrinsicContentSize" width="51.333333333333336" height="17"/>
-        </designable>
-        <designable name="xfe-uw-b7y">
-            <size key="intrinsicContentSize" width="30" height="34"/>
-        </designable>
-        <designable name="yG8-rV-0Py">
-            <size key="intrinsicContentSize" width="30" height="34"/>
-        </designable>
-        <designable name="ydl-Nt-YBv">
-            <size key="intrinsicContentSize" width="30" height="36"/>
-        </designable>
-        <designable name="zDz-M6-AUL">
-            <size key="intrinsicContentSize" width="30" height="48"/>
-        </designable>
-    </designables>
     <inferredMetricsTieBreakers>
         <segue reference="HlC-bb-GVq"/>
         <segue reference="6Wq-Fx-QbE"/>

@@ -51,7 +51,7 @@ struct Notifications {
                 print(notificationsCount, "notificationsCountnotificationsCountnotificationsCount")
                 DispatchQueue.main.async {
                     UIApplication.shared.applicationIconBadgeNumber = ids.count
-                    ViewController.shared?.notificationsCount = notificationsCount
+                    HomeVC.shared?.notificationsCount = notificationsCount
                     Notifications.notificationsCount = notificationsCount
                     
                 }

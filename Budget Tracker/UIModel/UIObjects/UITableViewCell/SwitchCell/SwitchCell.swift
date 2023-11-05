@@ -9,13 +9,14 @@
 import UIKit
 
 class SwitchCell: ClearCell {
-    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var switcher: UISwitch!
     private var changedAction:((Bool)->())?
     
     func set(title:String, isOn:Bool, changed:@escaping(Bool)->()) {
         titleLabel.text = title
         changedAction = changed
+        switcher.isOn = isOn
         switcher.addTarget(self, action: #selector(switched(_:)), for: .valueChanged)
         
     }

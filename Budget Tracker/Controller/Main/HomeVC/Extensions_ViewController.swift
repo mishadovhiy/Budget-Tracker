@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension ViewController {
+extension HomeVC {
     func scrollHead(_ scrollView: UIScrollView) {
         let offset = scrollView.contentOffset.y * -1
         let height = calendarContainer.frame.height * (-2)
@@ -704,7 +704,7 @@ extension ViewController {
 }
 
 
-extension ViewController: TransitionVCProtocol {
+extension HomeVC: TransitionVCProtocol {
     func deletePressed() {
         if let editing = editingTransaction {
             editingTransaction = nil
@@ -1152,7 +1152,7 @@ extension ViewController: TransitionVCProtocol {
 
 
 
-extension ViewController {
+extension HomeVC {
     enum ViewControllerType {
         case home
         case paymentReminders

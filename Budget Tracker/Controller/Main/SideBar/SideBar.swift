@@ -21,12 +21,12 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         
         var accpuntCell:CellData {
             return CellData(name: "Account".localize, value: appData.username == "" ? "Log in".localize : appData.username, segue: "", image: "person.fill", selectAction: {
-                ViewController.shared?.navigationController?.pushViewController(LoginViewController.configure(), animated: true)
+                HomeVC.shared?.navigationController?.pushViewController(LoginViewController.configure(), animated: true)
             })
         }
         
         let settingsCell:CellData = .init(name: "Settings".localize, value: "", segue: "", image: "gearshape.fill", selectAction: {
-            ViewController.shared?.navigationController?.pushViewController(SettingsVC.configure(), animated: true)
+            HomeVC.shared?.navigationController?.pushViewController(SettingsVC.configure(), animated: true)
         })
         
         let dbb = DataBase().db
@@ -34,21 +34,21 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         
         var categories:[CellData] = [
             .init(name: "Categories".localize, value: "\(catsCo.count - debts)", segue: "", image: "folder.fill", selectAction: {
-                ViewController.shared?.toCategories()
+                HomeVC.shared?.toCategories()
             }),
             .init(name: "Debts".localize, value: "\(debts)", segue: "", image: "rectangle.3.group.fill", pro: nil, notifications: notifications.0, selectAction: {
-                ViewController.shared?.toCategories(type: .debts)
+                HomeVC.shared?.toCategories(type: .debts)
             })//!(pro) ? 3 : nil
         ]
         let localCount = ((dbb[K.Keys.localTrancations] as? [[String:Any]] ?? []) + (dbb[K.Keys.localCategories] as? [[String:Any]] ?? [])).count
         if localCount > 0 {
             categories.append(CellData(name: "Local Data".localize, value: "\(localCount)", segue: "", image: "tray.fill", selectAction: {
-                ViewController.shared?.toCategories(type: .localData)
+                HomeVC.shared?.toCategories(type: .localData)
             }))
         }
         
         let statistic:CellData = .init(name: "Statistic".localize, value: "", segue: "", image: "chart.pie.fill", selectAction: {
-            ViewController.shared?.toStatistic(thisMonth: false, isExpenses: true)
+            HomeVC.shared?.toStatistic(thisMonth: false, isExpenses: true)
         })
         let trialDays = dbb["trialToExpireDays"] as? Int ?? 0
         let trialCell = CellData(name: "Trail till", value: "\(7 - trialDays)", segue: "", image: "clock.fill", selectAction: {
@@ -61,7 +61,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         }
         
         let upcommingRemiders:CellData = .init(name: "Payment reminders".localize, value: "", segue: "", image: "bell.fill", pro: nil, notifications: notifications.1, selectAction: {
-            ViewController.shared?.navigationController?.pushViewController(RemindersVC.configure(), animated: true)
+            HomeVC.shared?.navigationController?.pushViewController(RemindersVC.configure(), animated: true)
         })//!(pro) ? 0 : nil
         let applePay:CellData = .init(name: "apple pay".localize, value: "", segue: "", image: "chart.pie.fill", selectAction: applePayPressed)
         tableData = [
@@ -71,7 +71,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
             .init(section: [statistic, applePay], title: "", hidden: false),
         ]
         DispatchQueue.main.async {
-            ViewController.shared?.sideTableView.reloadData()
+            HomeVC.shared?.sideTableView.reloadData()
         }
         
     }
@@ -114,15 +114,15 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
     func toRemindersVC() {
         DispatchQueue.main.async {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let vccc = storyboard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
-            ViewController.shared?.navigationController?.pushViewController(vccc, animated: true)
+            let vccc = storyboard.instantiateViewController(withIdentifier: "ViewController") as! HomeVC
+            HomeVC.shared?.navigationController?.pushViewController(vccc, animated: true)
         }
     }
     
     func load() {
-        if ViewController.shared?.sideTableView.delegate == nil {
-                ViewController.shared?.sideTableView.delegate = self
-                ViewController.shared?.sideTableView.dataSource = self
+        if HomeVC.shared?.sideTableView.delegate == nil {
+                HomeVC.shared?.sideTableView.delegate = self
+                HomeVC.shared?.sideTableView.dataSource = self
         }
         
         DispatchQueue(label: "db", qos: .userInitiated).async {
@@ -161,9 +161,9 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
             if tableData[indexPath.section].section[indexPath.row].name != "" {
                 let segue = tableData[indexPath.section].section[indexPath.row].segue
                 if segue != "" {
-                    ViewController.shared?.fromSideBar = true
+                    HomeVC.shared?.fromSideBar = true
                     DispatchQueue.main.async {
-                        ViewController.shared?.performSegue(withIdentifier: segue, sender: self)
+                        HomeVC.shared?.performSegue(withIdentifier: segue, sender: self)
                     }
                 } else {
                     if let action = tableData[indexPath.section].section[indexPath.row].selectAction {

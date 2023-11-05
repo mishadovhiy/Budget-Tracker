@@ -130,7 +130,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                 if appData.username != "" {
                     AppData.categoriesHolder = nil
                     appData.needDownloadOnMainAppeare = false
-                    ViewController.shared?.downloadFromDB()
+                    HomeVC.shared?.downloadFromDB()
                 }
             }
         }

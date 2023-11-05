@@ -563,7 +563,7 @@ class MoreOptionsData {
         if let data = data {
             DispatchQueue.main.async {
                 if let nav = self.vc.navigationController {
-                    EnterValueVC.shared.presentScreen(in: nav, with: data, defaultValue:nil)
+                    EnterValueVC.presentScreen(in: nav, with: data, defaultValue:nil)
                     
                 }
             }

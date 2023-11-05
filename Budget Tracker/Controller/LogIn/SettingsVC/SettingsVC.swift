@@ -66,7 +66,7 @@ class SettingsVC: SuperViewController {
         if let data = data {
             DispatchQueue.main.async {
                 if let nav = self.navigationController {
-                    EnterValueVC.shared.presentScreen(in: nav, with: data, defaultValue:nil)
+                    EnterValueVC.presentScreen(in: nav, with: data, defaultValue:nil)
                     
                 }
             }

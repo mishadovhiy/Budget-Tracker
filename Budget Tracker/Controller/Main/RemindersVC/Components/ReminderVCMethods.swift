@@ -81,8 +81,8 @@ extension RemindersVC {
                         self.newMessage?.show(title: Text.success, description: "Transaction has been added!".localize, type: .succsess)
                     }
                 }
-                ViewController.shared?.actionAfterAdded = completion
-                ViewController.shared?.addNewTransaction(value: reminder.transaction.value, category: reminder.transaction.categoryID, date: self.today, comment: reminder.transaction.comment, reminderTime: nil, repeated: nil)
+                HomeVC.shared?.actionAfterAdded = completion
+                HomeVC.shared?.addNewTransaction(value: reminder.transaction.value, category: reminder.transaction.categoryID, date: self.today, comment: reminder.transaction.comment, reminderTime: nil, repeated: nil)
             }
         }
     }

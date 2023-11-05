@@ -20,6 +20,8 @@ struct UnparcePDF {
             let header = documentHeader(data: .init(defaultHeader: data.defaultHeaderData!), fromCreate: true)
             text.append(header)
             height += 145
+        } else {
+            text.append(.init(string: "  \n"))
         }
         data.headers.forEach({
             let header = customHeader(data: $0)
@@ -67,7 +69,7 @@ struct UnparcePDF {
         let text:NSMutableAttributedString = .init(string: "")
         let attributes:[NSAttributedString.Key : Any] = [
             .font:UIFont.systemFont(ofSize: 12, weight: .bold),
-            .foregroundColor:self.color,
+            .foregroundColor:textColor(for: data.custom?.textSettins.textColor) ?? primaryColor,
         ]
         text.append(.init(string: data.custom?.title ?? "-", attributes: attributes))
         let height = text.string.calculate(font: .systemFont(ofSize: 12, weight: .bold), inWindth: manager.pageWidth).height
@@ -82,21 +84,21 @@ struct UnparcePDF {
         attachment.bounds = .init(x: 0, y: -8, width: 40, height: 40)
         text.append(.init(attachment: attachment))
 
-        var attributes:[NSAttributedString.Key : Any] = [
+        let attributes:[NSAttributedString.Key : Any] = [
             .font:UIFont.systemFont(ofSize: 28, weight: .bold),
-            .foregroundColor:self.color,
+            .foregroundColor:self.primaryColor,
         ]
-        if fromCreate {
-            attributes.updateValue(URL(string: "https://mishadovhiy.com")!, forKey: .link)
-        }
+//        if fromCreate {
+//            attributes.updateValue(URL(string: "https://mishadovhiy.com")!, forKey: .link)
+//        }
         text.append(.init(string: "  Transactions History ", attributes: attributes))
         text.append(.init(string: "From Budget Tracker\n\n", attributes: [
             .font:UIFont.systemFont(ofSize: 12, weight: .bold),
-            .foregroundColor:(K.Colors.balanceT ?? .red).cgColor
+            .foregroundColor:secondaryColor
         ]))
         text.append(.init(string: (data.defaultHeader?.type.capitalized ?? "") + " for " + (data.defaultHeader?.duration ?? ""), attributes: [
             .font:UIFont.systemFont(ofSize: 10, weight: .bold),
-            .foregroundColor:(K.Colors.balanceT ?? .red).cgColor
+            .foregroundColor:secondaryColor
         ]))
         text.append(.init(string: "\n"))
         return text
@@ -117,7 +119,7 @@ struct UnparcePDF {
         view.addSubview(label)
         let label2 = UILabel(frame: .init(origin: .init(x: labelFrame.minX, y: labelFrame.minY + 15), size: labelFrame.size))
         label2.text = "Budget Tracker"
-        label2.textColor = UIColor(cgColor: color as! CGColor)
+        label2.textColor = UIColor(cgColor: primaryColor as! CGColor)
         label2.font = .systemFont(ofSize: 30, weight: .black)
         view.addSubview(label2)
         let attachment = NSTextAttachment()
@@ -147,22 +149,33 @@ struct UnparcePDF {
     }
     
     private func category(_ value:Any?) -> NSAttributedString {
-        return .init(string: ((value as? [String:Any])?["Name"] as? String ?? "Unknown Category").uppercased(), attributes: [.font:UIFont.systemFont(ofSize: 18, weight: .bold), .foregroundColor:self.color])
+        return .init(string: ((value as? [String:Any])?["Name"] as? String ?? "Unknown Category").uppercased(), attributes: [.font:UIFont.systemFont(ofSize: 18, weight: .bold), .foregroundColor:self.primaryColor])
     }
     
-    let color:AnyObject = (K.Colors.category ?? .white).cgColor
+    var primaryColor:AnyObject {
+        return manager.properties.colors.primaryGet
+    }
+    
+    var secondaryColor:AnyObject {
+        return manager.properties.colors.secondaryGet
+    }
+    
+    private func textColor(for userColor: String?) -> CGColor? {
+        let defaultColor = UIColor(cgColor: primaryColor as! CGColor)
+        return manager.properties.colors.getColor(defaultColor: defaultColor, color: userColor)
+    }
     
     private func row(_ dict:(String, Any)) -> NSAttributedString {
         let res:NSMutableAttributedString = .init(string: "")
         if let newdict = dict.1 as? [String:Any] {
-            res.append(.init(string: "\(dict.0)", attributes: [.font:UIFont.systemFont(ofSize: 9, weight: .light), .foregroundColor:self.color]))
+            res.append(.init(string: "\(dict.0)", attributes: [.font:UIFont.systemFont(ofSize: 9, weight: .light), .foregroundColor:self.primaryColor]))
             newdict.forEach {
                 res.append(self.row(($0.key, $0.value)))
             }
         } else {
             let keys = ["name", "transactions", "category", "value", "Name"]
             if keys.contains(dict.0) {
-                res.append(.init(string: "\(dict.0): \(dict.1)\n", attributes: [.font:UIFont.systemFont(ofSize: 9, weight: .light), .foregroundColor:self.color]))
+                res.append(.init(string: "\(dict.0): \(dict.1)\n", attributes: [.font:UIFont.systemFont(ofSize: 9, weight: .light), .foregroundColor:self.primaryColor]))
             }
             
         }
@@ -180,11 +193,11 @@ private extension UnparcePDF {
         label.frame.size = .init(width: size.width, height: 40)
         let string:NSMutableAttributedString = .init(string: "Total: ", attributes: [
             .font: UIFont.systemFont(ofSize: 12, weight: .regular),
-            .foregroundColor: self.color
+            .foregroundColor: self.primaryColor
         ])
         string.append(.init(string: value, attributes: [
             .font: UIFont.systemFont(ofSize: 14, weight: .semibold),
-            .foregroundColor: self.color
+            .foregroundColor: self.primaryColor
         ]))
         label.attributedText = string
         view.addSubview(label)
@@ -199,7 +212,7 @@ private extension UnparcePDF {
         let dateLabel = UILabel(frame: .init(origin: .zero, size: size))
         dateLabel.text = transaction?.date ?? ""
         dateLabel.textAlignment = .left
-        dateLabel.textColor = K.Colors.balanceT
+        dateLabel.textColor = UIColor(cgColor: secondaryColor as! CGColor)
         dateLabel.font = .systemFont(ofSize: 9, weight: .regular)
         view.addSubview(dateLabel)
         
@@ -207,7 +220,7 @@ private extension UnparcePDF {
             let commentLabel = UILabel(frame: .init(origin: .init(x: 80, y: 0), size: .init(width: manager.pageWidth / 2, height: size.height)))
             commentLabel.text = transaction?.comment
             commentLabel.textAlignment = .left
-            commentLabel.textColor = K.Colors.balanceT
+            commentLabel.textColor = UIColor(cgColor:secondaryColor as! CGColor)
             commentLabel.font = .systemFont(ofSize: 9, weight: .regular)
             view.addSubview(commentLabel)
         }
@@ -216,7 +229,7 @@ private extension UnparcePDF {
         let valueLabel = UILabel(frame: .init(origin: .zero, size: size))
         valueLabel.text = transaction?.value ?? ""
         valueLabel.textAlignment = .right
-        valueLabel.textColor = .init(cgColor: color as! CGColor)
+        valueLabel.textColor = .init(cgColor: primaryColor as! CGColor)
         valueLabel.font = .systemFont(ofSize: 12, weight: .semibold)
         view.addSubview(valueLabel)
         dotts(in: view, size: size)
@@ -228,7 +241,7 @@ private extension UnparcePDF {
         for i in 0..<(Int(size.width) / separetor) {
             let dotWidth:CGFloat = 3
             let dott = UIView(frame: .init(x: ((CGFloat(separetor) + dotWidth) * CGFloat(i)), y: size.height - 1, width: dotWidth, height: 0.8))
-            dott.backgroundColor = K.Colors.balanceT
+            dott.backgroundColor = UIColor(cgColor: secondaryColor as! CGColor)
             dott.layer.cornerRadius = 0.5
             view.addSubview(dott)
         }

@@ -9,13 +9,13 @@
 import UIKit
 
 class TransactionsManager {
-    var calculation:ViewController.Calculations?
+    var calculation:HomeVC.Calculations?
     var dataTaskCount:(Int, Int)?
     var taskChanged:(((Int, Int)?)->())?
     var filterChanged:Bool = false
     var daysBetween = [""]
 
-    func new(transactions:[TransactionsStruct]) -> [ViewController.tableStuct] {
+    func new(transactions:[TransactionsStruct]) -> [HomeVC.tableStuct] {
         let filtered = dataToDict(transactions)
         return dictToTable(filtered).sorted{
             Calendar.current.date(from: $0.date ) ?? Date.distantFuture >
@@ -79,7 +79,7 @@ class TransactionsManager {
         
     }
     
-    func dictToTable(_ dict:[String:[TransactionsStruct]]) -> [ViewController.tableStuct] {
+    func dictToTable(_ dict:[String:[TransactionsStruct]]) -> [HomeVC.tableStuct] {
         return dict.compactMap { (key: String, value: [TransactionsStruct]) in
             let co = DateComponents()
             let transactions = value.sorted { Double($0.value) ?? 0.0 < Double($1.value) ?? 0.0 }
@@ -92,9 +92,9 @@ class TransactionsManager {
         }
     }
     
-    private func amountForTransactions(_ transactions:[TransactionsStruct]) -> (Double,  ViewController.Calculations) {
+    private func amountForTransactions(_ transactions:[TransactionsStruct]) -> (Double,  HomeVC.Calculations) {
         var result:Double = 0
-        var calcs:ViewController.Calculations = .init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)
+        var calcs:HomeVC.Calculations = .init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)
         for transaction in transactions {
             let amount = (Double(transaction.value) ?? 0.0)
             result += amount
@@ -110,7 +110,7 @@ class TransactionsManager {
         let currentCalcs = calculation ?? .init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)
       //  calculations = .init(expenses: currentCalcs.expenses + calcs.expenses, income: currentCalcs.income + calcs.income, balance: calculations.balance, perioudBalance: currentCalcs.perioudBalance + calcs.perioudBalance)
        // return result
-        let calc:ViewController.Calculations = .init(expenses: currentCalcs.expenses + calcs.expenses, income: currentCalcs.income + calcs.income, balance: currentCalcs.balance, perioudBalance: currentCalcs.perioudBalance + calcs.perioudBalance)
+        let calc:HomeVC.Calculations = .init(expenses: currentCalcs.expenses + calcs.expenses, income: currentCalcs.income + calcs.income, balance: currentCalcs.balance, perioudBalance: currentCalcs.perioudBalance + calcs.perioudBalance)
         self.calculation = calc
         return (result, calc)
         

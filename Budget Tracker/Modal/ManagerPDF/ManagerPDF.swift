@@ -66,10 +66,12 @@ class ManagerPDF {
 //        return UnparcePDF(manager: self).dictionaryToString(dict, data: additionalData, fromCreate: true).0
 //    }
 
+    
     private func createPDF() -> PDFDocument? {
         let pdfDocument = PDFDocument()
         let text = pdfString()
-        guard let page = generator.createPDFPage(fromAttributes: .init(attributedString: text.0), textHeight: text.1, pageWidth: pageWidth)
+
+        guard let page = generator.createPDFPage(fromAttributes: .init(attributedString: text.0), textHeight: text.1, pageWidth: pageWidth, background: properties.colors.backgroundGet)
         else {
             showError(title: "Error converting to pdf image")
             return nil
@@ -80,6 +82,49 @@ class ManagerPDF {
     
     lazy var generator:PagePDF = .init()
 
+    var properties:UnparceProps = .init()
+    struct UnparceProps {
+        var colors:Colors = .init()
+        struct Colors {
+            var background:String?
+            var primary:String?
+            var secondary:String?
+            var tint:String?
+            
+            var backgroundGet:CGColor {
+                return getColor(defaultColor: K.Colors.background, color: background)
+            }
+            
+            var primaryGet:CGColor {
+                return getColor(defaultColor: K.Colors.category, color: primary)
+            }
+            
+            var secondaryGet:CGColor {
+                return getColor(defaultColor: K.Colors.balanceT, color: secondary)
+            }
+            
+            var tintGet:CGColor {
+                return getColor(defaultColor: K.Colors.balanceT, color: secondary)
+            }
+            
+            
+            
+            func getColor(defaultColor:UIColor?, color:String?) -> CGColor {
+                let defaultColor = defaultColor ?? .white
+                if let value = color {
+                    if !value.contains("#") {
+                        return (UIColor(named: value) ?? defaultColor).cgColor
+                    } else {
+                        return (UIColor(hex: value) ?? defaultColor).cgColor
+
+                    }
+                } else {
+                    return defaultColor.cgColor
+                }
+            }
+        }
+        
+    }
 }
 
 
@@ -100,6 +145,10 @@ extension ManagerPDF {
             var image:Data? = nil
             var title:String? = nil
             var description:String? = nil
+            
+            var textSettins:PdfTextProperties = .init(dict: [:])
+            
+            
         }
 
         struct DefaultHeader {

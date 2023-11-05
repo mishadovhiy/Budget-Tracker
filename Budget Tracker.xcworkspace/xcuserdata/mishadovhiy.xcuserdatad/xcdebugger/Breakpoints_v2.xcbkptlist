@@ -6329,9 +6329,9 @@
             filePath = "Budget Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "115"
-            endingLineNumber = "115"
-            landmarkName = "reloadTable()"
+            startingLineNumber = "147"
+            endingLineNumber = "147"
+            landmarkName = "toEnterValue(_:selectionData:nextPressed:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6345,8 +6345,8 @@
             filePath = "Budget Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "134"
-            endingLineNumber = "134"
+            startingLineNumber = "166"
+            endingLineNumber = "166"
             landmarkName = "exportPdfPressed(_:)"
             landmarkType = "7">
             <Locations>
@@ -6471,8 +6471,8 @@
             filePath = "Budget Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "33"
-            endingLineNumber = "33"
+            startingLineNumber = "34"
+            endingLineNumber = "34"
             landmarkName = "viewDidDismiss()"
             landmarkType = "7">
             <Locations>
@@ -6539,6 +6539,86 @@
             endingLineNumber = "425"
             landmarkName = "unknown"
             landmarkType = "0">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "828C4838-49E3-4436-8E5C-9A6E22D2E234"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Budget Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "197"
+            endingLineNumber = "197"
+            landmarkName = "colorPickerViewController(_:didSelect:continuously:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C83342AD-79BD-446F-9E62-3B2596A2A594"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Budget Tracker/Modal/ManagerPDF/PagePDF.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "19"
+            endingLineNumber = "19"
+            landmarkName = "createPDFPage(fromText:pageWidth:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8980D410-355D-4CB7-8072-0FFE1A54073F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Budget Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "189"
+            endingLineNumber = "189"
+            landmarkName = "colorPickerViewController(_:didSelect:continuously:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "8980D410-355D-4CB7-8072-0FFE1A54073F - 8ad8ec7166551eab"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static Budget_Tracker.AttributedStringTestVC.configure(pdf: Swift.Optional&lt;Budget_Tracker.ManagerPDF&gt;) -&gt; Budget_Tracker.AttributedStringTestVC"
+                  moduleName = "Budget Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "188"
+                  endingLineNumber = "188"
+                  offsetFromSymbolStart = "52">
+               </Location>
+               <Location
+                  uuid = "8980D410-355D-4CB7-8072-0FFE1A54073F - 759d08274ffffe47"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Budget_Tracker.AttributedStringTestVC.colorPickerViewController(_: __C.UIColorPickerViewController, didSelect: __C.UIColor, continuously: Swift.Bool) -&gt; ()"
+                  moduleName = "Budget Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "187"
+                  endingLineNumber = "187"
+                  offsetFromSymbolStart = "80">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

@@ -151,7 +151,7 @@ class adBannerView: UIView {
             if #available(iOS 13.0, *) {
                 BannerPublisher.valuePublisher.send(newValue)
             } else {
-                ViewController.shared?.bannerUpdated(newValue)
+                HomeVC.shared?.bannerUpdated(newValue)
             }
         }
     }
