@@ -30,8 +30,8 @@
             filePath = "Budget Tracker/AppDelegate/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "66"
-            endingLineNumber = "66"
+            startingLineNumber = "82"
+            endingLineNumber = "82"
             landmarkName = "application(_:didFinishLaunchingWithOptions:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -46,8 +46,8 @@
             filePath = "Budget Tracker/AppDelegate/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "178"
-            endingLineNumber = "178"
+            startingLineNumber = "194"
+            endingLineNumber = "194"
             landmarkName = "applicationDidBecomeActive(_:)"
             landmarkType = "7">
             <Locations>
@@ -94,8 +94,8 @@
             filePath = "Budget Tracker/AppDelegate/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "176"
-            endingLineNumber = "176"
+            startingLineNumber = "192"
+            endingLineNumber = "192"
             landmarkName = "applicationDidBecomeActive(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2231,6 +2231,21 @@
                   endingLineNumber = "82"
                   offsetFromSymbolStart = "296">
                </Location>
+               <Location
+                  uuid = "F67A1072-D4DC-4A96-816A-CDD421D9FE36 - 6eda06ea16c4ec96"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Budget_Tracker.AppDelegate.userNotificationCenter(_: __C.UNUserNotificationCenter, openSettingsFor: Swift.Optional&lt;__C.UNNotification&gt;) -&gt; ()"
+                  moduleName = "Budget Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mishadovhiy/Developer/Budget-Tracker/Budget%20Tracker/AppDelegate/AppDelegateExtensions.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "82"
+                  endingLineNumber = "82"
+                  offsetFromSymbolStart = "296">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -2308,6 +2323,21 @@
                   startingLineNumber = "77"
                   endingLineNumber = "77"
                   offsetFromSymbolStart = "732">
+               </Location>
+               <Location
+                  uuid = "52FA4404-5581-44A3-9CAD-3CEA3E51A75C - 966096773c584607"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Budget_Tracker.AppDelegate.application(_: __C.UIApplication, open: Foundation.URL, options: Swift.Dictionary&lt;__C.UIApplicationOpenURLOptionsKey, Any&gt;) -&gt; Swift.Bool"
+                  moduleName = "Budget Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mishadovhiy/Developer/Budget-Tracker/Budget%20Tracker/AppDelegate/AppDelegateExtensions.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "77"
+                  endingLineNumber = "77"
+                  offsetFromSymbolStart = "92">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -2562,8 +2592,8 @@
             filePath = "Budget Tracker/AppDelegate/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "137"
-            endingLineNumber = "137"
+            startingLineNumber = "153"
+            endingLineNumber = "153"
             landmarkName = "application(_:performActionFor:completionHandler:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2578,8 +2608,8 @@
             filePath = "Budget Tracker/AppDelegate/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "136"
-            endingLineNumber = "136"
+            startingLineNumber = "152"
+            endingLineNumber = "152"
             landmarkName = "application(_:performActionFor:completionHandler:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2770,8 +2800,8 @@
             filePath = "Budget Tracker/AppDelegate/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "46"
-            endingLineNumber = "46"
+            startingLineNumber = "47"
+            endingLineNumber = "47"
             landmarkName = "deviceType"
             landmarkType = "24">
          </BreakpointContent>
@@ -2818,8 +2848,8 @@
             filePath = "Budget Tracker/AppDelegate/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67"
+            startingLineNumber = "83"
+            endingLineNumber = "83"
             landmarkName = "application(_:didFinishLaunchingWithOptions:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2898,114 +2928,84 @@
             filePath = "Budget Tracker/AppDelegate/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "202"
-            endingLineNumber = "202"
+            startingLineNumber = "218"
+            endingLineNumber = "218"
             landmarkName = "performBackgroundFetch(completion:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "C0417C38-CAB4-4E4A-95B4-AAB706C6C7AC - 8c4296fbbe86367c"
+                  uuid = "C0417C38-CAB4-4E4A-95B4-AAB706C6C7AC - 776e62c4ff316f6e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Budget_Tracker.AppDelegate.applicationWillTerminate(__C.UIApplication) -&gt; ()"
+                  moduleName = "Budget Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mishadovhiy/Developer/Budget-Tracker/Budget%20Tracker/AppDelegate/AppDelegate.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "219"
+                  endingLineNumber = "219"
+                  offsetFromSymbolStart = "84">
+               </Location>
+               <Location
+                  uuid = "C0417C38-CAB4-4E4A-95B4-AAB706C6C7AC - 6e5cd7fd7dcf3b39"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "Budget_Tracker.AppDelegate.performBackgroundFetch(completion: Swift.Optional&lt;(Swift.Bool) -&gt; ()&gt;) -&gt; ()"
                   moduleName = "Budget Tracker"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/AppDelegate/AppDelegate.swift"
+                  urlString = "file:///Users/mishadovhiy/Developer/Budget-Tracker/Budget%20Tracker/AppDelegate/AppDelegate.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "201"
-                  endingLineNumber = "201"
-                  offsetFromSymbolStart = "1912">
+                  startingLineNumber = "217"
+                  endingLineNumber = "217"
+                  offsetFromSymbolStart = "476">
                </Location>
                <Location
-                  uuid = "C0417C38-CAB4-4E4A-95B4-AAB706C6C7AC - eabc7d04cc5ec051"
+                  uuid = "C0417C38-CAB4-4E4A-95B4-AAB706C6C7AC - 8a23c020f17c296"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "closure #1 @Sendable () -&gt; () in Budget_Tracker.AppDelegate.performBackgroundFetch(completion: Swift.Optional&lt;(Swift.Bool) -&gt; ()&gt;) -&gt; ()"
                   moduleName = "Budget Tracker"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/AppDelegate/AppDelegate.swift"
+                  urlString = "file:///Users/mishadovhiy/Developer/Budget-Tracker/Budget%20Tracker/AppDelegate/AppDelegate.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "202"
-                  endingLineNumber = "202"
-                  offsetFromSymbolStart = "408">
-               </Location>
-               <Location
-                  uuid = "C0417C38-CAB4-4E4A-95B4-AAB706C6C7AC - 8c4296fbbe86367c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Budget_Tracker.AppDelegate.performBackgroundFetch(completion: Swift.Optional&lt;(Swift.Bool) -&gt; ()&gt;) -&gt; ()"
-                  moduleName = "Budget Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/AppDelegate/AppDelegate.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "201"
-                  endingLineNumber = "201"
-                  offsetFromSymbolStart = "588">
-               </Location>
-               <Location
-                  uuid = "C0417C38-CAB4-4E4A-95B4-AAB706C6C7AC - eabc7d04cc5ec051"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 @Sendable () -&gt; () in Budget_Tracker.AppDelegate.performBackgroundFetch(completion: Swift.Optional&lt;(Swift.Bool) -&gt; ()&gt;) -&gt; ()"
-                  moduleName = "Budget Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/AppDelegate/AppDelegate.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "202"
-                  endingLineNumber = "202"
+                  startingLineNumber = "218"
+                  endingLineNumber = "218"
                   offsetFromSymbolStart = "36">
                </Location>
                <Location
-                  uuid = "C0417C38-CAB4-4E4A-95B4-AAB706C6C7AC - 8c4296fbbe86367c"
+                  uuid = "C0417C38-CAB4-4E4A-95B4-AAB706C6C7AC - 6e5cd7fd7dcf3b58"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "Budget_Tracker.AppDelegate.performBackgroundFetch(completion: Swift.Optional&lt;(Swift.Bool) -&gt; ()&gt;) -&gt; ()"
                   moduleName = "Budget Tracker"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/AppDelegate/AppDelegate.swift"
+                  urlString = "file:///Users/mishadovhiy/Developer/Budget-Tracker/Budget%20Tracker/AppDelegate/AppDelegate.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "201"
-                  endingLineNumber = "201"
+                  startingLineNumber = "218"
+                  endingLineNumber = "218"
                   offsetFromSymbolStart = "476">
                </Location>
                <Location
-                  uuid = "C0417C38-CAB4-4E4A-95B4-AAB706C6C7AC - 8c4296fbbe86399f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Budget_Tracker.AppDelegate.performBackgroundFetch(completion: Swift.Optional&lt;(Swift.Bool) -&gt; ()&gt;) -&gt; ()"
-                  moduleName = "Budget Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/AppDelegate/AppDelegate.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "202"
-                  endingLineNumber = "202"
-                  offsetFromSymbolStart = "476">
-               </Location>
-               <Location
-                  uuid = "C0417C38-CAB4-4E4A-95B4-AAB706C6C7AC - eabc7d04cc5ec070"
+                  uuid = "C0417C38-CAB4-4E4A-95B4-AAB706C6C7AC - 8a23c020f17c2b5"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
                   symbolName = "closure #1 @Sendable () -&gt; () in Budget_Tracker.AppDelegate.performBackgroundFetch(completion: Swift.Optional&lt;(Swift.Bool) -&gt; ()&gt;) -&gt; ()"
                   moduleName = "Budget Tracker"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/AppDelegate/AppDelegate.swift"
+                  urlString = "file:///Users/mishadovhiy/Developer/Budget-Tracker/Budget%20Tracker/AppDelegate/AppDelegate.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "203"
-                  endingLineNumber = "203"
+                  startingLineNumber = "219"
+                  endingLineNumber = "219"
                   offsetFromSymbolStart = "36">
                </Location>
             </Locations>
@@ -3021,8 +3021,8 @@
             filePath = "Budget Tracker/AppDelegate/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "116"
-            endingLineNumber = "116"
+            startingLineNumber = "132"
+            endingLineNumber = "132"
             landmarkName = "AppDelegate"
             landmarkType = "3">
          </BreakpointContent>
@@ -3037,8 +3037,8 @@
             filePath = "Budget Tracker/AppDelegate/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "94"
-            endingLineNumber = "94"
+            startingLineNumber = "110"
+            endingLineNumber = "110"
             landmarkName = "application(_:didFinishLaunchingWithOptions:)"
             landmarkType = "7">
             <Locations>
@@ -3100,8 +3100,8 @@
             filePath = "Budget Tracker/AppDelegate/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "95"
-            endingLineNumber = "95"
+            startingLineNumber = "111"
+            endingLineNumber = "111"
             landmarkName = "application(_:didFinishLaunchingWithOptions:)"
             landmarkType = "7">
             <Locations>
@@ -3178,8 +3178,8 @@
             filePath = "Budget Tracker/AppDelegate/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "102"
-            endingLineNumber = "102"
+            startingLineNumber = "118"
+            endingLineNumber = "118"
             landmarkName = "application(_:didFinishLaunchingWithOptions:)"
             landmarkType = "7">
             <Locations>
@@ -4823,22 +4823,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "C906AD0C-878E-461E-BF81-05BA68733864"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Budget Tracker/Mics/Extensions/UIViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "19"
-            endingLineNumber = "19"
-            landmarkName = "presentShareVC(vcc:with:completion:sender:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "6DC94FA2-B5CE-4B8F-A79C-94FABC5A4484"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -5260,8 +5244,8 @@
             filePath = "Budget Tracker/AppDelegate/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "39"
-            endingLineNumber = "39"
+            startingLineNumber = "40"
+            endingLineNumber = "40"
             landmarkName = "banner"
             landmarkType = "24">
          </BreakpointContent>
@@ -5874,54 +5858,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "F99D6B06-FC10-4767-906B-D6247465E957"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Budget Tracker/Modal/ManagerPDF/ManagerPDF.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "51"
-            endingLineNumber = "51"
-            landmarkName = "exportPDF(sender:toEdit:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "F99D6B06-FC10-4767-906B-D6247465E957 - 67d6b647c714450e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Budget_Tracker.ManagerPDF.exportPDF(sender: __C.UIView) -&gt; ()"
-                  moduleName = "Budget Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/Modal/ManagerPDF/ManagerPDF.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "33"
-                  endingLineNumber = "33"
-                  offsetFromSymbolStart = "40">
-               </Location>
-               <Location
-                  uuid = "F99D6B06-FC10-4767-906B-D6247465E957 - f794b925cc73a494"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;__C.GADFullScreenPresentingAd&gt;) -&gt; () in Budget_Tracker.ManagerPDF.exportPDF(sender: __C.UIView) -&gt; ()"
-                  moduleName = "Budget Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/Modal/ManagerPDF/ManagerPDF.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "34"
-                  endingLineNumber = "34"
-                  offsetFromSymbolStart = "36">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "E3B44F7B-7902-46BF-8FB0-A91A71E12E52"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -6217,8 +6153,8 @@
             filePath = "Budget Tracker/UIModel/adBannerView/adBannerView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "277"
-            endingLineNumber = "277"
+            startingLineNumber = "278"
+            endingLineNumber = "278"
             landmarkName = "adDidDismissFullScreenContent(_:)"
             landmarkType = "7">
             <Locations>
@@ -6265,8 +6201,8 @@
             filePath = "Budget Tracker/UIModel/adBannerView/adBannerView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "282"
-            endingLineNumber = "282"
+            startingLineNumber = "283"
+            endingLineNumber = "283"
             landmarkName = "adDidDismissFullScreenContent(_:)"
             landmarkType = "7">
             <Locations>
@@ -6313,8 +6249,8 @@
             filePath = "Budget Tracker/UIModel/UIButton+UIView/AdsButton.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "62"
-            endingLineNumber = "62"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
             landmarkName = "createAdView()"
             landmarkType = "7">
          </BreakpointContent>
@@ -6322,301 +6258,187 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "AE39A4A6-4270-4F09-BC60-6256B108A347"
+            uuid = "693E67A8-7A72-407D-8E69-C111DCF57881"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Budget Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "147"
-            endingLineNumber = "147"
-            landmarkName = "toEnterValue(_:selectionData:nextPressed:)"
+            startingLineNumber = "310"
+            endingLineNumber = "310"
+            landmarkName = "AttributedStringTestVC"
+            landmarkType = "21">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7CBF0BAB-1D2A-4662-A2BF-86AB2C9D7179"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Budget Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
+            landmarkName = "updateDB(completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "89CD0CAC-D0AA-4E01-9A8A-1D9C76FF7C25"
-            shouldBeEnabled = "No"
+            uuid = "69F815DB-AC17-4FFD-9A9B-98234358FCC2"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Budget Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "166"
-            endingLineNumber = "166"
-            landmarkName = "exportPdfPressed(_:)"
+            startingLineNumber = "229"
+            endingLineNumber = "229"
+            landmarkName = "toggleContainerHeight(_:completion:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "89CD0CAC-D0AA-4E01-9A8A-1D9C76FF7C25 - de4b1d9dd7c18c48"
+                  uuid = "69F815DB-AC17-4FFD-9A9B-98234358FCC2 - fc822aea5b167a8d"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Budget_Tracker.AttributedStringTestVC.exportPdfPressed(Any) -&gt; ()"
+                  symbolName = "Budget_Tracker.AttributedStringTestVC.toggleContainerHeight(_: Swift.Bool, completion: Swift.Optional&lt;() -&gt; ()&gt;) -&gt; ()"
                   moduleName = "Budget Tracker"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
+                  urlString = "file:///Users/mishadovhiy/Developer/Budget-Tracker/Budget%20Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "129"
-                  endingLineNumber = "129"
-                  offsetFromSymbolStart = "40">
+                  startingLineNumber = "183"
+                  endingLineNumber = "183"
+                  offsetFromSymbolStart = "152">
                </Location>
                <Location
-                  uuid = "89CD0CAC-D0AA-4E01-9A8A-1D9C76FF7C25 - 96c7db3649a6119c"
+                  uuid = "69F815DB-AC17-4FFD-9A9B-98234358FCC2 - e4257d1f1c78162f"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Budget_Tracker.AttributedStringTestVC.updateNavButtons() -&gt; ()"
+                  symbolName = "closure #1 (__C.NSLayoutConstraint) -&gt; Swift.Bool in Budget_Tracker.AttributedStringTestVC.toggleContainerHeight(_: Swift.Bool, completion: Swift.Optional&lt;() -&gt; ()&gt;) -&gt; ()"
                   moduleName = "Budget Tracker"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
+                  urlString = "file:///Users/mishadovhiy/Developer/Budget-Tracker/Budget%20Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "123"
-                  endingLineNumber = "123"
-                  offsetFromSymbolStart = "364">
+                  startingLineNumber = "183"
+                  endingLineNumber = "183"
+                  offsetFromSymbolStart = "44">
                </Location>
                <Location
-                  uuid = "89CD0CAC-D0AA-4E01-9A8A-1D9C76FF7C25 - de4b1d9dd7c18c86"
+                  uuid = "69F815DB-AC17-4FFD-9A9B-98234358FCC2 - fc822aea5b167a66"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Budget_Tracker.AttributedStringTestVC.exportPdfPressed(Any) -&gt; ()"
+                  symbolName = "Budget_Tracker.AttributedStringTestVC.toggleContainerHeight(_: Swift.Bool, completion: Swift.Optional&lt;() -&gt; ()&gt;) -&gt; ()"
                   moduleName = "Budget Tracker"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "123"
-                  endingLineNumber = "123"
-                  offsetFromSymbolStart = "76">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "48528F10-C9A6-4021-9FBE-6CAAE8EEAFBC"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Budget Tracker/Modal/ManagerPDF/ManagerPDF.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
-            landmarkName = "exportPDF(sender:toEdit:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "48528F10-C9A6-4021-9FBE-6CAAE8EEAFBC - 46a8e64c03e78349"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;__C.GADFullScreenPresentingAd&gt;) -&gt; () in Budget_Tracker.ManagerPDF.exportPDF(sender: __C.UIView, toEdit: Swift.Bool) -&gt; ()"
-                  moduleName = "Budget Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/Modal/ManagerPDF/ManagerPDF.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "36"
-                  endingLineNumber = "36"
-                  offsetFromSymbolStart = "720">
-               </Location>
-               <Location
-                  uuid = "48528F10-C9A6-4021-9FBE-6CAAE8EEAFBC - 863d87aa3a3c00b4"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 () -&gt; () in Budget_Tracker.ManagerPDF.exportPDF(sender: __C.UIView, toEdit: Swift.Bool) -&gt; ()"
-                  moduleName = "Budget Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/Modal/ManagerPDF/ManagerPDF.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "37"
-                  endingLineNumber = "37"
-                  offsetFromSymbolStart = "76">
-               </Location>
-               <Location
-                  uuid = "48528F10-C9A6-4021-9FBE-6CAAE8EEAFBC - deafc216ed7ec901"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Budget_Tracker.ManagerPDF.exportPDF(sender: __C.UIView, toEdit: Swift.Bool) -&gt; ()"
-                  moduleName = "Budget Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/Modal/ManagerPDF/ManagerPDF.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "36"
-                  endingLineNumber = "36"
-                  offsetFromSymbolStart = "368">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "0D92820C-4346-434F-AF00-D8FC075ADFB1"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Budget Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
-            landmarkName = "viewDidDismiss()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "0D92820C-4346-434F-AF00-D8FC075ADFB1 - d6a68e2817bd40e5"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Budget_Tracker.AttributedStringTestVC.viewDidDismiss() -&gt; ()"
-                  moduleName = "Budget Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "33"
-                  endingLineNumber = "33"
-                  offsetFromSymbolStart = "652">
-               </Location>
-               <Location
-                  uuid = "0D92820C-4346-434F-AF00-D8FC075ADFB1 - d6a68e2817bd40e5"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Budget_Tracker.AttributedStringTestVC.viewDidDismiss() -&gt; ()"
-                  moduleName = "Budget Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "33"
-                  endingLineNumber = "33"
-                  offsetFromSymbolStart = "668">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "28FE8484-F672-45F9-AF23-AC2175A89E46"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Budget Tracker/Controller/Main/StatisticVC/StatisticVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "429"
-            endingLineNumber = "429"
-            landmarkName = "adDidDismissFullScreenContent(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "AF800C7F-FA2A-47E5-A62A-D46619FC8FB5"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Budget Tracker/Controller/Main/StatisticVC/StatisticVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "425"
-            endingLineNumber = "425"
-            landmarkName = "unknown"
-            landmarkType = "0">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "828C4838-49E3-4436-8E5C-9A6E22D2E234"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Budget Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "197"
-            endingLineNumber = "197"
-            landmarkName = "colorPickerViewController(_:didSelect:continuously:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "C83342AD-79BD-446F-9E62-3B2596A2A594"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Budget Tracker/Modal/ManagerPDF/PagePDF.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "19"
-            endingLineNumber = "19"
-            landmarkName = "createPDFPage(fromText:pageWidth:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "8980D410-355D-4CB7-8072-0FFE1A54073F"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Budget Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "189"
-            endingLineNumber = "189"
-            landmarkName = "colorPickerViewController(_:didSelect:continuously:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "8980D410-355D-4CB7-8072-0FFE1A54073F - 8ad8ec7166551eab"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "static Budget_Tracker.AttributedStringTestVC.configure(pdf: Swift.Optional&lt;Budget_Tracker.ManagerPDF&gt;) -&gt; Budget_Tracker.AttributedStringTestVC"
-                  moduleName = "Budget Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
+                  urlString = "file:///Users/mishadovhiy/Developer/Budget-Tracker/Budget%20Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "188"
                   endingLineNumber = "188"
-                  offsetFromSymbolStart = "52">
+                  offsetFromSymbolStart = "152">
                </Location>
                <Location
-                  uuid = "8980D410-355D-4CB7-8072-0FFE1A54073F - 759d08274ffffe47"
+                  uuid = "69F815DB-AC17-4FFD-9A9B-98234358FCC2 - e4257d1f1c7816c4"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Budget_Tracker.AttributedStringTestVC.colorPickerViewController(_: __C.UIColorPickerViewController, didSelect: __C.UIColor, continuously: Swift.Bool) -&gt; ()"
+                  symbolName = "closure #1 (__C.NSLayoutConstraint) -&gt; Swift.Bool in Budget_Tracker.AttributedStringTestVC.toggleContainerHeight(_: Swift.Bool, completion: Swift.Optional&lt;() -&gt; ()&gt;) -&gt; ()"
                   moduleName = "Budget Tracker"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
+                  urlString = "file:///Users/mishadovhiy/Developer/Budget-Tracker/Budget%20Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "187"
-                  endingLineNumber = "187"
-                  offsetFromSymbolStart = "80">
+                  startingLineNumber = "188"
+                  endingLineNumber = "188"
+                  offsetFromSymbolStart = "44">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "27ED8B52-C52F-4A71-BE7E-19FE4317CC15"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Budget Tracker/UIModel/SelectionStackView/SelectionStackView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "55"
+            endingLineNumber = "55"
+            landmarkName = "showList(at:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "27ED8B52-C52F-4A71-BE7E-19FE4317CC15 - 8699dbda8830c70f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Budget_Tracker.SelectionStackView.showList(at: Swift.Optional&lt;Swift.Int&gt;) -&gt; ()"
+                  moduleName = "Budget Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mishadovhiy/Developer/Budget-Tracker/Budget%20Tracker/UIModel/SelectionStackView/SelectionStackView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "52"
+                  endingLineNumber = "52"
+                  offsetFromSymbolStart = "668">
+               </Location>
+               <Location
+                  uuid = "27ED8B52-C52F-4A71-BE7E-19FE4317CC15 - 9cfca41af0b600d3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.UIView) -&gt; () in Budget_Tracker.SelectionStackView.showList(at: Swift.Optional&lt;Swift.Int&gt;) -&gt; ()"
+                  moduleName = "Budget Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mishadovhiy/Developer/Budget-Tracker/Budget%20Tracker/UIModel/SelectionStackView/SelectionStackView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "53"
+                  endingLineNumber = "53"
+                  offsetFromSymbolStart = "144">
+               </Location>
+               <Location
+                  uuid = "27ED8B52-C52F-4A71-BE7E-19FE4317CC15 - 8699dbda8830c6ac"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Budget_Tracker.SelectionStackView.showList(at: Swift.Optional&lt;Swift.Int&gt;) -&gt; ()"
+                  moduleName = "Budget Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mishadovhiy/Developer/Budget-Tracker/Budget%20Tracker/UIModel/SelectionStackView/SelectionStackView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "55"
+                  endingLineNumber = "55"
+                  offsetFromSymbolStart = "668">
+               </Location>
+               <Location
+                  uuid = "27ED8B52-C52F-4A71-BE7E-19FE4317CC15 - 9cfca41af0b600b6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.UIView) -&gt; () in Budget_Tracker.SelectionStackView.showList(at: Swift.Optional&lt;Swift.Int&gt;) -&gt; ()"
+                  moduleName = "Budget Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mishadovhiy/Developer/Budget-Tracker/Budget%20Tracker/UIModel/SelectionStackView/SelectionStackView.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "56"
+                  endingLineNumber = "56"
+                  offsetFromSymbolStart = "144">
                </Location>
             </Locations>
          </BreakpointContent>

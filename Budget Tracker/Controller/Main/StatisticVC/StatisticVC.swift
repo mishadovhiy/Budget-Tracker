@@ -86,8 +86,14 @@ class StatisticVC: SuperViewController, CALayerDelegate {
 
         let dict:[[String:Any]] = data.compactMap({ $0.dict})
         let type = isAll ? "All time" : (segmentControll.selectedSegmentIndex == 0 ? "Expenses" : "Incomes")
-        let pdf:ManagerPDF = .init(dict: ["Budget Tracker":dict], pageTitle: "", vc: self, data: .init(defaultHeaderData:.init(duration: appData.filter.periodText, type: type), headers: [], footers: []))
-
+        let pdf:ManagerPDF = .init(dict: ["Budget Tracker":dict], pageTitle: "", vc: self, data: .init(duration: appData.filter.periodText, type: type))
+        //let pdf:ManagerPDF = .init(dict: ["Budget Tracker":dict], pageTitle: "", vc: self, data: .init(defaultHeaderData:.init(duration: appData.filter.periodText, type: type), headers: [], footers: []))
+//        let pdf:ManagerPDF = .init(dict: ["Budget Tracker":dict],
+//                                   pageTitle: "",
+//                                   vc: self,
+//                                   data: .init(duration: appData.filter.periodText,
+//                                               type: type))
+//
         pdf.exportPDF(sender: sender as! UIButton)
     }
     

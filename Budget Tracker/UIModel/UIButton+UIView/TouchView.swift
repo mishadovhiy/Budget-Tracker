@@ -12,6 +12,7 @@ class TouchView:BasicView {
     var touchAction:((Bool)->())?
     var pressedAction:(()->())?
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print("TouchViewtouchesBegan")
         if launch == nil {
             launch = self.backgroundColor
             touchesBegun()
@@ -22,6 +23,8 @@ class TouchView:BasicView {
         
     }
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        print("TouchViewtouchesEnded")
+
         touchesEnded()
         if let action = pressedAction {
             action()

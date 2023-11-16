@@ -66,6 +66,14 @@ extension UIView {
     
 }
 extension UIView {
+    func contains(_ touches: Set<UITouch>) -> Bool {
+        if let loc = touches.first?.location(in: self),
+           frame.contains(loc) {
+            return true
+        } else {
+            return false
+        }
+    }
     func removeWithAnimation(animation:CGFloat = 0.11, complation:(()->())? = nil) {
         UIView.animate(withDuration: animation, animations: {
             self.alpha = 0

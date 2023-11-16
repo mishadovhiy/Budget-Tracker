@@ -27,6 +27,7 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
 
     var selectionStackData:[SelectionStackView.SelectionData]?
     weak var selectionStackView:SelectionStackView?
+    var dismissedAction:(()->())?
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -44,6 +45,10 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
         }
     }
 
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        dismissedAction?()
+    }
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
@@ -129,7 +134,8 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
             let dif = self.view.frame.height - CGFloat(keyboardHeight) - (selectedTextfieldd?.superview?.frame.maxY ?? 0)
             if dif < 20 {
                 UIView.animate(withDuration: 0.3) {
-                    self.mainStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, ((dif / 2) - 20) / 2, 0)
+                   // self.mainStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, ((dif / 2) - 20) / 2, 0)
+                    AppDelegate.shared?.window?.layer.move(.top, value: ((dif / 2) - 20))
                 }
             }
         }
@@ -156,7 +162,8 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
 
     func loadUI() {
         if let selectionStackData = selectionStackData {
-            selectionStackView = .create(self.view, data: selectionStackData)
+            selectionStackView = .create(self.view, data: selectionStackData, position: .init(x: 10, y: self.additionalSafeAreaInsets.top + self.view.safeAreaInsets.top + (self.navigationController?.navigationBar.frame.height ?? 0)))
+            print(selectionStackView?.isUserInteractionEnabled, " selectionStackViewisUserInteractionEnabled")
         }
     }
     
@@ -278,7 +285,9 @@ extension EnterValueVC {
 
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.3) {
-                    self.mainStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+                   // self.mainStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+                    AppDelegate.shared?.window?.layer.move(.top, value: 0)
+
                 }
             }
     }

@@ -386,19 +386,19 @@
                         <viewLayoutGuide key="safeArea" id="PpG-vV-JRk"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="fnn-Q2-90r" firstAttribute="height" secondItem="Bok-nL-Ujc" secondAttribute="height" multiplier="0.5" id="4eX-A1-ke0"/>
-                            <constraint firstItem="PpG-vV-JRk" firstAttribute="trailing" secondItem="t5p-0E-DTn" secondAttribute="trailing" id="JdL-29-fqV"/>
-                            <constraint firstItem="t5p-0E-DTn" firstAttribute="top" secondItem="PpG-vV-JRk" secondAttribute="top" id="eCE-GY-it3"/>
+                            <constraint firstItem="t5p-0E-DTn" firstAttribute="leading" secondItem="PpG-vV-JRk" secondAttribute="leading" id="AR7-KD-xJo"/>
+                            <constraint firstItem="t5p-0E-DTn" firstAttribute="top" secondItem="PpG-vV-JRk" secondAttribute="top" id="OZC-To-iyE"/>
+                            <constraint firstItem="fnn-Q2-90r" firstAttribute="height" secondItem="Bok-nL-Ujc" secondAttribute="height" multiplier="0.5" priority="1" identifier="containerConstraintKeyShow" id="Ojk-bC-XNh"/>
                             <constraint firstItem="fnn-Q2-90r" firstAttribute="leading" secondItem="PpG-vV-JRk" secondAttribute="leading" id="eQg-Zf-pcF"/>
-                            <constraint firstItem="t5p-0E-DTn" firstAttribute="leading" secondItem="PpG-vV-JRk" secondAttribute="leading" id="fAb-CE-xzO"/>
                             <constraint firstItem="PpG-vV-JRk" firstAttribute="trailing" secondItem="fnn-Q2-90r" secondAttribute="trailing" id="jWQ-9f-htb"/>
                             <constraint firstAttribute="bottom" secondItem="fnn-Q2-90r" secondAttribute="bottom" id="sQX-rs-Tiw"/>
+                            <constraint firstItem="t5p-0E-DTn" firstAttribute="trailing" secondItem="PpG-vV-JRk" secondAttribute="trailing" id="vf8-IT-48y"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="DQG-zR-UeB">
                         <barButtonItem key="rightBarButtonItem" style="plain" id="ims-UX-AAS">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="d9Q-Qs-93K" customClass="AdsButton" customModule="Budget_Tracker" customModuleProvider="target">
-                                <rect key="frame" x="315" y="5.6666666666666679" width="95" height="33"/>
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="d9Q-Qs-93K" customClass="AdsButton" customModule="Budget_Tracker" customModuleProvider="target">
+                                <rect key="frame" x="315" y="5" width="95" height="34.333333333333336"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="Export"/>

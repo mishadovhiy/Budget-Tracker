@@ -57,6 +57,10 @@ extension SelectValueVC:UITableViewDelegate, UITableViewDataSource {
         
     }
     
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return tableData[section].sectionName != "" ? tableData[section].sectionName : nil
+    }
+    
     private func dismissOnSelect() {
         if let nav = self.navigationController {
             nav.popViewController(animated: true)
@@ -97,9 +101,9 @@ extension SelectValueVC {
     }
     struct SelectValueStruct {
         let name:String
+        var id:Int? = nil
         var regular:RegularStruct? = nil
         var switcher:SwitchStruct? = nil
-        
         struct RegularStruct {
             var description:String? = nil
             var didSelect:()->()

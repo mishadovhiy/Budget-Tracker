@@ -13,11 +13,11 @@ import UIKit
 struct UnparcePDF {
     let manager:ManagerPDF
     
-    func dictionaryToString(_ dictionary:[String:Any], data:ManagerPDF.PdfData, fromCreate:Bool = false) -> ([NSAttributedString], CGFloat) {
+    func dictionaryToString(_ dictionary:[String:Any], data:PDFProperties, fromCreate:Bool = false) -> ([NSAttributedString], CGFloat) {
         var height:CGFloat = 0
         var text:[NSAttributedString] = []
         if data.defaultHeader {
-            let header = documentHeader(data: .init(defaultHeader: data.defaultHeaderData!), fromCreate: true)
+            let header = documentHeader(data: data, fromCreate: true)
             text.append(header)
             height += 145
         } else {
@@ -65,27 +65,38 @@ struct UnparcePDF {
         return (text, height)
     }
     
-    private func customHeader(data:ManagerPDF.AdditionalPDFData) -> (NSMutableAttributedString, CGFloat) {
+    private func customHeader(data:AdditionalPDFData) -> (NSMutableAttributedString, CGFloat) {
         let text:NSMutableAttributedString = .init(string: "")
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = data.custom?.textSettins.alighment.textAligment ?? .left
+        print("dassfwer ", data.custom?.textSettins)
+
+        let font = font(for: data.custom?.textSettins.textSize ?? .small)
+        let fontResult = UIFont.systemFont(ofSize: font.0, weight: font.1)
+        let color = textColor(for: data.custom?.textSettins.textColor ?? .primary) ?? primaryColor
         let attributes:[NSAttributedString.Key : Any] = [
-            .font:UIFont.systemFont(ofSize: 12, weight: .bold),
-            .foregroundColor:textColor(for: data.custom?.textSettins.textColor) ?? primaryColor,
+            .font:fontResult,
+            .foregroundColor:color,
+            .paragraphStyle:paragraphStyle
         ]
         text.append(.init(string: data.custom?.title ?? "-", attributes: attributes))
-        let height = text.string.calculate(font: .systemFont(ofSize: 12, weight: .bold), inWindth: manager.pageWidth).height
+        let height = text.string.calculate(font: fontResult, inWindth: manager.pageWidth).height
         print(text.string, " gerfeefwrgef ", height)
         return (text, height)
     }
     
-    private func documentHeader(data:ManagerPDF.AdditionalPDFData, fromCreate:Bool = false) -> NSMutableAttributedString {
+    private func documentHeader(data:PDFProperties, fromCreate:Bool = false) -> NSMutableAttributedString {
         let text:NSMutableAttributedString = .init(string: "")
         let attachment = NSTextAttachment()
         attachment.image = .init(named: "icBig")
         attachment.bounds = .init(x: 0, y: -8, width: 40, height: 40)
+        let bigFont = font(for: .big)
+        let smallFont = font(for: .medium)
+
         text.append(.init(attachment: attachment))
 
         let attributes:[NSAttributedString.Key : Any] = [
-            .font:UIFont.systemFont(ofSize: 28, weight: .bold),
+            .font:UIFont.systemFont(ofSize: bigFont.0, weight: bigFont.1),
             .foregroundColor:self.primaryColor,
         ]
 //        if fromCreate {
@@ -93,11 +104,11 @@ struct UnparcePDF {
 //        }
         text.append(.init(string: "  Transactions History ", attributes: attributes))
         text.append(.init(string: "From Budget Tracker\n\n", attributes: [
-            .font:UIFont.systemFont(ofSize: 12, weight: .bold),
+            .font:UIFont.systemFont(ofSize: smallFont.0, weight: smallFont.1),
             .foregroundColor:secondaryColor
         ]))
-        text.append(.init(string: (data.defaultHeader?.type.capitalized ?? "") + " for " + (data.defaultHeader?.duration ?? ""), attributes: [
-            .font:UIFont.systemFont(ofSize: 10, weight: .bold),
+        text.append(.init(string: (data.defaultHeaderData?.type.capitalized ?? "") + " for " + (data.defaultHeaderData?.duration ?? ""), attributes: [
+            .font:UIFont.systemFont(ofSize: smallFont.0, weight: smallFont.1),
             .foregroundColor:secondaryColor
         ]))
         text.append(.init(string: "\n"))
@@ -115,12 +126,15 @@ struct UnparcePDF {
         let label = UILabel(frame: labelFrame)
         label.text = "Created with"
         label.textColor = K.Colors.link
-        label.font = .systemFont(ofSize: 12, weight: .medium)
+        let bigFont = font(for: .big)
+        let smallFont = font(for: .small)
+
+        label.font = UIFont.systemFont(ofSize: smallFont.0, weight: smallFont.1)
         view.addSubview(label)
         let label2 = UILabel(frame: .init(origin: .init(x: labelFrame.minX, y: labelFrame.minY + 15), size: labelFrame.size))
         label2.text = "Budget Tracker"
         label2.textColor = UIColor(cgColor: primaryColor as! CGColor)
-        label2.font = .systemFont(ofSize: 30, weight: .black)
+        label2.font = UIFont.systemFont(ofSize: bigFont.0, weight: bigFont.1)
         view.addSubview(label2)
         let attachment = NSTextAttachment()
         attachment.image = view.toImage
@@ -149,33 +163,49 @@ struct UnparcePDF {
     }
     
     private func category(_ value:Any?) -> NSAttributedString {
-        return .init(string: ((value as? [String:Any])?["Name"] as? String ?? "Unknown Category").uppercased(), attributes: [.font:UIFont.systemFont(ofSize: 18, weight: .bold), .foregroundColor:self.primaryColor])
+        let font = font(for: .big)
+        return .init(string: ((value as? [String:Any])?["Name"] as? String ?? "Unknown Category").uppercased(), attributes: [
+            .font:UIFont.systemFont(ofSize: font.0, weight: font.1),
+            .foregroundColor:self.primaryColor])
     }
     
     var primaryColor:AnyObject {
-        return manager.properties.colors.primaryGet
+        return manager.properties.documentProperties.colors.primary
     }
     
     var secondaryColor:AnyObject {
-        return manager.properties.colors.secondaryGet
+        return manager.properties.documentProperties.colors.secondary
     }
     
-    private func textColor(for userColor: String?) -> CGColor? {
-        let defaultColor = UIColor(cgColor: primaryColor as! CGColor)
-        return manager.properties.colors.getColor(defaultColor: defaultColor, color: userColor)
+    
+    private func font(for size:PdfTextProperties.TextSize) -> (CGFloat, UIFont.Weight) {
+        let selected = manager.properties.documentProperties.textSizes[size] ?? size.size.size
+        print(selected, " rgetrfweregtyb")
+        return (CGFloat(selected), size.size.weight)
+        
+        //UIFont.systemFont(ofSize: CGFloat(selected), weight: .regular)//.systemFont(ofSize: 12, weight: .regular)
+    }
+    
+    private func textColor(for userColor: PdfTextColor) -> CGColor? {
+        switch userColor {
+        case .primary:return primaryColor as! CGColor
+        case .secondary:return secondaryColor as! CGColor
+        }
     }
     
     private func row(_ dict:(String, Any)) -> NSAttributedString {
         let res:NSMutableAttributedString = .init(string: "")
+        let font = font(for: .small)
         if let newdict = dict.1 as? [String:Any] {
-            res.append(.init(string: "\(dict.0)", attributes: [.font:UIFont.systemFont(ofSize: 9, weight: .light), .foregroundColor:self.primaryColor]))
+            res.append(.init(string: "\(dict.0)", attributes: [.font:UIFont.systemFont(ofSize: font.0, weight: font.1), .foregroundColor:self.primaryColor]))
             newdict.forEach {
                 res.append(self.row(($0.key, $0.value)))
             }
         } else {
             let keys = ["name", "transactions", "category", "value", "Name"]
+
             if keys.contains(dict.0) {
-                res.append(.init(string: "\(dict.0): \(dict.1)\n", attributes: [.font:UIFont.systemFont(ofSize: 9, weight: .light), .foregroundColor:self.primaryColor]))
+                res.append(.init(string: "\(dict.0): \(dict.1)\n", attributes: [.font:UIFont.systemFont(ofSize: font.0, weight: font.1), .foregroundColor:self.primaryColor]))
             }
             
         }
@@ -191,13 +221,18 @@ private extension UnparcePDF {
         view.frame.size = size
         let label = UILabel()
         label.frame.size = .init(width: size.width, height: 40)
+        let font = font(for: .small)
+        let fontSmall = self.font(for: .medium)
+
         let string:NSMutableAttributedString = .init(string: "Total: ", attributes: [
-            .font: UIFont.systemFont(ofSize: 12, weight: .regular),
-            .foregroundColor: self.primaryColor
+           // .font: UIFont.systemFont(ofSize: 12, weight: .regular),
+            .font: UIFont.systemFont(ofSize: font.0, weight: font.1),
+            .foregroundColor: UIColor(cgColor: self.primaryColor as! CGColor)
         ])
         string.append(.init(string: value, attributes: [
-            .font: UIFont.systemFont(ofSize: 14, weight: .semibold),
-            .foregroundColor: self.primaryColor
+            //.font: UIFont.systemFont(ofSize: 14, weight: .semibold),
+            .font: UIFont.systemFont(ofSize: fontSmall.0, weight: fontSmall.1),
+            .foregroundColor: UIColor(cgColor: self.primaryColor as! CGColor)
         ]))
         label.attributedText = string
         view.addSubview(label)
@@ -208,12 +243,14 @@ private extension UnparcePDF {
         let transaction = TransactionsStruct.create(dictt: dict)
         let view = UIView()
         let size:CGSize = .init(width: manager.pageWidth - 100, height: 40)
+        let exSmallFont = font(for: .extraSmall)
+        let smallFont = font(for: .small)
         view.frame.size = size
         let dateLabel = UILabel(frame: .init(origin: .zero, size: size))
         dateLabel.text = transaction?.date ?? ""
         dateLabel.textAlignment = .left
         dateLabel.textColor = UIColor(cgColor: secondaryColor as! CGColor)
-        dateLabel.font = .systemFont(ofSize: 9, weight: .regular)
+        dateLabel.font = .systemFont(ofSize: exSmallFont.0, weight: exSmallFont.1)
         view.addSubview(dateLabel)
         
         if transaction?.comment != "" {
@@ -221,7 +258,7 @@ private extension UnparcePDF {
             commentLabel.text = transaction?.comment
             commentLabel.textAlignment = .left
             commentLabel.textColor = UIColor(cgColor:secondaryColor as! CGColor)
-            commentLabel.font = .systemFont(ofSize: 9, weight: .regular)
+            commentLabel.font = .systemFont(ofSize: exSmallFont.0, weight: exSmallFont.1)
             view.addSubview(commentLabel)
         }
         
@@ -230,7 +267,7 @@ private extension UnparcePDF {
         valueLabel.text = transaction?.value ?? ""
         valueLabel.textAlignment = .right
         valueLabel.textColor = .init(cgColor: primaryColor as! CGColor)
-        valueLabel.font = .systemFont(ofSize: 12, weight: .semibold)
+        valueLabel.font = .systemFont(ofSize: smallFont.0, weight: smallFont.1)
         view.addSubview(valueLabel)
         dotts(in: view, size: size)
         return view
@@ -247,5 +284,6 @@ private extension UnparcePDF {
         }
     }
 }
+
 
 

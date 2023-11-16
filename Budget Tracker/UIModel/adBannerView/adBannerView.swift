@@ -22,7 +22,8 @@ class adBannerView: UIView {
     var adNotReceved = true
     
     private var id:String {
-        (AppDelegate.shared?.appData.devMode ?? false) ? "ca-app-pub-3940256099942544/2934735716" : "ca-app-pub-5463058852615321/8457751935"
+        "ca-app-pub-3940256099942544/2934735716"//(AppDelegate.shared?.appData.devMode ?? false) ? "ca-app-pub-3940256099942544/2934735716" : "ca-app-pub-5463058852615321/8457751935"
+        //removeLater
     }
     
     public func createBanner() {
