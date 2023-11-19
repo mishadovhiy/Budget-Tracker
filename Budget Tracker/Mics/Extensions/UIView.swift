@@ -131,13 +131,15 @@ extension CALayer {
     enum KeyPath:String {
         case height = "bounds.size.height"
         case background = "backgroundColor"
-        
+        case stokeEnd = "strokeEnd"
         func from(_ view:CALayer) -> Any {
             switch self {
             case .height:
                 return view.bounds.size.height
             case .background:
                 return view.backgroundColor ?? UIColor.black.cgColor
+            case .stokeEnd:
+                return 0
             }
         }
         
@@ -147,6 +149,8 @@ extension CALayer {
                 return 0
             case .background:
                 return nil
+            case .stokeEnd:
+                return 1
             }
         }
         
@@ -156,6 +160,8 @@ extension CALayer {
                 view.bounds.size.height = ((to ?? self.to(view)) as? CGFloat ?? 0)
             case .background:
                 view.backgroundColor = ((to ?? self.to(view)) as! CGColor)
+            case .stokeEnd:
+break
             }
         }
     }
@@ -196,11 +202,11 @@ extension CALayer {
         self.shadowOpacity = opasity
     }
     
-    func drawSeparetor(space:CGPoint = .init(x: 0, y: 0), color:UIColor? = nil, opasity:Float = 1) -> CAShapeLayer? {
+    func drawSeparetor(space:CGPoint = .init(x: 0, y: 0), color:UIColor? = nil, opasity:Float = 1, y:CGFloat? = nil, width:CGFloat = 0.5) -> CAShapeLayer? {
         return self.drawLine([
-            .init(x: space.x, y: self.frame.height),
-            .init(x: self.frame.width - space.y, y: self.frame.height)
-        ], color: color ?? K.Colors.separetor, opacity: opasity)
+            .init(x: space.x, y: y ?? self.frame.height),
+            .init(x: self.frame.width - space.y, y: y ?? self.frame.height)
+        ], color: color ?? K.Colors.separetor, width: width, opacity: opasity)
     }
     
     func createPath(_ lines:[CGPoint]) -> UIBezierPath {

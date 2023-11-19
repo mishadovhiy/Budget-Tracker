@@ -8,6 +8,7 @@
 
 import UIKit
 import UserNotifications
+import GoogleMobileAds
 
 
 var transactionAdded = false
@@ -68,6 +69,11 @@ class HistoryVC: SuperViewController {
             calcMonthlyLimits()
         }
     }
+    
+    override func viewDidDismiss() {
+        super.viewDidDismiss()
+        removeKeyboardObthervers()
+    }
 
     var thisMonthTotal:Double = 0
     
@@ -88,28 +94,45 @@ class HistoryVC: SuperViewController {
     
     @IBOutlet weak var moreButton: UIButton!
     
-    func showMoreVC() {
-        let appData = AppData()
-        //get screen data
-        let addAmountToPay = {
+    private var interstitial: GADFullScreenPresentingAd?
+
+    func monthlyLimitPressed() {
+        if selectedCategory?.purpose == .debt {
             self.amountToPayEditing = true
             DispatchQueue.main.async {
                 self.tableView.reloadData()
-                // self.tableView.scrollToRow(at: IndexPath(row: 0, section: 2), at: .bottom, animated: true)
                 self.ai?.fastHide()
             }
+        } else {
+            AppDelegate.shared?.banner.toggleFullScreenAdd(self, type: .categoryLimit, loaded: { GADFullScreenPresentingAd in
+                self.interstitial = GADFullScreenPresentingAd
+                self.interstitial?.fullScreenContentDelegate = self
+            }, closed: { presented in
+                self.amountToPayEditing = true
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                    // self.tableView.scrollToRow(at: IndexPath(row: 0, section: 2), at: .bottom, animated: true)
+                    self.ai?.fastHide()
+                }
+            })
         }
         
+    }
+    
+    func showMoreVC() {
+        let appData = AppData()
+        //get screen data
+
         let addDueDate = {
             self.tocalendatPressed()
             
         }
         
         let moreData = selectedCategory?.purpose == .debt ? [
-            MoreVC.ScreenData(name: "Amount to pay".localize, description: "", showAI:false, action: addAmountToPay),
+            MoreVC.ScreenData(name: "Amount to pay".localize, description: "", showAI:false, action: monthlyLimitPressed),
             MoreVC.ScreenData(name: "Due date".localize, description: "", showAI:false, pro: appData.proEnabeled, action: addDueDate),
         ] : [
-            MoreVC.ScreenData(name: "Add monthly limit".localize, description: "", showAI:false, action: addAmountToPay),
+            MoreVC.ScreenData(name: "Add monthly limit".localize, description: "", showAI:false, action: monthlyLimitPressed),
         ]
         appData.presentMoreVC(currentVC: self, data: moreData, proIndex: 0)
     }
@@ -456,4 +479,13 @@ class HistoryVC: SuperViewController {
         }
     }
     
+}
+
+extension HistoryVC:GADFullScreenContentDelegate {
+    func adDidPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
+        AppDelegate.shared?.banner.adDidPresentFullScreenContent(ad)
+    }
+    func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
+        AppDelegate.shared?.banner.adDidDismissFullScreenContent(ad)
+    }
 }

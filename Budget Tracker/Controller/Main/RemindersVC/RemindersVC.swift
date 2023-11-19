@@ -79,12 +79,12 @@ class RemindersVC: SuperViewController {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     private var interstitial: GADFullScreenPresentingAd?
-    @IBOutlet weak var addTransactionButton: AdsButton!
+    @IBOutlet weak var addTransactionButton: AdButton!
     @IBAction func addTransactionPressed(_ sender: Any) {
         AppDelegate.shared?.banner.toggleFullScreenAdd(self, type: .paymentReminder, loaded: {
             self.interstitial = $0
             self.interstitial?.fullScreenContentDelegate = self
-        }, closed: {
+        }, closed: {presented in 
             self.performAddReminder()
         })
     }

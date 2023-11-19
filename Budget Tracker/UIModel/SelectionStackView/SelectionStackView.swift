@@ -77,8 +77,23 @@ class SelectionStackView: UIView {
 extension SelectionStackView {
     struct SelectionData {
         let value:RowValue
+        var launchSelectedID:String? = nil
         let subValues:[RowValue]
         let subSelected:(_ subValue:RowValue)->()
+        
+        var selectedRow:Int? {
+            guard let selectedID = launchSelectedID else { return nil }
+            var i = 0
+            var selected:Int?
+            subValues.forEach {
+                if $0.id == selectedID {
+                    selected = i
+                }
+                i += 1
+            }
+            print("hasselected ", selected)
+            return selected
+        }
     }
     struct RowValue {
         let name:String

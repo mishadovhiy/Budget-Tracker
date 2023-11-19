@@ -13,6 +13,7 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
     var screenData:EnterValueVCScreenData?
 
     @IBOutlet weak var valueTextField: TextField!
+    @IBOutlet weak var nextButton: Button!
     
     @IBOutlet weak private var codeLabel: UILabel!
     @IBOutlet weak private var mainStack: UIStackView!
@@ -25,17 +26,24 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
     @IBOutlet weak var userNameTitleLabel: UILabel!
     @IBOutlet weak private var userNameLabel: UILabel!
 
+    var nextButtonTitle:String = "Next"
     var selectionStackData:[SelectionStackView.SelectionData]?
     weak var selectionStackView:SelectionStackView?
     var dismissedAction:(()->())?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         valueTextField.addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
+        valueTextField.returnKeyType = .done
+        valueTextField.keyboardType = .default
         valueTextField.delegate = self
+        valueTextField.shouldReturn = {
+            let _ = self.textFieldShouldReturn(self.valueTextField)
+        }
         updateScreen()
         loadUI()
-        
+        nextButton.setTitle(nextButtonTitle, for: .normal)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -48,6 +56,7 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         dismissedAction?()
+        removeKeyboardObthervers()
     }
     
     override func viewWillLayoutSubviews() {
@@ -108,8 +117,8 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
             self.userNameTitleLabel.text = self.screenData?.descriptionTable?.1?.0
             
             self.valueTextField.text = self.textFieldValue
-            self.valueTextField.placeholder = self.screenData?.placeHolder
-            
+            self.valueTextField.placeholder = self.screenData?.placeHolder ?? self.textFieldValue
+            self.enteringValue = self.textFieldValue ?? ""
             let hideTF = self.screenData?.screenType == .code ? true : false
             if hideTF {
                 self.numberView.delegate = self
@@ -145,6 +154,7 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
     
     
     @objc func textfieldValueChanged(_ sender:UITextField) {
+        print(sender.text ?? "", " tgerfwd")
         DispatchQueue.main.async {
             self.enteringValue = sender.text ?? ""
             
@@ -152,22 +162,24 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
         }
     }
     
-    @IBAction private func mainValueChanged(_ sender: UITextField) {
-        DispatchQueue.main.async {
-            self.enteringValue = sender.text ?? ""
-        }
-
-    }
+//    @IBAction private func mainValueChanged(_ sender: UITextField) {
+//        DispatchQueue.main.async {
+//            self.enteringValue = sender.text ?? ""
+//        }
+//
+//    }
     
 
     func loadUI() {
-        if let selectionStackData = selectionStackData {
+        if let selectionStackData = selectionStackData, selectionStackView == nil {
             selectionStackView = .create(self.view, data: selectionStackData, position: .init(x: 10, y: self.additionalSafeAreaInsets.top + self.view.safeAreaInsets.top + (self.navigationController?.navigationBar.frame.height ?? 0)))
-            print(selectionStackView?.isUserInteractionEnabled, " selectionStackViewisUserInteractionEnabled")
         }
     }
     
-    
+    override func firstAppeared() {
+        super.firstAppeared()
+        
+    }
     
     
     private func next() {
@@ -208,6 +220,7 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
     
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        print("textFieldShouldReturn")
         next()
         return true
     }
@@ -230,14 +243,15 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
         }
     }
 
-    
+    var willAppeareCalled = false
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        if !willAppeareCalled {
+            willAppeareCalled = true
+            NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+            NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        }
         self.navigationController?.setNavigationBarHidden(false, animated: true)
-        
-        
         
     }
     

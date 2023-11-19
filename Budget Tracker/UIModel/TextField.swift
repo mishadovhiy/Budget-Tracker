@@ -12,7 +12,12 @@ class TextField: UITextField {
 
     private var btnLine:CALayer?
     private var firstMoved:Bool = false
-    
+    var shouldReturn:(()->())? {
+        didSet {
+            let view = self.subviews.first(where: {$0 is DelegateView}) as? DelegateView
+            view?.shouldReturn = self.shouldReturn
+        }
+    }
     override func didMoveToWindow() {
         super.didMoveToWindow()
         if !firstMoved {
@@ -22,10 +27,12 @@ class TextField: UITextField {
             backgroundColor = .clear
             layer.cornerRadius = 0
             let view = DelegateView()
+            view.layer.name = "DelegateViewdd"
             self.addSubview(view)
             view.backgroundColor = .clear
             view.editing = self.editing(_:)
             self.delegate = view
+            view.shouldReturn = shouldReturn
         }
     }
     
@@ -63,13 +70,19 @@ class TextField: UITextField {
  
     class DelegateView:UIView, UITextFieldDelegate {
         var editing:((_ begun:Bool) -> ())?
-        
+        var shouldReturn:(()->())?
         func textFieldDidBeginEditing(_ textField: UITextField) {
           editing?(true)
         }
         
         func textFieldDidEndEditing(_ textField: UITextField) {
           editing?(false)
+        }
+        
+        func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            print("textFieldShouldReturntextFieldShouldReturn")
+            self.shouldReturn?()
+            return true
         }
     }
 }

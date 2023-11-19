@@ -50,6 +50,20 @@ class SuperViewController: UIViewController {
         }
     }
 
+    var firstAppearCalled = false
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if !firstAppearCalled {
+            firstAppearCalled = true
+            firstAppeared()
+        }
+    }
+    
+    func firstAppeared() {
+        
+    }
+    
     func viewDidDismiss() {
         print("fedwe")
         newMessage = nil
@@ -72,6 +86,11 @@ class SuperViewController: UIViewController {
     }
     
     
+    
+    func removeKeyboardObthervers() {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
     
     func createCalendar(_ container:UIView, currentSelected:DateComponents?, selected:((_ date:DateComponents)->())? = nil, cellSelected:((_ date:DateComponents, _ cell:CalendarCell)->())? = nil) -> CalendarControlVC? {
         let vc = CalendarControlVC.configure(currentSelected: currentSelected, selected: selected)
@@ -117,7 +136,7 @@ class SuperViewController: UIViewController {
         return formater.string(from: date)
     }
     
-    func returnMonth(_ month: Int) -> String {
+    func getMonth(_ month: Int) -> String {
         let monthes = [
             1: "Jan".localize, 2: "Feb".localize, 3: "Mar".localize, 4: "Apr".localize, 5: "May".localize, 6: "Jun".localize, 7: "Jul".localize, 8: "Aug".localize, 9: "Sep".localize, 10: "Oct".localize, 11: "Nov".localize, 12: "Dec".localize
         ]
@@ -151,11 +170,11 @@ class SuperViewController: UIViewController {
     
     
     
-    func vibrate() {
+    func vibrate(style: UIImpactFeedbackGenerator.FeedbackStyle? = nil) {
         if #available(iOS 13.0, *) {
-            UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+            UIImpactFeedbackGenerator(style: style ?? .soft).impactOccurred()
         } else {
-            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+            UIImpactFeedbackGenerator(style: style ?? .light).impactOccurred()
         }
     }
     

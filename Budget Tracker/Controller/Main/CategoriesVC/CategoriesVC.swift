@@ -133,7 +133,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         historyDataStruct.removeAll()
         _categories.removeAll()
         _tableData.removeAll()
-        
+        removeKeyboardObthervers()
     }
     
     override func viewDidDisappear(_ animated: Bool) {

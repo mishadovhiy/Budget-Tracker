@@ -6,6 +6,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -22,23 +23,52 @@
                         <rect key="frame" x="259" y="6.6666666666666679" width="51" height="31.000000000000004"/>
                     </switch>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vDs-wR-JdQ">
-                        <rect key="frame" x="15.000000000000004" y="13" width="37.333333333333343" height="18"/>
+                        <rect key="frame" x="10" y="13" width="37.333333333333336" height="18"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <color key="textColor" name="CategoryColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="htw-hb-b1W" customClass="BasicView" customModule="Budget_Tracker" customModuleProvider="target">
+                        <rect key="frame" x="251.33333333333334" y="11" width="50.666666666666657" height="22"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pro" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vXF-1e-TJs">
+                                <rect key="frame" x="12.999999999999973" y="2" width="24.666666666666671" height="18"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="tintColor"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="vXF-1e-TJs" secondAttribute="bottom" constant="2" id="30L-vV-nPW"/>
+                            <constraint firstItem="vXF-1e-TJs" firstAttribute="top" secondItem="htw-hb-b1W" secondAttribute="top" constant="2" id="8WZ-Pd-je0"/>
+                            <constraint firstItem="vXF-1e-TJs" firstAttribute="leading" secondItem="htw-hb-b1W" secondAttribute="leading" constant="13" id="Zoi-Fl-lAy"/>
+                            <constraint firstAttribute="trailing" secondItem="vXF-1e-TJs" secondAttribute="trailing" constant="13" id="vfM-JD-F6q"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                <real key="value" value="4"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="shadowOpasity">
+                                <real key="value" value="0.5"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
+                    <constraint firstItem="htw-hb-b1W" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Ddj-0i-oIr"/>
                     <constraint firstItem="vDs-wR-JdQ" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="TVk-Lo-OQu"/>
+                    <constraint firstAttribute="trailing" secondItem="htw-hb-b1W" secondAttribute="trailing" constant="18" id="ZLi-wH-JJx"/>
                     <constraint firstAttribute="trailing" secondItem="ORM-AP-a81" secondAttribute="trailing" constant="12" id="bHK-MY-ybm"/>
                     <constraint firstItem="ORM-AP-a81" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="blW-Y6-bzZ"/>
-                    <constraint firstItem="vDs-wR-JdQ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="pFw-eS-cHR"/>
+                    <constraint firstItem="vDs-wR-JdQ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="pFw-eS-cHR"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
+                <outlet property="proView" destination="htw-hb-b1W" id="g3b-VK-S3N"/>
                 <outlet property="switcher" destination="ORM-AP-a81" id="TY5-rH-rwe"/>
                 <outlet property="titleLabel" destination="vDs-wR-JdQ" id="TC5-Xc-knN"/>
             </connections>
@@ -49,5 +79,8 @@
         <namedColor name="CategoryColor">
             <color red="0.15700000524520874" green="0.15700000524520874" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="tintColor">
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

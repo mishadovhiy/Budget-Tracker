@@ -107,6 +107,9 @@ extension CategoriesVC {
 
         }
     }
+    
+
+    
     var selectingIconFor:(IndexPath?, Int?) {
         get {
             return _selectingIconFor

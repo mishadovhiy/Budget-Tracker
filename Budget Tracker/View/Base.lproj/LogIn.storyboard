@@ -400,9 +400,6 @@
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" returnKeyType="done" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
-                                                <connections>
-                                                    <action selector="mainValueChanged:" destination="g3f-NZ-v6H" eventType="valueChanged" id="PfS-nh-0qd"/>
-                                                </connections>
                                             </textField>
                                         </subviews>
                                         <constraints>
@@ -445,6 +442,7 @@
                         <outlet property="emailTitleLabel" destination="6jg-eq-c8e" id="zlW-Zf-PxB"/>
                         <outlet property="mainStack" destination="in9-wI-9lJ" id="Ciz-pK-dK9"/>
                         <outlet property="mainTitleLabel" destination="RLQ-PF-Scy" id="lrD-jK-70d"/>
+                        <outlet property="nextButton" destination="HpS-9h-MF7" id="rDE-Sf-wqQ"/>
                         <outlet property="userNameLabel" destination="HU8-tg-hem" id="Ktv-pF-TYy"/>
                         <outlet property="userNameTitleLabel" destination="ALJ-1L-lgb" id="hlc-fs-ZEn"/>
                         <outlet property="userTableStack" destination="jc2-Ms-p9u" id="e1U-YR-Ldu"/>
@@ -1206,7 +1204,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="tintColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

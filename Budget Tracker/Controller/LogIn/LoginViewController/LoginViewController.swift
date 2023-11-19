@@ -129,7 +129,10 @@ class LoginViewController: SuperViewController {
     }
     
 
-    
+    override func viewDidDismiss() {
+        super.viewDidDismiss()
+        removeKeyboardObthervers()
+    }
     
     
     func updateUI() {
@@ -697,11 +700,14 @@ extension LoginViewController {
 
 extension LoginViewController: SelectUserVCDelegate {
     func selected(user: String) {
+        userSelected(user: user)
+    }
+    
+    func userSelected(user: String) {
         keyChainPassword(nick: user)
         nicknameLogLabel.text = user
         textFieldValuesDict.updateValue(user, forKey: "log.user")
     }
-    
     
 }
 

@@ -47,9 +47,11 @@ class BuyProVC: SuperViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         BuyProVC.shared = self
+        
         DispatchQueue.main.async {
+            self.tryFree.alpha = 0
             if self.appData.proVersion || self.appData.proTrial || self.appData.trialDate != "" {
-                self.tryFree.alpha = 0
+                //self.tryFree.alpha = 0
             }
             self.purchasedIndicatorView.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
         }

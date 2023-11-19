@@ -81,9 +81,13 @@ class AppData {
             let was = !purchasedOnThisDevice ? (db.db["proVersion"] as? Bool ?? false) : purchasedOnThisDevice
             db.db.updateValue(value, forKey: "proVersion")
             if was && !value {
-                AppDelegate.shared?.banner.createBanner()
+                DispatchQueue.main.async {
+                    AppDelegate.shared?.banner.createBanner()
+                }
             } else if !was && value {
-                AppDelegate.shared?.banner.hide(remove: true, ios13Hide: true)
+                DispatchQueue.main.async {
+                    AppDelegate.shared?.banner.hide(remove: true, ios13Hide: true)
+                }
             }
             
         }

@@ -15,7 +15,7 @@ extension UIActivityIndicatorView {
 }
 extension UIViewController {
     
-    func presentShareVC(vcc:UIViewController? = nil, with items:[Any], completion:(()->())? = nil, sender:UIView) {
+    func presentShareVC(vcc:UIViewController? = nil, with items:[Any], completion:(()->())? = nil, sender:UIView, dismissed:(()->())? = nil) {
         let activityViewController = UIActivityViewController(activityItems: items, applicationActivities: nil)
         activityViewController.popoverPresentationController?.sourceView = sender
         activityViewController.popoverPresentationController?.sourceRect = .init(origin: .zero, size: self.view.frame.size)
@@ -24,6 +24,11 @@ extension UIViewController {
             activityViewController.excludedActivityTypes?.append(.addToHomeScreen)
             activityViewController.excludedActivityTypes?.append(.sharePlay)
             
+        }
+        
+        
+        activityViewController.completionWithItemsHandler = { activityType, completed, returnedItems, error in
+            dismissed?()
         }
         if let vc = vcc {
             vc.present(activityViewController, animated: true, completion: completion)

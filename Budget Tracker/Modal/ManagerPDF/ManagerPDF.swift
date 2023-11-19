@@ -25,8 +25,8 @@ class ManagerPDF {
     var properties:PDFProperties = .init(dict: [:])
 
     lazy var generator:PagePDF = .init()
-    let pageWidth:CGFloat = 612
-    
+    var pageWidth:CGFloat = 612
+    let normalPageWidth:CGFloat = 612
     private func showError(title:String, description:String? = nil) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.newMessage.show(title:title, description: description, type: .error)
@@ -48,13 +48,24 @@ class ManagerPDF {
                     AppDelegate.shared?.banner.toggleFullScreenAdd(self.vc, type: .pdf, loaded: {
                         (self.vc as? StatisticVC)?.fullScrAd = $0
                         (self.vc as? StatisticVC)?.fullScrAd?.fullScreenContentDelegate = self.vc as? GADFullScreenContentDelegate
-                    }, closed: {
+                    }, closed: { presented in
                     //    self.vc.navigationController?.topViewController?.presentShareVC(with: [pdfData], sender: sender)
-                        self.vc.presentShareVC(with: [pdfData], sender:sender)
+                        if presented {
+                            self.vc.presentShareVC(with: [pdfData], sender:sender) {
+                                AppDelegate.shared?.banner.appeare(force: true)
+                            }
+                        } else {
+                            AppDelegate.shared?.banner.hide(ios13Hide: true, completion: {
+                                self.vc.presentShareVC(with: [pdfData], sender:sender) {
+                                    AppDelegate.shared?.banner.appeare(force: true)
+                                }
+                            })
+                        }
+                        
                     })
                     
                 } else {
-                    let newVC = AttributedStringTestVC.configure(pdf: self)
+                    let newVC = PDFEditVC.configure(pdf: self)
                     self.vc.navigationController?.pushViewController(newVC, animated: true)
                 }
             }
@@ -71,6 +82,14 @@ class ManagerPDF {
             res.append($0)
         })
         return (res, data.1)
+    }
+    
+    
+    func previewPDF() -> ([NSAttributedString], CGFloat) {
+        properties.defaultHeaderData = headerData
+        let data = UnparcePDF(manager: self).dictionaryToString(dict, data: properties, fromCreate: true)
+        print(properties, " gterfwe4e5gtr")
+        return data
     }
     
 

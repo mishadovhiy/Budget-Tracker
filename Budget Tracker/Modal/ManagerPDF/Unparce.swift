@@ -19,16 +19,27 @@ struct UnparcePDF {
         if data.defaultHeader {
             let header = documentHeader(data: data, fromCreate: true)
             text.append(header)
-            height += 145
+            height += (data.needDate ? 145 : 105)
+        } else if data.needDate {
+            text.append(documantDate(data: data, fromCreate: fromCreate))
+            height += 40
         } else {
             text.append(.init(string: "  \n"))
         }
+        var headI = 0
         data.headers.forEach({
-            let header = customHeader(data: $0)
+            let header = customHeader(data: $0, i: headI, isFooter: false, preview: fromCreate)
+            headI += 1
             text.append(header.0)
             text.append(.init(string: "\n"))
             height += (header.1)
         })
+        if fromCreate {
+            text.append(.init(string: "\n"))
+            let button = addButton(type: .addHeader)
+            text.append(button.0)
+            height += button.1
+        }
         text.append(.init(string: "\n\n\n"))
         height += 40
         dictionary.forEach({
@@ -56,29 +67,67 @@ struct UnparcePDF {
             height += 140
         }
         
+        var footI = 0
         data.footers.forEach({
-            let header = customHeader(data: $0)
+            let header = customHeader(data: $0, i: footI, isFooter: true, preview: fromCreate)
+            footI += 1
             text.append(header.0)
             text.append(.init(string: "\n"))
             height += (header.1)
         })
+        if fromCreate {
+            text.append(.init(string: "\n"))
+            let button = addButton(type: .addFooter)
+            text.append(button.0)
+            height += (button.1 + 10)
+            text.append(.init(string: "\n"))
+        }
         return (text, height)
     }
     
-    private func customHeader(data:AdditionalPDFData) -> (NSMutableAttributedString, CGFloat) {
+    
+    private func addButton(type:PDFEditVC.LinkAttributeType) -> (NSMutableAttributedString, CGFloat) {
+        let height:CGFloat = 50
+        let text:NSMutableAttributedString = .init(string: "")
+        let view = UIView(frame: .init(origin: .zero, size: .init(width: self.manager.pageWidth, height: height)))
+        let _ = view.layer.drawSeparetor(color: K.Colors.link, y:height / 2, width: 3)
+
+        let plus = UIImageView(frame: .init(origin: .init(x: manager.pageWidth / 2 - 25, y: height / 2 - 15), size: .init(width: 30, height: 30)))
+        plus.shadow()
+        plus.image = .init(named: "plusIcon")
+        plus.contentMode = .scaleAspectFit
+        view.addSubview(plus)
+        let attachment = NSTextAttachment()
+        attachment.image = view.toImage
+        attachment.bounds = view.frame
+    
+        text.append(.init(attachment: attachment))
+
+        let url = URL(string: "https://editCustom/\(type.rawValue)")!
+        text.addAttribute(.init(PDFEditVC.pdfLinkKey), value: url, range: NSRange(0..<text.length))
+        //here
+        return (text, height)
+    }
+    
+    private func customHeader(data:AdditionalPDFData, i:Int, isFooter:Bool, preview:Bool) -> (NSMutableAttributedString, CGFloat) {
         let text:NSMutableAttributedString = .init(string: "")
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = data.custom?.textSettins.alighment.textAligment ?? .left
         print("dassfwer ", data.custom?.textSettins)
-
+        
         let font = font(for: data.custom?.textSettins.textSize ?? .small)
         let fontResult = UIFont.systemFont(ofSize: font.0, weight: font.1)
         let color = textColor(for: data.custom?.textSettins.textColor ?? .primary) ?? primaryColor
-        let attributes:[NSAttributedString.Key : Any] = [
+        var attributes:[NSAttributedString.Key : Any] = [
             .font:fontResult,
             .foregroundColor:color,
             .paragraphStyle:paragraphStyle
         ]
+        if preview {
+            let linkComp:PDFEditVC.LinkAttributeType = isFooter ? .footer : .header
+            attributes.updateValue(URL(string: "https://editCustom/\(linkComp.rawValue)/\(i)")!, forKey: .init(PDFEditVC.pdfLinkKey))
+        }
+        
         text.append(.init(string: data.custom?.title ?? "-", attributes: attributes))
         let height = text.string.calculate(font: fontResult, inWindth: manager.pageWidth).height
         print(text.string, " gerfeefwrgef ", height)
@@ -99,14 +148,20 @@ struct UnparcePDF {
             .font:UIFont.systemFont(ofSize: bigFont.0, weight: bigFont.1),
             .foregroundColor:self.primaryColor,
         ]
-//        if fromCreate {
-//            attributes.updateValue(URL(string: "https://mishadovhiy.com")!, forKey: .link)
-//        }
         text.append(.init(string: "  Transactions History ", attributes: attributes))
         text.append(.init(string: "From Budget Tracker\n\n", attributes: [
             .font:UIFont.systemFont(ofSize: smallFont.0, weight: smallFont.1),
             .foregroundColor:secondaryColor
         ]))
+        if data.needDate {
+            text.append(documantDate(data: data, fromCreate: fromCreate))
+        }
+        return text
+    }
+    
+    private func documantDate(data:PDFProperties, fromCreate:Bool) -> NSMutableAttributedString {
+        let smallFont = font(for: .medium)
+        let text:NSMutableAttributedString = .init(string: "")
         text.append(.init(string: (data.defaultHeaderData?.type.capitalized ?? "") + " for " + (data.defaultHeaderData?.duration ?? ""), attributes: [
             .font:UIFont.systemFont(ofSize: smallFont.0, weight: smallFont.1),
             .foregroundColor:secondaryColor

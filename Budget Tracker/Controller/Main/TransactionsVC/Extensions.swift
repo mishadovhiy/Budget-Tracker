@@ -57,7 +57,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
             let dateComponent = selectedCategory?.dueDate
         //    print(dateComponent, "dateComponentdateComponentdateComponent")
             let date = "\(AppData.makeTwo(n: dateComponent?.day ?? 0))"
-            let month = "\(returnMonth(dateComponent?.month ?? 0)), \(dateComponent?.year ?? 0)"
+            let month = "\(getMonth(dateComponent?.month ?? 0)), \(dateComponent?.year ?? 0)"
 
             cell.expiredStack.isHidden = !dateExpired(dateComponent)
             

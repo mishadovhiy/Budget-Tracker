@@ -15,6 +15,7 @@ class BuyPageVC: UIPageViewController {
         .init(title: "Transfer data".localize, description: "Transfer transactions and categories between accounts".localize, imgName: "transfareDataIcon.pro", backgroundName: "purchaseBackground1"),
         .init(title: "No Adds".localize, description: "Remove all ads".localize, imgName: "noAds.pro", backgroundName: "purchaseBackground0"),
         .init(title: "App storage increase and more".localize, description: "• Create up to 15 accounts for email\n• Stores more data about app usage".localize, imgName: "dbStorage.pro", backgroundName: "purchaseBackground3"),
+        .init(title: "Edit PDF".localize, description: "Full edit PDF access".localize, imgName: "pdfIcon", backgroundName: "purchaseBackground0"),
     ]
     
     

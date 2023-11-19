@@ -41,8 +41,17 @@ extension LoginViewController: UITextFieldDelegate {
                         }
                         self.enteredEmailUsers = resultUsers
                         completion(found)
+                        print(resultUsers, " efrwd")
                         DispatchQueue.main.async {
-                            self.performSegue(withIdentifier: "toSelectUserVC", sender: self)
+
+                            SelectValueVC.presentScreen(in: self, with: [], structData: [
+                                .init(sectionName: "Select User", cells: resultUsers.compactMap({ apiUser in
+                                    .init(name: apiUser, regular: .init(didSelect: {
+                                        self.navigationController?.popViewController(animated: true)
+                                        self.userSelected(user: apiUser)
+                                    }))
+                                }))
+                            ], title: "User List")
                         }
                     } else {
                         let notFound = "Email not found".localize + "!"

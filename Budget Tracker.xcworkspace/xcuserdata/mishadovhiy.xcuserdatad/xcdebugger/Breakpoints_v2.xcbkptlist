@@ -3844,8 +3844,8 @@
             filePath = "Budget Tracker/Modal/AppData/AppData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "417"
-            endingLineNumber = "417"
+            startingLineNumber = "421"
+            endingLineNumber = "421"
             landmarkName = "presentMoreVC(currentVC:data:proIndex:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -3860,8 +3860,8 @@
             filePath = "Budget Tracker/Modal/AppData/AppData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "419"
-            endingLineNumber = "419"
+            startingLineNumber = "423"
+            endingLineNumber = "423"
             landmarkName = "presentMoreVC(currentVC:data:proIndex:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5482,8 +5482,8 @@
             filePath = "Budget Tracker/Modal/AppData/AppData.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "86"
-            endingLineNumber = "86"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
             landmarkName = "proVersion"
             landmarkType = "24">
             <Locations>
@@ -6146,54 +6146,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "AE0C874E-78CC-4F33-BC86-B37176CC3626"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Budget Tracker/UIModel/adBannerView/adBannerView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "278"
-            endingLineNumber = "278"
-            landmarkName = "adDidDismissFullScreenContent(_:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "AE0C874E-78CC-4F33-BC86-B37176CC3626 - fb92570dd934c352"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Budget_Tracker.adBannerView.adDidDismissFullScreenContent(__C.GADFullScreenPresentingAd) -&gt; ()"
-                  moduleName = "Budget Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/UIModel/adBannerView/adBannerView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "248"
-                  endingLineNumber = "248"
-                  offsetFromSymbolStart = "752">
-               </Location>
-               <Location
-                  uuid = "AE0C874E-78CC-4F33-BC86-B37176CC3626 - 1e7ff9ed436148d6"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 ((key: Swift.String, value: Budget_Tracker.FullScreenDelegate)) -&gt; () in Budget_Tracker.adBannerView.adDidDismissFullScreenContent(__C.GADFullScreenPresentingAd) -&gt; ()"
-                  moduleName = "Budget Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/btracker/Budget%20Tracker/UIModel/adBannerView/adBannerView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "249"
-                  endingLineNumber = "249"
-                  offsetFromSymbolStart = "32">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "6D5A13DA-3A80-4701-80B4-24AA8956A734"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -6201,8 +6153,8 @@
             filePath = "Budget Tracker/UIModel/adBannerView/adBannerView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "283"
-            endingLineNumber = "283"
+            startingLineNumber = "306"
+            endingLineNumber = "306"
             landmarkName = "adDidDismissFullScreenContent(_:)"
             landmarkType = "7">
             <Locations>
@@ -6265,10 +6217,10 @@
             filePath = "Budget Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "310"
-            endingLineNumber = "310"
-            landmarkName = "AttributedStringTestVC"
-            landmarkType = "21">
+            startingLineNumber = "353"
+            endingLineNumber = "353"
+            landmarkName = "colorPickerViewController(_:didSelect:continuously:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -6281,88 +6233,10 @@
             filePath = "Budget Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "86"
-            endingLineNumber = "86"
+            startingLineNumber = "134"
+            endingLineNumber = "134"
             landmarkName = "updateDB(completion:)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "69F815DB-AC17-4FFD-9A9B-98234358FCC2"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Budget Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "229"
-            endingLineNumber = "229"
-            landmarkName = "toggleContainerHeight(_:completion:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "69F815DB-AC17-4FFD-9A9B-98234358FCC2 - fc822aea5b167a8d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Budget_Tracker.AttributedStringTestVC.toggleContainerHeight(_: Swift.Bool, completion: Swift.Optional&lt;() -&gt; ()&gt;) -&gt; ()"
-                  moduleName = "Budget Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/Budget-Tracker/Budget%20Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "183"
-                  endingLineNumber = "183"
-                  offsetFromSymbolStart = "152">
-               </Location>
-               <Location
-                  uuid = "69F815DB-AC17-4FFD-9A9B-98234358FCC2 - e4257d1f1c78162f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (__C.NSLayoutConstraint) -&gt; Swift.Bool in Budget_Tracker.AttributedStringTestVC.toggleContainerHeight(_: Swift.Bool, completion: Swift.Optional&lt;() -&gt; ()&gt;) -&gt; ()"
-                  moduleName = "Budget Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/Budget-Tracker/Budget%20Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "183"
-                  endingLineNumber = "183"
-                  offsetFromSymbolStart = "44">
-               </Location>
-               <Location
-                  uuid = "69F815DB-AC17-4FFD-9A9B-98234358FCC2 - fc822aea5b167a66"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Budget_Tracker.AttributedStringTestVC.toggleContainerHeight(_: Swift.Bool, completion: Swift.Optional&lt;() -&gt; ()&gt;) -&gt; ()"
-                  moduleName = "Budget Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/Budget-Tracker/Budget%20Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "188"
-                  endingLineNumber = "188"
-                  offsetFromSymbolStart = "152">
-               </Location>
-               <Location
-                  uuid = "69F815DB-AC17-4FFD-9A9B-98234358FCC2 - e4257d1f1c7816c4"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (__C.NSLayoutConstraint) -&gt; Swift.Bool in Budget_Tracker.AttributedStringTestVC.toggleContainerHeight(_: Swift.Bool, completion: Swift.Optional&lt;() -&gt; ()&gt;) -&gt; ()"
-                  moduleName = "Budget Tracker"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/mishadovhiy/Developer/Budget-Tracker/Budget%20Tracker/Controller/Reusable/AttributedStringTestVC/AttributedStringTestVC.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "188"
-                  endingLineNumber = "188"
-                  offsetFromSymbolStart = "44">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -6441,6 +6315,54 @@
                   offsetFromSymbolStart = "144">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "15B4A76F-EBA9-4F09-862D-97F4C860A7ED"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Budget Tracker/Controller/Reusable/PDFEditVC/PDFEditVC.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "313"
+            endingLineNumber = "313"
+            landmarkName = "customSelected(data:type:at:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "290E3F88-93E6-4703-A1C2-1989D56E584E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Budget Tracker/UIModel/adBannerView/adBannerView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "81"
+            endingLineNumber = "81"
+            landmarkName = "appeare(force:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5ED7C092-EA92-4174-A564-84188D799B6F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Budget Tracker/UIModel/adBannerView/adBannerView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "110"
+            endingLineNumber = "110"
+            landmarkName = "hide(remove:ios13Hide:completion:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

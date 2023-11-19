@@ -24,6 +24,14 @@ struct PDFProperties {
             dict.updateValue(newValue, forKey: "defaultHeader")
         }
     }
+    var needDate:Bool {
+        get {
+            return dict["needDate"] as? Bool ?? true
+        }
+        set {
+            dict.updateValue(newValue, forKey: "needDate")
+        }
+    }
     var defaultFooter:Bool {
         get {
             return dict["defaultFooter"] as? Bool ?? true

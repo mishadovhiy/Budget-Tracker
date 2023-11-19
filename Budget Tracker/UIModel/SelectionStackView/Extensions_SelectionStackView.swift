@@ -90,6 +90,9 @@ extension SelectionStackView {
         label.addConstaits([.height:11], superV: stack)
         stackView.addArrangedSubview(stack)
         stack.addConstaits([.width:rowWidth, .height:self.frame.height], superV: stackView)
+        if let selected = value.selectedRow {
+            pickerView.selectRow(selected, inComponent: 0, animated: false)
+        }
     }
     
     private func createRow(_ value:SelectionData, at:Int) {

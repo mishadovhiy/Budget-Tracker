@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AdsButton: TouchButton {
+class AdButton: TouchButton {
 
     private var adLabel:UILabel?
     
@@ -30,9 +30,10 @@ class AdsButton: TouchButton {
     
     
     func toggleAdView(show:Bool) {
-        if let label = adLabel {
+        if let label = adLabel, let background = self.subviews.first(where: {$0.layer.name == "adBack"}) {
             UIView.animate(withDuration: 0.3) {
                 label.layer.opacity = show ? 1 : 0
+                background.layer.opacity = show ? 1 : 0
             }
         }
     }
@@ -62,6 +63,7 @@ class AdsButton: TouchButton {
         adLabel?.frame = .init(origin: .init(x: -5, y: 7), size: .init(width: 30, height: 30))
         let background = UIImageView(image: .init(named: "adBack"))
         background.contentMode = .scaleAspectFit
+        background.layer.name = "adBack"
         //background.backgroundColor = K.Colors.link
       //  background.layer.cornerRadius = 3
         self.addSubview(background)
