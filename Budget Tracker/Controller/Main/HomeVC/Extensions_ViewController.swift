@@ -198,8 +198,13 @@ extension HomeVC {
             let today = appData.filter.getToday()
             let lastDay = "31.\(appData.filter.getMonthFromString(s: today).makeTwo()).\(appData.filter.getYearFromString(s: today))"
             let firstDay = "01.\(appData.filter.getMonthFromString(s: today).makeTwo()).\(appData.filter.getYearFromString(s: today))"
-            appData.filter.to = appData.filter.to == "" ? lastDay : appData.filter.to
-            appData.filter.from = appData.filter.from == "" ? firstDay : appData.filter.from
+            if appData.filter.to == "" {
+                appData.filter.to = lastDay
+            }
+            if appData.filter.from == "" {
+                appData.filter.from = firstDay
+
+            }
             let to = appData.filter.to
             let monthT = appData.filter.getMonthFromString(s: to)
             let yearT = appData.filter.getYearFromString(s: to)
@@ -458,11 +463,13 @@ extension HomeVC {
                         completion(false)
                     } else {
                         let _ = self.appData.emailFromLoadedDataPurch(loadedData)
-                        self.appData.trialDate = userData[5]
+                        if self.appData.trialDate != userData[5] {
+                            self.appData.trialDate = userData[5]
+                        }
                         if !self.appData.purchasedOnThisDevice && !self.appData.proVersion {
                             print("checkPurchase appData.proVersion", self.appData.proVersion)
                             if userData[5] != "" {
-                                self.checkProTrial()
+                               // self.checkProTrial()
                             }
                         }
                         completion(true)
@@ -828,10 +835,13 @@ extension HomeVC: TransitionVCProtocol {
                 years.append(removeDayMonthFromString(arr[i].date))
             }
         }
-        appData.filter.filteredData = [
-            "months":months,
-            "years":years
-        ]
+        if appData.filter.filteredData["months"] != months || appData.filter.filteredData["years"] != years {
+            appData.filter.filteredData = [
+                "months":months,
+                "years":years
+            ]
+        }
+        
     }
     func toAddTransaction(editing:Bool = false, pressedView:UIView? = nil, canDivid:Bool = true, isCalendar:Bool = false) {
         if !editing {

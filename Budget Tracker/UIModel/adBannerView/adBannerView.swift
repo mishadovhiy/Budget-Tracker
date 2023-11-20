@@ -116,7 +116,7 @@ class adBannerView: UIView {
         }
         if !adNotReceved && go {
             adHidden = true
-        //    DispatchQueue.main.async {
+            DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.3) {
                     // self.alpha = 0
                     self.backgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, self.toHide, 0)
@@ -127,7 +127,7 @@ class adBannerView: UIView {
                     }
                     completion?()
                 }
-       //     }
+            }
         } else {
             completion?()
         }

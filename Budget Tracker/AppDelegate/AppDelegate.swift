@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     //todo: scene: shared = sctruct
-    weak static var shared:AppDelegate?
+    static var shared:AppDelegate?
     let center = UNUserNotificationCenter.current()
     lazy var notificationManager = NotificationManager()
     
@@ -174,7 +174,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
-        DataBase._db = nil
+    //    DataBase._db = nil
         AppData.categoriesHolder = nil
         DispatchQueue(label: "db", qos: .userInitiated).async {
             if self.appData.devMode {

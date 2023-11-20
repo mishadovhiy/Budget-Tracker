@@ -643,8 +643,11 @@ class LoginViewController: SuperViewController {
     @IBAction func emailUsersPressed(_ sender: UIButton) {
             let vc = SelectValueVC.configure()
         vc.delegate = self
-        vc.tableData = [.init(sectionName: "", cells: enteredEmailUsers.compactMap({
-            .init(name: $0)
+        vc.tableData = [.init(sectionName: "", cells: enteredEmailUsers.compactMap({ apiUser in
+            .init(name: apiUser, regular: .init(didSelect: {
+                self.navigationController?.popViewController(animated: true)
+                self.userSelected(user: apiUser)
+            }))
         }))]
         vc.titleText = "Select user".localize
         DispatchQueue.main.async {

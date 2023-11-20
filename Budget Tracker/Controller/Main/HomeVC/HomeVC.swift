@@ -50,7 +50,7 @@ class HomeVC: SuperViewController {
     @IBOutlet weak var bigExpensesStack: UIStackView!
     
     @IBOutlet weak var sideBarContentBlockerView: UIView!
-    weak static var shared: HomeVC?
+    static var shared: HomeVC?
     var fromSideBar = false
     var _notificationsCount = (0,0)
     var sidescrolling = false
@@ -212,7 +212,10 @@ class HomeVC: SuperViewController {
         dataTaskCount = (0,0)
         animateCellWillAppear = true
         let selectedPeriud = AppDelegate.shared?.appData.filter.selectedPeroud ?? ""
-        AppDelegate.shared?.appData.filter.selectedPeroud = selectedPeriud != "" ? selectedPeriud : "This Month"
+        let selectedPer = selectedPeriud != "" ? selectedPeriud : "This Month"
+        if AppDelegate.shared?.appData.filter.selectedPeroud != selectedPer {
+            AppDelegate.shared?.appData.filter.selectedPeroud = selectedPer
+        }
         
         if !showAll {
             allDaysBetween()

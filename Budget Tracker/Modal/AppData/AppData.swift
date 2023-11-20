@@ -151,7 +151,9 @@ class AppData {
                         }
                     }
                 }
-                proVersion = dbPurch
+                if proVersion != dbPurch {
+                    proVersion = dbPurch
+                }
                 print("dbPurch:", dbPurch)
                 return email
             }
@@ -229,7 +231,8 @@ class AppData {
     let testIds:[String] = [
         "092BAEA3-9810-4A80-ADEF-53ABC78F9CA0",
         "C2F525EB-3192-4483-9F29-50F1DA63BECF",
-        "B7BC8C6F-505C-4836-B240-3326CBDD0AC2"
+        "B7BC8C6F-505C-4836-B240-3326CBDD0AC2",
+        "E4636FA3-660C-4562-9D4B-999056448BB7"
     ]
 
 
