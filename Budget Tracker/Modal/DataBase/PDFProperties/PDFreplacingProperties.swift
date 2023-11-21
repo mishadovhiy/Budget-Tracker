@@ -100,7 +100,7 @@ struct PDFreplacingProperties {
                 }
             }
             static var allCases:[DateTypeFormat] = [
-                .mmDDyyy, .monthDDyyyy, .ddMMyyyy
+                .mmDDyyy, .ddMMyyyy//, .monthDDyyyy
             ]
 
         }
