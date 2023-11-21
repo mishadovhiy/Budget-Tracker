@@ -21,6 +21,8 @@ extension SelectValueVC:UITableViewDelegate, UITableViewDataSource {
         if let regular = tableData[indexPath.section].cells[indexPath.row].regular {
             let cell = tableView.dequeueReusableCell(withIdentifier: "SelectUserVCCell", for: indexPath) as! SelectUserVCCell
             cell.mainTitleLabel.text = tableData[indexPath.section].cells[indexPath.row].name
+            cell.mainDescriptionLabel.isHidden = tableData[indexPath.section].cells[indexPath.row].regular?.description ?? "" == ""
+            cell.mainDescriptionLabel.text = tableData[indexPath.section].cells[indexPath.row].regular?.description
             return cell
         } else if let switcher = tableData[indexPath.section].cells[indexPath.row].switcher {
             let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell", for: indexPath) as! SwitchCell

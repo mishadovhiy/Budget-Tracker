@@ -14,7 +14,6 @@ class PDFEditVC:SuperViewController {
     @IBOutlet weak var stopEditingButton: UIButton!
     var pdfData:ManagerPDF?
     @IBOutlet weak var exportPdfButton: AdButton!
-    var appearedPdfData:ManagerPDF?
     var enteringValuePropHolder:PdfTextProperties?
     let containerConstraintKey = "egualHeightContainer"
     var tableData:[NSAttributedString] = []
@@ -28,7 +27,6 @@ class PDFEditVC:SuperViewController {
         print(pdfData, " grefrwed")
         tableView.delegate = self
         tableView.dataSource = self
-        appearedPdfData = pdfData
         pdfData?.pageWidth = AppDelegate.shared?.window?.frame.width ?? 10
         updatePDF()
         createSettingsContainer()
@@ -49,7 +47,6 @@ class PDFEditVC:SuperViewController {
         AppDelegate.shared?.banner.fullScreenDelegates.removeValue(forKey: self.restorationIdentifier!)
         updateDB(completion: {
             self.pdfData = nil
-            self.appearedPdfData = nil
         })
         
 
@@ -230,6 +227,15 @@ class PDFEditVC:SuperViewController {
         }
     }
     
+   // weak var selectingTypeVC:SelectValueVC?
+    private func toSelectValueVC(title:String, tableData:[SelectValueVC.SelectValueSections],
+        complation:((_ vc:SelectValueVC)->())? = nil) {
+        let vc = SelectValueVC.configure()
+        vc.titleText = title
+        vc.tableData = tableData
+        settingsNav?.pushViewController(vc, animated: true)
+        complation?(vc)
+    }
     
     
     private func createSettingsContainer() {
@@ -262,7 +268,8 @@ class PDFEditVC:SuperViewController {
     
     private var settingsApepareCalled = false
     
-    func toEnterValue(_ title:String, selectionData:[SelectionStackView.SelectionData]?, selectedValue:AdditionalPDFData? = nil, nextPressed:@escaping(_ string:String)->()) {
+    //update enter value vc on didAppeare (adding custome type, attachment)
+    func toEnterValue(_ title:String, selectionData:[SelectionStackView.SelectionData]?, selectedValue:String? = nil, nextPressed:@escaping(_ string:String)->()) {
         toggleSettingsHeight(.text)
         let vc = EnterValueVC.configure()
         vc.screenData = .init(taskName: title, title: "", placeHolder: "", nextAction: {
@@ -275,14 +282,22 @@ class PDFEditVC:SuperViewController {
         vc.selectionStackData = selectionData
         vc.nextButtonTitle = "Done"
         if let value = selectedValue {
-            vc.textFieldValue = value.custom?.title
+            vc.textFieldValue = value
         }
-//        vc.dismissedAction = {
-//            self.toggleSettingsHeight(.none)
-//        }
         self.settingsNav?.pushViewController(vc, animated: true)
+        if selectionData != nil {
+            let dateButton = UIBarButtonItem(title: "Date", style: .done, target: self, action: #selector(dateTypePressed(_:)))
+            dateButton.tintColor = K.Colors.link
+            vc.navigationItem.rightBarButtonItems?.append(dateButton)
+        }
+        
+
     }
     
+    
+    @objc func dateTypePressed(_ sender:UIBarButtonItem) {
+        addCustomTypePressed()
+    }
     
     func reloadTable() {
         self.updatePDF()
@@ -303,16 +318,20 @@ class PDFEditVC:SuperViewController {
 
     var exportPressed = false
     @IBAction func exportPdfPressed(_ sender: Any) {
-        exportPressed = true
-        pdfData?.pageWidth = pdfData?.normalPageWidth ?? 0
-        pdfData?.exportPDF(sender: self.navigationController?.view ?? .init(), toEdit: false)
+        self.updateDB {
+            self.updatePDF()
+            self.exportPressed = true
+            self.pdfData?.pageWidth = self.pdfData?.normalPageWidth ?? 0
+            self.pdfData?.exportPDF(sender: self.navigationController?.view ?? .init(), toEdit: false)
+        }
+        
 
     }
     
     private func customSelected(data: AdditionalPDFData, type:LinkAttributeType, at:Int) {
         self.enteringValuePropHolder = data.custom?.textSettins ?? .init(dict: [:])
         print(enteringValuePropHolder, " enteringValuePropHolder")
-        self.toEnterValue("Edit \(type.title)", selectionData: self.textCustomizationData, selectedValue: data) { string in
+        self.toEnterValue("\(type.title)".capitalized, selectionData: self.textCustomizationData, selectedValue: data.custom?.title) { string in
             self.removeCustom(isFooter: type == .footer, at: at)
             self.addCustom(isFooter: type == .footer, str: string, insertAt: at)
         }
@@ -322,7 +341,7 @@ class PDFEditVC:SuperViewController {
     func addCustomPressed(_ selectedValue:AdditionalPDFData? = nil, type:LinkAttributeType) {
         self.enteringValuePropHolder = selectedValue?.custom?.textSettins ?? .init(dict: [:])
         print(type, "addCustomPressed")
-        self.toEnterValue("Enter new \(type.title)", selectionData: self.textCustomizationData, selectedValue: selectedValue, nextPressed: { string in
+        self.toEnterValue("New \(type.title)", selectionData: self.textCustomizationData, selectedValue: selectedValue?.custom?.title, nextPressed: { string in
             self.addCustom(isFooter: type == .addFooter, str: string)
         })
     }
@@ -477,8 +496,102 @@ extension PDFEditVC:UIColorPickerViewControllerDelegate {
 extension PDFEditVC:FullScreenDelegate {
     func toggleAdView(_ show: Bool) {
         exportPdfButton.toggleAdView(show: show)
+        //here
     }
 }
+
+
+
+//toAddType pressed
+extension PDFEditVC {
+    private var selectTypeTableData:[SelectValueVC.SelectValueSections] {
+        
+        [
+            .init(sectionName: "", cells: [
+                .init(name: "Type", 
+                      regular: .init(description: enteringValuePropHolder?.replacingType.date.type.title ?? "-" ,didSelect: dateTypePressed)),
+                .init(name: "Date format",
+                      regular: .init(description: enteringValuePropHolder?.replacingType.date.format.title ?? "-" , didSelect: dateFormatPressed)),
+                .init(name: "In text position",
+                      regular: .init(description: enteringValuePropHolder?.replacingType.date.inTextPosition.title ?? "-" , didSelect: {
+                          self.intextPositionPressed(attachment: false)
+                      })),
+                    .init(name: "Range separetor",
+                      regular: .init(description: enteringValuePropHolder?.replacingType.date.rangeSeparetor ?? "-", didSelect: {
+                          self.toEnterSeparetor(range: true)
+                      })),
+                .init(name: "Day separetor",
+                      regular: .init(description: enteringValuePropHolder?.replacingType.date.dateSeparetor ?? "-", didSelect: {
+                          self.toEnterSeparetor(range: false)
+                      }))
+            ])
+        ]
+    }
+    
+    
+    
+    private func toEnterSeparetor(range:Bool) {
+        let selected = range ? enteringValuePropHolder?.replacingType.date.rangeSeparetor : enteringValuePropHolder?.replacingType.date.dateSeparetor
+        toEnterValue((range ? "Range" : "Day") + " separetor", selectionData: nil, selectedValue: selected) { string in
+            if range {
+                self.enteringValuePropHolder?.replacingType.date.rangeSeparetor = string
+            } else {
+                self.enteringValuePropHolder?.replacingType.date.dateSeparetor = string
+            }
+            self.settingsNav?.popViewController(animated: true)
+        }
+    }
+    
+    
+    func intextPositionPressed(attachment:Bool) {
+        toSelectValueVC(title: "Select date format", tableData: [
+            .init(sectionName: "", cells: PdfTextProperties.InTextPosition.allCases.compactMap({ type in
+                .init(name: type.title, regular: .init(didSelect: {
+                    if !attachment {
+                        self.enteringValuePropHolder?.replacingType.date.inTextPosition = type
+
+                    } else {
+                        self.enteringValuePropHolder?.attachment.inTextPosition = type
+
+                    }
+                    self.settingsNav?.popViewController(animated: true)
+                }))
+            }))
+        ])
+    }
+    
+    private func dateFormatPressed() {
+        toSelectValueVC(title: "Select date format", tableData: [
+            .init(sectionName: "", cells: PDFreplacingProperties.DateType.DateTypeFormat.allCases.compactMap({ type in
+                .init(name: type.title, regular: .init(didSelect: {
+                    self.enteringValuePropHolder?.replacingType.date.format = type
+                    self.settingsNav?.popViewController(animated: true)
+                }))
+            }))
+        ])
+    }
+    
+    private func dateTypePressed() {
+        toSelectValueVC(title: "Select date type", tableData: [
+            .init(sectionName: "", cells: PDFreplacingProperties.DateType.DateTypeValue.allCases.compactMap({ type in
+                .init(name: type.title, regular: .init(didSelect: {
+                    self.enteringValuePropHolder?.replacingType.date.type = type
+                    self.settingsNav?.popViewController(animated: true)
+                }))
+            }))
+        ])
+    }
+    
+    func addCustomTypePressed() {
+        toSelectValueVC(title: "Date properties", tableData: self.selectTypeTableData) { vc in
+            vc.appeareAction = {
+                ($0 as! SelectValueVC).updateTable(self.selectTypeTableData)
+            }
+        }
+    }
+}
+
+
 
 extension PDFEditVC {
 

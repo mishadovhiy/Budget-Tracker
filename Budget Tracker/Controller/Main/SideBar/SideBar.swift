@@ -68,7 +68,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
             .init(section: accountSection, title: "", hidden: false),
             .init(section: categories, title: "", hidden: false),
             .init(section: [upcommingRemiders], title: "", hidden: false),
-            .init(section: [statistic, applePay], title: "", hidden: false),
+            .init(section: [statistic], title: "", hidden: false),
         ]
         DispatchQueue.main.async {
             HomeVC.shared?.sideTableView.reloadData()

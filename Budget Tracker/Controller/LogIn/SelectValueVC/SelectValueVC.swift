@@ -16,8 +16,6 @@ class SelectValueVC: SuperViewController {
     var delegate: SelectUserVCDelegate?
     var titleText:String?
     var corneredTable:Bool = false
-    var appeareAction:((_ vc:SelectValueVC?)->())?
-    var disapeareAction:((_ vc:SelectValueVC?)->())?
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.registerCell([.switcher])
@@ -31,14 +29,9 @@ class SelectValueVC: SuperViewController {
     //remove //refactoring: all in \tableData
     var selectedIdxAction:((Int) -> ())?
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        appeareAction?(self)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        disapeareAction?(self)
+    func updateTable(_ data:[SelectValueSections]) {
+        self.tableData = data
+        tableView.reloadData()
     }
 }
 

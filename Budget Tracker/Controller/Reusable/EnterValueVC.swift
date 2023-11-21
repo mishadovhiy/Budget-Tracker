@@ -248,11 +248,11 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
         super.viewWillAppear(animated)
         if !willAppeareCalled {
             willAppeareCalled = true
-            NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-            NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+            
         }
         self.navigationController?.setNavigationBarHidden(false, animated: true)
-        
+        NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     enum screenType {

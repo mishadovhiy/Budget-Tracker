@@ -946,26 +946,38 @@
                                             <rect key="frame" x="0.0" y="0.0" width="430" height="45.333332061767578"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hYQ-W7-a2h">
+                                                <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DCH-tm-haF">
                                                     <rect key="frame" x="10" y="9.9999999999999982" width="410" height="25.333333333333329"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="25" id="VUf-IA-NaG"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                    <color key="textColor" name="CategoryColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hYQ-W7-a2h">
+                                                            <rect key="frame" x="0.0" y="0.0" width="37.333333333333336" height="25.333333333333332"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="25" id="VUf-IA-NaG"/>
+                                                            </constraints>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                            <color key="textColor" name="CategoryColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="biw-N3-yMp">
+                                                            <rect key="frame" x="37.333333333333343" y="0.0" width="372.66666666666663" height="25.333333333333332"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                            <color key="textColor" name="CategoryColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </stackView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="hYQ-W7-a2h" secondAttribute="trailing" constant="10" id="7hI-hI-uhD"/>
-                                                <constraint firstItem="hYQ-W7-a2h" firstAttribute="leading" secondItem="fdV-pn-T4a" secondAttribute="leading" constant="10" id="CfX-CN-jQQ"/>
-                                                <constraint firstItem="hYQ-W7-a2h" firstAttribute="top" secondItem="fdV-pn-T4a" secondAttribute="top" constant="10" id="aDB-ZF-R9Q"/>
-                                                <constraint firstAttribute="bottom" secondItem="hYQ-W7-a2h" secondAttribute="bottom" constant="10" id="fsN-mL-pyt"/>
+                                                <constraint firstItem="DCH-tm-haF" firstAttribute="top" secondItem="fdV-pn-T4a" secondAttribute="top" constant="10" id="O7m-tP-Kj6"/>
+                                                <constraint firstAttribute="trailing" secondItem="DCH-tm-haF" secondAttribute="trailing" constant="10" id="aao-ir-F3f"/>
+                                                <constraint firstItem="DCH-tm-haF" firstAttribute="leading" secondItem="fdV-pn-T4a" secondAttribute="leading" constant="10" id="nAh-9n-05P"/>
+                                                <constraint firstAttribute="bottom" secondItem="DCH-tm-haF" secondAttribute="bottom" constant="10" id="vMG-Qd-1W0"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
+                                            <outlet property="mainDescriptionLabel" destination="biw-N3-yMp" id="koL-VG-Fn9"/>
                                             <outlet property="mainTitleLabel" destination="hYQ-W7-a2h" id="MVM-eC-8R7"/>
                                         </connections>
                                     </tableViewCell>
@@ -1204,7 +1216,7 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="tintColor">
-            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

@@ -156,6 +156,9 @@
 		8DF9DCCD2815A87400C7BFA0 /* adBannerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DF9DCCC2815A87400C7BFA0 /* adBannerView.xib */; };
 		8DF9DCD02815A89400C7BFA0 /* adBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF9DCCF2815A89400C7BFA0 /* adBannerView.swift */; };
 		8DF9DCD42815AAD000C7BFA0 /* ExtensionGADBannerViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF9DCD32815AAD000C7BFA0 /* ExtensionGADBannerViewDelegate.swift */; };
+		8DFEA8A22B0C504E003410D7 /* PDFreplacingProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFEA8A12B0C504E003410D7 /* PDFreplacingProperties.swift */; };
+		8DFEA8A52B0C5073003410D7 /* PdfTextProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFEA8A42B0C5073003410D7 /* PdfTextProperties.swift */; };
+		8DFEA8A72B0C5091003410D7 /* PdfDocumentProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFEA8A62B0C5091003410D7 /* PdfDocumentProperties.swift */; };
 		8DFF72892B07E75B00FC38A7 /* UITableViewDelegate_ SelectValueVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DFF72882B07E75B00FC38A7 /* UITableViewDelegate_ SelectValueVC.swift */; };
 /* End PBXBuildFile section */
 
@@ -358,6 +361,9 @@
 		8DF9DCCC2815A87400C7BFA0 /* adBannerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = adBannerView.xib; sourceTree = "<group>"; };
 		8DF9DCCF2815A89400C7BFA0 /* adBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = adBannerView.swift; sourceTree = "<group>"; };
 		8DF9DCD32815AAD000C7BFA0 /* ExtensionGADBannerViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionGADBannerViewDelegate.swift; sourceTree = "<group>"; };
+		8DFEA8A12B0C504E003410D7 /* PDFreplacingProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFreplacingProperties.swift; sourceTree = "<group>"; };
+		8DFEA8A42B0C5073003410D7 /* PdfTextProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PdfTextProperties.swift; sourceTree = "<group>"; };
+		8DFEA8A62B0C5091003410D7 /* PdfDocumentProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PdfDocumentProperties.swift; sourceTree = "<group>"; };
 		8DFF72882B07E75B00FC38A7 /* UITableViewDelegate_ SelectValueVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewDelegate_ SelectValueVC.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -524,7 +530,7 @@
 				8BE60E5827726EA8007B7FB3 /* LastSelected.swift */,
 				8BC8524F27E28D0F00C5A3A4 /* UserSettings.swift */,
 				8DD2D2CC2998902E0098C106 /* ViewControllers.swift */,
-				8D15BD5F2B047F5D00E1C444 /* PDFProperties.swift */,
+				8DFEA8A32B0C5063003410D7 /* PDFProperties */,
 			);
 			path = DataBase;
 			sourceTree = "<group>";
@@ -1022,6 +1028,17 @@
 			path = adBannerView;
 			sourceTree = "<group>";
 		};
+		8DFEA8A32B0C5063003410D7 /* PDFProperties */ = {
+			isa = PBXGroup;
+			children = (
+				8D15BD5F2B047F5D00E1C444 /* PDFProperties.swift */,
+				8DFEA8A62B0C5091003410D7 /* PdfDocumentProperties.swift */,
+				8DFEA8A42B0C5073003410D7 /* PdfTextProperties.swift */,
+				8DFEA8A12B0C504E003410D7 /* PDFreplacingProperties.swift */,
+			);
+			path = PDFProperties;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1243,9 +1260,11 @@
 				8B57837E275E6977007BA9EC /* SideBar.swift in Sources */,
 				8D17FABB2B07BF9F005E03FD /* UITableViewDelegate_AttributedStringVC.swift in Sources */,
 				8BFA15D427E8E87B0078856A /* LocalDataActionCell.swift in Sources */,
+				8DFEA8A52B0C5073003410D7 /* PdfTextProperties.swift in Sources */,
 				8BB75D4227F26CA000AE71A1 /* ReminderStruct.swift in Sources */,
 				8DA77CF4298B687E00949D98 /* Filter.swift in Sources */,
 				8BF63E8B276294F2002E8601 /* SelectValueVC.swift in Sources */,
+				8DFEA8A72B0C5091003410D7 /* PdfDocumentProperties.swift in Sources */,
 				8D163BA329944D2700EF6C2A /* UITapGestureRecognizer.swift in Sources */,
 				8B26328227E677930086C3A8 /* Label.swift in Sources */,
 				8DE693C22AD4A12C008501B0 /* SelectValueCollectionVC.swift in Sources */,
@@ -1322,6 +1341,7 @@
 				8B42FCDD2776805800013E4B /* NumbersTF.swift in Sources */,
 				8B5F342C26FB2D98000DDCAF /* EnterValueVC.swift in Sources */,
 				8BFA15D127E8E8510078856A /* categoriesVCcell.swift in Sources */,
+				8DFEA8A22B0C504E003410D7 /* PDFreplacingProperties.swift in Sources */,
 				8BC31D7B27E3E5EA00FBC939 /* Button.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1571,7 +1591,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
@@ -1602,7 +1622,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";

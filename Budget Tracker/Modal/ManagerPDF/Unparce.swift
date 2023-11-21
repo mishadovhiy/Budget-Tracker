@@ -127,8 +127,19 @@ struct UnparcePDF {
             let linkComp:PDFEditVC.LinkAttributeType = isFooter ? .footer : .header
             attributes.updateValue(URL(string: "https://editCustom/\(linkComp.rawValue)/\(i)")!, forKey: .init(PDFEditVC.pdfLinkKey))
         }
-        
+        var dateText:String = ""
+        let replacingType = data.custom?.textSettins.replacingType
+        if let date = replacingType, date.date.type != .none {
+            dateText = manager.date(for: date)
+        }
+        if replacingType?.date.inTextPosition == .left {
+            text.append(.init(string: dateText + " ", attributes: attributes))
+        }
         text.append(.init(string: data.custom?.title ?? "-", attributes: attributes))
+        if replacingType?.date.inTextPosition == .right {
+            text.append(.init(string: " " + dateText, attributes: attributes))
+        }
+
         let height = text.string.calculate(font: fontResult, inWindth: manager.pageWidth).height
         print(text.string, " gerfeefwrgef ", height)
         return (text, height)

@@ -65,12 +65,35 @@ extension DateComponents {
         return "\((self.month?.stringMonth ?? "").capitalized) \(self.day?.makeTwo() ?? "-"), \(self.year ?? 0)"
     }
     
-    func toShortString(dateFormat:String="dd.MM.yyyy") -> String? {
-        let day = AppData.makeTwo(int: self.day)
-        let month = AppData.makeTwo(int: self.month)
-        let year = "\(self.year ?? 0)"
-        return day + "." + month + "." + year
+    func toShortString(dateFormat:String="dd.MM.yyyy", components:[StringComponents] = [.dd, .mm, .yyyy], separetor:String = ".") -> String? {
+        var text = ""
+        components.forEach {
+            text += stringComponent($0)
+            if $0 != (components.last ?? .yyyy) {
+                text += separetor
+            }
+        }
+        return text
     }
+    
+    
+    private func stringComponent(_ value:StringComponents) -> String {
+        switch value {
+        case .dd:
+            return day?.twoDec ?? ""
+        case .mm:
+            return month?.twoDec ?? ""
+        case .month:
+            return month?.stringMonth ?? ""
+        case .yyyy:
+            return "\(year ?? 0)"
+        }
+    }
+    
+    enum StringComponents:String {
+    case dd, mm, month, yyyy
+    }
+    
     
     func stringToDateComponent(s: String, dateFormat:String="dd.MM.yyyy") -> DateComponents {//make privat
         let dateFormatter = DateFormatter()

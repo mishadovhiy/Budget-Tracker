@@ -115,7 +115,6 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         }
 
         self.tableView.contentInset.bottom = self.defaultTableInset
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {

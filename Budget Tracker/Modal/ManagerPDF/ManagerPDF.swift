@@ -21,6 +21,10 @@ class ManagerPDF {
         self.pageTitle = pageTitle
         self.vc = vc
         self.headerData = data
+        print(data.from.toShortString(), " ManagerPDF datesss")
+        print(data.to.toShortString(), " ManagerPDF datesss")
+        print(data.today.toShortString(), " ManagerPDF datesss")
+
     }
     var properties:PDFProperties = .init(dict: [:])
 
@@ -72,6 +76,29 @@ class ManagerPDF {
         }
     }
 
+    
+    func date(for type:PDFreplacingProperties) -> String {
+        //headerData
+        switch type.date.type {
+        case .transactionDateRange:
+            if let first = dateComponent(headerData.from, for: type),
+               let second = dateComponent(headerData.to, for: type) {
+                return first + " " + type.date.rangeSeparetor + " " + second
+            } else {
+                return ""
+            }
+        case .today:
+            return dateComponent(headerData.today, for: type) ?? ""
+        case .none:
+            return ""
+        }
+    }
+    
+
+    private func dateComponent(_ date:DateComponents, for type:PDFreplacingProperties) -> String? {
+        return date.toShortString(components: type.date.format.compontns, separetor: type.date.dateSeparetor)
+    }
+    
     
     func pdfString(fromCreate:Bool = false) -> (NSAttributedString, CGFloat) {
         let res:NSMutableAttributedString = .init(attributedString: .init(string: ""))

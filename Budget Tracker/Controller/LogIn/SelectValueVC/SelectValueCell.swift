@@ -9,6 +9,7 @@
 import UIKit
 
 class SelectUserVCCell: UITableViewCell {
+    @IBOutlet weak var mainDescriptionLabel: UILabel!
     @IBOutlet weak var mainTitleLabel: UILabel!
     override func draw(_ rect: CGRect) {
         super.draw(rect)

@@ -452,7 +452,7 @@ class TransitionVC: SuperViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if !(navigationController is TransactionNav) {
+        if !(navigationController is TransactionNav) && !(self.navigationController?.viewControllers.contains(where: {$0 is TransitionVC}) ?? false) {
             AppDelegate.shared?.banner.appeare(force:true)
         }
     }

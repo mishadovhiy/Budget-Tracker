@@ -85,15 +85,10 @@ class StatisticVC: SuperViewController, CALayerDelegate {
         let data = allData
 
         let dict:[[String:Any]] = data.compactMap({ $0.dict})
-        let type = isAll ? "All time" : (segmentControll.selectedSegmentIndex == 0 ? "Expenses" : "Incomes")
-        let pdf:ManagerPDF = .init(dict: ["Budget Tracker":dict], pageTitle: "", vc: self, data: .init(duration: appData.filter.periodText, type: type))
-        //let pdf:ManagerPDF = .init(dict: ["Budget Tracker":dict], pageTitle: "", vc: self, data: .init(defaultHeaderData:.init(duration: appData.filter.periodText, type: type), headers: [], footers: []))
-//        let pdf:ManagerPDF = .init(dict: ["Budget Tracker":dict],
-//                                   pageTitle: "",
-//                                   vc: self,
-//                                   data: .init(duration: appData.filter.periodText,
-//                                               type: type))
-//
+        let type = (segmentControll.selectedSegmentIndex == 0 ? "Expenses" : "Incomes")
+        let period = isAll ? "All time" : appData.filter.periodText
+        //get first and last transaction if all time
+        let pdf:ManagerPDF = .init(dict: ["Budget Tracker":dict], pageTitle: "", vc: self, data: .init(duration: period, type: type, from: appData.filter.fromDate, to: appData.filter.toDate, today: Date().toDateComponents()))
         pdf.exportPDF(sender: sender as! UIButton)
     }
     

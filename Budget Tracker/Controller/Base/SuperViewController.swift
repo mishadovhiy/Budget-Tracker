@@ -10,6 +10,9 @@ import UIKit
 
 class SuperViewController: UIViewController {
 
+    var appeareAction:((_ vc:SuperViewController?)->())?
+    var disapeareAction:((_ vc:SuperViewController?)->())?
+    
     weak var newMessage = AppDelegate.shared?.newMessage
     weak var ai = AppDelegate.shared?.ai
     var db:DataBase {
@@ -48,6 +51,8 @@ class SuperViewController: UIViewController {
             waitingToDisapeare = false
             self.viewDidDismiss()
         }
+        
+        disapeareAction?(self)
     }
 
     var firstAppearCalled = false
@@ -58,6 +63,7 @@ class SuperViewController: UIViewController {
             firstAppearCalled = true
             firstAppeared()
         }
+        appeareAction?(self)
     }
     
     func firstAppeared() {

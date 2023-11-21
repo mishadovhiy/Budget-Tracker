@@ -15,9 +15,9 @@ extension UITableView {
         if #available(iOS 15.0, *) {
             self.sectionHeaderTopPadding = 0
         }
-        if self.layer.name != "disabledBanner" {
+     //   if self.layer.name != "disabledBanner" {
             self.contentInset.bottom = AppDelegate.shared?.banner.size ?? 0
-        }
+       // }
     }
     
     func shadows(opasity:Float = 0.15, radius:CGFloat = 12) {
