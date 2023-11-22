@@ -378,12 +378,27 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="AttributedPreviewCell" id="b7r-Tp-mOE" customClass="AttributedPreviewCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="50" width="430" height="40.666667938232422"/>
+                                        <rect key="frame" x="0.0" y="28" width="430" height="40.666667938232422"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="b7r-Tp-mOE" id="mt9-BG-tBk">
                                             <rect key="frame" x="0.0" y="0.0" width="430" height="40.666667938232422"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
+                                                <view alpha="0.14999999999999999" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qBw-Me-lDU" customClass="BasicView" customModule="Budget_Tracker" customModuleProvider="target">
+                                                    <rect key="frame" x="5" y="0.0" width="420" height="40.666666666666664"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                            <real key="value" value="2"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                            <real key="value" value="10"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="color" keyPath="lineColor">
+                                                            <color key="value" systemColor="tintColor"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OvY-r1-YGs">
                                                     <rect key="frame" x="10" y="10.000000000000002" width="410" height="20.666666666666671"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -393,14 +408,19 @@
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
+                                                <constraint firstItem="qBw-Me-lDU" firstAttribute="top" secondItem="mt9-BG-tBk" secondAttribute="top" id="Dy7-jd-fbL"/>
+                                                <constraint firstAttribute="bottom" secondItem="qBw-Me-lDU" secondAttribute="bottom" id="EL3-5j-eEN"/>
                                                 <constraint firstAttribute="trailing" secondItem="OvY-r1-YGs" secondAttribute="trailing" constant="10" id="MDy-6C-hXK"/>
                                                 <constraint firstItem="OvY-r1-YGs" firstAttribute="leading" secondItem="mt9-BG-tBk" secondAttribute="leading" constant="10" id="Ofz-iG-era"/>
+                                                <constraint firstItem="qBw-Me-lDU" firstAttribute="leading" secondItem="mt9-BG-tBk" secondAttribute="leading" constant="5" id="S0j-rL-StR"/>
+                                                <constraint firstAttribute="trailing" secondItem="qBw-Me-lDU" secondAttribute="trailing" constant="5" id="TWe-78-nkw"/>
                                                 <constraint firstAttribute="bottom" secondItem="OvY-r1-YGs" secondAttribute="bottom" constant="10" id="hrg-sJ-eyq"/>
                                                 <constraint firstItem="OvY-r1-YGs" firstAttribute="top" secondItem="mt9-BG-tBk" secondAttribute="top" constant="10" id="mSV-FO-VXY"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
+                                            <outlet property="selectedLineView" destination="qBw-Me-lDU" id="ojL-8f-zTm"/>
                                             <outlet property="titleLabel" destination="OvY-r1-YGs" id="x0N-hJ-l0Y"/>
                                         </connections>
                                     </tableViewCell>
@@ -564,6 +584,9 @@
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="tintColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

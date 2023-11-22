@@ -170,20 +170,7 @@ extension CGFloat {
     }
 }
 
-extension Double {
-    var positive:Double {
-        if self <= 0 {
-            return self * -1
-        } else {
-            return self
-        }
-    }
-    
-    func string(_ decimals:Int = 2) -> String {
-        return String(format: "%.\(decimals)f", self)
 
-    }
-}
 
 
 extension NSAttributedString {

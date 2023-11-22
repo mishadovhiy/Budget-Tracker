@@ -30,6 +30,10 @@ extension SelectValueVC:UITableViewDelegate, UITableViewDataSource {
             cell.set(title:tableData[indexPath.section].cells[indexPath.row].name,
                      isOn: switcher.isOn, proEnabled: data != nil && !(AppDelegate.shared?.appData.proEnabeled ?? false), changed: switcher.switched)
             return cell
+        } else if let data = tableData[indexPath.section].cells[indexPath.row].slider {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SliderCell", for: indexPath) as! SliderCell
+            cell.set(data)
+            return cell
         } else {
             return UITableViewCell()
         }

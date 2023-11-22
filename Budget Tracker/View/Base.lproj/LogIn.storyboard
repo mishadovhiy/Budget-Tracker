@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_72" orientation="portrait" appearance="light"/>
+    <device id="retina6_72" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
@@ -981,6 +981,59 @@
                                             <outlet property="mainTitleLabel" destination="hYQ-W7-a2h" id="MVM-eC-8R7"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SliderCell" id="Vhc-Ew-Rzj" customClass="SliderCell" customModule="Budget_Tracker" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="95.333332061767578" width="430" height="68.333335876464844"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Vhc-Ew-Rzj" id="GJh-ZV-3CG">
+                                            <rect key="frame" x="0.0" y="0.0" width="430" height="68.333335876464844"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="T9P-ut-J5l">
+                                                    <rect key="frame" x="10" y="10.000000000000004" width="410" height="48.333333333333343"/>
+                                                    <subviews>
+                                                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="869-1x-vlW">
+                                                            <rect key="frame" x="0.0" y="0.0" width="410" height="18"/>
+                                                            <subviews>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NtX-KM-kcM">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="205" height="18"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                                    <color key="textColor" name="CategoryColor"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                                <label opaque="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mzg-9P-eTR">
+                                                                    <rect key="frame" x="205" y="0.0" width="205" height="18"/>
+                                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                                    <color key="textColor" name="CategoryColor"/>
+                                                                    <nil key="highlightedColor"/>
+                                                                </label>
+                                                            </subviews>
+                                                        </stackView>
+                                                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="yfh-PP-IaG">
+                                                            <rect key="frame" x="-2" y="18" width="414" height="31.333333333333329"/>
+                                                            <color key="minimumTrackTintColor" name="SecondaryBacroundColor2"/>
+                                                            <color key="maximumTrackTintColor" name="PrimaryBackgroundColor"/>
+                                                            <connections>
+                                                                <action selector="sliderChanged:" destination="Vhc-Ew-Rzj" eventType="valueChanged" id="QkX-i5-GDI"/>
+                                                            </connections>
+                                                        </slider>
+                                                    </subviews>
+                                                </stackView>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstItem="T9P-ut-J5l" firstAttribute="leading" secondItem="GJh-ZV-3CG" secondAttribute="leading" constant="10" id="8Jr-tU-coM"/>
+                                                <constraint firstAttribute="bottom" secondItem="T9P-ut-J5l" secondAttribute="bottom" constant="10" id="A3h-JA-ktZ"/>
+                                                <constraint firstAttribute="trailing" secondItem="T9P-ut-J5l" secondAttribute="trailing" constant="10" id="nYH-tS-ldr"/>
+                                                <constraint firstItem="T9P-ut-J5l" firstAttribute="top" secondItem="GJh-ZV-3CG" secondAttribute="top" constant="10" id="pbE-ud-Vk8"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <connections>
+                                            <outlet property="sliderValueLabel" destination="Mzg-9P-eTR" id="3VR-BE-STy"/>
+                                            <outlet property="sliderView" destination="yfh-PP-IaG" id="jeq-qQ-FE2"/>
+                                            <outlet property="titleLabel" destination="NtX-KM-kcM" id="bxy-iw-o6u"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </prototypes>
                             </tableView>
                         </subviews>
@@ -1186,13 +1239,16 @@
         <image name="person.3.sequence.fill" width="33" height="15"/>
         <image name="purchaseBackground0" width="323" height="137"/>
         <namedColor name="CategoryColor">
-            <color red="0.15700000524520874" green="0.15700000524520874" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.86699998378753662" green="0.86699998378753662" blue="0.86699998378753662" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="PrimaryBackgroundColor">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="SecondaryBacroundColor">
             <color red="0.078000001609325409" green="0.086000002920627594" blue="0.086000002920627594" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
+        <namedColor name="SecondaryBacroundColor2">
+            <color red="0.125" green="0.125" blue="0.125" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="balanceTitleColor">
             <color red="0.15700000524520874" green="0.15700000524520874" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>

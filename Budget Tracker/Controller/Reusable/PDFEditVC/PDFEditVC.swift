@@ -21,7 +21,7 @@ class PDFEditVC:SuperViewController {
     
     var selectingColorFor:SelectingColor = .background
     weak var settingsNav:UINavigationController?
-
+    var selectedRow:Int?
     override func viewDidLoad() {
         super.viewDidLoad()
         print(pdfData, " grefrwed")
@@ -88,11 +88,11 @@ class PDFEditVC:SuperViewController {
             self.updateDB()
         })))
         
-        header.append(.init(name: "Show date", switcher: .init(isOn: self.pdfData?.properties.needDate ?? true, switched: {
-            self.pdfData?.properties.needDate = $0
-            self.reloadTable()
-            self.updateDB()
-        })))
+//        header.append(.init(name: "Show date", switcher: .init(isOn: self.pdfData?.properties.needDate ?? true, switched: {
+//            self.pdfData?.properties.needDate = $0
+//            self.reloadTable()
+//            self.updateDB()
+//        })))
         
         
         var colors: [SelectValueVC.SelectValueStruct] = []
@@ -107,12 +107,24 @@ class PDFEditVC:SuperViewController {
             self.selectColorPressed(.secondary)
         })))
         
-        colors.append(.init(name: "Default colors", regular: .init(description: pdfData?.properties.documentProperties.colors.secondary == nil ? "Default" : "", didSelect: {
+        colors.append(.init(name: "Reorder", regular: .init(didSelect:reorderPressed)))
+        
+        colors.append(.init(name: "Restore colors to default", regular: .init(description: pdfData?.properties.documentProperties.colors.secondary == nil ? "Default" : "", didSelect: {
             AppDelegate.shared?.ai.showAlert(buttons: (.init(title: "Cancel", style: .regular, close: true, action: nil), .init(title: "Yes", style: .error, action: { _ in
                 self.pdfData?.properties.documentProperties.colors = .init(dict: [:])
                 self.updatePDF()
                 self.updateDB()
             })), title: "Are you sure you wanna set all colors to default?")
+        })))
+        
+        
+        colors.append(.init(name: "Restore data to default", regular: .init(description: pdfData?.properties.documentProperties.colors.secondary == nil ? "Default" : "", didSelect: {
+            AppDelegate.shared?.ai.showAlert(buttons: (.init(title: "Cancel", style: .regular, close: true, action: nil), .init(title: "Yes", style: .error, action: { _ in
+                self.pdfData?.properties = .init()
+
+                self.updatePDF()
+                self.updateDB()
+            })), title: "Are you sure you wanna set all data to default?")
         })))
         
         
@@ -146,7 +158,7 @@ class PDFEditVC:SuperViewController {
         })
     }
     
-    private func updatePDF() {
+    func updatePDF() {
         updateTableData()
         tableView.fadeTransition(0.3)
         tableView.reloadData()
@@ -177,20 +189,8 @@ class PDFEditVC:SuperViewController {
     }
     
     
-    private func selectColorPressed(_ color: SelectingColor) {
-        if #available(iOS 14.0, *) {
-            self.toggleSettingsHeight(.color)
-            let colorVC = ColorPickerVC()
-            colorVC.delegate = self
-            self.selectingColorFor = color
-            self.settingsNav?.pushViewController(colorVC, animated: true)
-        } else {
-            self.newMessage?.show(title:"Not availible on your device OS version", type: .error)
-        }
-    }
-    
-    
     func addCustom(isFooter:Bool, str:String, insertAt:Int? = nil) {
+        selectedRow = nil
         let holder = self.enteringValuePropHolder
         let newCustom = AdditionalPDFData.with({
             $0.custom = .with({
@@ -227,37 +227,13 @@ class PDFEditVC:SuperViewController {
         }
     }
     
-   // weak var selectingTypeVC:SelectValueVC?
-    private func toSelectValueVC(title:String, tableData:[SelectValueVC.SelectValueSections],
-        complation:((_ vc:SelectValueVC)->())? = nil) {
-        let vc = SelectValueVC.configure()
-        vc.titleText = title
-        vc.tableData = tableData
-        settingsNav?.pushViewController(vc, animated: true)
-        complation?(vc)
-    }
-    
-    
-    private func createSettingsContainer() {
-        let vc = SelectValueVC.configure()
-        vc.tableData = settingsData
-        let nav = UINavigationController(rootViewController: vc)
-        settingsNav = nav
-        vc.titleText = "PDF Settings"
-        addChild(nav)
-        containerView.addSubview(nav.view)
-        nav.view.addConstaits([.left:0, .right:0, .top:0, .bottom:0], superV: containerView)
-        nav.didMove(toParent: self)
-        vc.appeareAction = {
-            $0?.navigationController?.setNavigationBarHidden(true, animated: true)
-            self.settingsAppeared()
-        }
-        vc.disapeareAction = {
-            $0?.navigationController?.setNavigationBarHidden(false, animated: true)
-        }
-    }
 
-    private func settingsAppeared() {
+    
+    
+    private var settingsApepareCalled = false
+
+    func settingsAppeared() {
+        selectedRow = nil
         if !self.settingsApepareCalled {
             self.settingsApepareCalled = true
             self.updateDB()
@@ -266,32 +242,8 @@ class PDFEditVC:SuperViewController {
         self.toggleSettingsHeight(.none)
     }
     
-    private var settingsApepareCalled = false
-    
-    //update enter value vc on didAppeare (adding custome type, attachment)
-    func toEnterValue(_ title:String, selectionData:[SelectionStackView.SelectionData]?, selectedValue:String? = nil, nextPressed:@escaping(_ string:String)->()) {
-        toggleSettingsHeight(.text)
-        let vc = EnterValueVC.configure()
-        vc.screenData = .init(taskName: title, title: "", placeHolder: "", nextAction: {
-            nextPressed($0)
-            self.settingsNav?.popViewController(animated: true)
-            self.reloadTable()
-            self.enteringValuePropHolder = .init(dict: [:])
-            self.updateDB()
-        }, screenType: .string)
-        vc.selectionStackData = selectionData
-        vc.nextButtonTitle = "Done"
-        if let value = selectedValue {
-            vc.textFieldValue = value
-        }
-        self.settingsNav?.pushViewController(vc, animated: true)
-        if selectionData != nil {
-            let dateButton = UIBarButtonItem(title: "Date", style: .done, target: self, action: #selector(dateTypePressed(_:)))
-            dateButton.tintColor = K.Colors.link
-            vc.navigationItem.rightBarButtonItems?.append(dateButton)
-        }
-        
-
+    @objc func addAttachmentPressed(_ sender:UIBarButtonItem) {
+        addAttachmentPressed()
     }
     
     
@@ -305,12 +257,7 @@ class PDFEditVC:SuperViewController {
         vcc.tableData = self.settingsData
         vcc.tableView.reloadData()
     }
-    
-    override func setEditing(_ editing: Bool, animated: Bool) {
-        super.setEditing(editing, animated: animated)
-        updateNavButtons()
-        updatePDF()
-    }
+
     
     func updateNavButtons() {
         
@@ -331,7 +278,7 @@ class PDFEditVC:SuperViewController {
     private func customSelected(data: AdditionalPDFData, type:LinkAttributeType, at:Int) {
         self.enteringValuePropHolder = data.custom?.textSettins ?? .init(dict: [:])
         print(enteringValuePropHolder, " enteringValuePropHolder")
-        self.toEnterValue("\(type.title)".capitalized, selectionData: self.textCustomizationData, selectedValue: data.custom?.title) { string in
+        self.toEnterValue("", selectionData: self.textCustomizationData, selectedValue: data.custom?.title) { string in
             self.removeCustom(isFooter: type == .footer, at: at)
             self.addCustom(isFooter: type == .footer, str: string, insertAt: at)
         }
@@ -341,7 +288,7 @@ class PDFEditVC:SuperViewController {
     func addCustomPressed(_ selectedValue:AdditionalPDFData? = nil, type:LinkAttributeType) {
         self.enteringValuePropHolder = selectedValue?.custom?.textSettins ?? .init(dict: [:])
         print(type, "addCustomPressed")
-        self.toEnterValue("New \(type.title)", selectionData: self.textCustomizationData, selectedValue: selectedValue?.custom?.title, nextPressed: { string in
+        self.toEnterValue("", selectionData: self.textCustomizationData, selectedValue: selectedValue?.custom?.title, nextPressed: { string in
             self.addCustom(isFooter: type == .addFooter, str: string)
         })
     }
@@ -355,6 +302,14 @@ class PDFEditVC:SuperViewController {
             print("unksnow selected link")
 
         }
+    }
+    
+    func reorderPressed() {
+        self.stopEditingButton.fadeTransition(0.3)
+        self.stopEditingButton.isHidden = false
+        tableView.reloadData()
+        tableView.setEditing(true, animated: true)
+        print(tableView.isEditing, " gterfwds")
     }
     
     func linkPressed(_ url:URL) {
@@ -376,37 +331,6 @@ class PDFEditVC:SuperViewController {
     func deletePressed(at:Int, isFooter:Bool) {
         self.removeCustom(isFooter: isFooter, at: at)
         self.updateTableData()
-    }
-    
-    
-    
-    func toggleSettingsHeight(_ show:SettingsHeightType) {
-        let constant = containerView.constraints.first(where: {$0.identifier == "settingsHeight"})
-//        UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.55, initialSpringVelocity: 0) {
-//            constant?.constant = show.height
-//            self.containerView.layoutIfNeeded()
-//        }
-        UIView.animate(withDuration: 0.45) {
-            constant?.constant = show.height
-            self.containerView.layoutIfNeeded()
-        }
-        
-    }
-    
-    enum SettingsHeightType {
-        case none
-        case color
-        case text
-        var height:CGFloat {
-            switch self {
-            case .none:
-                return 125
-            case .color:
-                return 550
-            case .text:
-                return 300
-            }
-        }
     }
     
     
@@ -434,71 +358,10 @@ class PDFEditVC:SuperViewController {
     }
 
 
-    enum LinkAttributeType:String {
-        case header, footer, addHeader, addFooter
-        
-        var canReorder:Bool {
-            switch self {
-            case .header, .footer:
-                return true
-            default:
-                return false
-            }
-        }
-        
-        var title:String {
-            switch self {
-            case .header, .addHeader:
-                return "header"
-            case .footer, .addFooter:
-                return "footer"
-            }
-        }
-        
-        func dataIndex(components:[String]) -> Int? {
-            return Int(components.first(where: {Int($0) != nil}) ?? "")
-        }
-    }
-}
-@available(iOS 14.0, *)
-class ColorPickerVC: UIColorPickerViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        print("egrfwed")
-    }
-}
-
-extension PDFEditVC:UIColorPickerViewControllerDelegate {
-    enum SelectingColor {
-    case primary, secondary, background
-    }
-    @available(iOS 14.0, *)
-    func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
-        updateDB()
-     //   toggleSettingsHeight(.none)
-    }
     
-    @available(iOS 14.0, *)
-    func colorPickerViewController(_ viewController: UIColorPickerViewController, didSelect color: UIColor, continuously: Bool) {
-        switch selectingColorFor {
-        case .primary:
-            pdfData?.properties.documentProperties.colors.primary = color.cgColor
-        case .secondary:
-            pdfData?.properties.documentProperties.colors.secondary = color.cgColor
-        case .background:
-            pdfData?.properties.documentProperties.colors.background = color.cgColor
-        }
-        updatePDF()
-    }
+    var imageSelectedAction:((_ data:Data)->())?
 }
 
-
-extension PDFEditVC:FullScreenDelegate {
-    func toggleAdView(_ show: Bool) {
-        exportPdfButton.toggleAdView(show: show)
-        //here
-    }
-}
 
 
 
@@ -516,7 +379,7 @@ extension PDFEditVC {
                       regular: .init(description: enteringValuePropHolder?.replacingType.date.inTextPosition.title ?? "-" , didSelect: {
                           self.intextPositionPressed(attachment: false)
                       })),
-                    .init(name: "Range separetor",
+                .init(name: "Range separetor",
                       regular: .init(description: enteringValuePropHolder?.replacingType.date.rangeSeparetor ?? "-", didSelect: {
                           self.toEnterSeparetor(range: true)
                       })),
@@ -542,8 +405,7 @@ extension PDFEditVC {
         }
     }
     
-    
-    func intextPositionPressed(attachment:Bool) {
+    private func intextPositionPressed(attachment:Bool) {
         toSelectValueVC(title: "Select date format", tableData: [
             .init(sectionName: "", cells: PdfTextProperties.InTextPosition.allCases.compactMap({ type in
                 .init(name: type.title, regular: .init(didSelect: {
@@ -592,9 +454,46 @@ extension PDFEditVC {
 }
 
 
+extension PDFEditVC {
+    private var attachmentTableData:[SelectValueVC.SelectValueSections] {
+        [
+            .init(sectionName: "", cells: [
+                //file
+                .init(name:"Image", regular: .init(description:enteringValuePropHolder?.attachment.img != nil ? "Replace" : "Choose", didSelect: chooseAttachment)),
+                .init(name: "In text position",
+                      regular: .init(description: enteringValuePropHolder?.attachment.inTextPosition.title ?? "-" , didSelect: {
+                          self.intextPositionPressed(attachment: true)
+                      })),
+                .init(name: "", slider: .init(title: "Width", value: Float(enteringValuePropHolder?.attachment.size.width ?? 0), multiplier:enteringValuePropHolder?.attachment.multiplierSize ?? 0, changed: { newValue in
+                    self.enteringValuePropHolder?.attachment.size.width = CGFloat(newValue)
+                })),
+                .init(name: "", slider: .init(title: "Height", value: Float(enteringValuePropHolder?.attachment.size.height ?? 0), multiplier:enteringValuePropHolder?.attachment.multiplierSize ?? 0, changed: { newValue in
+                    self.enteringValuePropHolder?.attachment.size.height = CGFloat(newValue)
+                }))
+                //size
+            ])
+        ]
+    }
+    
+    private func chooseAttachment() {
+        toSelectImg { newImg in
+            self.enteringValuePropHolder?.attachment.img = newImg
+            (self.settingsNav?.viewControllers.last as! SelectValueVC).updateTable(self.attachmentTableData)
+        }
+    }
+    
+    private func addAttachmentPressed() {
+        toSelectValueVC(title: "Add Attachment", tableData: self.attachmentTableData) { vc in
+            vc.appeareAction = {
+                ($0 as! SelectValueVC).updateTable(self.attachmentTableData)
+            }
+        }
+    }
+}
+
+
 
 extension PDFEditVC {
-
     static func configure(pdf:ManagerPDF) -> PDFEditVC {
         let storyboard = UIStoryboard(name: "Reusable", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "AttributedStringTestVC") as! PDFEditVC

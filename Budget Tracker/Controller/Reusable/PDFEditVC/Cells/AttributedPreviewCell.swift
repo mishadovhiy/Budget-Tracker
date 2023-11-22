@@ -10,6 +10,7 @@ import UIKit
 
 class AttributedPreviewCell:UITableViewCell {
     
+    @IBOutlet weak var selectedLineView: BasicView!
     @IBOutlet weak var titleLabel: UILabel!
     
     func set(_ data:NSAttributedString) {

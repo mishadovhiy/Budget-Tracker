@@ -26,7 +26,7 @@ struct PdfTextProperties {
     
     var textColor:PdfTextColor? {
         get {
-            return .init(rawValue: dict["textColor"] as? String ?? "") ?? .primary
+            return .init(rawValue: dict["textColor"] as? String ?? "") ?? .secondary
         }
         set {
             if let value = newValue {
@@ -65,6 +65,14 @@ struct PdfTextProperties {
         }
     }
     
+    public static func with(
+      _ populator: (inout Self) throws -> ()
+    ) rethrows -> Self {
+        var message = Self(dict: [:])
+      try populator(&message)
+      return message
+    }
+    
     enum TextSize:String {
         case extraSmall
         case small
@@ -89,7 +97,7 @@ struct PdfTextProperties {
     }
     enum TextAlighment:String {
         case center, right, left
-        static let allCases:[TextAlighment] = [.center, .right, .left]
+        static let allCases:[TextAlighment] = [.left, .center, .right]
         
         var textAligment:NSTextAlignment {
             switch self {
@@ -112,12 +120,33 @@ struct PdfTextProperties {
         }
 
         var img:Data? {
-            return nil
+            get {
+                return dict["img"] as? Data
+            }
+            set {
+                if let data = newValue {
+                    dict.updateValue(data, forKey: "img")
+                } else {
+                    dict.removeValue(forKey: "img")
+                }
+            }
         }
         
         var size:CGSize {
-            return .init(width: 0, height: 0)
+            get {
+                return .create(dict["size"] as? [String:Float] ?? CGSize.init(width: 0.2, height: 0.2).dict)
+            }
+            set {
+                dict.updateValue(newValue.dict, forKey: "size")
+            }
         }
+        
+        var displeySize:CGSize {
+            return .init(width: size.width * CGFloat(multiplierSize), height: size.height * CGFloat(multiplierSize))
+        }
+        
+        let multiplierSize:Float = 200
+        
         
         var inTextPosition:PdfTextProperties.InTextPosition {
             get {

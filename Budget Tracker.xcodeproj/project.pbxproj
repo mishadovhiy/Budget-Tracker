@@ -71,6 +71,8 @@
 		8BF63E8F2762C83F002E8601 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF63E8E2762C83F002E8601 /* SettingsVC.swift */; };
 		8BFA15D127E8E8510078856A /* categoriesVCcell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFA15D027E8E8510078856A /* categoriesVCcell.swift */; };
 		8BFA15D427E8E87B0078856A /* LocalDataActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BFA15D327E8E87B0078856A /* LocalDataActionCell.swift */; };
+		8D0071DB2B0D88DF00DBB703 /* Extensions_PDFEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0071DA2B0D88DF00DBB703 /* Extensions_PDFEditVC.swift */; };
+		8D0071DD2B0D88F700DBB703 /* ColorPickerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0071DC2B0D88F700DBB703 /* ColorPickerVC.swift */; };
 		8D08FD482AC9A86C00BA0222 /* SpendingLimitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D08FD462AC9A86C00BA0222 /* SpendingLimitCell.swift */; };
 		8D08FD492AC9A86C00BA0222 /* SpendingLimitCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D08FD472AC9A86C00BA0222 /* SpendingLimitCell.xib */; };
 		8D08FD4D2AC9AA0300BA0222 /* AmountToPayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D08FD4B2AC9AA0300BA0222 /* AmountToPayCell.swift */; };
@@ -140,6 +142,9 @@
 		8DBB38F72AC8D46C009B56DD /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBB38F62AC8D46C009B56DD /* TextField.swift */; };
 		8DC033CC2985CA5A00CD98FF /* UITableViewDataSource_ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC033CB2985CA5A00CD98FF /* UITableViewDataSource_ViewController.swift */; };
 		8DD2D2CD2998902E0098C106 /* ViewControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD2D2CC2998902E0098C106 /* ViewControllers.swift */; };
+		8DD813472B0D38D600B72654 /* AdditionalPDFData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD813462B0D38D600B72654 /* AdditionalPDFData.swift */; };
+		8DD813492B0D717500B72654 /* SliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD813482B0D717500B72654 /* SliderCell.swift */; };
+		8DD8134C2B0D733C00B72654 /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD8134B2B0D733C00B72654 /* Double.swift */; };
 		8DD89D8723F1471400273904 /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8623F1471400273904 /* AppData.swift */; };
 		8DD89D8C23F1485700273904 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8B23F1485700273904 /* Constants.swift */; };
 		8DD89D8E23F1495300273904 /* TransactionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD89D8D23F1495300273904 /* TransactionVC.swift */; };
@@ -274,6 +279,8 @@
 		8BF63E8E2762C83F002E8601 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		8BFA15D027E8E8510078856A /* categoriesVCcell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = categoriesVCcell.swift; sourceTree = "<group>"; };
 		8BFA15D327E8E87B0078856A /* LocalDataActionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalDataActionCell.swift; sourceTree = "<group>"; };
+		8D0071DA2B0D88DF00DBB703 /* Extensions_PDFEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions_PDFEditVC.swift; sourceTree = "<group>"; };
+		8D0071DC2B0D88F700DBB703 /* ColorPickerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerVC.swift; sourceTree = "<group>"; };
 		8D08FD462AC9A86C00BA0222 /* SpendingLimitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpendingLimitCell.swift; sourceTree = "<group>"; };
 		8D08FD472AC9A86C00BA0222 /* SpendingLimitCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SpendingLimitCell.xib; sourceTree = "<group>"; };
 		8D08FD4B2AC9AA0300BA0222 /* AmountToPayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountToPayCell.swift; sourceTree = "<group>"; };
@@ -345,6 +352,9 @@
 		8DBB38F62AC8D46C009B56DD /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		8DC033CB2985CA5A00CD98FF /* UITableViewDataSource_ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewDataSource_ViewController.swift; sourceTree = "<group>"; };
 		8DD2D2CC2998902E0098C106 /* ViewControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllers.swift; sourceTree = "<group>"; };
+		8DD813462B0D38D600B72654 /* AdditionalPDFData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalPDFData.swift; sourceTree = "<group>"; };
+		8DD813482B0D717500B72654 /* SliderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderCell.swift; sourceTree = "<group>"; };
+		8DD8134B2B0D733C00B72654 /* Double.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
 		8DD89D8623F1471400273904 /* AppData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
 		8DD89D8B23F1485700273904 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		8DD89D8D23F1495300273904 /* TransactionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionVC.swift; sourceTree = "<group>"; };
@@ -614,6 +624,7 @@
 			isa = PBXGroup;
 			children = (
 				8B331B0A27E4128B0093BF72 /* String.swift */,
+				8DD8134B2B0D733C00B72654 /* Double.swift */,
 				8B26329527E6A32E0086C3A8 /* UIViewController.swift */,
 				8D17FABF2B07C3C1005E03FD /* URL.swift */,
 				8B5434F727ED80F400417141 /* UITableView.swift */,
@@ -692,6 +703,7 @@
 				8D8B6C3D245023EC007260A0 /* CalendarVC.swift */,
 				8B52DFEB27504D2900595A0C /* IconsVC.swift */,
 				8B5F342B26FB2D97000DDCAF /* EnterValueVC.swift */,
+				8D0071DC2B0D88F700DBB703 /* ColorPickerVC.swift */,
 				8D2CDA2A2AF4386200671A72 /* PDFEditVC */,
 				8B2A4D71271439520085E0F0 /* MoreVC.swift */,
 				8B6BA97F27E716220067FF58 /* WebViewVC.swift */,
@@ -848,6 +860,7 @@
 			isa = PBXGroup;
 			children = (
 				8DF479DD2ADF105A0092746E /* PDFEditVC.swift */,
+				8D0071DA2B0D88DF00DBB703 /* Extensions_PDFEditVC.swift */,
 				8D17FABA2B07BF9F005E03FD /* UITableViewDelegate_AttributedStringVC.swift */,
 				8D17FABE2B07BFD0005E03FD /* Cells */,
 			);
@@ -859,7 +872,7 @@
 			children = (
 				8BF63E8A276294F2002E8601 /* SelectValueVC.swift */,
 				8DFF72882B07E75B00FC38A7 /* UITableViewDelegate_ SelectValueVC.swift */,
-				8D2CDA2C2AF43C1100671A72 /* SelectValueCell.swift */,
+				8DD8134A2B0D717E00B72654 /* Cell */,
 			);
 			path = SelectValueVC;
 			sourceTree = "<group>";
@@ -1003,6 +1016,15 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
+		8DD8134A2B0D717E00B72654 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				8DD813482B0D717500B72654 /* SliderCell.swift */,
+				8D2CDA2C2AF43C1100671A72 /* SelectValueCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		8DD89D8823F1471900273904 /* Modal */ = {
 			isa = PBXGroup;
 			children = (
@@ -1032,6 +1054,7 @@
 			isa = PBXGroup;
 			children = (
 				8D15BD5F2B047F5D00E1C444 /* PDFProperties.swift */,
+				8DD813462B0D38D600B72654 /* AdditionalPDFData.swift */,
 				8DFEA8A62B0C5091003410D7 /* PdfDocumentProperties.swift */,
 				8DFEA8A42B0C5073003410D7 /* PdfTextProperties.swift */,
 				8DFEA8A12B0C504E003410D7 /* PDFreplacingProperties.swift */,
@@ -1224,6 +1247,7 @@
 				8B26329627E6A32E0086C3A8 /* UIViewController.swift in Sources */,
 				8B26327E27E66B060086C3A8 /* AppLocalization.swift in Sources */,
 				8D7FCA772ADAF02200B108A6 /* CoreDataDBManager.swift in Sources */,
+				8D0071DD2B0D88F700DBB703 /* ColorPickerVC.swift in Sources */,
 				8D2CDA1D2AF3F37A00671A72 /* calcCell.swift in Sources */,
 				8B331B0B27E4128B0093BF72 /* String.swift in Sources */,
 				8D2CDA1C2AF3F37A00671A72 /* HistoryCell.swift in Sources */,
@@ -1279,6 +1303,7 @@
 				8DBA7E5423F0316F00D8214C /* HomeVC.swift in Sources */,
 				8DF9DCD42815AAD000C7BFA0 /* ExtensionGADBannerViewDelegate.swift in Sources */,
 				8BD2E77C25B8622100D4DFBF /* LoginViewController.swift in Sources */,
+				8DD813472B0D38D600B72654 /* AdditionalPDFData.swift in Sources */,
 				8B26328427E67D1D0086C3A8 /* SegmentedControl.swift in Sources */,
 				8B35DA6625C6F124008A8719 /* Keychain.swift in Sources */,
 				8D8B6C3C245023D0007260A0 /* FilterTVC.swift in Sources */,
@@ -1287,6 +1312,7 @@
 				8DD89D9023F1496100273904 /* CategoriesVC.swift in Sources */,
 				8B6BA98027E716220067FF58 /* WebViewVC.swift in Sources */,
 				8DADC8922810E30300CC66EF /* TransactionNav.swift in Sources */,
+				8D0071DB2B0D88DF00DBB703 /* Extensions_PDFEditVC.swift in Sources */,
 				8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */,
 				8D0C5D1A2AF6CC1F002E2422 /* Extensions_SelectionStackView.swift in Sources */,
 				8D15BD602B047F5D00E1C444 /* PDFProperties.swift in Sources */,
@@ -1321,7 +1347,9 @@
 				8B6BFB1827F7C82C00DD4CBC /* CategoriesMethods.swift in Sources */,
 				8B898CF427F3EB0800B66F79 /* UIDatePicker.swift in Sources */,
 				8D17FAC02B07C3C1005E03FD /* URL.swift in Sources */,
+				8DD813492B0D717500B72654 /* SliderCell.swift in Sources */,
 				8D834D9C297E03D60056E686 /* CalendarModel.swift in Sources */,
+				8DD8134C2B0D733C00B72654 /* Double.swift in Sources */,
 				8B6BFB1A27F7CB7600DD4CBC /* AppearcenceExtensions.swift in Sources */,
 				8B52DFEC27504D2900595A0C /* IconsVC.swift in Sources */,
 				8D08FD482AC9A86C00BA0222 /* SpendingLimitCell.swift in Sources */,
@@ -1591,7 +1619,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
@@ -1622,7 +1650,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";

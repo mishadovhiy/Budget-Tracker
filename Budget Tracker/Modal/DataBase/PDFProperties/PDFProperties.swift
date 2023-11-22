@@ -51,7 +51,20 @@ struct PDFProperties {
     
     var headers:[AdditionalPDFData] {
         get {
-            return (dict["headers"] as? [[String:Any]])?.compactMap({.init(dict: $0)}) ?? []
+            return (dict["headers"] as? [[String:Any]])?.compactMap({.init(dict: $0)}) ?? [
+                .with({
+                    $0.custom = .with({
+                        $0.title = " "
+                        $0.textSettins = .with({
+                            $0.replacingType = .with({
+                                $0.date = .with({
+                                    $0.type = .transactionDateRange
+                                })
+                            })
+                        })
+                    })
+                })
+            ]
         }
         set {
             let new:[[String:Any]] = newValue.compactMap({$0.dict})
@@ -61,7 +74,21 @@ struct PDFProperties {
     
     var footers:[AdditionalPDFData] {
         get {
-            return (dict["footers"] as? [[String:Any]])?.compactMap({.init(dict: $0)}) ?? []
+            return (dict["footers"] as? [[String:Any]])?.compactMap({.init(dict: $0)}) ?? [
+                .with({
+                    $0.custom = .with({
+                        $0.title = " "
+                        $0.textSettins = .with({
+                            $0.alighment = .right
+                            $0.replacingType = .with({
+                                $0.date = .with({
+                                    $0.type = .today
+                                })
+                            })
+                        })
+                    })
+                })
+            ]
         }
         set {
             let new:[[String:Any]] = newValue.compactMap({$0.dict})
@@ -95,74 +122,6 @@ struct PDFProperties {
 
 
 
-struct AdditionalPDFData {
-    var dict:[String:Any]
-    init(dict: [String:Any]) {
-        self.dict = dict
-    }
-    init() {
-        self.dict = .init()
-    }
-    var custom:Custom? {
-        get {
-            return .init(dict: dict["custom"] as? [String:Any] ?? [:])
-        }
-        set {
-            if let value = newValue {
-                dict.updateValue(value.dict, forKey: "custom")
-            } else {
-                dict.removeValue(forKey: "custom")
-            }
-        }
-    }
-    public static func with(
-      _ populator: (inout Self) throws -> ()
-    ) rethrows -> Self {
-        var message = Self()
-      try populator(&message)
-      return message
-    }
-    
-    struct Custom {
-        var dict:[String:Any]
-        init(dict: [String:Any]) {
-            self.dict = dict
-        }
-        init() {
-            self.dict = .init()
-        }
-        var title:String? {
-            get {
-                return dict["title"] as? String
-            }
-            set {
-                if let value = newValue {
-                    dict.updateValue(value, forKey: "title")
-                } else {
-                    dict.removeValue(forKey: "title")
-                }
-            }
-        }
-        var description:String? = nil
-        var textSettins:PdfTextProperties {
-            get {
-                return .init(dict: dict["textSettins"] as? [String:Any] ?? [:])
-            }
-            set {
-                dict.updateValue(newValue.dict, forKey: "textSettins")
-            }
-        }
-        
-        public static func with(
-          _ populator: (inout Self) throws -> ()
-        ) rethrows -> Self {
-            var message = Self()
-          try populator(&message)
-          return message
-        }
-    }
-    
-}
 
 enum PdfTextColor:String {
     case primary, secondary

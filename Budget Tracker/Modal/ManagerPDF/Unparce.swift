@@ -20,9 +20,6 @@ struct UnparcePDF {
             let header = documentHeader(data: data, fromCreate: true)
             text.append(header)
             height += (data.needDate ? 145 : 105)
-        } else if data.needDate {
-            text.append(documantDate(data: data, fromCreate: fromCreate))
-            height += 40
         } else {
             text.append(.init(string: "  \n"))
         }
@@ -127,20 +124,35 @@ struct UnparcePDF {
             let linkComp:PDFEditVC.LinkAttributeType = isFooter ? .footer : .header
             attributes.updateValue(URL(string: "https://editCustom/\(linkComp.rawValue)/\(i)")!, forKey: .init(PDFEditVC.pdfLinkKey))
         }
-        var dateText:String = ""
+        var dateText:String?
         let replacingType = data.custom?.textSettins.replacingType
         if let date = replacingType, date.date.type != .none {
             dateText = manager.date(for: date)
         }
-        if replacingType?.date.inTextPosition == .left {
-            text.append(.init(string: dateText + " ", attributes: attributes))
+        
+        var attachmentText:NSAttributedString?
+        let attachment = data.custom?.textSettins.attachment
+        if let attachmentData = attachment, attachmentData.img != nil {
+            attachmentText = attachmentView(attachmentData.img, size: attachmentData.displeySize)
+        }
+        if attachment?.inTextPosition == .left && attachmentText != nil {
+            text.append(.init(attributedString: attachmentText!))
+        }
+        if replacingType?.date.inTextPosition == .left && dateText != nil {
+            text.append(.init(string: dateText! + " ", attributes: attributes))
         }
         text.append(.init(string: data.custom?.title ?? "-", attributes: attributes))
-        if replacingType?.date.inTextPosition == .right {
-            text.append(.init(string: " " + dateText, attributes: attributes))
+        if replacingType?.date.inTextPosition == .right && dateText != nil {
+            text.append(.init(string: " " + dateText!, attributes: attributes))
         }
 
-        let height = text.string.calculate(font: fontResult, inWindth: manager.pageWidth).height
+        if attachment?.inTextPosition == .right && attachmentText != nil {
+            text.append(.init(attributedString: attachmentText!))
+        }
+        var height = text.string.calculate(font: fontResult, inWindth: manager.pageWidth).height
+        if attachmentText != nil {
+            height += (attachment?.size.height ?? 0)
+        }
         print(text.string, " gerfeefwrgef ", height)
         return (text, height)
     }
@@ -151,7 +163,7 @@ struct UnparcePDF {
         attachment.image = .init(named: "icBig")
         attachment.bounds = .init(x: 0, y: -8, width: 40, height: 40)
         let bigFont = font(for: .big)
-        let smallFont = font(for: .medium)
+        let smallFont = font(for: .extraSmall)
 
         text.append(.init(attachment: attachment))
 
@@ -164,9 +176,7 @@ struct UnparcePDF {
             .font:UIFont.systemFont(ofSize: smallFont.0, weight: smallFont.1),
             .foregroundColor:secondaryColor
         ]))
-        if data.needDate {
-            text.append(documantDate(data: data, fromCreate: fromCreate))
-        }
+    //    text.append(documantDate(data: data, fromCreate: fromCreate))
         return text
     }
     
@@ -304,6 +314,20 @@ private extension UnparcePDF {
         view.addSubview(label)
         return view
     }
+    
+    
+    func attachmentView(_ data:Data?, size:CGSize) -> NSAttributedString? {
+        if let data = data {
+            let attachment = NSTextAttachment()
+            attachment.image = UIImage(data: data)
+            attachment.bounds = .init(origin: .zero, size: size)
+            return .init(attachment: attachment)
+        } else {
+            return nil
+        }
+        
+    }
+    
     
     func transactionView(_ dict:[String:Any]) -> UIView {
         let transaction = TransactionsStruct.create(dictt: dict)

@@ -24,6 +24,14 @@ struct PDFreplacingProperties {
         }
     }
     
+    public static func with(
+      _ populator: (inout Self) throws -> ()
+    ) rethrows -> Self {
+        var message = Self(dict: [:])
+      try populator(&message)
+      return message
+    }
+    
     struct DateType {
         var dict:[String:Any]
         init(dict: [String : Any]) {
@@ -69,11 +77,20 @@ struct PDFreplacingProperties {
     
         var inTextPosition:PdfTextProperties.InTextPosition {
             get {
-                return .init(rawValue: dict["inTextPosition"] as? String ?? "") ?? .left
+                return .init(rawValue: dict["inTextPosition"] as? String ?? "") ?? .right
             }
             set {
                 dict.updateValue(newValue.rawValue, forKey: "inTextPosition")
             }
+        }
+        
+        
+        public static func with(
+          _ populator: (inout Self) throws -> ()
+        ) rethrows -> Self {
+            var message = Self(dict: [:])
+          try populator(&message)
+          return message
         }
         
         

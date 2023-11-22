@@ -56,6 +56,8 @@ extension SelectValueVC {
         var forProUsers:Int? = nil
         var regular:RegularStruct? = nil
         var switcher:SwitchStruct? = nil
+        var slider:SliderStruct? = nil
+
         struct RegularStruct {
             var disctructive:Bool = false
             var description:String? = nil
@@ -64,6 +66,18 @@ extension SelectValueVC {
         struct SwitchStruct {
             let isOn:Bool
             var switched:(Bool)->()
+        }
+        
+        struct SliderStruct {
+            let title:String
+            var value:Float
+            let multiplier:Float
+            let changed:(_ newValue:Float)->()
+            
+            var resultValue:Float {
+                return value * multiplier
+            }
+            
         }
     }
     static func presentScreen(in nav:UIViewController, with data: [String], structData:[SelectValueSections]? = nil, title:String, selected: ((Int) -> ())? = nil) {
