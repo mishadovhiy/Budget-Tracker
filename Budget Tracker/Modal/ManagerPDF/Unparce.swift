@@ -13,71 +13,76 @@ import UIKit
 struct UnparcePDF {
     let manager:ManagerPDF
     
-    func dictionaryToString(_ dictionary:[String:Any], data:PDFProperties, fromCreate:Bool = false) -> ([NSAttributedString], CGFloat) {
+    func dictionaryToString(_ dictionary:[String:Any], data:PDFProperties, fromCreate:Bool = false) -> ([(NSAttributedString, Bool)], CGFloat) {
         var height:CGFloat = 0
-        var text:[NSAttributedString] = []
-        if data.defaultHeader {
-            let header = documentHeader(data: data, fromCreate: true)
-            text.append(header)
-            height += (data.needDate ? 145 : 105)
-        } else {
-            text.append(.init(string: "  \n"))
+        var text:[(NSAttributedString, Bool)] = []
+
+        let defaultHeaders:[AdditionalPDFData] = !data.defaultHeader ? [] : data.editableDefaultHeader(img: UIImage(named: "icBig")?.pngData())
+        var dHeaderI = 0
+        defaultHeaders.forEach {
+            let header = customHeader(data: $0, i: dHeaderI, isFooter: false, preview: false)
+            dHeaderI += 1
+            text.append((header.0, false))
+            text.append((.init(string: "\n"), false))
+            height += (header.1)
         }
         var headI = 0
+        //[AdditionalPDFData]
         data.headers.forEach({
             let header = customHeader(data: $0, i: headI, isFooter: false, preview: fromCreate)
             headI += 1
-            text.append(header.0)
-            text.append(.init(string: "\n"))
+            text.append((header.0, true))
+            text.append((.init(string: "\n"), false))
             height += (header.1)
         })
         if fromCreate {
-            text.append(.init(string: "\n"))
+            text.append((.init(string: "\n"), false))
             let button = addButton(type: .addHeader)
-            text.append(button.0)
+            text.append((button.0, true))
             height += button.1
         }
-        text.append(.init(string: "\n\n\n"))
+        text.append((.init(string: "\n\n\n"), false))
         height += 40
         dictionary.forEach({
             if let val = $0.value as? [String:Any] {
                 val.forEach({
-                    text.append(self.row(($0.key, $0.value)))
+                    text.append((self.row(($0.key, $0.value)), false))
                 })
             } else if let val = $0.value as? [[String:Any]] {
                 val.forEach({
                     let transactions = self.transactions($0["transactions"])
                     height += transactions.1
                     height += 105
-                    text.append(self.category($0["category"]))
-                    text.append(.init(string: "\n"))
-                    text.append(transactions.0)
-                    text.append(self.total("\($0["value"] as? Double ?? 0)"))
-                    text.append(.init(string: "\n"))
+                    text.append((self.category($0["category"]), false))
+                    text.append((.init(string: "\n"), false))
+                    text.append((transactions.0, false))
+                    text.append((self.total("\($0["value"] as? Double ?? 0)"), false))
+                    text.append((.init(string: "\n"), false))
                 })
             } else {
-                text.append(self.row(($0.key, $0.value)))
+                text.append((self.row(($0.key, $0.value)), false))
             }
         })
         if data.defaultFooter {
-            text.append(footer)
-            height += 140
+            text.append((footer, false))
+            text.append((.init(string: "\n\n"), false))
+            height += 150
         }
         
         var footI = 0
         data.footers.forEach({
             let header = customHeader(data: $0, i: footI, isFooter: true, preview: fromCreate)
             footI += 1
-            text.append(header.0)
-            text.append(.init(string: "\n"))
+            text.append((header.0, true))
+            text.append((.init(string: "\n"), false))
             height += (header.1)
         })
         if fromCreate {
-            text.append(.init(string: "\n"))
+            text.append((.init(string: "\n"), false))
             let button = addButton(type: .addFooter)
-            text.append(button.0)
+            text.append((button.0, true))
             height += (button.1 + 10)
-            text.append(.init(string: "\n"))
+            text.append((.init(string: "\n"), false))
         }
         return (text, height)
     }
@@ -115,6 +120,10 @@ struct UnparcePDF {
         let font = font(for: data.custom?.textSettins.textSize ?? .small)
         let fontResult = UIFont.systemFont(ofSize: font.0, weight: font.1)
         let color = textColor(for: data.custom?.textSettins.textColor ?? .primary) ?? primaryColor
+       // let paragraphStyle = NSMutableParagraphStyle()
+        if data.custom?.textSettins.attachment.img == nil {
+            paragraphStyle.lineSpacing = 4
+        }
         var attributes:[NSAttributedString.Key : Any] = [
             .font:fontResult,
             .foregroundColor:color,
@@ -149,12 +158,26 @@ struct UnparcePDF {
         if attachment?.inTextPosition == .right && attachmentText != nil {
             text.append(.init(attributedString: attachmentText!))
         }
-        var height = text.string.calculate(font: fontResult, inWindth: manager.pageWidth).height
+        let paragraphStyle2 = NSMutableParagraphStyle()
+
+        paragraphStyle2.lineSpacing = 10
+        var height = text.string.calculate(font: fontResult, inWindth: manager.pageWidth, attributes: [.paragraphStyle:paragraphStyle2]).height
         if attachmentText != nil {
-            height += (attachment?.size.height ?? 0)
+            height += (attachment?.displeySize.height ?? 0)
         }
-        print(text.string, " gerfeefwrgef ", height)
+
+        
         return (text, height)
+    }
+    
+    private func spaceView(h:CGFloat = 20) -> NSAttributedString {
+        let view = UIView()
+        view.backgroundColor = .clear
+        view.frame = .init(origin: .zero, size: .init(width: manager.pageWidth, height: h))
+        let attachment = NSTextAttachment()
+        attachment.image = view.toImage
+        attachment.bounds = view.bounds
+        return .init(attachment: attachment)
     }
     
     private func documentHeader(data:PDFProperties, fromCreate:Bool = false) -> NSMutableAttributedString {

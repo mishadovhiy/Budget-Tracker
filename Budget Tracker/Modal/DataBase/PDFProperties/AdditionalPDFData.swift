@@ -13,9 +13,7 @@ struct AdditionalPDFData {
     init(dict: [String:Any]) {
         self.dict = dict
     }
-    init() {
-        self.dict = .init()
-    }
+    var isDefault:Bool = false
     var custom:Custom? {
         get {
             return .init(dict: dict["custom"] as? [String:Any] ?? [:])
@@ -31,7 +29,7 @@ struct AdditionalPDFData {
     public static func with(
       _ populator: (inout Self) throws -> ()
     ) rethrows -> Self {
-        var message = Self()
+        var message = Self(dict: [:])
       try populator(&message)
       return message
     }
@@ -41,9 +39,7 @@ struct AdditionalPDFData {
         init(dict: [String:Any]) {
             self.dict = dict
         }
-        init() {
-            self.dict = .init()
-        }
+
         var title:String? {
             get {
                 return dict["title"] as? String
@@ -69,7 +65,7 @@ struct AdditionalPDFData {
         public static func with(
           _ populator: (inout Self) throws -> ()
         ) rethrows -> Self {
-            var message = Self()
+            var message = Self(dict: [:])
           try populator(&message)
           return message
         }

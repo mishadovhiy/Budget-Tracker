@@ -298,12 +298,9 @@ extension CategoriesVC {
             }
         }
         if (AppDelegate.shared?.symbolsAllowed ?? false) {
-            editAction.image = AppData.iconNamed("pencil.yellow")
-            deleteAction.image = AppData.iconSystemNamed("trash.red")
-            editAction.backgroundColor = K.Colors.primaryBacground
-            deleteAction.backgroundColor = K.Colors.primaryBacground
-            localDeleteAction.backgroundColor = K.Colors.primaryBacground
-            localDeleteAction.image = AppData.iconSystemNamed("trash.red")
+            editAction.editType()
+            deleteAction.deleteType()
+            localDeleteAction.deleteType()
         }
         
         if indexPath.section == 0 || indexPath.section == 1 {

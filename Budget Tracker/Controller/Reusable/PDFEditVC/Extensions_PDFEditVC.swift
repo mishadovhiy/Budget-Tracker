@@ -23,11 +23,16 @@ extension PDFEditVC {
     }
     
     func toSelectImg(selected:@escaping(_ newImg:Data?)->()) {
-        let imgPicker = UIImagePickerController()
+        let imgPicker = ImagePicker()
         imgPicker.delegate = self
         imgPicker.allowsEditing = true
+        imgPicker.dismissed = {
+            AppDelegate.shared?.banner.appeare(force: true)
+        }
         imageSelectedAction = selected
-        self.present(imgPicker, animated: true)
+        AppDelegate.shared?.banner.hide(ios13Hide: true, completion: {
+            self.present(imgPicker, animated: true)
+        })
     }
     
     func toEnterValue(_ title:String, selectionData:[SelectionStackView.SelectionData]?, selectedValue:String? = nil, nextPressed:@escaping(_ string:String)->()) {
@@ -36,9 +41,11 @@ extension PDFEditVC {
         vc.screenData = .init(taskName: title, title: "", placeHolder: "", nextAction: {
             nextPressed($0)
             self.settingsNav?.popViewController(animated: true)
-            self.reloadTable()
-            self.enteringValuePropHolder = .init(dict: [:])
-            self.updateDB()
+            if selectionData != nil {
+                self.reloadTable()
+                self.enteringValuePropHolder = .init(dict: [:])
+                self.updateDB()
+            }
         }, screenType: .string)
         vc.selectionStackData = selectionData
         vc.nextButtonTitle = "Done"
@@ -77,7 +84,7 @@ extension PDFEditVC {
         vc.tableData = settingsData
         let nav = UINavigationController(rootViewController: vc)
         settingsNav = nav
-        vc.titleText = "PDF Settings"
+        vc.titleText = ""//"PDF Settings"
         addChild(nav)
         containerView.addSubview(nav.view)
         nav.view.addConstaits([.left:0, .right:0, .top:0, .bottom:0], superV: containerView)
@@ -91,14 +98,32 @@ extension PDFEditVC {
         }
     }
 
+    
+    @objc func tableLongPress(_ sender: UILongPressGestureRecognizer) {
+        if sender.state == .began {
+            if #available(iOS 13.0, *) {
+                self.vibrate(style: .soft)
+            } else {
+                self.vibrate(style: .light)
+            }
+            self.setEditing(true)
+        }
+        
+    }
+    
     func toggleSettingsHeight(_ show:SettingsHeightType) {
         let constant = containerView.constraints.first(where: {$0.identifier == "settingsHeight"})
+        self.view.isUserInteractionEnabled = false
         UIView.animate(withDuration: 0.45, animations: {
             constant?.constant = show.height
             self.containerView.layoutIfNeeded()
         }, completion: { _ in
+            self.view.isUserInteractionEnabled = true
             if show == .none {
                 self.tableView.reloadData()
+            }
+            if let row = self.selectedRow {
+                self.tableView.scrollToRow(at: .init(row: row, section: 0), at: .bottom, animated: true)
             }
         })
     }
@@ -154,13 +179,28 @@ extension PDFEditVC:UIImagePickerControllerDelegate, UINavigationControllerDeleg
         guard let selectedAction = imageSelectedAction,
               let selected = (info[.editedImage] as? UIImage)?.pngData()
         else { return }
-        selectedAction(selected)
         
+      //  AppDelegate.shared?.banner.appeare(force: true, completion: {
+            selectedAction(selected)
+     //   })
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         //settingsNav?.popViewController(animated: true)
         picker.dismiss(animated: true)
+       // AppDelegate.shared?.banner.appeare(force: true)
+    }
+    
+    
+}
+
+
+class ImagePicker:UIImagePickerController {
+    var dismissed:(()->())?
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        dismissed?()
+        dismissed = nil
     }
 }
 

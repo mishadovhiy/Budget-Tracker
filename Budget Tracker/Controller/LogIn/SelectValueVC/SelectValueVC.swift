@@ -48,7 +48,7 @@ protocol SelectUserVCDelegate {
 extension SelectValueVC {
     struct SelectValueSections {
         let sectionName:String
-        let cells:[SelectValueStruct]
+        var cells:[SelectValueStruct]
     }
     struct SelectValueStruct {
         let name:String

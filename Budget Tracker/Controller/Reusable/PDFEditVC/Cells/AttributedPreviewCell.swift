@@ -13,6 +13,11 @@ class AttributedPreviewCell:UITableViewCell {
     @IBOutlet weak var selectedLineView: BasicView!
     @IBOutlet weak var titleLabel: UILabel!
     
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        setSelectedColor(K.Colors.link.withAlphaComponent(0.1))
+    }
+    
     func set(_ data:NSAttributedString) {
         let atr = data
         let mutating = NSMutableAttributedString(string: "")

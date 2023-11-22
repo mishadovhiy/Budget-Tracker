@@ -56,8 +56,11 @@ struct PDFProperties {
                     $0.custom = .with({
                         $0.title = " "
                         $0.textSettins = .with({
+                            $0.alighment = .center
+                            $0.textSize = .small
                             $0.replacingType = .with({
                                 $0.date = .with({
+                                    $0.inTextPosition = .left
                                     $0.type = .transactionDateRange
                                 })
                             })
@@ -94,6 +97,44 @@ struct PDFProperties {
             let new:[[String:Any]] = newValue.compactMap({$0.dict})
             dict.updateValue(new, forKey: "footers")
         }
+    }
+    
+    func editableDefaultHeader(img: Data?)->[AdditionalPDFData] {
+        return [
+            .with({
+                $0.isDefault = true
+                $0.custom = .with({
+                    $0.title = " "
+                    $0.textSettins = .with({
+                        $0.attachment = .with({
+                            $0.img = img
+                        })
+                    })
+                })
+            }),
+            .with({
+                $0.isDefault = true
+                $0.custom = .with({
+                    $0.title = "Transaction History"
+                    $0.textSettins = .with({
+                        $0.textSize = .big
+                        $0.textColor = .primary
+                        $0.alighment = .center
+                    })
+                })
+            }),
+            .with({
+                $0.isDefault = true
+                $0.custom = .with({
+                    $0.title = "From Budget tracker app"
+                    $0.textSettins = .with({
+                        $0.textSize = .small
+                        $0.textColor = .secondary
+                        $0.alighment = .center
+                    })
+                })
+            })
+        ]
     }
     
     var defaultHeaderData:DefaultHeaderData?

@@ -18,13 +18,7 @@ extension SelectValueVC:UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let regular = tableData[indexPath.section].cells[indexPath.row].regular {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "SelectUserVCCell", for: indexPath) as! SelectUserVCCell
-            cell.mainTitleLabel.text = tableData[indexPath.section].cells[indexPath.row].name
-            cell.mainDescriptionLabel.isHidden = tableData[indexPath.section].cells[indexPath.row].regular?.description ?? "" == ""
-            cell.mainDescriptionLabel.text = tableData[indexPath.section].cells[indexPath.row].regular?.description
-            return cell
-        } else if let switcher = tableData[indexPath.section].cells[indexPath.row].switcher {
+        if let switcher = tableData[indexPath.section].cells[indexPath.row].switcher {
             let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell", for: indexPath) as! SwitchCell
             let data = tableData[indexPath.section].cells[indexPath.row].forProUsers
             cell.set(title:tableData[indexPath.section].cells[indexPath.row].name,
@@ -34,8 +28,15 @@ extension SelectValueVC:UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "SliderCell", for: indexPath) as! SliderCell
             cell.set(data)
             return cell
-        } else {
-            return UITableViewCell()
+        } else  {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SelectUserVCCell", for: indexPath) as! SelectUserVCCell
+            let data = tableData[indexPath.section].cells[indexPath.row]
+            cell.mainTitleLabel.text = data.name
+            cell.mainDescriptionLabel.isHidden = data.regular?.description ?? "" == ""
+            cell.mainDescriptionLabel.text = data.regular?.description
+            cell.mainTitleLabel.textColor = (data.regular?.disctructive ?? false) ? .red : K.Colors.category
+            cell.mainTitleLabel.textAlignment = (data.regular?.disctructive ?? false) ? .center : .left
+            return cell
         }
         
     }

@@ -83,13 +83,19 @@ class StatisticVC: SuperViewController, CALayerDelegate {
     }
     @IBAction func sharePressed(_ sender: Any) {
         let data = allData
-
+        let allData = sortAllTransactions()
         let dict:[[String:Any]] = data.compactMap({ $0.dict})
         let type = (segmentControll.selectedSegmentIndex == 0 ? "Expenses" : "Incomes")
         let period = isAll ? "All time" : appData.filter.periodText
         //get first and last transaction if all time
-        let pdf:ManagerPDF = .init(dict: ["Budget Tracker":dict], pageTitle: "", vc: self, data: .init(duration: period, type: type, from: appData.filter.fromDate, to: appData.filter.toDate, today: Date().toDateComponents()))
+        let pdf:ManagerPDF = .init(dict: ["Budget Tracker":dict], pageTitle: "", vc: self, data: .init(duration: period, type: type, from: isAll ? allData.from ?? .init() : appData.filter.fromDate, to: isAll ? allData.to ?? .init() : appData.filter.toDate, today: Date().toDateComponents()))
         pdf.exportPDF(sender: sender as! UIButton)
+    }
+    
+    func sortAllTransactions() -> (from:DateComponents?, to:DateComponents?) {
+        let result = dataFromMain.sorted { ($0.date.compToIso() ?? .init()) < ($1.date.compToIso() ?? .init())
+        }
+        return (from:result.first?.date.compToIso(), to:result.last?.date.compToIso())
     }
     
     func updateUI() {

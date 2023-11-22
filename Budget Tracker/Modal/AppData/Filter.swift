@@ -62,7 +62,12 @@ extension AppData {
         }
         
         var toDate:DateComponents {
-            return to.stringToCompIso()
+            var date = from.stringToCompIso()
+            date.day = date.lastDayOfMonth ?? 32
+            print(date.day, " erwrw")
+            print("tototo", to)
+            print(date, " datedatedate")
+            return date
         }
         var fromDate:DateComponents {
             return from.stringToCompIso()

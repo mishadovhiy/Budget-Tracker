@@ -16,15 +16,15 @@ extension PDFEditVC:UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AttributedPreviewCell", for: indexPath) as! AttributedPreviewCell
         cell.selectedLineView.isHidden = !(selectedRow == indexPath.row)
-        cell.set(tableData[indexPath.row])
-        
+        cell.set(tableData[indexPath.row].0)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if settingsNav?.viewControllers.count == 1 {
-            if let url = link(indexPath, reorder: false) {
+            if tableData[indexPath.row].1, let url = link(indexPath, reorder: false)
+            {
                 selectedRow = indexPath.row
                 linkPressed(url)
                 tableView.reloadData()
@@ -37,16 +37,16 @@ extension PDFEditVC:UITableViewDelegate, UITableViewDataSource {
     }
     
     private func link(_ index:IndexPath, reorder:Bool = true) -> URL? {
-        let text = tableData[index.row]
+        let text = tableData[index.row].0
         let range = NSRange(0..<(text.length))
         if let url = url(text) {
             return url
         } else if text.containsAttachments(in: range), !reorder {
             let textNew = NSMutableAttributedString(attributedString: text)
             textNew.enumerateAttribute(NSAttributedString.Key.attachment, in: NSMakeRange(0, textNew.length), options: []) { value, range, stop in
-                if let attachment = value as? NSTextAttachment {
-                    textNew.replaceCharacters(in: range, with: "") // Remove the characters occupied by the attachment
-                    stop.pointee = true // Stop the enumeration after the first attachment is removed (if you have multiple)
+                if let _ = value as? NSTextAttachment {
+                    textNew.replaceCharacters(in: range, with: "")
+                    stop.pointee = true
                 }
                 
             }
@@ -67,7 +67,7 @@ extension PDFEditVC:UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        if let urlLink = link(indexPath, reorder: true),
+        if tableData[indexPath.row].1, let urlLink = link(indexPath, reorder: false),
            let component = urlLink.components.first(where: {
                return LinkAttributeType.init(rawValue: $0) != nil
            }),
@@ -76,25 +76,28 @@ extension PDFEditVC:UITableViewDelegate, UITableViewDataSource {
            let dataRow = url.dataIndex(components: urlLink.components),
            settingsNav?.viewControllers.count == 1
         {
-            return .init(actions: [
-                .init(style: .normal, title: "Reorder") { a, v, act in
-                    self.stopEditingButton.fadeTransition(0.3)
-                    self.stopEditingButton.isHidden = false
-                    tableView.reloadData()
-                    tableView.setEditing(true, animated: true)
-                    print(tableView.isEditing, " gterfwds")
-                },
-                .init(style: .normal, title: "Edit") { a, v, act in
-                    self.linkPressed(urlLink)
-                },
-                .init(style: .normal, title: "Delete") { a, v, act in
-                    self.deletePressed(at: dataRow, isFooter: url == .footer)
-                    tableView.beginUpdates()
-                    tableView.deleteRows(at: [indexPath], with: .left)
-                    tableView.endUpdates()
-                    self.updateDB()
+            
+            let edit:UIContextualAction = .init(style: .normal, title: "Edit") { a, v, act in
+                let holder = self.selectedRow
+                self.selectedRow = indexPath.row
+                
+                self.linkPressed(urlLink)
+                var raws = [indexPath]
+                if let holder = holder {
+                    raws.append(.init(row: holder, section: 0))
                 }
-            ])
+                tableView.reloadRows(at: raws, with: .automatic)
+            }
+            let delete:UIContextualAction = .init(style: .normal, title: "Delete") { a, v, act in
+                self.deletePressed(at: dataRow, isFooter: url == .footer)
+                tableView.beginUpdates()
+                tableView.deleteRows(at: [indexPath], with: .left)
+                tableView.endUpdates()
+                self.updateDB()
+            }
+            edit.editType()
+            delete.deleteType()
+            return .init(actions: [edit, delete])
         } else {
             return nil
         }
@@ -102,7 +105,7 @@ extension PDFEditVC:UITableViewDelegate, UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        if let urlLink = link(indexPath),
+        if tableData[indexPath.row].1, let urlLink = link(indexPath, reorder: false),
            let component = urlLink.components.first(where: {
                return LinkAttributeType.init(rawValue: $0) != nil
            }),
@@ -116,7 +119,7 @@ extension PDFEditVC:UITableViewDelegate, UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        if let urlLink = link(sourceIndexPath),
+        if tableData[sourceIndexPath.row].1, tableData[destinationIndexPath.row].1, let urlLink = link(sourceIndexPath),
            let component = urlLink.components.first(where: {
                return LinkAttributeType.init(rawValue: $0) != nil
            }),
@@ -134,4 +137,19 @@ extension PDFEditVC:UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if tableData[indexPath.row].1, let urlLink = link(indexPath, reorder: false),
+           let component = urlLink.components.first(where: {
+               return LinkAttributeType.init(rawValue: $0) != nil
+           }),
+           let url = LinkAttributeType(rawValue: component),
+           url.canReorder,
+           let _ = url.dataIndex(components: urlLink.components)
+        {
+            return true
+        } else {
+            return false
+        }
+    }
 }

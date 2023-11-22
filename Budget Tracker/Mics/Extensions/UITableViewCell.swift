@@ -40,3 +40,15 @@ extension UICollectionViewCell {
     }
 }
 
+extension UIContextualAction {
+    
+    func editType() {
+        self.image = AppData.iconNamed("pencil.yellow")
+        self.backgroundColor = K.Colors.primaryBacground
+    }
+    
+    func deleteType() {
+        self.image = AppData.iconSystemNamed("trash.red")
+        self.backgroundColor = K.Colors.primaryBacground
+    }
+}

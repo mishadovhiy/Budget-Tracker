@@ -9,7 +9,7 @@
 import UIKit
 
 class ReminderManager {
-    private let db = DataBase()
+    private var db = DataBase()
     
     
     var reminders:[ReminderStruct] {

@@ -30,10 +30,13 @@ extension String {
         return nil
     }
     
-    func calculate(font:UIFont? = nil, inWindth:CGFloat? = nil) -> CGSize {
-        let fontSize = font ?? UIFont.systemFont(ofSize: 16.0)
+    func calculate(font:UIFont, inWindth:CGFloat? = nil, attributes:[NSAttributedString.Key: Any]? = nil) -> CGSize {
+        let fontSize = font// ?? UIFont.systemFont(ofSize: 16)
         let defaultWidth = AppDelegate.shared?.window?.frame.width ?? 100
-        let textAttributes: [NSAttributedString.Key: Any] = [.font: fontSize]
+        var textAttributes: [NSAttributedString.Key: Any] = [.font: fontSize]
+        attributes?.forEach({
+            textAttributes.updateValue($0.value, forKey: $0.key)
+        })
         let attributedText = NSAttributedString(string: self, attributes: textAttributes)
 
         let boundingRect = attributedText.boundingRect(with: CGSize(width: inWindth ?? defaultWidth, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, context: nil)

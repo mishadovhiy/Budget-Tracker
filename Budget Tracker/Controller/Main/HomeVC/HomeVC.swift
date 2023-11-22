@@ -165,7 +165,11 @@ class HomeVC: SuperViewController {
         DispatchQueue.init(label: "local", qos: .userInitiated).async {
             AppDelegate.shared?.appData.filter.showAll = false
             AppDelegate.shared?.appData.filter.from = "\(1.makeTwo()).\(month.makeTwo()).\(year)"
-            AppDelegate.shared?.appData.filter.to = "\(31.makeTwo()).\(month.makeTwo()).\(year)"
+            var lastDay = DateComponents()
+            lastDay.year = year
+            lastDay.month = month
+            print(lastDay.lastDayOfMonth, " trgerfwd")
+            AppDelegate.shared?.appData.filter.to = "\((lastDay.lastDayOfMonth ?? 31).makeTwo()).\(month.makeTwo()).\(year)"
             if !self.completedFiltering {
                 self.transactionManager?.filterChanged = true
             }
@@ -206,7 +210,7 @@ class HomeVC: SuperViewController {
         let all = transactionManager?.filtered(apiTransactions) ?? []
         self.filterText = (showAll ? "All transactions".localize : (AppDelegate.shared?.appData.filter.periodText ?? ""))
         tableData = all
-        prepareFilterOptions(all)
+        prepareFilterOptions(apiTransactions)
         
         calculations = .init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)
         dataTaskCount = (0,0)

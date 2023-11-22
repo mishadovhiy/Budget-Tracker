@@ -106,13 +106,13 @@ class ManagerPDF {
         let data = UnparcePDF(manager: self).dictionaryToString(dict, data: properties, fromCreate: fromCreate)
         print(properties, " gterfwe4e5gtr")
         data.0.forEach({
-            res.append($0)
+            res.append($0.0)
         })
         return (res, data.1)
     }
     
     
-    func previewPDF() -> ([NSAttributedString], CGFloat) {
+    func previewPDF() -> ([(NSAttributedString, Bool)], CGFloat) {
         properties.defaultHeaderData = headerData
         let data = UnparcePDF(manager: self).dictionaryToString(dict, data: properties, fromCreate: true)
         print(properties, " gterfwe4e5gtr")

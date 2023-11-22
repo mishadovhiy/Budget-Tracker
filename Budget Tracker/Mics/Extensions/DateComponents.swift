@@ -122,6 +122,26 @@ extension DateComponents {
         return date
     }
     
+    var lastDayOfMonth: Int? {
+        let calendar = Calendar.current
+
+        var dateComponents = DateComponents()
+        dateComponents.calendar = calendar
+            dateComponents.year = year
+            dateComponents.month = month
+        
+        guard let firstDayOfNextMonth = calendar.date(from: dateComponents) else {
+            return nil
+        }
+
+        if let lastDayOfMonth = calendar.date(byAdding: DateComponents(day: -1), to: firstDayOfNextMonth) {
+            let day = calendar.component(.day, from: lastDayOfMonth)
+            return day
+        }
+        
+        return nil
+    }
+    
     //returnMonth() --- indeed : to do:replace!!!
     var stringMonth:String? {
         if let month = self.month {
@@ -136,4 +156,8 @@ extension DateComponents {
     
 
 
+}
+
+extension DateComponents:Comparable {
+    
 }

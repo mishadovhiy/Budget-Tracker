@@ -156,6 +156,14 @@ struct PdfTextProperties {
                 dict.updateValue(newValue.rawValue, forKey: "inTextPosition")
             }
         }
+        
+        public static func with(
+          _ populator: (inout Self) throws -> ()
+        ) rethrows -> Self {
+            var message = Self(dict: [:])
+          try populator(&message)
+          return message
+        }
     }
 
     enum InTextPosition:String {

@@ -16,7 +16,7 @@ class PDFEditVC:SuperViewController {
     @IBOutlet weak var exportPdfButton: AdButton!
     var enteringValuePropHolder:PdfTextProperties?
     let containerConstraintKey = "egualHeightContainer"
-    var tableData:[NSAttributedString] = []
+    var tableData:[(NSAttributedString, Bool)] = []
     static let pdfLinkKey = "pdfLink"
     
     var selectingColorFor:SelectingColor = .background
@@ -34,11 +34,12 @@ class PDFEditVC:SuperViewController {
         AppDelegate.shared?.banner.fullScreenDelegates.updateValue(self, forKey: self.restorationIdentifier!)
         tableView.separatorStyle = .none
         tableView.layer.cornerRadius = 9
-        self.stopEditingButton.isHidden = true
+        setEditing(false, animated: false)
 
         let bannerH = AppDelegate.shared?.banner.size ?? 0
         self.tableView.contentInset.top = bannerH == 0 ? 0 : (bannerH + 15)
         self.tableView.scrollToRow(at: .init(row: 0, section: 0), at: .top, animated: true)
+        tableView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(tableLongPress(_:))))
     }
     
     
@@ -57,8 +58,6 @@ class PDFEditVC:SuperViewController {
         updateNavButtons()
         AppDelegate.shared?.banner.setBackground(clear: true)
         AppDelegate.shared?.banner.changeBannerPosition(top: true)
-
-
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -107,24 +106,22 @@ class PDFEditVC:SuperViewController {
             self.selectColorPressed(.secondary)
         })))
         
-        colors.append(.init(name: "Reorder", regular: .init(didSelect:reorderPressed)))
-        
-        colors.append(.init(name: "Restore colors to default", regular: .init(description: pdfData?.properties.documentProperties.colors.secondary == nil ? "Default" : "", didSelect: {
+        colors.append(.init(name: "Restore colors", regular: .init(disctructive:true,description: pdfData?.properties.documentProperties.colors.secondary == nil ? "Default" : "", didSelect: {
             AppDelegate.shared?.ai.showAlert(buttons: (.init(title: "Cancel", style: .regular, close: true, action: nil), .init(title: "Yes", style: .error, action: { _ in
                 self.pdfData?.properties.documentProperties.colors = .init(dict: [:])
                 self.updatePDF()
                 self.updateDB()
-            })), title: "Are you sure you wanna set all colors to default?")
+            })), title: "Are you sure you want to set all colors to default?")
         })))
         
         
-        colors.append(.init(name: "Restore data to default", regular: .init(description: pdfData?.properties.documentProperties.colors.secondary == nil ? "Default" : "", didSelect: {
+        colors.append(.init(name: "Restore data", regular: .init(disctructive:true,description: pdfData?.properties.documentProperties.colors.secondary == nil ? "Default" : "", didSelect: {
             AppDelegate.shared?.ai.showAlert(buttons: (.init(title: "Cancel", style: .regular, close: true, action: nil), .init(title: "Yes", style: .error, action: { _ in
                 self.pdfData?.properties = .init()
 
                 self.updatePDF()
                 self.updateDB()
-            })), title: "Are you sure you wanna set all data to default?")
+            })), title: "Are you sure?\nAll selected colors and data would be lost")
         })))
         
         
@@ -147,12 +144,16 @@ class PDFEditVC:SuperViewController {
     }
 
     
+    func updateSettingsVCList(_ data:[SelectValueVC.SelectValueSections], vc:UIViewController? = nil) {
+        ((vc ?? self.settingsNav?.viewControllers.last) as? SelectValueVC)?.updateTable(data)
+    }
+    
     
     private func updateTableData() {
         let pdf = pdfData?.previewPDF()
         tableData.removeAll()
         pdf?.0.forEach({
-            if $0.string != "\n" && $0.string != "\n\n\n" && $0.string != "  \n" {
+            if $0.0.string != "\n" && $0.0.string != "\n\n\n" && $0.0.string != "  \n" {
                 tableData.append($0)
             }
         })
@@ -181,9 +182,15 @@ class PDFEditVC:SuperViewController {
     //pressed
     
     @IBAction func stopEditingPressed(_ sender: Any) {
-        self.stopEditingButton.fadeTransition(0.3)
-        self.stopEditingButton.isHidden = true
-        tableView.setEditing(false, animated: true)
+        self.setEditing(!tableView.isEditing)
+    }
+    
+    override func setEditing(_ editing:Bool, animated:Bool = true) {
+        if animated {
+            stopEditingButton.fadeTransition(0.3)
+        }
+        tableView.setEditing(editing, animated: true)
+        stopEditingButton.setTitle(editing ? "Save" : "Edit", for: .normal)
         updatePDF()
         updateDB()
     }
@@ -304,14 +311,6 @@ class PDFEditVC:SuperViewController {
         }
     }
     
-    func reorderPressed() {
-        self.stopEditingButton.fadeTransition(0.3)
-        self.stopEditingButton.isHidden = false
-        tableView.reloadData()
-        tableView.setEditing(true, animated: true)
-        print(tableView.isEditing, " gterfwds")
-    }
-    
     func linkPressed(_ url:URL) {
         let components = url.components
         print(components, " ferwdswerf")
@@ -368,26 +367,39 @@ class PDFEditVC:SuperViewController {
 //toAddType pressed
 extension PDFEditVC {
     private var selectTypeTableData:[SelectValueVC.SelectValueSections] {
-        
-        [
-            .init(sectionName: "", cells: [
-                .init(name: "Type", 
-                      regular: .init(description: enteringValuePropHolder?.replacingType.date.type.title ?? "-" ,didSelect: dateTypePressed)),
-                .init(name: "Date format",
-                      regular: .init(description: enteringValuePropHolder?.replacingType.date.format.title ?? "-" , didSelect: dateFormatPressed)),
-                .init(name: "In text position",
-                      regular: .init(description: enteringValuePropHolder?.replacingType.date.inTextPosition.title ?? "-" , didSelect: {
-                          self.intextPositionPressed(attachment: false)
-                      })),
-                .init(name: "Range separetor",
-                      regular: .init(description: enteringValuePropHolder?.replacingType.date.rangeSeparetor ?? "-", didSelect: {
-                          self.toEnterSeparetor(range: true)
-                      })),
-                .init(name: "Day separetor",
-                      regular: .init(description: enteringValuePropHolder?.replacingType.date.dateSeparetor ?? "-", didSelect: {
-                          self.toEnterSeparetor(range: false)
-                      }))
-            ])
+        let cells:[SelectValueVC.SelectValueStruct] = [
+            .init(name: "Date format",
+                  regular: .init(description: enteringValuePropHolder?.replacingType.date.format.title ?? "-" , didSelect: dateFormatPressed)),
+            .init(name: "In text position",
+                  regular: .init(description: enteringValuePropHolder?.replacingType.date.inTextPosition.title ?? "-" , didSelect: {
+                      self.intextPositionPressed(attachment: false)
+                  })),
+            .init(name: "Day separetor",
+                  regular: .init(description: enteringValuePropHolder?.replacingType.date.dateSeparetor ?? "-", didSelect: {
+                      self.toEnterSeparetor(range: false)
+                  }))
+        ]
+        let vis:SelectValueVC.SelectValueStruct =
+            .init(name: "Type",
+                  regular: .init(description: enteringValuePropHolder?.replacingType.date.type.title ?? "-" ,didSelect: dateTypePressed))
+        let other:SelectValueVC.SelectValueStruct = .init(name: "Range separetor",
+                          regular: .init(description: enteringValuePropHolder?.replacingType.date.rangeSeparetor ?? "-", didSelect: {
+                              self.toEnterSeparetor(range: true)
+                          }))
+        var resultCells:[SelectValueVC.SelectValueStruct] = [vis]
+
+        switch enteringValuePropHolder?.replacingType.date.type ?? .none {
+        case .transactionDateRange:
+            cells.forEach({resultCells.append($0)})
+            resultCells.append(other)
+
+        case .today:
+            cells.forEach({resultCells.append($0)})
+        case .none:
+            break
+        }
+        return [
+            .init(sectionName: "", cells: resultCells)
         ]
     }
     
@@ -401,7 +413,6 @@ extension PDFEditVC {
             } else {
                 self.enteringValuePropHolder?.replacingType.date.dateSeparetor = string
             }
-            self.settingsNav?.popViewController(animated: true)
         }
     }
     
@@ -447,7 +458,7 @@ extension PDFEditVC {
     func addCustomTypePressed() {
         toSelectValueVC(title: "Date properties", tableData: self.selectTypeTableData) { vc in
             vc.appeareAction = {
-                ($0 as! SelectValueVC).updateTable(self.selectTypeTableData)
+                self.updateSettingsVCList(self.selectTypeTableData, vc: $0)
             }
         }
     }
@@ -456,10 +467,7 @@ extension PDFEditVC {
 
 extension PDFEditVC {
     private var attachmentTableData:[SelectValueVC.SelectValueSections] {
-        [
-            .init(sectionName: "", cells: [
-                //file
-                .init(name:"Image", regular: .init(description:enteringValuePropHolder?.attachment.img != nil ? "Replace" : "Choose", didSelect: chooseAttachment)),
+        let cells: [SelectValueVC.SelectValueStruct] = [
                 .init(name: "In text position",
                       regular: .init(description: enteringValuePropHolder?.attachment.inTextPosition.title ?? "-" , didSelect: {
                           self.intextPositionPressed(attachment: true)
@@ -469,23 +477,36 @@ extension PDFEditVC {
                 })),
                 .init(name: "", slider: .init(title: "Height", value: Float(enteringValuePropHolder?.attachment.size.height ?? 0), multiplier:enteringValuePropHolder?.attachment.multiplierSize ?? 0, changed: { newValue in
                     self.enteringValuePropHolder?.attachment.size.height = CGFloat(newValue)
+                })),
+                .init(name: "Remove file", regular: .init(disctructive:true, didSelect: {
+                    self.enteringValuePropHolder?.attachment.img = nil
+                    self.updateSettingsVCList(self.attachmentTableData)
                 }))
-                //size
-            ])
+        ]
+        let other:SelectValueVC.SelectValueStruct =
+            .init(name:"Image", regular: .init(description:enteringValuePropHolder?.attachment.img != nil ? "Replace" : "Choose", didSelect: chooseAttachment))
+        var resultCells:[SelectValueVC.SelectValueStruct] = [other]
+        if enteringValuePropHolder?.attachment.img != nil {
+            cells.forEach({resultCells.append($0)})
+        } 
+        return [
+            .init(sectionName: "", cells: resultCells)
         ]
     }
     
     private func chooseAttachment() {
         toSelectImg { newImg in
             self.enteringValuePropHolder?.attachment.img = newImg
-            (self.settingsNav?.viewControllers.last as! SelectValueVC).updateTable(self.attachmentTableData)
+            self.updateSettingsVCList(self.attachmentTableData)
         }
     }
+    
+    //here
     
     private func addAttachmentPressed() {
         toSelectValueVC(title: "Add Attachment", tableData: self.attachmentTableData) { vc in
             vc.appeareAction = {
-                ($0 as! SelectValueVC).updateTable(self.attachmentTableData)
+                self.updateSettingsVCList(self.attachmentTableData, vc: $0)
             }
         }
     }
