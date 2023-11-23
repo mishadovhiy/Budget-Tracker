@@ -36,7 +36,12 @@ class ManagerPDF {
         appDelegate.newMessage.show(title:title, description: description, type: .error)
         
     }
-    func exportPDF(sender:UIView, toEdit:Bool = true) {
+    
+    func toExport(sender:UIView, toEdit:Bool) {
+        exportPDF(sender: sender, toEdit: toEdit)
+    }
+    
+    private func exportPDF(sender:UIView, toEdit:Bool = true) {
         DispatchQueue(label: "dbPdf", qos: .userInitiated).async {
             let db = AppDelegate.shared?.db.viewControllers.pdfProperties ?? .init(dict: [:])
             self.properties = db

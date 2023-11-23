@@ -119,7 +119,7 @@ extension PDFEditVC:UITableViewDelegate, UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        if tableData[sourceIndexPath.row].1, tableData[destinationIndexPath.row].1, let urlLink = link(sourceIndexPath),
+        if tableData[sourceIndexPath.row].1, tableData[destinationIndexPath.row].1, let urlLink = link(sourceIndexPath, reorder: false),
            let component = urlLink.components.first(where: {
                return LinkAttributeType.init(rawValue: $0) != nil
            }),
@@ -128,7 +128,7 @@ extension PDFEditVC:UITableViewDelegate, UITableViewDataSource {
            let dataIndex = url.dataIndex(components: urlLink.components)
         {
             let data = (url == .footer ? (self.pdfData?.properties.footers ?? []) : (self.pdfData?.properties.headers ?? []))[dataIndex]
-            let toLink = link(destinationIndexPath)
+            let toLink = link(destinationIndexPath, reorder: false)
             let toLinkurl = LinkAttributeType(rawValue: component)
             let toIndex = toLinkurl?.dataIndex(components: toLink?.components ?? [])
             self.removeCustom(isFooter: url == .footer, at: dataIndex)

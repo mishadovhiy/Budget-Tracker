@@ -89,7 +89,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
         let period = isAll ? "All time" : appData.filter.periodText
         //get first and last transaction if all time
         let pdf:ManagerPDF = .init(dict: ["Budget Tracker":dict], pageTitle: "", vc: self, data: .init(duration: period, type: type, from: isAll ? allData.from ?? .init() : appData.filter.fromDate, to: isAll ? allData.to ?? .init() : appData.filter.toDate, today: Date().toDateComponents()))
-        pdf.exportPDF(sender: sender as! UIButton)
+        pdf.toExport(sender: sender as! UIButton, toEdit: true)
     }
     
     func sortAllTransactions() -> (from:DateComponents?, to:DateComponents?) {

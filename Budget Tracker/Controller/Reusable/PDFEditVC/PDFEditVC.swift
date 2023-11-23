@@ -42,7 +42,6 @@ class PDFEditVC:SuperViewController {
         tableView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(tableLongPress(_:))))
     }
     
-    
     override func viewDidDismiss() {
         super.viewDidDismiss()
         AppDelegate.shared?.banner.fullScreenDelegates.removeValue(forKey: self.restorationIdentifier!)
@@ -276,7 +275,7 @@ class PDFEditVC:SuperViewController {
             self.updatePDF()
             self.exportPressed = true
             self.pdfData?.pageWidth = self.pdfData?.normalPageWidth ?? 0
-            self.pdfData?.exportPDF(sender: self.navigationController?.view ?? .init(), toEdit: false)
+            self.pdfData?.toExport(sender: self.navigationController?.view ?? .init(), toEdit: false)
         }
         
 

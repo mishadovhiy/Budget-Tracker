@@ -161,6 +161,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             if UserSettings.Security.password != "" && !(self.passcodeLock.presenting) {
                 DispatchQueue.main.async {
                     self.presentLock(passcode: false)
+                    
                 }
                 
             }
