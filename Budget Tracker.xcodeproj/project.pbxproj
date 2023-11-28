@@ -156,6 +156,11 @@
 		8DEB0CDB28184FEA002D24D3 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEB0CDA28184FEA002D24D3 /* Extensions.swift */; };
 		8DEB0CDE28188762002D24D3 /* Public.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEB0CDD28188762002D24D3 /* Public.swift */; };
 		8DEB0CE0281887E0002D24D3 /* UITextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEB0CDF281887E0002D24D3 /* UITextFieldDelegate.swift */; };
+		8DEB84D62B157EB700AB1975 /* CameraTextMLVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEB84D52B157EB700AB1975 /* CameraTextMLVC.swift */; };
+		8DEB84DB2B1588A200AB1975 /* ImagePreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEB84DA2B1588A200AB1975 /* ImagePreviewVC.swift */; };
+		8DEB84DD2B158B0400AB1975 /* SelectTextImageContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEB84DC2B158B0400AB1975 /* SelectTextImageContainerView.swift */; };
+		8DEB84E12B158E1600AB1975 /* DetectText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEB84DF2B158E1500AB1975 /* DetectText.swift */; };
+		8DEB84E22B158E1600AB1975 /* CameraModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEB84E02B158E1500AB1975 /* CameraModel.swift */; };
 		8DECAFC12460461F0041B734 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DECAFC02460461F0041B734 /* CloudKit.framework */; };
 		8DF479DE2ADF105A0092746E /* PDFEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF479DD2ADF105A0092746E /* PDFEditVC.swift */; };
 		8DF9DCCD2815A87400C7BFA0 /* adBannerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DF9DCCC2815A87400C7BFA0 /* adBannerView.xib */; };
@@ -365,6 +370,11 @@
 		8DEB0CDA28184FEA002D24D3 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		8DEB0CDD28188762002D24D3 /* Public.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Public.swift; sourceTree = "<group>"; };
 		8DEB0CDF281887E0002D24D3 /* UITextFieldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldDelegate.swift; sourceTree = "<group>"; };
+		8DEB84D52B157EB700AB1975 /* CameraTextMLVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraTextMLVC.swift; sourceTree = "<group>"; };
+		8DEB84DA2B1588A200AB1975 /* ImagePreviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreviewVC.swift; sourceTree = "<group>"; };
+		8DEB84DC2B158B0400AB1975 /* SelectTextImageContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTextImageContainerView.swift; sourceTree = "<group>"; };
+		8DEB84DF2B158E1500AB1975 /* DetectText.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetectText.swift; sourceTree = "<group>"; };
+		8DEB84E02B158E1500AB1975 /* CameraModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraModel.swift; sourceTree = "<group>"; };
 		8DECAFBF2460461C0041B734 /* Budget Tracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Budget Tracker.entitlements"; sourceTree = "<group>"; };
 		8DECAFC02460461F0041B734 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		8DF479DD2ADF105A0092746E /* PDFEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFEditVC.swift; sourceTree = "<group>"; };
@@ -699,6 +709,9 @@
 				8D834D95297E03D60056E686 /* CalendarControlVC */,
 				8D8B6C3D245023EC007260A0 /* CalendarVC.swift */,
 				8B52DFEB27504D2900595A0C /* IconsVC.swift */,
+				8DEB84DC2B158B0400AB1975 /* SelectTextImageContainerView.swift */,
+				8DEB84D72B157EC700AB1975 /* CameraTextMLVC.swift */,
+				8DEB84DA2B1588A200AB1975 /* ImagePreviewVC.swift */,
 				8B5F342B26FB2D97000DDCAF /* EnterValueVC.swift */,
 				8D0071DC2B0D88F700DBB703 /* ColorPickerVC.swift */,
 				8D2CDA2A2AF4386200671A72 /* PDFEditVC */,
@@ -1048,6 +1061,24 @@
 			path = Modal;
 			sourceTree = "<group>";
 		};
+		8DEB84D72B157EC700AB1975 /* CameraTextMLVC.swift */ = {
+			isa = PBXGroup;
+			children = (
+				8DEB84D52B157EB700AB1975 /* CameraTextMLVC.swift */,
+				8DEB84DE2B158E1500AB1975 /* CameraMLs */,
+			);
+			path = CameraTextMLVC.swift;
+			sourceTree = "<group>";
+		};
+		8DEB84DE2B158E1500AB1975 /* CameraMLs */ = {
+			isa = PBXGroup;
+			children = (
+				8DEB84DF2B158E1500AB1975 /* DetectText.swift */,
+				8DEB84E02B158E1500AB1975 /* CameraModel.swift */,
+			);
+			path = CameraMLs;
+			sourceTree = "<group>";
+		};
 		8DF9DCCE2815A87E00C7BFA0 /* adBannerView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1262,6 +1293,7 @@
 				8DEB0CDE28188762002D24D3 /* Public.swift in Sources */,
 				8DFF72892B07E75B00FC38A7 /* UITableViewDelegate_ SelectValueVC.swift in Sources */,
 				8B6BA98227E717850067FF58 /* Date.swift in Sources */,
+				8DEB84DD2B158B0400AB1975 /* SelectTextImageContainerView.swift in Sources */,
 				8D2CDA1E2AF3F37A00671A72 /* EmptyCell.swift in Sources */,
 				8D2CDA222AF3F37A00671A72 /* mainVCcell.swift in Sources */,
 				8DC033CC2985CA5A00CD98FF /* UITableViewDataSource_ViewController.swift in Sources */,
@@ -1273,6 +1305,7 @@
 				8DEB0CE0281887E0002D24D3 /* UITextFieldDelegate.swift in Sources */,
 				8B26329827E6A4470086C3A8 /* DateComponents.swift in Sources */,
 				8D08FD5A2ACA23F600BA0222 /* Unparce.swift in Sources */,
+				8DEB84E12B158E1600AB1975 /* DetectText.swift in Sources */,
 				8B26329327E69EFA0086C3A8 /* localizationDictUA.swift in Sources */,
 				8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */,
 				8D0C5D182AF6C16F002E2422 /* SelectionStackView.swift in Sources */,
@@ -1364,6 +1397,7 @@
 				8D2CDA352AF448A700671A72 /* SwitchCell.swift in Sources */,
 				8D08FD4D2AC9AA0300BA0222 /* AmountToPayCell.swift in Sources */,
 				8BF58D1F277C793D005A7F38 /* BuyPageVC.swift in Sources */,
+				8DEB84D62B157EB700AB1975 /* CameraTextMLVC.swift in Sources */,
 				8D52066B24216A6200772CD5 /* HistoryVC.swift in Sources */,
 				8D2CDA202AF3F37A00671A72 /* CVCell.swift in Sources */,
 				8DD2D2CD2998902E0098C106 /* ViewControllers.swift in Sources */,
@@ -1371,11 +1405,13 @@
 				8D6F947F2AEF15DC00103763 /* MessageContent.swift in Sources */,
 				8BF63E8D27629D14002E8601 /* SupportVC.swift in Sources */,
 				8D17FABD2B07BFBA005E03FD /* AttributedPreviewCell.swift in Sources */,
+				8DEB84DB2B1588A200AB1975 /* ImagePreviewVC.swift in Sources */,
 				8DD89D8C23F1485700273904 /* Constants.swift in Sources */,
 				8B5434FA27ED838F00417141 /* Notifications.swift in Sources */,
 				8D36724224D315BC00CE90A9 /* NetworkModel.swift in Sources */,
 				8B42FCDD2776805800013E4B /* NumbersTF.swift in Sources */,
 				8B5F342C26FB2D98000DDCAF /* EnterValueVC.swift in Sources */,
+				8DEB84E22B158E1600AB1975 /* CameraModel.swift in Sources */,
 				8BFA15D127E8E8510078856A /* categoriesVCcell.swift in Sources */,
 				8DFEA8A22B0C504E003410D7 /* PDFreplacingProperties.swift in Sources */,
 				8BC31D7B27E3E5EA00FBC939 /* Button.swift in Sources */,

@@ -132,7 +132,6 @@ class HomeVC: SuperViewController {
             }).store(in: &BannerPublisher.cancellableHolder)
         }
         
-        
     }
     
     

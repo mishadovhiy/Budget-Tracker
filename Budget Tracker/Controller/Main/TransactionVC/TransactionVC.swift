@@ -24,6 +24,7 @@ protocol TransitionVCProtocol {
 class TransitionVC: SuperViewController {
     @IBOutlet weak var removeLastButton: UIButton!
     @IBOutlet weak var removeAllButton: UIButton!
+    @IBOutlet weak var cameraContainer: UIView!
     @IBAction func trashPressed(_ sender: UIButton) {
         donePressed = true
         DispatchQueue.main.async {
@@ -65,7 +66,7 @@ class TransitionVC: SuperViewController {
     var editingComment = ""
     
     var pressedValueArrey: [String] =  []
-
+    
     var dateSet:String?
     var dateChanged = false
     var sbvsloded = false
@@ -77,7 +78,7 @@ class TransitionVC: SuperViewController {
     var calendarSelectedTime:DateComponents?
     func dismissVC(complation:(()->())? = nil) {
         self.navigationController?.delegate = dismissTransitionHolder
-
+        
         if self.navigationController is TransactionNav {
             self.dismiss(animated: true, completion: complation)
             viewDidDismiss()
@@ -87,7 +88,17 @@ class TransitionVC: SuperViewController {
             viewDidDismiss()
         }
     }
-
+    
+    func createCameraContainer() {
+        let nav = UINavigationController(rootViewController: SelectTextImageContainerView.configure())
+        addChild(nav)
+        guard let childView = nav.view else {
+            return
+        }
+        cameraContainer.addSubview(childView)
+        childView.addConstaits([.left:0, .right:0, .top:0, .bottom:0], superV: cameraContainer)
+        nav.didMove(toParent: self)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,6 +111,7 @@ class TransitionVC: SuperViewController {
         getEditingdata()
 
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        createCameraContainer()
     }
 
     override func viewDidDismiss() {

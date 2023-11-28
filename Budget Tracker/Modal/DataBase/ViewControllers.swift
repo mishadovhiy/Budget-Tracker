@@ -110,6 +110,41 @@ extension DataBase {
             }
         }
         
+        var cameraStorage:CameraVC {
+            get {
+                return .init(dict: dict["cameraStorage"] as? [String:Any] ?? [:])
+            }
+            set {
+                dict.updateValue(newValue.dict, forKey: "cameraStorage")
+            }
+        }
+        
+        struct CameraVC {
+            var dict:[String:Any]
+            init(dict: [String : Any]) {
+                self.dict = dict
+            }
+            
+            var addTransactionCameraEnabled:Bool {
+                get {
+                    return dict["addTransactionCameraEnabled"] as? Bool ?? false
+                }
+                set {
+                    dict.updateValue(newValue, forKey: "addTransactionCameraEnabled")
+                }
+            }
+            
+            var autoAddAll:Bool {
+                get {
+                    return dict["autoAddAll"] as? Bool ?? false
+                }
+                set {
+                    dict.updateValue(newValue, forKey: "autoAddAll")
+                }
+            }
+            
+            
+        }
         
     }
 }

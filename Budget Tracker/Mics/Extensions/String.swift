@@ -46,6 +46,10 @@ extension String {
     }
 
     
+    var filterNumber:Int? {
+        return Int(Double(self.filter { "0123456789.".contains($0) }) ?? 0)
+    }
+    
     func slice(from: String, to: String) -> String? {
         var text:String?
         let _ = (range(of: from)?.upperBound).flatMap { substringFrom in

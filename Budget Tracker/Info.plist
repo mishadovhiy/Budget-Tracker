@@ -48,6 +48,8 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>We need access to camera usage</string>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>
