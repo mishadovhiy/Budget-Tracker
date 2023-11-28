@@ -70,8 +70,10 @@ class DataBase {
     
     func removeAll() {
         
-        let holder = self
-
+        let vcs = self.viewControllers
+        let url = self.appUrl
+        let lastSelected = self.db["lastSelected"] as? [String:String] ?? [:]
+        
         lastSelectedDate = nil
         AppData.categoriesHolder = nil
         self.db.removeAll()
@@ -83,9 +85,10 @@ class DataBase {
         UserDefaults.standard.setValue(nil, forKey: "trialToExpireDays")
         UserDefaults.standard.setValue(nil, forKey: "username")
         UserDefaults.standard.setValue(nil, forKey: "password")
-        self.appUrl = holder.appUrl
-        self.viewControllers = holder.viewControllers
-        self.db.updateValue(holder.db["lastSelected"] as? [String:String] ?? [:], forKey: "lastSelected")
+
+        self.appUrl = url
+        self.viewControllers = vcs
+        self.db.updateValue(lastSelected, forKey: "lastSelected")
     }
     
     func checkDBUpdated() -> Bool {

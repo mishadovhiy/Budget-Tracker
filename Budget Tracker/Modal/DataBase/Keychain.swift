@@ -15,10 +15,38 @@ import Security
 
 public class KeychainService: NSObject {
     
+    class func loadUsers() -> [String]? {
+            let query: [String: Any] = [
+                kSecClass as String: kSecClassGenericPassword,
+                kSecAttrService as String: service,
+                kSecReturnAttributes as String: kCFBooleanTrue,
+                kSecMatchLimit as String: kSecMatchLimitAll
+            ]
+
+            var items: CFTypeRef?
+            let status = SecItemCopyMatching(query as CFDictionary, &items)
+
+            guard status == errSecSuccess else {
+                print("Error retrieving keychain items: \(status)")
+                return nil
+            }
+
+        var user:[String] = []
+            if let keychainItems = items as? [[String: Any]] {
+                for item in keychainItems {
+                    if let username = item[kSecAttrAccount as String] as? String {
+                        print("Username: \(username)")
+                        user.append(username)
+                    }
+                }
+            }
+        return user.count == 0 ? nil : user
+    }
     
-    class func updatePassword(service: String, account:String, data: String) {
+    class func updatePassword(account:String, data: String) {
         if let dataFromString: Data = data.data(using: String.Encoding.utf8, allowLossyConversion: false) {
-            
+            print("savepasssas")
+
             // Instantiate a new default keychain query
             let keychainQuery: NSMutableDictionary = NSMutableDictionary(objects: [KeychainServiceKeys.kSecClassGenericPasswordValue, service, account], forKeys: [KeychainServiceKeys.kSecClassValue, KeychainServiceKeys.kSecAttrServiceValue, KeychainServiceKeys.kSecAttrAccountValue])
             
@@ -29,11 +57,47 @@ public class KeychainService: NSObject {
                     print("Read failed: \(err)")
                 }
             }
+            
+            updateUsernameInKeychain(newUsername: account)
         }
     }
     
     
-    class func removePassword(service: String, account:String) {
+    static private func updateUsernameInKeychain(newUsername: String) {
+        let account = AppDelegate.shared?.appData.username ?? ""
+
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
+            kSecAttrAccount as String: account,
+            kSecReturnAttributes as String: kCFBooleanTrue,
+            kSecMatchLimit as String: kSecMatchLimitOne
+        ]
+
+        var item: CFTypeRef?
+        let status = SecItemCopyMatching(query as CFDictionary, &item)
+
+        guard status == errSecSuccess, let existingItem = item as? [String: Any] else {
+            print("Error retrieving keychain item: \(status)")
+            return
+        }
+
+        // Update the username (kSecAttrAccount) with the new value
+        let updateQuery: [String: Any] = [
+            kSecAttrAccount as String: newUsername
+        ]
+
+        let updateStatus = SecItemUpdate(query as CFDictionary, updateQuery as CFDictionary)
+
+        if updateStatus == errSecSuccess {
+            print("Username updated successfully")
+        } else {
+            print("Error updating username: \(updateStatus)")
+        }
+    }
+    
+    
+    class func removePassword(account:String) {
         
         // Instantiate a new default keychain query
         let keychainQuery: NSMutableDictionary = NSMutableDictionary(objects: [KeychainServiceKeys.kSecClassGenericPasswordValue, service, account, kCFBooleanTrue], forKeys: [KeychainServiceKeys.kSecClassValue, KeychainServiceKeys.kSecAttrServiceValue, KeychainServiceKeys.kSecAttrAccountValue, KeychainServiceKeys.kSecReturnDataValue])
@@ -49,9 +113,9 @@ public class KeychainService: NSObject {
     }
     
     
-    class func savePassword(service: String, account:String, data: String) {
+    class func savePassword(account:String, data: String) {
         if let dataFromString = data.data(using: String.Encoding.utf8, allowLossyConversion: false) {
-            
+            print("savepasssas")
             // Instantiate a new default keychain query
             let keychainQuery: NSMutableDictionary = NSMutableDictionary(objects: [KeychainServiceKeys.kSecClassGenericPasswordValue, service, account, dataFromString], forKeys: [KeychainServiceKeys.kSecClassValue, KeychainServiceKeys.kSecAttrServiceValue, KeychainServiceKeys.kSecAttrAccountValue, KeychainServiceKeys.kSecValueDataValue])
             
@@ -63,14 +127,17 @@ public class KeychainService: NSObject {
                     print("Write failed: \(err)")
                 }
             }
+            
+            updateUsernameInKeychain(newUsername: account)
+
         }
     }
-    
-    class func loadPassword(service: String, account:String) -> String? {
+    static private let service = "BudgetTrackerApp"
+    class func loadPassword(account:String) -> String? {
         // Instantiate a new default keychain query
         // Tell the query to return a result
         // Limit our results to one item
-        let keychainQuery: NSMutableDictionary = NSMutableDictionary(objects: [KeychainServiceKeys.kSecClassGenericPasswordValue, service, account, kCFBooleanTrue, KeychainServiceKeys.kSecMatchLimitOneValue], forKeys: [KeychainServiceKeys.kSecClassValue, KeychainServiceKeys.kSecAttrServiceValue, KeychainServiceKeys.kSecAttrAccountValue, KeychainServiceKeys.kSecReturnDataValue, KeychainServiceKeys.kSecMatchLimitValue])
+        let keychainQuery: NSMutableDictionary = NSMutableDictionary(objects: [KeychainServiceKeys.kSecClassGenericPasswordValue, self.service, account, kCFBooleanTrue, KeychainServiceKeys.kSecMatchLimitOneValue], forKeys: [KeychainServiceKeys.kSecClassValue, KeychainServiceKeys.kSecAttrServiceValue, KeychainServiceKeys.kSecAttrAccountValue, KeychainServiceKeys.kSecReturnDataValue, KeychainServiceKeys.kSecMatchLimitValue])
         
         var dataTypeRef :AnyObject?
         

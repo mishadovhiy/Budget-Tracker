@@ -45,6 +45,9 @@ class LoginViewController: SuperViewController {
 
         updateUI()
         self.title = appData.username == "" ? "Sign In".localize : appData.username
+        if appData.username == "" {
+            loadKeychainPasswords()
+        }
     }
     
     var userEmail = ""
@@ -268,17 +271,16 @@ class LoginViewController: SuperViewController {
     
 
     func performLoggin(userData:[String]) {
-
         let nickname = userData[0]
         let password = userData[2]
         let email = userData[1]
         let isPro = userData[4]
-        if let keycheinPassword = KeychainService.loadPassword(service: "BudgetTrackerApp", account: nickname) {
-            if keycheinPassword != password {
-                KeychainService.updatePassword(service: "BudgetTrackerApp", account: nickname, data: password)
-            }
+        if let keycheinPassword = KeychainService.loadPassword(account: nickname) {
+          //  if keycheinPassword != password {
+                KeychainService.updatePassword(account: nickname, data: password)
+           // }
         } else {
-            KeychainService.savePassword(service: "BudgetTrackerApp", account: nickname, data: password)
+            KeychainService.savePassword(account: nickname, data: password)
         }
         let prevUserName = appData.username
         
@@ -655,6 +657,16 @@ class LoginViewController: SuperViewController {
         }
             self.navigationController?.pushViewController(vc, animated: true)
     }
+    
+    private func loadKeychainPasswords() {
+        DispatchQueue(label: "db", qos: .userInitiated).async {
+            if let keychain = KeychainService.loadUsers() {
+                DispatchQueue.main.async {
+                    self.enteredEmailUsers = keychain
+                }
+            }
+        }
+    }
 }
 
 // extentions
@@ -681,7 +693,10 @@ extension LoginViewController {
                 self.passwordLabel.text = ""
                 self.passwordLogLabel.text = ""
                 self.nicknameLogLabel.text = ""
-                self.ai?.fastHide()
+                self.ai?.fastHide(completionn: { _ in
+                    self.loadKeychainPasswords()
+                })
+                //here
             }
         }
     }
@@ -726,7 +741,7 @@ extension LoginViewController {
             AppDelegate.shared?.center.removeAllDeliveredNotifications()
         }
         AppDelegate.shared?.notificationManager.deliveredNotificationIDs = []
-        db.db.removeAll()
+        db.removeAll()
         appData.proTrial = false
     }
     @IBAction func moreButtonPressed(_ sender: UIButton) {//morepressed

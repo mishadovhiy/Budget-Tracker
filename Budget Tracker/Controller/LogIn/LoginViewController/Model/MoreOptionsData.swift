@@ -616,7 +616,7 @@ class MoreOptionsData {
                             } else {
                                 self.appData.username = userData[0]
                                 self.appData.password = newPassword
-                                KeychainService.updatePassword(service: "BudgetTrackerApp", account: userData[0], data: newPassword)
+                                KeychainService.updatePassword(account: userData[0], data: newPassword)
                                 //EnterValueVC.shared?.closeVC(closeMessage: "Your password has been changed")
                                 self.toEnterValue(data: nil)
                                 self.showAlert(title:"Your password has been changed".localize, error: false)

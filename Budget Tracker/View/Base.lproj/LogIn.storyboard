@@ -147,7 +147,7 @@
                                                 </constraints>
                                                 <color key="tintColor" name="balanceTitleColor"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                <state key="normal" image="person.3.sequence.fill">
+                                                <state key="normal" title="✚" image="person.fill" catalog="system">
                                                     <color key="titleColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
@@ -320,11 +320,11 @@
             <objects>
                 <viewController storyboardIdentifier="EnterValueVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="g3f-NZ-v6H" customClass="EnterValueVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="WCz-zX-LTb">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="922"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="top" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="in9-wI-9lJ">
-                                <rect key="frame" x="75" y="391.33333333333331" width="280" height="149.66666666666669"/>
+                                <rect key="frame" x="75" y="386.33333333333331" width="280" height="149.66666666666669"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleAspectFit" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="wfW-zS-Z3i">
                                         <rect key="frame" x="0.0" y="0.0" width="231.33333333333334" height="49.333333333333336"/>
@@ -1229,17 +1229,17 @@
         </designable>
     </designables>
     <inferredMetricsTieBreakers>
-        <segue reference="L2Z-z7-BqA"/>
+        <segue reference="jP6-jS-NGM"/>
         <segue reference="v5h-7J-ubq"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="cancel" width="30" height="30"/>
         <image name="ellipsis" catalog="system" width="128" height="37"/>
         <image name="paperplane.fill" catalog="system" width="128" height="119"/>
-        <image name="person.3.sequence.fill" width="33" height="15"/>
+        <image name="person.fill" catalog="system" width="128" height="120"/>
         <image name="purchaseBackground0" width="323" height="137"/>
         <namedColor name="CategoryColor">
-            <color red="0.86699998378753662" green="0.86699998378753662" blue="0.86699998378753662" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.15700000524520874" green="0.15700000524520874" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="PrimaryBackgroundColor">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>

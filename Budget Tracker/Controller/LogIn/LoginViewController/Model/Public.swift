@@ -50,7 +50,7 @@ extension LoginViewController {
                                     self.userChanged()
                                     let prevUsere = AppDelegate.shared?.appData.username
                                     self.db.db.updateValue(prevUsere, forKey: "prevUserName")
-                                    KeychainService.savePassword(service: "BudgetTrackerApp", account: name, data: password)
+                                    KeychainService.savePassword(account: name, data: password)
                                     AppDelegate.shared?.appData.username = name
                                     AppDelegate.shared?.appData.password = password
                                     AppDelegate.shared?.appData.userEmailHolder = email
@@ -150,12 +150,12 @@ extension LoginViewController {
                         }
                         return
                     } else {
-                        if let keycheinPassword = KeychainService.loadPassword(service: "BudgetTrackerApp", account: nickname) {
+                        if let keycheinPassword = KeychainService.loadPassword(account: nickname) {
                             if keycheinPassword != password {
-                                KeychainService.updatePassword(service: "BudgetTrackerApp", account: nickname, data: password)
+                                KeychainService.updatePassword(account: nickname, data: password)
                             }
                         } else {
-                            KeychainService.savePassword(service: "BudgetTrackerApp", account: nickname, data: password)
+                            KeychainService.savePassword(account: nickname, data: password)
                         }
                         let prevUserName = AppDelegate.shared?.appData.username
                         
