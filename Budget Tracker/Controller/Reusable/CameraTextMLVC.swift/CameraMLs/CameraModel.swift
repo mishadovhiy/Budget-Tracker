@@ -32,10 +32,7 @@ struct CameraModel {
                 layer?.frame = view.frame
                 view.layer.insertSublayer(layer!, at: 0)
                 print("sessionsessionsession")
-                DispatchQueue(label: "camera", qos: .userInitiated).async { [self] in
-                    self.session.startRunning()
-
-                }
+                
                 
             }
         }
@@ -55,6 +52,24 @@ struct CameraModel {
         ]
         settings.previewPhotoFormat = previewFormat
         self.output.capturePhoto(with: settings, delegate: delegate)
+    }
+    
+    func stop() {
+        if session.isRunning {
+            DispatchQueue(label: "camera", qos: .userInitiated).async { [self] in
+                self.session.stopRunning()
+
+            }
+        }
+    }
+    
+    func resume() {
+        if !session.isRunning {
+            DispatchQueue(label: "camera", qos: .userInitiated).async { [self] in
+                self.session.startRunning()
+
+            }
+        }
     }
     
 }

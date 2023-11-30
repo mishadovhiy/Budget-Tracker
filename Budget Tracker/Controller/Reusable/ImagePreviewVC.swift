@@ -15,7 +15,11 @@ class ImagePreviewVC: UIViewController {
     var imgData:Data?
     var selectedSet:Set<String> = [] {
         didSet {
-            delegate?.textSelected(Array(selectedSet))
+            if !ignoreDataSet {
+                delegate?.textSelected(Array(selectedSet))
+            } else {
+                ignoreDataSet = false
+            }
         }
     }
     let textMLModel:DetectText = .init()
@@ -43,14 +47,19 @@ class ImagePreviewVC: UIViewController {
         self.select(touches)
     }
     
+    var ignoreDataSet:Bool = false
     func updateSelections(_ data:[String]? = nil) {
         if let value = data {
+            ignoreDataSet = true
             self.selectedSet = Set(value)
         }
         view.subviews.forEach {
-            let setContains = selectedSet.contains($0.layer.name!)
-            $0.fadeTransition(0.1)
-            $0.backgroundColor = (setContains ? UIColor.red : .green).withAlphaComponent(DetectText.backgroundAlphaComp)
+            if let layerName = $0.layer.name {
+                let setContains = selectedSet.contains(layerName)
+                $0.fadeTransition(0.1)
+                $0.backgroundColor = (!setContains ? UIColor.red : .green).withAlphaComponent(DetectText.backgroundAlphaComp)
+            }
+            
         }
     }
     

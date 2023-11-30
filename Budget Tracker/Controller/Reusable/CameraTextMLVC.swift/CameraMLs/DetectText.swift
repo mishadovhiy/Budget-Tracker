@@ -23,10 +23,9 @@ class DetectText {
                     self.addShapes(observation: obthervations, imgView: img).forEach { layer in
                         let view = UIView(frame: layer.frame)
                         let box = obthervations[i]
-
+                        view.layer.cornerRadius = layer.cornerRadius
                         if let gestureImage = self.cropImage(for: box, in: img.image!) {
                             self.imgString(from: gestureImage) { str in
-                                print("ergwfeadsADSF")
                                 view.isUserInteractionEnabled = true
                                 view.backgroundColor = .red.withAlphaComponent(DetectText.backgroundAlphaComp)
                                 view.layer.name = str

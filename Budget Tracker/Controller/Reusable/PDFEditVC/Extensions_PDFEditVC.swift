@@ -96,6 +96,7 @@ extension PDFEditVC {
         vc.disapeareAction = {
             $0?.navigationController?.setNavigationBarHidden(false, animated: true)
         }
+        nav.setBackground(.regular)
     }
 
     

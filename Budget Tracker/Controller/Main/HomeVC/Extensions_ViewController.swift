@@ -858,7 +858,10 @@ extension HomeVC: TransitionVCProtocol {
             
             let vc = TransitionVC.configure()
             vc.delegate = self
-            vc.dateSet = self.calendarSelectedDate
+            let defDate = Date().toDateComponents()
+            let filterDate = AppDelegate.shared?.appData.filter.fromDate ?? .init()
+            let thisMonth = defDate.month == filterDate.month && defDate.year == filterDate.year
+            vc.dateSet = self.calendarSelectedDate ?? (thisMonth ? defDate.toShortString() : nil)
             self.calendarSelectedDate = nil
             if let transaction = self.editingTransaction {
                 vc.editingDate = transaction.date

@@ -50,6 +50,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>We need access to camera usage</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>We use FaceID for password authorization</string>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>

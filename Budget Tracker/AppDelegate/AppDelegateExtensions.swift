@@ -61,6 +61,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                 self.appData.present(vc: navController) { _ in
                     self.ai.fastHide()
                 }
+                navController.setBackground(.regular)
                 
             }
         } else {
@@ -109,6 +110,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                 self.ai.fastHide()
             }
             
+            nav.setBackground(.regular)
         }
     }
     

@@ -15,7 +15,7 @@ class CameraTextMLVC:SuperViewController {
     @IBOutlet weak var makePhotoView: TouchView!
     @IBOutlet weak var cameraHolderView: UIView!
     
-    private var cameraModel:CameraModel!
+    var cameraModel:CameraModel!
     var selectionDelegate:ImagePreviewProtocol?
     
     override func viewDidLoad() {
@@ -28,16 +28,22 @@ class CameraTextMLVC:SuperViewController {
         toLibraryView.pressedAction = toLibraryPressed
     }
     
+    var appeareCalled:Bool = false
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: true)
+        if appeareCalled {
+            cameraModel.resume()
+        } else {
+            appeareCalled = true
+        }
     }
     
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: true)
-
+        cameraModel.stop()
     }
     
     func toLibraryPressed() {
@@ -45,7 +51,7 @@ class CameraTextMLVC:SuperViewController {
         imgPicker.delegate = self
         imgPicker.allowsEditing = true
         DispatchQueue.main.async {
-            AppDelegate.shared?.present(vc: imgPicker)
+            AppDelegate.shared?.present(vc: imgPicker, presentingVC: self.selectionDelegate as! SelectTextImageContainerView)
         }
     }
     

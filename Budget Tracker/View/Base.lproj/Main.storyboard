@@ -2462,7 +2462,7 @@
                                 </constraints>
                             </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Te-KM-v7g">
-                                <rect key="frame" x="0.0" y="288" width="430" height="526"/>
+                                <rect key="frame" x="0.0" y="246" width="430" height="568"/>
                                 <connections>
                                     <segue destination="E1b-0F-r81" kind="embed" id="Vmv-tm-uoN"/>
                                 </connections>
@@ -2489,6 +2489,25 @@
                                     <action selector="trashPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="3fb-xj-RLg"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uFQ-us-rIo" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
+                                <rect key="frame" x="363.33333333333331" y="256" width="51.666666666666686" height="44.333333333333314"/>
+                                <color key="backgroundColor" name="pinkColor"/>
+                                <color key="tintColor" name="CategoryColor1"/>
+                                <inset key="contentEdgeInsets" minX="10" minY="10" maxX="10" maxY="10"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="camera.fill" catalog="system"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
+                                        <color key="value" systemColor="tintColor"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="6"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="toggleCameraPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="R79-js-52k"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="MVK-VU-f07"/>
                         <color key="backgroundColor" name="PrimaryBackgroundColor"/>
@@ -2502,8 +2521,10 @@
                             <constraint firstItem="V5Z-aw-ROj" firstAttribute="top" secondItem="MVK-VU-f07" secondAttribute="top" constant="15" id="K6n-NS-wfR"/>
                             <constraint firstItem="0o7-y6-JW8" firstAttribute="leading" secondItem="MVK-VU-f07" secondAttribute="leading" constant="15" id="ZVr-kj-h2Y"/>
                             <constraint firstItem="MVK-VU-f07" firstAttribute="trailing" secondItem="3iV-TP-Myd" secondAttribute="trailing" id="ZVs-Z6-uYQ"/>
+                            <constraint firstItem="uFQ-us-rIo" firstAttribute="top" secondItem="6Te-KM-v7g" secondAttribute="top" constant="10" id="e3a-Va-Lx1"/>
                             <constraint firstItem="0o7-y6-JW8" firstAttribute="top" secondItem="V5Z-aw-ROj" secondAttribute="bottom" constant="35" id="ftZ-Bq-Sax"/>
                             <constraint firstItem="MVK-VU-f07" firstAttribute="trailing" secondItem="6Te-KM-v7g" secondAttribute="trailing" id="iFv-Qg-C2f"/>
+                            <constraint firstItem="6Te-KM-v7g" firstAttribute="top" secondItem="L8N-YR-jb6" secondAttribute="top" id="kip-D9-1kB"/>
                             <constraint firstItem="c9d-cL-RPP" firstAttribute="top" secondItem="MVK-VU-f07" secondAttribute="top" constant="10" id="lVo-Qd-z0i"/>
                             <constraint firstItem="ydl-Nt-YBv" firstAttribute="leading" secondItem="MVK-VU-f07" secondAttribute="leading" constant="10" id="mhQ-TT-h9S"/>
                             <constraint firstItem="MVK-VU-f07" firstAttribute="trailing" secondItem="c9d-cL-RPP" secondAttribute="trailing" constant="10" id="myY-IB-nw8"/>
@@ -2511,7 +2532,7 @@
                             <constraint firstItem="MVK-VU-f07" firstAttribute="trailing" secondItem="0o7-y6-JW8" secondAttribute="trailing" constant="15" id="nGd-zN-57v"/>
                             <constraint firstItem="c9d-cL-RPP" firstAttribute="leading" secondItem="V5Z-aw-ROj" secondAttribute="trailing" constant="15" id="p5v-RJ-EuY"/>
                             <constraint firstItem="3iV-TP-Myd" firstAttribute="leading" secondItem="MVK-VU-f07" secondAttribute="leading" id="pzc-xn-O38"/>
-                            <constraint firstItem="6Te-KM-v7g" firstAttribute="top" secondItem="V1P-Cy-4Mn" secondAttribute="top" id="tND-jZ-OWM"/>
+                            <constraint firstItem="MVK-VU-f07" firstAttribute="trailing" secondItem="uFQ-us-rIo" secondAttribute="trailing" constant="15" id="tf0-lb-FFw"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="    " id="kr8-Sj-SJr">
@@ -2533,6 +2554,7 @@
                         <outlet property="repeateSwitch" destination="hjl-zB-vY5" id="hbY-7Y-XK9"/>
                         <outlet property="repeatedView" destination="BCu-Ak-7J7" id="QLV-Cl-H84"/>
                         <outlet property="showValueButton" destination="XVk-PX-Zyj" id="YzY-bQ-S0O"/>
+                        <outlet property="toggleCameraButton" destination="uFQ-us-rIo" id="16a-Dx-dVK"/>
                         <outlet property="trashButton" destination="2np-os-Y0H" id="2K0-WK-Khm"/>
                         <outlet property="valueLabel" destination="qzi-1W-Nei" id="WlM-rJ-uNN"/>
                         <segue destination="hoT-B4-HCQ" kind="unwind" identifier="quitTransitionVC" unwindAction="unwindToViewControllerAWithSegue:" id="qbN-N1-wpB"/>
@@ -2607,7 +2629,7 @@
                                 </view>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="blue" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="statisticCellIdent" id="czw-1t-hDS" customClass="StatisticCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="408.5" width="430" height="48"/>
+                                        <rect key="frame" x="0.0" y="430.5" width="430" height="48"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="czw-1t-hDS" id="DL1-ap-cmz">
                                             <rect key="frame" x="0.0" y="0.0" width="399.66666666666669" height="48"/>
@@ -3192,7 +3214,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="ReminderCell" id="0VC-sg-p8P" customClass="ReminderCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="430" height="142"/>
+                                        <rect key="frame" x="0.0" y="50" width="430" height="142"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="0VC-sg-p8P" id="TYY-To-r2K">
                                             <rect key="frame" x="0.0" y="0.0" width="430" height="142"/>
@@ -3475,7 +3497,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="NoRemindersCell" id="JKn-bm-wcP" customClass="NoRemindersCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="170" width="430" height="26.333333969116211"/>
+                                        <rect key="frame" x="0.0" y="192" width="430" height="26.333333969116211"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="JKn-bm-wcP" id="U97-2I-zD1">
                                             <rect key="frame" x="0.0" y="0.0" width="430" height="26.333333969116211"/>
@@ -4097,8 +4119,9 @@
             <objects>
                 <viewController id="E1b-0F-r81" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="VGw-fv-gbi">
-                        <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="7bi-dY-wKj"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                 </viewController>
@@ -4289,6 +4312,7 @@
     <resources>
         <image name="airplane" width="19" height="17"/>
         <image name="bell.fill" catalog="system" width="123" height="128"/>
+        <image name="camera.fill" catalog="system" width="128" height="93"/>
         <image name="chevron.backward" catalog="system" width="97" height="128"/>
         <image name="ellipsis" catalog="system" width="128" height="37"/>
         <image name="imageView:Kpf-Vl-IUu:image" width="19" height="17">
@@ -4502,7 +4526,7 @@ AAAAAAIBAAAAAAAAAGEAAAAAAAAAAAAAAAAAAChAA
             <color red="0.078000001609325409" green="0.078000001609325409" blue="0.078000001609325409" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="balanceTitleColor">
-            <color red="0.43399998545646667" green="0.43399998545646667" blue="0.43399998545646667" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <color red="0.15700000524520874" green="0.15700000524520874" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="balanceValueColor">
             <color red="0.2669999897480011" green="0.2669999897480011" blue="0.2669999897480011" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>

@@ -9,13 +9,13 @@
 import UIKit
 
 extension UIView {
-    func fadeTransition(_ duration:CFTimeInterval) {
+    func fadeTransition(_ duration:CFTimeInterval = 0.3, type:CATransitionType = .fade) {
         let animation = CATransition()
         animation.timingFunction = CAMediaTimingFunction(name:
                 .linear)
-        animation.type = .fade
+        animation.type = type
         animation.duration = duration
-        layer.add(animation, forKey: CATransitionType.fade.rawValue)
+        layer.add(animation, forKey: type.rawValue)
     }
     var toImage: UIImage {
         let renderer = UIGraphicsImageRenderer(size: bounds.size)

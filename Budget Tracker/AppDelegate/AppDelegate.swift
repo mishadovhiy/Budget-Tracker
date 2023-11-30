@@ -155,7 +155,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
-        DataBase._db = nil
+       // DataBase._db = nil
         backgroundEnterDate = Date();
         DispatchQueue(label: "local", qos: .userInitiated).async {
             if UserSettings.Security.password != "" && !(self.passcodeLock.presenting) {
@@ -226,8 +226,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     
-    func present(vc:UIViewController, completion:(()->())? = nil) {
-        if let presenting = window?.rootViewController?.presentedViewController {
+    func present(vc:UIViewController, presentingVC:UIViewController? = nil, completion:(()->())? = nil) {
+        if let presentingVC = presentingVC {
+            presentingVC.present(vc, animated: true, completion: completion)
+        } else if let presenting = window?.rootViewController?.presentedViewController {
             presenting.dismiss(animated: true, completion: {
                 self.present(vc: vc, completion: completion)
             })

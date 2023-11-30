@@ -13,12 +13,12 @@ class PanViewController {
     var delegate:PanViewControllerProtocol?
     private var properies:ScrollProperties = .init()
     var dismissAction:(()->())? = nil
-    init(vc:UIViewController, dismissAction:(()->())? = nil) {
+    init(vc:UIViewController, toView:UIView?, dismissAction:(()->())? = nil) {
         self.dismissAction = dismissAction
         self.vc = vc
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(pinched(_:)))
         gesture.name = "PanViewControllerUIPanGestureRecognizer"
-        vc.view.addGestureRecognizer(gesture)
+        (toView ?? vc.view).addGestureRecognizer(gesture)
         vc.createPanIndicator()
     }
        
@@ -30,6 +30,8 @@ class PanViewController {
         dismissAction = nil
     }
     
+    var canSwipeFromFull:Bool = true
+    var isIgnoring:Bool = false
     @objc private func pinched(_ sender:UIPanGestureRecognizer) {
         let finger = sender.location(in: nil)
         let height = vc.view.frame.height

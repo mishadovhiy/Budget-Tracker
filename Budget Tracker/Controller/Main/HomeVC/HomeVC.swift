@@ -181,7 +181,7 @@ class HomeVC: SuperViewController {
     func dateSelected(_ newDate:DateComponents) {
         self.vibrate()
         self.calendarSelectedDate = newDate.toShortString()
-        self.toAddTransaction(pressedView: calendarContainer, isCalendar: true)
+        self.toAddTransaction(pressedView: calendarContainer, isCalendar: false)
 
     }
     func dateSelectedCell(_ newDate:DateComponents, _ cell:CalendarCell) {

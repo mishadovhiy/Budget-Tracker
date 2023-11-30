@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import LocalAuthentication
 
 class PascodeLockView: UIView, UITextFieldDelegate {
 
@@ -37,10 +38,19 @@ class PascodeLockView: UIView, UITextFieldDelegate {
             moved = true
             self.textField.delegate = self
             let _ = self.addBluer(insertAt: 0)
+            topStack.isUserInteractionEnabled = true
+            topStack.addGestureRecognizer(UITapGestureRecognizer(target: nil, action: #selector(repeateAuthorizationPressed(_:))))
         }
         self.layer.zPosition = 1000
     }
     
+    @objc func repeateAuthorizationPressed(_ sender:UITapGestureRecognizer) {
+        if #available(iOS 13.0.0, *) {
+            self.presentSystemAuthorization()
+        } else {
+            // Fallback on earlier versions
+        }
+    }
     
     public func present(presentCompletion:((Bool)->())? = nil) {
 
@@ -71,9 +81,25 @@ class PascodeLockView: UIView, UITextFieldDelegate {
                 if let presentCompletion = presentCompletion {
                     presentCompletion(true)
                 }
+                
             }
         }
     }
+    
+    @available(iOS 13.0.0, *)
+    private func presentSystemAuthorization() {
+        let context = LAContext()
+        context.localizedCancelTitle = "Cancel"
+        context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "Log in to App") { authorithed, error in
+            print(authorithed, " gterfwed")
+            print(error, " gterfwedq")
+            if authorithed {
+                self.passwordNotEntered = false
+                self.hide()
+            }
+        }
+    }
+    
      var presenting = false
     var passwordNotEntered = true
     func passcodeLock(passcodeEntered:(()->())? = nil) {
@@ -83,10 +109,20 @@ class PascodeLockView: UIView, UITextFieldDelegate {
             present(presentCompletion:  { _ in
                 self.performPresentingLock()
             })
+            if passcodeEntered == nil {
+                if #available(iOS 13.0.0, *) {
+                    self.presentSystemAuthorization()
+                }
+            }
+            
         } else {
             performPresentingLock()
+            if passcodeEntered == nil {
+                if #available(iOS 13.0.0, *) {
+                    self.presentSystemAuthorization()
+                }
+            }
         }
-        
     }
     private func performPresentingLock() {
         DispatchQueue.main.async {

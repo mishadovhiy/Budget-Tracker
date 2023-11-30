@@ -139,6 +139,7 @@
 		8DBA7E5723F0316F00D8214C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5523F0316F00D8214C /* Main.storyboard */; };
 		8DBA7E5C23F0317100D8214C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5B23F0317100D8214C /* Assets.xcassets */; };
 		8DBA7E5F23F0317100D8214C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5D23F0317100D8214C /* LaunchScreen.storyboard */; };
+		8DBAD3832B1686E0004A6323 /* SelectImageCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBAD3822B1686E0004A6323 /* SelectImageCollectionCell.swift */; };
 		8DBB38F72AC8D46C009B56DD /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBB38F62AC8D46C009B56DD /* TextField.swift */; };
 		8DC033CC2985CA5A00CD98FF /* UITableViewDataSource_ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC033CB2985CA5A00CD98FF /* UITableViewDataSource_ViewController.swift */; };
 		8DD2D2CD2998902E0098C106 /* ViewControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD2D2CC2998902E0098C106 /* ViewControllers.swift */; };
@@ -354,6 +355,7 @@
 		8DBA7E5623F0316F00D8214C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8DBA7E5B23F0317100D8214C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8DBA7E5E23F0317100D8214C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8DBAD3822B1686E0004A6323 /* SelectImageCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectImageCollectionCell.swift; sourceTree = "<group>"; };
 		8DBB38F62AC8D46C009B56DD /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		8DC033CB2985CA5A00CD98FF /* UITableViewDataSource_ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewDataSource_ViewController.swift; sourceTree = "<group>"; };
 		8DD2D2CC2998902E0098C106 /* ViewControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllers.swift; sourceTree = "<group>"; };
@@ -709,7 +711,7 @@
 				8D834D95297E03D60056E686 /* CalendarControlVC */,
 				8D8B6C3D245023EC007260A0 /* CalendarVC.swift */,
 				8B52DFEB27504D2900595A0C /* IconsVC.swift */,
-				8DEB84DC2B158B0400AB1975 /* SelectTextImageContainerView.swift */,
+				8DBAD3812B1686C3004A6323 /* SelectTextImageContainerView */,
 				8DEB84D72B157EC700AB1975 /* CameraTextMLVC.swift */,
 				8DEB84DA2B1588A200AB1975 /* ImagePreviewVC.swift */,
 				8B5F342B26FB2D97000DDCAF /* EnterValueVC.swift */,
@@ -1035,6 +1037,15 @@
 				8BC1B23B27D31426002C1E38 /* Reusable */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		8DBAD3812B1686C3004A6323 /* SelectTextImageContainerView */ = {
+			isa = PBXGroup;
+			children = (
+				8DEB84DC2B158B0400AB1975 /* SelectTextImageContainerView.swift */,
+				8DBAD3822B1686E0004A6323 /* SelectImageCollectionCell.swift */,
+			);
+			path = SelectTextImageContainerView;
 			sourceTree = "<group>";
 		};
 		8DD8134A2B0D717E00B72654 /* Cell */ = {
@@ -1407,6 +1418,7 @@
 				8D17FABD2B07BFBA005E03FD /* AttributedPreviewCell.swift in Sources */,
 				8DEB84DB2B1588A200AB1975 /* ImagePreviewVC.swift in Sources */,
 				8DD89D8C23F1485700273904 /* Constants.swift in Sources */,
+				8DBAD3832B1686E0004A6323 /* SelectImageCollectionCell.swift in Sources */,
 				8B5434FA27ED838F00417141 /* Notifications.swift in Sources */,
 				8D36724224D315BC00CE90A9 /* NetworkModel.swift in Sources */,
 				8B42FCDD2776805800013E4B /* NumbersTF.swift in Sources */,
@@ -1673,7 +1685,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 36;
+				MARKETING_VERSION = 37.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1704,7 +1716,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 36;
+				MARKETING_VERSION = 37.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

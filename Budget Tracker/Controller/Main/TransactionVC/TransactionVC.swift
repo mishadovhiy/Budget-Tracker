@@ -37,6 +37,9 @@ class TransitionVC: SuperViewController {
         }
         
     }
+
+    @IBOutlet weak var toggleCameraButton: TouchButton!
+    
     @IBOutlet weak var trashButton: UIButton!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var dateTextField: CustomTextField!
@@ -74,6 +77,17 @@ class TransitionVC: SuperViewController {
     var donePressed = false
     var selectedCategory: NewCategories?
     var fromDebts = false
+    var enteringValueResult:Int {
+        var res = "\(Int(cameraValue))"
+        if editingValue != 0 {
+            "\(Int(editingValue))".forEach {
+                res.append($0)
+            }
+        }
+        
+        return Int(res) ?? 0
+    }
+    var cameraValue:Int = 0
     
     var calendarSelectedTime:DateComponents?
     func dismissVC(complation:(()->())? = nil) {
@@ -88,9 +102,10 @@ class TransitionVC: SuperViewController {
             viewDidDismiss()
         }
     }
-    
+    var cameraVC:SelectTextImageContainerView?
     func createCameraContainer() {
-        let nav = UINavigationController(rootViewController: SelectTextImageContainerView.configure())
+        let vc = SelectTextImageContainerView.configure()
+        let nav = UINavigationController(rootViewController: vc)
         addChild(nav)
         guard let childView = nav.view else {
             return
@@ -98,6 +113,9 @@ class TransitionVC: SuperViewController {
         cameraContainer.addSubview(childView)
         childView.addConstaits([.left:0, .right:0, .top:0, .bottom:0], superV: cameraContainer)
         nav.didMove(toParent: self)
+        vc.delegate = self
+        nav.setBackground(.clear)
+        cameraVC = vc
     }
     
     override func viewDidLoad() {
@@ -111,7 +129,15 @@ class TransitionVC: SuperViewController {
         getEditingdata()
 
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        createCameraContainer()
+        if !fromEdit {
+            createCameraContainer()
+            toggleCamera(show:fromEdit ? false : (AppDelegate.shared?.db.viewControllers.cameraStorage.addTransactionCameraEnabled ?? false), animated:false)
+
+        } else {
+            toggleCameraButton.isHidden = true
+            cameraContainer.isHidden = true
+        }
+
     }
 
     override func viewDidDismiss() {
@@ -120,6 +146,7 @@ class TransitionVC: SuperViewController {
         panMahanger = nil
         delegate = nil
         dateSet = nil
+        cameraVC?.toggleCameraSession(pause: true, remove: true)
     }
 
     var panMahanger:PanViewController?
@@ -166,7 +193,6 @@ class TransitionVC: SuperViewController {
             self.valueLabel.text = self.pressedValue
             
         }
-    
     }
     
     @objc func datePressed(_ sender: UITapGestureRecognizer) {
@@ -223,7 +249,7 @@ class TransitionVC: SuperViewController {
             }
         }
     }
-    
+    var fromEdit = false
     func getEditingdata() {
         /*var lastExpense: NewCategories {
             let all = Array(db.categories)
@@ -245,6 +271,7 @@ class TransitionVC: SuperViewController {
             
         }
         if editingDate != "" {
+            fromEdit = true
             self.dateChanged = true
             displeyingTransaction.date = editingDate
             if editingValue > 0.0 {
@@ -393,9 +420,7 @@ class TransitionVC: SuperViewController {
         if let category = selectedCategory {
             DispatchQueue.main.async {
                 if self.valueLabel.text != "0" {
-                    let selectedSeg = self.purposeSwitcher.selectedSegmentIndex
-                    let intValue = (Double(self.valueLabel.text ?? "") ?? 0.0) * (-1)
-                    let value = selectedSeg == 0 ? "\(Int(intValue))" : self.valueLabel.text ?? ""
+                    let value = "\(self.enteringValueGet)"
                     let comment = self.commentTextField.text ?? ""
                     self.addNew(value: value, category: "\(category.id)", date: newDate, comment: comment)
                 } else {
@@ -404,6 +429,12 @@ class TransitionVC: SuperViewController {
             }
         }
         
+    }
+    
+    var enteringValueGet:Int {
+        let intValue = (Double(self.valueLabel.text ?? "") ?? 0.0) * (-1)
+        let value = purposeSwitcher.selectedSegmentIndex == 0 ? Int(intValue) : Int(self.valueLabel.text ?? "")
+        return value ?? 0
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -469,15 +500,23 @@ class TransitionVC: SuperViewController {
         }
     }
     
+    var viewAppeareCalled = false
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        if !viewAppeareCalled {
+            viewAppeareCalled = true
+            self.cameraVC?.toggleCameraSession(pause: fromEdit ? true : !(AppDelegate.shared?.db.viewControllers.cameraStorage.addTransactionCameraEnabled ?? false))
+
+        }
         if !(navigationController is TransactionNav) && panMahanger == nil {
-            panMahanger = .init(vc: self, dismissAction: {
+            panMahanger = .init(vc: self, toView: valueLabel.superview?.superview, dismissAction: {
                 self.navigationController?.delegate = self.dismissTransitionHolder
             })
+            panMahanger?.canSwipeFromFull = false
         } else {
             
         }
+
      //   purposeSwitcher.tintColor = K.Colors.category
     }
     @IBAction func purposeSwitched(_ sender: UISegmentedControl) {
@@ -550,8 +589,9 @@ class TransitionVC: SuperViewController {
         } else {
             UIImpactFeedbackGenerator().impactOccurred()
         }
+        editingValue = Double(pressedValue) ?? 0
         DispatchQueue.main.async {
-            self.valueLabel.text = self.pressedValue
+            self.valueLabel.text = "\(self.enteringValueResult)"
         }
         
         
@@ -563,26 +603,51 @@ class TransitionVC: SuperViewController {
             AudioServicesPlaySystemSound(1155)
             if pressedValue.count > 0 {
                 pressedValue.removeLast()
-                DispatchQueue.main.async {
-                    self.valueLabel.text = self.pressedValue
-                }
+                
             }
             if pressedValue.count == 0 {
                 pressedValue.removeAll()
-                DispatchQueue.main.async {
-                    self.valueLabel.text? = "0"
-                }
                 minusPlusLabel.alpha = 0
             }
         }
         if sender.tag == 2 {
             AudioServicesPlaySystemSound(1156)
             pressedValue.removeAll()
-            DispatchQueue.main.async {
-                self.valueLabel.text = "0"
-            }
             minusPlusLabel.alpha = 0
         }
+        editingValue = Double(pressedValue) ?? 0
+        
+        DispatchQueue.main.async {
+            self.valueLabel.text = "\(self.enteringValueResult)"//from sfeafeds
+        }
+    }
+    
+
+    var cameraShowing:Bool = false
+    private func toggleCamera(show:Bool, animated:Bool = true) {
+        cameraShowing = show
+        let hide = cameraContainer.frame.height + view.safeAreaInsets.bottom
+        DispatchQueue(label: "db", qos: .userInitiated).async {
+            AppDelegate.shared?.db.viewControllers.cameraStorage.addTransactionCameraEnabled = show
+        }
+        view.endEditing(true)
+        
+        UIView.animate(withDuration: 0.3) {
+            self.cameraContainer.layer.move(.top, value: show ? 0 : hide)
+        } completion: { _ in
+            if #available(iOS 13.0, *) {
+                self.toggleCameraButton.fadeTransition(0.1)
+                self.toggleCameraButton.setImage(show ? .init(named: "closeNoBack") : .init(systemName: "camera.fill"), for:.normal)
+            }
+        }
+
+        cameraVC?.toggleCameraSession(pause: !show)
+        
+        
+    }
+    
+    @IBAction func toggleCameraPressed(_ sender: Any) {
+        toggleCamera(show: !cameraShowing)
     }
     
     @objc func keyboardWillHide(_ notification: Notification) {
@@ -725,7 +790,20 @@ extension TransitionVC: CategoriesVCProtocol {
     }
     
     
+    
 }
+
+
+extension TransitionVC:SelectTextImageContainerViewProtocol {
+    func totalChanged(_ total: Int) {
+        print(total, " brgefwdas")
+        cameraValue = total
+        valueLabel.text = "\(enteringValueResult)"
+    }
+    
+    
+}
+
 
 extension TransitionVC {
     static func configure() -> TransitionVC {
