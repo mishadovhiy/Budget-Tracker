@@ -16,8 +16,8 @@ class LoginViewController: SuperViewController {
     
     @IBOutlet weak var createOrLogLabel: UILabel!
     @IBOutlet weak var createOrLogButton: UIButton!
-    @IBOutlet weak var logInButton: UIButton!
-    @IBOutlet weak var createAccButton: UIButton!
+    @IBOutlet weak var logInButton: LoadingButton!
+    @IBOutlet weak var createAccButton: LoadingButton!
     
     @IBOutlet weak var nicknameLabelCreate: TextField!
     @IBOutlet weak var emailLabel: TextField!
@@ -70,7 +70,7 @@ class LoginViewController: SuperViewController {
     func showAlert(title:String? = nil,text:String? = nil, error: Bool, goToLogin: Bool = false) {
         
         let resultTitle = title ?? (error ? "Error".localize : "Success".localize)
-        
+        endAnimating()
         DispatchQueue.main.async {
             self.ai?.showAlertWithOK(title: resultTitle, text: text, error: error) { _ in
                 if goToLogin {
@@ -218,6 +218,45 @@ class LoginViewController: SuperViewController {
     }
     
    // let load = LoadFromDB()
+    
+    private func performLoginPressed() {
+        self.hideKeyboard()
+        LoadFromDB.shared.Users { (loadedData, Error) in
+            if !Error {
+                let values = self.textFieldValuesDict
+                if let name = values["log.user"],
+                   let password = values["log.password"] {
+                    if name != "" && password != "" {
+                        if !name.contains("@") {
+                            self.logIn(nickname: name, password: password, loadedData: loadedData)
+                        } else {
+                            self.checkUsers(for: name, password: password) { _ in
+                                self.actionButtonsEnabled = true
+                            }
+                        }
+                        
+                    } else {
+                        self.actionButtonsEnabled = true
+                        self.obthervValues = true
+                        DispatchQueue.main.async {
+                            self.newMessage?.show(title: "All fields are required".localize, type: .error)
+                            self.ai?.fastHide()
+                            self.showWrongFields()
+                        }
+                        
+                        
+                    }
+                }
+            } else {
+                print("error!!!")
+                self.actionButtonsEnabled = true
+                DispatchQueue.main.async {
+                    self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                }
+            }
+        }
+    }
+    
     @IBAction func logInPressed(_ sender: UIButton) {
         print("LOGINPRESSED")
         transactionAdded = true
@@ -227,43 +266,12 @@ class LoginViewController: SuperViewController {
             UIImpactFeedbackGenerator().impactOccurred()
         }
 
-        self.ai?.show(title: "Logging in".localize) { (_) in
-            self.hideKeyboard()
-            LoadFromDB.shared.Users { (loadedData, Error) in
-                if !Error {
-                    let values = self.textFieldValuesDict
-                    if let name = values["log.user"],
-                       let password = values["log.password"] {
-                        if name != "" && password != "" {
-                            if !name.contains("@") {
-                                self.logIn(nickname: name, password: password, loadedData: loadedData)
-                            } else {
-                                self.checkUsers(for: name, password: password) { _ in
-                                    self.actionButtonsEnabled = true
-                                }
-                            }
-                            
-                        } else {
-                            self.actionButtonsEnabled = true
-                            self.obthervValues = true
-                            DispatchQueue.main.async {
-                                self.newMessage?.show(title: "All fields are required".localize, type: .error)
-                                self.ai?.fastHide()
-                                self.showWrongFields()
-                            }
-                            
-                            
-                        }
-                    }
-                } else {
-                    print("error!!!")
-                    self.actionButtonsEnabled = true
-                    DispatchQueue.main.async {
-                        self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
-                    }
-                }
-            }
+        (sender as! LoadingButton).startAnimating {
+            self.performLoginPressed()
         }
+//        self.ai?.show(title: "Logging in".localize) { (_) in
+//            
+//        }
         
         
         
@@ -313,12 +321,14 @@ class LoginViewController: SuperViewController {
         appData.needDownloadOnMainAppeare = true
         if fromPro || self.forceLoggedOutUser != "" {
             DispatchQueue.main.async {
+                self.endAnimating()
                 self.dismiss(animated: true) {
                     self.ai?.fastHide()
                 }
             }
         } else {
             DispatchQueue.main.async {
+                self.endAnimating()
                 self.ai?.fastHide { _ in
                     self.performSegue(withIdentifier: "homeVC", sender: self)
                 }
@@ -327,6 +337,11 @@ class LoginViewController: SuperViewController {
         }
     }
     
+    
+    func endAnimating() {
+        self.logInButton.stopAnimating()
+        self.createAccButton.stopAnimating()
+    }
     
     
     func logIn(nickname: String, password: String, loadedData: [[String]]) {
@@ -341,17 +356,13 @@ class LoginViewController: SuperViewController {
                 self.actionButtonsEnabled = true
                 let messageTitle = "Wrong".localize + " " + "password".localize
                 DispatchQueue.main.async {
-                    self.newMessage?.show(title: messageTitle, type: .error)
-                    self.ai?.fastHide()
+                    self.showError(title: messageTitle)
                 }
             }
         } else {
             self.actionButtonsEnabled = true
             DispatchQueue.main.async {
-                DispatchQueue.main.async {
-                    self.newMessage?.show(title: "User not found".localize, type: .error)
-                    self.ai?.fastHide()
-                }
+                self.showError(title: "User not found".localize)
             }
         }
         
@@ -359,25 +370,38 @@ class LoginViewController: SuperViewController {
     }
 
     
+    func showError(title:String) {
+        endAnimating()
+        self.newMessage?.show(title: title, type: .error)
+        self.ai?.fastHide()
+    }
+    
+    private func performCreateAccount() {
+        self.hideKeyboard()
+        LoadFromDB.shared.Users { (loadedData, Error) in
+            if !Error {
+                self.createAccoun(loadedData: loadedData)
+            } else {
+                self.actionButtonsEnabled = true
+                DispatchQueue.main.async {
+                    self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                }
+            }
+        }
+    }
+    
     @IBAction func createAccountPressed(_ sender: Any) {
         DispatchQueue.main.async {
             UIImpactFeedbackGenerator().impactOccurred()
         }
 
-
-        self.ai?.show(title: "Creating".localize) { (_) in
-            self.hideKeyboard()
-            LoadFromDB.shared.Users { (loadedData, Error) in
-                if !Error {
-                    self.createAccoun(loadedData: loadedData)
-                } else {
-                    self.actionButtonsEnabled = true
-                    DispatchQueue.main.async {
-                        self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
-                    }
-                }
-            }
+        (sender as! LoadingButton).startAnimating {
+            self.performCreateAccount()
         }
+//
+//        self.ai?.show(title: "Creating".localize) { (_) in
+//
+//        }
         
     }
     
@@ -449,6 +473,7 @@ class LoginViewController: SuperViewController {
     var forceLoggedOutUser = ""
     var obthervValues = false
     func showWrongFields() {
+        endAnimating()
         textfields.forEach({ tf in
             if tf == self.emailLabel {
                 if self.emailLabel.text != "" {
@@ -631,8 +656,6 @@ class LoginViewController: SuperViewController {
                 if self.usersButton.isHidden != hideUserButton {
                     UIView.animate(withDuration: 0.3) {
                         self.usersButton.isHidden = hideUserButton
-                    } completion: { _ in
-                        
                     }
                 }
                 
@@ -705,9 +728,7 @@ extension LoginViewController {
         DispatchQueue.main.async {
             UIView.animate(withDuration: 0.3) {
                 self.navigationController?.navigationBar.alpha = 1
-            } completion: {_ in
-            
-            }
+            } 
         }
     }
 }

@@ -224,7 +224,10 @@ class TapAnimationView:UIView {
     private func performAnimateTap(view:UIView, show:Bool = false,delay:TimeInterval = 0, completion:@escaping()->()) {
         UIView.animate(withDuration: 0.65, delay: delay, options: .curveEaseInOut, animations: {
             view.alpha = show ? 0.2 : 0
-        }, completion: { _ in
+        }, completion: { 
+            if !$0 {
+                return
+            }
             completion()
         })
     }

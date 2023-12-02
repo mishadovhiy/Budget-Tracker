@@ -32,6 +32,7 @@ extension LoginViewController {
                                 self.emailLabel.becomeFirstResponder()
                             }
                             DispatchQueue.main.async {
+                                self.endAnimating()
                                 self.ai?.showAlert(buttons: (firstButton, nil), title: "Enter valid email address".localize, description: "With correct email address you could restore your password in the future".localize, type: .error)
                                 
                             }
@@ -68,15 +69,16 @@ extension LoginViewController {
                                     
                                     if self.fromPro || self.forceLoggedOutUser != "" {
                                         DispatchQueue.main.async {
+                                            self.endAnimating()
                                                 self.dismiss(animated: true) {
                                                     self.ai?.fastHide()
                                                 }
                                         }
                                     } else {
                                         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
-                                            self.ai?.fastHide { _ in
-                                                self.performSegue(withIdentifier: "homeVC", sender: self)
-                                            }
+                                            self.endAnimating()
+                                            self.ai?.fastHide()
+                                            self.performSegue(withIdentifier: "homeVC", sender: self)
                                         }
                                     }
                                 }

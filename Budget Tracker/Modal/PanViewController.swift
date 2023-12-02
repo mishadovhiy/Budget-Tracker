@@ -76,7 +76,10 @@ class PanViewController {
         
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .allowUserInteraction, animations: {
             self.vc.view.layer.move(.top, value: show ? 0 : self.properies.toHideVC)
-        }, completion: { _ in
+        }, completion: {
+            if !$0 {
+                return
+            }
             if !show {
                 self.properies.vcShowing = false
                 self.properies.scrolling = false

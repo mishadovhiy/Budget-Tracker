@@ -95,7 +95,10 @@ class adBannerView: UIView {
                 UIView.animate(withDuration: 0.6, delay: 0.01, usingSpringWithDamping: 0.85, initialSpringVelocity: 0, options: .allowAnimatedContent, animations: {
                         //self.alpha = 1
                         self.backgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
-                    }, completion: {_ in
+                    }, completion: {
+                        if !$0 {
+                            return
+                        }
                         completion?()
                     })
               //  }
@@ -120,7 +123,10 @@ class adBannerView: UIView {
                 UIView.animate(withDuration: 0.3) {
                     // self.alpha = 0
                     self.backgroundView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, self.toHide, 0)
-                } completion: { _ in
+                } completion: { 
+                    if !$0 {
+                        return
+                    }
                     self.isHidden = true
                     if remove {
                         self.removeAd()
@@ -324,7 +330,10 @@ extension adBannerView {
         }
         UIView.animate(withDuration: 0.6, animations: {
             layer?.opacity = 0
-        }, completion: { _ in
+        }, completion: { 
+            if !$0 {
+                return
+            }
             layer?.removeAllAnimations()
             layer?.removeFromSuperlayer()
         })

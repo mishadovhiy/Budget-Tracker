@@ -85,8 +85,14 @@ class TransitionVC: SuperViewController {
                 res.append($0)
             }
         }
-        let val = (Int(res) ?? 0)
-        return purposeSwitcher.selectedSegmentIndex == 0 ? (val * -1) : val
+        var val = (Int(res) ?? (Int(editingValue)))
+        if purposeSwitcher.selectedSegmentIndex == 1 && val <= 0 {
+            val *= -1
+        }
+        if purposeSwitcher.selectedSegmentIndex == 0 && val >= 0 {
+            val *= -1
+        }
+        return val
     }
     var cameraValue:Int = 0
     
@@ -296,6 +302,7 @@ class TransitionVC: SuperViewController {
             editingCategoryHolder = editingCategory
             editingDateHolder = editingDate
             editingValueHolder = editingValue
+            editingValue = editingValueHolder
             editingCommentHolder = editingComment
             DispatchQueue.main.async {
                 if (self.commentTextField.text?.count ?? 0) > 0 {
@@ -417,13 +424,19 @@ class TransitionVC: SuperViewController {
     
     @IBOutlet weak var repeateSwitch: UISwitch!
     @IBAction func donePressed(_ sender: UIButton) {
+        doneEditingPressed()
+        
+    }
+    
+    func doneEditingPressed() {
         let newDate = self.displeyingTransaction.date == "" ? defaultDate : self.displeyingTransaction.date
         print("newDate:", newDate)
         print("egrfwd ", self.displeyingTransaction.date)
         if let category = selectedCategory {
             DispatchQueue.main.async {
                 if self.valueLabel.text != "0" {
-                    let value = "\(self.enteringValueResult)"
+                    let valueRes = category.purpose == .expense && self.enteringValueResult >= 0 ? (self.enteringValueResult * -1) : self.enteringValueResult
+                    let value = "\(valueRes)"
                     let comment = self.commentTextField.text ?? ""
                     self.addNew(value: value, category: "\(category.id)", date: newDate, comment: comment)
                 } else {
@@ -431,7 +444,6 @@ class TransitionVC: SuperViewController {
                 }
             }
         }
-        
     }
     
     var enteringValueGet:Int {
@@ -529,7 +541,8 @@ class TransitionVC: SuperViewController {
                 self.categoryTextField.text = ""
             }
             let lastSelectedID = appData.lastSelected.gett(valueType: sender.selectedSegmentIndex == 0 ? .expense : .income)
-            if let cat = db.category(lastSelectedID ?? "") {
+            let lastCat = AppDelegate.shared?.db.categories.last(where: {$0.purpose == (sender.selectedSegmentIndex == 0 ? .expense : .income)})
+            if let cat = db.category(lastSelectedID ?? "\(lastCat?.id ?? 0)") {
                 selectedCategory = cat
                 print("last selected cat: ", cat.name)
                 placeHolder = cat.name
@@ -561,6 +574,7 @@ class TransitionVC: SuperViewController {
         
         DispatchQueue.main.async {
             self.categoryTextField.placeholder = placeHolder
+            self.valueLabel.text = "\(self.enteringValueResult)"
         }
     }
     func toggleAmountKeyboard(show:Bool) {
@@ -580,12 +594,18 @@ class TransitionVC: SuperViewController {
     
     @IBAction func numberPressed(_ sender: UIButton) {
         
+        
+        numberPressed(n: sender.currentTitle ?? "")
+        
+    }
+    
+    func numberPressed(n:String) {
         if pressedValue == "0" {
             pressedValue = ""
         }
         if pressedValue.count != 7 {
             AudioServicesPlaySystemSound(1104)
-            pressedValue = pressedValue + (sender.currentTitle ?? "")
+            pressedValue = pressedValue + (n)
             if pressedValue != "0" {
                 minusPlusLabel.alpha = 1
             }
@@ -596,13 +616,10 @@ class TransitionVC: SuperViewController {
         DispatchQueue.main.async {
             self.valueLabel.text = "\(self.enteringValueResult)"
         }
-        
-        
     }
     
-    @IBAction func erasePressed(_ sender: UIButton) {
-
-        if sender.tag == 1 {
+    func erasePressed(lastOnly:Bool) {
+        if lastOnly {
             AudioServicesPlaySystemSound(1155)
             if pressedValue.count > 0 {
                 pressedValue.removeLast()
@@ -612,8 +629,7 @@ class TransitionVC: SuperViewController {
                 pressedValue.removeAll()
                 minusPlusLabel.alpha = 0
             }
-        }
-        if sender.tag == 2 {
+        } else {
             AudioServicesPlaySystemSound(1156)
             pressedValue.removeAll()
             minusPlusLabel.alpha = 0
@@ -623,6 +639,10 @@ class TransitionVC: SuperViewController {
         DispatchQueue.main.async {
             self.valueLabel.text = "\(self.enteringValueResult)"//from sfeafeds
         }
+    }
+    
+    @IBAction func erasePressed(_ sender: UIButton) {
+        self.erasePressed(lastOnly: sender.tag == 1)
     }
     
 
@@ -637,7 +657,10 @@ class TransitionVC: SuperViewController {
         
         UIView.animate(withDuration: 0.3) {
             self.cameraContainer.layer.move(.top, value: show ? 0 : hide)
-        } completion: { _ in
+        } completion: { 
+            if !$0 {
+                return
+            }
             if #available(iOS 13.0, *) {
                 self.toggleCameraButton.fadeTransition(0.1)
                 self.toggleCameraButton.setImage(show ? .init(named: "closeNoBack") : .init(systemName: "camera.fill"), for:.normal)
@@ -805,6 +828,33 @@ extension TransitionVC:SelectTextImageContainerViewProtocol {
     }
     
     
+}
+
+
+
+extension TransitionVC {
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+            guard let key = presses.first?.key else { return }
+            print(key.characters, "key.characterskey.characters")
+            switch key.keyCode {
+            case .keyboard0, .keyboard1, .keyboard2, .keyboard3, .keyboard4, .keyboard5, .keyboard6, .keyboard7, .keyboard8, .keyboard9:
+                if #available(iOS 13.4, *) {
+                    if let n = key.keyCode.number {
+                        self.numberPressed(n: "\(n)")
+                        
+                    }
+                }
+            case .keyboardDeleteForward, .keyboardDeleteOrBackspace:
+                self.erasePressed(lastOnly: true)
+            case .keyboardReturn, .keyboardReturnOrEnter:
+                self.doneEditingPressed()
+
+               
+            default:
+                super.pressesBegan(presses, with: event)
+            }
+            
+        }
 }
 
 

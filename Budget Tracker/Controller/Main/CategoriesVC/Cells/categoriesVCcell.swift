@@ -118,7 +118,10 @@ class categoriesVCcell: ClearCell {
                     DispatchQueue.main.async {
                         UIView.animate(withDuration: 0.3) {
                             self.footerBackground.backgroundColor = CategoriesVC.shared?.selectionBacground
-                        } completion: { _ in
+                        } completion: { 
+                            if !$0 {
+                                return
+                            }
                             CategoriesVC.shared?.tableView.reloadData()
                         }
 
@@ -156,7 +159,10 @@ class categoriesVCcell: ClearCell {
                 self.qntLabel.superview?.isHidden = false
                 self.categoryNameLabel.isHidden = false
                 self.dueDateStack.isHidden = false
-            } completion: { _ in
+            } completion: { 
+                if !$0 {
+                    return
+                }
                 self.cancelEditing()
                 self.editingStack.alpha = 1
             }
@@ -235,8 +241,6 @@ extension categoriesVCcell:UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         UIView.animate(withDuration: 0.2) {
             self.footerBackground.backgroundColor = K.Colors.secondaryBackground
-        } completion: { _ in
-            
         }
 
     }
@@ -255,8 +259,6 @@ extension categoriesVCcell:UITextFieldDelegate {
                 DispatchQueue.main.async {
                     UIView.animate(withDuration: 0.3) {
                         self.footerBackground.backgroundColor = CategoriesVC.shared?.selectionBacground
-                    } completion: { _ in
-                        
                     }
                 }
 
@@ -270,7 +272,10 @@ extension categoriesVCcell:UITextFieldDelegate {
                     DispatchQueue.main.async {
                         UIView.animate(withDuration: 0.3) {
                             self.footerBackground.backgroundColor = CategoriesVC.shared?.selectionBacground
-                        } completion: { _ in
+                        } completion: { 
+                            if !$0 {
+                                return
+                            }
                             textField.becomeFirstResponder()
                         }
 

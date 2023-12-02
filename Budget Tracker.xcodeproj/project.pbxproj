@@ -142,6 +142,8 @@
 		8DBAD3832B1686E0004A6323 /* SelectImageCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBAD3822B1686E0004A6323 /* SelectImageCollectionCell.swift */; };
 		8DBB38F72AC8D46C009B56DD /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBB38F62AC8D46C009B56DD /* TextField.swift */; };
 		8DC033CC2985CA5A00CD98FF /* UITableViewDataSource_ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC033CB2985CA5A00CD98FF /* UITableViewDataSource_ViewController.swift */; };
+		8DC40B032B1BAB64001777CC /*  UIKeyboardHIDUsage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC40B022B1BAB64001777CC /*  UIKeyboardHIDUsage.swift */; };
+		8DC40B052B1BBAC6001777CC /* LoadingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC40B042B1BBAC6001777CC /* LoadingButton.swift */; };
 		8DD2D2CD2998902E0098C106 /* ViewControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD2D2CC2998902E0098C106 /* ViewControllers.swift */; };
 		8DD813472B0D38D600B72654 /* AdditionalPDFData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD813462B0D38D600B72654 /* AdditionalPDFData.swift */; };
 		8DD813492B0D717500B72654 /* SliderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD813482B0D717500B72654 /* SliderCell.swift */; };
@@ -358,6 +360,8 @@
 		8DBAD3822B1686E0004A6323 /* SelectImageCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectImageCollectionCell.swift; sourceTree = "<group>"; };
 		8DBB38F62AC8D46C009B56DD /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		8DC033CB2985CA5A00CD98FF /* UITableViewDataSource_ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewDataSource_ViewController.swift; sourceTree = "<group>"; };
+		8DC40B022B1BAB64001777CC /*  UIKeyboardHIDUsage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = " UIKeyboardHIDUsage.swift"; sourceTree = "<group>"; };
+		8DC40B042B1BBAC6001777CC /* LoadingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingButton.swift; sourceTree = "<group>"; };
 		8DD2D2CC2998902E0098C106 /* ViewControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllers.swift; sourceTree = "<group>"; };
 		8DD813462B0D38D600B72654 /* AdditionalPDFData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionalPDFData.swift; sourceTree = "<group>"; };
 		8DD813482B0D717500B72654 /* SliderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderCell.swift; sourceTree = "<group>"; };
@@ -636,6 +640,7 @@
 				8DD8134B2B0D733C00B72654 /* Double.swift */,
 				8B26329527E6A32E0086C3A8 /* UIViewController.swift */,
 				8D17FABF2B07C3C1005E03FD /* URL.swift */,
+				8DC40B022B1BAB64001777CC /*  UIKeyboardHIDUsage.swift */,
 				8B5434F727ED80F400417141 /* UITableView.swift */,
 				8B52CC6627E3001B008D5348 /* UITableViewCell.swift */,
 				8B82A04027E2BDBD0011EC80 /* UITextField.swift */,
@@ -812,6 +817,7 @@
 			isa = PBXGroup;
 			children = (
 				8BC31D7A27E3E5EA00FBC939 /* Button.swift */,
+				8DC40B042B1BBAC6001777CC /* LoadingButton.swift */,
 				8D834DA1297E05530056E686 /* TouchView.swift */,
 				8BD3A3D827E4097400547022 /* BasicView.swift */,
 				8D2CDA242AF3F47C00671A72 /* AdButton.swift */,
@@ -1381,6 +1387,7 @@
 				8D834D9F297E03D60056E686 /* UICollectionViewDelegate_CalendarControlVC.swift in Sources */,
 				8B7D1AA1276CF203008942EC /* IconList.swift in Sources */,
 				8D834D9D297E03D60056E686 /* UICollectionViewDelegate_CalendarVC.swift in Sources */,
+				8DC40B052B1BBAC6001777CC /* LoadingButton.swift in Sources */,
 				8B7855A227F1527000169A93 /* UIView.swift in Sources */,
 				8B78559C27F0C9F200169A93 /* RemindersVC.swift in Sources */,
 				8B91F08E27E587A800B74F5A /* MoreOptionsData.swift in Sources */,
@@ -1396,6 +1403,7 @@
 				8DEB0CDB28184FEA002D24D3 /* Extensions.swift in Sources */,
 				8DB4DAC227FC10D000EAA56F /* Keys.swift in Sources */,
 				8DD89D8723F1471400273904 /* AppData.swift in Sources */,
+				8DC40B032B1BAB64001777CC /*  UIKeyboardHIDUsage.swift in Sources */,
 				8B6BFB1827F7C82C00DD4CBC /* CategoriesMethods.swift in Sources */,
 				8B898CF427F3EB0800B66F79 /* UIDatePicker.swift in Sources */,
 				8D17FAC02B07C3C1005E03FD /* URL.swift in Sources */,
@@ -1685,7 +1693,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 37.2;
+				MARKETING_VERSION = 37.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1716,7 +1724,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 37.2;
+				MARKETING_VERSION = 37.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

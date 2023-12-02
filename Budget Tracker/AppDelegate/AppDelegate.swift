@@ -41,6 +41,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
     var coreDataManager:CoreDataDBManager?
 
+    
+    var canPerformAction:Bool {
+        return !(!ai.hideIndicatorBlockDesibled || passcodeLock.presenting)
+    }
+    
     public lazy var deviceType:DeviceType = {
         if #available(iOS 13.0, *) {
 #if !os(iOS)

@@ -68,11 +68,14 @@ extension HomeVC {
             UIView.animate(withDuration: 0.58, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: [.allowAnimatedContent, .allowUserInteraction]) {
                 self.mainContentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
                 self.mainContentViewHelpher.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
-            } completion: { _ in
+            } completion: {
                 /*UIView.animate(withDuration: 0.3, animations: {
                     self.sideBarContentBlockerView.alpha = show ? 1 : 0
 
                 })*/
+                if !$0 {
+                    return
+                }
                 if !show {
                     UIView.animate(withDuration: 0.3, delay: 0, options: .allowUserInteraction, animations: {
                         self.sideBarContentBlockerView.alpha = show ? 1 : 0
@@ -296,7 +299,10 @@ extension HomeVC {
                 self.noDataLabel.text = text
                 UIView.animate(withDuration: appeareAnimation ? 0.25 : 0) {
                     self.noDataView.frame = CGRect(x: 0, y: y, width: self.view.frame.width, height: self.view.frame.height - y)
-                } completion: { (_) in
+                } completion: {
+                    if !$0 {
+                        return
+                    }
                     self.mainTableView.reloadData()
              //       if self.mainTableView.visibleCells.count > 1 {
                         
@@ -306,7 +312,10 @@ extension HomeVC {
             } else {
                 UIView.animate(withDuration: 0.25) {
                     self.noDataView.frame = CGRect(x: 0, y: self.view.frame.height, width: self.view.frame.width, height: self.view.frame.height / 2)
-                } completion: { (_) in
+                } completion: {
+                    if !$0 {
+                        return
+                    }
                     self.noDataView.isHidden = true
                   //  if self.mainTableView.visibleCells.count > 1 {
                     //    self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
@@ -343,7 +352,10 @@ extension HomeVC {
                 self.calculationSView.alpha = 0
                 UIView.animate(withDuration: 0.8) {
                     self.calculationSView.alpha = 1
-                } completion: { _ in
+                } completion: { 
+                    if !$0 {
+                        return
+                    }
                     self.updateDataLabels(noData: newValue.count == 0)
                 }
                 self.tableActionActivityIndicator.removeFromSuperview()
@@ -699,7 +711,10 @@ extension HomeVC {
                 DispatchQueue.main.async {
                     UIView.animate(withDuration: 0.6) {
                         self.dataTaskCountLabel.alpha = 0
-                    } completion: { (_) in
+                    } completion: {
+                        if !$0 {
+                            return
+                        }
                         self.dataTaskCountLabel.text = ""
                         self.dataTaskCountLabel.alpha = 1
                     }
@@ -873,7 +888,8 @@ extension HomeVC: TransitionVCProtocol {
             self.calendarSelectedDate = nil
             if let transaction = self.editingTransaction {
                 vc.editingDate = transaction.date
-                vc.editingValue = Double(transaction.value) ?? 0.0
+                let val = Double(transaction.value) ?? 0.0
+                vc.editingValue = val
                 vc.editingCategory = transaction.categoryID
                 vc.editingComment = transaction.comment
             }
@@ -1133,7 +1149,7 @@ extension HomeVC: TransitionVCProtocol {
                     vc?.frame = vcFrame
                     self.filterHelperView.frame = CGRect(x: filterFrame.minX + superFilter.minX, y: vcFrame.minY, width: vcFrame.width - 10, height: vcFrame.height)
                     self.filterHelperView.alpha = 0
-                    Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { (_) in
+                    Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { _ in
                         UIView.animate(withDuration: 0.6) {
                             self.filterHelperView.alpha = 1
                         }
@@ -1225,4 +1241,22 @@ class mainVCemptyCell: UITableViewCell {
         super.draw(rect)
         mainBackgroundView.layer.cornerRadius = 9//ViewController.shared?.tableCorners ?? 9
     }
+}
+
+
+extension HomeVC {
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+            guard let key = presses.first?.key else { return }
+            print(key.characters, "key.characterskey.characters")
+            switch key.keyCode {
+            case .keyboardN:
+                if AppDelegate.shared?.canPerformAction ?? false {
+                    toAddTransaction()
+                }
+               
+            default:
+                super.pressesBegan(presses, with: event)
+            }
+            
+        }
 }

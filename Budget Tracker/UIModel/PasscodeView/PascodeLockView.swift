@@ -77,7 +77,10 @@ class PascodeLockView: UIView, UITextFieldDelegate {
                 }
                 self.backgroundColor = self.lightBackground
                 self.primaryStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
-            } completion: { _ in
+            } completion: { 
+                if !$0 {
+                    return
+                }
                 if let presentCompletion = presentCompletion {
                     presentCompletion(true)
                 }
@@ -136,7 +139,10 @@ class PascodeLockView: UIView, UITextFieldDelegate {
                     self.appIcon.isHidden = true
                 }
 
-            } completion: { _ in
+            } completion: { 
+                if !$0 {
+                    return
+                }
                 let window = UIApplication.shared.keyWindow ?? UIWindow()
                 window.endEditing(true)
                 self.becomeFirstResponder()
@@ -174,7 +180,10 @@ class PascodeLockView: UIView, UITextFieldDelegate {
                     self.numbersStack.isHidden = true
                 }
                 
-            } completion: { _ in
+            } completion: { 
+                if !$0 {
+                    return
+                }
                 if let action = self.enteredAction {
                     self.enteredAction = nil
                     action()

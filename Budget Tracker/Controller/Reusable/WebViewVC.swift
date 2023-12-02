@@ -23,6 +23,7 @@ class WebViewVC: SuperViewController, UIScrollViewDelegate, WKNavigationDelegate
         super.viewDidLoad()
         WebViewVC.shared = self
         webView.scrollView.delegate = self
+        webView.alpha = 0
         title = screenTitle
         DispatchQueue.init(label: "loadHtmlData", qos: .userInteractive).async {
             if let htmlData = self.htmlData,
@@ -35,6 +36,9 @@ class WebViewVC: SuperViewController, UIScrollViewDelegate, WKNavigationDelegate
                     self.screenAI?.stopAnimating()
                     self.screenAI?.isHidden = true
                     self.webView.scrollView.contentInset.bottom = AppDelegate.shared?.banner.size ?? 0
+                    UIView.animate(withDuration: 0.3) {
+                        self.webView.alpha = 1
+                    }
                 }
             } else {
                 self.errorLoading()
@@ -47,7 +51,7 @@ class WebViewVC: SuperViewController, UIScrollViewDelegate, WKNavigationDelegate
     
     
     
-    public func presentScreen(in nav:UINavigationController, data:HtmlData, screenTitle:String) {
+    static func presentScreen(in nav:UINavigationController, data:HtmlData, screenTitle:String) {
         DispatchQueue.main.async {
             let storyboard = UIStoryboard(name: "Reusable", bundle: nil)
             let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC

@@ -118,7 +118,10 @@ extension PDFEditVC {
         UIView.animate(withDuration: 0.45, animations: {
             constant?.constant = show.height
             self.containerView.layoutIfNeeded()
-        }, completion: { _ in
+        }, completion: { 
+            if !$0 {
+                return
+            }
             self.view.isUserInteractionEnabled = true
             if show == .none {
                 self.tableView.reloadData()

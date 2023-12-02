@@ -143,7 +143,7 @@ class AppSettingsData {
         let privacy = SettingsVC.StandartCell(title: pprivacyTitle, action: {
             DispatchQueue.main.async {
                 if let nav = self.vc.navigationController {
-                    WebViewVC.shared?.presentScreen(in: nav, data: .init(url: "https://mishadovhiy.com/apps/previews/budget.html", key: "Privacy".localize), screenTitle: pprivacyTitle)
+                    WebViewVC.presentScreen(in: nav, data: .init(url: "https://mishadovhiy.com/apps/previews/budget.html", key: "Privacy".localize), screenTitle: pprivacyTitle)
                 }
             }
             

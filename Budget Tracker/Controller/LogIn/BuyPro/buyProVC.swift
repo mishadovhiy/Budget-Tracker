@@ -78,9 +78,7 @@ class BuyProVC: SuperViewController {
                     UIView.animate(withDuration: 0.3) {
                         //make bigger
                         self.purchasedIndicatorView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-                    } completion: { (_) in
-                        
-                    }
+                    } 
 
                 }
 

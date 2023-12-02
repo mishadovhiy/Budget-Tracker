@@ -763,7 +763,7 @@ class CalendarVC: SuperViewController {
             }
         } else if delegate != nil && !needPressDone {
             delegate?.dateSelected(date: newSelected, time: nil)
-            navigationController?.popToRootViewController(animated: true)
+            navigationController?.popViewController(animated: true)
         } else {
             delegate?.dateSelected(date: newSelected, time: nil)
         }

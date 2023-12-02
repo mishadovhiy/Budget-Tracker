@@ -91,7 +91,10 @@ extension CategoriesVC {
             }
             UIView.animate(withDuration: animated ? 0.3 : 0) {
                 self.iconsContainer.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, show ? 0 : containerHeight + (self.appData.resultSafeArea.0 + self.appData.resultSafeArea.1 + 50), 0)
-            } completion: { _ in
+            } completion: {
+                if !$0 {
+                    return
+                }
                 if self.iconsContainer.isHidden != false {
                     self.iconsContainer.isHidden = false
                 }

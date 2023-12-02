@@ -62,7 +62,10 @@ class FilterTVC: SuperViewController {
             
             UIView.animate(withDuration: 0.2) {
                 self.tableview.layer.frame = self.frame
-            } completion: { (_) in
+            } completion: { 
+                if !$0 {
+                    return
+                }
                 self.tableview.cellLayoutMarginsFollowReadableWidth = true
                 self.tableview.endUpdates()
                 self.tableview.reloadData()

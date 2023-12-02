@@ -77,7 +77,10 @@ extension UIView {
     func removeWithAnimation(animation:CGFloat = 0.11, complation:(()->())? = nil) {
         UIView.animate(withDuration: animation, animations: {
             self.alpha = 0
-        }) { _ in
+        }) { 
+            if !$0 {
+                return
+            }
             self.isHidden = true
             
             if let com = complation {

@@ -76,7 +76,10 @@ class AmountToPayCell: UITableViewCell {
                         if touch.view != self.changeButton || touch.view != self.deleteButton {
                             UIView.animate(withDuration: 0.3) {
                                 self.editingStack.alpha = 0
-                            } completion: { _ in
+                            } completion: { 
+                                if !$0 {
+                                    return
+                                }
                                 HistoryVC.shared?.calendarAmountPressed = (false, false)
                                 HistoryVC.shared?.tableView.reloadData()
                             }
@@ -91,7 +94,10 @@ class AmountToPayCell: UITableViewCell {
                 
                 UIView.animate(withDuration: 0.12) {
                     self.editingStack.alpha = 1
-                } completion: { _ in
+                } completion: { 
+                    if !$0 {
+                        return
+                    }
                     HistoryVC.shared?.calendarAmountPressed.1 = true
                     HistoryVC.shared?.tableView.reloadData()
                 }
@@ -159,7 +165,10 @@ class AmountToPayCell: UITableViewCell {
                 if self.amountToPayTextField.isHidden != hideTF {
                     self.amountToPayTextField.isHidden = hideTF
                 }
-            } completion: { _ in
+            } completion: { 
+                if !$0 {
+                    return
+                }
                 completionn(true)
             }
         }

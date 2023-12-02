@@ -69,26 +69,34 @@ class DataBase {
     }
     
     func removeAll() {
-        
-        let vcs = self.viewControllers
-        let url = self.appUrl
-        let lastSelected = self.db["lastSelected"] as? [String:String] ?? [:]
-        
-        lastSelectedDate = nil
-        AppData.categoriesHolder = nil
-        self.db.removeAll()
-       
-        //old db
-        UserDefaults.standard.setValue(nil, forKey: "lastSelected")
-        UserDefaults.standard.setValue(true, forKey: "checkTrialDate")
-        UserDefaults.standard.setValue(false, forKey: "trialPressed")
-        UserDefaults.standard.setValue(nil, forKey: "trialToExpireDays")
-        UserDefaults.standard.setValue(nil, forKey: "username")
-        UserDefaults.standard.setValue(nil, forKey: "password")
-
-        self.appUrl = url
-        self.viewControllers = vcs
-        self.db.updateValue(lastSelected, forKey: "lastSelected")
+        transactions = []
+        categories = []
+        localCategories = []
+        localTransactions = []
+        AppDelegate.shared?.appData.username = ""
+        AppDelegate.shared?.appData.password = ""
+//        let vcs = self.viewControllers
+//        let url = self.appUrl
+//        let lastSelected = self.db["lastSelected"] as? [String:String] ?? [:]
+//        let password = UserSettings.Security.password
+//        let passTimout = UserSettings.Security.timeOut
+//        lastSelectedDate = nil
+//        AppData.categoriesHolder = nil
+//        self.db.removeAll()
+//       
+//        //old db
+//        UserDefaults.standard.setValue(nil, forKey: "lastSelected")
+//        UserDefaults.standard.setValue(true, forKey: "checkTrialDate")
+//        UserDefaults.standard.setValue(false, forKey: "trialPressed")
+//        UserDefaults.standard.setValue(nil, forKey: "trialToExpireDays")
+//        UserDefaults.standard.setValue(nil, forKey: "username")
+//        UserDefaults.standard.setValue(nil, forKey: "password")
+//
+//        self.appUrl = url
+//        self.viewControllers = vcs
+//        UserSettings.Security.password = password
+//        UserSettings.Security.timeOut = passTimout
+//        self.db.updateValue(lastSelected, forKey: "lastSelected")
     }
     
     func checkDBUpdated() -> Bool {

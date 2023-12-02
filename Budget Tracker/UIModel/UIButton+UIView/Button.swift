@@ -10,7 +10,16 @@ import UIKit
 
 @IBDesignable
 class Button: UIButton {
-    
+    private var moveToWindow = false
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        if !moveToWindow {
+            firstMovedToWindow()
+        }
+    }
+    func firstMovedToWindow() {
+        
+    }
     @IBInspectable open var linkBackground:Bool = false {
         didSet {
             if linkBackground {

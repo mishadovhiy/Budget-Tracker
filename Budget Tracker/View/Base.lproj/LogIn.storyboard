@@ -77,7 +77,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hrx-eQ-ndU">
                                         <rect key="frame" x="0.0" y="274.99999999999994" width="280" height="40"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BR7-eH-6Pc" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BR7-eH-6Pc" customClass="LoadingButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                 <rect key="frame" x="202" y="6" width="78" height="28"/>
                                                 <color key="backgroundColor" systemColor="tintColor"/>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
@@ -169,7 +169,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JQi-hA-7c1">
                                         <rect key="frame" x="0.0" y="164.99999999999994" width="280" height="40"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z9u-BA-sZD" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z9u-BA-sZD" customClass="LoadingButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                 <rect key="frame" x="207" y="6" width="73" height="28"/>
                                                 <color key="backgroundColor" systemColor="tintColor"/>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
