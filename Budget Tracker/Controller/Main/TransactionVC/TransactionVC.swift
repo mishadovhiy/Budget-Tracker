@@ -27,6 +27,7 @@ class TransitionVC: SuperViewController {
     @IBOutlet weak var cameraContainer: UIView!
     @IBAction func trashPressed(_ sender: UIButton) {
         donePressed = true
+        print("trashPressedtrashPressedtrashPressed")
         DispatchQueue.main.async {
             self.dismissVC() {
                 DispatchQueue.init(label: "reload").async {
@@ -84,8 +85,8 @@ class TransitionVC: SuperViewController {
                 res.append($0)
             }
         }
-        
-        return Int(res) ?? 0
+        let val = (Int(res) ?? 0)
+        return purposeSwitcher.selectedSegmentIndex == 0 ? (val * -1) : val
     }
     var cameraValue:Int = 0
     
@@ -95,6 +96,7 @@ class TransitionVC: SuperViewController {
         
         if self.navigationController is TransactionNav {
             self.dismiss(animated: true, completion: complation)
+            complation?()
             viewDidDismiss()
         } else {
             self.navigationController?.popViewController(animated: true)
@@ -144,7 +146,7 @@ class TransitionVC: SuperViewController {
         super.viewDidDismiss()
         dismissTransitionHolder = nil
         panMahanger = nil
-        delegate = nil
+     //   delegate = nil
         dateSet = nil
         cameraVC?.toggleCameraSession(pause: true, remove: true)
     }
@@ -366,13 +368,14 @@ class TransitionVC: SuperViewController {
     func addNew(value: String, category: String, date: String, comment: String) {
         donePressed = true
         print("addNew called", value)
+        print("isEditing ", editingDate)
         DispatchQueue.main.async {
             UIImpactFeedbackGenerator().impactOccurred()
             self.checkDate(date: date) { _ in
                 DispatchQueue.init(label: "download").async {
                 if self.editingDate != "" {
                     let new = TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)
-                    let was = TransactionsStruct(value: "\(Int(self.editingValue))", categoryID: self.editingCategory, date: self.editingDate, comment: self.editingComment)
+                    let was = TransactionsStruct(value: "\(self.editingValueHolder)", categoryID: self.editingCategory, date: self.editingDate, comment: self.editingComment)
                     self.delegate?.editTransaction(new, was: was, reminderTime: self.reminder_Time, repeated: self.reminder_Repeated, idx: self.idxHolder)
                     self.quite()
 
@@ -420,7 +423,7 @@ class TransitionVC: SuperViewController {
         if let category = selectedCategory {
             DispatchQueue.main.async {
                 if self.valueLabel.text != "0" {
-                    let value = "\(self.enteringValueGet)"
+                    let value = "\(self.enteringValueResult)"
                     let comment = self.commentTextField.text ?? ""
                     self.addNew(value: value, category: "\(category.id)", date: newDate, comment: comment)
                 } else {

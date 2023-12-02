@@ -551,7 +551,7 @@ extension HomeVC {
     }
     
     func downloadFromDB(showError: Bool = false, title: String = "Downloading".localize, local:Bool = false) {
-        self.editingTransaction = nil
+     //   self.editingTransaction = nil
         self.sendError = false
         completedFiltering = false
         
@@ -717,6 +717,7 @@ extension HomeVC: TransitionVCProtocol {
             editingTransaction = nil
             selectedCell = nil
             let delete = DeleteFromDB()
+            print(editing, " gghdfsdaewreg")
             delete.newTransaction(editing) { _ in
                 self.apiUpdated()
                 self.filter()
@@ -729,21 +730,28 @@ extension HomeVC: TransitionVCProtocol {
     }
     
     func editTransaction(_ transaction: TransactionsStruct, was: TransactionsStruct, reminderTime:DateComponents?, repeated:Bool?, idx:Int?) {
-        let delete = DeleteFromDB()
-        delete.newTransaction(was) { _ in
-            // let save = SaveToDB()
-            SaveToDB.shared.newTransaction(transaction) { _ in
-                self.apiUpdated()
-                self.editingTransaction = nil
-                self.filter()
+        if let editingTransaction = editingTransaction {
+            let delete = DeleteFromDB()
+            delete.newTransaction(editingTransaction) { _ in
+                // let save = SaveToDB()
+                SaveToDB.shared.newTransaction(transaction) { _ in
+                    self.apiUpdated()
+                    self.editingTransaction = nil
+                    self.filter()
+                }
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.newMessage?.show(title:"Error deleting transaction".localize, description: "Try again".localize, type: .error)
             }
         }
+        
     }
     
     
     private func addNewTransaction(_ new:TransactionsStruct) {
         self.newTransaction = new
-        editingTransaction = nil
+   //     editingTransaction = nil
         self.animateCellWillAppear = false
         Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (_) in
             self.animateCellWillAppear = true
