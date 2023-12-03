@@ -1829,10 +1829,9 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </collectionReusableView>
                             </collectionView>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gve-Pc-cyc" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
-                                <rect key="frame" x="345" y="15" width="70" height="28"/>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gve-Pc-cyc" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
+                                <rect key="frame" x="339" y="15" width="76" height="32"/>
                                 <color key="backgroundColor" systemColor="tintColor"/>
-                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
                                 <inset key="contentEdgeInsets" minX="15" minY="5" maxX="15" maxY="5"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="Close">
@@ -1877,15 +1876,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="430" height="814"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c9d-cL-RPP" userLabel="doneButton" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c9d-cL-RPP" userLabel="doneButton" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                 <rect key="frame" x="380" y="10" width="40" height="40"/>
-                                <color key="backgroundColor" name="yellowColor"/>
+                                <color key="backgroundColor" systemColor="tintColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="3MZ-bu-ooF"/>
                                     <constraint firstAttribute="width" constant="40" id="k54-eE-tS5"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" systemColor="tintColor"/>
                                 <state key="normal" title="✓">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
@@ -1938,6 +1936,12 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="17f-0J-k9a" userLabel="valueView">
                                         <rect key="frame" x="0.0" y="0.0" width="400" height="60"/>
                                         <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nXT-cA-Nf1">
+                                                <rect key="frame" x="15" y="-20.333333333333343" width="370" height="20.333333333333332"/>
+                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                                <color key="textColor" name="balanceValueColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="200" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="3" translatesAutoresizingMaskIntoConstraints="NO" id="qzi-1W-Nei" userLabel="ValueLabel">
                                                 <rect key="frame" x="322" y="0.0" width="78" height="60"/>
                                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="42"/>
@@ -1969,10 +1973,14 @@
                                             <constraint firstItem="qzi-1W-Nei" firstAttribute="top" secondItem="17f-0J-k9a" secondAttribute="top" id="Oeg-Am-jOq"/>
                                             <constraint firstItem="A3t-7s-5P5" firstAttribute="top" secondItem="17f-0J-k9a" secondAttribute="top" id="PU1-2k-pIt"/>
                                             <constraint firstAttribute="trailing" secondItem="XVk-PX-Zyj" secondAttribute="trailing" id="S7C-BL-SFU"/>
+                                            <constraint firstItem="XVk-PX-Zyj" firstAttribute="top" secondItem="nXT-cA-Nf1" secondAttribute="bottom" id="cS8-87-0ea"/>
+                                            <constraint firstAttribute="trailing" secondItem="nXT-cA-Nf1" secondAttribute="trailing" constant="15" id="fAb-LB-bbq"/>
                                             <constraint firstItem="XVk-PX-Zyj" firstAttribute="leading" secondItem="17f-0J-k9a" secondAttribute="leading" id="flf-w2-Hwe"/>
+                                            <constraint firstItem="nXT-cA-Nf1" firstAttribute="leading" secondItem="17f-0J-k9a" secondAttribute="leading" constant="15" id="hKh-dM-tQc"/>
                                             <constraint firstAttribute="bottom" secondItem="XVk-PX-Zyj" secondAttribute="bottom" id="j0y-7H-qHL"/>
                                             <constraint firstAttribute="bottom" secondItem="qzi-1W-Nei" secondAttribute="bottom" id="kLY-73-3bM"/>
                                             <constraint firstItem="qzi-1W-Nei" firstAttribute="leading" secondItem="A3t-7s-5P5" secondAttribute="trailing" constant="2" id="u8F-6N-lix"/>
+                                            <constraint firstItem="qzi-1W-Nei" firstAttribute="width" relation="lessThanOrEqual" secondItem="17f-0J-k9a" secondAttribute="width" id="zvz-Kk-UhL"/>
                                         </constraints>
                                         <variation key="default">
                                             <mask key="subviews">
@@ -2155,16 +2163,16 @@
                                         <rect key="frame" x="0.0" y="0.0" width="430" height="300"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="mNa-Ms-yFh">
-                                                <rect key="frame" x="10" y="0.0" width="410" height="300"/>
+                                                <rect key="frame" x="10" y="45" width="410" height="255"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="40z-dE-iil">
-                                                        <rect key="frame" x="0.0" y="0.0" width="410" height="150"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="410" height="127.66666666666667"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="fTj-Lv-ZTL">
-                                                                <rect key="frame" x="0.0" y="0.0" width="410" height="75"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="410" height="63.666666666666664"/>
                                                                 <subviews>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6QC-Nh-XH7" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="102.66666666666667" height="75"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="102.66666666666667" height="63.666666666666664"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                                         <state key="normal" title="7">
@@ -2183,7 +2191,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jDM-Q8-4VJ" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                        <rect key="frame" x="102.66666666666669" y="0.0" width="102.33333333333331" height="75"/>
+                                                                        <rect key="frame" x="102.66666666666669" y="0.0" width="102.33333333333331" height="63.666666666666664"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                                         <state key="normal" title="8">
@@ -2202,7 +2210,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9iz-tv-iMd" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                        <rect key="frame" x="204.99999999999997" y="0.0" width="102.66666666666666" height="75"/>
+                                                                        <rect key="frame" x="204.99999999999997" y="0.0" width="102.66666666666666" height="63.666666666666664"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                                         <state key="normal" title="9">
@@ -2221,7 +2229,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JJR-Nl-rYc" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                        <rect key="frame" x="307.66666666666669" y="0.0" width="102.33333333333331" height="75"/>
+                                                                        <rect key="frame" x="307.66666666666669" y="0.0" width="102.33333333333331" height="63.666666666666664"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <state key="normal" image="chevron.backward" catalog="system">
                                                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="font">
@@ -2244,10 +2252,10 @@
                                                                 </subviews>
                                                             </stackView>
                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="RRW-CG-USi">
-                                                                <rect key="frame" x="0.0" y="75" width="410" height="75"/>
+                                                                <rect key="frame" x="0.0" y="63.666666666666629" width="410" height="64"/>
                                                                 <subviews>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jds-VY-N0Z" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="102.66666666666667" height="75"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="102.66666666666667" height="64"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                                         <state key="normal" title="4">
@@ -2266,7 +2274,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZDZ-cE-jf2" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                        <rect key="frame" x="102.66666666666669" y="0.0" width="102.33333333333331" height="75"/>
+                                                                        <rect key="frame" x="102.66666666666669" y="0.0" width="102.33333333333331" height="64"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                                         <state key="normal" title="5">
@@ -2285,7 +2293,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Jn-7a-agR" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                        <rect key="frame" x="204.99999999999997" y="0.0" width="102.66666666666666" height="75"/>
+                                                                        <rect key="frame" x="204.99999999999997" y="0.0" width="102.66666666666666" height="64"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                                         <state key="normal" title="6">
@@ -2304,7 +2312,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1vj-92-UOQ" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                        <rect key="frame" x="307.66666666666669" y="0.0" width="102.33333333333331" height="75"/>
+                                                                        <rect key="frame" x="307.66666666666669" y="0.0" width="102.33333333333331" height="64"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
                                                                         <state key="normal" title="C"/>
@@ -2326,13 +2334,13 @@
                                                         </subviews>
                                                     </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="9YQ-MZ-2hg">
-                                                        <rect key="frame" x="0.0" y="150" width="410" height="150"/>
+                                                        <rect key="frame" x="0.0" y="127.66666666666663" width="410" height="127.33333333333331"/>
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="8NR-4q-JwM">
-                                                                <rect key="frame" x="0.0" y="0.0" width="410" height="75"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="410" height="63.666666666666664"/>
                                                                 <subviews>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kdg-LE-BIm" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="102.66666666666667" height="75"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="102.66666666666667" height="63.666666666666664"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                                         <state key="normal" title="1">
@@ -2351,7 +2359,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CxJ-K9-I6v" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                        <rect key="frame" x="102.66666666666669" y="0.0" width="102.33333333333331" height="75"/>
+                                                                        <rect key="frame" x="102.66666666666669" y="0.0" width="102.33333333333331" height="63.666666666666664"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                                         <state key="normal" title="2">
@@ -2370,7 +2378,7 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hSo-nA-Zbw" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                        <rect key="frame" x="204.99999999999997" y="0.0" width="102.66666666666666" height="75"/>
+                                                                        <rect key="frame" x="204.99999999999997" y="0.0" width="102.66666666666666" height="63.666666666666664"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                                         <state key="normal" title="3">
@@ -2389,19 +2397,19 @@
                                                                         </connections>
                                                                     </button>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zct-MK-YTj">
-                                                                        <rect key="frame" x="307.66666666666669" y="0.0" width="102.33333333333331" height="75"/>
+                                                                        <rect key="frame" x="307.66666666666669" y="0.0" width="102.33333333333331" height="63.666666666666664"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     </button>
                                                                 </subviews>
                                                             </stackView>
                                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="dFf-pH-Tr4">
-                                                                <rect key="frame" x="0.0" y="75" width="410" height="75"/>
+                                                                <rect key="frame" x="0.0" y="63.666666666666742" width="410" height="63.666666666666657"/>
                                                                 <subviews>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QgF-cS-KdM">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="102.66666666666667" height="75"/>
+                                                                        <rect key="frame" x="0.0" y="0.0" width="102.66666666666667" height="63.666666666666664"/>
                                                                         <subviews>
                                                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sug-Eq-lTO" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="102.66666666666667" height="75"/>
+                                                                                <rect key="frame" x="0.0" y="0.0" width="102.66666666666667" height="63.666666666666664"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                 <fontDescription key="fontDescription" type="system" pointSize="36"/>
                                                                                 <state key="normal" title="0">
@@ -2428,16 +2436,28 @@
                                                                             <constraint firstItem="sug-Eq-lTO" firstAttribute="top" secondItem="QgF-cS-KdM" secondAttribute="top" id="vIx-lC-Sla"/>
                                                                         </constraints>
                                                                     </view>
-                                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fvx-Dm-VKG">
-                                                                        <rect key="frame" x="102.66666666666669" y="0.0" width="102.33333333333331" height="75"/>
+                                                                    <button opaque="NO" alpha="0.0" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fvx-Dm-VKG" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
+                                                                        <rect key="frame" x="102.66666666666669" y="0.0" width="102.33333333333331" height="63.666666666666664"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                                        <state key="normal" title="="/>
+                                                                        <userDefinedRuntimeAttributes>
+                                                                            <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
+                                                                                <color key="value" systemColor="tintColor"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                                                <real key="value" value="9"/>
+                                                                            </userDefinedRuntimeAttribute>
+                                                                        </userDefinedRuntimeAttributes>
+                                                                        <connections>
+                                                                            <action selector="actionButtonPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="8F5-XM-owv"/>
+                                                                        </connections>
                                                                     </button>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eyO-xh-bQC">
-                                                                        <rect key="frame" x="204.99999999999997" y="0.0" width="102.66666666666666" height="75"/>
+                                                                        <rect key="frame" x="204.99999999999997" y="0.0" width="102.66666666666666" height="63.666666666666664"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     </button>
                                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eL7-6Y-fv0">
-                                                                        <rect key="frame" x="307.66666666666669" y="0.0" width="102.33333333333331" height="75"/>
+                                                                        <rect key="frame" x="307.66666666666669" y="0.0" width="102.33333333333331" height="63.666666666666664"/>
                                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                     </button>
                                                                 </subviews>
@@ -2450,18 +2470,101 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="mNa-Ms-yFh" secondAttribute="bottom" id="FzP-iT-Bhs"/>
-                                            <constraint firstItem="mNa-Ms-yFh" firstAttribute="top" secondItem="dtl-DA-9aX" secondAttribute="top" id="NeN-Nk-r7s"/>
+                                            <constraint firstItem="mNa-Ms-yFh" firstAttribute="top" secondItem="dtl-DA-9aX" secondAttribute="top" constant="45" id="NeN-Nk-r7s"/>
                                             <constraint firstAttribute="trailing" secondItem="mNa-Ms-yFh" secondAttribute="trailing" constant="10" id="qBc-Qs-u4U"/>
                                             <constraint firstItem="mNa-Ms-yFh" firstAttribute="leading" secondItem="dtl-DA-9aX" secondAttribute="leading" constant="10" id="wmd-q9-KTe"/>
                                         </constraints>
                                     </view>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="GY8-SG-i9V">
+                                        <rect key="frame" x="10" y="-10" width="410" height="35"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kJN-OX-a2c" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="102.66666666666667" height="35"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                                <color key="tintColor" name="balanceValueColor"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="+"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
+                                                        <color key="value" systemColor="tintColor"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="9"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="actionButtonPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="Yrn-c9-hUw"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fSh-jG-SY9" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
+                                                <rect key="frame" x="102.66666666666669" y="0.0" width="102.33333333333331" height="35"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                                <color key="tintColor" name="balanceValueColor"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="－"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
+                                                        <color key="value" systemColor="tintColor"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="9"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="actionButtonPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="IAX-qI-zJe"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="60g-sX-kVw" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
+                                                <rect key="frame" x="204.99999999999997" y="0.0" width="102.66666666666666" height="35"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                                <color key="tintColor" name="balanceValueColor"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="÷"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
+                                                        <color key="value" systemColor="tintColor"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="9"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="actionButtonPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="ysm-k0-PFm"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b3m-HC-uqJ" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
+                                                <rect key="frame" x="307.66666666666669" y="0.0" width="102.33333333333331" height="35"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                                <color key="tintColor" name="balanceValueColor"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="✕"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
+                                                        <color key="value" systemColor="tintColor"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                        <real key="value" value="9"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="actionButtonPressed:" destination="o1K-SN-bUx" eventType="touchUpInside" id="GXj-H2-2Yk"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="35" id="lX2-YK-vi9"/>
+                                        </constraints>
+                                    </stackView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="dtl-DA-9aX" firstAttribute="leading" secondItem="3iV-TP-Myd" secondAttribute="leading" id="1ru-rM-ojT"/>
                                     <constraint firstAttribute="height" relation="lessThanOrEqual" constant="300" id="Asd-iW-KL7"/>
+                                    <constraint firstItem="GY8-SG-i9V" firstAttribute="leading" secondItem="3iV-TP-Myd" secondAttribute="leading" constant="10" id="KNp-sC-nGB"/>
+                                    <constraint firstItem="GY8-SG-i9V" firstAttribute="top" secondItem="dtl-DA-9aX" secondAttribute="top" constant="-10" id="NgK-7f-eiX"/>
                                     <constraint firstItem="dtl-DA-9aX" firstAttribute="top" secondItem="3iV-TP-Myd" secondAttribute="top" id="QHx-gK-Td5"/>
                                     <constraint firstAttribute="trailing" secondItem="dtl-DA-9aX" secondAttribute="trailing" id="UIH-Tx-Urt"/>
+                                    <constraint firstAttribute="trailing" secondItem="GY8-SG-i9V" secondAttribute="trailing" constant="10" id="VRy-fu-9JR"/>
                                     <constraint firstAttribute="bottom" secondItem="dtl-DA-9aX" secondAttribute="bottom" id="m3b-Yt-6eK"/>
                                 </constraints>
                             </view>
@@ -2543,6 +2646,7 @@
                         <barButtonItem key="backBarButtonItem" title="   " id="uAZ-XE-G0m"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="actionButtonsStack" destination="GY8-SG-i9V" id="em6-iH-z30"/>
                         <outlet property="cameraContainer" destination="6Te-KM-v7g" id="N0C-oN-cFQ"/>
                         <outlet property="categoryTextField" destination="kTT-Sl-tfE" id="JSs-X6-9Pz"/>
                         <outlet property="closeButton" destination="ydl-Nt-YBv" id="niB-eC-XpW"/>
@@ -2550,6 +2654,7 @@
                         <outlet property="commentTextField" destination="JSf-II-z0v" id="A7D-ZM-W6W"/>
                         <outlet property="dateTextField" destination="wMS-Hp-6gJ" id="lrX-BK-eQT"/>
                         <outlet property="doneButton" destination="c9d-cL-RPP" id="jqs-Wp-PaK"/>
+                        <outlet property="equelButton" destination="fvx-Dm-VKG" id="yA1-zy-6Rq"/>
                         <outlet property="minusPlusLabel" destination="A3t-7s-5P5" id="lCe-W0-1K1"/>
                         <outlet property="numbarPadView" destination="3iV-TP-Myd" id="USu-TZ-E32"/>
                         <outlet property="purposeSwitcher" destination="V5Z-aw-ROj" id="aaQ-dK-QwU"/>
@@ -2560,6 +2665,7 @@
                         <outlet property="showValueButton" destination="XVk-PX-Zyj" id="YzY-bQ-S0O"/>
                         <outlet property="toggleCameraButton" destination="uFQ-us-rIo" id="16a-Dx-dVK"/>
                         <outlet property="trashButton" destination="2np-os-Y0H" id="2K0-WK-Khm"/>
+                        <outlet property="valueHilderLabel" destination="nXT-cA-Nf1" id="pRs-ra-dQL"/>
                         <outlet property="valueLabel" destination="qzi-1W-Nei" id="WlM-rJ-uNN"/>
                         <segue destination="hoT-B4-HCQ" kind="unwind" identifier="quitTransitionVC" unwindAction="unwindToViewControllerAWithSegue:" id="qbN-N1-wpB"/>
                     </connections>
@@ -2567,7 +2673,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kbk-wB-y5m" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <exit id="hoT-B4-HCQ" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1558.8785046728972" y="-476.24190064794817"/>
+            <point key="canvasLocation" x="1558.6046511627908" y="-476.39484978540776"/>
         </scene>
         <!--  -->
         <scene sceneID="9XH-Gu-7p3">
@@ -2748,19 +2854,19 @@
                             </connections>
                         </segmentedControl>
                         <barButtonItem key="rightBarButtonItem" title="share" style="plain" id="h6I-pJ-oGC">
-                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="KvP-WS-BeQ" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="KvP-WS-BeQ" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                 <rect key="frame" x="299.33333333333331" y="5" width="50" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" name="AccentColor"/>
-                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" systemColor="tintColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="tintColor" systemColor="tintColor"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="PDF"/>
                                 <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="linkBackground" value="YES"/>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                         <real key="value" value="5"/>
                                     </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="linkBackground" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="sharePressed:" destination="U5Q-a5-Vkx" eventType="touchUpInside" id="cYC-C6-wtc"/>
@@ -3698,7 +3804,7 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TGK-Ax-n0d" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                         <rect key="frame" x="380" y="10" width="40" height="40"/>
-                                        <color key="backgroundColor" name="yellowColor"/>
+                                        <color key="backgroundColor" systemColor="tintColor"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="40" id="Gq0-8B-tPe"/>
                                             <constraint firstAttribute="height" constant="40" id="fHb-8H-WqJ"/>
@@ -3746,7 +3852,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="XFt-LS-Qbp">
                                 <rect key="frame" x="20" y="867" width="390" height="35"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j8N-A3-4Wm" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j8N-A3-4Wm" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="100" height="35"/>
                                         <color key="backgroundColor" systemColor="tintColor"/>
                                         <constraints>
@@ -3769,7 +3875,7 @@
                                             <action selector="goPressed:" destination="5n4-P6-pnR" eventType="touchUpInside" id="0h2-4q-par"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JQu-2B-c5Z" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
+                                    <button opaque="NO" tag="1" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JQu-2B-c5Z" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                         <rect key="frame" x="105" y="0.0" width="285" height="35"/>
                                         <color key="backgroundColor" systemColor="tintColor"/>
                                         <constraints>
@@ -3840,7 +3946,7 @@
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="GhQ-Pl-q1R" customClass="Button" customModule="Budget_Tracker" customModuleProvider="target">
                                 <rect key="frame" x="375" y="10" width="35" height="36"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" name="yellowColor"/>
+                                <color key="backgroundColor" systemColor="tintColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="✓">
@@ -4150,6 +4256,9 @@
         <designable name="5Bz-pA-1Zk">
             <size key="intrinsicContentSize" width="226.66666666666666" height="26.333333333333332"/>
         </designable>
+        <designable name="60g-sX-kVw">
+            <size key="intrinsicContentSize" width="30" height="35"/>
+        </designable>
         <designable name="6QC-Nh-XH7">
             <size key="intrinsicContentSize" width="30" height="55"/>
         </designable>
@@ -4194,7 +4303,7 @@
             <size key="intrinsicContentSize" width="30" height="55"/>
         </designable>
         <designable name="KvP-WS-BeQ">
-            <size key="intrinsicContentSize" width="30" height="27"/>
+            <size key="intrinsicContentSize" width="30" height="28"/>
         </designable>
         <designable name="NXe-cX-Hfu">
             <size key="intrinsicContentSize" width="76.666666666666671" height="26.333333333333332"/>
@@ -4238,8 +4347,11 @@
         <designable name="aI2-8y-K70">
             <size key="intrinsicContentSize" width="30" height="48"/>
         </designable>
+        <designable name="b3m-HC-uqJ">
+            <size key="intrinsicContentSize" width="30" height="35"/>
+        </designable>
         <designable name="c9d-cL-RPP">
-            <size key="intrinsicContentSize" width="30" height="36"/>
+            <size key="intrinsicContentSize" width="30" height="34"/>
         </designable>
         <designable name="dSw-Y8-OrZ">
             <size key="intrinsicContentSize" width="23.666666666666668" height="18"/>
@@ -4247,11 +4359,17 @@
         <designable name="daM-fM-aqs">
             <size key="intrinsicContentSize" width="34" height="36"/>
         </designable>
+        <designable name="fSh-jG-SY9">
+            <size key="intrinsicContentSize" width="30" height="35"/>
+        </designable>
+        <designable name="fvx-Dm-VKG">
+            <size key="intrinsicContentSize" width="30" height="30"/>
+        </designable>
         <designable name="gIt-0L-4IJ">
             <size key="intrinsicContentSize" width="30" height="48"/>
         </designable>
         <designable name="gve-Pc-cyc">
-            <size key="intrinsicContentSize" width="70" height="28"/>
+            <size key="intrinsicContentSize" width="76" height="32"/>
         </designable>
         <designable name="gwp-y1-Jmr">
             <size key="intrinsicContentSize" width="88.333333333333329" height="15.666666666666666"/>
@@ -4273,6 +4391,9 @@
         </designable>
         <designable name="jaM-jn-Fof">
             <size key="intrinsicContentSize" width="51" height="16"/>
+        </designable>
+        <designable name="kJN-OX-a2c">
+            <size key="intrinsicContentSize" width="30" height="35"/>
         </designable>
         <designable name="kdg-LE-BIm">
             <size key="intrinsicContentSize" width="30" height="55"/>
@@ -4533,7 +4654,7 @@ AAAAAAIBAAAAAAAAAGEAAAAAAAAAAAAAAAAAAChAA
             <color red="0.078000001609325409" green="0.078000001609325409" blue="0.078000001609325409" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="balanceTitleColor">
-            <color red="0.15700000524520874" green="0.15700000524520874" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <color red="0.43399998545646667" green="0.43399998545646667" blue="0.43399998545646667" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="balanceValueColor">
             <color red="0.2669999897480011" green="0.2669999897480011" blue="0.2669999897480011" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>

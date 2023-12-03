@@ -69,3 +69,84 @@ extension UIViewController {
         
     }
 }
+
+
+extension UIViewController {
+    var popupBackgroundColor:UIColor {
+        return K.Colors.popupBackground ?? .blue
+    }
+    
+    
+    /**
+     creates view on window
+     */
+    func createPopupBackgroundView(_ data:VCpresentedBackgroundData) {
+        if let superVC = self as? SuperViewController {
+            superVC.backgroundData = data
+        }
+        let win = AppDelegate.shared?.window ?? UIWindow()
+        let window = win
+       // data.fromWindow ? win : (TabBarController.shared?.view ?? UIView())
+        let supWindow = win
+        let backColor = popupBackgroundColor
+        
+
+        
+        let backgroundView = UIView(frame: .init(x: 0, y: -80, width: supWindow.frame.width, height: supWindow.frame.height + 80))
+        backgroundView.backgroundColor = backColor
+        backgroundView.alpha = 0
+        backgroundView.layer.name = data.id
+        backgroundView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(backgroundPressed(_:)))
+        tap.name = data.id
+        backgroundView.addGestureRecognizer(tap)
+        window.addSubview(backgroundView)
+        UIView.animate(withDuration: 0.3) {
+            backgroundView.alpha = data.alpha
+        }
+    }
+    /**
+     removes view from the window
+     */
+    func removePopupBackgroundView(_ data:VCpresentedBackgroundData) {
+        self.togglePresentedBackgroundView(.init(show: false, id: data.id, fromWindow: data.fromWindow, completion: {
+            $0.0.removeFromSuperview()
+            $0.1?.removeFromSuperview()
+        }))
+    }
+    
+    func togglePresentedBackgroundView(_ data:VCpresentedBackgroundData) {
+        let sup = AppDelegate.shared?.window ?? UIWindow()
+        guard let background = sup.subviews.first(where: { view in
+            return view.layer.name == data.id
+        }) else { return }
+
+        UIView.animate(withDuration: 0.3, animations: {
+            background.alpha = data.show ? 1 : 0
+        }) { _ in
+            if let comp = data.completion {
+                comp((background, nil))
+            }
+        
+        }
+    }
+    
+    
+    struct VCpresentedBackgroundData {
+        var isPopupVC = false
+        var show:Bool = false
+        var id = "VCbackgroundView"
+        var fromWindow = false
+        /**
+         for  createPopupBackgroundView method
+         */
+        var alpha:CGFloat = 1
+        var completion:((_ views:(UIView, UIView?))->())? = nil
+    }
+    
+    @objc private func backgroundPressed(_ sender:UITapGestureRecognizer) {
+        self.removePopupBackgroundView(.init(id: sender.name ?? "VCbackgroundView", fromWindow: false))
+        self.removePopupBackgroundView(.init(id: sender.name ?? "VCbackgroundView", fromWindow: true))
+        self.dismiss(animated: true)
+    }
+}

@@ -199,7 +199,7 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-class SideBardCell: UITableViewCell {
+class SideBardCell: ClearCell {
     
     @IBOutlet weak var notificationsLabel: UILabel!
     @IBOutlet weak var notificationsView: BasicView!
@@ -210,9 +210,7 @@ class SideBardCell: UITableViewCell {
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        let selected = UIView(frame: .zero)
-        selected.backgroundColor = K.Colors.sectionBackground
-        self.selectedBackgroundView = selected
+        setSelectedColor(K.Colors.separetor ?? .white)
 
         if !(AppDelegate.shared?.symbolsAllowed ?? false) {
             optionIcon.isHidden = true

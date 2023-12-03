@@ -130,9 +130,7 @@ extension RemindersVC {
     
     func editReminder(idx:Int) {
         editingReminder = idx
-        DispatchQueue.main.async {
-            self.performSegue(withIdentifier: "goToEditVC", sender: self)
-        }
+        self.performAddReminder()
     }
     
     func deleteReminder(idx:Int) {

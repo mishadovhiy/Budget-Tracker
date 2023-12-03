@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LoadingButton: Button {
+class LoadingButton: TouchButton {
 
 
     var refreshControl:UIActivityIndicatorView?

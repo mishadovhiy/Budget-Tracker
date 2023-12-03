@@ -54,6 +54,8 @@ struct K {
     
     struct Colors {
         static let background = UIColor(named: "backgroundColor")
+        static let popupBackground = UIColor.black.withAlphaComponent(0.7)
+
         static let balanceT = UIColor(named: "balanceTitleColor")
         static let balanceV = UIColor(named: "balanceValueColor")
         static let category = UIColor(named: "CategoryColor")

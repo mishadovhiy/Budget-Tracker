@@ -42,43 +42,49 @@ class ManagerPDF {
     }
     
     private func exportPDF(sender:UIView, toEdit:Bool = true) {
-        DispatchQueue(label: "dbPdf", qos: .userInitiated).async {
-            let db = AppDelegate.shared?.db.viewControllers.pdfProperties ?? .init(dict: [:])
-            self.properties = db
-            print(db, " yhrtgerfwd")
-            DispatchQueue.main.async {
-                guard let pdf = self.createPDF(),
-                      let pdfData = pdf.dataRepresentation() else {
-                    self.showError(title: "Error creating PDF")
-                    return
-                }
-                if !toEdit {
-                    self.vc.navigationController?.popViewController(animated: true)
-                    AppDelegate.shared?.banner.toggleFullScreenAdd(self.vc, type: .pdf, loaded: {
-                        (self.vc as? StatisticVC)?.fullScrAd = $0
-                        (self.vc as? StatisticVC)?.fullScrAd?.fullScreenContentDelegate = self.vc as? GADFullScreenContentDelegate
-                    }, closed: { presented in
-                    //    self.vc.navigationController?.topViewController?.presentShareVC(with: [pdfData], sender: sender)
-                        if presented {
-                            self.vc.presentShareVC(with: [pdfData], sender:sender) {
-                                AppDelegate.shared?.banner.appeare(force: true)
-                            }
-                        } else {
-                            AppDelegate.shared?.banner.hide(ios13Hide: true, completion: {
+        if !toEdit {
+            DispatchQueue(label: "dbPdf", qos: .userInitiated).async {
+                let db = AppDelegate.shared?.db.viewControllers.pdfProperties ?? .init(dict: [:])
+                self.properties = db
+                print(db, " yhrtgerfwd")
+                DispatchQueue.main.async {
+                    guard let pdf = self.createPDF(),
+                          let pdfData = pdf.dataRepresentation() else {
+                        self.showError(title: "Error creating PDF")
+                        return
+                    }
+                    if !toEdit {
+                        self.vc.navigationController?.popViewController(animated: true)
+                        AppDelegate.shared?.banner.toggleFullScreenAdd(self.vc, type: .pdf, loaded: {
+                            (self.vc as? StatisticVC)?.fullScrAd = $0
+                            (self.vc as? StatisticVC)?.fullScrAd?.fullScreenContentDelegate = self.vc as? GADFullScreenContentDelegate
+                        }, closed: { presented in
+                        //    self.vc.navigationController?.topViewController?.presentShareVC(with: [pdfData], sender: sender)
+                            if presented {
                                 self.vc.presentShareVC(with: [pdfData], sender:sender) {
                                     AppDelegate.shared?.banner.appeare(force: true)
                                 }
-                            })
-                        }
+                            } else {
+                                AppDelegate.shared?.banner.hide(ios13Hide: true, completion: {
+                                    self.vc.presentShareVC(with: [pdfData], sender:sender) {
+                                        AppDelegate.shared?.banner.appeare(force: true)
+                                    }
+                                })
+                            }
+                            
+                        })
                         
-                    })
-                    
-                } else {
-                    let newVC = PDFEditVC.configure(pdf: self)
-                    self.vc.navigationController?.pushViewController(newVC, animated: true)
+                    } else {
+                        let newVC = PDFEditVC.configure(pdf: self)
+                        self.vc.navigationController?.pushViewController(newVC, animated: true)
+                    }
                 }
             }
+        } else {
+            let newVC = PDFEditVC.configure(pdf: self)
+            self.vc.navigationController?.pushViewController(newVC, animated: true)
         }
+        
     }
 
     

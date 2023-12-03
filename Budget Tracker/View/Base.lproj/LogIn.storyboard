@@ -93,6 +93,7 @@
                                                     <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
                                                         <color key="value" name="darkTableColor"/>
                                                     </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="linkBackground" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="createAccountPressed:" destination="sFP-r5-fKW" eventType="touchUpInside" id="ugO-aO-yNJ"/>
@@ -185,6 +186,7 @@
                                                     <userDefinedRuntimeAttribute type="color" keyPath="pressColor">
                                                         <color key="value" name="darkTableColor"/>
                                                     </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="boolean" keyPath="linkBackground" value="YES"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="logInPressed:" destination="sFP-r5-fKW" eventType="touchUpInside" id="1UQ-Id-FTV"/>
@@ -1251,7 +1253,7 @@
             <color red="0.125" green="0.125" blue="0.125" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="balanceTitleColor">
-            <color red="0.15700000524520874" green="0.15700000524520874" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <color red="0.43399998545646667" green="0.43399998545646667" blue="0.43399998545646667" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="balanceValueColor">
             <color red="0.2669999897480011" green="0.2669999897480011" blue="0.2669999897480011" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>

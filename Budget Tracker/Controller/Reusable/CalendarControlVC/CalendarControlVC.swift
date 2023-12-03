@@ -174,9 +174,14 @@ class CalendarControlVC: UIViewController {
         
     }
     
-    
+    var calendarType:CalendarType = .month
+    enum CalendarType {
+        case year
+        case month
+    }
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         //     if scrolled {
+        //check calendarType 
         scrolled = false
         self.middleDate = .init(year: tableData[selectedInt].year,
                                 month: tableData[selectedInt].month)

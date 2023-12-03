@@ -410,8 +410,7 @@ extension AppData {
     
     func presentMoreVC(currentVC: UIViewController, data: [MoreVC.ScreenData], proIndex: Int = 0) {
         DispatchQueue.main.async {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let vccc = storyboard.instantiateViewController(withIdentifier: "MoreVC") as! MoreVC
+            let vccc = MoreVC.configure()
             vccc.modalPresentationStyle = .overFullScreen
             vccc.tableData = data
             vccc.navigationController?.setNavigationBarHidden(true, animated: false)

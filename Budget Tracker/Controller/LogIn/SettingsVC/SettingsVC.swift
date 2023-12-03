@@ -202,14 +202,19 @@ extension SettingsVC {
 
 
 
-class StandartSettingsCell: UITableViewCell {
+class StandartSettingsCell: ClearCell {
     
     @IBOutlet weak var proView: BasicView!
     @IBOutlet weak var colorView: BasicView!
     @IBOutlet weak var nameLabel: UILabel!
+    
+    override func draw() {
+        super.draw()
+        self.setSelectedColor(K.Colors.separetor ?? .white)
+    }
 }
 
-class TriggerSettingsCell: UITableViewCell {
+class TriggerSettingsCell: ClearCell {
     
     var switchedAction:((Bool) -> ())?
     
@@ -223,6 +228,10 @@ class TriggerSettingsCell: UITableViewCell {
         }
     }
     @IBOutlet weak var valueSwitcher: UISwitch!
+    override func draw() {
+        super.draw()
+        self.setSelectedColor(K.Colors.separetor ?? .white)
+    }
 }
 
 

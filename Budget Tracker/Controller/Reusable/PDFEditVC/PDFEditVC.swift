@@ -22,13 +22,28 @@ class PDFEditVC:SuperViewController {
     var selectingColorFor:SelectingColor = .background
     weak var settingsNav:UINavigationController?
     var selectedRow:Int?
+    
+    /**
+     let db = AppDelegate.shared?.db.viewControllers.pdfProperties ?? .init(dict: [:])
+     self.properties = db
+     */
+    
+    func loadDB() {
+        DispatchQueue(label: "db", qos: .userInteractive).async {
+            let db = AppDelegate.shared?.db.viewControllers.pdfProperties ?? .init(dict: [:])
+            self.pdfData?.properties = db
+            DispatchQueue.main.async {
+                self.updatePDF()
+            }
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         print(pdfData, " grefrwed")
         tableView.delegate = self
         tableView.dataSource = self
         pdfData?.pageWidth = AppDelegate.shared?.window?.frame.width ?? 10
-        updatePDF()
+        loadDB()
         createSettingsContainer()
         print(containerView.frame.height, " erfwd")
         AppDelegate.shared?.banner.fullScreenDelegates.updateValue(self, forKey: self.restorationIdentifier!)

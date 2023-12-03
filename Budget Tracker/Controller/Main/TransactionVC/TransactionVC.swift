@@ -25,6 +25,7 @@ class TransitionVC: SuperViewController {
     @IBOutlet weak var removeLastButton: UIButton!
     @IBOutlet weak var removeAllButton: UIButton!
     @IBOutlet weak var cameraContainer: UIView!
+    @IBOutlet weak var valueHilderLabel: UILabel!
     @IBAction func trashPressed(_ sender: UIButton) {
         donePressed = true
         print("trashPressedtrashPressedtrashPressed")
@@ -80,6 +81,7 @@ class TransitionVC: SuperViewController {
     var fromDebts = false
     var enteringValueResult:Int {
         var res = "\(Int(cameraValue))"
+        
         if editingValue != 0 {
             "\(Int(editingValue))".forEach {
                 res.append($0)
@@ -603,7 +605,8 @@ class TransitionVC: SuperViewController {
         if pressedValue == "0" {
             pressedValue = ""
         }
-        if pressedValue.count != 7 {
+        print(pressedValue, " trgerfwed wass")
+        if pressedValue.count < 7 {
             AudioServicesPlaySystemSound(1104)
             pressedValue = pressedValue + (n)
             if pressedValue != "0" {
@@ -611,8 +614,16 @@ class TransitionVC: SuperViewController {
             }
         } else {
             UIImpactFeedbackGenerator().impactOccurred()
+            errorSaving()
         }
-        editingValue = Double(pressedValue) ?? 0
+        let new = Double(pressedValue) ?? 0
+        let error = new.int == nil
+        if !error {
+            editingValue = new
+        } else {
+            pressedValue = "\(Int(editingValue))"
+            errorSaving()
+        }
         DispatchQueue.main.async {
             self.valueLabel.text = "\(self.enteringValueResult)"
         }
@@ -630,6 +641,8 @@ class TransitionVC: SuperViewController {
                 minusPlusLabel.alpha = 0
             }
         } else {
+            actionHolder = nil
+            enteredHolder = 0
             AudioServicesPlaySystemSound(1156)
             pressedValue.removeAll()
             minusPlusLabel.alpha = 0
@@ -680,6 +693,52 @@ class TransitionVC: SuperViewController {
         DispatchQueue.main.async {
             self.showPadPressed(self.showValueButton)
         }
+    }
+    
+    var actionHolder:ActionButton? {
+        didSet {
+            equelButton.fadeTransition()
+            equelButton.alpha = actionHolder != nil ? 1 : 0
+            actionButtonsStack.subviews.forEach({
+                if let button = $0 as? TouchButton {
+                    let need = ActionButton.init(rawValue: actionHolder?.rawValue ?? -1)?.rawValue == button.tag
+                    if button.layer.borderWidth != (need ? 2 : 0) {
+                        button.fadeTransition()
+                        button.layer.borderWidth = need ? 2 : 0
+                        button.layer.borderColor = need ? K.Colors.link.cgColor : UIColor.clear.cgColor
+                    }
+                }
+            })
+            valueHilderLabel.fadeTransition()
+            valueHilderLabel.alpha = actionHolder == nil || actionHolder == .equel ? 0 : 1
+            valueHilderLabel.text = "\(enteredHolder ?? 0)"
+        }
+    }
+    
+   
+    @IBOutlet weak var equelButton: TouchButton!
+    var enteredHolder:Double?
+    @IBOutlet weak var actionButtonsStack: UIStackView!
+    @IBAction func actionButtonPressed(_ sender:UIButton) {
+        guard let button = ActionButton.init(rawValue: sender.tag) else {
+            return
+        }
+        //here
+        if button != .equel {
+            pressedValue = ""
+            enteredHolder = Double(enteringValueResult)
+            editingValue = 0
+            valueLabel.text = "\(enteringValueResult)"
+        }
+        
+        let wasAction = actionHolder
+        if button == .equel, let was = wasAction {
+           
+            self.performCalculate(pressed: was)
+        }
+        
+        actionHolder = button != .equel ? button : nil
+        
     }
 }
 
@@ -761,9 +820,45 @@ extension TransitionVC: CalendarVCProtocol {
         print(time, " timetimetimetimetimetime")
 
     }
-    
-    
 }
+
+
+extension TransitionVC {
+    //here
+    func performCalculate(pressed:ActionButton) {
+        var result:Double = 0
+        guard let firstValue = enteredHolder else {
+            return
+        }
+        switch pressed {
+        case .divide:
+            result = firstValue / (Double(enteringValueResult))
+        case .minus:
+            result = firstValue - (Double(enteringValueResult))
+        case .multiply:
+            result = firstValue * (Double(enteringValueResult))
+        case .plus:
+            result = firstValue + (Double(enteringValueResult))
+        case .equel:
+            actionHolder = nil
+        }
+        let error = result.int == nil
+        let resVal = error ? firstValue : result
+        if error {
+            errorSaving()
+            AppDelegate.shared?.newMessage.show(title:"Value is too big", type: .error)
+        }
+        pressedValue = "\(Int(resVal))"
+        editingValue = resVal
+        valueLabel.text = "\(enteringValueResult)"
+        
+    }
+    enum ActionButton:Int {
+        case plus, minus, divide, multiply, equel
+    }
+}
+
+
 
 extension TransitionVC: CategoriesVCProtocol {
     
@@ -823,8 +918,14 @@ extension TransitionVC: CategoriesVCProtocol {
 extension TransitionVC:SelectTextImageContainerViewProtocol {
     func totalChanged(_ total: Int) {
         print(total, " brgefwdas")
-        cameraValue = total
-        valueLabel.text = "\(enteringValueResult)"
+        let error = Double(total).int == nil
+        if !error {
+            cameraValue = total
+            valueLabel.text = "\(enteringValueResult)"
+        } else {
+            errorSaving()
+        }
+        
     }
     
     

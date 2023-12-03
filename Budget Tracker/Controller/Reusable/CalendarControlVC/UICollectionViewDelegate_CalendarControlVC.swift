@@ -10,6 +10,7 @@ import UIKit
 extension CalendarControlVC:UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        //check calendarType
         return tableData.count
     }
     

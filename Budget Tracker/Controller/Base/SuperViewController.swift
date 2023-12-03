@@ -42,6 +42,16 @@ class SuperViewController: UIViewController {
         super.viewWillDisappear(animated)
         self.view.endEditing(true)
         print(navigationController?.viewControllers.count, " hygterfwed")
+        if let back = backgroundData{
+            if back.isPopupVC {
+                var backD = back
+                backD.show = false
+                togglePresentedBackgroundView(backD)
+                
+            } else {
+                removePopupBackgroundView(back)
+            }
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -53,6 +63,10 @@ class SuperViewController: UIViewController {
         }
         
         disapeareAction?(self)
+        
+        if let back = backgroundData, back.isPopupVC {
+            removePopupBackgroundView(back)
+        }
     }
 
     var firstAppearCalled = false
@@ -135,6 +149,7 @@ class SuperViewController: UIViewController {
         }
 
     }
+    var backgroundData:VCpresentedBackgroundData?
     
     func dateToString(dateFormat:String="dd.MM.yyyy", date: Date = Date()) -> String {
         let formater = DateFormatter()

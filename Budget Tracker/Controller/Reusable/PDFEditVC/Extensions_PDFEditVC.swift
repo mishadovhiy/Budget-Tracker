@@ -138,7 +138,7 @@ extension PDFEditVC {
         var height:CGFloat {
             switch self {
             case .none:
-                return 125
+                return 145
             case .color:
                 return 550
             case .text:

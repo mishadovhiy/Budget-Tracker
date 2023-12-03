@@ -152,6 +152,7 @@ extension RemindersVC :TransitionVCProtocol {
     }
     
     func editTransaction(_ transaction: TransactionsStruct, was: TransactionsStruct,reminderTime: DateComponents?, repeated: Bool?, idx:Int?) {
+        print("editTransactioneditTransactioneditTransaction")
         addReminder(wasStringID: idx, transaction: transaction, reminderTime: reminderTime, repeated: repeated)
     }
     

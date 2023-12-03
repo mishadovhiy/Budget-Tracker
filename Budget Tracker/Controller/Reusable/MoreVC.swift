@@ -58,7 +58,7 @@ class MoreVC: SuperViewController, UITableViewDelegate, UITableViewDataSource {
         bannerBackgroundWas = AppDelegate.shared?.banner.clearBackground ?? true
         UIView.animate(withDuration: 0.3) {
             AppDelegate.shared?.banner.setBackground(clear: true)
-            self.view.backgroundColor = self.storyColor
+        //    self.view.backgroundColor = self.storyColor
         }
     }
 
@@ -77,13 +77,25 @@ class MoreVC: SuperViewController, UITableViewDelegate, UITableViewDataSource {
         var pro: Bool = true
         let action: (() -> ())?
     }
-    
+    var scrollToHide:Bool = false
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y < -100.0 {
-            DispatchQueue.main.async {
-                self.dismiss(animated: true) {
-                    
-                }
+
+        scrollToHide = scrollView.contentOffset.y < -100.0
+    }
+
+    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+        if scrollToHide {
+            self.dismiss(animated: true) {
+                
+            }
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        if scrollToHide {
+            self.dismiss(animated: true) {
+                
             }
         }
     }
@@ -227,4 +239,14 @@ class DataOptionCell: ClearCell {
         }
     }
     
+}
+
+
+extension MoreVC {
+    static func configure() -> MoreVC {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vccc = storyboard.instantiateViewController(withIdentifier: "MoreVC") as! MoreVC
+        vccc.createPopupBackgroundView(.init(isPopupVC: true, fromWindow: true))
+        return vccc
+    }
 }
