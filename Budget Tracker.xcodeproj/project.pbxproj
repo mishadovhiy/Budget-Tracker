@@ -102,6 +102,8 @@
 		8D193BEE2B1FBC5B003EB531 /* DataOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D193BED2B1FBC5B003EB531 /* DataOptionCell.swift */; };
 		8D193BF02B1FBC80003EB531 /* UITableViewDelegate_MoreVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D193BEF2B1FBC80003EB531 /* UITableViewDelegate_MoreVC.swift */; };
 		8D193BF22B1FBF32003EB531 /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D193BF12B1FBF32003EB531 /* CalendarCell.swift */; };
+		8D193BF42B1FCE4D003EB531 /* TouchButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D193BF32B1FCE4D003EB531 /* TouchButton.swift */; };
+		8D193BF62B1FCE69003EB531 /* TapAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D193BF52B1FCE69003EB531 /* TapAnimationView.swift */; };
 		8D2CDA1C2AF3F37A00671A72 /* HistoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2CDA182AF3F2FD00671A72 /* HistoryCell.swift */; };
 		8D2CDA1D2AF3F37A00671A72 /* calcCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2CDA162AF3F2B800671A72 /* calcCell.swift */; };
 		8D2CDA1E2AF3F37A00671A72 /* EmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2CDA1B2AF3F34C00671A72 /* EmptyCell.swift */; };
@@ -337,6 +339,8 @@
 		8D193BED2B1FBC5B003EB531 /* DataOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataOptionCell.swift; sourceTree = "<group>"; };
 		8D193BEF2B1FBC80003EB531 /* UITableViewDelegate_MoreVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewDelegate_MoreVC.swift; sourceTree = "<group>"; };
 		8D193BF12B1FBF32003EB531 /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
+		8D193BF32B1FCE4D003EB531 /* TouchButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchButton.swift; sourceTree = "<group>"; };
+		8D193BF52B1FCE69003EB531 /* TapAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapAnimationView.swift; sourceTree = "<group>"; };
 		8D2CDA152AF3F29400671A72 /* mainVCcell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mainVCcell.swift; sourceTree = "<group>"; };
 		8D2CDA162AF3F2B800671A72 /* calcCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = calcCell.swift; sourceTree = "<group>"; };
 		8D2CDA172AF3F2DC00671A72 /* StatisticCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticCell.swift; sourceTree = "<group>"; };
@@ -883,8 +887,10 @@
 				8BC31D7A27E3E5EA00FBC939 /* Button.swift */,
 				8DC40B042B1BBAC6001777CC /* LoadingButton.swift */,
 				8D834DA1297E05530056E686 /* TouchView.swift */,
+				8D193BF52B1FCE69003EB531 /* TapAnimationView.swift */,
 				8BD3A3D827E4097400547022 /* BasicView.swift */,
 				8D2CDA242AF3F47C00671A72 /* AdButton.swift */,
+				8D193BF32B1FCE4D003EB531 /* TouchButton.swift */,
 			);
 			path = "UIButton+UIView";
 			sourceTree = "<group>";
@@ -1418,6 +1424,7 @@
 				8B6BA98227E717850067FF58 /* Date.swift in Sources */,
 				8DEB84DD2B158B0400AB1975 /* SelectTextImageContainerView.swift in Sources */,
 				8D2CDA1E2AF3F37A00671A72 /* EmptyCell.swift in Sources */,
+				8D193BF62B1FCE69003EB531 /* TapAnimationView.swift in Sources */,
 				8D193BE52B1FBA18003EB531 /* IconsVCCell.swift in Sources */,
 				8D193BEE2B1FBC5B003EB531 /* DataOptionCell.swift in Sources */,
 				8D2CDA222AF3F37A00671A72 /* mainVCcell.swift in Sources */,
@@ -1486,6 +1493,7 @@
 				8DADC8922810E30300CC66EF /* TransactionNav.swift in Sources */,
 				8D0071DB2B0D88DF00DBB703 /* Extensions_PDFEditVC.swift in Sources */,
 				8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */,
+				8D193BF42B1FCE4D003EB531 /* TouchButton.swift in Sources */,
 				8D0C5D1A2AF6CC1F002E2422 /* Extensions_SelectionStackView.swift in Sources */,
 				8D15BD602B047F5D00E1C444 /* PDFProperties.swift in Sources */,
 				8D7FCA792ADAF05300B108A6 /* AnimatedTransitioningManager.swift in Sources */,
