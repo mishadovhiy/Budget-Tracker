@@ -17,7 +17,11 @@ class CameraTextMLVC:SuperViewController {
     
     var cameraModel:CameraModel!
     var selectionDelegate:ImagePreviewProtocol?
-    
+    override func viewDidDismiss() {
+        super.viewDidDismiss()
+        selectionDelegate = nil
+        cameraModel = nil
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         print("CameraTextMLVCCameraTextMLVC")

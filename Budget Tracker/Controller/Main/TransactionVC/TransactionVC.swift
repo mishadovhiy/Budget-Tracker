@@ -103,12 +103,12 @@ class TransitionVC: SuperViewController {
         self.navigationController?.delegate = dismissTransitionHolder
         
         if self.navigationController is TransactionNav {
-            self.dismiss(animated: true, completion: complation)
             complation?()
+            self.dismiss(animated: true, completion: complation)
             viewDidDismiss()
         } else {
-            self.navigationController?.popViewController(animated: true)
             complation?()
+            self.navigationController?.popViewController(animated: true)
             viewDidDismiss()
         }
     }
@@ -154,9 +154,9 @@ class TransitionVC: SuperViewController {
         super.viewDidDismiss()
         dismissTransitionHolder = nil
         panMahanger = nil
-     //   delegate = nil
         dateSet = nil
         cameraVC?.toggleCameraSession(pause: true, remove: true)
+        delegate = nil
     }
 
     var panMahanger:PanViewController?

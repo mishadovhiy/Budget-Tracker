@@ -24,6 +24,11 @@ class CalendarControlVC: UIViewController {
     var higlightSelected:Bool = false
     var cellSelected:((_ day:DateComponents, _ cell:CalendarCell)->())? = nil
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        cellSelected = nil
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         monthView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.monthPressed(_:))))

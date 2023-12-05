@@ -14,6 +14,12 @@ class AdButton: TouchButton {
     
     private var movedToWindow:Bool = false
     
+    override func removeFromSuperview() {
+        super.removeFromSuperview()
+        adLabel = nil
+        print("AdButtonAdButton removed removeFromSuperview")
+    }
+    
     override func didMoveToWindow() {
         super.didMoveToWindow()
         if !movedToWindow && adLabel == nil {

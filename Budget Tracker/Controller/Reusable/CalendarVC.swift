@@ -16,24 +16,16 @@ class CalendarVC: SuperViewController {
     
     @IBOutlet weak var monthLabel: UILabel!
     @IBOutlet weak var calendarContainerView: UIView!
-    //@IBOutlet weak var commentTextField: UITextField!
-    //  @IBOutlet weak var reminderTimeLabel: UILabel!
     @IBOutlet weak var timePicker: UIDatePicker!
     @IBOutlet weak var mainDescriptionLabel: UILabel!
     @IBOutlet weak var mainTitleLabel: UILabel!
-    
-    var vcHeaderData: headerData?
-    
     @IBOutlet weak var headerView: UIView!
-   // @IBOutlet weak var textField: UITextField!
-    
-//    @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var endButton: UIButton!
     @IBOutlet weak var buttonsStack: UIStackView!
     @IBOutlet weak var doneButton: UIButton!
     
-
+    var vcHeaderData: headerData?
     var delegate: CalendarVCProtocol?
     var canSelectOnlyOne = false
     var selectedFrom = ""
@@ -42,11 +34,14 @@ class CalendarVC: SuperViewController {
     var daysBetween = [""]
     var selectedFromDayInt = 0
     var selectedToDayInt = 0
-  //  var darkAppearence = false
     var needPressDone = false
-    
     var year = 1996
     var month = 11
+    
+    override func viewDidDismiss() {
+        super.viewDidDismiss()
+        delegate = nil
+    }
     
     @objc func dateSelected(_ sender: UIDatePicker) {
         print(sender.date)

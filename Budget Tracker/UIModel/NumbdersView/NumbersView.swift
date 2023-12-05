@@ -35,7 +35,10 @@ class NumbersView: UIView {
     
     var limit: Int?
     @IBOutlet private weak var mainView: UIView!
-    
+    override func removeFromSuperview() {
+        super.removeFromSuperview()
+        delegate = nil
+    }
     var viewSize:CGSize {
         get {
             

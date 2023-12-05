@@ -37,11 +37,21 @@ class BuyProVC: SuperViewController {
     @IBOutlet weak var purchasedIndicatorView: UIView!
     
 
-    
-    var requestProd = SKProductsRequest()
+    var bannerWasHidden = false
+    var fromSettings = false
+    var didappCalled = false
+    var requestProd:SKProductsRequest! = SKProductsRequest()
     var proVProduct: SKProduct?
-    
+    var restoreRequest:SKReceiptRefreshRequest! = SKReceiptRefreshRequest()
 
+
+    override func viewDidDismiss() {
+        super.viewDidDismiss()
+        requestProd = nil
+        proVProduct = nil
+        BuyProVC.shared = nil
+        restoreRequest = nil
+    }
     
     weak static var shared: BuyProVC?
     override func viewDidLoad() {
@@ -98,9 +108,7 @@ class BuyProVC: SuperViewController {
         }
         
     }
-    var bannerWasHidden = false
-    var fromSettings = false
-    var didappCalled = false
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         if !didappCalled {
@@ -284,7 +292,6 @@ class BuyProVC: SuperViewController {
         
     }
     
-    let restoreRequest = SKReceiptRefreshRequest()
     @IBAction func restorePressed(_ sender: UIButton) {
         print("restorePressed")
         paymentQueueResponded = false

@@ -9,10 +9,11 @@ import UIKit
 
 class PanViewController {
     
-    private let vc:UIViewController
+    private var vc:UIViewController!
     var delegate:PanViewControllerProtocol?
     private var properies:ScrollProperties = .init()
     var dismissAction:(()->())? = nil
+    
     init(vc:UIViewController, toView:UIView?, dismissAction:(()->())? = nil) {
         self.dismissAction = dismissAction
         self.vc = vc
@@ -27,6 +28,8 @@ class PanViewController {
         gesture?.delegate = nil
         gesture?.isEnabled = false
         delegate = nil
+        dismissAction = nil
+        vc = nil
         dismissAction = nil
     }
     

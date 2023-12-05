@@ -11,10 +11,14 @@ import PDFKit
 import GoogleMobileAds
 
 class ManagerPDF {
-    private var vc:UIViewController
+    private var vc:UIViewController!
     private var pageTitle:String
     private var dict:[String:Any]
     private var headerData:PDFProperties.DefaultHeaderData
+    var properties:PDFProperties = .init(dict: [:])
+    lazy var generator:PagePDF = .init()
+    var pageWidth:CGFloat = 612
+    let normalPageWidth:CGFloat = 612
     
     init(dict: [String : Any], pageTitle:String, vc:UIViewController, data:PDFProperties.DefaultHeaderData) {
         self.dict = dict
@@ -26,11 +30,11 @@ class ManagerPDF {
         print(data.today.toShortString(), " ManagerPDF datesss")
 
     }
-    var properties:PDFProperties = .init(dict: [:])
-
-    lazy var generator:PagePDF = .init()
-    var pageWidth:CGFloat = 612
-    let normalPageWidth:CGFloat = 612
+    
+    deinit {
+        vc = nil
+    }
+    
     private func showError(title:String, description:String? = nil) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.newMessage.show(title:title, description: description, type: .error)

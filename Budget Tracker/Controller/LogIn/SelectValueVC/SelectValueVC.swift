@@ -33,6 +33,12 @@ class SelectValueVC: SuperViewController {
         self.tableData = data
         tableView.reloadData()
     }
+    
+    override func viewDidDismiss() {
+        super.viewDidDismiss()
+        selectedIdxAction = nil
+        delegate = nil
+    }
 }
 
 

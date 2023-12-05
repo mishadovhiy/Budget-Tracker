@@ -24,7 +24,21 @@ class SelectTextImageContainerView: UIViewController {
     var delegate:SelectTextImageContainerViewProtocol?
     private var cameraTextVC:CameraTextMLVC?
     var currentSelectingData:[SelectionData] = []
+    override func removeFromParent() {
+        super.removeFromParent()
+        removed()
+    }
     
+    private func removed() {
+        cameraTextVC = nil
+        delegate = nil
+        imageNav = nil
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        removed()
+        print("SelectTextImageContainerViewSelectTextImageContainerView removed")
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
 

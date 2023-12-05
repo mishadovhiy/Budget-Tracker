@@ -22,7 +22,11 @@ class AmountToPayCell: UITableViewCell {
     
     private var changeFunc:(() -> ())?
     private var deleteFunc:(() -> ())?
-    
+    override func removeFromSuperview() {
+        super.removeFromSuperview()
+        changeFunc = nil
+        deleteFunc = nil
+    }
     func set(_ selectedCategory:NewCategories?,
              changeAmountState:(Bool, Bool),
              catTotal:Double,

@@ -151,11 +151,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.showPaymentReminders()
             return
         case .monthlyLimits:
-            let vcc = CategoriesVC.configure()
-            vc = NavigationController(rootViewController: vcc)
+            vc = NavigationController(rootViewController: CategoriesVC.configure())
         }
-        if let vc = vc {
-            self.present(vc: vc)
+        if let vcc = vc {
+            vc = nil
+            self.present(vc: vcc)
         }
     }
     

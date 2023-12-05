@@ -13,12 +13,14 @@ import UIKit
 class AppSettingsData {
     
     private var specialData:[SettingsVC.TableData]? = nil
-    let vc:SettingsVC
+    var vc:SettingsVC!
     init(vc:SettingsVC, data:[SettingsVC.TableData]? = nil) {
         self.vc = vc
         self.specialData = data
     }
-    
+    deinit {
+        vc = nil
+    }
     func getData() -> [SettingsVC.TableData] {
         if let data = specialData {
             return data

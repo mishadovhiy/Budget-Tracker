@@ -9,7 +9,10 @@
 import UIKit
 import PassKit
 
-class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
+class SideBar: UIView {
+    var tableData:[TableData] = []
+
+    
     var appData:AppData {
         AppDelegate.shared?.appData ?? .init()
     }
@@ -108,9 +111,6 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    
-    var tableData:[TableData] = []
-
     func toRemindersVC() {
         DispatchQueue.main.async {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -130,53 +130,13 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return tableData.count
-    }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tableData[section].section.count
+    func newNotificationCount() {
+        load()
     }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SideBardCell", for: indexPath) as! SideBardCell
-        cell.nameLabel.superview?.alpha = tableData[indexPath.section].section[indexPath.row].name == "" ? 0 : 1
-        cell.nameLabel.text = tableData[indexPath.section].section[indexPath.row].name
-        cell.valueLabel.text = tableData[indexPath.section].section[indexPath.row].value
-        cell.notificationsView.isHidden = tableData[indexPath.section].section[indexPath.row].notifications == 0
-        cell.notificationsLabel.text = "\(tableData[indexPath.section].section[indexPath.row].notifications)"
-        cell.proView.isHidden = tableData[indexPath.section].section[indexPath.row].pro == nil
-        if (AppDelegate.shared?.symbolsAllowed ?? false) {
-            cell.optionIcon.image = AppData.iconSystemNamed(tableData[indexPath.section].section[indexPath.row].image)
-        }
-        return cell
-        
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        if let proID = tableData[indexPath.section].section[indexPath.row].pro {
-            appData.presentBuyProVC(selectedProduct: proID)
-        } else {
-            if tableData[indexPath.section].section[indexPath.row].name != "" {
-                let segue = tableData[indexPath.section].section[indexPath.row].segue
-                if segue != "" {
-                    HomeVC.shared?.fromSideBar = true
-                    DispatchQueue.main.async {
-                        HomeVC.shared?.performSegue(withIdentifier: segue, sender: self)
-                    }
-                } else {
-                    if let action = tableData[indexPath.section].section[indexPath.row].selectAction {
-                        action()
-                    }
-                }
-            }
-        }
-        
-        
-    }
-    
+}
 
+extension SideBar {
     struct TableData {
         let section: [CellData]
         let title: String
@@ -193,28 +153,4 @@ class SideBar: UIView, UITableViewDelegate, UITableViewDataSource {
         var selectAction:(()->())? = nil
         
     }
-    
-    func newNotificationCount() {
-        load()
-    }
 }
-
-class SideBardCell: ClearCell {
-    
-    @IBOutlet weak var notificationsLabel: UILabel!
-    @IBOutlet weak var notificationsView: BasicView!
-    @IBOutlet weak var proView: BasicView!
-    @IBOutlet weak var optionIcon: UIImageView!
-    @IBOutlet weak var valueLabel: UILabel!
-    @IBOutlet weak var nameLabel: UILabel!
-    
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        setSelectedColor(K.Colors.separetor ?? .white)
-
-        if !(AppDelegate.shared?.symbolsAllowed ?? false) {
-            optionIcon.isHidden = true
-        }
-    }
-}
-

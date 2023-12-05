@@ -13,18 +13,43 @@ protocol FullScreenDelegate {
     func toggleAdView(_ show:Bool)
 }
 class adBannerView: UIView {
-    var bannerWatchedFull:Bool = false
-
-    var fullScreenDelegates:[String:FullScreenDelegate] = [:]
     @IBOutlet weak var backgroundView: UIView!
     @IBOutlet private weak var adStack: UIStackView!
+    
+    private var presentingFullType:FullScreenBanner?
+    private weak var rootVC:UIViewController?
+    private var showedBannerTime:Data?
+    var bannerWatchedFull:Bool = false
+    var smallAddHideHolder:Bool = true
+    var fullScreenDelegates:[String:FullScreenDelegate] = [:]
+    
     let videoShowDelay:Double = 3 * 60
     var _size:CGFloat = 0
     var adHidden = true
     var adNotReceved = true
+    //private var showedBanner:[FullScreenBanner:Date] = [:]
+    private var showedBanner:Date?
+    private var bannerShowCompletion:((_ presented:Bool)->())?
+    var clearBackground = true
+    
+    
+    private func remove() {
+        rootVC = nil
+        presentingFullType = nil
+        showedBannerTime = nil
+        showedBanner = nil
+    }
+    override func removeFromSuperview() {
+        super.removeFromSuperview()
+        remove()
+    }
     
     private var id:String {
         (AppDelegate.shared?.appData.devMode ?? false) ? "ca-app-pub-3940256099942544/2934735716" : "ca-app-pub-5463058852615321/8457751935"
+    }
+    
+    deinit {
+        remove()
     }
     
     public func createBanner() {
@@ -50,7 +75,6 @@ class adBannerView: UIView {
         }
     }
     
-    var smallAddHideHolder:Bool = true
     func toggleFullScreenAdd(_ vc:UIViewController, type:FullScreenBanner, loaded:@escaping(GADFullScreenPresentingAd?)->(), closed:@escaping(_ presented:Bool)->()) {
         bannerCanShow(type: type) { show in
             if show {
@@ -144,7 +168,7 @@ class adBannerView: UIView {
         return window.frame.height
     }
     
-    var clearBackground = true
+    
     func setBackground(clear:Bool) {
         clearBackground = clear
         UIView.animate(withDuration: 0.3) {
@@ -195,9 +219,6 @@ class adBannerView: UIView {
         }
     }
     
-    
-    //private var showedBanner:[FullScreenBanner:Date] = [:]
-    private var showedBanner:Date?
 
     
     
@@ -214,7 +235,6 @@ class adBannerView: UIView {
         }
     }
     
-    private var bannerShowCompletion:((_ presented:Bool)->())?
     func bannerCanShow(type:FullScreenBanner, completion:@escaping(_ show:Bool)->()) {
         DispatchQueue(label: "db",  qos: .userInitiated).async {
             if !(AppDelegate.shared?.appData.proEnabeled ?? false) {
@@ -272,9 +292,7 @@ class adBannerView: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-    private var presentingFullType:FullScreenBanner?
-    private weak var rootVC:UIViewController?
-    private var showedBannerTime:Data?
+    
 
 }
 

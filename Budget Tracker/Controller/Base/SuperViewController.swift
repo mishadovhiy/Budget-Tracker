@@ -7,14 +7,20 @@
 //
 
 import UIKit
+import AlertViewLibrary
+import MessageViewLibrary
 
 class SuperViewController: UIViewController {
 
     var appeareAction:((_ vc:SuperViewController?)->())?
     var disapeareAction:((_ vc:SuperViewController?)->())?
     
-    weak var newMessage = AppDelegate.shared?.newMessage
-    weak var ai = AppDelegate.shared?.ai
+    var newMessage:MessageViewLibrary? {
+        return AppDelegate.shared?.newMessage
+    }
+    var ai: AlertViewLibrary? {
+        return AppDelegate.shared?.ai
+    }
     var db:DataBase {
         return AppDelegate.shared?.db ?? DataBase()
     }
@@ -85,9 +91,7 @@ class SuperViewController: UIViewController {
     }
     
     func viewDidDismiss() {
-        print("fedwe")
-        newMessage = nil
-        ai = nil
+
     }
  
     private var waitingToDisapeare = false

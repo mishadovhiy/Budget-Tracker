@@ -18,6 +18,12 @@ class TextField: UITextField {
             view?.shouldReturn = self.shouldReturn
         }
     }
+    
+    override func removeFromSuperview() {
+        super.removeFromSuperview()
+        btnLine = nil
+    }
+    
     override func didMoveToWindow() {
         super.didMoveToWindow()
         if !firstMoved {

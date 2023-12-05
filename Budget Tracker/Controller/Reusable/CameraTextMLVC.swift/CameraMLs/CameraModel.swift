@@ -9,10 +9,10 @@
 import AVFoundation
 import UIKit
 
-struct CameraModel {
+class CameraModel {
 
-    var session:AVCaptureSession
-    var output:AVCapturePhotoOutput
+    var session:AVCaptureSession!
+    var output:AVCapturePhotoOutput!
     var layer:AVCaptureVideoPreviewLayer?
     
     init(view:UIView) {
@@ -38,6 +38,13 @@ struct CameraModel {
         }
     }
 
+    deinit {
+        stop()
+        session = nil
+        output = nil
+        layer = nil
+    }
+    
     func updateFrame(_ newFrame:CGRect) {
         layer?.frame = newFrame
     }

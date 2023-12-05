@@ -37,6 +37,11 @@ class ClearCell:TableCell {
         }
     }
     
+    override func removeFromSuperview() {
+        super.removeFromSuperview()
+        touchesBegunAction = nil
+    }
+    
     var touchesBegunAction:((_ begun:Bool)->())?
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         moveTouchView(show: true, at: (touches.first, self))

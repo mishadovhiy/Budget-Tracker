@@ -16,14 +16,14 @@ extension CalendarControlVC:UICollectionViewDelegate, UICollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CalendarCollectionCell", for: indexPath) as! CalendarCollectionCell
-        cell.set(model: tableData[indexPath.row], higlightDate: higlightSelected ? selectedDateComponent : nil, vc: self, disp: true, didSelect: daySelected(_:), cellSelectedAction: cellSelected == nil ? nil : daySelectedCell(_:cell:))
+        cell.set(model: tableData[indexPath.row], higlightDate: higlightSelected ? selectedDateComponent : nil, vc: .init(values:values, selectedDate: selectedDate, middleDate: middleDate), disp: true, didSelect: daySelected(_:), cellSelectedAction: cellSelected == nil ? nil : daySelectedCell(_:cell:))
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CalendarCollectionCell", for: indexPath) as! CalendarCollectionCell
-        cell.set(model: tableData[indexPath.row], higlightDate: higlightSelected ? selectedDateComponent : nil, vc: self, disp: true, didSelect: daySelected(_:),cellSelectedAction: daySelectedCell)
+        cell.set(model: tableData[indexPath.row], higlightDate: higlightSelected ? selectedDateComponent : nil, vc: .init(values: values, selectedDate: selectedDate, middleDate: middleDate), disp: true, didSelect: daySelected(_:),cellSelectedAction: daySelectedCell)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

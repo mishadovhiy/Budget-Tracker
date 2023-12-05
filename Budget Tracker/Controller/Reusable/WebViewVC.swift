@@ -18,7 +18,10 @@ class WebViewVC: SuperViewController, UIScrollViewDelegate, WKNavigationDelegate
     public var htmlData: HtmlData?
     weak static var shared:WebViewVC?
     
-    
+    override func viewDidDismiss() {
+        super.viewDidDismiss()
+        WebViewVC.shared = nil
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         WebViewVC.shared = self

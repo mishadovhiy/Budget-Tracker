@@ -10,9 +10,15 @@ import Foundation
 import UIKit
 
 
-struct UnparcePDF {
-    let manager:ManagerPDF
-    
+class UnparcePDF {
+    var manager:ManagerPDF!
+    init(manager: ManagerPDF!) {
+        self.manager = manager
+    }
+    deinit {
+        manager = nil
+        print("UnparcePDFUnparcePDF deinit")
+    }
     func dictionaryToString(_ dictionary:[String:Any], data:PDFProperties, fromCreate:Bool = false) -> ([(NSAttributedString, Bool)], CGFloat) {
         var height:CGFloat = 0
         var text:[(NSAttributedString, Bool)] = []

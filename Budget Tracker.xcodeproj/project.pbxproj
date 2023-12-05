@@ -92,6 +92,16 @@
 		8D17FABB2B07BF9F005E03FD /* UITableViewDelegate_AttributedStringVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D17FABA2B07BF9F005E03FD /* UITableViewDelegate_AttributedStringVC.swift */; };
 		8D17FABD2B07BFBA005E03FD /* AttributedPreviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D17FABC2B07BFBA005E03FD /* AttributedPreviewCell.swift */; };
 		8D17FAC02B07C3C1005E03FD /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D17FABF2B07C3C1005E03FD /* URL.swift */; };
+		8D193BDE2B1FB736003EB531 /* UITableViewDelegate_SideBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D193BDD2B1FB736003EB531 /* UITableViewDelegate_SideBar.swift */; };
+		8D193BE02B1FB741003EB531 /* SideBardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D193BDF2B1FB741003EB531 /* SideBardCell.swift */; };
+		8D193BE32B1FBA0D003EB531 /* UICollectionViewDelegate_IconsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D193BE22B1FBA0D003EB531 /* UICollectionViewDelegate_IconsVC.swift */; };
+		8D193BE52B1FBA18003EB531 /* IconsVCCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D193BE42B1FBA18003EB531 /* IconsVCCell.swift */; };
+		8D193BE72B1FBA1F003EB531 /* IconsVCColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D193BE62B1FBA1F003EB531 /* IconsVCColorCell.swift */; };
+		8D193BE92B1FBA2A003EB531 /* CollectionIconsHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D193BE82B1FBA2A003EB531 /* CollectionIconsHeader.swift */; };
+		8D193BEB2B1FBA36003EB531 /* IconsCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D193BEA2B1FBA36003EB531 /* IconsCategoryCell.swift */; };
+		8D193BEE2B1FBC5B003EB531 /* DataOptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D193BED2B1FBC5B003EB531 /* DataOptionCell.swift */; };
+		8D193BF02B1FBC80003EB531 /* UITableViewDelegate_MoreVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D193BEF2B1FBC80003EB531 /* UITableViewDelegate_MoreVC.swift */; };
+		8D193BF22B1FBF32003EB531 /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D193BF12B1FBF32003EB531 /* CalendarCell.swift */; };
 		8D2CDA1C2AF3F37A00671A72 /* HistoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2CDA182AF3F2FD00671A72 /* HistoryCell.swift */; };
 		8D2CDA1D2AF3F37A00671A72 /* calcCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2CDA162AF3F2B800671A72 /* calcCell.swift */; };
 		8D2CDA1E2AF3F37A00671A72 /* EmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2CDA1B2AF3F34C00671A72 /* EmptyCell.swift */; };
@@ -317,6 +327,16 @@
 		8D17FABA2B07BF9F005E03FD /* UITableViewDelegate_AttributedStringVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewDelegate_AttributedStringVC.swift; sourceTree = "<group>"; };
 		8D17FABC2B07BFBA005E03FD /* AttributedPreviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedPreviewCell.swift; sourceTree = "<group>"; };
 		8D17FABF2B07C3C1005E03FD /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
+		8D193BDD2B1FB736003EB531 /* UITableViewDelegate_SideBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewDelegate_SideBar.swift; sourceTree = "<group>"; };
+		8D193BDF2B1FB741003EB531 /* SideBardCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideBardCell.swift; sourceTree = "<group>"; };
+		8D193BE22B1FBA0D003EB531 /* UICollectionViewDelegate_IconsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewDelegate_IconsVC.swift; sourceTree = "<group>"; };
+		8D193BE42B1FBA18003EB531 /* IconsVCCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconsVCCell.swift; sourceTree = "<group>"; };
+		8D193BE62B1FBA1F003EB531 /* IconsVCColorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconsVCColorCell.swift; sourceTree = "<group>"; };
+		8D193BE82B1FBA2A003EB531 /* CollectionIconsHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionIconsHeader.swift; sourceTree = "<group>"; };
+		8D193BEA2B1FBA36003EB531 /* IconsCategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconsCategoryCell.swift; sourceTree = "<group>"; };
+		8D193BED2B1FBC5B003EB531 /* DataOptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataOptionCell.swift; sourceTree = "<group>"; };
+		8D193BEF2B1FBC80003EB531 /* UITableViewDelegate_MoreVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewDelegate_MoreVC.swift; sourceTree = "<group>"; };
+		8D193BF12B1FBF32003EB531 /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
 		8D2CDA152AF3F29400671A72 /* mainVCcell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mainVCcell.swift; sourceTree = "<group>"; };
 		8D2CDA162AF3F2B800671A72 /* calcCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = calcCell.swift; sourceTree = "<group>"; };
 		8D2CDA172AF3F2DC00671A72 /* StatisticCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticCell.swift; sourceTree = "<group>"; };
@@ -503,6 +523,8 @@
 			isa = PBXGroup;
 			children = (
 				8B57837D275E6977007BA9EC /* SideBar.swift */,
+				8D193BDF2B1FB741003EB531 /* SideBardCell.swift */,
+				8D193BDD2B1FB736003EB531 /* UITableViewDelegate_SideBar.swift */,
 			);
 			path = SideBar;
 			sourceTree = "<group>";
@@ -734,14 +756,14 @@
 			children = (
 				8D834D95297E03D60056E686 /* CalendarControlVC */,
 				8D8B6C3D245023EC007260A0 /* CalendarVC.swift */,
-				8B52DFEB27504D2900595A0C /* IconsVC.swift */,
+				8D193BE12B1FB9F8003EB531 /* IconsVC */,
 				8DBAD3812B1686C3004A6323 /* SelectTextImageContainerView */,
 				8DEB84D72B157EC700AB1975 /* CameraTextMLVC.swift */,
 				8DEB84DA2B1588A200AB1975 /* ImagePreviewVC.swift */,
 				8B5F342B26FB2D97000DDCAF /* EnterValueVC.swift */,
 				8D0071DC2B0D88F700DBB703 /* ColorPickerVC.swift */,
 				8D2CDA2A2AF4386200671A72 /* PDFEditVC */,
-				8B2A4D71271439520085E0F0 /* MoreVC.swift */,
+				8D193BEC2B1FBC4C003EB531 /* MoreVC */,
 				8B6BA97F27E716220067FF58 /* WebViewVC.swift */,
 				8DE693C12AD4A12C008501B0 /* SelectValueCollectionVC.swift */,
 			);
@@ -830,6 +852,29 @@
 				8D17FABC2B07BFBA005E03FD /* AttributedPreviewCell.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		8D193BE12B1FB9F8003EB531 /* IconsVC */ = {
+			isa = PBXGroup;
+			children = (
+				8B52DFEB27504D2900595A0C /* IconsVC.swift */,
+				8D193BEA2B1FBA36003EB531 /* IconsCategoryCell.swift */,
+				8D193BE82B1FBA2A003EB531 /* CollectionIconsHeader.swift */,
+				8D193BE62B1FBA1F003EB531 /* IconsVCColorCell.swift */,
+				8D193BE42B1FBA18003EB531 /* IconsVCCell.swift */,
+				8D193BE22B1FBA0D003EB531 /* UICollectionViewDelegate_IconsVC.swift */,
+			);
+			path = IconsVC;
+			sourceTree = "<group>";
+		};
+		8D193BEC2B1FBC4C003EB531 /* MoreVC */ = {
+			isa = PBXGroup;
+			children = (
+				8B2A4D71271439520085E0F0 /* MoreVC.swift */,
+				8D193BEF2B1FBC80003EB531 /* UITableViewDelegate_MoreVC.swift */,
+				8D193BED2B1FBC5B003EB531 /* DataOptionCell.swift */,
+			);
+			path = MoreVC;
 			sourceTree = "<group>";
 		};
 		8D2CDA132AF3F24900671A72 /* UIButton+UIView */ = {
@@ -980,8 +1025,9 @@
 		8D834D97297E03D60056E686 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				8D834D98297E03D60056E686 /* UICollectionViewDelegate_CalendarVC.swift */,
 				8D834D99297E03D60056E686 /* DaysCollectionCell.swift */,
+				8D834D98297E03D60056E686 /* UICollectionViewDelegate_CalendarVC.swift */,
+				8D193BF12B1FBF32003EB531 /* CalendarCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -1372,6 +1418,8 @@
 				8B6BA98227E717850067FF58 /* Date.swift in Sources */,
 				8DEB84DD2B158B0400AB1975 /* SelectTextImageContainerView.swift in Sources */,
 				8D2CDA1E2AF3F37A00671A72 /* EmptyCell.swift in Sources */,
+				8D193BE52B1FBA18003EB531 /* IconsVCCell.swift in Sources */,
+				8D193BEE2B1FBC5B003EB531 /* DataOptionCell.swift in Sources */,
 				8D2CDA222AF3F37A00671A72 /* mainVCcell.swift in Sources */,
 				8DC033CC2985CA5A00CD98FF /* UITableViewDataSource_ViewController.swift in Sources */,
 				8D08FD552ACA010800BA0222 /* ManagerPDF.swift in Sources */,
@@ -1395,9 +1443,11 @@
 				8D39788F28083E81007A2C55 /* AppDelegateExtensions.swift in Sources */,
 				8BB75D4727F2952300AE71A1 /* CategoriesStruct.swift in Sources */,
 				8B746AC027F405970010F0A4 /* ReminderVCMethods.swift in Sources */,
+				8D193BF02B1FBC80003EB531 /* UITableViewDelegate_MoreVC.swift in Sources */,
 				8D163BA529944FA100EF6C2A /* ClearTableCell.swift in Sources */,
 				8B6B509927F3A69F0067C237 /* ReminderManager.swift in Sources */,
 				8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */,
+				8D193BDE2B1FB736003EB531 /* UITableViewDelegate_SideBar.swift in Sources */,
 				8B91F09127E58EF900B74F5A /* Text.swift in Sources */,
 				8B57837E275E6977007BA9EC /* SideBar.swift in Sources */,
 				8D17FABB2B07BF9F005E03FD /* UITableViewDelegate_AttributedStringVC.swift in Sources */,
@@ -1409,6 +1459,7 @@
 				8DFEA8A72B0C5091003410D7 /* PdfDocumentProperties.swift in Sources */,
 				8D163BA329944D2700EF6C2A /* UITapGestureRecognizer.swift in Sources */,
 				8B26328227E677930086C3A8 /* Label.swift in Sources */,
+				8D193BE02B1FB741003EB531 /* SideBardCell.swift in Sources */,
 				8DE693C22AD4A12C008501B0 /* SelectValueCollectionVC.swift in Sources */,
 				8BF58D1D277C78B7005A7F38 /* ProViewVC.swift in Sources */,
 				8DD89D8E23F1495300273904 /* TransactionVC.swift in Sources */,
@@ -1417,16 +1468,19 @@
 				8D7FCA7B2ADAF05C00B108A6 /* PanViewController.swift in Sources */,
 				8DF479DE2ADF105A0092746E /* PDFEditVC.swift in Sources */,
 				8DF9DCD02815A89400C7BFA0 /* adBannerView.swift in Sources */,
+				8D193BEB2B1FBA36003EB531 /* IconsCategoryCell.swift in Sources */,
 				8B746ABE27F4039E0010F0A4 /* UINavigationController.swift in Sources */,
 				8DBA7E5423F0316F00D8214C /* HomeVC.swift in Sources */,
 				8DF9DCD42815AAD000C7BFA0 /* ExtensionGADBannerViewDelegate.swift in Sources */,
 				8BD2E77C25B8622100D4DFBF /* LoginViewController.swift in Sources */,
 				8DD813472B0D38D600B72654 /* AdditionalPDFData.swift in Sources */,
 				8B26328427E67D1D0086C3A8 /* SegmentedControl.swift in Sources */,
+				8D193BE72B1FBA1F003EB531 /* IconsVCColorCell.swift in Sources */,
 				8B35DA6625C6F124008A8719 /* Keychain.swift in Sources */,
 				8D8B6C3C245023D0007260A0 /* FilterTVC.swift in Sources */,
 				8D08FD582ACA18CE00BA0222 /* PagePDF.swift in Sources */,
 				8BE60E5927726EA8007B7FB3 /* LastSelected.swift in Sources */,
+				8D193BF22B1FBF32003EB531 /* CalendarCell.swift in Sources */,
 				8DD89D9023F1496100273904 /* CategoriesVC.swift in Sources */,
 				8B6BA98027E716220067FF58 /* WebViewVC.swift in Sources */,
 				8DADC8922810E30300CC66EF /* TransactionNav.swift in Sources */,
@@ -1462,6 +1516,7 @@
 				8D834DA0297E03D60056E686 /* CalendarControlVC.swift in Sources */,
 				8DEB0CDB28184FEA002D24D3 /* Extensions.swift in Sources */,
 				8DB4DAC227FC10D000EAA56F /* Keys.swift in Sources */,
+				8D193BE92B1FBA2A003EB531 /* CollectionIconsHeader.swift in Sources */,
 				8DD89D8723F1471400273904 /* AppData.swift in Sources */,
 				8DC40B032B1BAB64001777CC /*  UIKeyboardHIDUsage.swift in Sources */,
 				8B6BFB1827F7C82C00DD4CBC /* CategoriesMethods.swift in Sources */,
@@ -1487,6 +1542,7 @@
 				8DEB84DB2B1588A200AB1975 /* ImagePreviewVC.swift in Sources */,
 				8DD89D8C23F1485700273904 /* Constants.swift in Sources */,
 				8DBAD3832B1686E0004A6323 /* SelectImageCollectionCell.swift in Sources */,
+				8D193BE32B1FBA0D003EB531 /* UICollectionViewDelegate_IconsVC.swift in Sources */,
 				8B5434FA27ED838F00417141 /* Notifications.swift in Sources */,
 				8D36724224D315BC00CE90A9 /* NetworkModel.swift in Sources */,
 				8B42FCDD2776805800013E4B /* NumbersTF.swift in Sources */,
