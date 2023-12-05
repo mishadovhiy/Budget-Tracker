@@ -25,7 +25,9 @@ extension LoginViewController {
                         self.actionButtonsEnabled = true
                         if !email.contains("@") || !email.contains(".") {
                             self.obthervValues = true
-                            self.showWrongFields()
+                            DispatchQueue.main.async {
+                                self.showWrongFields()
+                            }
                             
                             
                             let firstButton:AlertViewLibrary.button = .init(title: "Try again".localize, style: .regular, close: true) { _ in
@@ -39,7 +41,7 @@ extension LoginViewController {
 
                         } else {
                            // let save = SaveToDB()
-                            let toDataString = "&Nickname=\(name)" + "&Email=\(email)" + "&Password=\(password)" + "&Registration_Date=\(regDate)"
+                            let toDataString = "&Nickname=\(name)" + "&Email=\(email)" + "&Password=\(password)" + "&Registration_Date=\(regDate ?? "-")"
                             print(toDataString, "toDataStringtoDataStringtoDataString")
                             SaveToDB.shared.Users(toDataString: toDataString) { (error) in
                                 if error {
@@ -112,10 +114,10 @@ extension LoginViewController {
                     self.obthervValues = true
                     self.showWrongFields()
 
-                  //  DispatchQueue.main.async {
+                    DispatchQueue.main.async {
                     self.newMessage?.show(title: "All fields are required".localize, type: .error)
                         self.ai?.fastHide()
-                 //   }
+                    }
                   
                 }
             } else {
@@ -126,7 +128,11 @@ extension LoginViewController {
               //  }
             }
      //   }
-    }
+            } else {
+                DispatchQueue.main.async {
+                    self.showError(title: "all fields are required")
+                }
+            }
     
     
     

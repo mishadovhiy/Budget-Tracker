@@ -99,12 +99,9 @@ extension Data {
         }
     }
     var toDict:[String:Any]? {
-            // Decode the binary data to a dictionary
         if let dictionary = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(self) as? [String: Any] {
-                // Use 'dictionary' as the decoded dictionary
                 return dictionary
             } else {
-                
                 return nil
             }
     }

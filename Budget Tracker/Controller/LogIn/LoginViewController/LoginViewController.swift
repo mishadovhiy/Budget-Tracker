@@ -266,12 +266,12 @@ class LoginViewController: SuperViewController {
             UIImpactFeedbackGenerator().impactOccurred()
         }
 
-        (sender as! LoadingButton).startAnimating {
+//        (sender as! LoadingButton).startAnimating {
+//            self.performLoginPressed()
+//        }
+        self.ai?.show(title: "Logging in".localize) { (_) in
             self.performLoginPressed()
         }
-//        self.ai?.show(title: "Logging in".localize) { (_) in
-//            
-//        }
         
         
         
@@ -395,13 +395,13 @@ class LoginViewController: SuperViewController {
             UIImpactFeedbackGenerator().impactOccurred()
         }
 
-        (sender as! LoadingButton).startAnimating {
+//        (sender as! LoadingButton).startAnimating {
+//            self.performCreateAccount()
+//        }
+//
+        self.ai?.show(title: "Creating".localize) { (_) in
             self.performCreateAccount()
         }
-//
-//        self.ai?.show(title: "Creating".localize) { (_) in
-//
-//        }
         
     }
     

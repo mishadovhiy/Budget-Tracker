@@ -6478,7 +6478,7 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "B2E1EF13-798F-4EF3-B710-D173A0BA13D3"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Budget Tracker/Controller/Reusable/CameraTextMLVC.swift/CameraMLs/CameraModel.swift"

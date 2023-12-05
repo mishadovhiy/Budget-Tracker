@@ -60,6 +60,17 @@
          </AdditionalOption>
       </AdditionalOptions>
       <Testables>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "8DE4957F2B1D4C610009D065"
+               BuildableName = "Budget TrackerUITests.xctest"
+               BlueprintName = "Budget TrackerUITests"
+               ReferencedContainer = "container:Budget Tracker.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

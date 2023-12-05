@@ -69,12 +69,14 @@ class DataBase {
     }
     
     func removeAll() {
+        //here
         transactions = []
         categories = []
-        localCategories = []
-        localTransactions = []
+      //  localCategories = []
+      //  localTransactions = []
         AppDelegate.shared?.appData.username = ""
-        AppDelegate.shared?.appData.password = ""
+        AppDelegate.shared?.notificationManager.removeAll()
+      //  AppDelegate.shared?.appData.password = ""
 //        let vcs = self.viewControllers
 //        let url = self.appUrl
 //        let lastSelected = self.db["lastSelected"] as? [String:String] ?? [:]
@@ -83,14 +85,7 @@ class DataBase {
 //        lastSelectedDate = nil
 //        AppData.categoriesHolder = nil
 //        self.db.removeAll()
-//       
-//        //old db
-//        UserDefaults.standard.setValue(nil, forKey: "lastSelected")
-//        UserDefaults.standard.setValue(true, forKey: "checkTrialDate")
-//        UserDefaults.standard.setValue(false, forKey: "trialPressed")
-//        UserDefaults.standard.setValue(nil, forKey: "trialToExpireDays")
-//        UserDefaults.standard.setValue(nil, forKey: "username")
-//        UserDefaults.standard.setValue(nil, forKey: "password")
+//
 //
 //        self.appUrl = url
 //        self.viewControllers = vcs
@@ -227,10 +222,16 @@ class DataBase {
             return result
         }
         set {
-            let result = transactionsToDict(newValue: newValue)
-            db.updateValue(result, forKey: transactionsKey)
-            print(result.count, " rhtgerfweg")
-            UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")?.setValue(result, forKey: "transactionsDataNew")
+            if newValue.count != 0 {
+                let result = transactionsToDict(newValue: newValue)
+                db.updateValue(result, forKey: transactionsKey)
+                print(result.count, " rhtgerfweg")
+                UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")?.setValue(result, forKey: "transactionsDataNew")
+            } else {
+                db.removeValue(forKey: transactionsKey)
+                UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")?.removeObject(forKey: "transactionsDataNew")
+            }
+
         }
     }
     var localTransactions:[TransactionsStruct] {
@@ -272,8 +273,13 @@ class DataBase {
         }
         
         set {
-            let result = categoriesToDict(newValue: newValue)
-            db.updateValue(result, forKey: categoriesKey)
+            if newValue.count != 0 {
+                let result = categoriesToDict(newValue: newValue)
+                db.updateValue(result, forKey: categoriesKey)
+            } else {
+                db.removeValue(forKey: categoriesKey)
+            }
+            
         }
     }
     var localCategories: [NewCategories] {

@@ -174,9 +174,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         self.window?.endEditing(true)
-        if HomeVC.shared?.sideBarShowing ?? false {
-            HomeVC.shared?.toggleSideBar(false, animated: true)
-        }
+//        if HomeVC.shared?.sideBarShowing ?? false {
+//            HomeVC.shared?.toggleSideBar(false, animated: true)
+//        }
     }
     
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {

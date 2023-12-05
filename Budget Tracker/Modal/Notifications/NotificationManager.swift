@@ -40,15 +40,31 @@ struct NotificationManager {
             return result ?? []
         }
         set {
-            DispatchQueue(label: "db", qos: .userInitiated).async {
-                DataBase().db.updateValue(newValue, forKey: "deliveredNotificationIDs")
-                DispatchQueue.main.async {
-                    Notifications.getNotificationsNumber()
+            if newValue.count != 0 {
+                DispatchQueue(label: "db", qos: .userInitiated).async {
+                    DataBase().db.updateValue(newValue, forKey: "deliveredNotificationIDs")
+                    DispatchQueue.main.async {
+                        Notifications.getNotificationsNumber()
+                    }
+                }
+            } else {
+                DispatchQueue(label: "db", qos: .userInitiated).async {
+                    DataBase().db.removeValue(forKey: "deliveredNotificationIDs")
+
+                    DispatchQueue.main.async {
+                        Notifications.getNotificationsNumber()
+                    }
                 }
             }
+            
             
         }
     }
     
+    
+    mutating func removeAll() {
+        AppDelegate.shared?.center.removeAllDeliveredNotifications()
+        deliveredNotificationIDs = []
+    }
    
 }
