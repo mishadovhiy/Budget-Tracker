@@ -210,7 +210,9 @@ class HomeVC: SuperViewController {
     func filter(data:[TransactionsStruct]? = nil) {
         completedFiltering = false
         print("filterCalled")
-        let showAll = AppDelegate.shared?.appData.filter.showAll ?? false
+        let showAll = false//AppDelegate.shared?.appData.filter.showAll ?? false
+        print(AppDelegate.shared?.appData.filter.from, " tyhregrfwed")
+        print(AppDelegate.shared?.appData.filter.to, " tgerfwd")
         let all = transactionManager?.filtered(apiTransactions) ?? []
         self.filterText = (showAll ? "All transactions".localize : (AppDelegate.shared?.appData.filter.periodText ?? ""))
         tableData = all
@@ -327,17 +329,29 @@ class HomeVC: SuperViewController {
     @IBOutlet weak var expencesStack: UIStackView!
     @IBOutlet weak var perioudBalanceView: UIStackView!
 
+    
+    func checkDownload(force:Bool = false) {
+        if (AppDelegate.shared?.appData.needFullReload ?? false) {
+            AppDelegate.shared?.appData.needFullReload = false
+            self.toggleNoData(show: true, text: "Loading".localize, fromTop: true, appeareAnimation: false, addButtonHidden: true)
+            if !force {
+                self.downloadFromDB()
+            }
+        }
+        if force {
+            
+            
+            self.downloadFromDB()
+        }
+    }
+    
     @IBAction func homeVC(segue: UIStoryboardSegue) {
         DispatchQueue.global(qos: .userInteractive).async {
             print("HomeVC called")
             DispatchQueue.main.async {
                 self.dataCountLabel.text = ""
             }
-            if (AppDelegate.shared?.appData.needFullReload ?? false) {
-                AppDelegate.shared?.appData.needFullReload = false
-                self.toggleNoData(show: true, text: "Loading".localize, fromTop: true, appeareAnimation: false, addButtonHidden: true)
-            }
-            self.downloadFromDB()
+            self.checkDownload(force: true)
             
             if AppDelegate.shared?.appData.fromLoginVCMessage != "" {
                 print("appData.fromLoginVCMessage", AppDelegate.shared?.appData.fromLoginVCMessage ?? "-")

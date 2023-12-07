@@ -16,10 +16,19 @@ class TransactionsManager {
     var daysBetween = [""]
 
     func new(transactions:[TransactionsStruct]) -> [HomeVC.tableStuct] {
-        let filtered = dataToDict(transactions)
-        return dictToTable(filtered).sorted{
+        //        return dictToTable(filtered).sorted{
+        //            Calendar.current.date(from: $0.date ) ?? Date.distantFuture >
+        //                    Calendar.current.date(from: $1.date ) ?? Date.distantFuture
+        //        }
+        let today = (AppDelegate.shared?.appData.filter.fromDate ?? DateComponents())
+        let filtered = transactions.filter({
+            $0.dateFromString.toDateComponents().year == today.year && (($0.dateFromString.toDateComponents().month ?? 0) == (today.month ?? -1))
+        })
+        let result = dataToDict(filtered)
+        print(filtered, " grdfsa")
+        return dictToTable(result).sorted{
             Calendar.current.date(from: $0.date ) ?? Date.distantFuture >
-                    Calendar.current.date(from: $1.date ) ?? Date.distantFuture
+            Calendar.current.date(from: $1.date ) ?? Date.distantFuture
         }
     }
     

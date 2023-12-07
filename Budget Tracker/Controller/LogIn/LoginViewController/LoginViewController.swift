@@ -721,6 +721,7 @@ extension LoginViewController {
                 self.appData.proTrial = false
             }
             self.appData.db.removeAll()
+            self.appData.needFullReload = true
             DispatchQueue.main.async {
                 self.title = "Sign In".localize
                 self.passwordLabel.text = ""

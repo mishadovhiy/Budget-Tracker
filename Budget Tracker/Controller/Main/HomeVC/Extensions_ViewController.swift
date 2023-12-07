@@ -24,45 +24,45 @@ extension HomeVC {
     func scrollRefresh(_ scrollView:UIScrollView) {
         let finger = scrollView.panGestureRecognizer.location(in: self.view)
         refreshData = finger.x > self.view.frame.width / 2 ? false : true
-    //    self.mainTableView.refresh?.tintColor = self.refreshData ? K.Colors.pink : .clear
+        //    self.mainTableView.refresh?.tintColor = self.refreshData ? K.Colors.pink : .clear
         
         let max:CGFloat = 100
         let offsetY = scrollView.contentOffset.y * (-1)
         let alpha = offsetY / max
         if appData.username != "" {
-       //     UIView.animate(withDuration: 0.3) {
-               // self.mainTableView.refresh?.alpha = self.refreshData ? 0 : alpha
-         //   }
+            //     UIView.animate(withDuration: 0.3) {
+            // self.mainTableView.refresh?.alpha = self.refreshData ? 0 : alpha
+            //   }
         } else {
-        //    UIView.animate(withDuration: 0.3) {
+            //    UIView.animate(withDuration: 0.3) {
             //    self.mainTableView.refresh?.tintColor = .clear
-              //  self.mainTableView.refresh?.alpha = alpha
-          //  }
+            //  self.mainTableView.refresh?.alpha = alpha
+            //  }
         }
         let lastCellVisible = self.newTableData.count > 8 ? true : false
         if scrollView.contentOffset.y > 5.0 {
-//            DispatchQueue.main.async {
-//                if self.mainTableView.refresh?.isRefreshing ?? false {
-//                    self.mainTableView.refresh?.endRefreshing()
-//                }
-//            }
+            //            DispatchQueue.main.async {
+            //                if self.mainTableView.refresh?.isRefreshing ?? false {
+            //                    self.mainTableView.refresh?.endRefreshing()
+            //                }
+            //            }
         }
     }
     
     func toggleSideBar(_ show: Bool, animated:Bool) {
         sideBarShowing = show
-       /* if !show {
-            UIView.animate(withDuration: 0.3, animations: {
-                self.sideBarContentBlockerView.alpha = 0
-            })
-        }*/
+        /* if !show {
+         UIView.animate(withDuration: 0.3, animations: {
+         self.sideBarContentBlockerView.alpha = 0
+         })
+         }*/
         DispatchQueue.main.async {
             let frame = self.sideBar.layer.frame
             //UIView.animate(withDuration: animated ? 0.25 : 0) {
             if show {
                 UIView.animate(withDuration: 0.3, delay: 0, options: .allowUserInteraction, animations: {
                     self.sideBarContentBlockerView.alpha = show ? 1 : 0
-
+                    
                 })
             }
             UIView.animate(withDuration: 0.58, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: [.allowAnimatedContent, .allowUserInteraction]) {
@@ -70,16 +70,16 @@ extension HomeVC {
                 self.mainContentViewHelpher.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
             } completion: {
                 /*UIView.animate(withDuration: 0.3, animations: {
-                    self.sideBarContentBlockerView.alpha = show ? 1 : 0
-
-                })*/
+                 self.sideBarContentBlockerView.alpha = show ? 1 : 0
+                 
+                 })*/
                 if !$0 {
                     return
                 }
                 if !show {
                     UIView.animate(withDuration: 0.3, delay: 0, options: .allowUserInteraction, animations: {
                         self.sideBarContentBlockerView.alpha = show ? 1 : 0
-
+                        
                     })
                     
                 }
@@ -95,7 +95,7 @@ extension HomeVC {
                     } else {
                         self.mainTableView.removeGestureRecognizer(gesture)
                     }
-                //    self.mainTableView.reloadData()
+                    //    self.mainTableView.reloadData()
                 }
             }
             
@@ -109,7 +109,7 @@ extension HomeVC {
         let max:CGFloat = sideBar.frame.width - 10
         let resultXPos = finger.x
         let testCacl = resultXPos / max
-       // let c = testCacl - CGFloat(Int(testCacl))
+        // let c = testCacl - CGFloat(Int(testCacl))
         let resCalc = testCacl >= 1 ? 1 : testCacl
         self.sideBarContentBlockerView.alpha = resCalc
         
@@ -161,9 +161,9 @@ extension HomeVC {
                 let timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { (timer) in
                     if self.completedFiltering {
                         timer.invalidate()
-//                        DispatchQueue.main.async {
-//                            self.filterTextLabel.text = "Filter".localize + ": \(appData.filter.selectedPeroud)"
-//                        }
+                        //                        DispatchQueue.main.async {
+                        //                            self.filterTextLabel.text = "Filter".localize + ": \(appData.filter.selectedPeroud)"
+                        //                        }
                         DispatchQueue.main.async {
                             self.filterTextLabel.text = self._filterText
                         }
@@ -206,7 +206,7 @@ extension HomeVC {
             }
             if appData.filter.from == "" {
                 appData.filter.from = firstDay
-
+                
             }
             let to = appData.filter.to
             let monthT = appData.filter.getMonthFromString(s: to)
@@ -248,44 +248,44 @@ extension HomeVC {
         
         return (result, Int(amount))
     }
-
     
-   
     
-
+    
+    
+    
     func updateDataLabels(reloadAndAnimate: Bool = true, noData: Bool = false) {
-   //     let unsendedCount = appData.unsendedData.count
-   //     let hideLocal = localCount == 0 ? true : false
+        //     let unsendedCount = appData.unsendedData.count
+        //     let hideLocal = localCount == 0 ? true : false
         
-      //  DispatchQueue.main.async {
-      //      self.mainTableView.reloadData()
-           /* self.unsendedDataLabel.text = "\(unsendedCount)"
-            self.dataFromTitleLabel.text = "Local data".localize + ":"
-            self.dataFromValueLabel.text = "\(localCount)"
-            if reloadAndAnimate {
-                UIView.animate(withDuration: noData ? 0.0 : 0.35) {
-                    if self.unsendedDataLabel.superview?.superview?.isHidden != hideUnsended {
-                        self.unsendedDataLabel.superview?.superview?.isHidden = hideUnsended
-                    }
-                    self.enableLocalDataPress = !hideLocal
-                    if self.dataFromValueLabel.superview?.superview?.isHidden != hideLocal {
-                        self.dataFromValueLabel.superview?.superview?.isHidden = hideLocal
-                    }
-                } completion: { (_) in
-                    if self.mainTableView.visibleCells.count > 1 {
-                        self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
-                    } else {
-                        self.mainTableView.reloadData()
-                    }
-                }
-            } else {
-                if self.mainTableView.visibleCells.count > 1 {
-                    self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
-                } else {
-                    self.mainTableView.reloadData()
-                }
-            }*/
-       // }
+        //  DispatchQueue.main.async {
+        //      self.mainTableView.reloadData()
+        /* self.unsendedDataLabel.text = "\(unsendedCount)"
+         self.dataFromTitleLabel.text = "Local data".localize + ":"
+         self.dataFromValueLabel.text = "\(localCount)"
+         if reloadAndAnimate {
+         UIView.animate(withDuration: noData ? 0.0 : 0.35) {
+         if self.unsendedDataLabel.superview?.superview?.isHidden != hideUnsended {
+         self.unsendedDataLabel.superview?.superview?.isHidden = hideUnsended
+         }
+         self.enableLocalDataPress = !hideLocal
+         if self.dataFromValueLabel.superview?.superview?.isHidden != hideLocal {
+         self.dataFromValueLabel.superview?.superview?.isHidden = hideLocal
+         }
+         } completion: { (_) in
+         if self.mainTableView.visibleCells.count > 1 {
+         self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
+         } else {
+         self.mainTableView.reloadData()
+         }
+         }
+         } else {
+         if self.mainTableView.visibleCells.count > 1 {
+         self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
+         } else {
+         self.mainTableView.reloadData()
+         }
+         }*/
+        // }
     }
     func toggleNoData(show: Bool, text: String = "No Transactions".localize, fromTop: Bool = false, appeareAnimation: Bool = true, addButtonHidden: Bool = false) {
         
@@ -304,10 +304,10 @@ extension HomeVC {
                         return
                     }
                     self.mainTableView.reloadData()
-             //       if self.mainTableView.visibleCells.count > 1 {
-                        
-                        //self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
-             //       }
+                    //       if self.mainTableView.visibleCells.count > 1 {
+                    
+                    //self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
+                    //       }
                 }
             } else {
                 UIView.animate(withDuration: 0.25) {
@@ -317,40 +317,40 @@ extension HomeVC {
                         return
                     }
                     self.noDataView.isHidden = true
-                  //  if self.mainTableView.visibleCells.count > 1 {
+                    //  if self.mainTableView.visibleCells.count > 1 {
                     //    self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
-                        self.mainTableView.reloadData()
-                 //   }
+                    self.mainTableView.reloadData()
+                    //   }
                 }
             }
         }
     }
     
     func tableDataLoaded(_ newValue:[tableStuct]) {
-       
+        
         if transactionManager?.filterChanged ?? false{
             transactionManager?.filterChanged = false
-           // filter()
+            // filter()
             
         } else {
             dataTaskCount = nil
             selectedCell = nil
             self.completedFiltering = true
-          //  let from = appData.filter.fromDate
-          //  let showAll = appData.filter.showAll
+            //  let from = appData.filter.fromDate
+            //  let showAll = appData.filter.showAll
             DispatchQueue.main.async {
                 
-
+                
                 //here //c
                 self.toggleNoData(show: false, addButtonHidden: true)
-         //       let filterPeriod = (from.month?.stringMonth ?? "-").capitalized + ", \(from.year ?? 0)"
-             //   self.filterText = (showAll ? "All transactions" : filterPeriod).localize
+                //       let filterPeriod = (from.month?.stringMonth ?? "-").capitalized + ", \(from.year ?? 0)"
+                //   self.filterText = (showAll ? "All transactions" : filterPeriod).localize
                 //"Filter".localize + ": " + appData.filter.selectedPeroud
-
+                
                 self.calculationSView.alpha = 0
                 UIView.animate(withDuration: 0.8) {
                     self.calculationSView.alpha = 1
-                } completion: { 
+                } completion: {
                     if !$0 {
                         return
                     }
@@ -368,9 +368,10 @@ extension HomeVC {
                     self.actionAfterAdded = nil
                     addedAction(true)
                 }
+                //  self.mainTableView.reloadData()
                 if self.firstAppearence {
                     self.firstAppearence = false
-                  //  self.downloadFromDB()
+                    //  self.downloadFromDB()
                 }
             }
         }
@@ -447,7 +448,7 @@ extension HomeVC {
             button.tintColor = K.Colors.balanceV
             button.layer.cornerRadius = button.layer.frame.width / 2
             button.setImage(image, for: .normal)
-
+            
         }
     }
     func checkPurchase(completion:@escaping(Bool?)-> (), local:Bool = false) {
@@ -472,7 +473,7 @@ extension HomeVC {
                         if !self.appData.purchasedOnThisDevice && !self.appData.proVersion {
                             print("checkPurchase appData.proVersion", self.appData.proVersion)
                             if userData[5] != "" {
-                               // self.checkProTrial()
+                                // self.checkProTrial()
                             }
                         }
                         completion(true)
@@ -496,14 +497,15 @@ extension HomeVC {
         navigationController?.delegate = nil
         self.notificationsCount = Notifications.notificationsCount
         //    self.mainTableView.contentInset.top = self.calendarContainer.frame.height
-//        mainTableView.contentOffset.y = 0
+        //        mainTableView.contentOffset.y = 0
         if self.ai?.isShowing ?? false {
             DispatchQueue.main.async {
                 self.ai?.fastHide()
             }
         }
-        if appData.needDownloadOnMainAppeare {
+        if appData.needFullReload || self.appData.needDownloadOnMainAppeare {
             appData.needDownloadOnMainAppeare = false
+            appData.needFullReload = false
             self.downloadFromDB(title: "Fetching".localize)
         }
         let safeTop = self.view.safeAreaInsets.top
