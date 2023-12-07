@@ -45,7 +45,7 @@ class SupportVC: SuperViewController, UITextViewDelegate {
     
     func sendCode(title:String, head:String, body:String, completion: @escaping (Bool) -> ()) {
         let toDataString = "emailTitle=\(title)&emailHead=\(head)&emailBody=\(body)"
-        save(dbFileURL: "https://www.dovhiy.com/apps/budget-tracker-db/sendEmail.php?\(toDataString)", error: { (error) in
+        save(dbFileURL: "https://www.mishadovhiy.com/apps/budget-tracker-db/sendEmail.php?\(toDataString)", error: { (error) in
             completion(error)
         })
     }

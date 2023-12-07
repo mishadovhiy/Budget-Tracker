@@ -348,6 +348,15 @@ class BuyProVC: SuperViewController {
         
     }
     
+    func toDataString(save:Bool) -> String {
+        /*
+         let toDataStringMian = "&Nickname=\(appData.username)" + "&Email=\(self.userData.0)" + "&Password=\(self.userData.1)" + "&Registration_Date=\(self.userData.2)"
+         
+         let dataStringSave = toDataStringMian + "&ProVersion=1" + "&trialDate=\(self.userData.3)"
+         */
+        let toDataStringMian = "&Nickname=\(appData.username)" + "&Email=\(userData.0)" + "&Password=\(userData.1)" + "&Registration_Date=\(userData.2)"
+        return toDataStringMian + "&ProVersion=\(!save ? 0 : 1)" + "&trialDate=\(userData.3)"
+    }
 
     
 }
@@ -384,18 +393,12 @@ extension BuyProVC: SKPaymentTransactionObserver {
 
     func dbSavePurchase() {
        // let save = SaveToDB()
-        let toDataStringMian = "&Nickname=\(appData.username)" + "&Email=\(self.userData.0)" + "&Password=\(self.userData.1)" + "&Registration_Date=\(self.userData.2)"
-        
-        let dataStringSave = toDataStringMian + "&ProVersion=1" + "&trialDate=\(self.userData.3)"
-        print(dataStringSave)
         let delete = DeleteFromDB()
-        let dataStringDelete = toDataStringMian
-        print(dataStringDelete)
-        delete.User(toDataString: dataStringDelete) { (errorr) in
+        delete.User(toDataString: self.toDataString(save: false)) { (errorr) in
             if errorr {
                 self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
             } else {
-                SaveToDB.shared.Users(toDataString: dataStringSave ) { (error) in
+                SaveToDB.shared.Users(toDataString: self.toDataString(save: true) ) { (error) in
                     if error {
                         self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
                     } else {

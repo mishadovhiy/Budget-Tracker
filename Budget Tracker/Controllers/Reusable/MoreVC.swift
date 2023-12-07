@@ -187,7 +187,9 @@ class MoreVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         //firstCellHeight
         //tableView.frame.height - tableView.contentSize.height
-        return indexPath.section == 0 ? firstCellHeight : cellHeightCust
+        let height = indexPath.section == 0 ? firstCellHeight : cellHeightCust
+        let min:CGFloat = 60
+        return height <= min ? min : height
     }
     
     

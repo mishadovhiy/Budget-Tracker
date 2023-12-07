@@ -106,7 +106,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         }
     }
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
-        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: analyticsName))
         if appData.devMode {
             let button = IndicatorView.button(title: "ok", style: .error, close: true) { _ in
                 
@@ -120,7 +119,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
-        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: analyticsName))
         print(#function)
         let now = Date()
         guard let logoutDate = backgroundEnterDate else{
@@ -157,8 +155,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
-        AnalyticModel.shared.analiticStorage.append(.init(key: #function.description, action: analyticsName))
-        AnalyticModel.shared.checkData()
         print(#function)
     }
     
