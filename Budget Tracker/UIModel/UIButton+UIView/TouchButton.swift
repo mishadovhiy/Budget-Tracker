@@ -107,4 +107,22 @@ class TouchButton: Button {
          //   self.animatePress(false)
         }
     }
+    
+    private var firstMovedSuperview = false
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        if !firstMovedSuperview {
+            firstMovedSuperview = true
+        }
+    }
+    
+    override func removeFromSuperview() {
+        super.removeFromSuperview()
+        if firstMovedSuperview {
+            touchAction = nil
+            pressedAction = nil
+            launch = nil
+            removeTouchView()
+        }
+    }
 }

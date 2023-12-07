@@ -169,14 +169,15 @@ class AppSettingsData {
         
         
         let appShortcodes = SettingsVC.StandartCell(title: "Application ShortCode Actions", action: {
-            let ignoring = DataBase().viewControllers.ignoredActionTypes
+            let db = AppDelegate.shared?.db ?? .init()
+            let ignoring = db.viewControllers.ignoredActionTypes
             let cells:[SettingsVC.TriggerCell] = AppDelegate.ShortCodeItem.allCases.compactMap({ item in
                 return .init(title: item.item.title, isOn: !ignoring.contains(item.rawValue), action: { isOn in
                     DispatchQueue(label: "db", qos: .userInitiated).async {
                         if isOn {
-                            DataBase().viewControllers.ignoredActionTypes.removeAll(where: {$0.contains(item.rawValue)})
+                            db.viewControllers.ignoredActionTypes.removeAll(where: {$0.contains(item.rawValue)})
                         } else {
-                            DataBase().viewControllers.ignoredActionTypes.append(item.rawValue)
+                            db.viewControllers.ignoredActionTypes.append(item.rawValue)
                         }
                         DispatchQueue.main.async {
                             AppDelegate.shared?.setQuickActions()

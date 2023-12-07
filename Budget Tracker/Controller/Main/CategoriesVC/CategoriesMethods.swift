@@ -88,13 +88,15 @@ extension CategoriesVC {
     }
     func saveToLocal() {
         if let transfaring = transfaringCategories {
-            db.localCategories = transfaring.categories
-            db.localTransactions = transfaring.transactions
-            transfaringCategories = nil
-            screenType = .localData
-            loadData()
-            DispatchQueue.main.async {
-                self.navigationController?.popToRootViewController(animated: true)
+            DispatchQueue(label: "db", qos: .userInitiated).async {
+                self.db.localCategories = transfaring.categories
+                self.db.localTransactions = transfaring.transactions
+                self.transfaringCategories = nil
+                self.screenType = .localData
+                self.loadData()
+                DispatchQueue.main.async {
+                    self.navigationController?.popToRootViewController(animated: true)
+                }
             }
         }
         

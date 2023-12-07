@@ -17,6 +17,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     //todo: scene: shared = sctruct
     static var shared:AppDelegate?
+//    static var shared:AppDelegate? {
+//        if !Thread.isMainThread {
+//            print("ismainerror")
+//        }
+//        return UIApplication.shared.delegate as? AppDelegate
+//    }
     let center = UNUserNotificationCenter.current()
     lazy var notificationManager = NotificationManager()
     
@@ -86,7 +92,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AppDelegate.shared = self
         coreDataManager = .init(persistentContainer: persistentContainer, appDelegate: self)
         DispatchQueue(label: "db", qos: .userInitiated).async {
-            DataBase().checkDBUpdated()
             let tint = AppData.linkColor
             let today = self.appData.filter.getToday()
             let value = self.db.db["lastLaunching"] as? String ?? ""

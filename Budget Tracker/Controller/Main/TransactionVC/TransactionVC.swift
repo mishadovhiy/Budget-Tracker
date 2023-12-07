@@ -272,7 +272,7 @@ class TransitionVC: SuperViewController {
         }
         selectedCategory = db.category(editingCategory) ?? lastExpense*/
         if editingCategory != "" {
-            selectedCategory = DataBase().category(self.editingCategory)
+            selectedCategory = AppDelegate.shared?.db.category(self.editingCategory)
             purposeSwitcher.selectedSegmentIndex = selectedPurpose != nil ? selectedPurpose! : 0
             purposeSwitched(purposeSwitcher)
             DispatchQueue.main.async {
@@ -293,7 +293,7 @@ class TransitionVC: SuperViewController {
                 self.isModalInPresentation = true
             }*/
             minusPlusLabel.alpha = 1
-            let db = DataBase()
+            let db = AppDelegate.shared?.db ?? .init()
             let category = db.category(self.editingCategory)
             selectedCategory = category
             DispatchQueue.main.async {

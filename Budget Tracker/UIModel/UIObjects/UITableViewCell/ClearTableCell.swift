@@ -37,9 +37,19 @@ class ClearCell:TableCell {
         }
     }
     
+//    private var firstMoved = false
+//    override func didMoveToSuperview() {
+//        super.didMoveToSuperview()
+//        if !firstMoved {
+//            firstMoved = true
+//        }
+//    }
     override func removeFromSuperview() {
         super.removeFromSuperview()
-        touchesBegunAction = nil
+//        if firstMoved {
+        //    touchesBegunAction = nil
+
+//        }
     }
     
     var touchesBegunAction:((_ begun:Bool)->())?

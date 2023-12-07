@@ -819,7 +819,8 @@ extension HomeVC: TransitionVCProtocol {
             var monthA: Int = getMonthFrom(string: appData.filter.from)
             var yearA: Int = getYearFrom(string: appData.filter.from)
             
-            transactionManager?.daysBetween = [appData.filter.from]
+            var daysBetween: [String] = transactionManager?.daysBetween ?? []
+            daysBetween.append(appData.filter.from)
             for _ in 0..<amount {
                 dayA += 1
                 if dayA == 32 {
@@ -831,12 +832,13 @@ extension HomeVC: TransitionVCProtocol {
                     }
                 }
                 let new: String = "\(AppData.makeTwo(n: dayA)).\(AppData.makeTwo(n: monthA)).\(AppData.makeTwo(n: yearA))"
-                transactionManager?.daysBetween.append(new) // was bellow break: last day in month wasnt displeying
+                daysBetween.append(new) // was bellow break: last day in month wasnt displeying
                 if new == appData.filter.to {
                     break
                 }
                 
             }
+            transactionManager?.daysBetween = daysBetween
         } else {
             transactionManager?.daysBetween.removeAll()
             transactionManager?.daysBetween.append(appData.filter.from)

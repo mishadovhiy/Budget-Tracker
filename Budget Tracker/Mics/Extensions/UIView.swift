@@ -67,6 +67,11 @@ extension UIView {
         }
     }
     
+    func removeTouchView() {
+        guard let view = self.subviews.first(where: {$0.layer.name == "createTouchView"}) else { return }
+        view.removeFromSuperview()
+    }
+    
     func addBluer(frame:CGRect? = nil, style:UIBlurEffect.Style = (.init(rawValue: -1000) ?? .regular), insertAt:Int? = nil) -> UIVisualEffectView {
         let blurEffect = UIBlurEffect(style: style)//prominent//dark//regular
         let bluer = UIVisualEffectView(effect: blurEffect)

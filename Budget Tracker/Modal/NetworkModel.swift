@@ -14,6 +14,9 @@ struct LoadFromDB {
     }
     static var shared = LoadFromDB()
     private func load(urlPath: String, completion: @escaping (NSArray, error?) -> ()) {
+        if Thread.isMainThread && appData.devMode {
+            AppDelegate.shared?.ai.showAlertWithOK(title:"main thread error ", text: "\(#function)", error: true)
+        }
         print(urlPath, " urlPathurlPathurlPath")
         if let url: URL = URL(string: urlPath) {
             let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -50,7 +53,9 @@ struct LoadFromDB {
     
 
     
-    let db = DataBase()
+    var db:DataBase {
+        return AppDelegate.shared?.db ?? .init()
+    }
     
     enum error {
         case internet
@@ -60,8 +65,7 @@ struct LoadFromDB {
     
     
     
-    
-    func newCategories(otherUser: String? = nil, saveLocally: Bool = true, local:Bool = false, completion: @escaping ([NewCategories], error) -> ()) {
+    private func performAddCategory(otherUser: String? = nil, saveLocally: Bool = true, local:Bool = false, completion: @escaping ([NewCategories], error) -> ()) {
         let user = otherUser == nil ? appData.username : otherUser!
         if user == "" || local {
             let local = db.categories
@@ -95,12 +99,21 @@ struct LoadFromDB {
                 }
             }
         }
-        
     }
     
     
+    func newCategories(otherUser: String? = nil, saveLocally: Bool = true, local:Bool = false, completion: @escaping ([NewCategories], error) -> ()) {
+        if Thread.isMainThread {
+            DispatchQueue(label: "api", qos: .userInitiated).async {
+                self.performAddCategory(otherUser: otherUser, saveLocally: saveLocally, local: local, completion: completion)
+            }
+        } else {
+            performAddCategory(otherUser: otherUser, saveLocally: saveLocally, local: local, completion: completion)
+        }
+        
+    }
     
-    func newTransactions(otherUser: String? = nil, saveLocally: Bool = true, completion: @escaping ([TransactionsStruct], error) -> (), local:Bool = false) {
+    private func performnewTransactions(otherUser: String? = nil, saveLocally: Bool = true, completion: @escaping ([TransactionsStruct], error) -> (), local:Bool = false) {
         let user = otherUser == nil ? appData.username : otherUser!
         if user == "" || local {
             let local = db.transactions
@@ -136,9 +149,20 @@ struct LoadFromDB {
         }
     }
     
+    func newTransactions(otherUser: String? = nil, saveLocally: Bool = true, completion: @escaping ([TransactionsStruct], error) -> (), local:Bool = false) {
+        if Thread.isMainThread {
+            DispatchQueue(label: "api", qos: .userInitiated).async {
+                self.performnewTransactions(otherUser: otherUser, saveLocally: saveLocally, completion: completion, local: local)
+
+            }
+        } else {
+            self.performnewTransactions(otherUser: otherUser, saveLocally: saveLocally, completion: completion, local: local)
+        }
+        
+    }
     
-    
-    func Users(completion: @escaping ([[String]], Bool) -> ()) {
+    private func performLoadUsers(completion: @escaping ([[String]], Bool) -> ()) {
+
         var loadedData: [[String]] = []
         let urlPath = Keys.dbURL + "users.php"
         if let url: URL = URL(string: urlPath) {
@@ -185,8 +209,19 @@ struct LoadFromDB {
             task.resume()
         }
         }
+    }
+    
+    func Users(completion: @escaping ([[String]], Bool) -> ()) {
+        if Thread.isMainThread {
+            DispatchQueue(label: "api", qos: .userInitiated).async {
+                self.performLoadUsers(completion: completion)
+            }
+        } else {
+            performLoadUsers(completion: completion)
+        }
         
     }
+    
     
     
     static func checkPassword(from loadedData:[[String]], nickname:String, password:String) -> (Bool, [String]?) {
@@ -221,7 +256,9 @@ struct SaveToDB {
     var appData:AppData {
         return AppDelegate.shared?.appData ?? .init()
     }
-    let db = DataBase()
+    var db:DataBase {
+        return appData.db
+    }
     enum dataType {
         case transactions
         case categories
@@ -229,6 +266,16 @@ struct SaveToDB {
     }
 
     static var shared = SaveToDB()
+    
+    func performnewTransaction(_ transaction: TransactionsStruct, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {
+        if Thread.isMainThread {
+            DispatchQueue(label: "api", qos: .userInitiated).async {
+                self.performnewTransaction(transaction, saveLocally: saveLocally, completion: completion)
+            }
+        } else {
+            performnewTransaction(transaction, saveLocally: saveLocally, completion: completion)
+        }
+    }
     
     func newTransaction(_ transaction: TransactionsStruct, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {
         if appData.username == "" {
@@ -252,8 +299,8 @@ struct SaveToDB {
             })
         }
     }
-    //param: dont append and dont send to unsended when toDataString!= nil
-    func newCategories(_ category: NewCategories, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {
+    
+    private func performnewCategories(_ category: NewCategories, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {
         if appData.username == "" {
             DispatchQueue(label: "db", qos: .userInitiated).async {
                 self.db.categories.append(category)
@@ -297,16 +344,30 @@ struct SaveToDB {
                 completion(error)
             })
         }
+    }
+    //param: dont append and dont send to unsended when toDataString!= nil
+    func newCategories(_ category: NewCategories, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {
         
+        DispatchQueue(label: "api", qos: .userInitiated).async {
+            self.performnewCategories(category, saveLocally: saveLocally, completion: completion)
+        }
     }
     
 
     
     
     func Users(toDataString: String, completion: @escaping (Bool) -> ()) {
-        save(dbFileURL: Keys.dbURL + "new-user.php", toDataString: toDataString, error: { (error) in
-            completion(error)
-        })
+        if Thread.isMainThread {
+            DispatchQueue(label: "api", qos: .userInitiated).async {
+                self.save(dbFileURL: Keys.dbURL + "new-user.php", toDataString: toDataString, error: { (error) in
+                    completion(error)
+                })
+            }
+        } else {
+            save(dbFileURL: Keys.dbURL + "new-user.php", toDataString: toDataString, error: { (error) in
+                completion(error)
+            })
+        }
     }
     
     func NewPassword(toDataString: String, completion: @escaping (Bool) -> ()) {
@@ -409,16 +470,27 @@ struct DeleteFromDB {
     var appData:AppData {
         return AppDelegate.shared?.appData ?? .init()
     }
-    let db = DataBase()
+    var db:DataBase {
+        return appData.db
+    }
     static var shared = DeleteFromDB()
     
     func User(toDataString: String, completion: @escaping (Bool) -> ()) {
-        delete(dbFileURL: Keys.dbURL + "delete-user.php", toDataString: toDataString, error: { (error) in
-               completion(error)
-           })
+        if Thread.isMainThread {
+            DispatchQueue(label: "api", qos: .userInitiated).async {
+                self.delete(dbFileURL: Keys.dbURL + "delete-user.php", toDataString: toDataString, error: { (error) in
+                       completion(error)
+                   })
+            }
+        } else {
+            delete(dbFileURL: Keys.dbURL + "delete-user.php", toDataString: toDataString, error: { (error) in
+                   completion(error)
+               })
+        }
     }
     
-    func CategoriesNew(category: NewCategories, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {
+
+    func performCategoriesNew(category: NewCategories, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {
         if appData.username == "" {
             deleteCategory(category: category)
             completion(false)
@@ -457,7 +529,18 @@ struct DeleteFromDB {
                 completion(error)
             })
         }
+    }
+    
+    
+    func CategoriesNew(category: NewCategories, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {
         
+        if Thread.isMainThread {
+            DispatchQueue(label: "api", qos: .userInitiated).async {
+                self.performCategoriesNew(category: category, saveLocally: saveLocally, completion: completion)
+            }
+        } else {
+            performCategoriesNew(category: category, saveLocally: saveLocally, completion: completion)
+        }
     }
     private func deleteCategory(category: NewCategories) {
         let all = db.categories
@@ -475,7 +558,7 @@ struct DeleteFromDB {
         }
     }
     
-    func newTransaction(_ transaction: TransactionsStruct, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {
+    func performnewTransaction(_ transaction: TransactionsStruct, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {
         if appData.username == "" {
             db.deleteTransaction(transaction: transaction)
             completion(false)
@@ -495,6 +578,16 @@ struct DeleteFromDB {
                 
                 completion(error)
             })
+        }
+    }
+    
+    func newTransaction(_ transaction: TransactionsStruct, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {
+        if Thread.isMainThread {
+            DispatchQueue(label: "api", qos: .userInitiated).async {
+                self.performnewTransaction(transaction, saveLocally: saveLocally, completion: completion)
+            }
+        } else {
+            performnewTransaction(transaction, saveLocally: saveLocally, completion: completion)
         }
     }
 

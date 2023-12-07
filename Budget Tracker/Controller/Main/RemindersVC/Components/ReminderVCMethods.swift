@@ -41,7 +41,7 @@ extension RemindersVC {
     
     
     private func loadReminders(unseen:[String]) {
-        let data = reminders.reminders
+        let data = ReminderManager.reminders
         var result:[ReminderStruct] = []
         for raw in data {
             var new:ReminderStruct = .init(transaction: raw.transaction, dict: raw.dict)

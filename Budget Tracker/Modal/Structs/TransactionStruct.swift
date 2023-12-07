@@ -26,8 +26,8 @@ struct TransactionsStruct {
     
     
     var category:NewCategories {
-        let db = DataBase()
-        return db.category(categoryID) ?? NewCategories(id: -1, name: "Unknown", icon: "", color: "", purpose: .expense)
+        let db = AppDelegate.shared?.db
+        return db?.category(categoryID) ?? NewCategories(id: -1, name: "Unknown", icon: "", color: "", purpose: .expense)
     }
     
     static func create(dictt:[String:Any]?) -> TransactionsStruct? {

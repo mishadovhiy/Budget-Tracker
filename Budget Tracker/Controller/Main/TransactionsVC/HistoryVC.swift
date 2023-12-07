@@ -400,16 +400,18 @@ class HistoryVC: SuperViewController {
         
         //   let load = LoadFromDB()
         
-        LoadFromDB.shared.newCategories { data, error in
-            if let id = self.selectedCategory?.id {
-                if let category = self.db.category("\(id)") {
-                    let delete = DeleteFromDB()
-                    delete.CategoriesNew(category: category) { errorBool in
-                        completion(data, errorBool)
+        DispatchQueue(label: "api", qos: .userInitiated).async {
+            LoadFromDB.shared.newCategories { data, error in
+                if let id = self.selectedCategory?.id {
+                    if let category = self.db.category("\(id)") {
+                        let delete = DeleteFromDB()
+                        delete.CategoriesNew(category: category) { errorBool in
+                            completion(data, errorBool)
+                        }
                     }
                 }
+                
             }
-            
         }
         
         

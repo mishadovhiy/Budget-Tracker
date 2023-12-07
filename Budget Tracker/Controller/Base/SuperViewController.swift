@@ -236,8 +236,8 @@ class SuperViewController: UIViewController {
     
     func showHistory(categpry: String, transactions: [TransactionsStruct]) {
         print("showHistory")
-        let db = DataBase()
-        if let category = db.category(categpry) {
+        let db = AppDelegate.shared?.db
+        if let category = db?.category(categpry) {
             DispatchQueue.main.async {
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let vccc = storyboard.instantiateViewController(withIdentifier: "HistoryVC") as! HistoryVC

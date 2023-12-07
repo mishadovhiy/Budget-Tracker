@@ -24,9 +24,21 @@ class AmountToPayCell: UITableViewCell {
     private var deleteFunc:(() -> ())?
     override func removeFromSuperview() {
         super.removeFromSuperview()
-        changeFunc = nil
-        deleteFunc = nil
+        if firstMovedSuperview {
+            changeFunc = nil
+            deleteFunc = nil
+        }
+        
     }
+    
+    private var firstMovedSuperview = false
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        if !firstMovedSuperview {
+            firstMovedSuperview = true
+        }
+    }
+    
     func set(_ selectedCategory:NewCategories?,
              changeAmountState:(Bool, Bool),
              catTotal:Double,

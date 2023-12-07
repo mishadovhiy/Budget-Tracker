@@ -19,6 +19,14 @@ class SwitchCell: ClearCell {
         changedAction = nil
     }
     
+    private var firstMovedSuperview = false
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        if !firstMovedSuperview {
+            firstMovedSuperview = true
+        }
+    }
+    
     func set(title:String, isOn:Bool, proEnabled:Bool = false, changed:@escaping(Bool)->()) {
         switcher.isUserInteractionEnabled = !proEnabled
         switcher.alpha = !proEnabled ? 1 : 0.5

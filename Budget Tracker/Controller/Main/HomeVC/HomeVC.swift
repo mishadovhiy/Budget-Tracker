@@ -153,10 +153,16 @@ class HomeVC: SuperViewController {
         
     }
 
+    var vcAppeared = false
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         viewAppeared()
         AppDelegate.shared?.banner.setBackground(clear: false)
+        if !vcAppeared {
+            vcAppeared = true
+        } else if AppDelegate.shared?.banner.adHidden ?? false {
+            AppDelegate.shared?.banner.appeare(force: true)
+        }
     }
     
     func monthSelected(_ year:Int, _ month:Int) {

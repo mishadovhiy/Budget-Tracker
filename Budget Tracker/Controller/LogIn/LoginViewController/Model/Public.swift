@@ -59,9 +59,8 @@ extension LoginViewController {
                                     AppDelegate.shared?.appData.userEmailHolder = email
                                     
                                     if prevUsere == "" && self.forceLoggedOutUser == "" {
-                                        let db = DataBase()
-                                        db.localTransactions = dat.0
-                                        db.localCategories = dat.1
+                                        self.db.localTransactions = dat.0
+                                        self.db.localCategories = dat.1
                                     }
                                     if self.forceLoggedOutUser == "" {
                                         self.forceLoggedOutUser = ""
@@ -174,7 +173,6 @@ extension LoginViewController {
                             db.db.updateValue(prevUserName, forKey: "prevUserName")
                             
                             if prevUserName == "" && forceLoggedOutUser == "" {
-                                let db = DataBase()
                                 db.localCategories = dat.0
                                 db.localTransactions = dat.1
                                 

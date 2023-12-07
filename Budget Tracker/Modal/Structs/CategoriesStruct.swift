@@ -20,8 +20,8 @@ struct NewCategories {
     var monthLimit:Double? = nil
 
     var transactions: [TransactionsStruct] {
-        let db = DataBase()
-        return db.transactions(for: self)
+        let db = AppDelegate.shared?.db
+        return db?.transactions(for: self) ?? []
     }
     
     var monthlyProgress:CGFloat? {

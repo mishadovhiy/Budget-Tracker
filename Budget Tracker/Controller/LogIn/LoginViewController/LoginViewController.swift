@@ -87,12 +87,14 @@ class LoginViewController: SuperViewController {
 
     func loadUsers(completion:@escaping ([[String]]) -> ()) {
       //  let load = LoadFromDB()
-        LoadFromDB.shared.Users { (users, error) in
-            if !error {
-                completion(users)
-            } else {
-                DispatchQueue.main.async {
-                    self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+        DispatchQueue(label: "api", qos: .userInitiated).async {
+            LoadFromDB.shared.Users { (users, error) in
+                if !error {
+                    completion(users)
+                } else {
+                    DispatchQueue.main.async {
+                        self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                    }
                 }
             }
         }
@@ -220,7 +222,7 @@ class LoginViewController: SuperViewController {
    // let load = LoadFromDB()
     
     private func performLoginPressed() {
-        self.hideKeyboard()
+        
         LoadFromDB.shared.Users { (loadedData, Error) in
             if !Error {
                 let values = self.textFieldValuesDict
@@ -266,11 +268,12 @@ class LoginViewController: SuperViewController {
             UIImpactFeedbackGenerator().impactOccurred()
         }
 
-//        (sender as! LoadingButton).startAnimating {
-//            self.performLoginPressed()
-//        }
+        self.hideKeyboard()
         self.ai?.show(title: "Logging in".localize) { (_) in
-            self.performLoginPressed()
+            self.hideKeyboard()
+            DispatchQueue(label: "api", qos: .userInitiated).async {
+                self.performLoginPressed()
+            }
         }
         
         
@@ -299,7 +302,7 @@ class LoginViewController: SuperViewController {
             db.db.updateValue(prevUserName, forKey: "prevUserName")
             
             if prevUserName == "" && forceLoggedOutUser == "" {
-                let db = DataBase()
+                let db = AppDelegate.shared?.db ?? .init()
                 db.localCategories = dat.0
                 db.localTransactions = dat.1
                 
@@ -377,7 +380,6 @@ class LoginViewController: SuperViewController {
     }
     
     private func performCreateAccount() {
-        self.hideKeyboard()
         LoadFromDB.shared.Users { (loadedData, Error) in
             if !Error {
                 self.createAccoun(loadedData: loadedData)
@@ -395,12 +397,12 @@ class LoginViewController: SuperViewController {
             UIImpactFeedbackGenerator().impactOccurred()
         }
 
-//        (sender as! LoadingButton).startAnimating {
-//            self.performCreateAccount()
-//        }
-//
         self.ai?.show(title: "Creating".localize) { (_) in
-            self.performCreateAccount()
+            self.hideKeyboard()
+
+            DispatchQueue(label: "api", qos: .userInitiated).async {
+                self.performCreateAccount()
+            }
         }
         
     }
@@ -670,7 +672,11 @@ class LoginViewController: SuperViewController {
         vc.delegate = self
         vc.tableData = [.init(sectionName: "", cells: enteredEmailUsers.compactMap({ apiUser in
             .init(name: apiUser, regular: .init(didSelect: {
-                self.navigationController?.popViewController(animated: true)
+                if let nav = self.navigationController{
+                    nav.popViewController(animated: true)
+                } else {
+                    self.presentingViewController?.dismiss(animated: true)
+                }
                 self.userSelected(user: apiUser)
             }))
         }))]
@@ -678,7 +684,11 @@ class LoginViewController: SuperViewController {
         DispatchQueue.main.async {
             self.nicknameLogLabel.endEditing(true)
         }
-            self.navigationController?.pushViewController(vc, animated: true)
+        if let nav = self.navigationController{
+            nav.pushViewController(vc, animated: true)
+        } else {
+            self.present(vc, animated: true)
+        }
     }
     
     private func loadKeychainPasswords() {

@@ -11,7 +11,9 @@ import Foundation
 
 
 class AppData {
-    let db = DataBase()
+    var db:DataBase {
+        return AppDelegate.shared?.db ?? .init()
+    }
     var filter:Filter {
         get {
             let dict = db.db["Filter"] as? [String : Any] ?? [:]
@@ -272,8 +274,9 @@ class AppData {
     
     lazy var screenColors = categoryColors
     
+    //refactoring: in db
     var randomColorName: String {
-        return DataBase().db["SelectedTintColor"] as? String ?? "yellowColor"
+        return db.db["SelectedTintColor"] as? String ?? "yellowColor"
     }
     
     func stringDate(_ sender: UIDatePicker) -> String {

@@ -14,13 +14,18 @@ class BuyProVC: SuperViewController {
     
     func showAlert(title:String,text:String?, error: Bool, goHome: Bool = false) {
         paymentQueueResponded = true
-        DispatchQueue.main.async {
+        let show = {
             self.ai?.showAlertWithOK(title: title, text: text, error: error) { _ in
                 if goHome {
-                    DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: "homeVC", sender: self)
-                    }
+                    self.dismiss(animated: true, completion: nil)
                 }
+            }
+        }
+        if Thread.isMainThread {
+            show()
+        } else {
+            DispatchQueue.main.async {
+                show()
             }
         }
 
@@ -67,7 +72,7 @@ class BuyProVC: SuperViewController {
         }
         pageChanged(pageControll)
         DispatchQueue(label: "db", qos: .userInitiated).async {
-            if let price = DataBase().db["productPrice"] as? String {
+            if let price = AppDelegate.shared?.db.db["productPrice"] as? String {
                 DispatchQueue.main.async {
                     self.priceLabel.text = "\((Double(price)?.string()) ?? "")"
                 }
@@ -76,8 +81,7 @@ class BuyProVC: SuperViewController {
 
         self.closeButton.alpha = navigationController == nil ? 1 : 0
     }
-
-
+    
     
     func showPurchasedIndicator() {
         if appData.proVersion {
@@ -116,6 +120,11 @@ class BuyProVC: SuperViewController {
             proBackgroundView.alpha = 0.5
             showPurchasedIndicator()
             getProducts()
+//            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
+//                self.ai?.show(completion: { _ in
+//                    self.checkTransitionState(.purchased, transaction: .init())
+//                })
+//            })
         }
         
         
@@ -296,11 +305,13 @@ class BuyProVC: SuperViewController {
         print("restorePressed")
         paymentQueueResponded = false
         if SKPaymentQueue.canMakePayments() {
-            SKPaymentQueue.default().restoreCompletedTransactions()
-            SKPaymentQueue.default().add(self)
+            self.restoreRequest.delegate = self
+
+           
 
             self.ai?.show { (_) in
-                self.restoreRequest.delegate = self
+                SKPaymentQueue.default().restoreCompletedTransactions()
+                SKPaymentQueue.default().add(self)
                 self.restoreRequest.start()
             }
             
@@ -312,10 +323,7 @@ class BuyProVC: SuperViewController {
     
     
     @IBAction func closePressed(_ sender: Any) {
-        print("prrrr")
-        DispatchQueue.main.async {
-            self.dismiss(animated: true, completion: nil)
-        }
+        self.dismiss(animated: true, completion: nil)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -336,7 +344,7 @@ extension BuyProVC: SKProductsRequestDelegate {
             print(product, "productproductproduct")
             proVProduct = product
             DispatchQueue(label: "db", qos: .userInitiated).async {
-                DataBase().db.updateValue("\(product.price.doubleValue)", forKey: "productPrice")
+                AppDelegate.shared?.db.db.updateValue("\(product.price.doubleValue)", forKey: "productPrice")
                 print(product.price, " rgfergtbhgref")
                 DispatchQueue.main.async {
                     self.priceLabel.text = "\(product.price.doubleValue.string())"
@@ -379,7 +387,11 @@ extension BuyProVC: SKPaymentTransactionObserver {
                     }
                 }
             } else {
-                self.showAlert(title: "Error saving purchase".localize, text: "", error: true)
+                
+                self.showAlert(title: "Purchase restored".localize, text: "", error: false)
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+                    self.ai?.showAlertWithOK(title: "Error saving purchase to your Budget Tracker account", text: "Please, log in to your account and Restore Purchase Again", error: true)
+                })
             }
         }
         
@@ -395,43 +407,46 @@ extension BuyProVC: SKPaymentTransactionObserver {
         }
     }
     
-    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
-        for transaction in transactions {
-            switch transaction.transactionState {
-            case .purchasing:
-                break
 
-            case .purchased, .restored:
-                print("paymentQueue pur succss")
-                if !paymentQueueResponded {
-                    paymentQueueResponded = true
+    func checkTransitionState(_ state:SKPaymentTransactionState? = nil, transaction:SKPaymentTransaction) {
+        let test = state != nil
+        switch state ?? transaction.transactionState {
+        case .purchased, .restored:
+            print("paymentQueue pur succss")
+            if !paymentQueueResponded {
+                paymentQueueResponded = true
+                if !test {
+                    print("fsdfassrgetr")
                     SKPaymentQueue.default().finishTransaction(transaction)
                     SKPaymentQueue.default().remove(self)
-                    
-                    DispatchQueue.init(label: "DB").async {
-                        self.appData.proVersion = true
-                        self.appData.purchasedOnThisDevice = true
-                        self.dbSavePurchase()
-                    }
                 }
                 
-                break
-            case .failed, .deferred:
-                print("paymentQueue pur ERROR")
-                SKPaymentQueue.default().finishTransaction(transaction)
-                SKPaymentQueue.default().remove(self)
-                DispatchQueue.main.async {
-                    self.showAlert(title: "Payment failed".localize, text: nil, error: true)
-                }
-                break
-            default:
-                DispatchQueue.main.async {
-                    self.ai?.fastHide() { (_) in
-                        SKPaymentQueue.default().finishTransaction(transaction)
-                        SKPaymentQueue.default().remove(self)
-                    }
+                DispatchQueue.init(label: "DB").async {
+                    self.appData.proVersion = true
+                    self.appData.purchasedOnThisDevice = true
+                    self.dbSavePurchase()
                 }
             }
+            
+            break
+        case .failed:
+            print("paymentQueue pur ERROR")
+            if !test {
+                SKPaymentQueue.default().finishTransaction(transaction)
+                SKPaymentQueue.default().remove(self)
+            }
+            DispatchQueue.main.async {
+                self.showAlert(title: "Payment failed".localize, text: nil, error: true)
+            }
+            break
+        default:
+            break
+        }
+    }
+    
+    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        transactions.forEach {
+            checkTransitionState(transaction: $0)
         }
     }
 }

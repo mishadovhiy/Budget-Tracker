@@ -10,6 +10,9 @@ import UIKit
 
 
 struct NotificationManager {
+    var db:DataBase {
+        return AppDelegate.shared?.db ?? .init()
+    }
     func loadNotifications(completion: @escaping ([String]) -> ()) {
         DispatchQueue.main.async {
             AppDelegate.shared?.center.getDeliveredNotifications(completionHandler: { nitof in
@@ -35,25 +38,21 @@ struct NotificationManager {
     
     var deliveredNotificationIDs: [String] {
         get {
-            let result = DataBase().db["deliveredNotificationIDs"] as? [String]
+            let result = db.db["deliveredNotificationIDs"] as? [String]
             print(result ?? ["-"], "deliveredNotificationIDs")
             return result ?? []
         }
         set {
             if newValue.count != 0 {
-                DispatchQueue(label: "db", qos: .userInitiated).async {
-                    DataBase().db.updateValue(newValue, forKey: "deliveredNotificationIDs")
-                    DispatchQueue.main.async {
-                        Notifications.getNotificationsNumber()
-                    }
+                self.db.db.updateValue(newValue, forKey: "deliveredNotificationIDs")
+                DispatchQueue.main.async {
+                    Notifications.getNotificationsNumber()
                 }
             } else {
-                DispatchQueue(label: "db", qos: .userInitiated).async {
-                    DataBase().db.removeValue(forKey: "deliveredNotificationIDs")
+                db.db.removeValue(forKey: "deliveredNotificationIDs")
 
-                    DispatchQueue.main.async {
-                        Notifications.getNotificationsNumber()
-                    }
+                DispatchQueue.main.async {
+                    Notifications.getNotificationsNumber()
                 }
             }
             

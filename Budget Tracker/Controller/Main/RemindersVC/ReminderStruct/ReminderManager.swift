@@ -8,13 +8,15 @@
 
 import UIKit
 
-class ReminderManager {
-    private var db = DataBase()
+struct ReminderManager {
+    var db:DataBase {
+        return AppDelegate.shared?.db ?? .init()
+    }
     
     
-    var reminders:[ReminderStruct] {
+    static var reminders:[ReminderStruct] {
         get {
-            var data = db.db["PaymentReminder"] as? [[String:Any]] ?? []
+            var data = AppDelegate.shared?.db.db["PaymentReminder"] as? [[String:Any]] ?? []
             var result:[ReminderStruct] = []
             for item in data {
                 
@@ -32,34 +34,34 @@ class ReminderManager {
             for val in newValue {
                 result.append(val.transaction.dict)
             }
-            db.db.updateValue(result, forKey: "PaymentReminder")
+            AppDelegate.shared?.db.db.updateValue(result, forKey: "PaymentReminder")
         }
     }
 
     
-    func deleteReminder(id:String) {
-        DispatchQueue.main.async {
-            AppDelegate.shared?.center.removePendingNotificationRequests(withIdentifiers: [id])
-        }
-        let data = Array(self.reminders)
-        var result:[ReminderStruct] = []
-        var found = false
-        for i in 0..<data.count {
-            if data[i].id != id || found {
-                result.append(data[i])
-            } else {
-                if data[i].id == id {
-                    found = true
-                }
-            }
-            
-         }
+    mutating func deleteReminder(id:String) {
         DispatchQueue(label: "db", qos: .userInitiated).async {
-            self.reminders = result
+            DispatchQueue.main.async {
+                AppDelegate.shared?.center.removePendingNotificationRequests(withIdentifiers: [id])
+            }
+            let data = Array(ReminderManager.reminders)
+            var result:[ReminderStruct] = []
+            var found = false
+            for i in 0..<data.count {
+                if data[i].id != id || found {
+                    result.append(data[i])
+                } else {
+                    if data[i].id == id {
+                        found = true
+                    }
+                }
+                
+             }
+            ReminderManager.reminders = result
         }
     }
     
-    func saveReminder(transaction:TransactionsStruct, newReminder:ReminderStruct, completionn: @escaping (Bool) -> ()) {
+    mutating func saveReminder(transaction:TransactionsStruct, newReminder:ReminderStruct, completionn: @escaping (Bool) -> ()) {
         let notifications = Notifications()
         let title = "Payment reminder".localize + "\n" + "For category".localize + ": " + transaction.category.name
         let body = "Amount".localize + ": " + transaction.value
@@ -73,7 +75,8 @@ class ReminderManager {
                         if added {
                             var newTransaction = transaction
                             newTransaction.reminder = newReminder.dict
-                            self.reminders.append(.init(transaction: newTransaction, dict: newReminder.dict))
+                            ReminderManager.reminders.append(.init(transaction: newTransaction, dict: newReminder.dict))
+                        //    AppDelegate.shared?.db.db.up
                             completionn(true)
                         } else {
                             completionn(false)

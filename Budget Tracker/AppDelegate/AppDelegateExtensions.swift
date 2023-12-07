@@ -127,7 +127,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         if !becameActive {
             becameActive = true
         } else {
-            let fiveMin:Double = appData.devMode ? 0.1 : Double(60 * 3)
+            let fiveMin:Double = Double(60 * 3)//appData.devMode ? 0.1 : Double(60 * 3)
             if ti > fiveMin {
                 if appData.username != "" {
                     AppData.categoriesHolder = nil

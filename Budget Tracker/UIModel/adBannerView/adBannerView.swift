@@ -41,9 +41,19 @@ class adBannerView: UIView {
     }
     override func removeFromSuperview() {
         super.removeFromSuperview()
-        remove()
+        if firstMovedSuperview {
+            remove()
+        }
     }
     
+    
+    private var firstMovedSuperview = false
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        if !firstMovedSuperview {
+            firstMovedSuperview = true
+        }
+    }
     private var id:String {
         (AppDelegate.shared?.appData.devMode ?? false) ? "ca-app-pub-3940256099942544/2934735716" : "ca-app-pub-5463058852615321/8457751935"
     }
@@ -155,11 +165,15 @@ class adBannerView: UIView {
                     if remove {
                         self.removeAd()
                     }
-                    completion?()
+                    DispatchQueue.main.async {
+                        completion?()
+                    }
                 }
             }
         } else {
-            completion?()
+            DispatchQueue.main.async {
+                completion?()
+            }
         }
     }
     

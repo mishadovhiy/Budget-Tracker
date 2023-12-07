@@ -21,15 +21,18 @@ struct Notifications {
             if pending {
                 AppDelegate.shared?.center.removePendingNotificationRequests(withIdentifiers: [id])
             }
-        }
-        let deliveredHolder = AppDelegate.shared?.notificationManager.deliveredNotificationIDs ?? []
-        var newNotif:[String] = []
-        for i in 0..<deliveredHolder.count {
-            if deliveredHolder[i] != id {
-                newNotif.append(deliveredHolder[i])
+            DispatchQueue(label: "db", qos: .userInitiated).async {
+                let deliveredHolder = AppDelegate.shared?.notificationManager.deliveredNotificationIDs ?? []
+                var newNotif:[String] = []
+                for i in 0..<deliveredHolder.count {
+                    if deliveredHolder[i] != id {
+                        newNotif.append(deliveredHolder[i])
+                    }
+                }
+                AppDelegate.shared?.notificationManager.deliveredNotificationIDs = newNotif
             }
         }
-        AppDelegate.shared?.notificationManager.deliveredNotificationIDs = newNotif
+        
     }
     
     static func getNotificationsNumber() {

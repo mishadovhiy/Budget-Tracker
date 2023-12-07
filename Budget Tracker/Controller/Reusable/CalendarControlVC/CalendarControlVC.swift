@@ -26,7 +26,7 @@ class CalendarControlVC: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        cellSelected = nil
+      //  cellSelected = nil
     }
     
     override func viewDidLoad() {

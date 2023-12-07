@@ -18,7 +18,6 @@ class mainVCcell: ClearCell {
  //   @IBOutlet weak var dailyTotalLabel: UILabel!
  //   @IBOutlet weak var sectionView: UIView!
     @IBOutlet weak var commentLabel: UILabel!
-    //let db = DataBase()
     
 
     override func draw(_ rect: CGRect) {

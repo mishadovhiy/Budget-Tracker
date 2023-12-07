@@ -25,9 +25,18 @@ class LoadingButton: TouchButton {
     }
     override func removeFromSuperview() {
         super.removeFromSuperview()
+        
         refreshControl = nil
         launchColor = nil
         launchTint = nil
+    }
+    
+    private var firstMovedSuperview = false
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        if !firstMovedSuperview {
+            firstMovedSuperview = true
+        }
     }
     
     override func firstMovedToWindow() {

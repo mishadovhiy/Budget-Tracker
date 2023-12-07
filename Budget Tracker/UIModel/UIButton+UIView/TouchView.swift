@@ -18,10 +18,23 @@ class TouchView:BasicView {
             self.createTouchView()
         }
     }
+    
+    var firstMovedSuperview = false
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        if !firstMovedSuperview {
+            firstMovedSuperview = true
+        }
+    }
+    
+    
     override func removeFromSuperview() {
         super.removeFromSuperview()
-        touchAction = nil
-        pressedAction = nil
+        if firstMovedSuperview {
+            touchAction = nil
+            pressedAction = nil
+        }
+        
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.moveTouchView(show: true, at: (touches.first, self))

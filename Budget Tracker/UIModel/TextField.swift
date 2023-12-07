@@ -19,9 +19,20 @@ class TextField: UITextField {
         }
     }
     
+    private var firstMovedSuperview = false
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        if !firstMovedSuperview {
+            firstMovedSuperview = true
+        }
+    }
+    
     override func removeFromSuperview() {
         super.removeFromSuperview()
-        btnLine = nil
+        if firstMovedSuperview {
+            btnLine = nil
+
+        }
     }
     
     override func didMoveToWindow() {

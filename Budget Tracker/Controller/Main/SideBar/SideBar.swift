@@ -17,7 +17,7 @@ class SideBar: UIView {
         AppDelegate.shared?.appData ?? .init()
     }
     func getData(){
-        let db = DataBase()
+        let db = AppDelegate.shared?.db ?? .init()
         let debts = db.debts.count
       //  let pro = appData.proEnabeled
         let notifications = Notifications.notificationsCount
@@ -32,8 +32,7 @@ class SideBar: UIView {
             HomeVC.shared?.navigationController?.pushViewController(SettingsVC.configure(), animated: true)
         })
         
-        let dbb = DataBase().db
-        let catsCo = dbb["categoriesDataNew"] as? [[String:Any]] ?? []
+        let catsCo = db.db["categoriesDataNew"] as? [[String:Any]] ?? []
         
         var categories:[CellData] = [
             .init(name: "Categories".localize, value: "\(catsCo.count - debts)", segue: "", image: "folder.fill", selectAction: {
@@ -43,7 +42,7 @@ class SideBar: UIView {
                 HomeVC.shared?.toCategories(type: .debts)
             })//!(pro) ? 3 : nil
         ]
-        let localCount = ((dbb[K.Keys.localTrancations] as? [[String:Any]] ?? []) + (dbb[K.Keys.localCategories] as? [[String:Any]] ?? [])).count
+        let localCount = ((db.db[K.Keys.localTrancations] as? [[String:Any]] ?? []) + (db.db[K.Keys.localCategories] as? [[String:Any]] ?? [])).count
         if localCount > 0 {
             categories.append(CellData(name: "Local Data".localize, value: "\(localCount)", segue: "", image: "tray.fill", selectAction: {
                 HomeVC.shared?.toCategories(type: .localData)
@@ -53,7 +52,7 @@ class SideBar: UIView {
         let statistic:CellData = .init(name: "Statistic".localize, value: "", segue: "", image: "chart.pie.fill", selectAction: {
             HomeVC.shared?.toStatistic(thisMonth: false, isExpenses: true)
         })
-        let trialDays = dbb["trialToExpireDays"] as? Int ?? 0
+        let trialDays = db.db["trialToExpireDays"] as? Int ?? 0
         let trialCell = CellData(name: "Trail till", value: "\(7 - trialDays)", segue: "", image: "clock.fill", selectAction: {
             AppDelegate.shared?.present(vc: BuyProVC.configure())
         })
