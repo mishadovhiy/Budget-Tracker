@@ -16,7 +16,7 @@ class SwitchCell: ClearCell {
     
     override func removeFromSuperview() {
         super.removeFromSuperview()
-        changedAction = nil
+       // changedAction = nil
     }
     
     private var firstMovedSuperview = false

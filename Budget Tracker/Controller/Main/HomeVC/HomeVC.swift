@@ -31,7 +31,7 @@ class HomeVC: SuperViewController {
     @IBOutlet weak var categoriesButton: UIButton!
     @IBOutlet weak var dataCountLabel: UILabel!
     @IBOutlet weak var calculationSView: UIStackView!
-    @IBOutlet weak var mainTableView: UITableView!
+    @IBOutlet weak var mainTableView: RefreshTableView!
     @IBOutlet weak var addTransitionButton: UIButton!
     
     @IBOutlet weak var darkBackgroundUnderTable: UIView!
@@ -72,9 +72,7 @@ class HomeVC: SuperViewController {
     var undendedCount = 0
     var filterAndCalcFrameHolder = (CGRect.zero, CGRect.zero)
     var wasSendingUnsended = false
-    var refreshSubview = UIView.init(frame: .zero)
     var correctFrameBackground:CGRect = .zero
-    var refreshControl = UIRefreshControl()
     var tableData:[TransactionsStruct] = []
     var _TableData: [tableStuct] = []
     var completedFiltering = false
@@ -99,7 +97,6 @@ class HomeVC: SuperViewController {
     var selectedCell: IndexPath? = nil
     var animateCellWillAppear = true
     var calcViewHeight:CGFloat = 0
-    let tableActionActivityIndicator = UIActivityIndicatorView.init(style: .gray)
     var refreshData = false
     var lastWhiteBackheight = 0
     var openFiler = false
@@ -113,6 +110,8 @@ class HomeVC: SuperViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        mainTableView.refreshBackgroundColor = self.view.backgroundColor
+        mainTableView.refreshAction = refresh
         transactionManager = .init()
         transactionManager?.taskChanged = {
             self.dataTaskCount = $0
@@ -241,7 +240,7 @@ class HomeVC: SuperViewController {
     }
 
     var dbTotal:Int = 0
-    @objc func refresh(sender:AnyObject) {
+    func refresh() {
         //add transaction
         //scrolltop (other, similier function) - to ask if user whants to refresh db
         forseSendUnsendedData = true
@@ -250,13 +249,18 @@ class HomeVC: SuperViewController {
                 if AppDelegate.shared?.appData.username != "" {
                     self.downloadFromDB(showError: true)
                 } else {
+                    mainTableView.refresh?.endRefreshing()
                     self.filter()
                 }
             } else {
+                mainTableView.refresh?.endRefreshing()
                 toAddTransaction()
+                
+
                 
             }
         } else {
+            mainTableView.refresh?.endRefreshing()
             toAddTransaction()
         }
     }

@@ -194,7 +194,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             vc.historyDataStruct = historyDataStruct
             vc.selectedCategory = selectedCategory
             vc.fromCategories = true
-            vc.allowEditing = screenType != .localData ? (selectedCategory?.purpose == .debt ? true : false) : (transfaringCategories == nil ? true : false)
+            vc.allowEditing = screenType != .localData ? (selectedCategory?.purpose == .debt ? true : false) : false//(transfaringCategories == nil ? true : false)
             vc.mainType = screenType != .localData ? .db : transfaringCategories == nil ? .localData : .unsaved
             vc.edited = {
                // self.loadTableData(loadFromUD: false)

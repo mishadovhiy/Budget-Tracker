@@ -30,6 +30,7 @@ class TextField: UITextField {
     override func removeFromSuperview() {
         super.removeFromSuperview()
         if firstMovedSuperview {
+            btnLine?.removeFromSuperlayer()
             btnLine = nil
 
         }

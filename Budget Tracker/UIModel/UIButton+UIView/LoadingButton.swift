@@ -14,6 +14,14 @@ class LoadingButton: TouchButton {
     var refreshControl:UIActivityIndicatorView?
     private var launchColor:UIColor?
     private var launchTint:UIColor?
+    
+    var movedd = false
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        if !movedd {
+            movedd = true
+        }
+    }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         if launchColor == nil {
@@ -25,10 +33,12 @@ class LoadingButton: TouchButton {
     }
     override func removeFromSuperview() {
         super.removeFromSuperview()
-        
-        refreshControl = nil
-        launchColor = nil
-        launchTint = nil
+        if movedd {
+            refreshControl?.removeFromSuperview()
+            refreshControl = nil
+            launchColor = nil
+            launchTint = nil
+        }
     }
     
     private var firstMovedSuperview = false

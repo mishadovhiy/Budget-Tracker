@@ -104,6 +104,7 @@
 		8D193BF22B1FBF32003EB531 /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D193BF12B1FBF32003EB531 /* CalendarCell.swift */; };
 		8D193BF42B1FCE4D003EB531 /* TouchButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D193BF32B1FCE4D003EB531 /* TouchButton.swift */; };
 		8D193BF62B1FCE69003EB531 /* TapAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D193BF52B1FCE69003EB531 /* TapAnimationView.swift */; };
+		8D1E4BCE2B222E360030BCB8 /* RefreshTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1E4BCD2B222E360030BCB8 /* RefreshTableView.swift */; };
 		8D2CDA1C2AF3F37A00671A72 /* HistoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2CDA182AF3F2FD00671A72 /* HistoryCell.swift */; };
 		8D2CDA1D2AF3F37A00671A72 /* calcCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2CDA162AF3F2B800671A72 /* calcCell.swift */; };
 		8D2CDA1E2AF3F37A00671A72 /* EmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2CDA1B2AF3F34C00671A72 /* EmptyCell.swift */; };
@@ -341,6 +342,7 @@
 		8D193BF12B1FBF32003EB531 /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
 		8D193BF32B1FCE4D003EB531 /* TouchButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchButton.swift; sourceTree = "<group>"; };
 		8D193BF52B1FCE69003EB531 /* TapAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapAnimationView.swift; sourceTree = "<group>"; };
+		8D1E4BCD2B222E360030BCB8 /* RefreshTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTableView.swift; sourceTree = "<group>"; };
 		8D2CDA152AF3F29400671A72 /* mainVCcell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mainVCcell.swift; sourceTree = "<group>"; };
 		8D2CDA162AF3F2B800671A72 /* calcCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = calcCell.swift; sourceTree = "<group>"; };
 		8D2CDA172AF3F2DC00671A72 /* StatisticCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticCell.swift; sourceTree = "<group>"; };
@@ -743,6 +745,7 @@
 			isa = PBXGroup;
 			children = (
 				8DBB38F62AC8D46C009B56DD /* TextField.swift */,
+				8D1E4BCD2B222E360030BCB8 /* RefreshTableView.swift */,
 				8D0C5D162AF6C162002E2422 /* SelectionStackView */,
 				8D2CDA142AF3F26B00671A72 /* UITableViewCell */,
 				8B26328327E67D1D0086C3A8 /* SegmentedControl.swift */,
@@ -1409,6 +1412,7 @@
 			files = (
 				8D163BA729944FD100EF6C2A /* TableCell.swift in Sources */,
 				8BC8525027E28D0F00C5A3A4 /* UserSettings.swift in Sources */,
+				8D1E4BCE2B222E360030BCB8 /* RefreshTableView.swift in Sources */,
 				8D7FCA7E2ADAF28B00B108A6 /* LocalDataBase.xcdatamodeld in Sources */,
 				8DEB0CD928184FC0002D24D3 /* DebtDescriptionCell.swift in Sources */,
 				8B4728BC27533A470078BD34 /* DataBase.swift in Sources */,
@@ -1831,7 +1835,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 37.9;
+				MARKETING_VERSION = 37.11;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1862,7 +1866,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 37.9;
+				MARKETING_VERSION = 37.11;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

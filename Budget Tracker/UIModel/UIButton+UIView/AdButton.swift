@@ -24,6 +24,7 @@ class AdButton: TouchButton {
     override func removeFromSuperview() {
         super.removeFromSuperview()
         if firstMovedSuperview {
+            adLabel?.removeFromSuperview()
             adLabel = nil
         }
         print("AdButtonAdButton removed removeFromSuperview")

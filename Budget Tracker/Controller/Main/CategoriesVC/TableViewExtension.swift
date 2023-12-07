@@ -87,7 +87,7 @@ extension CategoriesVC {
                     let index = IndexPath(row: indexPath.row, section: indexPath.section - sectionsBeforeData)
                     cell.set(index: index, footer: nil)
 
-                    let category = tableData[index.section].data[indexPath.row]
+                    let category = indexPath.row + 1 <= tableData[index.section].data.count ? tableData[index.section].data[indexPath.row] : .init(category: .init(id: 0, name: "", icon: "", color: "", purpose: .debt), transactions: [])
 
                     let hideUnseenIndicator = containsINUnseen(id: "\(category.category.id)") ? false : true
                     cell.unseenIndicatorView.isHidden = hideUnseenIndicator

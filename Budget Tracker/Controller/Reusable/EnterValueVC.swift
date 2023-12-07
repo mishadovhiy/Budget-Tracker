@@ -46,10 +46,15 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
         nextButton.setTitle(nextButtonTitle, for: .normal)
     }
 
+    var appeared = false
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.ai?.fastHide { _ in
-            self.valueTextField.becomeFirstResponder()
+            if !self.appeared {
+                self.appeared = true
+                self.valueTextField.becomeFirstResponder()
+
+            }
         }
     }
 
@@ -253,6 +258,11 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        self.view.endEditing(true)
     }
     
     enum screenType {

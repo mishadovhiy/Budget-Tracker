@@ -69,20 +69,24 @@ extension RemindersVC {
     
 
     
-    
+    private func performAddTransactionToHome(_ reminder: ReminderStruct) {
+        self.addNextReminder(reminder: reminder) { added in
+            let completion:(Bool) -> () = { _ in
+                self.loadData()
+                DispatchQueue.main.async {
+                    self.newMessage?.show(title: Text.success, description: "Transaction has been added!".localize, type: .succsess)
+                }
+            }
+            HomeVC.shared?.actionAfterAdded = completion
+            HomeVC.shared?.addNewTransaction(value: reminder.transaction.value, category: reminder.transaction.categoryID, date: self.today, comment: reminder.transaction.comment, reminderTime: nil, repeated: nil)
+        }
+    }
     
     func addTransaction(idx:Int) {
         let reminder = tableData[idx]
         ai?.show { _ in
-            self.addNextReminder(reminder: reminder) { added in
-                let completion:(Bool) -> () = { _ in
-                    self.loadData()
-                    DispatchQueue.main.async {
-                        self.newMessage?.show(title: Text.success, description: "Transaction has been added!".localize, type: .succsess)
-                    }
-                }
-                HomeVC.shared?.actionAfterAdded = completion
-                HomeVC.shared?.addNewTransaction(value: reminder.transaction.value, category: reminder.transaction.categoryID, date: self.today, comment: reminder.transaction.comment, reminderTime: nil, repeated: nil)
+            DispatchQueue(label: "api", qos: .userInitiated).async {
+                self.performAddTransactionToHome(reminder)
             }
         }
     }

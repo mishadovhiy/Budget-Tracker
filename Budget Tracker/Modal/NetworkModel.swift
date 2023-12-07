@@ -553,9 +553,10 @@ struct DeleteFromDB {
                 deleted = true
             }
         }
-        DispatchQueue(label: "db", qos: .userInitiated).async {
-            self.db.categories = new
+        if !deleted {
+            print("category:", category, " fvdsdaefwrg not found to delete")
         }
+        db.categories = new
     }
     
     func performnewTransaction(_ transaction: TransactionsStruct, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {

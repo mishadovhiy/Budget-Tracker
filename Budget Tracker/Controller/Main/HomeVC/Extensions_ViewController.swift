@@ -24,28 +24,28 @@ extension HomeVC {
     func scrollRefresh(_ scrollView:UIScrollView) {
         let finger = scrollView.panGestureRecognizer.location(in: self.view)
         refreshData = finger.x > self.view.frame.width / 2 ? false : true
-        self.refreshControl.tintColor = self.refreshData ? K.Colors.pink : .clear
+    //    self.mainTableView.refresh?.tintColor = self.refreshData ? K.Colors.pink : .clear
         
         let max:CGFloat = 100
         let offsetY = scrollView.contentOffset.y * (-1)
         let alpha = offsetY / max
         if appData.username != "" {
-            UIView.animate(withDuration: 0.3) {
-                self.refreshSubview.alpha = self.refreshData ? 0 : alpha
-            }
+       //     UIView.animate(withDuration: 0.3) {
+               // self.mainTableView.refresh?.alpha = self.refreshData ? 0 : alpha
+         //   }
         } else {
-            UIView.animate(withDuration: 0.3) {
-                self.refreshControl.tintColor = .clear
-                self.refreshSubview.alpha = alpha
-            }
+        //    UIView.animate(withDuration: 0.3) {
+            //    self.mainTableView.refresh?.tintColor = .clear
+              //  self.mainTableView.refresh?.alpha = alpha
+          //  }
         }
         let lastCellVisible = self.newTableData.count > 8 ? true : false
         if scrollView.contentOffset.y > 5.0 {
-            DispatchQueue.main.async {
-                if self.refreshControl.isRefreshing {
-                    self.refreshControl.endRefreshing()
-                }
-            }
+//            DispatchQueue.main.async {
+//                if self.mainTableView.refresh?.isRefreshing ?? false {
+//                    self.mainTableView.refresh?.endRefreshing()
+//                }
+//            }
         }
     }
     
@@ -95,7 +95,7 @@ extension HomeVC {
                     } else {
                         self.mainTableView.removeGestureRecognizer(gesture)
                     }
-                    self.mainTableView.reloadData()
+                //    self.mainTableView.reloadData()
                 }
             }
             
@@ -257,8 +257,8 @@ extension HomeVC {
    //     let unsendedCount = appData.unsendedData.count
    //     let hideLocal = localCount == 0 ? true : false
         
-        DispatchQueue.main.async {
-            self.mainTableView.reloadData()
+      //  DispatchQueue.main.async {
+      //      self.mainTableView.reloadData()
            /* self.unsendedDataLabel.text = "\(unsendedCount)"
             self.dataFromTitleLabel.text = "Local data".localize + ":"
             self.dataFromValueLabel.text = "\(localCount)"
@@ -285,7 +285,7 @@ extension HomeVC {
                     self.mainTableView.reloadData()
                 }
             }*/
-        }
+       // }
     }
     func toggleNoData(show: Bool, text: String = "No Transactions".localize, fromTop: Bool = false, appeareAnimation: Bool = true, addButtonHidden: Bool = false) {
         
@@ -339,16 +339,14 @@ extension HomeVC {
           //  let from = appData.filter.fromDate
           //  let showAll = appData.filter.showAll
             DispatchQueue.main.async {
-                self.mainTableView.reloadData()
-                if self.refreshControl.isRefreshing {
-                    self.refreshControl.endRefreshing()
-                }
                 
+
                 //here //c
                 self.toggleNoData(show: false, addButtonHidden: true)
          //       let filterPeriod = (from.month?.stringMonth ?? "-").capitalized + ", \(from.year ?? 0)"
              //   self.filterText = (showAll ? "All transactions" : filterPeriod).localize
                 //"Filter".localize + ": " + appData.filter.selectedPeroud
+
                 self.calculationSView.alpha = 0
                 UIView.animate(withDuration: 0.8) {
                     self.calculationSView.alpha = 1
@@ -358,7 +356,6 @@ extension HomeVC {
                     }
                     self.updateDataLabels(noData: newValue.count == 0)
                 }
-                self.tableActionActivityIndicator.removeFromSuperview()
                 if self.appData.username != "" {
                     self.sendUnsaved()
                 }
@@ -373,7 +370,7 @@ extension HomeVC {
                 }
                 if self.firstAppearence {
                     self.firstAppearence = false
-                    self.downloadFromDB()
+                  //  self.downloadFromDB()
                 }
             }
         }
@@ -450,13 +447,7 @@ extension HomeVC {
             button.tintColor = K.Colors.balanceV
             button.layer.cornerRadius = button.layer.frame.width / 2
             button.setImage(image, for: .normal)
-            self.refreshSubview.addSubview(button)
-            let superWidth = self.view.frame.width
-            self.refreshSubview.frame = CGRect(x: superWidth / 2 - 10, y: 0, width: 20, height: 20)
-            self.refreshControl.addTarget(self, action: #selector(self.refresh(sender:)), for: UIControl.Event.valueChanged)
-            self.refreshSubview.alpha = 0
-            self.refreshControl.addSubview(self.refreshSubview)
-            self.mainTableView.addSubview(self.refreshControl)
+
         }
     }
     func checkPurchase(completion:@escaping(Bool?)-> (), local:Bool = false) {
@@ -572,6 +563,7 @@ extension HomeVC {
             self.filterText = title
      //   }
         apiLoading = true
+        mainTableView.startAnimating()
         DispatchQueue.init(label: "download", qos: .userInitiated).async {
             LoadFromDB.shared.newCategories(local:local) { categoryes, error in
                 
@@ -790,12 +782,7 @@ extension HomeVC: TransitionVCProtocol {
         } else {
             print("reloaddd")
             self.editingTransaction = nil
-            DispatchQueue.main.async {
-                if self.refreshControl.isRefreshing {
-                    self.refreshControl.endRefreshing()
-                }
-                // self.calculateLabels()
-            }
+
         }
     }
     func addNewTransaction(value: String, category: String, date: String, comment: String, reminderTime:DateComponents?, repeated:Bool?) {
@@ -1048,7 +1035,7 @@ extension HomeVC: TransitionVCProtocol {
         } else {
             if startedSendingUnsended {
                 startedSendingUnsended = false
-                downloadFromDB()
+                downloadFromDB(local: AppDelegate.shared?.appData.username ?? "" == "")
             } else {
                 //send local data
                 if appData.sendSavedData {
@@ -1109,7 +1096,7 @@ extension HomeVC: TransitionVCProtocol {
                             }
                         } else {
                             appData.sendSavedData = false
-                            downloadFromDB()
+                            downloadFromDB(local: AppDelegate.shared?.appData.username ?? "" == "")
                         }
                     }
                 }
@@ -1127,8 +1114,8 @@ extension HomeVC: TransitionVCProtocol {
         print("prepare")
         selectedCell = nil
         DispatchQueue.main.async {
-            if self.refreshControl.isRefreshing {
-                self.refreshControl.endRefreshing()
+            if self.mainTableView.refresh?.isRefreshing ?? false {
+                self.mainTableView.refresh?.endRefreshing()
             }
         }
         switch segue.identifier {

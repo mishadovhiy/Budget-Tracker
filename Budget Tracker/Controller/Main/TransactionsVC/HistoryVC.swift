@@ -215,7 +215,7 @@ class HistoryVC: SuperViewController {
             }
         }
         
-        
+        print("ghrdfsd selcat ", selectedCategory)
     }
     
     func stringToInterval(s: String) -> DateComponents {
@@ -406,6 +406,7 @@ class HistoryVC: SuperViewController {
                     if let category = self.db.category("\(id)") {
                         let delete = DeleteFromDB()
                         delete.CategoriesNew(category: category) { errorBool in
+                            print(errorBool, " ythrgerfesadwe delete ", id)
                             completion(data, errorBool)
                         }
                     }
