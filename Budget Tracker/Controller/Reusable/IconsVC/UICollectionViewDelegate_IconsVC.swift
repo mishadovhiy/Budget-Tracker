@@ -62,7 +62,8 @@ extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "IconsVCColorCell", for: indexPath) as! IconsVCColorCell
             
-            cell.colorView.backgroundColor = AppData.colorNamed(coloresStrTemporary[indexPath.row])
+            cell.colorView.backgroundColor = .colorNamed(coloresStrTemporary[indexPath.row])
+            //AppData.colorNamed(coloresStrTemporary[indexPath.row])
             let selectionColor = screenType == .colorsOnly ? K.Colors.sectionBackground : K.Colors.primaryBacground
             cell.backgroundColor = coloresStrTemporary[indexPath.row] == selectedColorName ? selectionColor : .clear
             return cell
@@ -71,13 +72,8 @@ extension IconsVC: UICollectionViewDelegate, UICollectionViewDataSource {
             cell.layer.cornerRadius = 4
             let index = IndexPath(row: indexPath.row, section: indexPath.section - 1)
             let iconName = iconsData[index.section].data[index.row]
-           // cell.backgroundColor = index == selectedIconIndex ? K.Colors.secondaryBackground : .clear
-            if #available(iOS 13.0, *) {
-                cell.mainImage.image = AppData.iconSystemNamed(iconName, errorName: "warning")
-            }
-            
-            let selectedColor = AppData.colorNamed(selectedColorName)
-            //cell.mainImage.tintColor = index == selectedIconIndex ? selectedColor :  K.Colors.balanceT
+            cell.mainImage.image = .init(iconName, errorName: "warning")
+            let selectedColor = UIColor.colorNamed(selectedColorName)
             cell.mainImage.tintColor = iconName == selectedIconName ? selectedColor :  K.Colors.balanceT
             return cell
         }

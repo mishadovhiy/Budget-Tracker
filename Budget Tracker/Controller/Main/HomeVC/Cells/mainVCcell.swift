@@ -67,13 +67,13 @@ class mainVCcell: ClearCell {
         let value = String(format:"%.0f", Double(data.value) ?? 0.0)
         valueLabel.text = Double(data.value) ?? 0.0 > 0.0 ? "+\(value)" : value
         let category = HomeVC.shared?.db.category(data.categoryID)
-        if AppDelegate.shared!.symbolsAllowed {
-            categoryImage.image = AppData.iconSystemNamed(category?.icon)
+        if AppDelegate.shared!.properties!.appData.symbolsAllowed {
+            categoryImage.image = .init(category?.icon)
         } else {
             categoryImage.superview?.isHidden = true
         }
         
-        categoryImage.tintColor = AppData.colorNamed(category?.color)
+        categoryImage.tintColor = .init(category?.color)
         categoryLabel.text = (category?.name ?? "Unknown category").localize
         commentLabel.text = data.comment
         commentImage.alpha = data.comment == "" ? 0 : 1

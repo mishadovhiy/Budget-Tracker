@@ -25,8 +25,9 @@ extension SideBar:UITableViewDelegate, UITableViewDataSource {
         cell.notificationsView.isHidden = tableData[indexPath.section].section[indexPath.row].notifications == 0
         cell.notificationsLabel.text = "\(tableData[indexPath.section].section[indexPath.row].notifications)"
         cell.proView.isHidden = tableData[indexPath.section].section[indexPath.row].pro == nil
-        if (AppDelegate.shared?.symbolsAllowed ?? false) {
-            cell.optionIcon.image = AppData.iconSystemNamed(tableData[indexPath.section].section[indexPath.row].image)
+        if (AppDelegate.shared?.properties?.appData.symbolsAllowed ?? false) {
+            cell.optionIcon.image = .init(tableData[indexPath.section].section[indexPath.row].image)
+            //AppData.iconSystemNamed(tableData[indexPath.section].section[indexPath.row].image)
         }
         return cell
         

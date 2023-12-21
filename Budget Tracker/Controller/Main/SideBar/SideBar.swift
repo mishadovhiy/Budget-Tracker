@@ -14,16 +14,16 @@ class SideBar: UIView {
 
     
     var appData:AppData {
-        AppDelegate.shared?.appData ?? .init()
+        AppDelegate.shared?.properties?.appData ?? .init()
     }
     func getData(){
-        let db = AppDelegate.shared?.db ?? .init()
+        let db = AppDelegate.shared?.properties?.db ?? .init()
         let debts = db.debts.count
       //  let pro = appData.proEnabeled
         let notifications = Notifications.notificationsCount
         
         var accpuntCell:CellData {
-            return CellData(name: "Account".localize, value: appData.username == "" ? "Log in".localize : appData.username, segue: "", image: "person.fill", selectAction: {
+            return CellData(name: "Account".localize, value: appData.db.username == "" ? "Log in".localize : appData.db.username, segue: "", image: "person.fill", selectAction: {
                 HomeVC.shared?.navigationController?.pushViewController(LoginViewController.configure(), animated: true)
             })
         }
@@ -54,7 +54,7 @@ class SideBar: UIView {
         })
         let trialDays = db.db["trialToExpireDays"] as? Int ?? 0
         let trialCell = CellData(name: "Trail till", value: "\(7 - trialDays)", segue: "", image: "clock.fill", selectAction: {
-            AppDelegate.shared?.present(vc: BuyProVC.configure())
+            AppDelegate.shared?.properties?.appData.present(vc: BuyProVC.configure())
         })
 
 
@@ -84,9 +84,9 @@ class SideBar: UIView {
                 if results == .success || results == .alreadyPresenting {
                     self.loadAppleTransactions()
                 } else if results == .notSupported {
-                    AppDelegate.shared?.ai.showAlertWithOK(title:"Not supported", error: true)
+                    AppDelegate.shared?.properties?.ai.showAlertWithOK(title:"Not supported", error: true)
                 } else {
-                    AppDelegate.shared?.ai.showAlert(buttons: (.init(title: "Cancel", style: .regular, close: true, action: nil), .init(title: "To Settings", style: .link, action: { _ in
+                    AppDelegate.shared?.properties?.ai.showAlert(buttons: (.init(title: "Cancel", style: .regular, close: true, action: nil), .init(title: "To Settings", style: .link, action: { _ in
                         AppData.toDeviceSettings()
                     })), title: "\(results)", description: "Access denied")
                 }

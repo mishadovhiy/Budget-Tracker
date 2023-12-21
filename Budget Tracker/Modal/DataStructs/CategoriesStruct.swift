@@ -20,7 +20,7 @@ struct NewCategories {
     var monthLimit:Double? = nil
 
     var transactions: [TransactionsStruct] {
-        let db = AppDelegate.shared?.db
+        let db = AppDelegate.shared?.properties?.db
         return db?.transactions(for: self) ?? []
     }
     

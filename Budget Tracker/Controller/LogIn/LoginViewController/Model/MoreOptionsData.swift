@@ -21,7 +21,11 @@ class MoreOptionsData {
     deinit {
         print("deiniteeed")
     }
-    lazy var ai = AppDelegate.shared!.ai
+    
+    var ai:AlertViewLibrary {
+        AppDelegate.shared?.properties?.ai ?? .init()
+    }
+    
     func get(isPro:Bool) -> [MoreVC.ScreenData] {
         wrongCodeCount = 0
         forgotPasswordUsername = ""
@@ -30,7 +34,7 @@ class MoreOptionsData {
         //get screen data
 
         let forgotPassword = {
-            if appData.username != "" {
+            if appData.db.username != "" {
                 self.forgotPasswordTapped()
             } else {
                 let nextAction: (String) -> () = { (newvalue2) in
@@ -47,8 +51,8 @@ class MoreOptionsData {
                         if !found {
                             self.showAlert(title: "User not found".localize, text: nil, error: true)
                         } else {
-                           // appData.username = newValue
-                           // appData.password = ""
+                           // appData.db.username = newValue
+                           // appData.db.password = ""
                             self.forgotPasswordUsername = newvalue2
                             self.sendRestorationCode(toChange: .changePassword)
                         }
@@ -82,7 +86,7 @@ class MoreOptionsData {
             MoreVC.ScreenData(name: "Forgot password".localize, description: "", action: forgotPassword),
         ]
         
-        return appData.username == "" ? notUserLogged : loggedUserData
+        return appData.db.username == "" ? notUserLogged : loggedUserData
     }
     
     var forgotPasswordUsername = ""
@@ -114,7 +118,7 @@ class MoreOptionsData {
     }
     
     var appData:AppData {
-        return AppDelegate.shared?.appData ?? .init()
+        return AppDelegate.shared?.properties?.appData ?? .init()
     }
     
     private func performGetUsers(completion:@escaping([String]?) -> ()) {
@@ -123,7 +127,7 @@ class MoreOptionsData {
                 self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
                 completion(nil)
             } else {
-                let name = self.appData.username
+                let name = self.appData.db.username ?? ""
                 for i in 0..<loadedData.count {
                     if loadedData[i][0] == name {
                         completion(loadedData[i])
@@ -158,10 +162,10 @@ class MoreOptionsData {
                         self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
                     }
                 } else {
-                    if self.appData.username != "" {
+                    if self.appData.db.username != "" {
                         var emailToSend = ""
                         for i in 0..<users.count {
-                            if users[i][0] == self.appData.username {
+                            if users[i][0] == self.appData.db.username {
                                 emailToSend = users[i][1]
                                 break
                             }
@@ -215,7 +219,7 @@ class MoreOptionsData {
                 } else {
                     var emailToSend = ""
                     for i in 0..<users.count {
-                        if users[i][0] == self.appData.username {
+                        if users[i][0] == self.appData.db.username {
                             emailToSend = users[i][1]
                             break
                         }
@@ -305,7 +309,7 @@ class MoreOptionsData {
                         
                     } else {
                         DispatchQueue.main.async {
-                            AppDelegate.shared!.newMessage.show(title: "Wrong password".localize, type: .error)
+                            AppDelegate.shared?.properties?.newMessage.show(title: "Wrong password".localize, type: .error)
                         }
                     }
                 }
@@ -315,7 +319,7 @@ class MoreOptionsData {
                 self.toEnterValue(data: screenData)
             } else {
                 DispatchQueue.main.async {
-                    AppDelegate.shared?.newMessage.show(title: "User not found".localize, description: "'\(enteredUser)'", type: .error)
+                    AppDelegate.shared?.properties?.newMessage.show(title: "User not found".localize, description: "'\(enteredUser)'", type: .error)
                 }
             }
         }
@@ -352,9 +356,9 @@ class MoreOptionsData {
                    // EnterValueVC.shared?.clearAll(animated: true)
                 } else {
 
-                    let newUser = self.forgotPasswordUsername == "" ? self.appData.username : self.forgotPasswordUsername
+                    let newUser = self.forgotPasswordUsername == "" ? self.appData.db.username : self.forgotPasswordUsername
                     DispatchQueue(label: "db", qos: .userInitiated).async {
-                        self.appData.username = newUser
+                        self.appData.db.username = newUser
                         DispatchQueue.main.async {
                             self.cangePasswordDB(username: newUser, newPassword: new)
                         }
@@ -433,7 +437,7 @@ class MoreOptionsData {
       
           
             if !(newEmail).contains("@") || !(newEmail).contains(".") {
-                AppDelegate.shared?.newMessage.show(title: "Enter valid email".localize, type: .error)
+                AppDelegate.shared?.properties?.newMessage.show(title: "Enter valid email".localize, type: .error)
             } else {
                 self.ai.show(title: nil) { _ in
                     self.performChanageEmail(userData: userData, newEmail: newEmail)
@@ -479,7 +483,7 @@ class MoreOptionsData {
     
     func sendRestorationCode(toChange: restoreCodeAction) {
 
-        let userHolder = appData.username == "" ? forgotPasswordUsername : appData.username
+        let userHolder = appData.db.username == "" ? forgotPasswordUsername : appData.db.username
         let username = foundUsername != nil ? foundUsername! : userHolder
         if username != "" {
             self.currectAnsware = ""
@@ -564,7 +568,7 @@ class MoreOptionsData {
         } else {
 
             let nextAction: (String) -> () = { (newvalue) in
-                if self.appData.username != "" {
+                if self.appData.db.username != "" {
                     self.ai.show(title: nil) { _ in
                     //    let load = LoadFromDB()
                         LoadFromDB.shared.Users { (users, error) in
@@ -644,8 +648,8 @@ class MoreOptionsData {
                                     self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
                                 }
                             } else {
-                                self.appData.username = userData[0]
-                                self.appData.password = newPassword
+                                self.appData.db.username = userData[0]
+                                self.appData.db.password = newPassword
                                 KeychainService.updatePassword(account: userData[0], data: newPassword)
                                 //EnterValueVC.shared?.closeVC(closeMessage: "Your password has been changed")
                                 self.toEnterValue(data: nil)
@@ -672,7 +676,7 @@ class MoreOptionsData {
                         self.showAlert(title: "Passwords not match".localize + "!", text: nil, error: true)
                   //      EnterValueVC.shared?.clearAll(animated: true)
                     } else {
-                        self.cangePasswordDB(username: self.appData.username, newPassword: new)
+                        self.cangePasswordDB(username: self.appData.db.username, newPassword: new)
                     }
                 }
                 let screenDataRep = EnterValueVC.EnterValueVCScreenData(taskName: "Change password".localize, title: "Repeat password".localize, placeHolder: "Password".localize, nextAction: repeatPasAction, screenType: .password)
@@ -725,7 +729,7 @@ class MoreOptionsData {
     func changePasswordTapped() {
         print("changeEmailTapped")
 
-        let username = appData.username
+        let username = appData.db.username
         if username != "" {
             ai.show { _ in
                 DispatchQueue(label: "api", qos: .userInitiated).async {

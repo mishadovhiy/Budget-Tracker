@@ -29,7 +29,7 @@ extension CategoriesVC {
         }
     }
     func updateUI() {
-        if appData.username != "" && screenType != .localData {
+        if appData.db.username != "" && screenType != .localData {
             addRefreshControll()
         }
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -90,7 +90,7 @@ extension CategoriesVC {
                 }
             }
             UIView.animate(withDuration: animated ? 0.3 : 0) {
-                self.iconsContainer.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, show ? 0 : containerHeight + (self.appData.resultSafeArea.0 + self.appData.resultSafeArea.1 + 50), 0)
+                self.iconsContainer.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, show ? 0 : containerHeight + (self.properties!.appData.resultSafeArea.0 + self.properties!.appData.resultSafeArea.1 + 50), 0)
             } completion: {
                 if !$0 {
                     return
@@ -143,7 +143,7 @@ extension CategoriesVC {
             toggleIcons(show: false, animated: true, category: nil)
         }
         
-        AppDelegate.shared?.window?.endEditing(true)
+        UIApplication.shared.keyWindow?.endEditing(true)
         self.editingTF = nil
             /* if searchBar.isFirstResponder {
                  DispatchQueue.main.async {
@@ -204,7 +204,7 @@ extension CategoriesVC {
             MoreVC.ScreenData(name: "Name".localize, description: "", showAI: true, selected: self.sortOption == .name, action: nameAction),
             MoreVC.ScreenData(name: "Most used".localize, description: "", showAI: true, selected: self.sortOption == .transactionsCount, action: countAction),
         ]
-        appData.presentMoreVC(currentVC: self, data: moreData, proIndex: 3)
+        MoreVC.presentMoreVC(currentVC: self, data: moreData, proIndex: 3)
     }
     
     
@@ -249,11 +249,11 @@ extension CategoriesVC {
 
                 DispatchQueue(label: "db", qos: .userInitiated).async {
                     if img != "" {
-                        self.appData.lastSelected.sett(value: img, setterType: .icon, valueType: valType)
+                        self.properties?.appData.db.lastSelected.sett(value: img, setterType: .icon, valueType: valType)
                         self.tableData[selectingFooter].newCategory.category.icon = img
                     }
                     if color != "" {
-                        self.appData.lastSelected.sett(value: color, setterType: .color, valueType: valType)
+                        self.properties?.appData.db.lastSelected.sett(value: color, setterType: .color, valueType: valType)
                         self.tableData[selectingFooter].newCategory.category.color = color
                     }
                 }

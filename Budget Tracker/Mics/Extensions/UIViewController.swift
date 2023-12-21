@@ -7,6 +7,7 @@
 //
 
 import UIKit
+
 extension UIActivityIndicatorView {
     open override func didMoveToWindow() {
         super.didMoveToWindow()
@@ -33,7 +34,7 @@ extension UIViewController {
         if let vc = vcc {
             vc.present(activityViewController, animated: true, completion: completion)
         } else {
-            AppDelegate.shared?.present(vc: activityViewController, completion: completion)
+            AppDelegate.shared?.properties?.appData.present(vc: activityViewController, completion: completion)
         }
         
     }
@@ -84,7 +85,7 @@ extension UIViewController {
         if let superVC = self as? SuperViewController {
             superVC.backgroundData = data
         }
-        let win = AppDelegate.shared?.window ?? UIWindow()
+        let win = UIApplication.shared.keyWindow ?? UIWindow()
         let window = win
        // data.fromWindow ? win : (TabBarController.shared?.view ?? UIView())
         let supWindow = win
@@ -116,7 +117,7 @@ extension UIViewController {
     }
     
     func togglePresentedBackgroundView(_ data:VCpresentedBackgroundData) {
-        let sup = AppDelegate.shared?.window ?? UIWindow()
+        let sup = UIApplication.shared.keyWindow ?? UIWindow()
         guard let background = sup.subviews.first(where: { view in
             return view.layer.name == data.id
         }) else { return }

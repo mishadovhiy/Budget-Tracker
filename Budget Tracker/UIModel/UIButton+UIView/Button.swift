@@ -47,7 +47,7 @@ class Button: UIButton {
     @IBInspectable open var titleWhenNoSymbols: String = "" {
         didSet {
             
-            if !AppDelegate.shared!.symbolsAllowed && (titleWhenNoSymbols != "") {
+            if !(AppDelegate.shared?.properties?.appData.symbolsAllowed ?? true) && (titleWhenNoSymbols != "") {
                 self.setTitle(self.titleWhenNoSymbols.localize, for: .normal)
                 self.setImage(nil, for: .normal)
                 self.titleLabel?.font = .systemFont(ofSize: 15)

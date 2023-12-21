@@ -6,7 +6,7 @@
 //  Copyright © 2022 Misha Dovhiy. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 extension DateComponents {
     public static func < (lhs: DateComponents, rhs: DateComponents) -> Bool {
@@ -21,35 +21,9 @@ extension DateComponents {
         } else {
             return true
         }
-      /*  if let dateDate = NSCalendar.current.date(from: self) {
-            let dif = dateDate.differenceFromNow
-           /* let one = (difference.second ?? 0) + (difference.minute ?? 0) + (difference.hour ?? 0)
-            let expDays = (difference.day ?? 0) + (difference.month ?? 0) + (difference.year ?? 0)
-            if expDays <= 0 {
-                return (difference.hour ?? 0) <= 0 && (difference.minute ?? 0) <= 0 ? false : true
-            } else {
-                return true
-            }*/
-            print(dif, "fgedfgdfhrt")
-            if intOk(dif.year) && intOk(dif.month) && intOk(dif.day) {
-                if intOk(dif.hour)  {
-                    return false
-                } else {
-                    return !intOk(dif.minute)
-                }
-            } else {
-                return true
-            }
-            
-         //   let expiredSeconds = one + expDays :
-         //   return expiredSeconds >= 0 ? true : false
-        } else {
-            return true
-        }*/
+
     }
-    private func intOk(_ int:Int?) -> Bool {
-        return int ?? 0 > 0 ? false : true
-    }
+ 
     func toIsoString() -> String? {
         if let date = Calendar.current.date(from: self){
             return date.iso8601withFractionalSeconds
@@ -58,11 +32,11 @@ extension DateComponents {
     }
     
     var timeString:String {
-        return "\(hour?.makeTwo() ?? "01"):\(minute?.makeTwo() ?? "01")"
+        return "\(hour?.twoDec ?? "01"):\(minute?.twoDec ?? "01")"
     }
     
     var textDate:String {
-        return "\((self.month?.stringMonth ?? "").capitalized) \(self.day?.makeTwo() ?? "-"), \(self.year ?? 0)"
+        return "\((self.month?.stringMonth ?? "").capitalized) \(self.day?.twoDec ?? "-"), \(self.year ?? 0)"
     }
     
     func toShortString(dateFormat:String="dd.MM.yyyy", components:[StringComponents] = [.dd, .mm, .yyyy], separetor:String = ".") -> String? {
@@ -95,18 +69,13 @@ extension DateComponents {
     }
     
     
-    func stringToDateComponent(s: String, dateFormat:String="dd.MM.yyyy") -> DateComponents {//make privat
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = dateFormat
-        let date = dateFormatter.date(from: s)
-        return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date ?? Date())
-    }
+    
     
     func stringToCompIso(s: String, dateFormat:String="dd.MM.yyyy") -> DateComponents {
         if let date = s.iso8601withFractionalSeconds {
             return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
         } else {
-            return stringToDateComponent(s: s, dateFormat: dateFormat)
+            return s.stringToDateComponent(dateFormat: dateFormat)
         }
     }
     

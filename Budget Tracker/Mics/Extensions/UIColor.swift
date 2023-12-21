@@ -9,7 +9,7 @@
 import UIKit
 
 extension UIColor {
-
+    
     public convenience init?(hex:String) {
         var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         
@@ -34,23 +34,23 @@ extension UIColor {
     }
     
     var toHex: String {
-            if let components = self.cgColor.components, components.count >= 3 {
-                let red = Int(components[0] * 255.0)
-                let green = Int(components[1] * 255.0)
-                let blue = Int(components[2] * 255.0)
-                
-                return String(format: "#%02X%02X%02X", red, green, blue)
-            }
+        if let components = self.cgColor.components, components.count >= 3 {
+            let red = Int(components[0] * 255.0)
+            let green = Int(components[1] * 255.0)
+            let blue = Int(components[2] * 255.0)
             
-            return "#000000" // Default to black if unable to get color components
+            return String(format: "#%02X%02X%02X", red, green, blue)
         }
+        
+        return "#000000"
+    }
     
     private func makeColor(componentDelta: CGFloat) -> UIColor {
         var red: CGFloat = 0
         var blue: CGFloat = 0
         var green: CGFloat = 0
         var alpha: CGFloat = 0
-
+        
         
         getRed(
             &red,
@@ -58,7 +58,7 @@ extension UIColor {
             blue: &blue,
             alpha: &alpha
         )
-
+        
         
         return UIColor(
             red: add(componentDelta, toComponent: red),
@@ -78,5 +78,50 @@ extension UIColor {
     
     func darker(componentDelta: CGFloat = 0.1) -> UIColor {
         return makeColor(componentDelta: -1*componentDelta)
+    }
+    
+    static var linkColor:UIColor? {
+        return colorNamed(nil)
+    }
+    
+    static func colorNamed(_ name: String?) -> UIColor {
+        let defaultCo = K.Colors.link
+        if name ?? "" != "" {
+            return UIColor(named: name ?? "") ?? defaultCo
+        } else {
+            return defaultCo
+        }
+    }
+    
+    convenience init(_ name: String?) {
+        let defaultCo = K.Colors.link
+        if name ?? "" != "" {
+            if UIColor.init(named: name ?? "") != nil {
+                self.init(named: name ?? "")!
+            } else {
+                self.init(cgColor: defaultCo.cgColor)
+            }
+        } else {
+            self.init(cgColor: defaultCo.cgColor)
+        }
+    }
+    
+    
+    
+}
+
+extension UIImage {
+    convenience init?(QRcode:String) {
+        let data = QRcode.data(using: String.Encoding.ascii)
+        if let filter = CIFilter(name: "CIQRCodeGenerator") {
+            filter.setValue(data, forKey: "inputMessage")
+            let transform = CGAffineTransform(scaleX: 3, y: 3)
+            
+            if let output = filter.outputImage?.transformed(by: transform) {
+                self.init(ciImage: output)
+            }
+        }
+        self.init()
+        
     }
 }

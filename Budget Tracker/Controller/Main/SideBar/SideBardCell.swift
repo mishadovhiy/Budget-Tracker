@@ -21,7 +21,7 @@ class SideBardCell: ClearCell {
         super.draw(rect)
         setSelectedColor(K.Colors.separetor ?? .white)
 
-        if !(AppDelegate.shared?.symbolsAllowed ?? false) {
+        if !(AppDelegate.shared?.properties?.appData.symbolsAllowed ?? false) {
             optionIcon.isHidden = true
         }
     }

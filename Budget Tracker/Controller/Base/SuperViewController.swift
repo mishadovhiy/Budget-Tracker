@@ -15,17 +15,21 @@ class SuperViewController: UIViewController {
     var appeareAction:((_ vc:SuperViewController?)->())?
     var disapeareAction:((_ vc:SuperViewController?)->())?
     
+    var properties:AppProperties? {
+        return AppDelegate.shared?.properties
+    }
+    
     var newMessage:MessageViewLibrary? {
-        return AppDelegate.shared?.newMessage
+        return AppDelegate.shared?.properties?.newMessage
     }
     var ai: AlertViewLibrary? {
-        return AppDelegate.shared?.ai
+        return AppDelegate.shared?.properties?.ai
     }
     var db:DataBase {
-        return AppDelegate.shared?.db ?? DataBase()
+        return AppDelegate.shared?.properties?.db ?? DataBase()
     }
     var appData:AppData {
-        return AppDelegate.shared?.appData ?? .init()
+        return AppDelegate.shared?.properties?.appData ?? .init()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -36,7 +40,7 @@ class SuperViewController: UIViewController {
         
     }
 
-    lazy var defaultTableInset = AppDelegate.shared?.banner.size ?? 0
+    lazy var defaultTableInset = AppDelegate.shared?.properties?.banner.size ?? 0
     
 
     override func viewDidLoad() {
@@ -236,7 +240,7 @@ class SuperViewController: UIViewController {
     
     func showHistory(categpry: String, transactions: [TransactionsStruct]) {
         print("showHistory")
-        let db = AppDelegate.shared?.db
+        let db = AppDelegate.shared?.properties?.db
         if let category = db?.category(categpry) {
             DispatchQueue.main.async {
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)

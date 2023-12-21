@@ -38,7 +38,7 @@ class WebViewVC: SuperViewController, UIScrollViewDelegate, WKNavigationDelegate
                     self.webView.isHidden = false
                     self.screenAI?.stopAnimating()
                     self.screenAI?.isHidden = true
-                    self.webView.scrollView.contentInset.bottom = AppDelegate.shared?.banner.size ?? 0
+                    self.webView.scrollView.contentInset.bottom = AppDelegate.shared?.properties?.banner.size ?? 0
                     UIView.animate(withDuration: 0.3) {
                         self.webView.alpha = 1
                     }
@@ -88,7 +88,7 @@ class WebViewVC: SuperViewController, UIScrollViewDelegate, WKNavigationDelegate
     
     private func errorLoading() {
         DispatchQueue.main.async {
-            AppDelegate.shared?.ai.showAlertWithOK(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, hidePressed: { _ in
+            AppDelegate.shared?.properties?.ai.showAlertWithOK(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, hidePressed: { _ in
                 DispatchQueue.main.async {
                     self.navigationController?.popViewController(animated: true)
                 }

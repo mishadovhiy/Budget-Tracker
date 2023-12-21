@@ -30,7 +30,6 @@ class PanViewController {
         delegate = nil
         dismissAction = nil
         vc = nil
-        dismissAction = nil
     }
     
     var canSwipeFromFull:Bool = true

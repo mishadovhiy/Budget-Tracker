@@ -126,8 +126,8 @@ class SupportVC: SuperViewController, UITextViewDelegate {
             self.textView.endEditing(true)
         }
         
-            AppDelegate.shared!.ai.show { _ in
-                let userMessage = self.message + "Username:\(AppDelegate.shared?.appData.username ?? "-")"
+        AppDelegate.shared?.properties?.ai.show { _ in
+                let userMessage = self.message + "Username:\(AppDelegate.shared?.properties?.appData.db.username ?? "-")"
                 if let mesag = userMessage.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
                     self.sendCode(title: "btUserSupportRequest", head: "SupportVC", body: mesag) { error in
 

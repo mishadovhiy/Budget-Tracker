@@ -17,7 +17,7 @@ extension LoginViewController {
             if let name = values["create.username"],
                let email = values["create.email"],
                 let password = values["create.password"] {
-                let regDate = AppDelegate.shared?.appData.filter.getToday()
+                let regDate = AppDelegate.shared?.properties?.appData.db.filter.getToday()
             if password == values["create.password.repeate"] ?? "" {
                 if name != "" && !name.contains("@") && email != "" && password != "" {
                     let emailLimitOp = self.canAddForEmail(email, loadedData: loadedData)
@@ -51,12 +51,12 @@ extension LoginViewController {
                                 } else {
                                     let dat = (self.db.transactions, self.db.categories)
                                     self.userChanged()
-                                    let prevUsere = AppDelegate.shared?.appData.username
+                                    let prevUsere = AppDelegate.shared?.properties?.appData.db.username
                                     self.db.db.updateValue(prevUsere, forKey: "prevUserName")
                                     KeychainService.savePassword(account: name, data: password)
-                                    AppDelegate.shared?.appData.username = name
-                                    AppDelegate.shared?.appData.password = password
-                                    AppDelegate.shared?.appData.userEmailHolder = email
+                                    AppDelegate.shared?.properties?.appData.db.username = name
+                                    AppDelegate.shared?.properties?.appData.db.password = password
+                                    AppDelegate.shared?.properties?.appData.db.userEmailHolder = email
                                     
                                     if prevUsere == "" && self.forceLoggedOutUser == "" {
                                         self.db.localTransactions = dat.0
@@ -64,7 +64,7 @@ extension LoginViewController {
                                     }
                                     if self.forceLoggedOutUser == "" {
                                         self.forceLoggedOutUser = ""
-                                        AppDelegate.shared?.appData.fromLoginVCMessage = "Wellcome".localize + ", \(AppDelegate.shared?.appData.username ?? "-")"
+                                        AppDelegate.shared?.properties?.appData.fromLoginVCMessage = "Wellcome".localize + ", \(AppDelegate.shared?.properties?.appData.db.username ?? "-")"
                                     }
                                     
                                     
@@ -93,7 +93,7 @@ extension LoginViewController {
                                     self.newMessage?.show(title: "You have reached the maximum amount of usernames".localize, type: .error)
                                 }
                             } else {
-                                AppDelegate.shared?.appData.presentBuyProVC(selectedProduct: 3)
+                                AppDelegate.shared?.properties?.appData.presentBuyProVC(selectedProduct: 3)
                                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                                     self.newMessage?.show(title: "You have reached the maximum amount of usernames".localize, description: "Update to Pro".localize + " " + "to create new username".localize, type: .standart)
                                 }
@@ -164,7 +164,7 @@ extension LoginViewController {
                         } else {
                             KeychainService.savePassword(account: nickname, data: password)
                         }
-                        let prevUserName = AppDelegate.shared?.appData.username
+                        let prevUserName = AppDelegate.shared?.properties?.appData.db.username
                         
                         
                         if prevUserName != nickname {
@@ -179,16 +179,16 @@ extension LoginViewController {
                             }
                             
                             if forceLoggedOutUser == "" {
-                                AppDelegate.shared?.appData.fromLoginVCMessage = "Wellcome".localize + ", \(AppDelegate.shared?.appData.username ?? "")"
+                                AppDelegate.shared?.properties?.appData.fromLoginVCMessage = "Wellcome".localize + ", \(AppDelegate.shared?.properties?.appData.db.username ?? "")"
                             }
                             
                         }
-                        AppDelegate.shared?.appData.username = nickname
-                        AppDelegate.shared?.appData.password = password
-                        AppDelegate.shared?.appData.userEmailHolder = loadedData[i][DBEmailIndex]
+                        AppDelegate.shared?.properties?.appData.db.username = nickname
+                        AppDelegate.shared?.properties?.appData.db.password = password
+                        AppDelegate.shared?.properties?.appData.db.userEmailHolder = loadedData[i][DBEmailIndex]
                         
-                        if !(AppDelegate.shared?.appData.purchasedOnThisDevice ?? false) {
-                            AppDelegate.shared?.appData.proVersion = loadedData[i][4] == "1" ? true : (AppDelegate.shared?.appData.proVersion ?? false)
+                        if !(AppDelegate.shared?.properties?.appData.db.purchasedOnThisDevice ?? false) {
+                            AppDelegate.shared?.properties?.appData.db.proVersion = loadedData[i][4] == "1" ? true : (AppDelegate.shared?.properties?.appData.db.proVersion ?? false)
                         }
                         if fromPro || self.forceLoggedOutUser != "" {
                             DispatchQueue.main.async {

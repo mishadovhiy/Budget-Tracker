@@ -19,10 +19,10 @@ struct AppLocalization {
     
     static var udLocalization :String? {
         get {
-            return AppDelegate.shared?.db.db["Localization"] as? String
+            return AppDelegate.shared?.properties?.db.db["Localization"] as? String
         }
         set {
-            AppDelegate.shared?.db.db.updateValue(newValue ?? "eng", forKey: "Localization")
+            AppDelegate.shared?.properties?.db.db.updateValue(newValue ?? "eng", forKey: "Localization")
         }
     }
 

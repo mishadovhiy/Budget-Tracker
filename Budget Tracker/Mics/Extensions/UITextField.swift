@@ -9,24 +9,23 @@
 import UIKit
 
 extension UITextField {
+    
     open override func draw(_ rect: CGRect) {
         super.draw(rect)
         self.undoManager?.removeAllActions()
     }
+    
     func setPaddings(_ amount:CGFloat){
-        DispatchQueue.main.async {
-            let leftView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.size.height))
-            self.leftView = leftView
-            self.leftViewMode = .always
-            let rightView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.size.height))
-            self.rightView = rightView
-            self.rightViewMode = .always
-        }
+        let leftView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.size.height))
+        self.leftView = leftView
+        self.leftViewMode = .always
+        let rightView = UIView(frame: CGRect(x: 0, y: 0, width: amount, height: self.frame.size.height))
+        self.rightView = rightView
+        self.rightViewMode = .always
     }
     
     func setPlaceHolderColor(_ color:UIColor) {
             self.attributedPlaceholder = NSAttributedString(string: self.placeholder ?? "", attributes: [NSAttributedString.Key.foregroundColor: color])
     }
-    
     
 }

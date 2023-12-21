@@ -84,7 +84,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     }
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: true)
-        AppDelegate.shared?.banner.setBackground(clear: false)
+        AppDelegate.shared?.properties?.banner.setBackground(clear: false)
     }
     
     override func viewWillLayoutSubviews() {
@@ -98,6 +98,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
+        CategoriesVC.shared = self
         searchBar.endEditing(true)
             if let editTF = self.editingTF {
                 self.editingTF = nil
@@ -119,8 +120,8 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-//        AppDelegate.shared?.window?.backgroundColor = .clear
-        AppDelegate.shared?.banner.setBackground(clear: true)
+//        UIApplication.shared.keyWindow?.backgroundColor = .clear
+        AppDelegate.shared?.properties?.banner.setBackground(clear: true)
     }
     
     override func viewDidDismiss() {
@@ -174,7 +175,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     }
     
     func showMoreOptions() {
-        appData.presentMoreVC(currentVC: self, data: [
+        MoreVC.presentMoreVC(currentVC: self, data: [
             .init(name: "Sort", description: "", showAI:false, action: showMoreVC),
             .init(name: "Default cetrgories", description: "", showAI:false, action: {
                 self.toSelectCategory = true
@@ -217,9 +218,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         }
         set {
             _allCategoriesHolder = newValue
-            if fromSettings {
-                AppData.categoriesHolder = newValue
-            }
+
         }
     }
     
@@ -265,12 +264,9 @@ extension CategoriesVC: IconsVCDelegate {
     }
 
     func kayboardAppeared(_ keyboardHeight:CGFloat) {
-        DispatchQueue.main.async {
-            let height:CGFloat = keyboardHeight - self.appData.resultSafeArea.1 - self.defaultButtonInset
+        let height:CGFloat = keyboardHeight - (AppDelegate.shared?.properties?.appData.resultSafeArea.1 ?? 0) - self.defaultButtonInset
             let cellEditing = (self.editingTF?.layer.name?.contains("cell") ?? false) || self.selectingIconFor.0 != nil
             self.tableView.contentInset.bottom = height + (cellEditing ? (self.regFooterHeight * (-1)) : 0)
-
-        }
     }
 }
 

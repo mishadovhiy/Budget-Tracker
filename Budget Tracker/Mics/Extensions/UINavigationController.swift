@@ -9,12 +9,11 @@
 import UIKit
 
 extension UINavigationController {
-    
-    
     enum AppNavigationBacground {
-    case regular
+        case regular
         case clear
     }
+    
     func setBackground(_ background:AppNavigationBacground) {
         switch background {
         case .clear:
@@ -30,7 +29,7 @@ extension UINavigationController {
             }
             self.navigationBar.barTintColor = K.Colors.primaryBacground
             self.navigationBar.backgroundColor = K.Colors.primaryBacground
-
+            
             self.navigationBar.setBackgroundImage(UIImage(), for: .default)
             self.navigationBar.shadowImage = UIImage()
         }
@@ -41,13 +40,11 @@ class NavigationController: UINavigationController {
     open override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         setBackground(.regular)
-       // self.navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
-       
     }
     override func pushViewController(_ viewController: UIViewController, animated: Bool) {
         super.pushViewController(viewController, animated: animated)
     }
-
+    
     override func popViewController(animated: Bool) -> UIViewController? {
         var holder = self.viewControllers
         super.popViewController(animated: animated)

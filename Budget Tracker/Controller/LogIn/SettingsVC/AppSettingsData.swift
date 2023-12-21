@@ -42,7 +42,7 @@ class AppSettingsData {
     
     
     func appearenceSection() -> [Any] {
-        let colorCell = SettingsVC.StandartCell(title: "Primary color".localize, description: "", colorNamed:  AppData.linkColor, pro: nil, action: {//!appData.proEnabeled ? 3 : nil
+        let colorCell = SettingsVC.StandartCell(title: "Primary color".localize, description: "", colorNamed:  AppDelegate.shared?.properties?.db.linkColor ?? "", pro: nil, action: {//!appData.proEnabeled ? 3 : nil
             DispatchQueue.main.async {
                 self.vc.performSegue(withIdentifier: "toColors", sender: self.vc)
             }
@@ -169,9 +169,9 @@ class AppSettingsData {
         
         
         let appShortcodes = SettingsVC.StandartCell(title: "Application ShortCode Actions", action: {
-            let db = AppDelegate.shared?.db ?? .init()
+            let db = AppDelegate.shared?.properties?.db ?? .init()
             let ignoring = db.viewControllers.ignoredActionTypes
-            let cells:[SettingsVC.TriggerCell] = AppDelegate.ShortCodeItem.allCases.compactMap({ item in
+            let cells:[SettingsVC.TriggerCell] = ShortCodeItem.allCases.compactMap({ item in
                 return .init(title: item.item.title, isOn: !ignoring.contains(item.rawValue), action: { isOn in
                     DispatchQueue(label: "db", qos: .userInitiated).async {
                         if isOn {
@@ -180,7 +180,7 @@ class AppSettingsData {
                             db.viewControllers.ignoredActionTypes.append(item.rawValue)
                         }
                         DispatchQueue.main.async {
-                            AppDelegate.shared?.setQuickActions()
+                            AppDelegate.shared?.properties?.setQuickActions()
                         }
                     }
                 })
@@ -193,13 +193,13 @@ class AppSettingsData {
         
         
         
-        let testPro:SettingsVC.TriggerCell = SettingsVC.TriggerCell(title: "forceNotPro", isOn: AppDelegate.shared?.appData.forceNotPro ?? false, pro: nil, action: { (newValue) in
-            AppDelegate.shared?.appData.forceNotPro = newValue ? true : nil
+        let testPro:SettingsVC.TriggerCell = SettingsVC.TriggerCell(title: "forceNotPro", isOn: AppDelegate.shared?.properties?.appData.db.forceNotPro ?? false, pro: nil, action: { (newValue) in
+            AppDelegate.shared?.properties?.appData.db.forceNotPro = newValue ? true : nil
         })
 
         
         var cells = [otherCell, appShortcodes]
-        if AppDelegate.shared?.appData.devMode ?? false {
+        if AppDelegate.shared?.properties?.appData.db.devMode ?? false {
             //cells.append
         }
         return cells
@@ -251,8 +251,7 @@ extension AppSettingsData {
     }
     
     func getUserPasscode(completion:@escaping() -> ()) {
-
-        AppDelegate.shared!.presentLock(passcode: true, passcodeVerified: completion)
+        AppDelegate.shared?.properties?.presentLock(passcode: true, passcodeVerified: completion)
     }
     
     
@@ -261,11 +260,11 @@ extension AppSettingsData {
         let nextAction:(String) -> () = { (newValue) in
             let repeateAction:(String) -> () = { (repeatedPascode) in
                 if newValue == repeatedPascode {
-                    AppDelegate.shared!.newMessage.show(title: "Passcode has been setted".localize, type: .succsess)
+                    AppDelegate.shared?.properties?.newMessage.show(title: "Passcode has been setted".localize, type: .succsess)
                     self.vc.toEnterValue(data: nil)
                     completion(newValue)
                 } else {
-                    AppDelegate.shared!.newMessage.show(title: "Passcodes don't match".localize, type: .error)
+                    AppDelegate.shared?.properties?.newMessage.show(title: "Passcodes don't match".localize, type: .error)
                 }
             }
             let passcodeSecondEntered = EnterValueVC.EnterValueVCScreenData(taskName: "Create".localize + " " + "passcode".localize, title: "Repeat".localize + " " + "passcode".localize, placeHolder: "Password".localize, nextAction: repeateAction, screenType: .code)

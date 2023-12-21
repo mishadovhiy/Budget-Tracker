@@ -12,24 +12,24 @@ import UIKit
 
 struct Notifications {
     
-    private let center = AppDelegate.shared?.center
+    private let center = AppDelegate.shared?.properties?.center
     
     
     static func removeNotification(id:String, pending:Bool = false) {
         DispatchQueue.main.async {
-            AppDelegate.shared?.center.removeDeliveredNotifications(withIdentifiers: [id])
+            AppDelegate.shared?.properties?.center.removeDeliveredNotifications(withIdentifiers: [id])
             if pending {
-                AppDelegate.shared?.center.removePendingNotificationRequests(withIdentifiers: [id])
+                AppDelegate.shared?.properties?.center.removePendingNotificationRequests(withIdentifiers: [id])
             }
             DispatchQueue(label: "db", qos: .userInitiated).async {
-                let deliveredHolder = AppDelegate.shared?.notificationManager.deliveredNotificationIDs ?? []
+                let deliveredHolder = AppDelegate.shared?.properties?.notificationManager.deliveredNotificationIDs ?? []
                 var newNotif:[String] = []
                 for i in 0..<deliveredHolder.count {
                     if deliveredHolder[i] != id {
                         newNotif.append(deliveredHolder[i])
                     }
                 }
-                AppDelegate.shared?.notificationManager.deliveredNotificationIDs = newNotif
+                AppDelegate.shared?.properties?.notificationManager.deliveredNotificationIDs = newNotif
             }
         }
         
@@ -37,8 +37,8 @@ struct Notifications {
     
     static func getNotificationsNumber() {
     //    DispatchQueue.main.async {
-            AppDelegate.shared?.center.getDeliveredNotifications { notifications in
-                var ids = AppDelegate.shared?.notificationManager.deliveredNotificationIDs ?? []
+            AppDelegate.shared?.properties?.center.getDeliveredNotifications { notifications in
+                var ids = AppDelegate.shared?.properties?.notificationManager.deliveredNotificationIDs ?? []
                 for notification in notifications {
                     ids.append(notification.request.identifier)
                 }
@@ -109,10 +109,10 @@ struct Notifications {
     
     static func requestNotifications() {
         DispatchQueue.main.async {
-            AppDelegate.shared?.center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+            AppDelegate.shared?.properties?.center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
                 if !granted {
                     DispatchQueue.main.async {
-                        AppDelegate.shared?.ai.showAlertWithOK(title: "Notifications not permitted".localize, text: "Allow to use user notifications for this app".localize, error: true, okTitle:"Go to settings".localize) { _ in
+                        AppDelegate.shared?.properties?.ai.showAlertWithOK(title: "Notifications not permitted".localize, text: "Allow to use user notifications for this app".localize, error: true, okTitle:"Go to settings".localize) { _ in
                             DispatchQueue.main.async {
                                 if let url = URL(string: UIApplication.openSettingsURLString) {
                                     UIApplication.shared.open(url, options: [:]) { _ in

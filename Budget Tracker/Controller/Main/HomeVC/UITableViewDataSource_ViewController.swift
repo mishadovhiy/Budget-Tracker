@@ -77,7 +77,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             
             cell.dateLabel.textColor = K.Colors.link
             let date = newTableData[section - 1].date
-            cell.dateLabel.text = "\(AppData.makeTwo(n: date.day ?? 0))"
+            cell.dateLabel.text = "\(date.day?.twoDec ?? "")"
             cell.monthLabel.text =  date.stringMonth
             cell.yearLabel.text = "\(date.year ?? 0)"
             let contentView = cell.contentView
@@ -129,7 +129,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             return bigFr //- 45
         } else {
             if newTableData.count == 0 && indexPath.section == 1{
-                let safe = AppDelegate.shared?.window?.safeAreaInsets.top ?? 0 + 20
+                let safe = UIApplication.shared.keyWindow?.safeAreaInsets.top ?? 0 + 20
                 return (tableView.layer.frame.height - (bigFr + (safe))).validate(min: 0)
             } else {
                 return UITableView.automaticDimension

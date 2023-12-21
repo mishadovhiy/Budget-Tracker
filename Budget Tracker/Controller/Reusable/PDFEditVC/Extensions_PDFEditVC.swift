@@ -27,10 +27,10 @@ extension PDFEditVC {
         imgPicker.delegate = self
         imgPicker.allowsEditing = true
         imgPicker.dismissed = {
-            AppDelegate.shared?.banner.appeare(force: true)
+            AppDelegate.shared?.properties?.banner.appeare(force: true)
         }
         imageSelectedAction = selected
-        AppDelegate.shared?.banner.hide(ios13Hide: true, completion: {
+        AppDelegate.shared?.properties?.banner.hide(ios13Hide: true, completion: {
             self.present(imgPicker, animated: true)
         })
     }
@@ -184,7 +184,7 @@ extension PDFEditVC:UIImagePickerControllerDelegate, UINavigationControllerDeleg
               let selected = (info[.editedImage] as? UIImage)?.pngData()
         else { return }
         
-      //  AppDelegate.shared?.banner.appeare(force: true, completion: {
+      //  AppDelegate.shared?.properties?.banner.appeare(force: true, completion: {
             selectedAction(selected)
      //   })
     }
@@ -192,7 +192,7 @@ extension PDFEditVC:UIImagePickerControllerDelegate, UINavigationControllerDeleg
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         //settingsNav?.popViewController(animated: true)
         picker.dismiss(animated: true)
-       // AppDelegate.shared?.banner.appeare(force: true)
+       // AppDelegate.shared?.properties?.banner.appeare(force: true)
     }
     
     

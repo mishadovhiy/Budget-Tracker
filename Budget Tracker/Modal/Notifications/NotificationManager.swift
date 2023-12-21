@@ -11,11 +11,11 @@ import UIKit
 
 struct NotificationManager {
     var db:DataBase {
-        return AppDelegate.shared?.db ?? .init()
+        return AppDelegate.shared?.properties?.db ?? .init()
     }
     func loadNotifications(completion: @escaping ([String]) -> ()) {
         DispatchQueue.main.async {
-            AppDelegate.shared?.center.getDeliveredNotifications(completionHandler: { nitof in
+            AppDelegate.shared?.properties?.center.getDeliveredNotifications(completionHandler: { nitof in
                 var newIDs:[String] = []
                 for i in 0..<nitof.count {
                     let requestID = nitof[i].request.identifier
@@ -62,7 +62,7 @@ struct NotificationManager {
     
     
     mutating func removeAll() {
-        AppDelegate.shared?.center.removeAllDeliveredNotifications()
+        AppDelegate.shared?.properties?.center.removeAllDeliveredNotifications()
         deliveredNotificationIDs = []
     }
    

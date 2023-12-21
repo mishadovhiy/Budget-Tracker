@@ -45,7 +45,7 @@ class IconsVC: SuperViewController {
     }
     
     lazy var coloresStrTemporary:[String] = {
-        return (screenType == .colorsOnly ? AppDelegate.shared?.appData.screenColors : AppDelegate.shared?.appData.categoryColors) ?? []
+        return (screenType == .colorsOnly ? AppDelegate.shared?.properties?.appData.screenColors : AppDelegate.shared?.properties?.appData.categoryColors) ?? []
     }()
     
     var selectedColorId:Int = 0

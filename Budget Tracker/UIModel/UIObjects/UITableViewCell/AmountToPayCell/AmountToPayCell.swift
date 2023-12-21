@@ -62,7 +62,7 @@ class AmountToPayCell: UITableViewCell {
         self.restAmountLabel.text = "\(amToPay + tEx)"
         self.amountToPayLabel.text = "\(amToPay)"
         self.progressBar.progress = Float(progress)
-        self.progressBar.progressTintColor = AppData.colorNamed(selectedCategory?.color)
+        self.progressBar.progressTintColor = .colorNamed(selectedCategory?.color)
         self.progressBar.isHidden = amToPay == 0
         amountToPayLabel.text = "\(amToPay)"
         amountToPayTextField.addTarget(self, action: #selector(tfChanged(_:)), for: .editingChanged)
@@ -144,8 +144,8 @@ class AmountToPayCell: UITableViewCell {
                     }
                 }
                 
-                self.deleteButton.setImage(AppData.iconSystemNamed(deleteIcon), for: .normal)
-                self.changeButton.setImage(AppData.iconSystemNamed(changeIcon), for: .normal)
+                self.deleteButton.setImage(.init(deleteIcon), for: .normal)
+                self.changeButton.setImage(.init(changeIcon), for: .normal)
                 
             }
         }
@@ -194,7 +194,7 @@ class AmountToPayCell: UITableViewCell {
     @IBAction func changePressed(_ sender: UIButton) {
         if isEdit {
             //  DispatchQueue.main.async {
-            HistoryVC.shared?.ai?.show(title: "Sending".localize, completion: { _ in
+            HistoryVC.shared?.properties?.ai.show(title: "Sending".localize, completion: { _ in
                 self.isEdit = false
                 self.showEdit(false, hideStack: true) { _ in
                     let text = self.amountToPayTextField.text ?? ""
@@ -227,7 +227,7 @@ class AmountToPayCell: UITableViewCell {
         if !isEdit {
             if let funcc = deleteFunc {
                 //    DispatchQueue.main.async {
-                HistoryVC.shared?.ai?.show(title: "Deleting".localize, completion: { _ in
+                HistoryVC.shared?.properties?.ai.show(title: "Deleting".localize, completion: { _ in
                     self.showEdit(new, hideStack: true) { _ in
                         funcc()
                         

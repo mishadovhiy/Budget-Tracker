@@ -141,7 +141,7 @@ class TransitionVC: SuperViewController {
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         if !fromEdit {
             createCameraContainer()
-            toggleCamera(show:fromEdit ? false : (AppDelegate.shared?.db.viewControllers.cameraStorage.addTransactionCameraEnabled ?? false), animated:false)
+            toggleCamera(show:fromEdit ? false : (AppDelegate.shared?.properties?.db.viewControllers.cameraStorage.addTransactionCameraEnabled ?? false), animated:false)
 
         } else {
             toggleCameraButton.isHidden = true
@@ -162,7 +162,7 @@ class TransitionVC: SuperViewController {
     var panMahanger:PanViewController?
 
     lazy var defaultDate:String = {
-        return dateSet ?? (lastSelectedDate ?? (AppDelegate.shared?.appData.filter.from ?? ""))
+        return dateSet ?? (lastSelectedDate ?? (AppDelegate.shared?.properties?.appData.db.filter.from ?? ""))
     }()
     @IBOutlet weak var doneButton: UIButton!
 
@@ -199,7 +199,7 @@ class TransitionVC: SuperViewController {
         pressedValue = "0"
 
         DispatchQueue.main.async {
-                ///self.appData.objects.datePicker.datePickerMode = .date
+                ///self.properties?.appData.objects.datePicker.datePickerMode = .date
             self.valueLabel.text = self.pressedValue
             
         }
@@ -272,7 +272,7 @@ class TransitionVC: SuperViewController {
         }
         selectedCategory = db.category(editingCategory) ?? lastExpense*/
         if editingCategory != "" {
-            selectedCategory = AppDelegate.shared?.db.category(self.editingCategory)
+            selectedCategory = AppDelegate.shared?.properties?.db.category(self.editingCategory)
             purposeSwitcher.selectedSegmentIndex = selectedPurpose != nil ? selectedPurpose! : 0
             purposeSwitched(purposeSwitcher)
             DispatchQueue.main.async {
@@ -293,7 +293,7 @@ class TransitionVC: SuperViewController {
                 self.isModalInPresentation = true
             }*/
             minusPlusLabel.alpha = 1
-            let db = AppDelegate.shared?.db ?? .init()
+            let db = AppDelegate.shared?.properties?.db ?? .init()
             let category = db.category(self.editingCategory)
             selectedCategory = category
             DispatchQueue.main.async {
@@ -505,7 +505,7 @@ class TransitionVC: SuperViewController {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: true)
         if !(navigationController is TransactionNav) {
-            AppDelegate.shared?.banner.hide(ios13Hide:true)
+            AppDelegate.shared?.properties?.banner.hide(ios13Hide:true)
         }
 
     }
@@ -513,7 +513,7 @@ class TransitionVC: SuperViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         if !(navigationController is TransactionNav) && !(self.navigationController?.viewControllers.contains(where: {$0 is TransitionVC}) ?? false) {
-            AppDelegate.shared?.banner.appeare(force:true)
+            AppDelegate.shared?.properties?.banner.appeare(force:true)
         }
     }
     
@@ -522,7 +522,7 @@ class TransitionVC: SuperViewController {
         super.viewDidAppear(animated)
         if !viewAppeareCalled {
             viewAppeareCalled = true
-            self.cameraVC?.toggleCameraSession(pause: fromEdit ? true : !(AppDelegate.shared?.db.viewControllers.cameraStorage.addTransactionCameraEnabled ?? false))
+            self.cameraVC?.toggleCameraSession(pause: fromEdit ? true : !(AppDelegate.shared?.properties?.db.viewControllers.cameraStorage.addTransactionCameraEnabled ?? false))
 
         }
         if !(navigationController is TransactionNav) && panMahanger == nil {
@@ -542,8 +542,8 @@ class TransitionVC: SuperViewController {
             DispatchQueue.main.async {
                 self.categoryTextField.text = ""
             }
-            let lastSelectedID = appData.lastSelected.gett(valueType: sender.selectedSegmentIndex == 0 ? .expense : .income)
-            let lastCat = AppDelegate.shared?.db.categories.last(where: {$0.purpose == (sender.selectedSegmentIndex == 0 ? .expense : .income)})
+            let lastSelectedID = appData.db.lastSelected.gett(valueType: sender.selectedSegmentIndex == 0 ? .expense : .income)
+            let lastCat = AppDelegate.shared?.properties?.db.categories.last(where: {$0.purpose == (sender.selectedSegmentIndex == 0 ? .expense : .income)})
             if let cat = db.category(lastSelectedID ?? "\(lastCat?.id ?? 0)") {
                 selectedCategory = cat
                 print("last selected cat: ", cat.name)
@@ -664,7 +664,7 @@ class TransitionVC: SuperViewController {
         cameraShowing = show
         let hide = cameraContainer.frame.height + view.safeAreaInsets.bottom
         DispatchQueue(label: "db", qos: .userInitiated).async {
-            AppDelegate.shared?.db.viewControllers.cameraStorage.addTransactionCameraEnabled = show
+            AppDelegate.shared?.properties?.db.viewControllers.cameraStorage.addTransactionCameraEnabled = show
         }
         view.endEditing(true)
         
@@ -846,7 +846,7 @@ extension TransitionVC {
         let resVal = error ? firstValue : result
         if error {
             errorSaving()
-            AppDelegate.shared?.newMessage.show(title:"Value is too big", type: .error)
+            AppDelegate.shared?.properties?.newMessage.show(title:"Value is too big", type: .error)
         }
         pressedValue = "\(Int(resVal))"
         editingValue = resVal
@@ -872,17 +872,17 @@ extension TransitionVC: CategoriesVCProtocol {
                 DispatchQueue(label: "db", qos: .userInitiated).async {
                     switch category.purpose {
                     case .expense:
-                        self.appData.lastSelected.sett(value: "\(category.id)", valueType: .expense)
+                        self.properties?.appData.db.lastSelected.sett(value: "\(category.id)", valueType: .expense)
                     case .income:
-                        self.appData.lastSelected.sett(value: "\(category.id)", valueType: .income)
+                        self.properties?.appData.db.lastSelected.sett(value: "\(category.id)", valueType: .income)
                     case .debt:
-                        self.appData.lastSelected.sett(value: "\(category.id)", valueType: .debt)
+                        self.properties?.appData.db.lastSelected.sett(value: "\(category.id)", valueType: .debt)
 
                     }
                 }
             } else {
                 DispatchQueue(label: "db", qos: .userInitiated).async {
-                    self.appData.lastSelected.sett(value: "\(category.id)", valueType: .debt)
+                    self.properties?.appData.db.lastSelected.sett(value: "\(category.id)", valueType: .debt)
                     self.selectedCategory = category
                     DispatchQueue.main.async {
                         

@@ -45,7 +45,7 @@ class categoriesVCcell: ClearCell {
         super.draw(rect)
         if !drawed {
             drawed = true
-            if !AppDelegate.shared!.symbolsAllowed {
+            if !(AppDelegate.shared!.properties?.appData.symbolsAllowed ?? true) {
                 iconimage.isHidden = true
             }
             self.touchesBegunAction = { began in
@@ -95,7 +95,7 @@ class categoriesVCcell: ClearCell {
         if index != nil {
             self.newCategoryTF.delegate = self
             self.newCategoryTF.addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
-            if AppDelegate.shared!.symbolsAllowed {
+            if AppDelegate.shared!.properties?.appData.symbolsAllowed ?? false {
                 let iconPressed = UITapGestureRecognizer(target: self, action: #selector(self.iconPressed(_:)))//
                 self.iconimage.addGestureRecognizer(iconPressed)
             }

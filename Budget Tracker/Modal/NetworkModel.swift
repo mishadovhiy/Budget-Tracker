@@ -10,12 +10,12 @@ import UIKit
 
 struct LoadFromDB {
     var appData:AppData {
-        return AppDelegate.shared?.appData ?? .init()
+        return AppDelegate.shared?.properties?.appData ?? .init()
     }
     static var shared = LoadFromDB()
     private func load(urlPath: String, completion: @escaping (NSArray, error?) -> ()) {
-        if Thread.isMainThread && appData.devMode {
-            AppDelegate.shared?.ai.showAlertWithOK(title:"main thread error ", text: "\(#function)", error: true)
+        if Thread.isMainThread && appData.db.devMode {
+            AppDelegate.shared?.properties?.ai.showAlertWithOK(title:"main thread error ", text: "\(#function)", error: true)
         }
         print(urlPath, " urlPathurlPathurlPath")
         if let url: URL = URL(string: urlPath) {
@@ -35,8 +35,8 @@ struct LoadFromDB {
                     }
                     if Thread.isMainThread {
                         print("!!!!!!!!!!!errororor api")
-                        if (AppDelegate.shared?.appData.devMode ?? false) {
-                            AppDelegate.shared?.newMessage.show(title:"fatal error, from main", type: .error)
+                        if (AppDelegate.shared?.properties?.appData.db.devMode ?? false) {
+                            AppDelegate.shared?.properties?.newMessage.show(title:"fatal error, from main", type: .error)
                         }
                     }
                     completion(jsonResult, nil)
@@ -54,7 +54,7 @@ struct LoadFromDB {
 
     
     var db:DataBase {
-        return AppDelegate.shared?.db ?? .init()
+        return AppDelegate.shared?.properties?.db ?? .init()
     }
     
     enum error {
@@ -66,7 +66,7 @@ struct LoadFromDB {
     
     
     private func performAddCategory(otherUser: String? = nil, saveLocally: Bool = true, local:Bool = false, completion: @escaping ([NewCategories], error) -> ()) {
-        let user = otherUser == nil ? appData.username : otherUser!
+        let user = otherUser == nil ? appData.db.username : otherUser!
         if user == "" || local {
             let local = db.categories
             completion(local, .none)
@@ -114,7 +114,7 @@ struct LoadFromDB {
     }
     
     private func performnewTransactions(otherUser: String? = nil, saveLocally: Bool = true, completion: @escaping ([TransactionsStruct], error) -> (), local:Bool = false) {
-        let user = otherUser == nil ? appData.username : otherUser!
+        let user = otherUser == nil ? appData.db.username : otherUser!
         if user == "" || local {
             let local = db.transactions
             completion(local, .none)
@@ -224,7 +224,10 @@ struct LoadFromDB {
     
     
     
-    static func checkPassword(from loadedData:[[String]], nickname:String, password:String) -> (Bool, [String]?) {
+    static func checkPassword(from loadedData:[[String]], nickname:String?, password:String?) -> (Bool, [String]?) {
+        guard let password, let nickname else {
+            return (true, nil)
+        }
         var wrongPassword = true
         var userData:[String]?
         for i in 0..<loadedData.count {
@@ -254,7 +257,7 @@ struct LoadFromDB {
 
 struct SaveToDB {
     var appData:AppData {
-        return AppDelegate.shared?.appData ?? .init()
+        return AppDelegate.shared?.properties?.appData ?? .init()
     }
     var db:DataBase {
         return appData.db
@@ -278,16 +281,16 @@ struct SaveToDB {
     }
     
     func newTransaction(_ transaction: TransactionsStruct, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {
-        if appData.username == "" {
+        if appData.db.username == "" {
             db.transactions.append(transaction)
             completion(false)
         } else {
 
-            let data = "&Nickname=\(appData.username)" + "&CategoryId=\(transaction.categoryID)" + "&Amount=\(transaction.value)" + "&Date=\(transaction.date)" + "&Comment=\(transaction.comment)"
+            let data = "&Nickname=\(appData.db.username)" + "&CategoryId=\(transaction.categoryID)" + "&Amount=\(transaction.value)" + "&Date=\(transaction.date)" + "&Comment=\(transaction.comment)"
             save(dbFileURL: Keys.dbURL + "new-NewTransaction.php", toDataString: data, error: { (error) in
                 if error {
                     if saveLocally {
-                        appData.unsendedData.append(["transactionNew": transaction.dict])
+                        appData.db.unsendedData.append(["transactionNew": transaction.dict])
                     }
                     
                 }
@@ -301,7 +304,7 @@ struct SaveToDB {
     }
     
     private func performnewCategories(_ category: NewCategories, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {
-        if appData.username == "" {
+        if appData.db.username == "" {
             DispatchQueue(label: "db", qos: .userInitiated).async {
                 self.db.categories.append(category)
                 DispatchQueue.main.async {
@@ -329,11 +332,11 @@ struct SaveToDB {
                 }
                 return ""
             }
-            let data = "&Nickname=\(appData.username)" + "&Id=\(category.id)" + "&Name=\(category.name)" + "&Icon=\(category.icon)" + "&Color=\(category.color)" + "&Purpose=\(pupose)" + amount + dueDate
+            let data = "&Nickname=\(appData.db.username)" + "&Id=\(category.id)" + "&Name=\(category.name)" + "&Icon=\(category.icon)" + "&Color=\(category.color)" + "&Purpose=\(pupose)" + amount + dueDate
             save(dbFileURL: Keys.dbURL + "new-NewCategory.php", toDataString: data, error: { (error) in
                 if error {
                     if saveLocally {
-                        appData.unsendedData.append(["categoryNew": category.dict])
+                        appData.db.unsendedData.append(["categoryNew": category.dict])
                     }
                     
                 }
@@ -417,8 +420,8 @@ struct SaveToDB {
                         print(Thread.isMainThread, " apithreaddd")
                         if Thread.isMainThread {
                             print("!!!!!!!!!!!errororor api")
-                            if (AppDelegate.shared?.appData.devMode ?? false) {
-                                AppDelegate.shared?.newMessage.show(title:"fatal error, from main", type: .error)
+                            if (AppDelegate.shared?.properties?.appData.db.devMode ?? false) {
+                                AppDelegate.shared?.properties?.newMessage.show(title:"fatal error, from main", type: .error)
                             }
                         }
                         if returnedData == "1" {
@@ -468,7 +471,7 @@ struct SaveToDB {
 
 struct DeleteFromDB {
     var appData:AppData {
-        return AppDelegate.shared?.appData ?? .init()
+        return AppDelegate.shared?.properties?.appData ?? .init()
     }
     var db:DataBase {
         return appData.db
@@ -491,7 +494,7 @@ struct DeleteFromDB {
     
 
     func performCategoriesNew(category: NewCategories, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {
-        if appData.username == "" {
+        if appData.db.username == "" {
             deleteCategory(category: category)
             completion(false)
         } else {
@@ -514,11 +517,11 @@ struct DeleteFromDB {
                 return ""
             }
             
-            let data = "&Nickname=\(appData.username)" + "&Id=\(category.id)" + "&Name=\(category.name)" + "&Icon=\(category.icon)" + "&Color=\(category.color)" + "&Purpose=\(pupose)" + amount + dueDate
+            let data = "&Nickname=\(appData.db.username)" + "&Id=\(category.id)" + "&Name=\(category.name)" + "&Icon=\(category.icon)" + "&Color=\(category.color)" + "&Purpose=\(pupose)" + amount + dueDate
             delete(dbFileURL: Keys.dbURL + "delete-NewCategory.php", toDataString: data, error: { (error) in
                 if error {
                     if saveLocally {
-                        appData.unsendedData.append(["deleteCategoryNew": category.dict])
+                        appData.db.unsendedData.append(["deleteCategoryNew": category.dict])
                     }
                     
                 }
@@ -560,16 +563,16 @@ struct DeleteFromDB {
     }
     
     func performnewTransaction(_ transaction: TransactionsStruct, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {
-        if appData.username == "" {
+        if appData.db.username == "" {
             db.deleteTransaction(transaction: transaction)
             completion(false)
         } else {
 
-            let data = "&Nickname=\(appData.username)" + "&CategoryId=\(transaction.categoryID)" + "&Amount=\(transaction.value)" + "&Date=\(transaction.date)" + "&Comment=\(transaction.comment)"
+            let data = "&Nickname=\(appData.db.username)" + "&CategoryId=\(transaction.categoryID)" + "&Amount=\(transaction.value)" + "&Date=\(transaction.date)" + "&Comment=\(transaction.comment)"
             delete(dbFileURL: Keys.dbURL + "delete-NewTransaction.php", toDataString: data, error: { (error) in
                 if error {
                     if saveLocally {
-                        appData.unsendedData.append(["deleteTransactionNew": transaction.dict])
+                        appData.db.unsendedData.append(["deleteTransactionNew": transaction.dict])
                     }
                     
                 }
@@ -593,11 +596,11 @@ struct DeleteFromDB {
     }
 
     func deleteAccount(completion: @escaping (Bool) -> ()) {
-        if appData.username == "" {
+        if appData.db.username == "" {
             completion(false)
         } else {
 
-          /*  let data = "&Nickname=\(appData.username)" + "&CategoryId=\(transaction.categoryID)" + "&Amount=\(transaction.value)" + "&Date=\(transaction.date)" + "&Comment=\(transaction.comment)"
+          /*  let data = "&Nickname=\(appData.db.username)" + "&CategoryId=\(transaction.categoryID)" + "&Amount=\(transaction.value)" + "&Date=\(transaction.date)" + "&Comment=\(transaction.comment)"
             delete(dbFileURL: Keys.dbURL + "delete-NewTransaction.php", toDataString: data, error: { (error) in
                 if error {
 
@@ -634,8 +637,8 @@ struct DeleteFromDB {
                         print(Thread.isMainThread, " apithreaddd")
                         if Thread.isMainThread {
                             print("!!!!!!!!!!!errororor api")
-                            if (AppDelegate.shared?.appData.devMode ?? false) {
-                                AppDelegate.shared?.newMessage.show(title:"fatal error, from main", type: .error)
+                            if (AppDelegate.shared?.properties?.appData.db.devMode ?? false) {
+                                AppDelegate.shared?.properties?.newMessage.show(title:"fatal error, from main", type: .error)
                             }
                         }
                         if let unwrappedData = data {

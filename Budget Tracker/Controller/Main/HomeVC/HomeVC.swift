@@ -14,7 +14,7 @@ class HomeVC: SuperViewController {
     let transitionAppearenceManager = AnimatedTransitioningManager(duration: 0.267)
     
     var touchingFromShow = false
-
+    
     @IBOutlet weak var balanceHelperView: UIView!
     @IBOutlet weak var sideTableView: UITableView!
     @IBOutlet weak var pinchView: UIView!
@@ -86,7 +86,7 @@ class HomeVC: SuperViewController {
     var timers: [Timer] = []
     var safeArreaHelperViewAdded = false
     var safeArreaHelperView: UIView?
-    let center = AppDelegate.shared?.center
+    let center = AppDelegate.shared?.properties?.center
     var sendError = false
     var startedSendingUnsended = false
     var highesLoadedCatID: Int?
@@ -124,7 +124,7 @@ class HomeVC: SuperViewController {
         sideBar.load()
         toggleSideBar(false, animated: false)
         
-        self.mainTableView.contentInset.bottom = AppDelegate.shared?.banner.size ?? 0
+        self.mainTableView.contentInset.bottom = AppDelegate.shared?.properties?.banner.size ?? 0
         if #available(iOS 13.0, *) {
             BannerPublisher.valuePublisher.sink(receiveValue: {
                 self.bannerUpdated($0)
@@ -146,34 +146,34 @@ class HomeVC: SuperViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        AppDelegate.shared?.window?.backgroundColor = K.Colors.primaryBacground
+        UIApplication.shared.keyWindow?.backgroundColor = K.Colors.primaryBacground
         
         super.viewWillDisappear(animated)
         
     }
-
+    
     var vcAppeared = false
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         viewAppeared()
-        AppDelegate.shared?.banner.setBackground(clear: false)
+        AppDelegate.shared?.properties?.banner.setBackground(clear: false)
         if !vcAppeared {
             vcAppeared = true
-        } else if AppDelegate.shared?.banner.adHidden ?? false {
-            AppDelegate.shared?.banner.appeare(force: true)
+        } else if AppDelegate.shared?.properties?.banner.adHidden ?? false {
+            AppDelegate.shared?.properties?.banner.appeare(force: true)
         }
     }
     
     func monthSelected(_ year:Int, _ month:Int) {
         lastSelectedDate = nil
         DispatchQueue.init(label: "local", qos: .userInitiated).async {
-            AppDelegate.shared?.appData.filter.showAll = false
-            AppDelegate.shared?.appData.filter.from = "\(1.makeTwo()).\(month.makeTwo()).\(year)"
+            AppDelegate.shared?.properties?.appData.db.filter.showAll = false
+            AppDelegate.shared?.properties?.appData.db.filter.from = "\(1.twoDec).\(month.twoDec).\(year)"
             var lastDay = DateComponents()
             lastDay.year = year
             lastDay.month = month
             print(lastDay.lastDayOfMonth, " trgerfwd")
-            AppDelegate.shared?.appData.filter.to = "\((lastDay.lastDayOfMonth ?? 31).makeTwo()).\(month.makeTwo()).\(year)"
+            AppDelegate.shared?.properties?.appData.db.filter.to = "\((lastDay.lastDayOfMonth ?? 31).twoDec).\(month.twoDec).\(year)"
             if !self.completedFiltering {
                 self.transactionManager?.filterChanged = true
             }
@@ -187,21 +187,21 @@ class HomeVC: SuperViewController {
         self.vibrate()
         self.calendarSelectedDate = newDate.toShortString()
         self.toAddTransaction(pressedView: calendarContainer, isCalendar: false)
-
+        
     }
     func dateSelectedCell(_ newDate:DateComponents, _ cell:CalendarCell) {
-    /*    self.vibrate()
-        self.calendarSelectedDate = newDate.toShortString()
-        self.toAddTransaction(pressedView: calendarContainer, canDivid: true, isCalendar: true)*/
+        /*    self.vibrate()
+         self.calendarSelectedDate = newDate.toShortString()
+         self.toAddTransaction(pressedView: calendarContainer, canDivid: true, isCalendar: true)*/
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        print("today is", AppDelegate.shared?.appData.filter.getToday())
-        AppDelegate.shared?.window?.backgroundColor = .clear
+        print("today is", AppDelegate.shared?.properties?.appData.db.filter.getToday())
+        UIApplication.shared.keyWindow?.backgroundColor = .clear
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         super.viewWillAppear(animated)
         navigationController?.delegate = nil
-
+        
     }
     
     var transactionManager:TransactionsManager?
@@ -210,21 +210,21 @@ class HomeVC: SuperViewController {
     func filter(data:[TransactionsStruct]? = nil) {
         completedFiltering = false
         print("filterCalled")
-        let showAll = false//AppDelegate.shared?.appData.filter.showAll ?? false
-        print(AppDelegate.shared?.appData.filter.from, " tyhregrfwed")
-        print(AppDelegate.shared?.appData.filter.to, " tgerfwd")
+        let showAll = false//AppDelegate.shared?.properties?.appData.db.filter.showAll ?? false
+        print(AppDelegate.shared?.properties?.appData.db.filter.from, " tyhregrfwed")
+        print(AppDelegate.shared?.properties?.appData.db.filter.to, " tgerfwd")
         let all = transactionManager?.filtered(apiTransactions) ?? []
-        self.filterText = (showAll ? "All transactions".localize : (AppDelegate.shared?.appData.filter.periodText ?? ""))
+        self.filterText = (showAll ? "All transactions".localize : (AppDelegate.shared?.properties?.appData.db.filter.periodText ?? ""))
         tableData = all
         prepareFilterOptions(apiTransactions)
         
         calculations = .init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)
         dataTaskCount = (0,0)
         animateCellWillAppear = true
-        let selectedPeriud = AppDelegate.shared?.appData.filter.selectedPeroud ?? ""
+        let selectedPeriud = AppDelegate.shared?.properties?.appData.db.filter.selectedPeroud ?? ""
         let selectedPer = selectedPeriud != "" ? selectedPeriud : "This Month"
-        if AppDelegate.shared?.appData.filter.selectedPeroud != selectedPer {
-            AppDelegate.shared?.appData.filter.selectedPeroud = selectedPer
+        if AppDelegate.shared?.properties?.appData.db.filter.selectedPeroud != selectedPer {
+            AppDelegate.shared?.properties?.appData.db.filter.selectedPeroud = selectedPer
         }
         
         if !showAll {
@@ -240,15 +240,15 @@ class HomeVC: SuperViewController {
             
         }
     }
-
+    
     var dbTotal:Int = 0
     func refresh() {
         //add transaction
         //scrolltop (other, similier function) - to ask if user whants to refresh db
         forseSendUnsendedData = true
-        if AppDelegate.shared?.appData.username != "" {
+        if AppDelegate.shared?.properties?.appData.db.username != "" {
             if refreshData {
-                if AppDelegate.shared?.appData.username != "" {
+                if AppDelegate.shared?.properties?.appData.db.username != "" {
                     self.downloadFromDB(showError: true)
                 } else {
                     mainTableView.refresh?.endRefreshing()
@@ -258,7 +258,7 @@ class HomeVC: SuperViewController {
                 mainTableView.refresh?.endRefreshing()
                 toAddTransaction()
                 
-
+                
                 
             }
         } else {
@@ -266,7 +266,7 @@ class HomeVC: SuperViewController {
             toAddTransaction()
         }
     }
-
+    
     func deleteFromDB(at: IndexPath) {
         selectedCell = nil
         let delete = DeleteFromDB()
@@ -274,18 +274,18 @@ class HomeVC: SuperViewController {
             self.filter()
         }
     }
-
+    
     @objc func sideBarPinched(_ sender: UIPanGestureRecognizer) {
         sideBarPinch(sender)
     }
-
+    
     
     @IBAction func addTransactionPressed(_ sender: Any) {
         toAddTransaction()
     }
     
     @objc func mainContentTap(_ sender: UITapGestureRecognizer) {
-    //    toggleSideBar(false, animated: true)
+        //    toggleSideBar(false, animated: true)
     }
     
     @IBAction func menuPressed(_ sender: UIButton) {
@@ -298,7 +298,7 @@ class HomeVC: SuperViewController {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if sideBarShowing {
-          //  toggleSideBar(false, animated: true)
+            //  toggleSideBar(false, animated: true)
             self.scrollHead(scrollView)
             return
         }
@@ -306,7 +306,7 @@ class HomeVC: SuperViewController {
         self.scrollHead(scrollView)
     }
     
-//MARK: - Other
+    //MARK: - Other
     
     var monthTransactions:[TransactionsStruct] = []
     var totalBalance = 0.0
@@ -314,25 +314,25 @@ class HomeVC: SuperViewController {
     var selectedToDayInt = 0
     var editingTransaction: TransactionsStruct?
     var prevSelectedPer:String?
-
+    
     
     var filterHelperView = UIView(frame: .zero)
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         UIView.animate(withDuration: 0.19) {
-           // self.safeArreaHelperView?.alpha = 1
+            // self.safeArreaHelperView?.alpha = 1
             self.safeArreaHelperView?.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
         }
         self.prepareSegue(for: segue, sender: sender)
- 
+        
     }
-
+    
     @IBOutlet weak var expencesStack: UIStackView!
     @IBOutlet weak var perioudBalanceView: UIStackView!
-
+    
     
     func checkDownload(force:Bool = false) {
-        if (AppDelegate.shared?.appData.needFullReload ?? false) {
-            AppDelegate.shared?.appData.needFullReload = false
+        if (AppDelegate.shared?.properties?.appData.needFullReload ?? false) {
+            AppDelegate.shared?.properties?.appData.needFullReload = false
             self.toggleNoData(show: true, text: "Loading".localize, fromTop: true, appeareAnimation: false, addButtonHidden: true)
             if !force {
                 self.downloadFromDB()
@@ -353,11 +353,11 @@ class HomeVC: SuperViewController {
             }
             self.checkDownload(force: true)
             
-            if AppDelegate.shared?.appData.fromLoginVCMessage != "" {
-                print("appData.fromLoginVCMessage", AppDelegate.shared?.appData.fromLoginVCMessage ?? "-")
+            if AppDelegate.shared?.properties?.appData.fromLoginVCMessage != "" {
+                print("appData.fromLoginVCMessage", AppDelegate.shared?.properties?.appData.fromLoginVCMessage ?? "-")
                 DispatchQueue.main.async {
-                    self.newMessage?.show(title:AppDelegate.shared?.appData.fromLoginVCMessage ?? "", type: .standart)
-                    AppDelegate.shared?.appData.fromLoginVCMessage = ""
+                    self.newMessage?.show(title:AppDelegate.shared?.properties?.appData.fromLoginVCMessage ?? "", type: .standart)
+                    AppDelegate.shared?.properties?.appData.fromLoginVCMessage = ""
                     if self.sideBarShowing {
                         self.toggleSideBar(false, animated: true)
                     }
@@ -365,7 +365,7 @@ class HomeVC: SuperViewController {
             }
         }
     }
-
+    
     @IBAction func unwindToFilter(segue: UIStoryboardSegue) {
         print("FROM FILTER")
         DispatchQueue.global(qos: .userInteractive).async {
@@ -375,13 +375,13 @@ class HomeVC: SuperViewController {
                     self.filterTextLabel.alpha = 1
                 }
             }
-            if self.prevSelectedPer != AppDelegate.shared?.appData.filter.selectedPeroud {
+            if self.prevSelectedPer != AppDelegate.shared?.properties?.appData.db.filter.selectedPeroud {
                 self.filter()
             }
         }
     }
-
-
+    
+    
     @objc func monthBalancePressed(_ sender:UITapGestureRecognizer) {
         currentStatistic = true
         if canTouchHandleTap {
@@ -395,7 +395,7 @@ class HomeVC: SuperViewController {
         print(currentStatistic, " currentStatisticcurrentStatistic")
         vc.isAll = !currentStatistic
         vc.fromsideBar = self.fromSideBar
-
+        
         currentStatistic = false
         self.fromSideBar = false
         self.navigationController?.pushViewController(vc, animated: true)
@@ -412,26 +412,24 @@ class HomeVC: SuperViewController {
     @IBAction func statisticLabelPressed(_ sender: UIButton) {
         currentStatistic = true
         
-        DispatchQueue.main.async {
-            var expenses = true
-            switch sender.tag {
-            case 0: expenses = true
-            case 1: expenses = false
-            default: expenses = true
-            }
-            self.toStatistic(thisMonth: true, isExpenses: expenses)
+        var expenses = true
+        switch sender.tag {
+        case 0: expenses = true
+        case 1: expenses = false
+        default: expenses = true
         }
+        self.toStatistic(thisMonth: true, isExpenses: expenses)
         
     }
-
+    
     @objc func savedTransPressed(_ sender: UITapGestureRecognizer) {
-        if !(AppDelegate.shared?.appData.sendSavedData ?? true) {
+        if !(AppDelegate.shared?.properties?.appData.sendSavedData ?? true) {
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: "toUnsendedVC", sender: self)
             }
         }
     }
-
+    
     @IBAction func addTransactionPressedd(_ sender: UIButton) {
         toAddTransaction()
     }

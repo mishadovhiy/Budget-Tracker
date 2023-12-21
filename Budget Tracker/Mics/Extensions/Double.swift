@@ -29,6 +29,7 @@ extension Double {
             return nil
         }
     }
+    
 }
 
 extension Float {
@@ -43,6 +44,7 @@ extension CGSize {
         return .init(width: CGFloat(dict["width"] ?? 0),
                      height: CGFloat(dict["height"] ?? 0))
     }
+    
     var dict:[String:Float] {
         return [
             "width":Float(width),

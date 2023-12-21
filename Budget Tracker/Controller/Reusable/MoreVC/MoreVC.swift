@@ -59,13 +59,13 @@ class MoreVC: SuperViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
             self.view.backgroundColor = .clear
-        AppDelegate.shared?.banner.setBackground(clear: bannerBackgroundWas)
+        AppDelegate.shared?.properties?.banner.setBackground(clear: bannerBackgroundWas)
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        bannerBackgroundWas = AppDelegate.shared?.banner.clearBackground ?? true
+        bannerBackgroundWas = AppDelegate.shared?.properties?.banner.clearBackground ?? true
         UIView.animate(withDuration: 0.3) {
-            AppDelegate.shared?.banner.setBackground(clear: true)
+            AppDelegate.shared?.properties?.banner.setBackground(clear: true)
         //    self.view.backgroundColor = self.storyColor
         }
     }
@@ -138,6 +138,30 @@ extension MoreVC {
 
 
 extension MoreVC {
+    static func presentMoreVC(currentVC: UIViewController, data: [MoreVC.ScreenData], proIndex: Int = 0) {
+            let vccc = MoreVC.configure()
+            vccc.modalPresentationStyle = .overFullScreen
+            vccc.tableData = data
+            vccc.navigationController?.setNavigationBarHidden(true, animated: false)
+            let cellHeight = 50
+            let contentHeight = data.count * cellHeight
+        let safeArea = AppDelegate.shared?.properties?.appData.resultSafeArea ?? (.init(),.init())
+            let safeAt = safeArea.1
+            let safebt = safeArea.0 + 10
+            let window = UIApplication.shared.keyWindow ?? UIWindow()
+            let screenHeight = window.frame.height
+            let additionalMargin:CGFloat = safeAt > 0 ? 45 : 40
+            let tableInButtom = (screenHeight - (safeAt + safebt + additionalMargin)) - (CGFloat(contentHeight))
+            if CGFloat(contentHeight) > currentVC.view.frame.height / 2 {
+                vccc.firstCellHeight = currentVC.view.frame.height / 2
+            } else {
+                vccc.firstCellHeight = tableInButtom
+            }
+            vccc.selectedProIndex = proIndex
+            vccc.cellHeightCust = CGFloat.init(cellHeight)
+            currentVC.present(vccc, animated: true)
+        
+    }
     static func configure() -> MoreVC {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vccc = storyboard.instantiateViewController(withIdentifier: "MoreVC") as! MoreVC

@@ -971,6 +971,9 @@
         <designable name="T04-sT-3MF">
             <size key="intrinsicContentSize" width="27.333333333333332" height="15.666666666666666"/>
         </designable>
+        <designable name="d9Q-Qs-93K">
+            <size key="intrinsicContentSize" width="48" height="30"/>
+        </designable>
         <designable name="j4h-St-yMg">
             <size key="intrinsicContentSize" width="31" height="15.666666666666666"/>
         </designable>
@@ -1005,7 +1008,7 @@
             <color red="0.078000001609325409" green="0.086000002920627594" blue="0.086000002920627594" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="balanceTitleColor">
-            <color red="0.43399998545646667" green="0.43399998545646667" blue="0.43399998545646667" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <color red="0.15700000524520874" green="0.15700000524520874" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="balanceValueColor">
             <color red="0.2669999897480011" green="0.2669999897480011" blue="0.2669999897480011" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>

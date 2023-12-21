@@ -26,7 +26,7 @@ struct TransactionsStruct {
     
     
     var category:NewCategories {
-        let db = AppDelegate.shared?.db
+        let db = AppDelegate.shared?.properties?.db
         return db?.category(categoryID) ?? NewCategories(id: -1, name: "Unknown", icon: "", color: "", purpose: .expense)
     }
     

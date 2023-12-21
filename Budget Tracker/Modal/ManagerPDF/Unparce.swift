@@ -19,6 +19,7 @@ class UnparcePDF {
         manager = nil
         print("UnparcePDFUnparcePDF deinit")
     }
+    
     func dictionaryToString(_ dictionary:[String:Any], data:PDFProperties, fromCreate:Bool = false) -> ([(NSAttributedString, Bool)], CGFloat) {
         var height:CGFloat = 0
         var text:[(NSAttributedString, Bool)] = []
@@ -167,7 +168,8 @@ class UnparcePDF {
         let paragraphStyle2 = NSMutableParagraphStyle()
 
         paragraphStyle2.lineSpacing = 10
-        var height = text.string.calculate(font: fontResult, inWindth: manager.pageWidth, attributes: [.paragraphStyle:paragraphStyle2]).height
+        
+        var height = fontResult.calculate(inWindth:manager.pageWidth, attributes: [.paragraphStyle:paragraphStyle2], string: text.string).height
         if attachmentText != nil {
             height += (attachment?.displeySize.height ?? 0)
         }
@@ -223,7 +225,8 @@ class UnparcePDF {
     private var footer:NSMutableAttributedString {
         let text:NSMutableAttributedString = .init(string: "")
         let view = UIView(frame:.init(origin: .zero, size: .init(width: manager.pageWidth, height: 90)))
-        let imageView:UIImageView = .init(image: Keys.appstoreURL.createQR())
+       
+        let imageView:UIImageView = .init(image: .init(QRcode: Keys.appstoreURL))
         imageView.frame.size = .init(width: 90, height: 90)
         imageView.layer.cornerRadius = 6
         view.addSubview(imageView)

@@ -65,14 +65,14 @@ class BuyProVC: SuperViewController {
         
         DispatchQueue.main.async {
             self.tryFree.alpha = 0
-            if self.appData.proVersion || self.appData.proTrial || self.appData.trialDate != "" {
+            if self.properties!.appData.db.proVersion || self.properties!.appData.db.proTrial || self.properties?.appData.db.trialDate != "" {
                 //self.tryFree.alpha = 0
             }
             self.purchasedIndicatorView.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
         }
         pageChanged(pageControll)
         DispatchQueue(label: "db", qos: .userInitiated).async {
-            if let price = AppDelegate.shared?.db.db["productPrice"] as? String {
+            if let price = AppDelegate.shared?.properties?.db.db["productPrice"] as? String {
                 DispatchQueue.main.async {
                     self.priceLabel.text = "\((Double(price)?.string()) ?? "")"
                 }
@@ -84,7 +84,7 @@ class BuyProVC: SuperViewController {
     
     
     func showPurchasedIndicator() {
-        if appData.proVersion {
+        if appData.db.proVersion {
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.2) {
                     self.purchasedIndicatorView.alpha = 1
@@ -105,9 +105,9 @@ class BuyProVC: SuperViewController {
         navigationController?.setNavigationBarHidden(false, animated: true)
         if !appeareCalled {
             appeareCalled = true
-            bannerWasHidden = AppDelegate.shared?.banner.adHidden ?? false
+            bannerWasHidden = AppDelegate.shared?.properties?.banner.adHidden ?? false
             if !bannerWasHidden {
-                AppDelegate.shared?.banner.hide(ios13Hide: true)
+                AppDelegate.shared?.properties?.banner.hide(ios13Hide: true)
             }
         }
         
@@ -133,7 +133,7 @@ class BuyProVC: SuperViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(true)
         if !bannerWasHidden {
-            AppDelegate.shared?.banner.appeare(force: true)
+            AppDelegate.shared?.properties?.banner.appeare(force: true)
         }
        
     }
@@ -167,7 +167,7 @@ class BuyProVC: SuperViewController {
                 self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
                 completion(nil)
             } else {
-                let name = self.appData.username
+                let name = self.properties?.appData.db.username
                 for i in 0..<loadedData.count {
                     if loadedData[i][0] == name {
                         completion(loadedData[i])
@@ -183,8 +183,8 @@ class BuyProVC: SuperViewController {
         DispatchQueue(label: "local", qos: .userInitiated).async {
             self.db.viewControllers.trial.trialPressed = true
         }
-        if !appData.proVersion {
-            if appData.username != "" {
+        if !appData.db.proVersion {
+            if appData.db.username != "" {
                 self.ai?.show { (_) in
                     self.getUser { loadedData in
                         if let data = loadedData {
@@ -224,14 +224,14 @@ class BuyProVC: SuperViewController {
     
     
     func trialWithoutAcoount() {
-        appData.proTrial = true
-        appData.trialDate = appData.filter.getToday()
+        appData.db.proTrial = true
+        appData.db.trialDate = appData.db.filter.getToday()
         showAlert(title: Text.success, text: "Trial has been started successfully".localize, error: false, goHome: true)
     }
     
     func performTrial(loadedData:(String, String, String, String)) {
-        let today = appData.filter.getToday()
-        let toDataStringMian = "&Nickname=\(appData.username)" + "&Email=\(loadedData.0)" + "&Password=\(loadedData.1)" + "&Registration_Date=\(loadedData.2)"
+        let today = appData.db.filter.getToday()
+        let toDataStringMian = "&Nickname=\(appData.db.username)" + "&Email=\(loadedData.0)" + "&Password=\(loadedData.1)" + "&Registration_Date=\(loadedData.2)"
         
         let dataStringSave = toDataStringMian + "&ProVersion=0" + "&trialDate=\(today)"
         print(dataStringSave)
@@ -245,8 +245,8 @@ class BuyProVC: SuperViewController {
                     self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
                 } else {
                     DispatchQueue.main.async {
-                        self.appData.proTrial = true
-                        self.appData.trialDate = today
+                        self.properties?.appData.db.proTrial = true
+                        self.properties?.appData.db.trialDate = today
                         self.showAlert(title: Text.success, text: "Trial has been started successfully".localize, error: false, goHome: true)
 
                     }
@@ -264,9 +264,9 @@ class BuyProVC: SuperViewController {
     var userData = ("","","","")
     @IBAction func buyPressed(_ sender: UIButton) {
         paymentQueueResponded = false
-        let nick = appData.username
-        if !appData.proVersion {
-            if appData.username == "" {
+        let nick = appData.db.username
+        if !appData.db.proVersion {
+            if appData.db.username == "" {
                 DispatchQueue.main.async {
                     self.performSegue(withIdentifier: "toSingIn", sender: self)
                 }
@@ -344,7 +344,7 @@ extension BuyProVC: SKProductsRequestDelegate {
             print(product, "productproductproduct")
             proVProduct = product
             DispatchQueue(label: "db", qos: .userInitiated).async {
-                AppDelegate.shared?.db.db.updateValue("\(product.price.doubleValue)", forKey: "productPrice")
+                AppDelegate.shared?.properties?.db.db.updateValue("\(product.price.doubleValue)", forKey: "productPrice")
                 print(product.price, " rgfergtbhgref")
                 DispatchQueue.main.async {
                     self.priceLabel.text = "\(product.price.doubleValue.string())"
@@ -422,8 +422,8 @@ extension BuyProVC: SKPaymentTransactionObserver {
                 }
                 
                 DispatchQueue.init(label: "DB").async {
-                    self.appData.proVersion = true
-                    self.appData.purchasedOnThisDevice = true
+                    self.properties?.appData.db.proVersion = true
+                    self.properties?.appData.db.purchasedOnThisDevice = true
                     self.dbSavePurchase()
                 }
             }
@@ -454,6 +454,11 @@ extension BuyProVC: SKPaymentTransactionObserver {
 
 
 extension BuyProVC {
+    static func presentBuyProVC(selectedProduct:Int) {
+        let vc = BuyProVC.configure()
+        vc.selectedProduct = selectedProduct
+        AppDelegate.shared?.properties?.appData.present(vc: vc)
+    }
     static func configure() -> BuyProVC {
         return UIStoryboard(name: "LogIn", bundle: nil).instantiateViewController(withIdentifier: "BuyProVC") as! BuyProVC
     }

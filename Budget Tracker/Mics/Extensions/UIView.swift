@@ -115,7 +115,7 @@ extension UIView {
     func removeWithAnimation(animation:CGFloat = 0.11, complation:(()->())? = nil) {
         UIView.animate(withDuration: animation, animations: {
             self.alpha = 0
-        }) { 
+        }) {
             if !$0 {
                 return
             }
@@ -202,7 +202,7 @@ extension CALayer {
             case .background:
                 view.backgroundColor = ((to ?? self.to(view)) as! CGColor)
             case .stokeEnd:
-break
+                break
             }
         }
     }
@@ -290,3 +290,4 @@ break
         
     }
 }
+

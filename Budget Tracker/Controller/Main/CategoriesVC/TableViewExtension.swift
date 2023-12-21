@@ -115,17 +115,17 @@ extension CategoriesVC {
 
                     cell.newCategoryTF.layer.name = "cell\(index.row)"
                     let dueDate = category.category.dueDate
-                   let stringDate = "\(AppData.makeTwo(n: dueDate?.day ?? 0)).\(AppData.makeTwo(n: dueDate?.month ?? 0)).\(dueDate?.year ?? 0)"
+                    let stringDate = "\(dueDate?.day?.twoDec ?? "").\(dueDate?.month?.twoDec ?? "").\(dueDate?.year ?? 0)"
                     cell.dueDateLabel.text = stringDate
                     let expired = dateExpired(dueDate)
                     cell.dueDateIcon.tintColor = expired ? K.Colors.negative : K.Colors.category
                     cell.dueDateLabel.textColor = expired ? K.Colors.negative : K.Colors.balanceT
                     
                     cell.qntLabel.text = "\(category.transactions.count)"
-                    if (AppDelegate.shared?.symbolsAllowed ?? false) {
+                    if (AppDelegate.shared?.properties?.appData.symbolsAllowed ?? false) {
                         let imgName = category.editing == nil ? category.category.icon : category.editing?.icon
-                        cell.iconimage.image = AppData.iconSystemNamed(imgName)
-                        cell.iconimage.tintColor = category.editing == nil ? AppData.colorNamed(category.category.color) : AppData.colorNamed(category.editing?.color)
+                        cell.iconimage.image = .init(imgName)
+                        cell.iconimage.tintColor = category.editing == nil ? .init(category.category.color) : .init(category.editing?.color)
                     }
                     
                     
@@ -196,9 +196,9 @@ extension CategoriesVC {
             cell.footerHelperBottomView.isHidden = false
         cell.set(index: nil, footer: sect)
         cell.newCategoryTF.text = category.name
-            if (AppDelegate.shared?.symbolsAllowed ?? false) {
-                cell.iconimage.image = AppData.iconSystemNamed(category.icon)
-                cell.iconimage.tintColor = AppData.colorNamed(category.color)
+            if (AppDelegate.shared?.properties?.appData.symbolsAllowed ?? false) {
+                cell.iconimage.image = .init(category.icon)
+                cell.iconimage.tintColor = .init(category.color)
             } else {
                 cell.iconimage.isHidden = true
             }
@@ -290,14 +290,12 @@ extension CategoriesVC {
         }
         
         let editAction = UIContextualAction(style: .normal, title: "Edit".localize) {  (contextualAction, view, boolValue) in
-            //self.tableActionActivityIndicator.startAnimating()
             self.tableData[indexPath.section - self.sectionsBeforeData].data[indexPath.row].editing = self.tableData[indexPath.section - self.sectionsBeforeData].data[indexPath.row].category
             DispatchQueue.main.async {
                 self.tableView.reloadRows(at: [indexPath], with: .left)
-               // self.tableView.reloadData()
             }
         }
-        if (AppDelegate.shared?.symbolsAllowed ?? false) {
+        if (AppDelegate.shared?.properties?.appData.symbolsAllowed ?? false) {
             editAction.editType()
             deleteAction.deleteType()
             localDeleteAction.deleteType()
