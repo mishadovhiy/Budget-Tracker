@@ -101,7 +101,7 @@ class HistoryVC: SuperViewController {
             self.amountToPayEditing = true
             DispatchQueue.main.async {
                 self.tableView.reloadData()
-                self.ai?.fastHide()
+                self.ai?.hide()
             }
         } else {
             AppDelegate.shared?.properties?.banner.toggleFullScreenAdd(self, type: .categoryLimit, loaded: { GADFullScreenPresentingAd in
@@ -112,7 +112,7 @@ class HistoryVC: SuperViewController {
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                     // self.tableView.scrollToRow(at: IndexPath(row: 0, section: 2), at: .bottom, animated: true)
-                    self.ai?.fastHide()
+                    self.ai?.hide()
                 }
             })
         }
@@ -368,7 +368,7 @@ class HistoryVC: SuperViewController {
                     self.changed = true
                     self.selectedCategory = newCategory
                     DispatchQueue.main.async {
-                        self.ai?.fastHide { (_) in
+                        self.ai?.hide {
                             self.tableView.reloadData()
                         }
                         
@@ -454,11 +454,11 @@ class HistoryVC: SuperViewController {
     var changed:Bool = false
     func sendAmountToPay(_ text: String) {
         if let _ = Double(text) {
-            self.ai?.show(title: "Sending".localize) { _ in
+            self.ai?.showLoading(title: "Sending".localize) {
                 self.changed = true
                 self.changeAmountToPay(enteredAmount: text) { (_) in
                     self.amountToPayEditing = false
-                    self.ai?.fastHide { (_) in
+                    self.ai?.hide {
                         
                         DispatchQueue.main.async {
                             //  self.tableView.reloadData()
@@ -505,7 +505,7 @@ extension HistoryVC {
                 vc.selectedCategory = categoryy
                 vc.fromCategories = true
                 AppDelegate.shared?.properties?.appData.present(vc: navController) {
-                    AppDelegate.shared?.properties?.ai.fastHide()
+                    AppDelegate.shared?.properties?.ai.hide()
                 }
                 navController.setBackground(.regular)
                 
@@ -513,7 +513,7 @@ extension HistoryVC {
         } else {
             let text = AppDelegate.shared?.properties?.appData.db.devMode ?? false ? categpry : nil
             DispatchQueue.main.async {
-                AppDelegate.shared?.properties?.ai.showAlertWithOK(title:"Category not found".localize, text:text, error: true)
+                AppDelegate.shared?.properties?.ai.showAlertWithOK(title:"Category not found".localize, description:text)
             }
         }
         

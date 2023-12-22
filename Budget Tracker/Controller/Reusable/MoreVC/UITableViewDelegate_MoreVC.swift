@@ -71,7 +71,7 @@ extension MoreVC:UITableViewDelegate, UITableViewDataSource {
                         }
                     }
                     if tableData[indexPath.row].showAI {
-                        AppDelegate.shared?.properties?.ai.show(completion: { _ in
+                        AppDelegate.shared?.properties?.ai.showLoading(completion: {
                             goNext()
                         })
                     } else {

@@ -126,7 +126,7 @@ class SupportVC: SuperViewController, UITextViewDelegate {
             self.textView.endEditing(true)
         }
         
-        AppDelegate.shared?.properties?.ai.show { _ in
+        AppDelegate.shared?.properties?.ai.showLoading {
                 let userMessage = self.message + "Username:\(AppDelegate.shared?.properties?.appData.db.username ?? "-")"
                 if let mesag = userMessage.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
                     self.sendCode(title: "btUserSupportRequest", head: "SupportVC", body: mesag) { error in
@@ -134,7 +134,7 @@ class SupportVC: SuperViewController, UITextViewDelegate {
                         let title =  error ? "Error".localize : "Thank you".localize
                         let description = error ? "Try later".localize : "Your message has been sent".localize
                         DispatchQueue.main.async {
-                            self.ai?.showAlertWithOK(title: title, text: description, error: error)
+                            self.ai?.showAlertWithOK(title: title, description: description, viewType: error ? .error : .standard)
                             self.navigationController?.popViewController(animated: true)
                         }
                         

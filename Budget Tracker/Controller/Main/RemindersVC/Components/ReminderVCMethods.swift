@@ -61,7 +61,7 @@ extension RemindersVC {
                 self.tableView.dataSource = self
             }
             self.tableView.reloadData()
-            self.ai?.fastHide()
+            self.ai?.hide()
         }
     }
 
@@ -84,7 +84,7 @@ extension RemindersVC {
     
     func addTransaction(idx:Int) {
         let reminder = tableData[idx]
-        ai?.show { _ in
+        ai?.showLoading { 
             DispatchQueue(label: "api", qos: .userInitiated).async {
                 self.performAddTransactionToHome(reminder)
             }
@@ -108,7 +108,7 @@ extension RemindersVC {
                     if addded {
                         completion(true)
                     } else {
-                        self.ai?.showAlertWithOK(title: "Error adding reminder", text: nil, error: true)
+                        self.ai?.showAlertWithOK(title: "Error adding reminder")
                     }
                 }
 

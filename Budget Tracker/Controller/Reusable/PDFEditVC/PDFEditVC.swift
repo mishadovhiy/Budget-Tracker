@@ -121,21 +121,33 @@ class PDFEditVC:SuperViewController {
         })))
         
         colors.append(.init(name: "Restore colors", regular: .init(disctructive:true,description: pdfData?.properties.documentProperties.colors.secondary == nil ? "Default" : "", didSelect: {
-            AppDelegate.shared?.properties?.ai.showAlert(buttons: (.init(title: "Cancel", style: .regular, close: true, action: nil), .init(title: "Yes", style: .error, action: { _ in
-                self.pdfData?.properties.documentProperties.colors = .init(dict: [:])
-                self.updatePDF()
-                self.updateDB()
-            })), title: "Are you sure you want to set all colors to default?")
+            guard let ai = AppDelegate.shared?.properties?.ai else {
+                return
+            }
+            ai.showAlertWithOK(title: "Are you sure you want to set all colors to default?", viewType: .standard, button: .with({
+                $0.title = "Yes"
+                $0.action = {
+                    self.pdfData?.properties.documentProperties.colors = .init(dict: [:])
+                    self.updatePDF()
+                    self.updateDB()
+                }
+            }), okTitle: "Cancel".localize)
         })))
         
         
         colors.append(.init(name: "Restore data", regular: .init(disctructive:true,description: pdfData?.properties.documentProperties.colors.secondary == nil ? "Default" : "", didSelect: {
-            AppDelegate.shared?.properties?.ai.showAlert(buttons: (.init(title: "Cancel", style: .regular, close: true, action: nil), .init(title: "Yes", style: .error, action: { _ in
-                self.pdfData?.properties = .init()
-
-                self.updatePDF()
-                self.updateDB()
-            })), title: "Are you sure?\nAll selected colors and data would be lost")
+            guard let ai = AppDelegate.shared?.properties?.ai else {
+                return
+            }
+            ai.showAlertWithOK(title: "Are you sure?\nAll selected colors and data would be lost", button: .with({
+                $0.title = "Yes"
+                $0.action = {
+                    self.pdfData?.properties = .init()
+                    self.updatePDF()
+                    self.updateDB()
+                }
+            }), okTitle: "Cancel".localize)
+            
         })))
         
         

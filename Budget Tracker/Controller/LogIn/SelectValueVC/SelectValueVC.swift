@@ -19,7 +19,7 @@ class SelectValueVC: SuperViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.registerCell([.switcher])
-        AppDelegate.shared?.properties?.ai.fastHide()
+        AppDelegate.shared?.properties?.ai.hide()
         title = titleText
         tableView.delegate = self
         tableView.dataSource = self

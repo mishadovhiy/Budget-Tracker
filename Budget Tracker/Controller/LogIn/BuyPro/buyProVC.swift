@@ -15,11 +15,11 @@ class BuyProVC: SuperViewController {
     func showAlert(title:String,text:String?, error: Bool, goHome: Bool = false) {
         paymentQueueResponded = true
         let show = {
-            self.ai?.showAlertWithOK(title: title, text: text, error: error) { _ in
+            self.ai?.showAlertWithOK(title: title, description: text, viewType: error ? .error : .standard, okPressed: {
                 if goHome {
                     self.dismiss(animated: true, completion: nil)
                 }
-            }
+            })
         }
         if Thread.isMainThread {
             show()
@@ -185,7 +185,7 @@ class BuyProVC: SuperViewController {
         }
         if !appData.db.proVersion {
             if appData.db.username != "" {
-                self.ai?.show { (_) in
+                self.ai?.showLoading {
                     self.getUser { loadedData in
                         if let data = loadedData {
                             if data[5] != "" {
@@ -208,15 +208,16 @@ class BuyProVC: SuperViewController {
                 }
                 
             } else {
-                let firstButton = self.ai!.prebuild_closeButton(title: "Close".localize, style: .error)
-                let secondButton:AlertViewLibrary.button? = .init(title: "Sign in".localize, style: .regular, close: true) { _ in
-                    DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: "toSingIn", sender: self)
-                    }
-                }
-                
+
                 DispatchQueue.main.async {
-                    self.ai!.showAlert(buttons: (firstButton, secondButton), title: "Sign in required".localize, type: .standard)
+                    self.ai?.showAlertWithOK(title: "Sign in required", viewType: .standard, button: .with({
+                        $0.title = "Sign in".localize
+                        $0.action = {
+                            self.performSegue(withIdentifier: "toSingIn", sender: self)
+
+                        }
+                        $0.style = .error
+                    }), okTitle:"Close".localize)
                 }
             }
         }
@@ -272,7 +273,7 @@ class BuyProVC: SuperViewController {
                 }
             } else {
 
-                self.ai?.show { (_) in
+                self.ai?.showLoading {
                     guard let myProduct = self.proVProduct else {
                         self.showAlert(title: "Error".localize, text: "Permission denied".localize, error: true)
                         return
@@ -306,10 +307,7 @@ class BuyProVC: SuperViewController {
         paymentQueueResponded = false
         if SKPaymentQueue.canMakePayments() {
             self.restoreRequest.delegate = self
-
-           
-
-            self.ai?.show { (_) in
+            self.ai?.showLoading {
                 SKPaymentQueue.default().restoreCompletedTransactions()
                 SKPaymentQueue.default().add(self)
                 self.restoreRequest.start()
@@ -390,7 +388,7 @@ extension BuyProVC: SKPaymentTransactionObserver {
                 
                 self.showAlert(title: "Purchase restored".localize, text: "", error: false)
                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
-                    self.ai?.showAlertWithOK(title: "Error saving purchase to your Budget Tracker account", text: "Please, log in to your account and Restore Purchase Again", error: true)
+                    self.ai?.showAlertWithOK(title: "Error saving purchase to your Budget Tracker account", description: "Please, log in to your account and Restore Purchase Again", viewType: .error)
                 })
             }
         }

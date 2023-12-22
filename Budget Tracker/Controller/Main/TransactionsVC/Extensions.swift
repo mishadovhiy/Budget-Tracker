@@ -123,7 +123,7 @@ extension HistoryVC: UITableViewDelegate, UITableViewDataSource {
     
     func removeAmountToPay() {
         self.changeAmountToPay(enteredAmount: "") { (_) in
-            self.ai?.fastHide { (_) in
+            self.ai?.hide {
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
@@ -255,7 +255,7 @@ extension HistoryVC: TransitionVCProtocol {
 extension HistoryVC: CalendarVCProtocol {
     
     func dateSelected(date: String, time: DateComponents?) {
-        self.ai?.show { (_) in
+        self.ai?.showLoading {
             let id = "Debts\(self.selectedCategory?.id ?? 0)"
             self.properties?.center.removePendingNotificationRequests(withIdentifiers: [id])
             let fullDate = "\(date) \((time?.hour ?? 0).twoDec):\((time?.minute ?? 0).twoDec):\((time?.second ?? 0).twoDec)"
@@ -287,7 +287,7 @@ extension HistoryVC: CalendarVCProtocol {
                     
                 } else {
                     let errorText = "Error".localize + " " + "adding".localize + " " + "Due date".localize
-                    self.ai?.fastHide { _ in
+                    self.ai?.hide {
                         DispatchQueue.main.async {
                             self.newMessage?.show(title: errorText, type: .error)
                         }
@@ -299,7 +299,7 @@ extension HistoryVC: CalendarVCProtocol {
             }
             else {
                 let errorText = "Error".localize + " " + "adding".localize + " " + "Due date".localize
-                self.ai?.fastHide { _ in
+                self.ai?.hide { 
                     DispatchQueue.main.async {
                         self.newMessage?.show(title:errorText, type: .error)
                     }

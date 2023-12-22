@@ -23,9 +23,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var canPerformAction:Bool {
         if let properties {
-            return !(!properties.ai.hideIndicatorBlockDesibled || properties.passcodeLock.presenting)
+            return !(!properties.ai.canHideAlert || properties.passcodeLock.presenting)
         } else {
-            return true
+            return false
         }
     }
     
@@ -66,7 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         DispatchQueue(label: "db", qos: .userInitiated).async {
             if self.properties?.appData.db.devMode ?? false {
                 DispatchQueue.main.async {
-                    self.properties?.ai.showAlertWithOK(title: "Memory warning!", error: true)
+                    self.properties?.ai.showAlertWithOK(title: "Memory warning!")
                 }
             }
         }

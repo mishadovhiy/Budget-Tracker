@@ -129,7 +129,7 @@ extension CategoriesVC {
             UIImpactFeedbackGenerator().impactOccurred()
             let category = category ?? self.tableData[section].newCategory
             if category.category.name != "" {
-                self.ai?.show(title:"Saving".localize, notShowIfLoggedUser: true) { _ in
+                self.ai?.showLoading(title:"Saving".localize, canIgonre: true) { 
                     DispatchQueue.main.async {
                         if let editTF = self.editingTF {
                             self.editingTF = nil

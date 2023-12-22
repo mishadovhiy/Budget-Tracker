@@ -22,7 +22,7 @@ class SuperViewController: UIViewController {
     var newMessage:MessageViewLibrary? {
         return AppDelegate.shared?.properties?.newMessage
     }
-    var ai: AlertViewLibrary? {
+    var ai: AlertManager? {
         return AppDelegate.shared?.properties?.ai
     }
     var db:DataBase {

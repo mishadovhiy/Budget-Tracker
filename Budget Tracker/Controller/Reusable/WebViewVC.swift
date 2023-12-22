@@ -88,7 +88,7 @@ class WebViewVC: SuperViewController, UIScrollViewDelegate, WKNavigationDelegate
     
     private func errorLoading() {
         DispatchQueue.main.async {
-            AppDelegate.shared?.properties?.ai.showAlertWithOK(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, hidePressed: { _ in
+            AppDelegate.shared?.properties?.ai.showAlertWithOK(title: Text.Error.InternetTitle, description: Text.Error.internetDescription, okPressed: {
                 DispatchQueue.main.async {
                     self.navigationController?.popViewController(animated: true)
                 }

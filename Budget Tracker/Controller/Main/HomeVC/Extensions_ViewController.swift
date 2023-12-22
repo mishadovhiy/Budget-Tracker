@@ -382,7 +382,6 @@ extension HomeVC {
         get { return _calculations }
         set {
             _calculations = newValue
-            print(newValue, " tgrfeweertgref")
             transactionManager?.calculation = newValue
             DispatchQueue.main.async {
                 for label in self.self.ecpensesLabels {
@@ -496,11 +495,9 @@ extension HomeVC {
     func viewAppeared() {
         navigationController?.delegate = nil
         self.notificationsCount = Notifications.notificationsCount
-        //    self.mainTableView.contentInset.top = self.calendarContainer.frame.height
-        //        mainTableView.contentOffset.y = 0
         if self.ai?.isShowing ?? false {
             DispatchQueue.main.async {
-                self.ai?.fastHide()
+                self.ai?.hide()
             }
         }
         if appData.needFullReload || self.properties!.appData.needDownloadOnMainAppeare {
@@ -511,7 +508,6 @@ extension HomeVC {
         let safeTop = self.view.safeAreaInsets.top
         UIView.animate(withDuration: 0.3) {
             self.safeArreaHelperView?.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, self.safeArreaHelperViewCalc * -1, 0)
-           // self.safeArreaHelperView?.alpha = 0
         }
         if !safeArreaHelperViewAdded {
             safeArreaHelperViewAdded = true
@@ -526,7 +522,6 @@ extension HomeVC {
                 }
             }
         }
-      //  appData.safeArea = (safeTop, self.view.safeAreaInsets.bottom)
     }
     var safeArreaHelperViewCalc:CGFloat {
         return self.view.safeAreaInsets.top + (safeArreaHelperView?.frame.height ?? 0)

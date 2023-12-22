@@ -49,7 +49,7 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
     var appeared = false
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.ai?.fastHide { _ in
+        self.ai?.hide { 
             if !self.appeared {
                 self.appeared = true
                 self.valueTextField.becomeFirstResponder()

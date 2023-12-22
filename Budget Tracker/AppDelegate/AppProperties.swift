@@ -19,9 +19,9 @@ class AppProperties {
         return MessageViewLibrary.instanceFromNib()
     }()
     
-    lazy var ai: AlertViewLibrary = {
-        let ai = AlertViewLibrary.instanceFromNib(aiAppearence())
-        ai.notShowingCondition = aiNotShowingCondition
+    lazy var ai: AlertManager = {
+        let ai = AlertManager(appearence: aiAppearence())
+        ai.setIgnorPresentLoader(self.aiNotShowingCondition)
         return ai
     }()
     
@@ -38,30 +38,42 @@ class AppProperties {
     let appData = AppData()
     
     func aiAppearence() -> AIAppearence {
-        let texts:AIAppearence.Text = .init(loading: "Loading".localize, done: "Done".localize, internetError: (title: "Internet error".localize, description: "Try again later".localize), error: "Error".localize, okButton: "OK".localize, success: "Success".localize)
-        
         let view = K.Colors.background ?? .red
-        
         let background = UIColor.black
-        
-        let accent = (background: background.withAlphaComponent(0.7),
-                      view: view.withAlphaComponent(0.8),
-                      higlight: UIColor.red)
-        
-        let normal = (background: background.withAlphaComponent(0.5),
-                      view: view.withAlphaComponent(0.6))
-        
-        let buttom = (link: K.Colors.link, normal: K.Colors.category ?? .red)
-        
-        let textsColor = (title: K.Colors.category ?? .red, description: K.Colors.balanceT ?? .red)
-        
         let separetor = (K.Colors.separetor ?? .red).withAlphaComponent(0.5)
         
-        let colors:AIAppearence.Colors = .init(accent: accent, normal: normal, buttom: buttom, texts: textsColor, separetor: separetor)
-        var new:AIAppearence = .init(text: texts, colors: colors)
-        new.zPosition = 1001
-
-        return new
+        return .with({
+            $0.defaultText = .with({
+                $0.loading = "Loading".localize
+                $0.okButton = "OK".localize
+                $0.error = "Error".localize
+                $0.success = "Success".localize
+                $0.internetError = ("Internet error".localize, "Try again later".localize)
+                $0.standart = "Done".localize
+                
+            })
+            $0.additionalLaunchProperties = .with({
+                $0.mainCorners = 9
+                $0.zPosition = 1001
+            })
+            $0.colors = .generate({
+                $0.loaderBackAlpha = 0.25
+                $0.alertBackAlpha = 0.5
+                $0.loaderView = view.lighter()
+                $0.view = view
+                $0.background = background
+                $0.separetor = separetor
+                $0.texts = .with({
+                    $0.title = K.Colors.category ?? .red
+                    $0.description = K.Colors.balanceT ?? .red
+                })
+                $0.buttom = .with({
+                    $0.link = K.Colors.link
+                    $0.normal = K.Colors.category ?? .red
+                })
+                
+            })
+        })
     }
     
     func aiNotShowingCondition() -> Bool {

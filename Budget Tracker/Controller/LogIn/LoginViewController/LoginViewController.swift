@@ -72,13 +72,13 @@ class LoginViewController: SuperViewController {
         let resultTitle = title ?? (error ? "Error".localize : "Success".localize)
         endAnimating()
         DispatchQueue.main.async {
-            self.ai?.showAlertWithOK(title: resultTitle, text: text, error: error) { _ in
+            self.ai?.showAlertWithOK(title: resultTitle, description: text, viewType: error ? .error : .standard, okPressed: {
                 if goToLogin {
                     DispatchQueue.main.async {
                         self.navigationController?.popViewController(animated: true)
                     }
                 }
-            }
+            })
         }
 
     }
@@ -242,7 +242,7 @@ class LoginViewController: SuperViewController {
                         self.obthervValues = true
                         DispatchQueue.main.async {
                             self.newMessage?.show(title: "All fields are required".localize, type: .error)
-                            self.ai?.fastHide()
+                            self.ai?.hide()
                             self.showWrongFields()
                         }
                         
@@ -269,7 +269,7 @@ class LoginViewController: SuperViewController {
         }
 
         self.hideKeyboard()
-        self.ai?.show(title: "Logging in".localize) { (_) in
+        self.ai?.showLoading(title: "Logging in".localize) {
             self.hideKeyboard()
             DispatchQueue(label: "api", qos: .userInitiated).async {
                 self.performLoginPressed()
@@ -326,13 +326,13 @@ class LoginViewController: SuperViewController {
             DispatchQueue.main.async {
                 self.endAnimating()
                 self.dismiss(animated: true) {
-                    self.ai?.fastHide()
+                    self.ai?.hide()
                 }
             }
         } else {
             DispatchQueue.main.async {
                 self.endAnimating()
-                self.ai?.fastHide { _ in
+                self.ai?.hide {
                     self.performSegue(withIdentifier: "homeVC", sender: self)
                 }
             }
@@ -376,7 +376,7 @@ class LoginViewController: SuperViewController {
     func showError(title:String) {
         endAnimating()
         self.newMessage?.show(title: title, type: .error)
-        self.ai?.fastHide()
+        self.ai?.hide()
     }
     
     private func performCreateAccount() {
@@ -397,7 +397,7 @@ class LoginViewController: SuperViewController {
             UIImpactFeedbackGenerator().impactOccurred()
         }
 
-        self.ai?.show(title: "Creating".localize) { (_) in
+        self.ai?.showLoading(title: "Creating".localize) {
             self.hideKeyboard()
 
             DispatchQueue(label: "api", qos: .userInitiated).async {
@@ -702,9 +702,6 @@ class LoginViewController: SuperViewController {
     }
 }
 
-// extentions
-
-
 
 
 
@@ -727,10 +724,9 @@ extension LoginViewController {
                 self.passwordLabel.text = ""
                 self.passwordLogLabel.text = ""
                 self.nicknameLogLabel.text = ""
-                self.ai?.fastHide(completionn: { _ in
+                self.ai?.hide() {
                     self.loadKeychainPasswords()
-                })
-                //here
+                }
             }
         }
     }

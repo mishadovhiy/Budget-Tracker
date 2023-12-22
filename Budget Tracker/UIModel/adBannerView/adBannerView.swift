@@ -316,7 +316,7 @@ extension adBannerView {
     func adDidPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
         bannerWatchedFull = false
         showedBannerTime = Data()
-        AppDelegate.shared?.properties?.ai.fastHide()
+        AppDelegate.shared?.properties?.ai.hide()
         let shape = UIApplication.shared.keyWindow?.layer.drawSeparetor(color: K.Colors.link, y: UIApplication.shared.keyWindow?.safeAreaInsets.top, width: 3)
         shape?.name = "adFullBanerLine"
         shape?.performAnimation(key: .stokeEnd, to: CGFloat(1), code: .general, duration: 10, completion: {
@@ -324,17 +324,14 @@ extension adBannerView {
             UIView.animate(withDuration: 0.3) {
                 shape?.strokeColor = UIColor.green.cgColor
             }
-         //   shape?.performAnimation(key: .background, to: UIColor.green.cgColor, duration: 0.4)
         })
     }
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        print("adDidDismissFullScreenContent")
         let holderCompletion = bannerShowCompletion
         bannerShowCompletion = nil
         let layer = UIApplication.shared.keyWindow?.layer.sublayers?.first(where: {$0.name == "adFullBanerLine"})
         
         if let _ = presentingFullType {
-            //self.showedBanner.updateValue(Date(), forKey: type)
             if self.bannerWatchedFull {
                 self.showedBanner = Date()
                 self.fullScreenDelegates.forEach({

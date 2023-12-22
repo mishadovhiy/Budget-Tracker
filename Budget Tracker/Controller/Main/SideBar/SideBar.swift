@@ -84,11 +84,13 @@ class SideBar: UIView {
                 if results == .success || results == .alreadyPresenting {
                     self.loadAppleTransactions()
                 } else if results == .notSupported {
-                    AppDelegate.shared?.properties?.ai.showAlertWithOK(title:"Not supported", error: true)
+                    AppDelegate.shared?.properties?.ai.showAlertWithOK(title:"Not supported")
                 } else {
-                    AppDelegate.shared?.properties?.ai.showAlert(buttons: (.init(title: "Cancel", style: .regular, close: true, action: nil), .init(title: "To Settings", style: .link, action: { _ in
-                        AppData.toDeviceSettings()
-                    })), title: "\(results)", description: "Access denied")
+                    AppDelegate.shared?.properties?.ai.showAlertWithOK(title: "Open App Settings Settings".localize, description: "Will open app's page in system settings".localize, button: .with({
+                        $0.action = AppData.toDeviceSettings
+                        $0.title = "Go to settings".localize
+                    }), okTitle: "Cancel".localize)
+                    
                 }
             })
             

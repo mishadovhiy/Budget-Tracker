@@ -15,7 +15,9 @@ struct LoadFromDB {
     static var shared = LoadFromDB()
     private func load(urlPath: String, completion: @escaping (NSArray, error?) -> ()) {
         if Thread.isMainThread && appData.db.devMode {
-            AppDelegate.shared?.properties?.ai.showAlertWithOK(title:"main thread error ", text: "\(#function)", error: true)
+            AppDelegate.shared?.properties?.ai.showAlert(title: "main thread error ", description: "\(#function)", appearence: .with({
+                $0.type = .error
+            }))
         }
         print(urlPath, " urlPathurlPathurlPath")
         if let url: URL = URL(string: urlPath) {

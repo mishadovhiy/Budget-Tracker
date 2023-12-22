@@ -21,15 +21,15 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         let notificationText = notification.request.content.body
         let notificationTitle = notification.request.content.title
         properties?.notificationManager.deliveredNotificationIDs.append(notification.request.identifier)
-        let okButton:AlertViewLibrary.button = .init(title: "Close", style: .regular, close:true, action: nil)
-        let showButton = AlertViewLibrary.button(title: "Show", style: .link, close: false) { _ in
-            
-            self.openNotification(notification)
-            
-        }
+
         DispatchQueue.main.async {
             AudioServicesPlaySystemSound(1007)
-            self.properties?.ai.showAlert(buttons: (showButton, okButton), title: notificationTitle, description: notificationText)
+            self.properties?.ai.showAlertWithOK(title: notificationTitle, description: notificationText, viewType: .standard, button: .with({
+                $0.title = "Show notification".localize
+                $0.action = {
+                    self.openNotification(notification)
+                }
+            }), okTitle: "Close".localize)
         }
         
     }
