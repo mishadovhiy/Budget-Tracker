@@ -162,6 +162,8 @@ class HomeVC: SuperViewController {
         } else if AppDelegate.shared?.properties?.banner.adHidden ?? false {
             AppDelegate.shared?.properties?.banner.appeare(force: true)
         }
+        
+      //  ai?.showAlertWithOK(title: "d")
     }
     
     func monthSelected(_ year:Int, _ month:Int) {

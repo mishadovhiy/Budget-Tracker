@@ -495,11 +495,11 @@ extension HomeVC {
     func viewAppeared() {
         navigationController?.delegate = nil
         self.notificationsCount = Notifications.notificationsCount
-        if self.ai?.isShowing ?? false {
-            DispatchQueue.main.async {
-                self.ai?.hide()
-            }
-        }
+//        if self.ai?.isShowing ?? false {
+//            DispatchQueue.main.async {
+//                self.ai?.hide()
+//            }
+//        }
         if appData.needFullReload || self.properties!.appData.needDownloadOnMainAppeare {
             appData.needDownloadOnMainAppeare = false
             appData.needFullReload = false

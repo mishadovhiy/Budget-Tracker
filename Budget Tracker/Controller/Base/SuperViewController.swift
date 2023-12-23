@@ -51,7 +51,6 @@ class SuperViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.view.endEditing(true)
-        print(navigationController?.viewControllers.count, " hygterfwed")
         if let back = backgroundData{
             if back.isPopupVC {
                 var backD = back

@@ -14,9 +14,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     
-    static var shared:AppDelegate? {
-        return UIApplication.shared.delegate as? AppDelegate
-    }
+    static var shared:AppDelegate?
+//    {
+//        if !Thread.isMainThread {
+//            print("fatal err")
+//        }
+//        return UIApplication.shared.delegate as? AppDelegate
+//    }
 
    
     var properties:AppProperties?
@@ -31,6 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        AppDelegate.shared = self
         properties = .init()
         properties?.appLoaded()
         return true

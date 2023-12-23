@@ -24,18 +24,14 @@ class CalendarControlVC: UIViewController {
     var higlightSelected:Bool = false
     var cellSelected:((_ day:DateComponents, _ cell:CalendarCell)->())? = nil
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-      //  cellSelected = nil
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         monthView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.monthPressed(_:))))
         let swipeClose = UISwipeGestureRecognizer(target: self, action: #selector(swipeClose(_:)))
         self.view.addGestureRecognizer(swipeClose)
+        let appDelegate = AppDelegate.shared
         DispatchQueue.init(label: "l", qos: .userInitiated).async {
-            let today = AppDelegate.shared?.properties?.appData.db.filter.fromDate ?? DateComponents()
+            let today = appDelegate?.properties?.db.filter.fromDate ?? DateComponents()
             self.middleDate = .init(year: today.year ?? 0, month: today.month ?? 0)
         }
     }

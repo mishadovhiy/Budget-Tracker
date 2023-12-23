@@ -85,11 +85,10 @@ extension UIColor {
     }
     
     static func colorNamed(_ name: String?) -> UIColor {
-        let defaultCo = K.Colors.link
         if name ?? "" != "" {
-            return UIColor(named: name ?? "") ?? defaultCo
+            return UIColor(named: name ?? "") ?? .red//?? (UIApplication.shared.keyWindow?.tintColor ?? .red)
         } else {
-            return defaultCo
+            return .red//UIApplication.shared.keyWindow?.tintColor ?? .red
         }
     }
     

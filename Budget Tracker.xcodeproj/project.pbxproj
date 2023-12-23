@@ -123,6 +123,8 @@
 		8D2CDA362AF448A700671A72 /* SwitchCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D2CDA342AF448A700671A72 /* SwitchCell.xib */; };
 		8D36724224D315BC00CE90A9 /* NetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D36724124D315BC00CE90A9 /* NetworkModel.swift */; };
 		8D39788F28083E81007A2C55 /* AppDelegateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D39788E28083E81007A2C55 /* AppDelegateExtensions.swift */; };
+		8D4584292B3528980029AA17 /* AlertController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D4584282B3528980029AA17 /* AlertController.xib */; };
+		8D45842C2B3528B00029AA17 /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D45842B2B3528B00029AA17 /* AlertController.swift */; };
 		8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5206662421695200772CD5 /* StatisticBrain.swift */; };
 		8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D52066824216A2900772CD5 /* StatisticVC.swift */; };
 		8D52066B24216A6200772CD5 /* HistoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D52066A24216A6200772CD5 /* HistoryVC.swift */; };
@@ -369,6 +371,8 @@
 		8D2CDA342AF448A700671A72 /* SwitchCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SwitchCell.xib; sourceTree = "<group>"; };
 		8D36724124D315BC00CE90A9 /* NetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkModel.swift; sourceTree = "<group>"; };
 		8D39788E28083E81007A2C55 /* AppDelegateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegateExtensions.swift; sourceTree = "<group>"; };
+		8D4584282B3528980029AA17 /* AlertController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlertController.xib; sourceTree = "<group>"; };
+		8D45842B2B3528B00029AA17 /* AlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertController.swift; sourceTree = "<group>"; };
 		8D5206662421695200772CD5 /* StatisticBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticBrain.swift; sourceTree = "<group>"; };
 		8D52066824216A2900772CD5 /* StatisticVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticVC.swift; sourceTree = "<group>"; };
 		8D52066A24216A6200772CD5 /* HistoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryVC.swift; sourceTree = "<group>"; };
@@ -768,6 +772,7 @@
 			isa = PBXGroup;
 			children = (
 				8DBB38F62AC8D46C009B56DD /* TextField.swift */,
+				8D45842A2B35289F0029AA17 /* AlertController */,
 				8D1E4BCD2B222E360030BCB8 /* RefreshTableView.swift */,
 				8D0C5D162AF6C162002E2422 /* SelectionStackView */,
 				8D2CDA142AF3F26B00671A72 /* UITableViewCell */,
@@ -1003,12 +1008,21 @@
 		8D39788D28083E5B007A2C55 /* AppDelegate */ = {
 			isa = PBXGroup;
 			children = (
+				8DA2B7FF2AFE99F000847B43 /* SceneDelegate.swift */,
 				8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */,
 				8D7883132B342ABA008B3578 /* AppProperties.swift */,
-				8DA2B7FF2AFE99F000847B43 /* SceneDelegate.swift */,
 				8D39788E28083E81007A2C55 /* AppDelegateExtensions.swift */,
 			);
 			path = AppDelegate;
+			sourceTree = "<group>";
+		};
+		8D45842A2B35289F0029AA17 /* AlertController */ = {
+			isa = PBXGroup;
+			children = (
+				8D4584282B3528980029AA17 /* AlertController.xib */,
+				8D45842B2B3528B00029AA17 /* AlertController.swift */,
+			);
+			path = AlertController;
 			sourceTree = "<group>";
 		};
 		8D519D382AD352BE00DBAD18 /* SettingsVC */ = {
@@ -1361,6 +1375,7 @@
 				8DBA7E5C23F0317100D8214C /* Assets.xcassets in Resources */,
 				8D08FD4E2AC9AA0300BA0222 /* AmountToPayCell.xib in Resources */,
 				8D08FD492AC9A86C00BA0222 /* SpendingLimitCell.xib in Resources */,
+				8D4584292B3528980029AA17 /* AlertController.xib in Resources */,
 				8DBA7E5723F0316F00D8214C /* Main.storyboard in Resources */,
 				8B6BA97E27E715C20067FF58 /* Reusable.storyboard in Resources */,
 				8DF9DCCD2815A87400C7BFA0 /* adBannerView.xib in Resources */,
@@ -1480,6 +1495,7 @@
 				8D39788F28083E81007A2C55 /* AppDelegateExtensions.swift in Sources */,
 				8BB75D4727F2952300AE71A1 /* CategoriesStruct.swift in Sources */,
 				8B746AC027F405970010F0A4 /* ReminderVCMethods.swift in Sources */,
+				8D45842C2B3528B00029AA17 /* AlertController.swift in Sources */,
 				8D193BF02B1FBC80003EB531 /* UITableViewDelegate_MoreVC.swift in Sources */,
 				8D163BA529944FA100EF6C2A /* ClearTableCell.swift in Sources */,
 				8B6B509927F3A69F0067C237 /* ReminderManager.swift in Sources */,

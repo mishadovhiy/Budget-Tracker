@@ -20,7 +20,8 @@ class AppProperties {
     }()
     
     lazy var ai: AlertManager = {
-        let ai = AlertManager(appearence: aiAppearence())
+        print("AlertManagerAlertManager")
+        let ai = AlertManager()
         ai.setIgnorPresentLoader(self.aiNotShowingCondition)
         return ai
     }()
@@ -99,11 +100,12 @@ class AppProperties {
 
 extension AppProperties {
     func appLoaded() {
-        print(UIDevice.current.identifierForVendor?.uuidString, " identifierForVendor")
+        if coreDataManager != nil {
+            return
+        }
         coreDataManager = .init(persistentContainer: AppDelegate.shared!.persistentContainer, appDelegate: AppDelegate.shared!)
         DispatchQueue(label: "db", qos: .userInitiated).async {
             DataBase._db = self.coreDataManager?.fetch(.general)?.data?.toDict ?? [:]
-            let tint = UIColor.linkColor
             let today = self.appData.db.filter.getToday()
             let value = self.db.db["lastLaunching"] as? String ?? ""
             if value != today {
@@ -112,6 +114,8 @@ extension AppProperties {
             }
             let pro = self.appData.db.proEnabeled
             let localization = AppLocalization.udLocalization ?? (NSLocale.current.languageCode ?? "-")
+            let tint = UIColor(self.appData.db.linkColor)
+
             DispatchQueue.main.async {
                 UIApplication.shared.keyWindow?.tintColor = tint
                 self.center.delegate = AppDelegate.shared

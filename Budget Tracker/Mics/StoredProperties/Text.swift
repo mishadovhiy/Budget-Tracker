@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 struct Text {
     static let success = "Success".localize
     static let cancel = "Cancel".localize

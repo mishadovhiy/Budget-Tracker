@@ -10,6 +10,9 @@ import UIKit
 
 extension UIApplication {
     var keyWindow:UIWindow? {
+        if !Thread.isMainThread {
+            print("main error")
+        }
         let scene = self.connectedScenes.first(where: {($0 as? UIWindowScene)?.activationState == .foregroundActive}) as? UIWindowScene
         if #available(iOS 15.0, *) {
             return scene?.keyWindow

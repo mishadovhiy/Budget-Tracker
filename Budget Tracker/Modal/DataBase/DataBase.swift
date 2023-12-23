@@ -18,15 +18,14 @@ class DataBase {
             if let db = DataBase._db {
                 return db
             } else {
-                let v = AppDelegate.shared?.properties?.coreDataManager?.fetch(.general)?.data?.toDict ?? [:]
-                DataBase._db = v
-                print(Thread.isMainThread, " dbgetThread")
+                let dbDict = AppDelegate.shared?.properties?.coreDataManager?.fetch(.general)?.data?.toDict ?? [:]
+                DataBase._db = dbDict
                 if Thread.isMainThread {
                     if devMode {
                         fatalError("db from main thread")
                     }
                 }
-                return v
+                return dbDict
             }
             
         }
