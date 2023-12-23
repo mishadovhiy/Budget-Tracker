@@ -75,6 +75,24 @@ extension AppData {
              window?.rootViewController?.present(vc, animated: true, completion: completion)
         }
     }
+    
+    func threadCheck(shouldMainThread:Bool = true, showError:Bool = true) {
+        let error = shouldMainThread != Thread.isMainThread
+        if error {
+            print("!!!!!!!!!!!errororor api")
+            if (AppDelegate.shared?.properties?.appData.db.devMode ?? false) && showError {
+                if !Thread.isMainThread {
+                    DispatchQueue.main.async {
+                        AppDelegate.shared?.properties?.newMessage.show(title:"fatal error, from main", type: .error)
+
+                    }
+                } else if showError {
+                    AppDelegate.shared?.properties?.newMessage.show(title:"fatal error, from main", type: .error)
+
+                }
+            }
+        }
+    }
 
 }
 

@@ -14,11 +14,7 @@ struct LoadFromDB {
     }
     static var shared = LoadFromDB()
     private func load(urlPath: String, completion: @escaping (NSArray, error?) -> ()) {
-        if Thread.isMainThread && appData.db.devMode {
-            AppDelegate.shared?.properties?.ai.showAlert(title: "main thread error ", description: "\(#function)", appearence: .with({
-                $0.type = .error
-            }))
-        }
+        AppDelegate.shared?.properties?.appData.threadCheck(shouldMainThread: false)
         print(urlPath, " urlPathurlPathurlPath")
         if let url: URL = URL(string: urlPath) {
             let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -35,18 +31,11 @@ struct LoadFromDB {
                         completion([], .internet)
                         return
                     }
-                    if Thread.isMainThread {
-                        print("!!!!!!!!!!!errororor api")
-                        if (AppDelegate.shared?.properties?.appData.db.devMode ?? false) {
-                            AppDelegate.shared?.properties?.newMessage.show(title:"fatal error, from main", type: .error)
-                        }
-                    }
+                    AppDelegate.shared?.properties?.appData.threadCheck(shouldMainThread: false)
                     completion(jsonResult, nil)
                 }
             }
-      //      DispatchQueue.main.async {
-                task.resume()
-      //      }
+            task.resume()
         } else {
             completion([], .other)
         }
@@ -420,12 +409,8 @@ struct SaveToDB {
                     if let unwrappedData = data {
                         let returnedData = NSString(data: unwrappedData, encoding: String.Encoding.utf8.rawValue)
                         print(Thread.isMainThread, " apithreaddd")
-                        if Thread.isMainThread {
-                            print("!!!!!!!!!!!errororor api")
-                            if (AppDelegate.shared?.properties?.appData.db.devMode ?? false) {
-                                AppDelegate.shared?.properties?.newMessage.show(title:"fatal error, from main", type: .error)
-                            }
-                        }
+                        AppDelegate.shared?.properties?.appData.threadCheck(shouldMainThread: false)
+
                         if returnedData == "1" {
                             print("save: sended \(dataToSend)")
                             error(false)
@@ -636,13 +621,8 @@ struct DeleteFromDB {
                         return
                         
                     } else {
-                        print(Thread.isMainThread, " apithreaddd")
-                        if Thread.isMainThread {
-                            print("!!!!!!!!!!!errororor api")
-                            if (AppDelegate.shared?.properties?.appData.db.devMode ?? false) {
-                                AppDelegate.shared?.properties?.newMessage.show(title:"fatal error, from main", type: .error)
-                            }
-                        }
+                        AppDelegate.shared?.properties?.appData.threadCheck(shouldMainThread: false)
+
                         if let unwrappedData = data {
                             let returnedData = NSString(data: unwrappedData, encoding: String.Encoding.utf8.rawValue)
                             if returnedData == "1" {

@@ -20,11 +20,8 @@ class DataBase {
             } else {
                 let dbDict = AppDelegate.shared?.properties?.coreDataManager?.fetch(.general)?.data?.toDict ?? [:]
                 DataBase._db = dbDict
-                if Thread.isMainThread {
-                    if devMode {
-                        fatalError("db from main thread")
-                    }
-                }
+                AppDelegate.shared?.properties?.appData.threadCheck(shouldMainThread: false)
+
                 return dbDict
             }
             
@@ -35,11 +32,8 @@ class DataBase {
                 return
             }
             DataBase._db = newValue
-            if Thread.isMainThread {
-                if devMode {
-                    fatalError("db from main thread")
-                }
-            }
+            AppDelegate.shared?.properties?.appData.threadCheck(shouldMainThread: false)
+
             if let core:Data = .create(from: newValue) {
                 print("updating core data")
                 AppDelegate.shared?.properties?.coreDataManager?.update(.init(db: core))
