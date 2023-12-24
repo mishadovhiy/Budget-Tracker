@@ -763,7 +763,7 @@ extension LoginViewController {
     func userChanged() {
         actionButtonsEnabled = true
         appData.needFullReload = true
-        lastSelectedDate = nil
+        self.db.transactionDate = nil
         DispatchQueue.main.async {
             AppDelegate.shared?.properties?.center.removeAllPendingNotificationRequests()
             AppDelegate.shared?.properties?.center.removeAllDeliveredNotifications()

@@ -134,7 +134,18 @@ class DataBase {
         }
     }
     
-    
+    var transactionDate:String? {
+        get{
+            return db["transactionDate"] as? String ?? ""
+        }
+        set(value){
+            if let value {
+                db.updateValue(value, forKey: "transactionDate")
+            } else {
+                db.removeValue(forKey: "transactionDate")
+            }
+        }
+    }
     
     
     

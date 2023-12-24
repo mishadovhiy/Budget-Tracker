@@ -110,7 +110,7 @@ extension AppProperties {
             let value = self.db.db["lastLaunching"] as? String ?? ""
             if value != today {
                 self.db.db.updateValue(today, forKey: "lastLaunching")
-                lastSelectedDate = nil
+                self.db.transactionDate = nil
             }
             let pro = self.appData.db.proEnabeled
             let localization = AppLocalization.udLocalization ?? (NSLocale.current.languageCode ?? "-")

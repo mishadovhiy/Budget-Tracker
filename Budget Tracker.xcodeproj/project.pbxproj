@@ -104,6 +104,10 @@
 		8D193BF22B1FBF32003EB531 /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D193BF12B1FBF32003EB531 /* CalendarCell.swift */; };
 		8D193BF42B1FCE4D003EB531 /* TouchButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D193BF32B1FCE4D003EB531 /* TouchButton.swift */; };
 		8D193BF62B1FCE69003EB531 /* TapAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D193BF52B1FCE69003EB531 /* TapAnimationView.swift */; };
+		8D1957BC2B38B05A006EC829 /* ViewModelHomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1957BB2B38B05A006EC829 /* ViewModelHomeVC.swift */; };
+		8D1957BE2B38BCCB006EC829 /* mainFooterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1957BD2B38BCCB006EC829 /* mainFooterCell.swift */; };
+		8D1957C02B38BCDE006EC829 /* mainHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1957BF2B38BCDE006EC829 /* mainHeaderCell.swift */; };
+		8D1957C22B38BCF9006EC829 /* mainVCemptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1957C12B38BCF9006EC829 /* mainVCemptyCell.swift */; };
 		8D1E4BCE2B222E360030BCB8 /* RefreshTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1E4BCD2B222E360030BCB8 /* RefreshTableView.swift */; };
 		8D251BBF2B2D22C6005EB934 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D251BBE2B2D22C6005EB934 /* Dictionary.swift */; };
 		8D251BC12B2D2A8D005EB934 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D251BC02B2D2A8D005EB934 /* NetworkError.swift */; };
@@ -159,7 +163,6 @@
 		8DADC8922810E30300CC66EF /* TransactionNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DADC8912810E30300CC66EF /* TransactionNav.swift */; };
 		8DAF26982B37A8240023573E /* oldNetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAF26972B37A8240023573E /* oldNetworkModel.swift */; };
 		8DAF26A52B37D3470023573E /* NetworkTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAF26A42B37D3470023573E /* NetworkTestView.swift */; };
-		8DAF26A72B37D4D30023573E /* SuperSwiftuiVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAF26A62B37D4D30023573E /* SuperSwiftuiVC.swift */; };
 		8DB4DAC227FC10D000EAA56F /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB4DAC127FC10D000EAA56F /* Keys.swift */; };
 		8DB7C459284EA064001DBFB7 /* AlertViewLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 8DB7C458284EA064001DBFB7 /* AlertViewLibrary */; };
 		8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */; };
@@ -357,6 +360,10 @@
 		8D193BF12B1FBF32003EB531 /* CalendarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
 		8D193BF32B1FCE4D003EB531 /* TouchButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchButton.swift; sourceTree = "<group>"; };
 		8D193BF52B1FCE69003EB531 /* TapAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapAnimationView.swift; sourceTree = "<group>"; };
+		8D1957BB2B38B05A006EC829 /* ViewModelHomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelHomeVC.swift; sourceTree = "<group>"; };
+		8D1957BD2B38BCCB006EC829 /* mainFooterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mainFooterCell.swift; sourceTree = "<group>"; };
+		8D1957BF2B38BCDE006EC829 /* mainHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mainHeaderCell.swift; sourceTree = "<group>"; };
+		8D1957C12B38BCF9006EC829 /* mainVCemptyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mainVCemptyCell.swift; sourceTree = "<group>"; };
 		8D1E4BCD2B222E360030BCB8 /* RefreshTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTableView.swift; sourceTree = "<group>"; };
 		8D251BBE2B2D22C6005EB934 /* Dictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dictionary.swift; sourceTree = "<group>"; };
 		8D251BC02B2D2A8D005EB934 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
@@ -414,7 +421,6 @@
 		8DADC8912810E30300CC66EF /* TransactionNav.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionNav.swift; sourceTree = "<group>"; };
 		8DAF26972B37A8240023573E /* oldNetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = oldNetworkModel.swift; sourceTree = "<group>"; };
 		8DAF26A42B37D3470023573E /* NetworkTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTestView.swift; sourceTree = "<group>"; };
-		8DAF26A62B37D4D30023573E /* SuperSwiftuiVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperSwiftuiVC.swift; sourceTree = "<group>"; };
 		8DB4DAC127FC10D000EAA56F /* Keys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		8DBA7E4C23F0316F00D8214C /* Budget Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Budget Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -569,7 +575,6 @@
 			isa = PBXGroup;
 			children = (
 				8B7B63CB2655CAFB0067C434 /* SuperViewController.swift */,
-				8DAF26A62B37D4D30023573E /* SuperSwiftuiVC.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -578,6 +583,7 @@
 			isa = PBXGroup;
 			children = (
 				8DBA7E5323F0316F00D8214C /* HomeVC.swift */,
+				8D1957BB2B38B05A006EC829 /* ViewModelHomeVC.swift */,
 				8D742FE12B0DC718006211DD /* Cells */,
 				8DC033CB2985CA5A00CD98FF /* UITableViewDataSource_ViewController.swift */,
 				8D0EC25E2985DB9600EBD1ED /* Extensions_ViewController.swift */,
@@ -1064,6 +1070,9 @@
 			children = (
 				8D2CDA162AF3F2B800671A72 /* calcCell.swift */,
 				8D2CDA152AF3F29400671A72 /* mainVCcell.swift */,
+				8D1957C12B38BCF9006EC829 /* mainVCemptyCell.swift */,
+				8D1957BD2B38BCCB006EC829 /* mainFooterCell.swift */,
+				8D1957BF2B38BCDE006EC829 /* mainHeaderCell.swift */,
 				8D2CDA1A2AF3F33300671A72 /* CVCell.swift */,
 				8D2CDA1B2AF3F34C00671A72 /* EmptyCell.swift */,
 			);
@@ -1491,6 +1500,7 @@
 				8DFF72892B07E75B00FC38A7 /* UITableViewDelegate_ SelectValueVC.swift in Sources */,
 				8B6BA98227E717850067FF58 /* Date.swift in Sources */,
 				8DEB84DD2B158B0400AB1975 /* SelectTextImageContainerView.swift in Sources */,
+				8D1957C22B38BCF9006EC829 /* mainVCemptyCell.swift in Sources */,
 				8D2CDA1E2AF3F37A00671A72 /* EmptyCell.swift in Sources */,
 				8D193BF62B1FCE69003EB531 /* TapAnimationView.swift in Sources */,
 				8D193BE52B1FBA18003EB531 /* IconsVCCell.swift in Sources */,
@@ -1544,6 +1554,7 @@
 				8DD89D8E23F1495300273904 /* TransactionVC.swift in Sources */,
 				8D251BC72B2D2F83005EB934 /* UIImage.swift in Sources */,
 				8D8B6C3E245023EC007260A0 /* CalendarVC.swift in Sources */,
+				8D1957C02B38BCDE006EC829 /* mainHeaderCell.swift in Sources */,
 				8D2CDA212AF3F37A00671A72 /* FilterCell.swift in Sources */,
 				8D7FCA7B2ADAF05C00B108A6 /* PanViewController.swift in Sources */,
 				8DF479DE2ADF105A0092746E /* PDFEditVC.swift in Sources */,
@@ -1571,6 +1582,7 @@
 				8D0C5D1A2AF6CC1F002E2422 /* Extensions_SelectionStackView.swift in Sources */,
 				8D15BD602B047F5D00E1C444 /* PDFProperties.swift in Sources */,
 				8D7FCA792ADAF05300B108A6 /* AnimatedTransitioningManager.swift in Sources */,
+				8D1957BE2B38BCCB006EC829 /* mainFooterCell.swift in Sources */,
 				8D834D9E297E03D60056E686 /* DaysCollectionCell.swift in Sources */,
 				8BF63E8F2762C83F002E8601 /* SettingsVC.swift in Sources */,
 				8B20751227D9A7AF00CF2172 /* PascodeLockView.swift in Sources */,
@@ -1630,10 +1642,10 @@
 				8DBAD3832B1686E0004A6323 /* SelectImageCollectionCell.swift in Sources */,
 				8D193BE32B1FBA0D003EB531 /* UICollectionViewDelegate_IconsVC.swift in Sources */,
 				8B5434FA27ED838F00417141 /* Notifications.swift in Sources */,
+				8D1957BC2B38B05A006EC829 /* ViewModelHomeVC.swift in Sources */,
 				8D251BC32B2D2DA2005EB934 /* Data.swift in Sources */,
 				8B42FCDD2776805800013E4B /* NumbersTF.swift in Sources */,
 				8B5F342C26FB2D98000DDCAF /* EnterValueVC.swift in Sources */,
-				8DAF26A72B37D4D30023573E /* SuperSwiftuiVC.swift in Sources */,
 				8DEB84E22B158E1600AB1975 /* CameraModel.swift in Sources */,
 				8BFA15D127E8E8510078856A /* categoriesVCcell.swift in Sources */,
 				8D251BC12B2D2A8D005EB934 /* NetworkError.swift in Sources */,

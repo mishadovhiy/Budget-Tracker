@@ -41,7 +41,7 @@ extension SideBar:UITableViewDelegate, UITableViewDataSource {
             if tableData[indexPath.section].section[indexPath.row].name != "" {
                 let segue = tableData[indexPath.section].section[indexPath.row].segue
                 if segue != "" {
-                    HomeVC.shared?.fromSideBar = true
+                    HomeVC.shared?.viewModel.fromSideBar = true
                     DispatchQueue.main.async {
                         HomeVC.shared?.performSegue(withIdentifier: segue, sender: self)
                     }

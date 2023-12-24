@@ -9,11 +9,6 @@
 import UIKit
 import AVFoundation
 
-///bug:
-//when quiting vc its refreshing on mainVC
-
-var lastSelectedDate:String?
-
 protocol TransitionVCProtocol {
     func addNewTransaction(value: String, category: String, date: String, comment: String, reminderTime:DateComponents?, repeated:Bool?)
     func editTransaction(_ transaction:TransactionsStruct, was:TransactionsStruct,reminderTime: DateComponents?, repeated: Bool?, idx:Int?)
@@ -162,7 +157,7 @@ class TransitionVC: SuperViewController {
     var panMahanger:PanViewController?
 
     lazy var defaultDate:String = {
-        return dateSet ?? (lastSelectedDate ?? (AppDelegate.shared?.properties?.appData.db.filter.from ?? ""))
+        return dateSet ?? (self.db.transactionDate ?? (AppDelegate.shared?.properties?.appData.db.filter.from ?? ""))
     }()
     @IBOutlet weak var doneButton: UIButton!
 
@@ -814,11 +809,8 @@ extension TransitionVC: CalendarVCProtocol {
         DispatchQueue.main.async {
             self.dateTextField.text = newDate + timeString
         }
-        lastSelectedDate = newDate
         displeyingTransaction.date = newDate
-        print(displeyingTransaction.date, " newDatenewDatenewDate")
-        print(time, " timetimetimetimetimetime")
-
+        self.db.transactionDate = newDate
     }
 }
 

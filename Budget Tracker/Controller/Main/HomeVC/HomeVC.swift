@@ -8,7 +8,7 @@
 
 import UIKit
 import Combine
-class HomeVC: SuperSwiftuiVC {
+class HomeVC: SuperViewController {
     typealias TransitionComponents = (albumCoverImageView: UIImageView?, albumNameLabel: UILabel?)
     public var transitionComponents = TransitionComponents(albumCoverImageView: nil, albumNameLabel: nil)
     let transitionAppearenceManager = AnimatedTransitioningManager(duration: 0.267)
@@ -48,98 +48,26 @@ class HomeVC: SuperSwiftuiVC {
     @IBOutlet weak var mainContentView: UIView!
     @IBOutlet weak var menuButton: UIButton!
     @IBOutlet weak var bigExpensesStack: UIStackView!
-    
+    @IBOutlet weak var expencesStack: UIStackView!
+    @IBOutlet weak var perioudBalanceView: UIStackView!
     @IBOutlet weak var sideBarContentBlockerView: UIView!
     static var shared: HomeVC?
-    var fromSideBar = false
-    var _notificationsCount = (0,0)
-    var sidescrolling = false
-    var wasShowingSideBar = false
-    var beginScrollPosition:CGFloat = 0
-    
-    var sideBarShowing = false
-    var firstLod = true
-    var subviewsLoaded = false
-    var canTouchHandleTap = true
-    var firstLoaded = false
-    var justLoaded = true
-    var newTransaction: TransactionsStruct?
-    var highliteCell: IndexPath?
-    var tableDHolder: [tableStuct] = []
-    var forseSendUnsendedData = true
-    var addTransFrame = CGRect.zero
-    var enableLocalDataPress = false
-    var undendedCount = 0
-    var filterAndCalcFrameHolder = (CGRect.zero, CGRect.zero)
-    var wasSendingUnsended = false
-    var correctFrameBackground:CGRect = .zero
-    var tableData:[TransactionsStruct] = []
-    var _TableData: [tableStuct] = []
-    var completedFiltering = false
-    let tableCorners:CGFloat = 15
-    var actionAfterAdded:((Bool) -> ())?
-    var firstAppearence = true
-    var _calculations:Calculations = .init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)
-    var forceLoggedOutUser = ""
-    var resetPassword = false
-    var _filterText: String = "Filter".localize
-    var timers: [Timer] = []
-    var safeArreaHelperViewAdded = false
     var safeArreaHelperView: UIView?
+    var transactionManager:TransactionsManager?
+    var viewModel:ViewModelHomeVC = .init()
     let center = AppDelegate.shared?.properties?.center
-    var sendError = false
-    var startedSendingUnsended = false
-    var highesLoadedCatID: Int?
-    var added = false
-    var allData: [[TransactionsStruct]] = []
-    var calendar:CalendarControlVC?
-    var unsavedTransactionsCount = 0
-    var selectedCell: IndexPath? = nil
-    var animateCellWillAppear = true
-    var calcViewHeight:CGFloat = 0
-    var refreshData = false
-    var lastWhiteBackheight = 0
-    var openFiler = false
-    var apiLoading = true
-    var newTableData: [tableStuct] {
-        get { return _TableData }
-        set {
-            _TableData = newValue
-            tableDataLoaded(newValue)
+
+    var newTableData: [tableStuct] = [] {
+        didSet {
+            tableDataLoaded(newTableData)
         }
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        mainTableView.refreshBackgroundColor = self.view.backgroundColor
-        mainTableView.refreshAction = refresh
-        transactionManager = .init()
-        transactionManager?.taskChanged = {
-            self.dataTaskCount = $0
-        }
         updateUI()
-        
-        pinchView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:))))
-        self.sideBarContentBlockerView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:))))
-        HomeVC.shared = self
-        sideBar.load()
-        toggleSideBar(false, animated: false)
-        
-        self.mainTableView.contentInset.bottom = AppDelegate.shared?.properties?.banner.size ?? 0
-        if #available(iOS 13.0, *) {
-            BannerPublisher.valuePublisher.sink(receiveValue: {
-                self.bannerUpdated($0)
-            }).store(in: &BannerPublisher.cancellableHolder)
-        }
-        
     }
-    
-    
-    func bannerUpdated(_ value:CGFloat) {
-        self.mainTableView.contentInset.bottom = value
-    }
-    
-    var calendarSelectedDate:String?
-    
+        
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         sbvsLoaded()
@@ -147,107 +75,93 @@ class HomeVC: SuperSwiftuiVC {
     
     override func viewWillDisappear(_ animated: Bool) {
         UIApplication.shared.keyWindow?.backgroundColor = K.Colors.primaryBacground
-        
         super.viewWillDisappear(animated)
-        
     }
     
-    var vcAppeared = false
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         viewAppeared()
         AppDelegate.shared?.properties?.banner.setBackground(clear: false)
-        if !vcAppeared {
-            vcAppeared = true
+        if !viewModel.vcAppeared {
+            viewModel.vcAppeared = true
         } else if AppDelegate.shared?.properties?.banner.adHidden ?? false {
             AppDelegate.shared?.properties?.banner.appeare(force: true)
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        UIApplication.shared.keyWindow?.backgroundColor = .clear
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        super.viewWillAppear(animated)
+        navigationController?.delegate = nil
+    }
+    
+    
+    func bannerUpdated(_ value:CGFloat) {
+        self.mainTableView.contentInset.bottom = value
+    }
+    
     func monthSelected(_ year:Int, _ month:Int) {
-        lastSelectedDate = nil
         DispatchQueue.init(label: "local", qos: .userInitiated).async {
+            self.db.transactionDate = nil
             AppDelegate.shared?.properties?.appData.db.filter.showAll = false
             AppDelegate.shared?.properties?.appData.db.filter.from = "\(1.twoDec).\(month.twoDec).\(year)"
             var lastDay = DateComponents()
             lastDay.year = year
             lastDay.month = month
-            print(lastDay.lastDayOfMonth, " trgerfwd")
             AppDelegate.shared?.properties?.appData.db.filter.to = "\((lastDay.lastDayOfMonth ?? 31).twoDec).\(month.twoDec).\(year)"
-            if !self.completedFiltering {
+            if !self.viewModel.completedFiltering {
                 self.transactionManager?.filterChanged = true
             }
             self.filter()
         }
     }
     
-    //todo:
-    //return UICollectionViewCell
+
     func dateSelected(_ newDate:DateComponents) {
         self.vibrate()
-        self.calendarSelectedDate = newDate.toShortString()
+        self.viewModel.calendarSelectedDate = newDate.toShortString()
         self.toAddTransaction(pressedView: calendarContainer, isCalendar: false)
-        
     }
+    
     func dateSelectedCell(_ newDate:DateComponents, _ cell:CalendarCell) {
         /*    self.vibrate()
          self.calendarSelectedDate = newDate.toShortString()
          self.toAddTransaction(pressedView: calendarContainer, canDivid: true, isCalendar: true)*/
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        print("today is", AppDelegate.shared?.properties?.appData.db.filter.getToday())
-        UIApplication.shared.keyWindow?.backgroundColor = .clear
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
-        super.viewWillAppear(animated)
-        navigationController?.delegate = nil
-        
-    }
-    
-    var transactionManager:TransactionsManager?
-    
-    var apiTransactions:[TransactionsStruct] = []
     func filter(data:[TransactionsStruct]? = nil) {
-        completedFiltering = false
-        print("filterCalled")
-        let showAll = false//AppDelegate.shared?.properties?.appData.db.filter.showAll ?? false
-        print(AppDelegate.shared?.properties?.appData.db.filter.from, " tyhregrfwed")
-        print(AppDelegate.shared?.properties?.appData.db.filter.to, " tgerfwd")
-        let all = transactionManager?.filtered(apiTransactions) ?? []
-        self.filterText = (showAll ? "All transactions".localize : (AppDelegate.shared?.properties?.appData.db.filter.periodText ?? ""))
-        tableData = all
-        prepareFilterOptions(apiTransactions)
+        viewModel.completedFiltering = false
+        let all = transactionManager?.filtered(viewModel.apiTransactions) ?? []
+        self.filterText = AppDelegate.shared?.properties?.appData.db.filter.periodText ?? ""
+        viewModel.tableData = all
+        prepareFilterOptions(viewModel.apiTransactions)
         
         calculations = .init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)
         dataTaskCount = (0,0)
-        animateCellWillAppear = true
+        viewModel.animateCellWillAppear = true
         let selectedPeriud = AppDelegate.shared?.properties?.appData.db.filter.selectedPeroud ?? ""
         let selectedPer = selectedPeriud != "" ? selectedPeriud : "This Month"
         if AppDelegate.shared?.properties?.appData.db.filter.selectedPeroud != selectedPer {
             AppDelegate.shared?.properties?.appData.db.filter.selectedPeroud = selectedPer
         }
         
-        if !showAll {
-            allDaysBetween()
-        }
+        allDaysBetween()
         newTableData = transactionManager?.new(transactions: all) ?? []
         self.calculations = transactionManager!.calculation!
-        self.monthTransactions.removeAll()
+        viewModel.monthTransactions.removeAll()
         newTableData.forEach {
             $0.transactions.forEach {
-                self.monthTransactions.append($0)
+                viewModel.monthTransactions.append($0)
             }
             
         }
     }
     
-    var dbTotal:Int = 0
     func refresh() {
-        //add transaction
-        //scrolltop (other, similier function) - to ask if user whants to refresh db
-        forseSendUnsendedData = true
+        viewModel.forseSendUnsendedData = true
         if AppDelegate.shared?.properties?.appData.db.username != "" {
-            if refreshData {
+            if viewModel.refreshData {
                 if AppDelegate.shared?.properties?.appData.db.username != "" {
                     self.downloadFromDB(showError: true)
                 } else {
@@ -257,9 +171,6 @@ class HomeVC: SuperSwiftuiVC {
             } else {
                 mainTableView.refresh?.endRefreshing()
                 toAddTransaction()
-                
-                
-                
             }
         } else {
             mainTableView.refresh?.endRefreshing()
@@ -268,7 +179,7 @@ class HomeVC: SuperSwiftuiVC {
     }
     
     func deleteFromDB(at: IndexPath) {
-        selectedCell = nil
+        viewModel.selectedCell = nil
         let delete = DeleteFromDB()
         delete.newTransaction(newTableData[at.section].transactions[at.row]) { _ in
             self.filter()
@@ -279,26 +190,20 @@ class HomeVC: SuperSwiftuiVC {
         sideBarPinch(sender)
     }
     
-    
     @IBAction func addTransactionPressed(_ sender: Any) {
         toAddTransaction()
     }
     
     @objc func mainContentTap(_ sender: UITapGestureRecognizer) {
-        //    toggleSideBar(false, animated: true)
+            toggleSideBar(false, animated: true)
     }
     
     @IBAction func menuPressed(_ sender: UIButton) {
-        toggleSideBar(!sideBarShowing, animated: true)
-    }
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        compliteScrolling()
+        toggleSideBar(!viewModel.sideBarShowing, animated: true)
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if sideBarShowing {
-            //  toggleSideBar(false, animated: true)
+        if viewModel.sideBarShowing {
             self.scrollHead(scrollView)
             return
         }
@@ -307,29 +212,6 @@ class HomeVC: SuperSwiftuiVC {
     }
     
     //MARK: - Other
-    
-    var monthTransactions:[TransactionsStruct] = []
-    var totalBalance = 0.0
-    var selectedFromDayInt = 0
-    var selectedToDayInt = 0
-    var editingTransaction: TransactionsStruct?
-    var prevSelectedPer:String?
-    
-    
-    var filterHelperView = UIView(frame: .zero)
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        UIView.animate(withDuration: 0.19) {
-            // self.safeArreaHelperView?.alpha = 1
-            self.safeArreaHelperView?.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
-        }
-        self.prepareSegue(for: segue, sender: sender)
-        
-    }
-    
-    @IBOutlet weak var expencesStack: UIStackView!
-    @IBOutlet weak var perioudBalanceView: UIStackView!
-    
-    
     func checkDownload(force:Bool = false) {
         if (AppDelegate.shared?.properties?.appData.needFullReload ?? false) {
             AppDelegate.shared?.properties?.appData.needFullReload = false
@@ -339,8 +221,6 @@ class HomeVC: SuperSwiftuiVC {
             }
         }
         if force {
-            
-            
             self.downloadFromDB()
         }
     }
@@ -352,13 +232,12 @@ class HomeVC: SuperSwiftuiVC {
                 self.dataCountLabel.text = ""
             }
             self.checkDownload(force: true)
-            
             if AppDelegate.shared?.properties?.appData.fromLoginVCMessage != "" {
                 print("appData.fromLoginVCMessage", AppDelegate.shared?.properties?.appData.fromLoginVCMessage ?? "-")
                 DispatchQueue.main.async {
                     self.newMessage?.show(title:AppDelegate.shared?.properties?.appData.fromLoginVCMessage ?? "", type: .standart)
                     AppDelegate.shared?.properties?.appData.fromLoginVCMessage = ""
-                    if self.sideBarShowing {
+                    if self.viewModel.sideBarShowing {
                         self.toggleSideBar(false, animated: true)
                     }
                 }
@@ -370,12 +249,11 @@ class HomeVC: SuperSwiftuiVC {
         print("FROM FILTER")
         DispatchQueue.global(qos: .userInteractive).async {
             DispatchQueue.main.async {
-                self.filterHelperView.alpha = 0
                 UIView.animate(withDuration: 0.3) {
                     self.filterTextLabel.alpha = 1
                 }
             }
-            if self.prevSelectedPer != AppDelegate.shared?.properties?.appData.db.filter.selectedPeroud {
+            if self.viewModel.prevSelectedPer != AppDelegate.shared?.properties?.appData.db.filter.selectedPeroud {
                 self.filter()
             }
         }
@@ -383,21 +261,19 @@ class HomeVC: SuperSwiftuiVC {
     
     
     @objc func monthBalancePressed(_ sender:UITapGestureRecognizer) {
-        currentStatistic = true
-        if canTouchHandleTap {
+        viewModel.currentStatistic = true
+        if viewModel.canTouchHandleTap {
             toStatistic(thisMonth: true, isExpenses: true)
         }
     }
     
     func toStatistic(thisMonth:Bool, isExpenses:Bool) {
-        let vc = StatisticVC.configure(data: currentStatistic ? monthTransactions : apiTransactions)
+        let vc = StatisticVC.configure(data: viewModel.currentStatistic ? viewModel.monthTransactions : viewModel.apiTransactions)
         vc.expensesPressed = true
-        print(currentStatistic, " currentStatisticcurrentStatistic")
-        vc.isAll = !currentStatistic
-        vc.fromsideBar = self.fromSideBar
-        
-        currentStatistic = false
-        self.fromSideBar = false
+        vc.isAll = !viewModel.currentStatistic
+        vc.fromsideBar = viewModel.fromSideBar
+        viewModel.currentStatistic = false
+        viewModel.fromSideBar = false
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -408,10 +284,8 @@ class HomeVC: SuperSwiftuiVC {
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
-    var currentStatistic = false
     @IBAction func statisticLabelPressed(_ sender: UIButton) {
-        currentStatistic = true
-        
+        viewModel.currentStatistic = true
         var expenses = true
         switch sender.tag {
         case 0: expenses = true
@@ -454,5 +328,6 @@ class HomeVC: SuperSwiftuiVC {
         }
     }
     
+
 }
 

@@ -10,7 +10,7 @@ import UIKit
 
 struct LastSelected {
     let mainKey = "lastSelected"
-    var db:DataBase {
+    private var db:DataBase {
         return AppDelegate.shared?.properties?.db ?? .init()
     }
     private var dict: [String:String] {

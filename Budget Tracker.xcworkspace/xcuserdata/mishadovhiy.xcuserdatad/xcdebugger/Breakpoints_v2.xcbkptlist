@@ -5851,8 +5851,8 @@
             filePath = "Budget Tracker/Controller/Main/HomeVC/Extensions_ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "778"
-            endingLineNumber = "778"
+            startingLineNumber = "686"
+            endingLineNumber = "686"
             landmarkName = "quiteTransactionVC(reload:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5867,8 +5867,8 @@
             filePath = "Budget Tracker/Controller/Main/TransactionVC/TransactionVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "35"
-            endingLineNumber = "35"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
             landmarkName = "trashPressed(_:)"
             landmarkType = "7">
          </BreakpointContent>

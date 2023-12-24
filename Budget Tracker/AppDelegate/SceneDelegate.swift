@@ -22,7 +22,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
        // AppDelegate.shared?.properties = .init()
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = .init(windowScene: windowScene)
-        let vc:UIViewController = SuperSwiftuiVC()
         window?.rootViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NavigationController")
         window?.makeKeyAndVisible()
      //   AppDelegate.shared?.window = window

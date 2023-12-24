@@ -14,7 +14,7 @@ extension HomeVC {
         let height = calendarContainer.frame.height * (-2)
         let cantTapBig = scrollView.contentOffset.y >= bigCalcView.frame.height
         self.bigCalcView.alpha = cantTapBig ? 0 : 1
-        canTouchHandleTap = !cantTapBig
+        viewModel.canTouchHandleTap = !cantTapBig
         if height <= offset {
             calendarContainer.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, offset <= 0 ? offset : 0, 0)
         } else {
@@ -23,42 +23,13 @@ extension HomeVC {
     }
     func scrollRefresh(_ scrollView:UIScrollView) {
         let finger = scrollView.panGestureRecognizer.location(in: self.view)
-        refreshData = finger.x > self.view.frame.width / 2 ? false : true
-        //    self.mainTableView.refresh?.tintColor = self.refreshData ? K.Colors.pink : .clear
-        
-        let max:CGFloat = 100
-        let offsetY = scrollView.contentOffset.y * (-1)
-        let alpha = offsetY / max
-        if appData.db.username != "" {
-            //     UIView.animate(withDuration: 0.3) {
-            // self.mainTableView.refresh?.alpha = self.refreshData ? 0 : alpha
-            //   }
-        } else {
-            //    UIView.animate(withDuration: 0.3) {
-            //    self.mainTableView.refresh?.tintColor = .clear
-            //  self.mainTableView.refresh?.alpha = alpha
-            //  }
-        }
-        let lastCellVisible = self.newTableData.count > 8 ? true : false
-        if scrollView.contentOffset.y > 5.0 {
-            //            DispatchQueue.main.async {
-            //                if self.mainTableView.refresh?.isRefreshing ?? false {
-            //                    self.mainTableView.refresh?.endRefreshing()
-            //                }
-            //            }
-        }
+        viewModel.refreshData = finger.x > self.view.frame.width / 2 ? false : true
     }
     
     func toggleSideBar(_ show: Bool, animated:Bool) {
-        sideBarShowing = show
-        /* if !show {
-         UIView.animate(withDuration: 0.3, animations: {
-         self.sideBarContentBlockerView.alpha = 0
-         })
-         }*/
+        viewModel.sideBarShowing = show
         DispatchQueue.main.async {
             let frame = self.sideBar.layer.frame
-            //UIView.animate(withDuration: animated ? 0.25 : 0) {
             if show {
                 UIView.animate(withDuration: 0.3, delay: 0, options: .allowUserInteraction, animations: {
                     self.sideBarContentBlockerView.alpha = show ? 1 : 0
@@ -69,10 +40,6 @@ extension HomeVC {
                 self.mainContentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
                 self.mainContentViewHelpher.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
             } completion: {
-                /*UIView.animate(withDuration: 0.3, animations: {
-                 self.sideBarContentBlockerView.alpha = show ? 1 : 0
-                 
-                 })*/
                 if !$0 {
                     return
                 }
@@ -84,8 +51,8 @@ extension HomeVC {
                     
                 }
                 self.sideBar.getData()
-                if self.firstLod {
-                    self.firstLod = false
+                if self.viewModel.firstLod {
+                    self.viewModel.firstLod = false
                     self.sideBar.isHidden = false
                     self.menuButton.isEnabled = true
                     let gesture = UITapGestureRecognizer(target: self, action: #selector( self.mainContentTap(_:)))
@@ -95,7 +62,6 @@ extension HomeVC {
                     } else {
                         self.mainTableView.removeGestureRecognizer(gesture)
                     }
-                    //    self.mainTableView.reloadData()
                 }
             }
             
@@ -103,7 +69,7 @@ extension HomeVC {
     }
     func sideBarPinch(_ sender:UIPanGestureRecognizer) {
         if sender.state == .began {
-            touchingFromShow = sideBarShowing
+            touchingFromShow = viewModel.sideBarShowing
         }
         let finger = sender.location(in: self.view)
         let max:CGFloat = sideBar.frame.width - 10
@@ -114,10 +80,10 @@ extension HomeVC {
         self.sideBarContentBlockerView.alpha = resCalc
         
         if sender.state == .began {
-            sidescrolling = finger.x < 80
-            wasShowingSideBar = sideBarShowing
+            viewModel.sidescrolling = finger.x < 80
+            viewModel.wasShowingSideBar = viewModel.sideBarShowing
         }
-        if sidescrolling || sideBarShowing {
+        if viewModel.sidescrolling || viewModel.sideBarShowing {
             if sender.state == .began || sender.state == .changed {
                 let maximum = max + 30
                 let newPosition = finger.x >= maximum ? maximum : (finger.x <= 0 ? 0 : finger.x)
@@ -128,7 +94,7 @@ extension HomeVC {
                 
             } else {
                 if sender.state == .ended {
-                    let toHide:CGFloat = wasShowingSideBar ? 200 : 80
+                    let toHide:CGFloat = viewModel.wasShowingSideBar ? 200 : 80
                     toggleSideBar(finger.x > toHide ? true : false, animated: true)
                 }
             }
@@ -144,31 +110,29 @@ extension HomeVC {
         return date
     }
     
-    var filterText: String{
+    var filterText: String {
         get {
-            return _filterText
+            return viewModel._filterText
         }
         set {
-            _filterText = newValue
+            viewModel._filterText = newValue
             var dots = ""
             DispatchQueue.main.async {
                 self.filterTextLabel.text = newValue
             }
-            for i in 0..<self.timers.count {
-                self.timers[i].invalidate()
+            for i in 0..<self.viewModel.timers.count {
+                self.viewModel.timers[i].invalidate()
             }
-            if !completedFiltering {
+            if !viewModel.completedFiltering {
                 let timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { (timer) in
-                    if self.completedFiltering {
+                    if self.viewModel.completedFiltering {
                         timer.invalidate()
-                        //                        DispatchQueue.main.async {
-                        //                            self.filterTextLabel.text = "Filter".localize + ": \(appData.db.filter.selectedPeroud)"
-                        //                        }
+
                         DispatchQueue.main.async {
-                            self.filterTextLabel.text = self._filterText
+                            self.filterTextLabel.text = self.viewModel._filterText
                         }
-                        for i in 0..<self.timers.count {
-                            self.timers[i].invalidate()
+                        for i in 0..<self.viewModel.timers.count {
+                            self.viewModel.timers[i].invalidate()
                         }
                         return
                     } else {
@@ -186,11 +150,11 @@ extension HomeVC {
                         }
                         
                         DispatchQueue.main.async {
-                            self.filterTextLabel.text = self._filterText + dots
+                            self.filterTextLabel.text = self.viewModel._filterText + dots
                         }
                     }
                 }
-                timers.append(timer)
+                viewModel.timers.append(timer)
             }
         }
     }
@@ -212,11 +176,11 @@ extension HomeVC {
             let monthT = appData.db.filter.getMonthFromString(s: to)
             let yearT = appData.db.filter.getYearFromString(s: to)
             let dayTo = appData.db.filter.getLastDayOf(month: monthT, year: yearT)
-            selectedToDayInt = dayTo
-            selectedFromDayInt = appData.db.filter.getDayFromString(s: appData.db.filter.from)
+            viewModel.selectedToDayInt = dayTo
+            viewModel.selectedFromDayInt = appData.db.filter.getDayFromString(s: appData.db.filter.from)
             
             let monthDifference = getMonthFrom(string: appData.db.filter.to) - getMonthFrom(string: appData.db.filter.from)
-            var amount = selectedToDayInt + (31 - selectedFromDayInt) + (monthDifference * 31)
+            var amount = viewModel.selectedToDayInt + (31 - viewModel.selectedFromDayInt) + (monthDifference * 31)
             if amount < 0 {
                 amount *= -1
             }
@@ -225,7 +189,7 @@ extension HomeVC {
         } else {
             let yearDifference = (getYearFrom(string: appData.db.filter.to) - getYearFrom(string: appData.db.filter.from)) - 1
             let monthDifference = (12 - getMonthFrom(string: appData.db.filter.from)) + (yearDifference * 12) + getMonthFrom(string: appData.db.filter.to)
-            var amount = selectedToDayInt + (31 - selectedFromDayInt) + (monthDifference * 31)
+            var amount = viewModel.selectedToDayInt + (31 - viewModel.selectedFromDayInt) + (monthDifference * 31)
             if amount < 0 {
                 amount *= -1
             }
@@ -250,47 +214,9 @@ extension HomeVC {
     }
     
     
-    
-    
-    
-    func updateDataLabels(reloadAndAnimate: Bool = true, noData: Bool = false) {
-        //     let unsendedCount = appData.unsendedData.count
-        //     let hideLocal = localCount == 0 ? true : false
-        
-        //  DispatchQueue.main.async {
-        //      self.mainTableView.reloadData()
-        /* self.unsendedDataLabel.text = "\(unsendedCount)"
-         self.dataFromTitleLabel.text = "Local data".localize + ":"
-         self.dataFromValueLabel.text = "\(localCount)"
-         if reloadAndAnimate {
-         UIView.animate(withDuration: noData ? 0.0 : 0.35) {
-         if self.unsendedDataLabel.superview?.superview?.isHidden != hideUnsended {
-         self.unsendedDataLabel.superview?.superview?.isHidden = hideUnsended
-         }
-         self.enableLocalDataPress = !hideLocal
-         if self.dataFromValueLabel.superview?.superview?.isHidden != hideLocal {
-         self.dataFromValueLabel.superview?.superview?.isHidden = hideLocal
-         }
-         } completion: { (_) in
-         if self.mainTableView.visibleCells.count > 1 {
-         self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
-         } else {
-         self.mainTableView.reloadData()
-         }
-         }
-         } else {
-         if self.mainTableView.visibleCells.count > 1 {
-         self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
-         } else {
-         self.mainTableView.reloadData()
-         }
-         }*/
-        // }
-    }
     func toggleNoData(show: Bool, text: String = "No Transactions".localize, fromTop: Bool = false, appeareAnimation: Bool = true, addButtonHidden: Bool = false) {
         
         DispatchQueue.main.async {
-            
             self.addTransactionWhenEmptyButton.isHidden = addButtonHidden
             if show {
                 self.addTransactionWhenEmptyButton.alpha = 1
@@ -304,10 +230,6 @@ extension HomeVC {
                         return
                     }
                     self.mainTableView.reloadData()
-                    //       if self.mainTableView.visibleCells.count > 1 {
-                    
-                    //self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
-                    //       }
                 }
             } else {
                 UIView.animate(withDuration: 0.25) {
@@ -317,10 +239,7 @@ extension HomeVC {
                         return
                     }
                     self.noDataView.isHidden = true
-                    //  if self.mainTableView.visibleCells.count > 1 {
-                    //    self.mainTableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .bottom)
                     self.mainTableView.reloadData()
-                    //   }
                 }
             }
         }
@@ -330,23 +249,12 @@ extension HomeVC {
         
         if transactionManager?.filterChanged ?? false{
             transactionManager?.filterChanged = false
-            // filter()
-            
         } else {
             dataTaskCount = nil
-            selectedCell = nil
-            self.completedFiltering = true
-            //  let from = appData.db.filter.fromDate
-            //  let showAll = appData.db.filter.showAll
+            viewModel.selectedCell = nil
+            self.viewModel.completedFiltering = true
             DispatchQueue.main.async {
-                
-                
-                //here //c
                 self.toggleNoData(show: false, addButtonHidden: true)
-                //       let filterPeriod = (from.month?.stringMonth ?? "-").capitalized + ", \(from.year ?? 0)"
-                //   self.filterText = (showAll ? "All transactions" : filterPeriod).localize
-                //"Filter".localize + ": " + appData.db.filter.selectedPeroud
-                
                 self.calculationSView.alpha = 0
                 UIView.animate(withDuration: 0.8) {
                     self.calculationSView.alpha = 1
@@ -354,34 +262,51 @@ extension HomeVC {
                     if !$0 {
                         return
                     }
-                    self.updateDataLabels(noData: newValue.count == 0)
                 }
                 if self.properties?.appData.db.username != "" {
                     self.sendUnsaved()
                 }
-                if let _ = self.newTransaction {
-                    self.newTransaction = nil
-                    self.compliteScrolling()
+                if let _ = self.viewModel.newTransaction {
+                    self.viewModel.newTransaction = nil
                 }
                 
-                if let addedAction = self.actionAfterAdded {
-                    self.actionAfterAdded = nil
+                if let addedAction = self.viewModel.actionAfterAdded {
+                    self.viewModel.actionAfterAdded = nil
                     addedAction(true)
-                }
-                //  self.mainTableView.reloadData()
-                if self.firstAppearence {
-                    self.firstAppearence = false
-                    //  self.downloadFromDB()
                 }
             }
         }
         
     }
     
-    var calculations:Calculations {
-        get { return _calculations }
+    
+    var notificationsCount:(Int, Int) {
+        get {
+            return viewModel._notificationsCount
+        }
         set {
-            _calculations = newValue
+            viewModel._notificationsCount = newValue
+            let result = newValue.0 + newValue.1
+            let hide = result == 0
+            DispatchQueue.main.async {
+                self.notificationsLabel.text = "\(result)"
+                if self.notificationsView.isHidden != hide {
+                    UIView.animate(withDuration: 0.3) {
+                        self.notificationsView.isHidden = hide
+                    }
+                    
+                }
+                self.sideBar.newNotificationCount()
+            }
+        }
+    }
+    
+    var calculations:Calculations {
+        get {
+            return viewModel._calculations
+        }
+        set {
+            viewModel._calculations = newValue
             transactionManager?.calculation = newValue
             DispatchQueue.main.async {
                 for label in self.self.ecpensesLabels {
@@ -394,7 +319,7 @@ extension HomeVC {
                     let value = Int(newValue.perioudBalance)
                     label.text = "\(value)"
                     label.textColor = value >= 0 ? K.Colors.category : K.Colors.negative
-                    let hide = Int(newValue.perioudBalance) == self.dbTotal || newValue.perioudBalance == 0
+                    let hide = Int(newValue.perioudBalance) == self.viewModel.dbTotal || newValue.perioudBalance == 0
                     let hi:CGFloat = hide ? 0 : 1
                     if (label.superview?.alpha ?? 0) != hi {
                         UIView.animate(withDuration: 0.13) {
@@ -404,7 +329,7 @@ extension HomeVC {
                     
                 }
                 for label in self.balanceLabels {
-                    let value = self.dbTotal
+                    let value = self.viewModel.dbTotal
                     label.text = "\(value)"
                     label.textColor = value >= 0 ? K.Colors.category : K.Colors.negative
                 }
@@ -413,27 +338,25 @@ extension HomeVC {
         }
     }
     func sbvsLoaded() {
-        if !subviewsLoaded {
+        if !viewModel.subviewsLoaded {
             self.noDataView.isHidden = false
-            subviewsLoaded = true
+            viewModel.subviewsLoaded = true
             toggleNoData(show: true, text: "Loading".localize, fromTop: true, appeareAnimation: false, addButtonHidden: true)
             self.unsendedDataLabel.superview?.superview?.isHidden = true
             self.dataFromValueLabel.superview?.superview?.isHidden = true
-            self.filterAndCalcFrameHolder.0 = self.filterView.frame
-            self.filterAndCalcFrameHolder.1 = self.calculationSView.frame
+            viewModel.filterAndCalcFrameHolder.0 = self.filterView.frame
+            viewModel.filterAndCalcFrameHolder.1 = self.calculationSView.frame
             
-            self.view.addSubview(self.filterHelperView)
-            self.filterHelperView.shadow(opasity: 0.9, black: true)
             let superframe = self.calculationSView.superview?.frame ?? .zero
             let calcFrame = self.calculationSView.frame
             self.calculationSView.frame = CGRect(x: -superframe.height, y: calcFrame.minY, width: calcFrame.width, height: calcFrame.height)
             
             self.noDataView.translatesAutoresizingMaskIntoConstraints = true
             self.noDataView.layer.masksToBounds = true
-            self.noDataView.layer.cornerRadius = self.tableCorners
+            noDataView.layer.cornerRadius = viewModel.tableCorners
             self.noDataView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
             self.darkBackgroundUnderTable.layer.masksToBounds = true
-            self.darkBackgroundUnderTable.layer.cornerRadius = self.tableCorners
+            self.darkBackgroundUnderTable.layer.cornerRadius = self.viewModel.tableCorners
             self.darkBackgroundUnderTable.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
             self.darkBackgroundUnderTable.translatesAutoresizingMaskIntoConstraints = true
             self.addTransitionButton.layer.cornerRadius = self.addTransitionButton.layer.frame.width / 2
@@ -447,9 +370,9 @@ extension HomeVC {
             button.tintColor = K.Colors.balanceV
             button.layer.cornerRadius = button.layer.frame.width / 2
             button.setImage(image, for: .normal)
-            
         }
     }
+    
     func checkPurchase(completion:@escaping(Bool?)-> (), local:Bool = false) {
         let nick = self.properties?.appData.db.username
         if nick == "" || local {
@@ -462,7 +385,7 @@ extension HomeVC {
                 let wrongPassword = checkPassword.0
                 if let userData = checkPassword.1 {
                     if wrongPassword {
-                        self.wrongPassword()
+                        self.apiPasswordChanged()
                         completion(false)
                     } else {
                         let _ = self.properties?.appData.db.emailFromLoadedDataPurch(loadedData)
@@ -495,11 +418,6 @@ extension HomeVC {
     func viewAppeared() {
         navigationController?.delegate = nil
         self.notificationsCount = Notifications.notificationsCount
-//        if self.ai?.isShowing ?? false {
-//            DispatchQueue.main.async {
-//                self.ai?.hide()
-//            }
-//        }
         if appData.needFullReload || self.properties!.appData.needDownloadOnMainAppeare {
             appData.needDownloadOnMainAppeare = false
             appData.needFullReload = false
@@ -509,8 +427,7 @@ extension HomeVC {
         UIView.animate(withDuration: 0.3) {
             self.safeArreaHelperView?.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, self.safeArreaHelperViewCalc * -1, 0)
         }
-        if !safeArreaHelperViewAdded {
-            safeArreaHelperViewAdded = true
+        if safeArreaHelperView == nil {
             if let window = UIApplication.shared.keyWindow {
                 DispatchQueue.main.async {
                     let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: safeTop))
@@ -529,8 +446,8 @@ extension HomeVC {
     func apiUpdated(_ loadedData: [TransactionsStruct]? = nil) {
         let db = db.transactions
         let data = loadedData ?? db
-        self.dbTotal = 0
-        self.apiTransactions = data
+        self.viewModel.dbTotal = 0
+        self.viewModel.apiTransactions = data
         var resultt:[String:CGFloat] = [:]
         data.forEach { transaction in
             let date = transaction.date.stringToCompIso()
@@ -541,35 +458,31 @@ extension HomeVC {
             resultt.updateValue(new, forKey: model)
         }
         db.forEach { value in
-            dbTotal += (Int(value.value) ?? 0)
+            viewModel.dbTotal += (Int(value.value) ?? 0)
         }
-        calendar?.values = resultt
+        viewModel.calendar?.values = resultt
         DispatchQueue.main.async {
-            self.calendar?.collectionView.reloadData()
+            self.viewModel.calendar?.collectionView.reloadData()
             self.mainContentView.isUserInteractionEnabled = true
         }
     }
     
     func downloadFromDB(showError: Bool = false, title: String = "Downloading".localize, local:Bool = false) {
-     //   self.editingTransaction = nil
-        self.sendError = false
-        completedFiltering = false
-        
-        lastSelectedDate = nil
-   //     DispatchQueue.main.async {
-            self.filterText = title
-     //   }
-        apiLoading = true
+        viewModel.sendError = false
+        viewModel.completedFiltering = false
+        self.filterText = title
+        viewModel.apiLoading = true
         mainTableView.startAnimating()
         DispatchQueue.init(label: "download", qos: .userInitiated).async {
+            self.db.transactionDate = nil
             LoadFromDB.shared.newCategories(local:local) { categoryes, error in
                 
                 if error == .none {
-                    self.highesLoadedCatID = ((categoryes.sorted{ $0.id > $1.id }).first?.id ?? 0) + 1
+                    self.viewModel.highesLoadedCatID = ((categoryes.sorted{ $0.id > $1.id }).first?.id ?? 0) + 1
                     LoadFromDB.shared.newTransactions(completion:  { loadedData, error in
                         self.apiUpdated(loadedData)
                         self.checkPurchase(completion:  { _ in
-                            self.apiLoading = false
+                            self.viewModel.apiLoading = false
                             self.filter(data: loadedData)
                         }, local:local)
                     }, local:local)
@@ -588,32 +501,22 @@ extension HomeVC {
     }
     
     
-    var notificationsCount:(Int, Int) {
-        get { return _notificationsCount }
-        set {
-            _notificationsCount = newValue
-            let result = newValue.0 + newValue.1
-            let hide = result == 0
-            DispatchQueue.main.async {
-                self.notificationsLabel.text = "\(result)"
-                if self.notificationsView.isHidden != hide {
-                    UIView.animate(withDuration: 0.3) {
-                        self.notificationsView.isHidden = hide
-                    }
-                    
-                }
-                self.sideBar.newNotificationCount()
-            }
-        }
-    }
+    
     
     func updateUI() {
-        self.calendar = self.createCalendar(calendarContainer, currentSelected: nil, selected: dateSelected(_:), cellSelected: dateSelectedCell(_:_:))
-        calendar?.monthChanged = self.monthSelected(_:_:)
+        mainTableView.refreshBackgroundColor = self.view.backgroundColor
+        mainTableView.refreshAction = refresh
+        transactionManager = .init()
+        transactionManager?.taskChanged = {
+            self.dataTaskCount = $0
+        }
+        
+        viewModel.calendar = self.createCalendar(calendarContainer, currentSelected: nil, selected: dateSelected(_:), cellSelected: dateSelectedCell(_:_:))
+        viewModel.calendar?.monthChanged = self.monthSelected(_:_:)
         downloadFromDB(local: true)
         self.mainTableView.delegate = self
         self.mainTableView.dataSource = self
-        self.enableLocalDataPress = false
+        viewModel.enableLocalDataPress = false
 
         
         balanceHelperView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(monthBalancePressed(_:))))
@@ -624,22 +527,32 @@ extension HomeVC {
                 self.bigExpensesStack.backgroundColor = pressed ? K.Colors.darkTable?.withAlphaComponent(0.2) : .clear
             })
         }
+        pinchView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:))))
+        self.sideBarContentBlockerView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:))))
+        HomeVC.shared = self
+        sideBar.load()
+        toggleSideBar(false, animated: false)
         
+        self.mainTableView.contentInset.bottom = AppDelegate.shared?.properties?.banner.size ?? 0
+        if #available(iOS 13.0, *) {
+            BannerPublisher.valuePublisher.sink(receiveValue: {
+                self.bannerUpdated($0)
+            }).store(in: &BannerPublisher.cancellableHolder)
+        }
     }
-    func wrongPassword() {
+    
+    func apiPasswordChanged() {
         print(appData.db.password)
-        self.forceLoggedOutUser = appData.db.username
+        viewModel.forceLoggedOutUser = appData.db.username
         appData.db.username = ""
         appData.db.password = ""
-        self.resetPassword = true
+        viewModel.resetPassword = true
         let segue = "toSingIn"
-        //(AppDelegate.shared?.deviceType ?? .mac) == .primary ? "toSingIn" : "toSettingsFullScreen"
         print(#function, " ", segue)
         DispatchQueue.main.async {
             self.performSegue(withIdentifier: segue, sender: self)
         }
     }
-    
     
     func checkProTrial() {
         let wasStr = appData.db.trialDate
@@ -658,7 +571,6 @@ extension HomeVC {
                         self.newMessage?.show(title: "Pro trial is over".localize, type: .standart)
                     }
                 }
-                
             }
         } else {
             appData.db.proTrial = false
@@ -703,9 +615,9 @@ extension HomeVC {
 
 extension HomeVC: TransitionVCProtocol {
     func deletePressed() {
-        if let editing = editingTransaction {
-            editingTransaction = nil
-            selectedCell = nil
+        if let editing = viewModel.editingTransaction {
+            viewModel.editingTransaction = nil
+            viewModel.selectedCell = nil
             let delete = DeleteFromDB()
             print(editing, " gghdfsdaewreg")
             delete.newTransaction(editing) { _ in
@@ -720,13 +632,13 @@ extension HomeVC: TransitionVCProtocol {
     }
     
     func editTransaction(_ transaction: TransactionsStruct, was: TransactionsStruct, reminderTime:DateComponents?, repeated:Bool?, idx:Int?) {
-        if let editingTransaction = editingTransaction {
+        if let editingTransaction = viewModel.editingTransaction {
             let delete = DeleteFromDB()
             delete.newTransaction(editingTransaction) { _ in
                 // let save = SaveToDB()
                 SaveToDB.shared.newTransaction(transaction) { _ in
                     self.apiUpdated()
-                    self.editingTransaction = nil
+                    self.viewModel.editingTransaction = nil
                     self.filter()
                 }
             }
@@ -740,31 +652,27 @@ extension HomeVC: TransitionVCProtocol {
     
     
     private func addNewTransaction(_ new:TransactionsStruct) {
-        self.newTransaction = new
-   //     editingTransaction = nil
-        self.animateCellWillAppear = false
+        viewModel.newTransaction = new
+        viewModel.animateCellWillAppear = false
         Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { (_) in
-            self.animateCellWillAppear = true
+            self.viewModel.animateCellWillAppear = true
         }
         
         if new.value != "" && new.date != "" {
-           // DispatchQueue.main.async {
                 self.filterText = "Adding".localize
-            //}
-            //let save = SaveToDB()
             SaveToDB.shared.newTransaction(TransactionsStruct(value: new.value, categoryID: "\(new.category.id)", date: new.date, comment: new.comment)) { error in
                 self.apiUpdated()
                 self.filter()
-                self.editingTransaction = nil
+                self.viewModel.editingTransaction = nil
                 if !error {
-                    self.forseSendUnsendedData = true
+                    self.viewModel.forseSendUnsendedData = true
                     self.sendUnsaved()
                 }
             }
             
         } else {
             print("reloaddd")
-            self.editingTransaction = nil
+            self.viewModel.editingTransaction = nil
 
         }
     }
@@ -775,17 +683,16 @@ extension HomeVC: TransitionVCProtocol {
     
     
     func quiteTransactionVC(reload:Bool){
-        self.editingTransaction = nil
+        viewModel.editingTransaction = nil
         if reload {
-            print("trloaddd")
             filter()
         }
-        print("quite trans")
     }
+    
     func calculateDifference(amount: Int) {
-        allData = []
+        viewModel.allData = []
         if appData.db.filter.to != appData.db.filter.from {
-            var dayA: Int = selectedFromDayInt
+            var dayA: Int = viewModel.selectedFromDayInt
             var monthA: Int = getMonthFrom(string: appData.db.filter.from)
             var yearA: Int = getYearFrom(string: appData.db.filter.from)
             
@@ -802,22 +709,20 @@ extension HomeVC: TransitionVCProtocol {
                     }
                 }
                 let new: String = "\(dayA.twoDec).\(monthA.twoDec).\(yearA.twoDec)"
-                daysBetween.append(new) // was bellow break: last day in month wasnt displeying
+                daysBetween.append(new)
                 if new == appData.db.filter.to {
                     break
                 }
-                
             }
             transactionManager?.daysBetween = daysBetween
         } else {
             transactionManager?.daysBetween.removeAll()
             transactionManager?.daysBetween.append(appData.db.filter.from)
         }
-        
     }
     
     func prepareFilterOptions(_ data:[TransactionsStruct]? = nil) {
-        let dat = data == nil ? Array(apiTransactions) : data!
+        let dat = data == nil ? Array(viewModel.apiTransactions) : data!
         let arr = Array(dat.sorted{ $0.dateFromString > $1.dateFromString })
         var months:[String] = []
         var years:[String] = []
@@ -840,7 +745,7 @@ extension HomeVC: TransitionVCProtocol {
     }
     func toAddTransaction(editing:Bool = false, pressedView:UIView? = nil, canDivid:Bool = true, isCalendar:Bool = false) {
         if !editing {
-            editingTransaction = nil
+            viewModel.editingTransaction = nil
         }
         DispatchQueue.main.async {
             if !isCalendar {
@@ -856,9 +761,9 @@ extension HomeVC: TransitionVCProtocol {
             let defDate = Date().toDateComponents()
             let filterDate = AppDelegate.shared?.properties?.appData.db.filter.fromDate ?? .init()
             let thisMonth = defDate.month == filterDate.month && defDate.year == filterDate.year
-            vc.dateSet = self.calendarSelectedDate ?? (thisMonth ? defDate.toShortString() : nil)
-            self.calendarSelectedDate = nil
-            if let transaction = self.editingTransaction {
+            vc.dateSet = self.viewModel.calendarSelectedDate ?? (thisMonth ? defDate.toShortString() : nil)
+            self.viewModel.calendarSelectedDate = nil
+            if let transaction = self.viewModel.editingTransaction {
                 vc.editingDate = transaction.date
                 let val = Double(transaction.value) ?? 0.0
                 vc.editingValue = val
@@ -873,49 +778,27 @@ extension HomeVC: TransitionVCProtocol {
         }
     }
     
-    func compliteScrolling() {
-       /* if mainTableView.contentOffset.y < self.bigCalcView.frame.height {
-            if mainTableView.contentOffset.y < self.bigCalcView.frame.height / 2 {
-                canTouchHandleTap = true
-                
-                DispatchQueue.main.async {
-                    self.mainTableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
-                }
-            } else {
-                canTouchHandleTap = false
-                DispatchQueue.main.async {
-                    self.mainTableView.scrollToRow(at: IndexPath(row: 0, section: 1), at: .top, animated: true)
-                }
-            }
-        }*/
-    }
-    
-    func removeDayFromString(_ s: String) -> String {//-> date comp
-        var m = s
-        for _ in 0..<3 {
-            m.removeFirst()
-        }
-        return m
+    func removeDayFromString(_ s: String) -> String {
+        let component = s.stringToDateComponent()
+        print(component, " gerfsewreg")
+        return (component.month?.twoDec ?? "") + ".\(component.year ?? 0)"
     }
     
     func removeDayMonthFromString(_ s: String) -> String {
-        var m = s
-        for _ in 0..<6 {
-            m.removeFirst()
-        }
-        return m
+        let component = s.stringToDateComponent()
+        print(component, " gerfsewreg")
+        return "\(component.year ?? 0)"
     }
     
     func sendUnsaved() {
-        if self.sendError {
+        if viewModel.sendError {
             return
         }
         let errorAction = {
-            self.sendError = true
-            self.startedSendingUnsended = false
+            self.viewModel.sendError = true
+            self.viewModel.startedSendingUnsended = false
             if self.properties!.appData.sendSavedData {
                 self.properties?.appData.sendSavedData = false
-                //show message error, try again later
                 DispatchQueue.main.async {
                     self.newMessage?.show(title:"Error sending data".localize, description: "Try again later".localize, type: .error)
                 }
@@ -925,25 +808,21 @@ extension HomeVC: TransitionVCProtocol {
         let unsended = self.properties?.appData.db.unsendedData ?? []
         if unsended.count > 0 {
             if let first = unsended.first {
-                startedSendingUnsended = true
-                updateDataLabels(reloadAndAnimate: false)
-                if self._filterText != "Sending".localize {
-              //      DispatchQueue.main.async {
+                viewModel.startedSendingUnsended = true
+                if self.filterText != "Sending".localize {
                         self.filterText = "Sending".localize
-                //    }
                 }
                 
-                // let save = SaveToDB()
                 let delete = DeleteFromDB()
                 if let addCategory:NewCategories = .create(dict: first["categoryNew"] ?? [:]) {
-                    if let highest = highesLoadedCatID {
+                    if let highest = viewModel.highesLoadedCatID {
                         var cat = addCategory
                         let newID = highest + 1
                         cat.id = newID
                         SaveToDB.shared.newCategories(cat, saveLocally: false) { error in
                             if !error {
                                 self.properties?.appData.db.unsendedData.removeFirst()
-                                self.highesLoadedCatID! += 1
+                                self.viewModel.highesLoadedCatID! += 1
                                 var newTransactions: [[String:Any]] = []
                                 for i in 0..<unsended.count {
                                     if let trans:TransactionsStruct = .create(dictt: unsended[i]["transactionNew"]) {
@@ -965,12 +844,11 @@ extension HomeVC: TransitionVCProtocol {
                             }
                         }
                     } else {
-                        //  let load = LoadFromDB()
                         LoadFromDB.shared.newCategories { loadedCategories, error in
                             if error == .none {
                                 let allCatSorted = loadedCategories.sorted{ $0.id > $1.id }
                                 let highest = allCatSorted.first?.id ?? 0
-                                self.highesLoadedCatID = highest
+                                self.viewModel.highesLoadedCatID = highest
                                 
                                 
                                 self.sendUnsaved()
@@ -1016,28 +894,23 @@ extension HomeVC: TransitionVCProtocol {
                 
             }
         } else {
-            if startedSendingUnsended {
-                startedSendingUnsended = false
+            if viewModel.startedSendingUnsended {
+                viewModel.startedSendingUnsended = false
                 downloadFromDB(local: AppDelegate.shared?.properties?.appData.db.username ?? "" == "")
             } else {
-                //send local data
                 if appData.sendSavedData {
-                    //update labels
-                    updateDataLabels(reloadAndAnimate: false)
-                    if self._filterText != "Sending".localize {
-                     //   DispatchQueue.main.async {
+                    if self.filterText != "Sending".localize {
                             self.filterText = "Sending"
-                       // }
                     }
                     let save = SaveToDB()
                     if let category = db.localCategories.first {
-                        if let highest = highesLoadedCatID {
+                        if let highest = viewModel.highesLoadedCatID {
                             var cat = category
                             cat.id = highest + 1
                             save.newCategories(cat) { error in
                                 
                                 if !error {
-                                    self.highesLoadedCatID! += 1
+                                    self.viewModel.highesLoadedCatID! += 1
                                     self.db.localCategories.removeFirst()
                                     let localTransactions = self.db.localTransactions
                                     for i in 0..<localTransactions.count {
@@ -1054,12 +927,11 @@ extension HomeVC: TransitionVCProtocol {
                                 }
                             }
                         } else {
-                            //    let load = LoadFromDB()
                             LoadFromDB.shared.newCategories { loadedCategories, error in
                                 if error == .none {
                                     let allCatSorted = loadedCategories.sorted{ $0.id > $1.id }
                                     let highest = allCatSorted.first?.id ?? 0
-                                    self.highesLoadedCatID = highest
+                                    self.viewModel.highesLoadedCatID = highest
                                     
                                     self.sendUnsaved()
                                 } else {
@@ -1088,60 +960,8 @@ extension HomeVC: TransitionVCProtocol {
         }
         
     }
-    
-    
-    
-    func prepareSegue(for segue: UIStoryboardSegue, sender: Any?) {
-        self.sendError = false
-     //   toggleSideBar(false, animated: true)
-        print("prepare")
-        selectedCell = nil
-        DispatchQueue.main.async {
-            if self.mainTableView.refresh?.isRefreshing ?? false {
-                self.mainTableView.refresh?.endRefreshing()
-            }
-        }
-        switch segue.identifier {
-        case "toReminders":
-            //     let nav = segue.destination as! UINavigationController
-            let vc = segue.destination as! RemindersVC
-            
-        case "toFiterVC":
-            let vc = segue.destination as? FilterTVC
-            self.mainTableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
-            DispatchQueue(label: "db", qos: .userInitiated).async {
-                self.prevSelectedPer = self.properties?.appData.db.filter.selectedPeroud
-                vc?.months = self.properties?.appData.db.filter.filteredData["months"] ?? []
-                vc?.years = self.properties?.appData.db.filter.filteredData["years"] ?? []
-                DispatchQueue.main.async {
-                    let filterFrame = self.filterView.frame//self.filterAndCalcFrameHolder.0
-                    let superFilter = self.filterView.superview?.frame ?? .zero
-                    let helperFrame = self.mainContentViewHelpher.frame
-                    let vcFrame = CGRect(x: filterFrame.minX + superFilter.minX, y: filterFrame.minY + superFilter.minY + helperFrame.height, width: filterFrame.width - 10, height: filterFrame.width)
-                    vc?.frame = vcFrame
-                    self.filterHelperView.frame = CGRect(x: filterFrame.minX + superFilter.minX, y: vcFrame.minY, width: vcFrame.width - 10, height: vcFrame.height)
-                    self.filterHelperView.alpha = 0
-                    Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false) { _ in
-                        UIView.animate(withDuration: 0.6) {
-                            self.filterHelperView.alpha = 1
-                        }
-                    }
-                }
-            }
-            
 
-        case "toSingIn":
-            let nav = segue.destination as! UINavigationController
-            let vc = nav.topViewController as! LoginViewController
-            DispatchQueue(label: "db",  qos: .userInitiated).async {
-                self.properties?.appData.db.username = ""
-                self.properties?.appData.db.password = ""
-                vc.forceLoggedOutUser = self.forceLoggedOutUser
-                vc.messagesFromOtherScreen = "Your password has been changed".localize
-            }
-        default: return
-        }
-    }
+    
     
     func deleteUnsendedTransactions(id: String) {
         let all = appData.db.unsendedData
@@ -1179,42 +999,6 @@ extension HomeVC {
         var transactions: [TransactionsStruct]
     }
 }
-
-
-
-
-
-class mainHeaderCell: UITableViewCell {
-    
-    @IBOutlet weak var mainView: UIView!
-    @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var monthLabel: UILabel!
-    @IBOutlet weak var yearLabel: UILabel!
-    
-}
-
-class mainFooterCell: UITableViewCell {
-    
-    @IBOutlet weak var cornerView: UIView!
-    @IBOutlet weak var totalLabel: UILabel!
-    
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        self.cornerView.layer.cornerRadius = 15
-        self.cornerView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
-    }
-}
-
-
-class mainVCemptyCell: UITableViewCell {
-    
-    @IBOutlet weak var mainBackgroundView: UIView!
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        mainBackgroundView.layer.cornerRadius = 9//ViewController.shared?.tableCorners ?? 9
-    }
-}
-
 
 extension HomeVC {
     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
