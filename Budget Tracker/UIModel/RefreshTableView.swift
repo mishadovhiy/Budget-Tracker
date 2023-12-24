@@ -10,6 +10,8 @@ import UIKit
 
 class RefreshTableView: UITableView {
 
+    private var activityIndicator:UIActivityIndicatorView?
+    
     var refreshBackgroundColor:UIColor?
     private var _refreshAction:(()->())?
     var refreshAction:(()->())? {
@@ -32,13 +34,32 @@ class RefreshTableView: UITableView {
         }
     }
     
+    /**
+     - to animate UIRefreshControll
+     - UIRefreshControll located on top of the UITableView
+     */
+    func startRefreshing() {
+        activityIndicator?.startAnimating()
+    }
+    
+    /**
+     - to animate UIActivityIndicatorView
+     - UIActivityIndicatorView located in the middle of the UITableView
+     */
     func startAnimating() {
         refresh?.beginRefreshing()
     }
     
+    private var reloadCalled = false
     override func reloadData() {
         super.reloadData()
-        refresh?.endRefreshing()
+        if !reloadCalled {
+            reloadCalled = true
+        } else if moved {
+            refresh?.endRefreshing()
+            activityIndicator?.stopAnimating()
+        }
+       
     }
     
     @objc private func refreshed(_ sender:UIRefreshControl) {
@@ -54,6 +75,8 @@ class RefreshTableView: UITableView {
         super.removeFromSuperview()
         if moved {
             refreshAction = nil
+            activityIndicator?.removeFromSuperview()
+            activityIndicator = nil
         }
     }
     
@@ -62,7 +85,19 @@ class RefreshTableView: UITableView {
         super.didMoveToSuperview()
         if !moved {
             moved = true
+            addActivityView()
         }
+    }
+    
+    private func addActivityView() {
+        if activityIndicator != nil {
+            return
+        }
+        activityIndicator = .init(style: .medium)
+        activityIndicator?.tintColor = K.Colors.category
+        self.addSubview(activityIndicator!)
+        activityIndicator?.addConstaits([.centerX:0, .centerY:0], superV: self)
+        activityIndicator?.startAnimating()
     }
 }
 

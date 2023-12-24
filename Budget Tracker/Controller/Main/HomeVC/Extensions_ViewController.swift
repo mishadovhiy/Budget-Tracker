@@ -472,7 +472,7 @@ extension HomeVC {
         viewModel.completedFiltering = false
         self.filterText = title
         viewModel.apiLoading = true
-        mainTableView.startAnimating()
+        mainTableView.startRefreshing()
         DispatchQueue.init(label: "download", qos: .userInitiated).async {
             self.db.transactionDate = nil
             LoadFromDB.shared.newCategories(local:local) { categoryes, error in

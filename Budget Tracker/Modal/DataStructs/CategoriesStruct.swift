@@ -40,6 +40,19 @@ struct NewCategories {
         case expense = "Expenses"
         case income = "Incomes"
         case debt = "debt"
+        
+        var lastSelected:LastSelected.SelectedTypeEnum {
+            switch self {
+            case .expense:
+                return .expense
+            case .income:
+                return .income
+            case .debt:
+                return .debt
+            default:
+                return .expense
+            }
+        }
     }
     static func stringToPurpose(_ string: String) -> CategoryPurpose {
         switch string {
@@ -131,5 +144,26 @@ struct DebtsStruct {
 
 
 
-
+extension [NewCategories] {
+    static var defaultCategories:[NewCategories] {
+        return [
+            .init(id: -4, name: "Work", icon: "briefcase.fill", color: "BlueColor", purpose: .income),
+            .init(id: -5, name: "Project #1", icon: "globe.americas.fill", color: "PinkColor-1", purpose: .income),
+            .init(id: -3, name: "Groceries", icon: "takeoutbag.and.cup.and.straw.fill", color: "OrangeColor-1", purpose: .expense),
+            .init(id: -6, name: "Health", icon: "bandage.fill", color: "yellowColor2", purpose: .expense),
+            .init(id: -7, name: "Bills", icon: "flame.fill", color: "RedColor", purpose: .expense),
+            .init(id: -8, name: "Entertainment", icon: "theatermasks.fill", color: "PinkColor", purpose: .expense),
+            .init(id: -9, name: "Clothing", icon: "tshirt.fill", color: "Brown", purpose: .expense),
+            .init(id: -10, name: "Transport", icon: "car.fill", color: "PinkColor-1", purpose: .expense),
+            .init(id: -11, name: "Restaurants", icon: "fork.knife", color: "PinkColor", purpose: .expense),
+            
+            .init(id: -12, name: "Gifts", icon: "gift.fill", color: "pinkColor2", purpose: .expense),
+            .init(id: -14, name: "Travel", icon: "suitcase.cart.fill", color: "yellowColor2", purpose: .expense),
+            .init(id: -13, name: "Housing", icon: "house.fill", color: "OrangeColor-1", purpose: .expense),
+            .init(id: -15, name: "Subscriptions", icon: "gamecontroller.fill", color: "GreenColor-2", purpose: .expense),
+            .init(id: -16, name: "Savings", icon: "dollarsign.circle.fill", color: "GreenColor", purpose: .expense),
+            
+        ]
+    }
+}
 

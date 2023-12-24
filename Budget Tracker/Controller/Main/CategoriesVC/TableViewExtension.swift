@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension CategoriesVC {
+extension CategoriesVC:UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return tableData.count + 2
     }

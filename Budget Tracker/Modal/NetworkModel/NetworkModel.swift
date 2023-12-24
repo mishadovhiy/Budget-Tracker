@@ -15,7 +15,7 @@ struct NetworkModel {
 }
 
 extension NetworkModel {
-    static func loadCategories() async -> [NewCategories] {
+    static func loadCategories(showError:Bool = false) async -> [NewCategories] {
         let response = await NetworkTask.load(urlPath: Keys.dbURL + "NewCategories.php")
         return response.unparseCategories(saveLocally: true) ?? []
     }
