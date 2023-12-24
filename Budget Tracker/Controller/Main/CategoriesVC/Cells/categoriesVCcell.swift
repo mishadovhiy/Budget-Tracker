@@ -27,7 +27,7 @@ class categoriesVCcell: ClearCell {
     @IBOutlet weak var buttonsSeparetor: UIView!
     
     @IBOutlet weak var editingStack: UIStackView!
-    @IBOutlet weak var newCategoryTF: TextField!
+    @IBOutlet weak var newCategoryTF: BaseTextField!
     
     
     

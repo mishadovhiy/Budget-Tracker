@@ -19,13 +19,13 @@ class LoginViewController: SuperViewController {
     @IBOutlet weak var logInButton: LoadingButton!
     @IBOutlet weak var createAccButton: LoadingButton!
     
-    @IBOutlet weak var nicknameLabelCreate: TextField!
-    @IBOutlet weak var emailLabel: TextField!
-    @IBOutlet weak var passwordLabel: TextField!
-    @IBOutlet weak var confirmPasswordLabel: TextField!
+    @IBOutlet weak var nicknameLabelCreate: BaseTextField!
+    @IBOutlet weak var emailLabel: BaseTextField!
+    @IBOutlet weak var passwordLabel: BaseTextField!
+    @IBOutlet weak var confirmPasswordLabel: BaseTextField!
     
-    @IBOutlet weak var nicknameLogLabel: TextField!
-    @IBOutlet weak var passwordLogLabel: TextField!
+    @IBOutlet weak var nicknameLogLabel: BaseTextField!
+    @IBOutlet weak var passwordLogLabel: BaseTextField!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet var titleLabels: [UILabel]!
     
@@ -93,7 +93,7 @@ class LoginViewController: SuperViewController {
                     completion(users)
                 } else {
                     DispatchQueue.main.async {
-                        self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                        self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                     }
                 }
             }
@@ -253,7 +253,7 @@ class LoginViewController: SuperViewController {
                 print("error!!!")
                 self.actionButtonsEnabled = true
                 DispatchQueue.main.async {
-                    self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                    self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                 }
             }
         }
@@ -386,7 +386,7 @@ class LoginViewController: SuperViewController {
             } else {
                 self.actionButtonsEnabled = true
                 DispatchQueue.main.async {
-                    self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                    self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                 }
             }
         }

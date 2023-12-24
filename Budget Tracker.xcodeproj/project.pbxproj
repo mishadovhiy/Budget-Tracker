@@ -54,7 +54,7 @@
 		8B82A04127E2BDBD0011EC80 /* UITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B82A04027E2BDBD0011EC80 /* UITextField.swift */; };
 		8B898CF427F3EB0800B66F79 /* UIDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B898CF327F3EB0800B66F79 /* UIDatePicker.swift */; };
 		8B91F08E27E587A800B74F5A /* MoreOptionsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91F08D27E587A800B74F5A /* MoreOptionsData.swift */; };
-		8B91F09127E58EF900B74F5A /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91F09027E58EF900B74F5A /* Text.swift */; };
+		8B91F09127E58EF900B74F5A /* AppText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91F09027E58EF900B74F5A /* AppText.swift */; };
 		8BB75D4227F26CA000AE71A1 /* ReminderStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB75D4127F26CA000AE71A1 /* ReminderStruct.swift */; };
 		8BB75D4427F294DE00AE71A1 /* TransactionStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB75D4327F294DE00AE71A1 /* TransactionStruct.swift */; };
 		8BB75D4727F2952300AE71A1 /* CategoriesStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB75D4627F2952300AE71A1 /* CategoriesStruct.swift */; };
@@ -158,6 +158,8 @@
 		8DA77CF4298B687E00949D98 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA77CF3298B687E00949D98 /* Filter.swift */; };
 		8DADC8922810E30300CC66EF /* TransactionNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DADC8912810E30300CC66EF /* TransactionNav.swift */; };
 		8DAF26982B37A8240023573E /* oldNetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAF26972B37A8240023573E /* oldNetworkModel.swift */; };
+		8DAF26A52B37D3470023573E /* NetworkTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAF26A42B37D3470023573E /* NetworkTestView.swift */; };
+		8DAF26A72B37D4D30023573E /* SuperSwiftuiVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAF26A62B37D4D30023573E /* SuperSwiftuiVC.swift */; };
 		8DB4DAC227FC10D000EAA56F /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB4DAC127FC10D000EAA56F /* Keys.swift */; };
 		8DB7C459284EA064001DBFB7 /* AlertViewLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 8DB7C458284EA064001DBFB7 /* AlertViewLibrary */; };
 		8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */; };
@@ -166,7 +168,7 @@
 		8DBA7E5C23F0317100D8214C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5B23F0317100D8214C /* Assets.xcassets */; };
 		8DBA7E5F23F0317100D8214C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5D23F0317100D8214C /* LaunchScreen.storyboard */; };
 		8DBAD3832B1686E0004A6323 /* SelectImageCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBAD3822B1686E0004A6323 /* SelectImageCollectionCell.swift */; };
-		8DBB38F72AC8D46C009B56DD /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBB38F62AC8D46C009B56DD /* TextField.swift */; };
+		8DBB38F72AC8D46C009B56DD /* BaseTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBB38F62AC8D46C009B56DD /* BaseTextField.swift */; };
 		8DC033CC2985CA5A00CD98FF /* UITableViewDataSource_ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC033CB2985CA5A00CD98FF /* UITableViewDataSource_ViewController.swift */; };
 		8DC40B032B1BAB64001777CC /*  UIKeyboardHIDUsage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC40B022B1BAB64001777CC /*  UIKeyboardHIDUsage.swift */; };
 		8DC40B052B1BBAC6001777CC /* LoadingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC40B042B1BBAC6001777CC /* LoadingButton.swift */; };
@@ -305,7 +307,7 @@
 		8B82A04027E2BDBD0011EC80 /* UITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextField.swift; sourceTree = "<group>"; };
 		8B898CF327F3EB0800B66F79 /* UIDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDatePicker.swift; sourceTree = "<group>"; };
 		8B91F08D27E587A800B74F5A /* MoreOptionsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreOptionsData.swift; sourceTree = "<group>"; };
-		8B91F09027E58EF900B74F5A /* Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
+		8B91F09027E58EF900B74F5A /* AppText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppText.swift; sourceTree = "<group>"; };
 		8BB75D4127F26CA000AE71A1 /* ReminderStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderStruct.swift; sourceTree = "<group>"; };
 		8BB75D4327F294DE00AE71A1 /* TransactionStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionStruct.swift; sourceTree = "<group>"; };
 		8BB75D4627F2952300AE71A1 /* CategoriesStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesStruct.swift; sourceTree = "<group>"; };
@@ -411,6 +413,8 @@
 		8DA77CF3298B687E00949D98 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
 		8DADC8912810E30300CC66EF /* TransactionNav.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionNav.swift; sourceTree = "<group>"; };
 		8DAF26972B37A8240023573E /* oldNetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = oldNetworkModel.swift; sourceTree = "<group>"; };
+		8DAF26A42B37D3470023573E /* NetworkTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTestView.swift; sourceTree = "<group>"; };
+		8DAF26A62B37D4D30023573E /* SuperSwiftuiVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperSwiftuiVC.swift; sourceTree = "<group>"; };
 		8DB4DAC127FC10D000EAA56F /* Keys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		8DBA7E4C23F0316F00D8214C /* Budget Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Budget Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -419,7 +423,7 @@
 		8DBA7E5B23F0317100D8214C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8DBA7E5E23F0317100D8214C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8DBAD3822B1686E0004A6323 /* SelectImageCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectImageCollectionCell.swift; sourceTree = "<group>"; };
-		8DBB38F62AC8D46C009B56DD /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
+		8DBB38F62AC8D46C009B56DD /* BaseTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTextField.swift; sourceTree = "<group>"; };
 		8DC033CB2985CA5A00CD98FF /* UITableViewDataSource_ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewDataSource_ViewController.swift; sourceTree = "<group>"; };
 		8DC40B022B1BAB64001777CC /*  UIKeyboardHIDUsage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = " UIKeyboardHIDUsage.swift"; sourceTree = "<group>"; };
 		8DC40B042B1BBAC6001777CC /* LoadingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingButton.swift; sourceTree = "<group>"; };
@@ -565,6 +569,7 @@
 			isa = PBXGroup;
 			children = (
 				8B7B63CB2655CAFB0067C434 /* SuperViewController.swift */,
+				8DAF26A62B37D4D30023573E /* SuperSwiftuiVC.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -583,7 +588,7 @@
 		8B26328F27E69A970086C3A8 /* StoredProperties */ = {
 			isa = PBXGroup;
 			children = (
-				8B91F09027E58EF900B74F5A /* Text.swift */,
+				8B91F09027E58EF900B74F5A /* AppText.swift */,
 				8DB4DAC127FC10D000EAA56F /* Keys.swift */,
 				8DD89D8B23F1485700273904 /* Constants.swift */,
 				8B7D1AA0276CF203008942EC /* IconList.swift */,
@@ -777,7 +782,7 @@
 		8BC1B23A27D3136C002C1E38 /* UIModel */ = {
 			isa = PBXGroup;
 			children = (
-				8DBB38F62AC8D46C009B56DD /* TextField.swift */,
+				8DBB38F62AC8D46C009B56DD /* BaseTextField.swift */,
 				8D45842A2B35289F0029AA17 /* AlertController */,
 				8D1E4BCD2B222E360030BCB8 /* RefreshTableView.swift */,
 				8D0C5D162AF6C162002E2422 /* SelectionStackView */,
@@ -795,6 +800,7 @@
 		8BC1B23B27D31426002C1E38 /* Reusable */ = {
 			isa = PBXGroup;
 			children = (
+				8DAF26A42B37D3470023573E /* NetworkTestView.swift */,
 				8D834D95297E03D60056E686 /* CalendarControlVC */,
 				8D8B6C3D245023EC007260A0 /* CalendarVC.swift */,
 				8D193BE12B1FB9F8003EB531 /* IconsVC */,
@@ -1501,11 +1507,12 @@
 				8D08FD5A2ACA23F600BA0222 /* Unparce.swift in Sources */,
 				8DEB84E12B158E1600AB1975 /* DetectText.swift in Sources */,
 				8B26329327E69EFA0086C3A8 /* localizationDictUA.swift in Sources */,
+				8DAF26A52B37D3470023573E /* NetworkTestView.swift in Sources */,
 				8D52066924216A2900772CD5 /* StatisticVC.swift in Sources */,
 				8D0C5D182AF6C16F002E2422 /* SelectionStackView.swift in Sources */,
 				8D0EC25F2985DB9600EBD1ED /* Extensions_ViewController.swift in Sources */,
 				8BB75D4427F294DE00AE71A1 /* TransactionStruct.swift in Sources */,
-				8DBB38F72AC8D46C009B56DD /* TextField.swift in Sources */,
+				8DBB38F72AC8D46C009B56DD /* BaseTextField.swift in Sources */,
 				8D996D522B3792B900DF12A6 /* ServerResponse.swift in Sources */,
 				8D996D552B3794E800DF12A6 /* NetworkTask.swift in Sources */,
 				8B52CC6727E3001B008D5348 /* UITableViewCell.swift in Sources */,
@@ -1520,7 +1527,7 @@
 				8B6B509927F3A69F0067C237 /* ReminderManager.swift in Sources */,
 				8D5206672421695200772CD5 /* StatisticBrain.swift in Sources */,
 				8D193BDE2B1FB736003EB531 /* UITableViewDelegate_SideBar.swift in Sources */,
-				8B91F09127E58EF900B74F5A /* Text.swift in Sources */,
+				8B91F09127E58EF900B74F5A /* AppText.swift in Sources */,
 				8B57837E275E6977007BA9EC /* SideBar.swift in Sources */,
 				8D17FABB2B07BF9F005E03FD /* UITableViewDelegate_AttributedStringVC.swift in Sources */,
 				8BFA15D427E8E87B0078856A /* LocalDataActionCell.swift in Sources */,
@@ -1626,6 +1633,7 @@
 				8D251BC32B2D2DA2005EB934 /* Data.swift in Sources */,
 				8B42FCDD2776805800013E4B /* NumbersTF.swift in Sources */,
 				8B5F342C26FB2D98000DDCAF /* EnterValueVC.swift in Sources */,
+				8DAF26A72B37D4D30023573E /* SuperSwiftuiVC.swift in Sources */,
 				8DEB84E22B158E1600AB1975 /* CameraModel.swift in Sources */,
 				8BFA15D127E8E8510078856A /* categoriesVCcell.swift in Sources */,
 				8D251BC12B2D2A8D005EB934 /* NetworkError.swift in Sources */,

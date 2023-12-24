@@ -74,7 +74,7 @@ extension RemindersVC {
             let completion:(Bool) -> () = { _ in
                 self.loadData()
                 DispatchQueue.main.async {
-                    self.newMessage?.show(title: Text.success, description: "Transaction has been added!".localize, type: .succsess)
+                    self.newMessage?.show(title: AppText.success, description: "Transaction has been added!".localize, type: .succsess)
                 }
             }
             HomeVC.shared?.actionAfterAdded = completion

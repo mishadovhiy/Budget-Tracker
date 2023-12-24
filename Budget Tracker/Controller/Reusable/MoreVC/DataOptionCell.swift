@@ -11,7 +11,7 @@ import UIKit
 class DataOptionCell: ClearCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
-    @IBOutlet weak var textField: TextField!
+    @IBOutlet weak var textField: BaseTextField!
     
     @IBOutlet weak var proView: UIView!
 

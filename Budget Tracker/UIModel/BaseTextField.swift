@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TextField: UITextField {
+class BaseTextField: UITextField {
 
     private var btnLine:CALayer?
     private var firstMoved:Bool = false

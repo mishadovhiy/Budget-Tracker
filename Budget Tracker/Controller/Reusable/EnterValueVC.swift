@@ -12,7 +12,7 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
     
     var screenData:EnterValueVCScreenData?
 
-    @IBOutlet weak var valueTextField: TextField!
+    @IBOutlet weak var valueTextField: BaseTextField!
     @IBOutlet weak var nextButton: Button!
     
     @IBOutlet weak private var codeLabel: UILabel!

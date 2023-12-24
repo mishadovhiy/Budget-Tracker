@@ -51,7 +51,7 @@ class TransitionVC: SuperViewController {
     @IBOutlet weak var numbarPadView: UIView!
     @IBOutlet weak var valueLabel: UILabel!
     @IBOutlet weak var minusPlusLabel: UILabel!
-    @IBOutlet weak var commentTextField: TextField!
+    @IBOutlet weak var commentTextField: BaseTextField!
     @IBOutlet weak var commentCountLabel: UILabel!
     var dismissTransitionHolder:AnimatedTransitioningManager?
     var delegate:TransitionVCProtocol?

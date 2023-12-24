@@ -48,7 +48,7 @@ extension LoginViewController {
                             SaveToDB.shared.Users(toDataString: toDataString) { (error) in
                                 if error {
                                     DispatchQueue.main.async {
-                                        self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                                        self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                                     }
                                 } else {
                                     let dat = (self.db.transactions, self.db.categories)

@@ -8,7 +8,7 @@
 
 import UIKit
 import Combine
-class HomeVC: SuperViewController {
+class HomeVC: SuperSwiftuiVC {
     typealias TransitionComponents = (albumCoverImageView: UIImageView?, albumNameLabel: UILabel?)
     public var transitionComponents = TransitionComponents(albumCoverImageView: nil, albumNameLabel: nil)
     let transitionAppearenceManager = AnimatedTransitioningManager(duration: 0.267)

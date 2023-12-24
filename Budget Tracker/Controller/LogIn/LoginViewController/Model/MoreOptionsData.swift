@@ -104,7 +104,7 @@ class MoreOptionsData {
                 let delete = DeleteFromDB()
                 delete.User(toDataString: toDat) { (errorr) in
                     if errorr {
-                        self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
+                        self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true)
                     } else {
                         self.vc.logout()
                         DispatchQueue.main.async {
@@ -123,7 +123,7 @@ class MoreOptionsData {
     private func performGetUsers(completion:@escaping([String]?) -> ()) {
         LoadFromDB.shared.Users { (loadedData, error) in
             if error {
-                self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
+                self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true)
                 completion(nil)
             } else {
                 let name = self.appData.db.username ?? ""
@@ -157,7 +157,7 @@ class MoreOptionsData {
         LoadFromDB.shared.Users { (users, error) in
             if error {
                 DispatchQueue.main.async {
-                    self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                    self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                 }
             } else {
                 if self.appData.db.username != "" {
@@ -210,7 +210,7 @@ class MoreOptionsData {
             LoadFromDB.shared.Users { (users, error) in
                 if error {
                     DispatchQueue.main.async {
-                        self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                        self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                     }
                 } else {
                     var emailToSend = ""
@@ -242,7 +242,7 @@ class MoreOptionsData {
                 completion(users)
             } else {
                 DispatchQueue.main.async {
-                    self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                    self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                 }
             }
         }
@@ -263,7 +263,7 @@ class MoreOptionsData {
                         }
                     } else {
                         DispatchQueue.main.async {
-                            self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                            self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                         }
                     }
                 }
@@ -271,7 +271,7 @@ class MoreOptionsData {
                 
             } else {
                 DispatchQueue.main.async {
-                    self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                    self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                 }
             }
         }
@@ -376,7 +376,7 @@ class MoreOptionsData {
         LoadFromDB.shared.Users { (loadedData, error) in
             if error {
                 DispatchQueue.main.async {
-                    self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                    self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                 }
                 completion(nil)
             } else {
@@ -405,7 +405,7 @@ class MoreOptionsData {
                     SaveToDB.shared.Users(toDataString: toDataStringMian ) { (error) in
                         if error {
                             DispatchQueue.main.async {
-                                self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                                self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                             }
                         }
                         let delete = DeleteFromDB()
@@ -414,7 +414,7 @@ class MoreOptionsData {
                         delete.User(toDataString: dataStringDelete) { (errorr) in
                             if errorr {
                                 DispatchQueue.main.async {
-                                    self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                                    self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                                 }
                             } else {
                                 DispatchQueue.main.async {
@@ -488,7 +488,7 @@ class MoreOptionsData {
                     LoadFromDB.shared.Users { (loadedData, error) in
                         if error {
                             DispatchQueue.main.async {
-                                self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true, image: .init(named: "restorationCode"))
+                                self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true, image: .init(named: "restorationCode"))
                             }
                         } else {
                             var emailToSend = ""
@@ -505,7 +505,7 @@ class MoreOptionsData {
                             SaveToDB.shared.sendCode(toDataString: "emailTo=\(emailToSend)&Nickname=\(username)&resetCode=\(code)") { (codeError) in
                                 if codeError {
                                     DispatchQueue.main.async {
-                                        self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                                        self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                                     }
                                 } else {
                                     self.currectAnsware = code
@@ -610,7 +610,7 @@ class MoreOptionsData {
             LoadFromDB.shared.Users { (loadedData, error) in
                 if error {
                     DispatchQueue.main.async {
-                        self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                        self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                     }
                 } else {
                     var userData: [String] = []
@@ -625,7 +625,7 @@ class MoreOptionsData {
                     SaveToDB.shared.Users(toDataString: toDataStringMian ) { (error) in
                         if error {
                             DispatchQueue.main.async {
-                                self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                                self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                             }
                         }
                         let delete = DeleteFromDB()
@@ -634,7 +634,7 @@ class MoreOptionsData {
                         delete.User(toDataString: dataStringDelete) { (errorr) in
                             if errorr {
                                 DispatchQueue.main.async {
-                                    self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                                    self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                                 }
                             } else {
                                 self.appData.db.username = userData[0]
@@ -699,7 +699,7 @@ class MoreOptionsData {
                 
             } else {
                 DispatchQueue.main.async {
-                    self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                    self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                 }
             }
         }
@@ -729,7 +729,7 @@ class MoreOptionsData {
 extension MoreOptionsData {
     func showAlert(title:String? = nil,text:String? = nil, error: Bool, goToLogin: Bool = false, image:UIImage? = nil) {
         
-        let resultTitle = title == nil ? (error ? Text.Error.error : Text.success) : title!
+        let resultTitle = title == nil ? (error ? AppText.Error.error : AppText.success) : title!
         DispatchQueue.main.async {
             self.vc?.ai?.showAlertWithOK(title: resultTitle, description: text, viewType: error ? .error : .standard, okPressed: {
                 if goToLogin {

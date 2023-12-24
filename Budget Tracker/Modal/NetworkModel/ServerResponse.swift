@@ -68,8 +68,12 @@ class ServerResponse {
 
 
 extension ServerResponse {
-    enum RequestType {
+    enum RequestType:String {
         case loadTransaction, loadCategories
+        
+        var id:UUID {
+            return .init()
+        }
     }
     
     private func unparceRequest(_ type:RequestType, username:String? = nil, save:Bool) -> [[String : Any]]? {

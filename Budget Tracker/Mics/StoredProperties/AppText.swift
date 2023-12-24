@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct Text {
+struct AppText {
     static let success = "Success".localize
     static let cancel = "Cancel".localize
     struct Error {

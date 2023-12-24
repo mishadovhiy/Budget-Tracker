@@ -17,12 +17,12 @@ struct NetworkModel {
 extension NetworkModel {
     static func loadCategories() async -> [NewCategories] {
         let response = await NetworkTask.load(urlPath: Keys.dbURL + "NewCategories.php")
-        return response.unparceCategories(saveLocally: true) ?? []
+        return response.unparseCategories(saveLocally: true) ?? []
     }
     
     static func loadTransactions() async -> [TransactionsStruct] {
         let response = await NetworkTask.load(urlPath: Keys.dbURL + "newTransactions.php")
-        return response.unparceTransactions(saveLocally: true) ?? []
+        return response.unparseTransactions(saveLocally: true) ?? []
     }
     
 //    static func loadUsers() async -> [[String]] {

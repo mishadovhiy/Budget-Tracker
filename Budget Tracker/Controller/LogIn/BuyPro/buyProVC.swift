@@ -164,7 +164,7 @@ class BuyProVC: SuperViewController {
     func getUser(completion:@escaping([String]?) -> ()) {
         LoadFromDB.shared.Users { (loadedData, error) in
             if error {
-                self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
+                self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true)
                 completion(nil)
             } else {
                 let name = self.properties?.appData.db.username
@@ -227,7 +227,7 @@ class BuyProVC: SuperViewController {
     func trialWithoutAcoount() {
         appData.db.proTrial = true
         appData.db.trialDate = appData.db.filter.getToday()
-        showAlert(title: Text.success, text: "Trial has been started successfully".localize, error: false, goHome: true)
+        showAlert(title: AppText.success, text: "Trial has been started successfully".localize, error: false, goHome: true)
     }
     
     func performTrial(loadedData:(String, String, String, String)) {
@@ -239,16 +239,16 @@ class BuyProVC: SuperViewController {
         let delete = DeleteFromDB()
         delete.User(toDataString: toDataStringMian) { (errorr) in
             if errorr {
-                self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
+                self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true)
             } else {
                 SaveToDB.shared.Users(toDataString: dataStringSave ) { (error) in
                 if error {
-                    self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
+                    self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true)
                 } else {
                     DispatchQueue.main.async {
                         self.properties?.appData.db.proTrial = true
                         self.properties?.appData.db.trialDate = today
-                        self.showAlert(title: Text.success, text: "Trial has been started successfully".localize, error: false, goHome: true)
+                        self.showAlert(title: AppText.success, text: "Trial has been started successfully".localize, error: false, goHome: true)
 
                     }
                 }
@@ -372,11 +372,11 @@ extension BuyProVC: SKPaymentTransactionObserver {
                 let delete = DeleteFromDB()
                 delete.User(toDataString: self.toDataString(save: false, user: user)) { (errorr) in
                     if errorr {
-                        self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
+                        self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true)
                     } else {
                         SaveToDB.shared.Users(toDataString: self.toDataString(save: true, user: user)) { (error) in
                             if error {
-                                self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
+                                self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true)
                             } else {
                                 self.scsPurchaseShow()
                             }
@@ -400,7 +400,7 @@ extension BuyProVC: SKPaymentTransactionObserver {
     func scsPurchaseShow() {
         DispatchQueue.main.async {
             self.showPurchasedIndicator()
-            self.showAlert(title: Text.success, text: "Pro version available across all your devices".localize, error: false, goHome: true)
+            self.showAlert(title: AppText.success, text: "Pro version available across all your devices".localize, error: false, goHome: true)
           //  UIApplication().endBackgroundTask()
         }
     }
