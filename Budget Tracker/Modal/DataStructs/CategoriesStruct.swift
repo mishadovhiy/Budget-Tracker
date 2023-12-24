@@ -97,6 +97,30 @@ struct NewCategories {
         
         return result
     }
+    
+    
+    var apiData:String? {
+        guard let username = AppDelegate.shared?.properties?.db.username, username != "" else { return nil }
+        var amount:String {
+            if let amount = self.amountToPay {
+                return "&AmountToPay=\(amount)"
+            } else if let amount = self.monthLimit {
+                return "&AmountToPay=\(amount)"
+            }
+            return ""
+        }
+        
+        var dueDate:String {
+            if let date = self.dueDate {
+                if let result = date.toIsoString() {
+                    return "&DueDate=" + result
+                }
+            }
+            return ""
+        }
+
+        return "&Nickname=\(username)" + "&Id=\(self.id)" + "&Name=\(self.name)" + "&Icon=\(self.icon)" + "&Color=\(self.color)" + "&Purpose=\(self.purpose.rawValue)" + amount + dueDate
+    }
 }
 
 struct DebtsStruct {

@@ -1,19 +1,18 @@
 //
-//  dbModel.swift
+//  oldNetworkModel.swift
 //  Budget Tracker
 //
-//  Created by Misha Dovhiy on 30.07.2020.
-//  Copyright © 2020 Misha Dovhiy. All rights reserved.
+//  Created by Misha Dovhiy on 24.12.2023.
+//  Copyright © 2023 Misha Dovhiy. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 struct LoadFromDB {
-    var appData:AppData {
-        return AppDelegate.shared?.properties?.appData ?? .init()
-    }
+    
     static var shared = LoadFromDB()
-    private func load(urlPath: String, completion: @escaping (NSArray, error?) -> ()) {
+
+    private func load(urlPath: String, completion: @escaping (NSArray, ServerError?) -> ()) {
         AppDelegate.shared?.properties?.appData.threadCheck(shouldMainThread: false)
         print(urlPath, " urlPathurlPathurlPath")
         if let url: URL = URL(string: urlPath) {
@@ -42,21 +41,19 @@ struct LoadFromDB {
         
     }
     
-
+    var appData:AppProperties {
+        return AppDelegate.shared?.properties ?? .init()
+    }
     
     var db:DataBase {
         return AppDelegate.shared?.properties?.db ?? .init()
     }
     
-    enum error {
-        case internet
-        case other
-        case none
-    }
     
     
     
-    private func performAddCategory(otherUser: String? = nil, saveLocally: Bool = true, local:Bool = false, completion: @escaping ([NewCategories], error) -> ()) {
+    
+    private func performAddCategory(otherUser: String? = nil, saveLocally: Bool = true, local:Bool = false, completion: @escaping ([NewCategories], ServerError) -> ()) {
         let user = otherUser == nil ? appData.db.username : otherUser!
         if user == "" || local {
             let local = db.categories
@@ -93,7 +90,11 @@ struct LoadFromDB {
     }
     
     
-    func newCategories(otherUser: String? = nil, saveLocally: Bool = true, local:Bool = false, completion: @escaping ([NewCategories], error) -> ()) {
+    
+
+    
+    
+    func newCategories(otherUser: String? = nil, saveLocally: Bool = true, local:Bool = false, completion: @escaping ([NewCategories], ServerError) -> ()) {
         if Thread.isMainThread {
             DispatchQueue(label: "api", qos: .userInitiated).async {
                 self.performAddCategory(otherUser: otherUser, saveLocally: saveLocally, local: local, completion: completion)
@@ -104,7 +105,7 @@ struct LoadFromDB {
         
     }
     
-    private func performnewTransactions(otherUser: String? = nil, saveLocally: Bool = true, completion: @escaping ([TransactionsStruct], error) -> (), local:Bool = false) {
+    private func performnewTransactions(otherUser: String? = nil, saveLocally: Bool = true, completion: @escaping ([TransactionsStruct], ServerError) -> (), local:Bool = false) {
         let user = otherUser == nil ? appData.db.username : otherUser!
         if user == "" || local {
             let local = db.transactions
@@ -140,7 +141,7 @@ struct LoadFromDB {
         }
     }
     
-    func newTransactions(otherUser: String? = nil, saveLocally: Bool = true, completion: @escaping ([TransactionsStruct], error) -> (), local:Bool = false) {
+    func newTransactions(otherUser: String? = nil, saveLocally: Bool = true, completion: @escaping ([TransactionsStruct], ServerError) -> (), local:Bool = false) {
         if Thread.isMainThread {
             DispatchQueue(label: "api", qos: .userInitiated).async {
                 self.performnewTransactions(otherUser: otherUser, saveLocally: saveLocally, completion: completion, local: local)
@@ -481,30 +482,15 @@ struct DeleteFromDB {
     
 
     func performCategoriesNew(category: NewCategories, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {
+        guard let data = category.apiData else {
+            completion(false)
+            return
+        }
         if appData.db.username == "" {
             deleteCategory(category: category)
             completion(false)
         } else {
-            let pupose = category.purpose.rawValue
-            var amount:String {
-                if let amount = category.amountToPay {
-                    return "&AmountToPay=\(amount)"
-                } else if let amount = category.monthLimit {
-                    return "&AmountToPay=\(amount)"
-                }
-                return ""
-            }
             
-            var dueDate:String {
-                if let date = category.dueDate {
-                    if let result = date.toIsoString() {
-                        return "&DueDate=" + result
-                    }
-                }
-                return ""
-            }
-            
-            let data = "&Nickname=\(appData.db.username)" + "&Id=\(category.id)" + "&Name=\(category.name)" + "&Icon=\(category.icon)" + "&Color=\(category.color)" + "&Purpose=\(pupose)" + amount + dueDate
             delete(dbFileURL: Keys.dbURL + "delete-NewCategory.php", toDataString: data, error: { (error) in
                 if error {
                     if saveLocally {
@@ -607,7 +593,6 @@ struct DeleteFromDB {
         request.httpMethod = "POST"
         var dataString = "secretWord=" + Keys.secretKey
             appData.needDownloadOnMainAppeare = true
-        //send
         dataString = dataString + toDataString
              print(dataString, "dataStringdataStringdataString delete")
         if let urlStringData = dataString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
@@ -655,5 +640,3 @@ struct DeleteFromDB {
     }
     
 }
-
-

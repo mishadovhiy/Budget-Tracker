@@ -1,0 +1,23 @@
+{
+  "pins" : [
+    {
+      "identity" : "alertviewlibrary",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mishadovhiy/AlertViewLibrary.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "7f34d1a5b750580348a493a2be36efc701597aa7"
+      }
+    },
+    {
+      "identity" : "messageviewlibrary",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mishadovhiy/MessageViewLibrary.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "581414d0dff30ba9fc1a78cbcffd47386d6f667d"
+      }
+    }
+  ],
+  "version" : 2
+}

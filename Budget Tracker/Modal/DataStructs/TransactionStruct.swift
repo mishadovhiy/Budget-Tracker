@@ -68,6 +68,13 @@ struct TransactionsStruct {
         }
         return result
     }
+    
+    var apiData:String? {
+        guard let username = AppDelegate.shared?.properties?.db.username, username != "" else {
+            return nil
+        }
+        return "&Nickname=\(username)" + "&CategoryId=\(self.categoryID)" + "&Amount=\(self.value)" + "&Date=\(self.date)" + "&Comment=\(self.comment)"
+    }
 }
 
 extension TransactionsStruct {
