@@ -45,7 +45,7 @@ struct NetworkTask {
             return nil
         }
         print("jsonResultjsonResult ", jsonResult)
-        AppDelegate.shared?.properties?.appData.threadCheck(shouldMainThread: false)
+        AppDelegate.properties?.appData.threadCheck(shouldMainThread: false)
         return jsonResult
     }
 }

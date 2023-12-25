@@ -19,13 +19,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         //AppDelegate.shared = UIApplication.shared.delegate as? AppDelegate
-       // AppDelegate.shared?.properties = .init()
+       // AppDelegate.properties = .init()
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = .init(windowScene: windowScene)
         window?.rootViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NavigationController")
         window?.makeKeyAndVisible()
      //   AppDelegate.shared?.window = window
-     //   AppDelegate.shared?.properties?.appLoaded()
+     //   AppDelegate.properties?.appLoaded()
 
     }
 
@@ -40,14 +40,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func sceneDidBecomeActive(_ scene: UIScene) {
         print("fsdadsa ", #function)
-        AppDelegate.shared?.properties?.becomeActive()
+        AppDelegate.properties?.becomeActive()
         // Called when the scene has moved from an inactive state to an active state.
         // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
         print("fsdadsa ", #function)
-        AppDelegate.shared?.properties?.receinActive()
+        AppDelegate.properties?.receinActive()
         // Called when the scene will move from an active state to an inactive state.
         // This may occur due to temporary interruptions (ex. an incoming phone call).
     }

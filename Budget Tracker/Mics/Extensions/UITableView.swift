@@ -15,7 +15,7 @@ extension UITableView {
         if #available(iOS 15.0, *) {
             self.sectionHeaderTopPadding = 0
         }
-        self.contentInset.bottom = AppDelegate.shared?.properties?.banner.size ?? 0
+        self.contentInset.bottom = AppDelegate.properties?.banner.size ?? 0
     }
     
     func shadows(opasity:Float = 0.15, radius:CGFloat = 12) {
@@ -40,6 +40,6 @@ extension UITableView {
 extension UICollectionView {
     open override func draw(_ rect: CGRect) {
         super.draw(rect)
-        self.contentInset.bottom = AppDelegate.shared?.properties?.banner.size ?? 0
+        self.contentInset.bottom = AppDelegate.properties?.banner.size ?? 0
     }
 }

@@ -44,8 +44,8 @@ class LoginViewController: SuperViewController {
         super.viewDidLoad()
 
         updateUI()
-        self.title = appData.db.username == "" ? "Sign In".localize : appData.db.username
-        if appData.db.username == "" {
+        self.title = db.username == "" ? "Sign In".localize : db.username
+        if db.username == "" {
             loadKeychainPasswords()
         }
     }
@@ -53,7 +53,7 @@ class LoginViewController: SuperViewController {
     var userEmail = ""
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        let nik = appData.db.username
+        let nik = db.username
         if nik != "" {
             loadUsers { users in
                 for i in 0..<users.count {
@@ -64,7 +64,7 @@ class LoginViewController: SuperViewController {
                 }
             }
         }
-        self.additionalSafeAreaInsets.bottom = AppDelegate.shared?.properties?.banner.size ?? 0
+        self.additionalSafeAreaInsets.bottom = AppDelegate.properties?.banner.size ?? 0
     }
     
     func showAlert(title:String? = nil,text:String? = nil, error: Bool, goToLogin: Bool = false) {
@@ -148,8 +148,8 @@ class LoginViewController: SuperViewController {
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
 
-        let nickname =  self.forceLoggedOutUser != "" ? self.forceLoggedOutUser :  appData.db.username
-        let password = appData.db.username == "" ? "" : appData.db.password
+        let nickname =  self.forceLoggedOutUser != "" ? self.forceLoggedOutUser :  db.username
+        let password = db.username == "" ? "" : db.password
         DispatchQueue.main.async {
             self.nicknameLogLabel.text = nickname
             self.passwordLogLabel.text = password
@@ -193,7 +193,7 @@ class LoginViewController: SuperViewController {
     
     
     override func viewDidDisappear(_ animated: Bool) {
-      //  AppDelegate.shared?.properties?.banner.appeare(force: true)
+      //  AppDelegate.properties?.banner.appeare(force: true)
         DispatchQueue.main.async {
             self.helperNavView?.removeFromSuperview()
         }
@@ -202,7 +202,7 @@ class LoginViewController: SuperViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: true)
-     //   AppDelegate.shared?.properties?.banner.hide(ios13Hide: true)
+     //   AppDelegate.properties?.banner.hide(ios13Hide: true)
     }
     
     var actionButtonsEnabled : Bool {
@@ -293,7 +293,7 @@ class LoginViewController: SuperViewController {
         } else {
             KeychainService.savePassword(account: nickname, data: password)
         }
-        let prevUserName = appData.db.username
+        let prevUserName = db.username
         
         
         if prevUserName != nickname {
@@ -302,24 +302,24 @@ class LoginViewController: SuperViewController {
             db.db.updateValue(prevUserName, forKey: "prevUserName")
             
             if prevUserName == "" && forceLoggedOutUser == "" {
-                let db = AppDelegate.shared?.properties?.db ?? .init()
+                let db = AppDelegate.properties?.db ?? .init()
                 db.localCategories = dat.0
                 db.localTransactions = dat.1
                 
             }
             
             if forceLoggedOutUser == "" {
-                appData.fromLoginVCMessage = "Wellcome".localize + ", \(appData.db.username)"
+                appData.fromLoginVCMessage = "Wellcome".localize + ", \(db.username)"
             }
             
         }
-        appData.db.username = nickname
-        appData.db.password = password
-        appData.db.userEmailHolder = email
+        db.username = nickname
+        db.password = password
+        db.userEmailHolder = email
         
         
-        if !appData.db.purchasedOnThisDevice {
-            appData.db.proVersion = isPro == "1" ? true : appData.db.proVersion
+        if !db.purchasedOnThisDevice {
+            db.proVersion = isPro == "1" ? true : db.proVersion
         }
         appData.needDownloadOnMainAppeare = true
         if fromPro || self.forceLoggedOutUser != "" {
@@ -458,14 +458,14 @@ class LoginViewController: SuperViewController {
     }
     func canAddForEmail(_ email: String, loadedData: [[String]]) -> EmailLimit? {
         var count = 0
-        let maxCount = appData.db.proVersion ? 15 : 3
+        let maxCount = db.proVersion ? 15 : 3
         for i in 0..<loadedData.count {
             if loadedData[i][1] == email {
                 count += 1
             }
         }
         
-        return maxCount > count ? nil : (!appData.db.proVersion ? .canUpdate : .totalError)
+        return maxCount > count ? nil : (!db.proVersion ? .canUpdate : .totalError)
     }
     enum EmailLimit {
     case totalError
@@ -713,11 +713,11 @@ class LoginViewController: SuperViewController {
 extension LoginViewController {
     func logout() {
         DispatchQueue(label: "local", qos: .userInitiated).async {
-            if !(self.properties?.appData.db.purchasedOnThisDevice ?? false) {
-                self.properties?.appData.db.proVersion = false
-                self.properties?.appData.db.proTrial = false
+            if !(self.properties?.db.purchasedOnThisDevice ?? false) {
+                self.properties?.db.proVersion = false
+                self.properties?.db.proTrial = false
             }
-            self.properties?.appData.db.removeAll()
+            self.properties?.db.removeAll()
             self.properties?.appData.needFullReload = true
             DispatchQueue.main.async {
                 self.title = "Sign In".localize
@@ -765,19 +765,19 @@ extension LoginViewController {
         appData.needFullReload = true
         self.db.transactionDate = nil
         DispatchQueue.main.async {
-            AppDelegate.shared?.properties?.center.removeAllPendingNotificationRequests()
-            AppDelegate.shared?.properties?.center.removeAllDeliveredNotifications()
+            AppDelegate.properties?.center.removeAllPendingNotificationRequests()
+            AppDelegate.properties?.center.removeAllDeliveredNotifications()
         }
-        AppDelegate.shared?.properties?.notificationManager.deliveredNotificationIDs = []
+        AppDelegate.properties?.notificationManager.deliveredNotificationIDs = []
         db.removeAll()
-        appData.db.proTrial = false
+        db.proTrial = false
     }
     @IBAction func moreButtonPressed(_ sender: UIButton) {//morepressed
         DispatchQueue(label: "db", qos: .userInitiated).async {
-            let pro = self.properties?.appData.db.proEnabeled
+            let pro = self.properties?.db.proEnabeled
             DispatchQueue.main.async {
                 let data = MoreOptionsData(vc: self)
-                MoreVC.presentMoreVC(currentVC: self, data: data.get(isPro: self.properties?.appData.db.proEnabeled ?? false), proIndex: 1)
+                MoreVC.presentMoreVC(currentVC: self, data: data.get(isPro: self.properties?.db.proEnabeled ?? false), proIndex: 1)
                 self.hideKeyboard()
             }
         }

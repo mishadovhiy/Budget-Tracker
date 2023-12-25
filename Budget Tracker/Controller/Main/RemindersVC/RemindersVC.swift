@@ -25,13 +25,13 @@ class RemindersVC: SuperViewController {
         RemindersVC.shared = self
         loadData()
         title = "Payment reminders ".localize
-        AppDelegate.shared?.properties?.banner.fullScreenDelegates.updateValue(self, forKey: self.restorationIdentifier!)
+        AppDelegate.properties?.banner.fullScreenDelegates.updateValue(self, forKey: self.restorationIdentifier!)
 
     }
 
     override func viewDidDismiss() {
         super.viewDidDismiss()
-        AppDelegate.shared?.properties?.banner.fullScreenDelegates.removeValue(forKey: self.restorationIdentifier!)
+        AppDelegate.properties?.banner.fullScreenDelegates.removeValue(forKey: self.restorationIdentifier!)
     }
     
 
@@ -47,13 +47,13 @@ class RemindersVC: SuperViewController {
         navigationController?.delegate = nil
         if !firstAppeared {
             firstAppeared = true
-            AppDelegate.shared?.properties?.banner.bannerCanShow(type: .paymentReminder, completion: {
+            AppDelegate.properties?.banner.bannerCanShow(type: .paymentReminder, completion: {
                 self.addTransactionButton.toggleAdView(show: $0)
             })
             
         }
     }
-    lazy var today = AppDelegate.shared?.properties?.appData.db.filter.getToday() ?? ""
+    lazy var today = AppDelegate.properties?.db.filter.getToday() ?? ""
     var editingReminder:Int?
     func performAddReminder() {
         Notifications.requestNotifications()
@@ -81,7 +81,7 @@ class RemindersVC: SuperViewController {
     private var interstitial: GADFullScreenPresentingAd?
     @IBOutlet weak var addTransactionButton: AdButton!
     @IBAction func addTransactionPressed(_ sender: Any) {
-        AppDelegate.shared?.properties?.banner.toggleFullScreenAdd(self, type: .paymentReminder, loaded: {
+        AppDelegate.properties?.banner.toggleFullScreenAdd(self, type: .paymentReminder, loaded: {
             self.interstitial = $0
             self.interstitial?.fullScreenContentDelegate = self
         }, closed: {presented in 
@@ -170,10 +170,10 @@ extension RemindersVC :TransitionVCProtocol {
 
 extension RemindersVC:GADFullScreenContentDelegate {
     func adDidPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        AppDelegate.shared?.properties?.banner.adDidPresentFullScreenContent(ad)
+        AppDelegate.properties?.banner.adDidPresentFullScreenContent(ad)
     }
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        AppDelegate.shared?.properties?.banner.adDidDismissFullScreenContent(ad)
+        AppDelegate.properties?.banner.adDidDismissFullScreenContent(ad)
     }
     
 }
@@ -195,8 +195,8 @@ extension RemindersVC {
             let vc = strorybpard.instantiateViewController(withIdentifier: "RemindersVC") as! RemindersVC
             vc.fromAppDelegate = true
             let nav = UINavigationController(rootViewController: vc)
-            AppDelegate.shared?.properties?.appData.present(vc: nav) {
-                AppDelegate.shared?.properties?.ai.hide()
+            AppDelegate.properties?.appData.present(vc: nav) {
+                AppDelegate.properties?.ai.hide()
             }
             
             nav.setBackground(.regular)

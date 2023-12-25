@@ -163,6 +163,7 @@
 		8DADC8922810E30300CC66EF /* TransactionNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DADC8912810E30300CC66EF /* TransactionNav.swift */; };
 		8DAF26982B37A8240023573E /* oldNetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAF26972B37A8240023573E /* oldNetworkModel.swift */; };
 		8DAF26A52B37D3470023573E /* NetworkTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAF26A42B37D3470023573E /* NetworkTestView.swift */; };
+		8DB23E0D2B3A05B3004AB0C2 /* AIAppearence_Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB23E0C2B3A05B3004AB0C2 /* AIAppearence_Extension.swift */; };
 		8DB4DAC227FC10D000EAA56F /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB4DAC127FC10D000EAA56F /* Keys.swift */; };
 		8DB7C459284EA064001DBFB7 /* AlertViewLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 8DB7C458284EA064001DBFB7 /* AlertViewLibrary */; };
 		8DBA7E5023F0316F00D8214C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */; };
@@ -421,6 +422,7 @@
 		8DADC8912810E30300CC66EF /* TransactionNav.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionNav.swift; sourceTree = "<group>"; };
 		8DAF26972B37A8240023573E /* oldNetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = oldNetworkModel.swift; sourceTree = "<group>"; };
 		8DAF26A42B37D3470023573E /* NetworkTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTestView.swift; sourceTree = "<group>"; };
+		8DB23E0C2B3A05B3004AB0C2 /* AIAppearence_Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIAppearence_Extension.swift; sourceTree = "<group>"; };
 		8DB4DAC127FC10D000EAA56F /* Keys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		8DBA7E4C23F0316F00D8214C /* Budget Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Budget Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DBA7E4F23F0316F00D8214C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -731,6 +733,7 @@
 				8B5434F727ED80F400417141 /* UITableView.swift */,
 				8B52CC6627E3001B008D5348 /* UITableViewCell.swift */,
 				8B82A04027E2BDBD0011EC80 /* UITextField.swift */,
+				8DB23E0C2B3A05B3004AB0C2 /* AIAppearence_Extension.swift */,
 				8DE481B62AE42ABA00A74542 /* UILabel.swift */,
 				8B26328527E67E720086C3A8 /* UISegmentedControl.swift */,
 				8D163BA229944D2700EF6C2A /* UITapGestureRecognizer.swift */,
@@ -1601,6 +1604,7 @@
 				8B91F08E27E587A800B74F5A /* MoreOptionsData.swift in Sources */,
 				8B52DFEA2750232D00595A0C /* NumbersView.swift in Sources */,
 				8D2CDA2D2AF43C1100671A72 /* SelectValueCell.swift in Sources */,
+				8DB23E0D2B3A05B3004AB0C2 /* AIAppearence_Extension.swift in Sources */,
 				8D2CDA252AF3F47C00671A72 /* AdButton.swift in Sources */,
 				8D251BC52B2D2DE3005EB934 /* UIFont.swift in Sources */,
 				8BD3A3D927E4097400547022 /* BasicView.swift in Sources */,

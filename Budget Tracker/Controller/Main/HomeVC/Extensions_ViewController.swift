@@ -161,25 +161,25 @@ extension HomeVC {
     
     func allDaysBetween() {
         
-        if getYearFrom(string: appData.db.filter.to) == getYearFrom(string: appData.db.filter.from) {
-            let today = appData.db.filter.getToday()
-            let lastDay = "31.\(appData.db.filter.getMonthFromString(s: today).twoDec).\(appData.db.filter.getYearFromString(s: today))"
-            let firstDay = "01.\(appData.db.filter.getMonthFromString(s: today).twoDec).\(appData.db.filter.getYearFromString(s: today))"
-            if appData.db.filter.to == "" {
-                appData.db.filter.to = lastDay
+        if getYearFrom(string: db.filter.to) == getYearFrom(string: db.filter.from) {
+            let today = db.filter.getToday()
+            let lastDay = "31.\(db.filter.getMonthFromString(s: today).twoDec).\(db.filter.getYearFromString(s: today))"
+            let firstDay = "01.\(db.filter.getMonthFromString(s: today).twoDec).\(db.filter.getYearFromString(s: today))"
+            if db.filter.to == "" {
+                db.filter.to = lastDay
             }
-            if appData.db.filter.from == "" {
-                appData.db.filter.from = firstDay
+            if db.filter.from == "" {
+                db.filter.from = firstDay
                 
             }
-            let to = appData.db.filter.to
-            let monthT = appData.db.filter.getMonthFromString(s: to)
-            let yearT = appData.db.filter.getYearFromString(s: to)
-            let dayTo = appData.db.filter.getLastDayOf(month: monthT, year: yearT)
+            let to = db.filter.to
+            let monthT = db.filter.getMonthFromString(s: to)
+            let yearT = db.filter.getYearFromString(s: to)
+            let dayTo = db.filter.getLastDayOf(month: monthT, year: yearT)
             viewModel.selectedToDayInt = dayTo
-            viewModel.selectedFromDayInt = appData.db.filter.getDayFromString(s: appData.db.filter.from)
+            viewModel.selectedFromDayInt = db.filter.getDayFromString(s: db.filter.from)
             
-            let monthDifference = getMonthFrom(string: appData.db.filter.to) - getMonthFrom(string: appData.db.filter.from)
+            let monthDifference = getMonthFrom(string: db.filter.to) - getMonthFrom(string: db.filter.from)
             var amount = viewModel.selectedToDayInt + (31 - viewModel.selectedFromDayInt) + (monthDifference * 31)
             if amount < 0 {
                 amount *= -1
@@ -187,8 +187,8 @@ extension HomeVC {
             calculateDifference(amount: amount)
             
         } else {
-            let yearDifference = (getYearFrom(string: appData.db.filter.to) - getYearFrom(string: appData.db.filter.from)) - 1
-            let monthDifference = (12 - getMonthFrom(string: appData.db.filter.from)) + (yearDifference * 12) + getMonthFrom(string: appData.db.filter.to)
+            let yearDifference = (getYearFrom(string: db.filter.to) - getYearFrom(string: db.filter.from)) - 1
+            let monthDifference = (12 - getMonthFrom(string: db.filter.from)) + (yearDifference * 12) + getMonthFrom(string: db.filter.to)
             var amount = viewModel.selectedToDayInt + (31 - viewModel.selectedFromDayInt) + (monthDifference * 31)
             if amount < 0 {
                 amount *= -1
@@ -263,7 +263,7 @@ extension HomeVC {
                         return
                     }
                 }
-                if self.properties?.appData.db.username != "" {
+                if self.properties?.db.username != "" {
                     self.sendUnsaved()
                 }
                 if let _ = self.viewModel.newTransaction {
@@ -374,26 +374,26 @@ extension HomeVC {
     }
     
     func checkPurchase(completion:@escaping(Bool?)-> (), local:Bool = false) {
-        let nick = self.properties?.appData.db.username
+        let nick = self.properties?.db.username
         if nick == "" || local {
             completion(true)
             return
         }
         LoadFromDB.shared.Users { (loadedData, error) in
             if !error {
-                let checkPassword = LoadFromDB.checkPassword(from: loadedData, nickname: self.properties?.appData.db.username, password: self.properties?.appData.db.password)
+                let checkPassword = LoadFromDB.checkPassword(from: loadedData, nickname: self.properties?.db.username, password: self.properties?.db.password)
                 let wrongPassword = checkPassword.0
                 if let userData = checkPassword.1 {
                     if wrongPassword {
                         self.apiPasswordChanged()
                         completion(false)
                     } else {
-                        let _ = self.properties?.appData.db.emailFromLoadedDataPurch(loadedData)
-                        if self.properties?.appData.db.trialDate != userData[5] {
-                            self.properties?.appData.db.trialDate = userData[5]
+                        let _ = self.properties?.db.emailFromLoadedDataPurch(loadedData)
+                        if self.properties?.db.trialDate != userData[5] {
+                            self.properties?.db.trialDate = userData[5]
                         }
-                        if !self.properties!.appData.db.purchasedOnThisDevice && !self.properties!.appData.db.proVersion {
-                            print("checkPurchase appData.proVersion", self.properties?.appData.db.proVersion)
+                        if !self.properties!.db.purchasedOnThisDevice && !self.properties!.db.proVersion {
+                            print("checkPurchase appData.proVersion", self.properties?.db.proVersion)
                             if userData[5] != "" {
                                 // self.checkProTrial()
                             }
@@ -529,11 +529,10 @@ extension HomeVC {
         }
         pinchView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:))))
         self.sideBarContentBlockerView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:))))
-        HomeVC.shared = self
         sideBar.load()
         toggleSideBar(false, animated: false)
         
-        self.mainTableView.contentInset.bottom = AppDelegate.shared?.properties?.banner.size ?? 0
+        self.mainTableView.contentInset.bottom = AppDelegate.properties?.banner.size ?? 0
         if #available(iOS 13.0, *) {
             BannerPublisher.valuePublisher.sink(receiveValue: {
                 self.bannerUpdated($0)
@@ -542,10 +541,10 @@ extension HomeVC {
     }
     
     func apiPasswordChanged() {
-        print(appData.db.password)
-        viewModel.forceLoggedOutUser = appData.db.username
-        appData.db.username = ""
-        appData.db.password = ""
+        print(db.password)
+        viewModel.forceLoggedOutUser = db.username
+        db.username = ""
+        db.password = ""
         viewModel.resetPassword = true
         let segue = "toSingIn"
         print(#function, " ", segue)
@@ -555,16 +554,16 @@ extension HomeVC {
     }
     
     func checkProTrial() {
-        let wasStr = appData.db.trialDate
-        let todayStr = appData.db.filter.getToday()
+        let wasStr = db.trialDate
+        let todayStr = db.filter.getToday()
         let dates = (dateFrom(sting: wasStr), dateFrom(sting: todayStr))
         let dif = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: dates.0 ?? Date(), to: dates.1 ?? Date())
         if dif.year == 0 && dif.month == 0 {
             if dif.day ?? 0 <= 7 {
-                appData.db.proTrial = true
+                db.proTrial = true
                 db.viewControllers.trial.expireDays = dif.day ?? 0
             } else {
-                appData.db.proTrial = false
+                db.proTrial = false
                 db.viewControllers.trial.checkTrial = false
                 if db.viewControllers.trial.trialPressed {
                     DispatchQueue.main.async {
@@ -573,7 +572,7 @@ extension HomeVC {
                 }
             }
         } else {
-            appData.db.proTrial = false
+            db.proTrial = false
             db.viewControllers.trial.checkTrial = false
 
             if db.viewControllers.trial.trialPressed {
@@ -691,13 +690,13 @@ extension HomeVC: TransitionVCProtocol {
     
     func calculateDifference(amount: Int) {
         viewModel.allData = []
-        if appData.db.filter.to != appData.db.filter.from {
+        if db.filter.to != db.filter.from {
             var dayA: Int = viewModel.selectedFromDayInt
-            var monthA: Int = getMonthFrom(string: appData.db.filter.from)
-            var yearA: Int = getYearFrom(string: appData.db.filter.from)
+            var monthA: Int = getMonthFrom(string: db.filter.from)
+            var yearA: Int = getYearFrom(string: db.filter.from)
             
             var daysBetween: [String] = transactionManager?.daysBetween ?? []
-            daysBetween.append(appData.db.filter.from)
+            daysBetween.append(db.filter.from)
             for _ in 0..<amount {
                 dayA += 1
                 if dayA == 32 {
@@ -710,14 +709,14 @@ extension HomeVC: TransitionVCProtocol {
                 }
                 let new: String = "\(dayA.twoDec).\(monthA.twoDec).\(yearA.twoDec)"
                 daysBetween.append(new)
-                if new == appData.db.filter.to {
+                if new == db.filter.to {
                     break
                 }
             }
             transactionManager?.daysBetween = daysBetween
         } else {
             transactionManager?.daysBetween.removeAll()
-            transactionManager?.daysBetween.append(appData.db.filter.from)
+            transactionManager?.daysBetween.append(db.filter.from)
         }
     }
     
@@ -735,8 +734,8 @@ extension HomeVC: TransitionVCProtocol {
                 years.append(removeDayMonthFromString(arr[i].date))
             }
         }
-        if appData.db.filter.filteredData["months"] != months || appData.db.filter.filteredData["years"] != years {
-            appData.db.filter.filteredData = [
+        if db.filter.filteredData["months"] != months || db.filter.filteredData["years"] != years {
+            db.filter.filteredData = [
                 "months":months,
                 "years":years
             ]
@@ -759,7 +758,7 @@ extension HomeVC: TransitionVCProtocol {
             let vc = TransitionVC.configure()
             vc.delegate = self
             let defDate = Date().toDateComponents()
-            let filterDate = AppDelegate.shared?.properties?.appData.db.filter.fromDate ?? .init()
+            let filterDate = AppDelegate.properties?.db.filter.fromDate ?? .init()
             let thisMonth = defDate.month == filterDate.month && defDate.year == filterDate.year
             vc.dateSet = self.viewModel.calendarSelectedDate ?? (thisMonth ? defDate.toShortString() : nil)
             self.viewModel.calendarSelectedDate = nil
@@ -805,7 +804,7 @@ extension HomeVC: TransitionVCProtocol {
             }
             self.filter()
         }
-        let unsended = self.properties?.appData.db.unsendedData ?? []
+        let unsended = self.properties?.db.unsendedData ?? []
         if unsended.count > 0 {
             if let first = unsended.first {
                 viewModel.startedSendingUnsended = true
@@ -821,7 +820,7 @@ extension HomeVC: TransitionVCProtocol {
                         cat.id = newID
                         SaveToDB.shared.newCategories(cat, saveLocally: false) { error in
                             if !error {
-                                self.properties?.appData.db.unsendedData.removeFirst()
+                                self.properties?.db.unsendedData.removeFirst()
                                 self.viewModel.highesLoadedCatID! += 1
                                 var newTransactions: [[String:Any]] = []
                                 for i in 0..<unsended.count {
@@ -836,7 +835,7 @@ extension HomeVC: TransitionVCProtocol {
                                 }
                                 
                                 for i in 0..<newTransactions.count {
-                                    self.properties?.appData.db.unsendedData.append(["transactionNew":newTransactions[i]])
+                                    self.properties?.db.unsendedData.append(["transactionNew":newTransactions[i]])
                                 }
                                 self.sendUnsaved()
                             } else {
@@ -861,7 +860,7 @@ extension HomeVC: TransitionVCProtocol {
                     if let deleteCategory = NewCategories.create(dict: first["deleteCategoryNew"] ?? [:]) {
                         delete.CategoriesNew(category: deleteCategory, saveLocally: false) { error in
                             if !error {
-                                self.properties?.appData.db.unsendedData.removeFirst()
+                                self.properties?.db.unsendedData.removeFirst()
                                 self.sendUnsaved()
                             } else {
                                 errorAction()
@@ -871,7 +870,7 @@ extension HomeVC: TransitionVCProtocol {
                         if let addTransaction = TransactionsStruct.create(dictt: first["transactionNew"] ?? [:]) {
                             SaveToDB.shared.newTransaction(addTransaction, saveLocally: false) { error in
                                 if !error {
-                                    self.properties?.appData.db.unsendedData.removeFirst()
+                                    self.properties?.db.unsendedData.removeFirst()
                                     self.sendUnsaved()
                                 } else {
                                     errorAction()
@@ -881,7 +880,7 @@ extension HomeVC: TransitionVCProtocol {
                             if let deleteTransaction = TransactionsStruct.create(dictt: first["deleteTransactionNew"] ?? [:]) {
                                 delete.newTransaction(deleteTransaction, saveLocally: false) { error in
                                     if !error {
-                                        self.properties?.appData.db.unsendedData.removeFirst()
+                                        self.properties?.db.unsendedData.removeFirst()
                                         self.sendUnsaved()
                                     }else {
                                         errorAction()
@@ -896,7 +895,7 @@ extension HomeVC: TransitionVCProtocol {
         } else {
             if viewModel.startedSendingUnsended {
                 viewModel.startedSendingUnsended = false
-                downloadFromDB(local: AppDelegate.shared?.properties?.appData.db.username ?? "" == "")
+                downloadFromDB(local: AppDelegate.properties?.db.username ?? "" == "")
             } else {
                 if appData.sendSavedData {
                     if self.filterText != "Sending".localize {
@@ -951,7 +950,7 @@ extension HomeVC: TransitionVCProtocol {
                             }
                         } else {
                             appData.sendSavedData = false
-                            downloadFromDB(local: AppDelegate.shared?.properties?.appData.db.username ?? "" == "")
+                            downloadFromDB(local: AppDelegate.properties?.db.username ?? "" == "")
                         }
                     }
                 }
@@ -964,7 +963,7 @@ extension HomeVC: TransitionVCProtocol {
     
     
     func deleteUnsendedTransactions(id: String) {
-        let all = appData.db.unsendedData
+        let all = db.unsendedData
         var resultt:[[String : [String : Any]]] = []
         for i in 0..<all.count {
             if let transaction = TransactionsStruct.create(dictt: all[i]["transactionNew"]) {
@@ -975,7 +974,7 @@ extension HomeVC: TransitionVCProtocol {
                 resultt.append(all[i])
             }
         }
-        appData.db.unsendedData = resultt
+        db.unsendedData = resultt
     }
 }
 
@@ -1006,7 +1005,8 @@ extension HomeVC {
             print(key.characters, "key.characterskey.characters")
             switch key.keyCode {
             case .keyboardN:
-                if AppDelegate.shared?.canPerformAction ?? false {
+                let appDelegate = UIApplication.shared.delegate as? AppDelegate
+                if appDelegate?.canPerformAction ?? false {
                     toAddTransaction()
                 }
                

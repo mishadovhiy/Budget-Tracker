@@ -42,7 +42,7 @@ class AppSettingsData {
     
     
     func appearenceSection() -> [Any] {
-        let colorCell = SettingsVC.StandartCell(title: "Primary color".localize, description: "", colorNamed:  AppDelegate.shared?.properties?.db.linkColor ?? "", pro: nil, action: {//!appData.proEnabeled ? 3 : nil
+        let colorCell = SettingsVC.StandartCell(title: "Primary color".localize, description: "", colorNamed:  AppDelegate.properties?.db.linkColor ?? "", pro: nil, action: {//!appData.proEnabeled ? 3 : nil
             DispatchQueue.main.async {
                 self.vc.performSegue(withIdentifier: "toColors", sender: self.vc)
             }
@@ -169,7 +169,7 @@ class AppSettingsData {
         
         
         let appShortcodes = SettingsVC.StandartCell(title: "Application ShortCode Actions", action: {
-            let db = AppDelegate.shared?.properties?.db ?? .init()
+            let db = AppDelegate.properties?.db ?? .init()
             let ignoring = db.viewControllers.ignoredActionTypes
             let cells:[SettingsVC.TriggerCell] = ShortCodeItem.allCases.compactMap({ item in
                 return .init(title: item.item.title, isOn: !ignoring.contains(item.rawValue), action: { isOn in
@@ -180,7 +180,7 @@ class AppSettingsData {
                             db.viewControllers.ignoredActionTypes.append(item.rawValue)
                         }
                         DispatchQueue.main.async {
-                            AppDelegate.shared?.properties?.setQuickActions()
+                            AppDelegate.properties?.setQuickActions()
                         }
                     }
                 })
@@ -193,13 +193,13 @@ class AppSettingsData {
         
         
         
-        let testPro:SettingsVC.TriggerCell = SettingsVC.TriggerCell(title: "forceNotPro", isOn: AppDelegate.shared?.properties?.appData.db.forceNotPro ?? false, pro: nil, action: { (newValue) in
-            AppDelegate.shared?.properties?.appData.db.forceNotPro = newValue ? true : nil
+        let testPro:SettingsVC.TriggerCell = SettingsVC.TriggerCell(title: "forceNotPro", isOn: AppDelegate.properties?.db.forceNotPro ?? false, pro: nil, action: { (newValue) in
+            AppDelegate.properties?.db.forceNotPro = newValue ? true : nil
         })
 
         
         var cells = [otherCell, appShortcodes]
-        if AppDelegate.shared?.properties?.appData.db.devMode ?? false {
+        if AppDelegate.properties?.db.devMode ?? false {
             //cells.append
         }
         return cells
@@ -251,7 +251,7 @@ extension AppSettingsData {
     }
     
     func getUserPasscode(completion:@escaping() -> ()) {
-        AppDelegate.shared?.properties?.presentLock(passcode: true, passcodeVerified: completion)
+        AppDelegate.properties?.presentLock(passcode: true, passcodeVerified: completion)
     }
     
     
@@ -260,11 +260,11 @@ extension AppSettingsData {
         let nextAction:(String) -> () = { (newValue) in
             let repeateAction:(String) -> () = { (repeatedPascode) in
                 if newValue == repeatedPascode {
-                    AppDelegate.shared?.properties?.newMessage.show(title: "Passcode has been setted".localize, type: .succsess)
+                    AppDelegate.properties?.newMessage.show(title: "Passcode has been setted".localize, type: .succsess)
                     self.vc.toEnterValue(data: nil)
                     completion(newValue)
                 } else {
-                    AppDelegate.shared?.properties?.newMessage.show(title: "Passcodes don't match".localize, type: .error)
+                    AppDelegate.properties?.newMessage.show(title: "Passcodes don't match".localize, type: .error)
                 }
             }
             let passcodeSecondEntered = EnterValueVC.EnterValueVCScreenData(taskName: "Create".localize + " " + "passcode".localize, title: "Repeat".localize + " " + "passcode".localize, placeHolder: "Password".localize, nextAction: repeateAction, screenType: .code)

@@ -55,7 +55,7 @@ class CameraTextMLVC:SuperViewController {
         imgPicker.delegate = self
         imgPicker.allowsEditing = true
         DispatchQueue.main.async {
-            AppDelegate.shared?.properties?.appData.present(vc: imgPicker, presentingVC: self.selectionDelegate as! SelectTextImageContainerView)
+            AppDelegate.properties?.appData.present(vc: imgPicker, presentingVC: self.selectionDelegate as! SelectTextImageContainerView)
         }
     }
     

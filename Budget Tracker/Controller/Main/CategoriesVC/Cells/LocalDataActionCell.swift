@@ -37,9 +37,9 @@ class LocalDataActionCell: UITableViewCell {
     
     
     @objc func saveLocallyPress(_ sender: UITapGestureRecognizer) {
-        AppDelegate.shared?.properties?.appData.needDownloadOnMainAppeare = true
+        AppDelegate.properties?.appData.needDownloadOnMainAppeare = true
         DispatchQueue.main.async {
-            AppDelegate.shared?.properties?.ai.showLoading(title:"Saving".localize) {
+            AppDelegate.properties?.ai.showLoading(title:"Saving".localize) {
                 if let action = self.saveAction {
                     action()
                 }
@@ -48,15 +48,15 @@ class LocalDataActionCell: UITableViewCell {
         
     }
     @objc func sendPress(_ sender: UITapGestureRecognizer) {
-        AppDelegate.shared?.properties?.ai.showLoading(title:"Preparing".localize) {
+        AppDelegate.properties?.ai.showLoading(title:"Preparing".localize) {
             if let action = self.sendAction {
                 action()
             }
         }
     }
     @objc func deletePress(_ sender: UITapGestureRecognizer) {
-        AppDelegate.shared?.properties?.ai.showLoading(title:"Deleting".localize) {
-            AppDelegate.shared?.properties?.appData.needDownloadOnMainAppeare = true
+        AppDelegate.properties?.ai.showLoading(title:"Deleting".localize) {
+            AppDelegate.properties?.appData.needDownloadOnMainAppeare = true
             if let action = self.deleteAction {
                 action()
             }

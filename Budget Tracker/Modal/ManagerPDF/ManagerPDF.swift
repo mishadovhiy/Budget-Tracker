@@ -33,7 +33,7 @@ class ManagerPDF {
     
     private func showError(title:String, description:String? = nil) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.properties!.newMessage.show(title:title, description: description, type: .error)
+        AppDelegate.properties!.newMessage.show(title:title, description: description, type: .error)
         
     }
     
@@ -44,7 +44,7 @@ class ManagerPDF {
     private func exportPDF(sender:UIView, toEdit:Bool = true) {
         if !toEdit {
             DispatchQueue(label: "dbPdf", qos: .userInitiated).async {
-                let db = AppDelegate.shared?.properties?.db.viewControllers.pdfProperties ?? .init(dict: [:])
+                let db = AppDelegate.properties?.db.viewControllers.pdfProperties ?? .init(dict: [:])
                 self.properties = db
                 print(db, " yhrtgerfwd")
                 DispatchQueue.main.async {
@@ -55,19 +55,19 @@ class ManagerPDF {
                     }
                     if !toEdit {
                         self.vc.navigationController?.popViewController(animated: true)
-                        AppDelegate.shared?.properties?.banner.toggleFullScreenAdd(self.vc, type: .pdf, loaded: {
+                        AppDelegate.properties?.banner.toggleFullScreenAdd(self.vc, type: .pdf, loaded: {
                             (self.vc as? StatisticVC)?.fullScrAd = $0
                             (self.vc as? StatisticVC)?.fullScrAd?.fullScreenContentDelegate = self.vc as? GADFullScreenContentDelegate
                         }, closed: { presented in
                         //    self.vc.navigationController?.topViewController?.presentShareVC(with: [pdfData], sender: sender)
                             if presented {
                                 self.vc.presentShareVC(with: [pdfData], sender:sender) {
-                                    AppDelegate.shared?.properties?.banner.appeare(force: true)
+                                    AppDelegate.properties?.banner.appeare(force: true)
                                 }
                             } else {
-                                AppDelegate.shared?.properties?.banner.hide(ios13Hide: true, completion: {
+                                AppDelegate.properties?.banner.hide(ios13Hide: true, completion: {
                                     self.vc.presentShareVC(with: [pdfData], sender:sender) {
-                                        AppDelegate.shared?.properties?.banner.appeare(force: true)
+                                        AppDelegate.properties?.banner.appeare(force: true)
                                     }
                                 })
                             }

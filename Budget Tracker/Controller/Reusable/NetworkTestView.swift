@@ -39,14 +39,14 @@ class NetworkTestViewViewModel:ObservableObject {
             guard let i = requestTypeSelected,
                   i <= self.data.count - 1
             else { return }
-            AppDelegate.shared?.properties?.ai.showLoading() {
+            AppDelegate.properties?.ai.showLoading() {
                 self.dataSelected(type: self.data[i])
             }
         }
     }
     
     @MainActor func requestCompleted(data:Int) {
-        AppDelegate.shared?.properties?.ai.hide()
+        AppDelegate.properties?.ai.hide()
     }
     
     private func dataSelected(type:ServerResponse.RequestType) {

@@ -26,7 +26,7 @@ struct TransactionsStruct {
     
     
     var category:NewCategories {
-        let db = AppDelegate.shared?.properties?.db
+        let db = AppDelegate.properties?.db
         return db?.category(categoryID) ?? NewCategories(id: -1, name: "Unknown", icon: "", color: "", purpose: .expense)
     }
     
@@ -70,7 +70,7 @@ struct TransactionsStruct {
     }
     
     var apiData:String? {
-        guard let username = AppDelegate.shared?.properties?.db.username, username != "" else {
+        guard let username = AppDelegate.properties?.db.username, username != "" else {
             return nil
         }
         return "&Nickname=\(username)" + "&CategoryId=\(self.categoryID)" + "&Amount=\(self.value)" + "&Date=\(self.date)" + "&Comment=\(self.comment)"

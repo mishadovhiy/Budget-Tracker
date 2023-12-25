@@ -55,7 +55,7 @@ class adBannerView: UIView {
         }
     }
     private var id:String {
-        (AppDelegate.shared?.properties?.appData.db.devMode ?? false) ? "ca-app-pub-3940256099942544/2934735716" : "ca-app-pub-5463058852615321/8457751935"
+        (AppDelegate.properties?.db.devMode ?? false) ? "ca-app-pub-3940256099942544/2934735716" : "ca-app-pub-5463058852615321/8457751935"
     }
     
     deinit {
@@ -114,9 +114,9 @@ class adBannerView: UIView {
         
         var go:Bool {
             if #available(iOS 13.0, *) {
-                return force && !(AppDelegate.shared?.properties?.appData.db.proEnabeled ?? false)
+                return force && !(AppDelegate.properties?.db.proEnabeled ?? false)
             } else {
-                return !(AppDelegate.shared?.properties?.appData.db.proEnabeled ?? false)
+                return !(AppDelegate.properties?.db.proEnabeled ?? false)
             }
         }
      //   DispatchQueue(label: "db", qos: .userInitiated).async {
@@ -146,7 +146,7 @@ class adBannerView: UIView {
         
         var go:Bool {
             if #available(iOS 13.0, *) {
-                return (remove || (AppDelegate.shared?.properties?.appData.db.proEnabeled ?? false) || ios13Hide) && !adHidden
+                return (remove || (AppDelegate.properties?.db.proEnabeled ?? false) || ios13Hide) && !adHidden
             } else {
                 return true
             }
@@ -186,7 +186,7 @@ class adBannerView: UIView {
     func setBackground(clear:Bool) {
         clearBackground = clear
         UIView.animate(withDuration: 0.3) {
-            AppDelegate.shared?.properties?.banner.backgroundView.backgroundColor = clear ? .clear : K.Colors.primaryBacground
+            AppDelegate.properties?.banner.backgroundView.backgroundColor = clear ? .clear : K.Colors.primaryBacground
         }
     }
     
@@ -239,7 +239,7 @@ class adBannerView: UIView {
     private func presentFullScreen(_ vc:UIViewController, loaded:@escaping(GADFullScreenPresentingAd?)->()) {
         //here
         rootVC = vc
-        let id = (AppDelegate.shared?.properties?.appData.db.devMode ?? false) ? "ca-app-pub-3940256099942544/4411468910" : "ca-app-pub-5463058852615321/8167495597"
+        let id = (AppDelegate.properties?.db.devMode ?? false) ? "ca-app-pub-3940256099942544/4411468910" : "ca-app-pub-5463058852615321/8167495597"
         GADInterstitialAd.load(withAdUnitID: id, request: GADRequest()) { ad, error in
             loaded(ad)
             if error != nil {
@@ -251,7 +251,7 @@ class adBannerView: UIView {
     
     func bannerCanShow(type:FullScreenBanner, completion:@escaping(_ show:Bool)->()) {
         DispatchQueue(label: "db",  qos: .userInitiated).async {
-            if !(AppDelegate.shared?.properties?.appData.db.proEnabeled ?? false) {
+            if !(AppDelegate.properties?.db.proEnabeled ?? false) {
                 if let from = self.showedBanner {
                     let now = Date()
                     let dif = now.timeIntervalSince(from)
@@ -281,7 +281,7 @@ class adBannerView: UIView {
     
     
     @IBAction private func closePressed(_ sender: UIButton) {
-        AppDelegate.shared?.properties?.appData.presentBuyProVC(selectedProduct: 2)
+        AppDelegate.properties?.appData.presentBuyProVC(selectedProduct: 2)
     }
     
     
@@ -316,7 +316,7 @@ extension adBannerView {
     func adDidPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
         bannerWatchedFull = false
         showedBannerTime = Data()
-        AppDelegate.shared?.properties?.ai.hide()
+        AppDelegate.properties?.ai.hide()
         let shape = UIApplication.shared.keyWindow?.layer.drawSeparetor(color: K.Colors.link, y: UIApplication.shared.keyWindow?.safeAreaInsets.top, width: 3)
         shape?.name = "adFullBanerLine"
         shape?.performAnimation(key: .stokeEnd, to: CGFloat(1), code: .general, duration: 10, completion: {
@@ -351,7 +351,7 @@ extension adBannerView {
                     holderCompletion?(true)
                 }
             } else {
-                AppDelegate.shared?.properties?.newMessage.show(title:"Ad not watched till the end", type: .error)
+                AppDelegate.properties?.newMessage.show(title:"Ad not watched till the end", type: .error)
 
                 self.appeare(force: true)
             }

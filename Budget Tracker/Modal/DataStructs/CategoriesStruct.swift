@@ -20,7 +20,7 @@ struct NewCategories {
     var monthLimit:Double? = nil
 
     var transactions: [TransactionsStruct] {
-        let db = AppDelegate.shared?.properties?.db
+        let db = AppDelegate.properties?.db
         return db?.transactions(for: self) ?? []
     }
     
@@ -113,7 +113,7 @@ struct NewCategories {
     
     
     var apiData:String? {
-        guard let username = AppDelegate.shared?.properties?.db.username, username != "" else { return nil }
+        guard let username = AppDelegate.properties?.db.username, username != "" else { return nil }
         var amount:String {
             if let amount = self.amountToPay {
                 return "&AmountToPay=\(amount)"

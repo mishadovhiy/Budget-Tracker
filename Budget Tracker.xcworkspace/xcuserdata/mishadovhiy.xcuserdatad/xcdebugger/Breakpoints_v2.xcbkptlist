@@ -30,8 +30,8 @@
             filePath = "Budget Tracker/AppDelegate/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "84"
-            endingLineNumber = "84"
+            startingLineNumber = "74"
+            endingLineNumber = "74"
             landmarkName = "applicationDidBecomeActive(_:)"
             landmarkType = "7">
             <Locations>
@@ -2025,7 +2025,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "59"
             endingLineNumber = "59"
-            landmarkName = "application(_:open:options:)"
+            landmarkName = "userNotificationCenter(_:openSettingsFor:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -2148,6 +2148,21 @@
                   endingLineNumber = "59"
                   offsetFromSymbolStart = "404">
                </Location>
+               <Location
+                  uuid = "F67A1072-D4DC-4A96-816A-CDD421D9FE36 - 6eda06ea16c4e38f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Budget_Tracker.AppDelegate.userNotificationCenter(_: __C.UNUserNotificationCenter, openSettingsFor: Swift.Optional&lt;__C.UNNotification&gt;) -&gt; ()"
+                  moduleName = "Budget Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mishadovhiy/Developer/Budget-Tracker/Budget%20Tracker/AppDelegate/AppDelegateExtensions.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "59"
+                  endingLineNumber = "59"
+                  offsetFromSymbolStart = "416">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -2163,7 +2178,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "54"
             endingLineNumber = "54"
-            landmarkName = "openNotification(_:)"
+            landmarkName = "application(_:open:options:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -2524,8 +2539,8 @@
             filePath = "Budget Tracker/AppDelegate/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "62"
-            endingLineNumber = "62"
+            startingLineNumber = "52"
+            endingLineNumber = "52"
             landmarkName = "application(_:performActionFor:completionHandler:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2540,8 +2555,8 @@
             filePath = "Budget Tracker/AppDelegate/AppDelegate.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "60"
-            endingLineNumber = "60"
+            startingLineNumber = "50"
+            endingLineNumber = "50"
             landmarkName = "application(_:performActionFor:completionHandler:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5851,8 +5866,8 @@
             filePath = "Budget Tracker/Controller/Main/HomeVC/Extensions_ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "686"
-            endingLineNumber = "686"
+            startingLineNumber = "685"
+            endingLineNumber = "685"
             landmarkName = "quiteTransactionVC(reload:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6044,6 +6059,21 @@
                   endingLineNumber = "42"
                   offsetFromSymbolStart = "1676">
                </Location>
+               <Location
+                  uuid = "4EDB8A95-85F1-45D6-A2D1-59CDF7E51EC5 - de1871c85633d6c9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static Budget_Tracker.NetworkTask.unparceData((Foundation.Data, __C.NSURLResponse)) -&gt; Swift.Optional&lt;__C.NSArray&gt;"
+                  moduleName = "Budget Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mishadovhiy/Developer/Budget-Tracker/Budget%20Tracker/Modal/NetworkModel/NetworkTask.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "42"
+                  endingLineNumber = "42"
+                  offsetFromSymbolStart = "1560">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -6121,6 +6151,21 @@
                   startingLineNumber = "38"
                   endingLineNumber = "38"
                   offsetFromSymbolStart = "1408">
+               </Location>
+               <Location
+                  uuid = "79B99144-1EC2-4546-8870-666CFD2097E8 - de1871c85633d645"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "static Budget_Tracker.NetworkTask.unparceData((Foundation.Data, __C.NSURLResponse)) -&gt; Swift.Optional&lt;__C.NSArray&gt;"
+                  moduleName = "Budget Tracker"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mishadovhiy/Developer/Budget-Tracker/Budget%20Tracker/Modal/NetworkModel/NetworkTask.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "38"
+                  endingLineNumber = "38"
+                  offsetFromSymbolStart = "1292">
                </Location>
             </Locations>
          </BreakpointContent>

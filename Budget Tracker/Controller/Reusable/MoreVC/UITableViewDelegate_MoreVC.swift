@@ -59,7 +59,7 @@ extension MoreVC:UITableViewDelegate, UITableViewDataSource {
         } else {
             if indexPath.section == 1 {
                 if !tableData[indexPath.row].pro {
-                    AppDelegate.shared?.properties?.appData.presentBuyProVC(selectedProduct: selectedProIndex)
+                    AppDelegate.properties?.appData.presentBuyProVC(selectedProduct: selectedProIndex)
                     tableView.deselectRow(at: indexPath, animated: true)
                 } else {
                 if let function = tableData[indexPath.row].action {
@@ -71,7 +71,7 @@ extension MoreVC:UITableViewDelegate, UITableViewDataSource {
                         }
                     }
                     if tableData[indexPath.row].showAI {
-                        AppDelegate.shared?.properties?.ai.showLoading(completion: {
+                        AppDelegate.properties?.ai.showLoading(completion: {
                             goNext()
                         })
                     } else {

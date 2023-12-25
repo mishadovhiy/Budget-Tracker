@@ -35,7 +35,7 @@ class AdButton: TouchButton {
         if !movedToWindow && adLabel == nil {
             movedToWindow = true
             DispatchQueue(label: "db", qos: .userInitiated).async {
-                if !(AppDelegate.shared?.properties?.appData.db.proEnabeled ?? false) {
+                if !(AppDelegate.properties?.db.proEnabeled ?? false) {
                     DispatchQueue.main.async {
                         self.createAdView()
                     }

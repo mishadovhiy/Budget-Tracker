@@ -31,7 +31,6 @@ class IconsVC: SuperViewController {
         }
     }()
     var closeAction:(()->())?
-    weak static var shared:IconsVC?
     var selectedIconName = ""
     var selectedColorName = ""
     var defaultCategories:[NewCategories] = []
@@ -39,13 +38,12 @@ class IconsVC: SuperViewController {
     
     override func viewDidDismiss() {
         super.viewDidDismiss()
-        IconsVC.shared = nil
         icons = nil
         delegate = nil
     }
     
     lazy var coloresStrTemporary:[String] = {
-        return (screenType == .colorsOnly ? AppDelegate.shared?.properties?.appData.screenColors : AppDelegate.shared?.properties?.appData.categoryColors) ?? []
+        return (screenType == .colorsOnly ? AppDelegate.properties?.appData.screenColors : AppDelegate.properties?.appData.categoryColors) ?? []
     }()
     
     var selectedColorId:Int = 0
@@ -87,7 +85,6 @@ class IconsVC: SuperViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        IconsVC.shared = self
         collectionView.delegate = self
         collectionView.dataSource = self
         title = screenType == .colorsOnly ? "Primary color".localize : "Set icon".localize

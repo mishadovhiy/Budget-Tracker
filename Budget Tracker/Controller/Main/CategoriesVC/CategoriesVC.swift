@@ -52,7 +52,9 @@ class CategoriesVC: SuperViewController {
     var wasEdited = false
     @IBOutlet weak var moreNavButton: Button!
     var toSelectCategory = false
-    
+    var iconChildren:IconsVC? {
+        return children.first(where: {$0 is IconsVC}) as? IconsVC
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         updateUI()
@@ -61,7 +63,7 @@ class CategoriesVC: SuperViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: true)
-        AppDelegate.shared?.properties?.banner.setBackground(clear: false)
+        AppDelegate.properties?.banner.setBackground(clear: false)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -82,7 +84,7 @@ class CategoriesVC: SuperViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        AppDelegate.shared?.properties?.banner.setBackground(clear: true)
+        AppDelegate.properties?.banner.setBackground(clear: true)
     }
     
     override func viewDidDismiss() {
@@ -196,7 +198,7 @@ extension CategoriesVC: IconsVCDelegate {
     }
     
     func kayboardAppeared(_ keyboardHeight:CGFloat) {
-        let height:CGFloat = keyboardHeight - (AppDelegate.shared?.properties?.appData.resultSafeArea.1 ?? 0) - self.defaultButtonInset
+        let height:CGFloat = keyboardHeight - (AppDelegate.properties?.appData.resultSafeArea.1 ?? 0) - self.defaultButtonInset
         let cellEditing = (self.editingTF?.layer.name?.contains("cell") ?? false) || self.selectingIconFor.0 != nil
         self.tableView.contentInset.bottom = height + (cellEditing ? (self.regFooterHeight * (-1)) : 0)
     }

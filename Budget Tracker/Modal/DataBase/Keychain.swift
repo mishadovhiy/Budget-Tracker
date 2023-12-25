@@ -62,7 +62,7 @@ public class KeychainService: NSObject {
     
     
     static private func updateUsernameInKeychain(newUsername: String) {
-        let account = AppDelegate.shared?.properties?.appData.db.username ?? ""
+        let account = AppDelegate.properties?.db.username ?? ""
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrService as String: service,

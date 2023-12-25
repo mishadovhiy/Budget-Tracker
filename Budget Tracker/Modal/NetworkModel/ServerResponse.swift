@@ -62,7 +62,7 @@ class ServerResponse {
     }
     
     fileprivate var appData:AppProperties? {
-        return AppDelegate.shared?.properties
+        return AppDelegate.properties
     }
 }
 

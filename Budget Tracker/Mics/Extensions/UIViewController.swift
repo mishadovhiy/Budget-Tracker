@@ -34,7 +34,7 @@ extension UIViewController {
         if let vc = vcc {
             vc.present(activityViewController, animated: true, completion: completion)
         } else {
-            AppDelegate.shared?.properties?.appData.present(vc: activityViewController, completion: completion)
+            AppDelegate.properties?.appData.present(vc: activityViewController, completion: completion)
         }
         
     }

@@ -20,7 +20,6 @@ class AppProperties {
     }()
     
     lazy var ai: AlertManager = {
-        print("AlertManagerAlertManager")
         let ai = AlertManager()
         ai.setIgnorPresentLoader(self.aiNotShowingCondition)
         return ai
@@ -38,47 +37,9 @@ class AppProperties {
     }()
     let appData = AppData()
     
-    func aiAppearence() -> AIAppearence {
-        let view = K.Colors.background ?? .red
-        let background = UIColor.black
-        let separetor = (K.Colors.separetor ?? .red).withAlphaComponent(0.5)
-        
-        return .with({
-            $0.defaultText = .with({
-                $0.loading = "Loading".localize
-                $0.okButton = "OK".localize
-                $0.error = "Error".localize
-                $0.success = "Success".localize
-                $0.internetError = ("Internet error".localize, "Try again later".localize)
-                $0.standart = "Done".localize
-                
-            })
-            $0.additionalLaunchProperties = .with({
-                $0.mainCorners = 9
-                $0.zPosition = 1001
-            })
-            $0.colors = .generate({
-                $0.loaderBackAlpha = 0.25
-                $0.alertBackAlpha = 0.5
-                $0.loaderView = view.lighter()
-                $0.view = view
-                $0.background = background
-                $0.separetor = separetor
-                $0.texts = .with({
-                    $0.title = K.Colors.category ?? .red
-                    $0.description = K.Colors.balanceT ?? .red
-                })
-                $0.buttom = .with({
-                    $0.link = K.Colors.link
-                    $0.normal = K.Colors.category ?? .red
-                })
-                
-            })
-        })
-    }
     
     func aiNotShowingCondition() -> Bool {
-        return appData.db.username == ""
+        return db.username == ""
     }
     
     func setQuickActions() {
@@ -99,27 +60,30 @@ class AppProperties {
 }
 
 extension AppProperties {
+    private var appDelegate:AppDelegate {
+        return UIApplication.shared.delegate as? AppDelegate ?? .init()
+    }
     func appLoaded() {
         if coreDataManager != nil {
             return
         }
-        coreDataManager = .init(persistentContainer: AppDelegate.shared!.persistentContainer, appDelegate: AppDelegate.shared!)
+        coreDataManager = .init(persistentContainer: appDelegate.persistentContainer, appDelegate: appDelegate)
         DispatchQueue(label: "db", qos: .userInitiated).async {
             DataBase._db = self.coreDataManager?.fetch(.general)?.data?.toDict ?? [:]
-            let today = self.appData.db.filter.getToday()
+            let today = self.db.filter.getToday()
             let value = self.db.db["lastLaunching"] as? String ?? ""
             if value != today {
                 self.db.db.updateValue(today, forKey: "lastLaunching")
                 self.db.transactionDate = nil
             }
-            let pro = self.appData.db.proEnabeled
+            let pro = self.db.proEnabeled
             let localization = AppLocalization.udLocalization ?? (NSLocale.current.languageCode ?? "-")
-            let tint = UIColor(self.appData.db.linkColor)
+            let tint = UIColor(self.db.linkColor)
 
             DispatchQueue.main.async {
                 UIApplication.shared.keyWindow?.tintColor = tint
-                self.center.delegate = AppDelegate.shared
-                UNUserNotificationCenter.current().delegate = AppDelegate.shared
+                self.center.delegate = self.appDelegate
+                UNUserNotificationCenter.current().delegate = self.appDelegate
                 Notifications.getNotificationsNumber()
                 
                 AppLocalization.launchedLocalization = localization
@@ -171,7 +135,7 @@ extension AppProperties {
         } else {
             let fiveMin:Double = Double(60 * 3)//appData.devMode ? 0.1 : Double(60 * 3)
             if ti > fiveMin {
-                if appData.db.username != "" {
+                if db.username != "" {
                     appData.needDownloadOnMainAppeare = false
                     HomeVC.shared?.downloadFromDB()
                 }

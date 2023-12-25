@@ -86,9 +86,9 @@ class StatisticVC: SuperViewController, CALayerDelegate {
         let allData = sortAllTransactions()
         let dict:[[String:Any]] = data.compactMap({ $0.dict})
         let type = (segmentControll.selectedSegmentIndex == 0 ? "Expenses" : "Incomes")
-        let period = isAll ? "All time" : appData.db.filter.periodText
+        let period = isAll ? "All time" : db.filter.periodText
         //get first and last transaction if all time
-        let pdf:ManagerPDF = .init(dict: ["Budget Tracker":dict], pageTitle: "", vc: self, data: .init(duration: period, type: type, from: isAll ? allData.from ?? .init() : appData.db.filter.fromDate, to: isAll ? allData.to ?? .init() : appData.db.filter.toDate, today: Date().toDateComponents()))
+        let pdf:ManagerPDF = .init(dict: ["Budget Tracker":dict], pageTitle: "", vc: self, data: .init(duration: period, type: type, from: isAll ? allData.from ?? .init() : db.filter.fromDate, to: isAll ? allData.to ?? .init() : db.filter.toDate, today: Date().toDateComponents()))
         pdf.toExport(sender: sender as! UIButton, toEdit: true)
     }
     
@@ -174,7 +174,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
             
 
         
-        let textt = (isAll ? "All period" : appData.db.filter.periodText).localize
+        let textt = (isAll ? "All period" : db.filter.periodText).localize
             DispatchQueue.main.async {
                 self.titleLabel.text = (self.expensesPressed ? "Expenses".localize : "Incomes".localize) + " " + "for".localize + " " + textt
                 self.totalLabel.text = "\(Int(totalAmount))"
@@ -248,7 +248,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
             let vc = segue.destination as! HistoryVC
             vc.fromStatistic = true
             vc.historyDataStruct = historyDataStruct
-            let db = AppDelegate.shared?.properties?.db ?? .init()
+            let db = AppDelegate.properties?.db ?? .init()
             vc.selectedCategory = db.category(selectedCategoryName)
             vc.selectedPurposeH = segmentControll.selectedSegmentIndex
             vc.fromCategories = fromDebts
@@ -429,11 +429,11 @@ struct GraphDataStruct {
 
 extension StatisticVC:GADFullScreenContentDelegate {
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        AppDelegate.shared?.properties?.banner.adDidDismissFullScreenContent(ad)
+        AppDelegate.properties?.banner.adDidDismissFullScreenContent(ad)
         
     }
     func adDidPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        AppDelegate.shared?.properties?.banner.adDidPresentFullScreenContent(ad)
+        AppDelegate.properties?.banner.adDidPresentFullScreenContent(ad)
     }
 }
 

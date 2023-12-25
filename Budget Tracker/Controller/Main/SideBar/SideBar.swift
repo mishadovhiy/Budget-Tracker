@@ -14,16 +14,16 @@ class SideBar: UIView {
 
     
     var appData:AppData {
-        AppDelegate.shared?.properties?.appData ?? .init()
+        AppDelegate.properties?.appData ?? .init()
     }
     func getData(){
-        let db = AppDelegate.shared?.properties?.db ?? .init()
+        let db = AppDelegate.properties?.db ?? .init()
         let debts = db.debts.count
       //  let pro = appData.proEnabeled
         let notifications = Notifications.notificationsCount
         
         var accpuntCell:CellData {
-            return CellData(name: "Account".localize, value: appData.db.username == "" ? "Log in".localize : appData.db.username, segue: "", image: "person.fill", selectAction: {
+            return CellData(name: "Account".localize, value: db.username == "" ? "Log in".localize : db.username, segue: "", image: "person.fill", selectAction: {
                 HomeVC.shared?.navigationController?.pushViewController(LoginViewController.configure(), animated: true)
             })
         }
@@ -54,7 +54,7 @@ class SideBar: UIView {
         })
         let trialDays = db.db["trialToExpireDays"] as? Int ?? 0
         let trialCell = CellData(name: "Trail till", value: "\(7 - trialDays)", segue: "", image: "clock.fill", selectAction: {
-            AppDelegate.shared?.properties?.appData.present(vc: BuyProVC.configure())
+            AppDelegate.properties?.appData.present(vc: BuyProVC.configure())
         })
 
 
@@ -84,9 +84,9 @@ class SideBar: UIView {
                 if results == .success || results == .alreadyPresenting {
                     self.loadAppleTransactions()
                 } else if results == .notSupported {
-                    AppDelegate.shared?.properties?.ai.showAlertWithOK(title:"Not supported")
+                    AppDelegate.properties?.ai.showAlertWithOK(title:"Not supported")
                 } else {
-                    AppDelegate.shared?.properties?.ai.showAlertWithOK(title: "Open App Settings Settings".localize, description: "Will open app's page in system settings".localize, button: .with({
+                    AppDelegate.properties?.ai.showAlertWithOK(title: "Open App Settings Settings".localize, description: "Will open app's page in system settings".localize, button: .with({
                         $0.action = AppData.toDeviceSettings
                         $0.title = "Go to settings".localize
                     }), okTitle: "Cancel".localize)
@@ -119,6 +119,7 @@ class SideBar: UIView {
             HomeVC.shared?.navigationController?.pushViewController(vccc, animated: true)
         }
     }
+    
     
     func load() {
         if HomeVC.shared?.sideTableView.delegate == nil {

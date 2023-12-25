@@ -29,9 +29,8 @@ class CalendarControlVC: UIViewController {
         monthView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.monthPressed(_:))))
         let swipeClose = UISwipeGestureRecognizer(target: self, action: #selector(swipeClose(_:)))
         self.view.addGestureRecognizer(swipeClose)
-        let appDelegate = AppDelegate.shared
         DispatchQueue.init(label: "l", qos: .userInitiated).async {
-            let today = appDelegate?.properties?.db.filter.fromDate ?? DateComponents()
+            let today = AppDelegate.properties?.db.filter.fromDate ?? DateComponents()
             self.middleDate = .init(year: today.year ?? 0, month: today.month ?? 0)
         }
     }
@@ -245,7 +244,7 @@ extension CalendarControlVC {
         let vc = CalendarControlVC.configure(currentSelected: currentSelected, selected: selected)
         vc.modalTransitionStyle = .coverVertical
         vc.modalPresentationStyle = .overFullScreen
-        AppDelegate.shared?.properties?.appData.present(vc: vc)
+        AppDelegate.properties?.appData.present(vc: vc)
         //   NavigationVC.shared?.present(vc, animated: true)
         
     }

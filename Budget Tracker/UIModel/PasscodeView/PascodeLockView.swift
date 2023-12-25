@@ -60,7 +60,7 @@ class PascodeLockView: UIView, UITextFieldDelegate {
         }
         presenting = true
         DispatchQueue.main.async {
-            AppDelegate.shared?.properties?.ai.canHideAlert = false
+            AppDelegate.properties?.ai.canHideAlert = false
             let window = UIApplication.shared.keyWindow ?? UIWindow()
             self.frame = window.frame
             self.primaryStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, window.frame.height + 100, 0)
@@ -189,8 +189,8 @@ class PascodeLockView: UIView, UITextFieldDelegate {
                     action()
                 }
                 self.removeFromSuperview()
-                AppDelegate.shared?.properties?.ai.canHideAlert = true
-                AppDelegate.shared?.properties?.ai.hide()
+                AppDelegate.properties?.ai.canHideAlert = true
+                AppDelegate.properties?.ai.hide()
             }
 
         }
@@ -220,7 +220,7 @@ class PascodeLockView: UIView, UITextFieldDelegate {
         } else {
             DispatchQueue.main.async {
                 AudioServicesPlaySystemSound(1102)
-                AppDelegate.shared?.properties?.newMessage.show(title: "Wrong code!".localize, type: .error)
+                AppDelegate.properties?.newMessage.show(title: "Wrong code!".localize, type: .error)
                 self.enteredValue = ""
             }
         }

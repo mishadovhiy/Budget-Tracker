@@ -122,7 +122,7 @@ extension CategoriesVC:UITableViewDelegate, UITableViewDataSource {
                     cell.dueDateLabel.textColor = expired ? K.Colors.negative : K.Colors.balanceT
                     
                     cell.qntLabel.text = "\(category.transactions.count)"
-                    if (AppDelegate.shared?.properties?.appData.symbolsAllowed ?? false) {
+                    if (AppDelegate.properties?.appData.symbolsAllowed ?? false) {
                         let imgName = category.editing == nil ? category.category.icon : category.editing?.icon
                         cell.iconimage.image = .init(imgName)
                         cell.iconimage.tintColor = category.editing == nil ? .init(category.category.color) : .init(category.editing?.color)
@@ -196,7 +196,7 @@ extension CategoriesVC:UITableViewDelegate, UITableViewDataSource {
             cell.footerHelperBottomView.isHidden = false
             cell.set(index: nil, footer: sect)
             cell.newCategoryTF.text = category.name
-            if (AppDelegate.shared?.properties?.appData.symbolsAllowed ?? false) {
+            if (AppDelegate.properties?.appData.symbolsAllowed ?? false) {
                 cell.iconimage.image = .init(category.icon)
                 cell.iconimage.tintColor = .init(category.color)
             } else {
@@ -270,7 +270,7 @@ extension CategoriesVC:UITableViewDelegate, UITableViewDataSource {
                 self.tableView.reloadRows(at: [indexPath], with: .left)
             }
         }
-        if (AppDelegate.shared?.properties?.appData.symbolsAllowed ?? false) {
+        if (AppDelegate.properties?.appData.symbolsAllowed ?? false) {
             editAction.editType()
             deleteAction.deleteType()
             localDeleteAction.deleteType()

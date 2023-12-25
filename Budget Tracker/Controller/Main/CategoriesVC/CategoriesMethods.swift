@@ -33,7 +33,7 @@ extension CategoriesVC {
             self.allCategoriesHolder = self.categories
         } else {
             if self.screenType == .categories || self.screenType == .debts {
-                AppDelegate.shared?.properties?.notificationManager.loadNotifications { unsees in
+                AppDelegate.properties?.notificationManager.loadNotifications { unsees in
                     self.unseenIDs = unsees
                     self.loadData(loadFromUD: loadFromUD)
                 }
@@ -47,7 +47,7 @@ extension CategoriesVC {
     func loadData(showError:Bool = false, loadFromUD: Bool = false) {
         tableDataLoaded = false
         if screenType != .localData {
-            if !loadFromUD && appData.db.username != "" {
+            if !loadFromUD && db.username != "" {
                 
                 Task {
                     let data = await NetworkModel.loadCategories(showError: showError)
@@ -219,14 +219,14 @@ extension CategoriesVC {
                     let data = ic.icons.first?.data ?? []
                     return data[Int.random(in: 0..<data.count)]
                 }
-                let debtColor = appData.db.lastSelected.gett(setterType: .color, valueType: .debt) ?? appData.db.randomColorName
-                let debtImg = appData.db.lastSelected.gett(setterType: .icon, valueType: .debt) ?? ""
+                let debtColor = db.lastSelected.gett(setterType: .color, valueType: .debt) ?? db.randomColorName
+                let debtImg = db.lastSelected.gett(setterType: .icon, valueType: .debt) ?? ""
                 
-                let expenseColor = appData.db.lastSelected.gett(setterType: .color, valueType: .expense) ?? appData.db.randomColorName
-                let expenseImg = appData.db.lastSelected.gett(setterType: .icon, valueType: .expense) ?? ""
+                let expenseColor = db.lastSelected.gett(setterType: .color, valueType: .expense) ?? db.randomColorName
+                let expenseImg = db.lastSelected.gett(setterType: .icon, valueType: .expense) ?? ""
                 
-                let incomeColor = appData.db.lastSelected.gett(setterType: .color, valueType: .income) ?? appData.db.randomColorName
-                let incomeImg = appData.db.lastSelected.gett(setterType: .icon, valueType: .income) ?? ""
+                let incomeColor = db.lastSelected.gett(setterType: .color, valueType: .income) ?? db.randomColorName
+                let incomeImg = db.lastSelected.gett(setterType: .icon, valueType: .income) ?? ""
                 
                 var resultData:[ScreenDataStruct] = []
                
@@ -248,8 +248,8 @@ extension CategoriesVC {
                     let data = ic.icons.first?.data ?? []
                     return data[Int.random(in: 0..<data.count)]
                 }
-                let debtColor = appData.db.lastSelected.gett(setterType: .color, valueType: .debt) ?? appData.db.linkColor
-                let debtImg = appData.db.lastSelected.gett(setterType: .icon, valueType: .debt) ?? ""
+                let debtColor = db.lastSelected.gett(setterType: .color, valueType: .debt) ?? db.linkColor
+                let debtImg = db.lastSelected.gett(setterType: .icon, valueType: .debt) ?? ""
                 self.tableData = [
                     ScreenDataStruct(title: "", data: resultDict[purpose(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: debtImg, color: debtColor, purpose: .debt), transactions: [])),
                 ]

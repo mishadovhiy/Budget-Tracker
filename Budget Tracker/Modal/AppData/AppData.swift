@@ -11,8 +11,8 @@ import Foundation
 
 
 class AppData {
-    var db:DataBase {
-        return AppDelegate.shared?.properties?.db ?? .init()
+    fileprivate var db:DataBase {
+        return AppDelegate.properties?.db ?? .init()
     }
     
     var sendSavedData = false
@@ -25,7 +25,7 @@ class AppData {
     
     var resultSafeArea: (CGFloat, CGFloat) {
         let safe = UIApplication.shared.keyWindow?.safeAreaInsets ?? .zero
-        let btn = safe.top + (AppDelegate.shared?.properties?.banner.size ?? 0)
+        let btn = safe.top + (AppDelegate.properties?.banner.size ?? 0)
         return (btn, safe.bottom)
     }
     
@@ -80,14 +80,14 @@ extension AppData {
         let error = shouldMainThread != Thread.isMainThread
         if error {
             print("!!!!!!!!!!!errororor api")
-            if (AppDelegate.shared?.properties?.appData.db.devMode ?? false) && showError {
+            if (AppDelegate.properties?.db.devMode ?? false) && showError {
                 if !Thread.isMainThread {
                     DispatchQueue.main.async {
-                        AppDelegate.shared?.properties?.newMessage.show(title:"fatal error, from main", type: .error)
+                        AppDelegate.properties?.newMessage.show(title:"fatal error, from main", type: .error)
 
                     }
                 } else if showError {
-                    AppDelegate.shared?.properties?.newMessage.show(title:"fatal error, from main", type: .error)
+                    AppDelegate.properties?.newMessage.show(title:"fatal error, from main", type: .error)
 
                 }
             }

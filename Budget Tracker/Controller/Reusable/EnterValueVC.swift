@@ -190,7 +190,7 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
     private func next() {
         print(#function, enteringValue)
         let errorAction = {
-            AppDelegate.shared?.properties?.newMessage.show(title:"Error editing".localize, type: .error)
+            AppDelegate.properties?.newMessage.show(title:"Error editing".localize, type: .error)
         }
         
         if let function = screenData?.nextAction {

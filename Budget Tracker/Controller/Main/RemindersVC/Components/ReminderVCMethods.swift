@@ -10,7 +10,7 @@ import UIKit
 
 extension RemindersVC {
     func loadData() {
-        AppDelegate.shared?.properties?.notificationManager.loadNotifications { unsees in
+        AppDelegate.properties?.notificationManager.loadNotifications { unsees in
             self.loadReminders(unseen: unsees)
         }
     }
@@ -45,7 +45,7 @@ extension RemindersVC {
         var result:[ReminderStruct] = []
         for raw in data {
             var new:ReminderStruct = .init(transaction: raw.transaction, dict: raw.dict)
-            new.higlightUnseen = (AppDelegate.shared?.properties?.notificationManager.containsUnseen(id: new.id ?? "", unseen: unseen) ?? false)
+            new.higlightUnseen = (AppDelegate.properties?.notificationManager.containsUnseen(id: new.id ?? "", unseen: unseen) ?? false)
             print(new, "newnewnewnewnew")
             result.append(new)
             

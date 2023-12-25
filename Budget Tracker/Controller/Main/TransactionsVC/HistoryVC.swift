@@ -104,7 +104,7 @@ class HistoryVC: SuperViewController {
                 self.ai?.hide()
             }
         } else {
-            AppDelegate.shared?.properties?.banner.toggleFullScreenAdd(self, type: .categoryLimit, loaded: { GADFullScreenPresentingAd in
+            AppDelegate.properties?.banner.toggleFullScreenAdd(self, type: .categoryLimit, loaded: { GADFullScreenPresentingAd in
                 self.interstitial = GADFullScreenPresentingAd
                 self.interstitial?.fullScreenContentDelegate = self
             }, closed: { presented in
@@ -120,7 +120,7 @@ class HistoryVC: SuperViewController {
     }
     
     func showMoreVC() {
-        let appData = AppData()
+        let appData = AppDelegate.properties ?? .init()
         //get screen data
         
         let addDueDate = {
@@ -130,7 +130,7 @@ class HistoryVC: SuperViewController {
         
         let moreData = selectedCategory?.purpose == .debt ? [
             MoreVC.ScreenData(name: "Amount to pay".localize, description: "", showAI:false, action: monthlyLimitPressed),
-            MoreVC.ScreenData(name: "Due date".localize, description: "", showAI:false, pro: appData.db.proEnabeled, action: addDueDate),
+            MoreVC.ScreenData(name: "Due date".localize, description: "", showAI:false, pro: db.proEnabeled, action: addDueDate),
         ] : [
             MoreVC.ScreenData(name: "Add monthly limit".localize, description: "", showAI:false, action: monthlyLimitPressed),
         ]
@@ -167,13 +167,13 @@ class HistoryVC: SuperViewController {
     
     @IBOutlet weak var footerStack: UIStackView!
     func addBennerHelper() {
-        if !appData.db.proEnabeled {
+        if !db.proEnabeled {
             let view = UIView()
             view.backgroundColor = .clear
             view.isHidden = true
             footerStack.addArrangedSubview(view)
             self.view.addConstraints([
-                .init(item: view, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: AppDelegate.shared?.properties?.banner.size ?? 0),
+                .init(item: view, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: AppDelegate.properties?.banner.size ?? 0),
                 .init(item: view, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: self.view.frame.width)
             ])
             view.translatesAutoresizingMaskIntoConstraints = false
@@ -229,7 +229,7 @@ class HistoryVC: SuperViewController {
         }
     }
     
-    weak var center = AppDelegate.shared?.properties?.center
+    weak var center = AppDelegate.properties?.center
     
     
     func getDebtData() {
@@ -258,7 +258,7 @@ class HistoryVC: SuperViewController {
             let keyboardHeight = keyboardRectangle.height
             if keyboardHeight > 1.0 {
                 DispatchQueue.main.async {
-                    self.tableView.contentInset.bottom = keyboardHeight - (AppDelegate.shared?.properties?.appData.resultSafeArea.1 ?? 0)
+                    self.tableView.contentInset.bottom = keyboardHeight - (AppDelegate.properties?.appData.resultSafeArea.1 ?? 0)
                     
                 }
             }
@@ -382,7 +382,7 @@ class HistoryVC: SuperViewController {
     
     
     func tocalendatPressed() {
-        if appData.db.proEnabeled {
+        if db.proEnabeled {
             Notifications.requestNotifications()
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: "toCalendar", sender: self)
@@ -485,10 +485,10 @@ class HistoryVC: SuperViewController {
 
 extension HistoryVC:GADFullScreenContentDelegate {
     func adDidPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        AppDelegate.shared?.properties?.banner.adDidPresentFullScreenContent(ad)
+        AppDelegate.properties?.banner.adDidPresentFullScreenContent(ad)
     }
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        AppDelegate.shared?.properties?.banner.adDidDismissFullScreenContent(ad)
+        AppDelegate.properties?.banner.adDidDismissFullScreenContent(ad)
     }
 }
 
@@ -504,16 +504,16 @@ extension HistoryVC {
                 vc.historyDataStruct = db.transactions(for: categoryy)
                 vc.selectedCategory = categoryy
                 vc.fromCategories = true
-                AppDelegate.shared?.properties?.appData.present(vc: navController) {
-                    AppDelegate.shared?.properties?.ai.hide()
+                AppDelegate.properties?.appData.present(vc: navController) {
+                    AppDelegate.properties?.ai.hide()
                 }
                 navController.setBackground(.regular)
                 
             }
         } else {
-            let text = AppDelegate.shared?.properties?.appData.db.devMode ?? false ? categpry : nil
+            let text = AppDelegate.properties?.db.devMode ?? false ? categpry : nil
             DispatchQueue.main.async {
-                AppDelegate.shared?.properties?.ai.showAlertWithOK(title:"Category not found".localize, description:text)
+                AppDelegate.properties?.ai.showAlertWithOK(title:"Category not found".localize, description:text)
             }
         }
         

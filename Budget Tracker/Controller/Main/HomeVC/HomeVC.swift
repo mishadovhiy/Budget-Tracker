@@ -51,11 +51,14 @@ class HomeVC: SuperViewController {
     @IBOutlet weak var expencesStack: UIStackView!
     @IBOutlet weak var perioudBalanceView: UIStackView!
     @IBOutlet weak var sideBarContentBlockerView: UIView!
-    static var shared: HomeVC?
+    static var shared: HomeVC? {
+        let nav = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController
+        return nav?.viewControllers.first(where: {$0 is HomeVC}) as? HomeVC
+    }
     var safeArreaHelperView: UIView?
     var transactionManager:TransactionsManager?
     var viewModel:ViewModelHomeVC = .init()
-    let center = AppDelegate.shared?.properties?.center
+    let center = AppDelegate.properties?.center
 
     var newTableData: [tableStuct] = [] {
         didSet {
@@ -81,11 +84,11 @@ class HomeVC: SuperViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         viewAppeared()
-        AppDelegate.shared?.properties?.banner.setBackground(clear: false)
+        AppDelegate.properties?.banner.setBackground(clear: false)
         if !viewModel.vcAppeared {
             viewModel.vcAppeared = true
-        } else if AppDelegate.shared?.properties?.banner.adHidden ?? false {
-            AppDelegate.shared?.properties?.banner.appeare(force: true)
+        } else if AppDelegate.properties?.banner.adHidden ?? false {
+            AppDelegate.properties?.banner.appeare(force: true)
         }
     }
     
@@ -104,12 +107,12 @@ class HomeVC: SuperViewController {
     func monthSelected(_ year:Int, _ month:Int) {
         DispatchQueue.init(label: "local", qos: .userInitiated).async {
             self.db.transactionDate = nil
-            AppDelegate.shared?.properties?.appData.db.filter.showAll = false
-            AppDelegate.shared?.properties?.appData.db.filter.from = "\(1.twoDec).\(month.twoDec).\(year)"
+            AppDelegate.properties?.db.filter.showAll = false
+            AppDelegate.properties?.db.filter.from = "\(1.twoDec).\(month.twoDec).\(year)"
             var lastDay = DateComponents()
             lastDay.year = year
             lastDay.month = month
-            AppDelegate.shared?.properties?.appData.db.filter.to = "\((lastDay.lastDayOfMonth ?? 31).twoDec).\(month.twoDec).\(year)"
+            AppDelegate.properties?.db.filter.to = "\((lastDay.lastDayOfMonth ?? 31).twoDec).\(month.twoDec).\(year)"
             if !self.viewModel.completedFiltering {
                 self.transactionManager?.filterChanged = true
             }
@@ -133,17 +136,17 @@ class HomeVC: SuperViewController {
     func filter(data:[TransactionsStruct]? = nil) {
         viewModel.completedFiltering = false
         let all = transactionManager?.filtered(viewModel.apiTransactions) ?? []
-        self.filterText = AppDelegate.shared?.properties?.appData.db.filter.periodText ?? ""
+        self.filterText = AppDelegate.properties?.db.filter.periodText ?? ""
         viewModel.tableData = all
         prepareFilterOptions(viewModel.apiTransactions)
         
         calculations = .init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)
         dataTaskCount = (0,0)
         viewModel.animateCellWillAppear = true
-        let selectedPeriud = AppDelegate.shared?.properties?.appData.db.filter.selectedPeroud ?? ""
+        let selectedPeriud = AppDelegate.properties?.db.filter.selectedPeroud ?? ""
         let selectedPer = selectedPeriud != "" ? selectedPeriud : "This Month"
-        if AppDelegate.shared?.properties?.appData.db.filter.selectedPeroud != selectedPer {
-            AppDelegate.shared?.properties?.appData.db.filter.selectedPeroud = selectedPer
+        if AppDelegate.properties?.db.filter.selectedPeroud != selectedPer {
+            AppDelegate.properties?.db.filter.selectedPeroud = selectedPer
         }
         
         allDaysBetween()
@@ -160,9 +163,9 @@ class HomeVC: SuperViewController {
     
     func refresh() {
         viewModel.forseSendUnsendedData = true
-        if AppDelegate.shared?.properties?.appData.db.username != "" {
+        if AppDelegate.properties?.db.username != "" {
             if viewModel.refreshData {
-                if AppDelegate.shared?.properties?.appData.db.username != "" {
+                if AppDelegate.properties?.db.username != "" {
                     self.downloadFromDB(showError: true)
                 } else {
                     mainTableView.refresh?.endRefreshing()
@@ -213,8 +216,8 @@ class HomeVC: SuperViewController {
     
     //MARK: - Other
     func checkDownload(force:Bool = false) {
-        if (AppDelegate.shared?.properties?.appData.needFullReload ?? false) {
-            AppDelegate.shared?.properties?.appData.needFullReload = false
+        if (AppDelegate.properties?.appData.needFullReload ?? false) {
+            AppDelegate.properties?.appData.needFullReload = false
             self.toggleNoData(show: true, text: "Loading".localize, fromTop: true, appeareAnimation: false, addButtonHidden: true)
             if !force {
                 self.downloadFromDB()
@@ -232,11 +235,11 @@ class HomeVC: SuperViewController {
                 self.dataCountLabel.text = ""
             }
             self.checkDownload(force: true)
-            if AppDelegate.shared?.properties?.appData.fromLoginVCMessage != "" {
-                print("appData.fromLoginVCMessage", AppDelegate.shared?.properties?.appData.fromLoginVCMessage ?? "-")
+            if AppDelegate.properties?.appData.fromLoginVCMessage != "" {
+                print("appData.fromLoginVCMessage", AppDelegate.properties?.appData.fromLoginVCMessage ?? "-")
                 DispatchQueue.main.async {
-                    self.newMessage?.show(title:AppDelegate.shared?.properties?.appData.fromLoginVCMessage ?? "", type: .standart)
-                    AppDelegate.shared?.properties?.appData.fromLoginVCMessage = ""
+                    self.newMessage?.show(title:AppDelegate.properties?.appData.fromLoginVCMessage ?? "", type: .standart)
+                    AppDelegate.properties?.appData.fromLoginVCMessage = ""
                     if self.viewModel.sideBarShowing {
                         self.toggleSideBar(false, animated: true)
                     }
@@ -253,7 +256,7 @@ class HomeVC: SuperViewController {
                     self.filterTextLabel.alpha = 1
                 }
             }
-            if self.viewModel.prevSelectedPer != AppDelegate.shared?.properties?.appData.db.filter.selectedPeroud {
+            if self.viewModel.prevSelectedPer != AppDelegate.properties?.db.filter.selectedPeroud {
                 self.filter()
             }
         }
@@ -297,7 +300,7 @@ class HomeVC: SuperViewController {
     }
     
     @objc func savedTransPressed(_ sender: UITapGestureRecognizer) {
-        if !(AppDelegate.shared?.properties?.appData.sendSavedData ?? true) {
+        if !(AppDelegate.properties?.appData.sendSavedData ?? true) {
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: "toUnsendedVC", sender: self)
             }

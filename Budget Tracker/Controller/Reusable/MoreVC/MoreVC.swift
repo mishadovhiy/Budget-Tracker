@@ -59,13 +59,13 @@ class MoreVC: SuperViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
             self.view.backgroundColor = .clear
-        AppDelegate.shared?.properties?.banner.setBackground(clear: bannerBackgroundWas)
+        AppDelegate.properties?.banner.setBackground(clear: bannerBackgroundWas)
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        bannerBackgroundWas = AppDelegate.shared?.properties?.banner.clearBackground ?? true
+        bannerBackgroundWas = AppDelegate.properties?.banner.clearBackground ?? true
         UIView.animate(withDuration: 0.3) {
-            AppDelegate.shared?.properties?.banner.setBackground(clear: true)
+            AppDelegate.properties?.banner.setBackground(clear: true)
         //    self.view.backgroundColor = self.storyColor
         }
     }
@@ -145,7 +145,7 @@ extension MoreVC {
             vccc.navigationController?.setNavigationBarHidden(true, animated: false)
             let cellHeight = 50
             let contentHeight = data.count * cellHeight
-        let safeArea = AppDelegate.shared?.properties?.appData.resultSafeArea ?? (.init(),.init())
+        let safeArea = AppDelegate.properties?.appData.resultSafeArea ?? (.init(),.init())
             let safeAt = safeArea.1
             let safebt = safeArea.0 + 10
             let window = UIApplication.shared.keyWindow ?? UIWindow()

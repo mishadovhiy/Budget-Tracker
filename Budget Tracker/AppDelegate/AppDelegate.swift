@@ -13,20 +13,11 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-    
-    static var shared:AppDelegate?
-//    {
-//        if !Thread.isMainThread {
-//            print("fatal err")
-//        }
-//        return UIApplication.shared.delegate as? AppDelegate
-//    }
 
-   
-    var properties:AppProperties?
+    static var properties:AppProperties?
 
     var canPerformAction:Bool {
-        if let properties {
+        if let properties = AppDelegate.properties {
             return !(!properties.ai.canHideAlert || properties.passcodeLock.presenting)
         } else {
             return false
@@ -35,9 +26,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        AppDelegate.shared = self
-        properties = .init()
-        properties?.appLoaded()
+        AppDelegate.properties = .init()
+        AppDelegate.properties?.appLoaded()
         return true
     }
 
@@ -59,19 +49,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         if let vcc = vc {
             vc = nil
-            self.properties?.appData.present(vc: vcc)
+            AppDelegate.properties?.appData.present(vc: vcc)
         }
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
-        properties?.receinActive()
+        AppDelegate.properties?.receinActive()
     }
     
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
         DispatchQueue(label: "db", qos: .userInitiated).async {
-            if self.properties?.appData.db.devMode ?? false {
+            if AppDelegate.properties?.db.devMode ?? false {
                 DispatchQueue.main.async {
-                    self.properties?.ai.showAlertWithOK(title: "Memory warning!")
+                    AppDelegate.properties?.ai.showAlertWithOK(title: "Memory warning!")
                 }
             }
         }
@@ -81,7 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
-        properties?.becomeActive()
+        AppDelegate.properties?.becomeActive()
     }
     
     func applicationWillTerminate(_ application: UIApplication) {

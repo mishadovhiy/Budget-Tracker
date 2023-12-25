@@ -10,13 +10,13 @@ import UIKit
 
 struct ReminderManager {
     var db:DataBase {
-        return AppDelegate.shared?.properties?.db ?? .init()
+        return AppDelegate.properties?.db ?? .init()
     }
     
     
     static var reminders:[ReminderStruct] {
         get {
-            var data = AppDelegate.shared?.properties?.db.db["PaymentReminder"] as? [[String:Any]] ?? []
+            var data = AppDelegate.properties?.db.db["PaymentReminder"] as? [[String:Any]] ?? []
             var result:[ReminderStruct] = []
             for item in data {
                 
@@ -34,7 +34,7 @@ struct ReminderManager {
             for val in newValue {
                 result.append(val.transaction.dict)
             }
-            AppDelegate.shared?.properties?.db.db.updateValue(result, forKey: "PaymentReminder")
+            AppDelegate.properties?.db.db.updateValue(result, forKey: "PaymentReminder")
         }
     }
 
@@ -42,7 +42,7 @@ struct ReminderManager {
     mutating func deleteReminder(id:String) {
         DispatchQueue(label: "db", qos: .userInitiated).async {
             DispatchQueue.main.async {
-                AppDelegate.shared?.properties?.center.removePendingNotificationRequests(withIdentifiers: [id])
+                AppDelegate.properties?.center.removePendingNotificationRequests(withIdentifiers: [id])
             }
             let data = Array(ReminderManager.reminders)
             var result:[ReminderStruct] = []
@@ -76,7 +76,7 @@ struct ReminderManager {
                             var newTransaction = transaction
                             newTransaction.reminder = newReminder.dict
                             ReminderManager.reminders.append(.init(transaction: newTransaction, dict: newReminder.dict))
-                        //    AppDelegate.shared?.properties?.db.db.up
+                        //    AppDelegate.properties?.db.db.up
                             completionn(true)
                         } else {
                             completionn(false)

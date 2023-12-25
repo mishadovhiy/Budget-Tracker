@@ -22,7 +22,7 @@ extension SelectValueVC:UITableViewDelegate, UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: "SwitchCell", for: indexPath) as! SwitchCell
             let data = tableData[indexPath.section].cells[indexPath.row].forProUsers
             cell.set(title:tableData[indexPath.section].cells[indexPath.row].name,
-                     isOn: switcher.isOn, proEnabled: data != nil && !(AppDelegate.shared?.properties?.appData.db.proEnabeled ?? false), changed: switcher.switched)
+                     isOn: switcher.isOn, proEnabled: data != nil && !(AppDelegate.properties?.db.proEnabeled ?? false), changed: switcher.switched)
             return cell
         } else if let data = tableData[indexPath.section].cells[indexPath.row].slider {
             let cell = tableView.dequeueReusableCell(withIdentifier: "SliderCell", for: indexPath) as! SliderCell
@@ -57,8 +57,8 @@ extension SelectValueVC:UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if let proID = self.tableData[indexPath.section].cells[indexPath.row].forProUsers, !(AppDelegate.shared?.properties?.appData.db.proEnabeled ?? false) {
-            AppDelegate.shared?.properties?.appData.presentBuyProVC(selectedProduct: proID)
+        if let proID = self.tableData[indexPath.section].cells[indexPath.row].forProUsers, !(AppDelegate.properties?.db.proEnabeled ?? false) {
+            AppDelegate.properties?.appData.presentBuyProVC(selectedProduct: proID)
         } else {
             if let delegate = self.delegate {
                 delegate.selected(user: self.tableData[indexPath.section].cells[indexPath.row].name)

@@ -18,9 +18,9 @@ class DataBase {
             if let db = DataBase._db {
                 return db
             } else {
-                let dbDict = AppDelegate.shared?.properties?.coreDataManager?.fetch(.general)?.data?.toDict ?? [:]
+                let dbDict = AppDelegate.properties?.coreDataManager?.fetch(.general)?.data?.toDict ?? [:]
                 DataBase._db = dbDict
-                AppDelegate.shared?.properties?.appData.threadCheck(shouldMainThread: false)
+                AppDelegate.properties?.appData.threadCheck(shouldMainThread: false)
 
                 return dbDict
             }
@@ -32,11 +32,11 @@ class DataBase {
                 return
             }
             DataBase._db = newValue
-            AppDelegate.shared?.properties?.appData.threadCheck(shouldMainThread: false)
+            AppDelegate.properties?.appData.threadCheck(shouldMainThread: false)
 
             if let core:Data = .create(from: newValue) {
                 print("updating core data")
-                AppDelegate.shared?.properties?.coreDataManager?.update(.init(db: core))
+                AppDelegate.properties?.coreDataManager?.update(.init(db: core))
             }
         }
     }
@@ -84,11 +84,11 @@ class DataBase {
             db.updateValue(value, forKey: "proVersion")
             if was && !value {
                 DispatchQueue.main.async {
-                    AppDelegate.shared?.properties?.banner.createBanner()
+                    AppDelegate.properties?.banner.createBanner()
                 }
             } else if !was && value {
                 DispatchQueue.main.async {
-                    AppDelegate.shared?.properties?.banner.hide(remove: true, ios13Hide: true)
+                    AppDelegate.properties?.banner.hide(remove: true, ios13Hide: true)
                 }
             }
             
@@ -204,7 +204,7 @@ class DataBase {
         transactions = []
         categories = []
        username = ""
-        AppDelegate.shared?.properties?.notificationManager.removeAll()
+        AppDelegate.properties?.notificationManager.removeAll()
 
     }
     

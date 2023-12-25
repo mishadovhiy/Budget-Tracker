@@ -11,9 +11,17 @@ import UIKit
 
 extension CategoriesVC {
     @MainActor func tableLoaded() {
-        tableDataLoaded = true
-        stopEditing(keepIcons: false)
-        tableView.reloadData()
+        if !Thread.isMainThread {
+            DispatchQueue.main.async {
+                self.tableDataLoaded = true
+                self.stopEditing(keepIcons: false)
+                self.tableView.reloadData()
+            }
+        } else {
+            tableDataLoaded = true
+            stopEditing(keepIcons: false)
+            tableView.reloadData()
+        }
     }
     @objc func iconTapped(_ sender: UITapGestureRecognizer) {
         if let dob = Double(sender.name ?? "") {
@@ -36,7 +44,7 @@ extension CategoriesVC {
         searchBar.delegate = self
         selectingIconFor = (nil,nil)
         title = screenType.title
-        if appData.db.username != "" && screenType != .localData {
+        if db.username != "" && screenType != .localData {
             self.tableView.refreshAction = {
                 self.loadData(showError: true)
             }
@@ -58,10 +66,10 @@ extension CategoriesVC {
         showingIcons = show
         if toSelectCategory && show {
             toSelectCategory = false
-            IconsVC.shared?.defaultCategories = .defaultCategories
-            IconsVC.shared?.screenType = .defaultCategories
+            iconChildren?.defaultCategories = .defaultCategories
+            iconChildren?.screenType = .defaultCategories
         } else {
-            IconsVC.shared?.screenType = .all
+            iconChildren?.screenType = .all
         }
         if show {
             self.tableView.addGestureRecognizer(viewTap)
@@ -86,7 +94,7 @@ extension CategoriesVC {
             self.editingTfIndex = (nil,nil)
             self.stopEditing(keepIcons: true)
         } else {
-            if self.editingTF == nil && IconsVC.shared?.screenType != .defaultCategories && self.selectingIconFor == (nil, nil) {
+            if self.editingTF == nil && iconChildren?.screenType != .defaultCategories && self.selectingIconFor == (nil, nil) {
                 self.tableView.contentInset.bottom = self.defaultTableInset
             }
         }
@@ -100,12 +108,12 @@ extension CategoriesVC {
                 self.iconsContainer.isHidden = false
             }
             if show {
-                IconsVC.shared?.selectedIconName = category?.icon ?? ""
-                IconsVC.shared?.selectedColorName = category?.color ?? ""
+                self.iconChildren?.selectedIconName = category?.icon ?? ""
+                self.iconChildren?.selectedColorName = category?.color ?? ""
                 
                 self.kayboardAppeared(containerHeight)
-                IconsVC.shared?.collectionView.reloadData()
-                IconsVC.shared?.scrollToSelected()
+                self.iconChildren?.collectionView.reloadData()
+                self.iconChildren?.scrollToSelected()
             }
         }
     }
@@ -126,7 +134,7 @@ extension CategoriesVC {
                     }
                 }
             } else {
-                if showingIcons && IconsVC.shared?.screenType != .defaultCategories {
+                if showingIcons && self.iconChildren?.screenType != .defaultCategories {
                     toggleIcons(show: false, animated: false, category: nil)
                 }
             }
@@ -134,6 +142,9 @@ extension CategoriesVC {
         }
     }
     func stopEditing(keepIcons:Bool = false) {
+        if !Thread.isMainThread {
+            fatalError()
+        }
         if showingIcons && !keepIcons {
             toggleIcons(show: false, animated: true, category: nil)
         }
@@ -189,7 +200,7 @@ extension CategoriesVC {
                 default:
                     break
                 }
-                self.properties?.appData.db.lastSelected.sett(value: $0.value, setterType: $0.key, valueType: valType)
+                self.properties?.db.lastSelected.sett(value: $0.value, setterType: $0.key, valueType: valType)
             }
         })
     }
@@ -200,7 +211,7 @@ extension CategoriesVC {
         
         values.forEach({
             if $0.value != "" {
-                self.properties?.appData.db.lastSelected.sett(value: $0.value, setterType: $0.key, valueType: valType)
+                self.properties?.db.lastSelected.sett(value: $0.value, setterType: $0.key, valueType: valType)
                 switch $0.key {
                 case .icon:
                     self.tableData[selectingFooter].newCategory.category.icon = img

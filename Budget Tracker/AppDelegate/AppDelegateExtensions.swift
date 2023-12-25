@@ -20,11 +20,11 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let notificationText = notification.request.content.body
         let notificationTitle = notification.request.content.title
-        properties?.notificationManager.deliveredNotificationIDs.append(notification.request.identifier)
+        AppDelegate.properties?.notificationManager.deliveredNotificationIDs.append(notification.request.identifier)
 
         DispatchQueue.main.async {
             AudioServicesPlaySystemSound(1007)
-            self.properties?.ai.showAlertWithOK(title: notificationTitle, description: notificationText, viewType: .standard, button: .with({
+            AppDelegate.properties?.ai.showAlertWithOK(title: notificationTitle, description: notificationText, viewType: .standard, button: .with({
                 $0.title = "Show notification".localize
                 $0.action = {
                     self.openNotification(notification)
@@ -67,7 +67,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                     }
                 }
             } else {
-                properties?.newMessage.show(title:"Category not found".localize, type: .error)
+                AppDelegate.properties?.newMessage.show(title:"Category not found".localize, type: .error)
             }
             
         } else {

@@ -11,10 +11,10 @@ import UIKit
 struct UserSettings {
     static var dict:[String:Any] {
         get {
-            return AppDelegate.shared?.properties?.db.db["UserSettingsDict"] as? [String:Any] ?? [:]
+            return AppDelegate.properties?.db.db["UserSettingsDict"] as? [String:Any] ?? [:]
         }
         set {
-            AppDelegate.shared?.properties?.db.db.updateValue(newValue, forKey: "UserSettingsDict")
+            AppDelegate.properties?.db.db.updateValue(newValue, forKey: "UserSettingsDict")
         }
     }
     

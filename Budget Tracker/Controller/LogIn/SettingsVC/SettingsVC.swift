@@ -48,7 +48,7 @@ class SettingsVC: SuperViewController {
         case "toColors":
             let vc = segue.destination as! IconsVC
             vc.delegate = self
-            vc.selectedColorName = AppDelegate.shared?.properties?.appData.db.linkColor ?? ""
+            vc.selectedColorName = AppDelegate.properties?.db.linkColor ?? ""
             vc.screenType = .colorsOnly
         default:
             break
@@ -95,7 +95,7 @@ extension SettingsVC: IconsVCDelegate {
     
     func selected(img: String, color: String) {
         DispatchQueue(label: "db", qos: .userInitiated).async {
-            AppDelegate.shared?.properties?.db.linkColor = color
+            AppDelegate.properties?.db.linkColor = color
             DispatchQueue.main.async {
                 self.navigationController?.popViewController(animated: true)
                 self.loadData()
@@ -152,14 +152,14 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         if let standartData = tableData[indexPath.section].cells[indexPath.row] as? StandartCell {
             if let proID = standartData.pro {
-                AppDelegate.shared?.properties?.appData.presentBuyProVC(selectedProduct: proID)
+                AppDelegate.properties?.appData.presentBuyProVC(selectedProduct: proID)
             } else {
                 standartData.action()
             }
         } else {
             if let trigger = tableData[indexPath.section].cells[indexPath.row] as? TriggerCell {
                 if let proID = trigger.pro {
-                    AppDelegate.shared?.properties?.appData.presentBuyProVC(selectedProduct: proID)
+                    AppDelegate.properties?.appData.presentBuyProVC(selectedProduct: proID)
                 }
             }
         }
