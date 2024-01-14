@@ -34,7 +34,9 @@ extension UIFont {
             textAttributes.updateValue($0.value, forKey: $0.key)
         })
         let attributedText = NSAttributedString(string: string, attributes: textAttributes)
-
+print(attributedText, " calculatecalculatecalculatecalculate")
+        print(inWindth ?? defaultWidth, " wefdsa")
+//crash
         let boundingRect = attributedText.boundingRect(with: CGSize(width: inWindth ?? defaultWidth, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, context: nil)
 
         return CGSize(width: ceil(boundingRect.size.width), height: ceil(boundingRect.size.height))

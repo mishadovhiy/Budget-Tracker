@@ -10,6 +10,7 @@ import UIKit
 
 class SideBardCell: ClearCell {
     
+    @IBOutlet weak var backgroundMainView: UIView!
     @IBOutlet weak var notificationsLabel: UILabel!
     @IBOutlet weak var notificationsView: BasicView!
     @IBOutlet weak var proView: BasicView!
@@ -19,8 +20,8 @@ class SideBardCell: ClearCell {
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        setSelectedColor(K.Colors.separetor ?? .white)
-
+        setSelectedColor(.clear)
+       // selectedBackgroundView = backgroundMainView
         if !(AppDelegate.properties?.appData.symbolsAllowed ?? false) {
             optionIcon.isHidden = true
         }

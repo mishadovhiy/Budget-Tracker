@@ -11,7 +11,7 @@ import AVFoundation
 import LocalAuthentication
 
 class PascodeLockView: UIView, UITextFieldDelegate {
-
+    
     //for app delegate only
     let backgroundCol = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.98)
     let lightBackground = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.85)
@@ -53,7 +53,6 @@ class PascodeLockView: UIView, UITextFieldDelegate {
     }
     
     public func present(presentCompletion:((Bool)->())? = nil) {
-
         enteredValue = ""
         if presenting {
             return
@@ -69,18 +68,11 @@ class PascodeLockView: UIView, UITextFieldDelegate {
             self.appIcon.alpha = 1
             UIView.animate(withDuration: 0.5) {
                 
-                if self.appIcon.isHidden != false {
-                    self.appIcon.isHidden = false
-                }
-                if self.numbersStack.isHidden != true {
-                    self.numbersStack.isHidden = true
-                }
+                self.appIcon.isHidden = false
+                self.numbersStack.isHidden = true
                 self.backgroundColor = self.lightBackground
                 self.primaryStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
-            } completion: { 
-                if !$0 {
-                    return
-                }
+            } completion: { _ in
                 if let presentCompletion = presentCompletion {
                     presentCompletion(true)
                 }
@@ -96,27 +88,38 @@ class PascodeLockView: UIView, UITextFieldDelegate {
         context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "Log in to App") { authorithed, error in
             print(authorithed, " gterfwed")
             print(error, " gterfwedq")
-            if authorithed {
+            if authorithed && error == nil {
                 self.passwordNotEntered = false
                 self.hide()
             }
         }
     }
     
-     var presenting = false
+    var presenting = false
     var passwordNotEntered = true
-    func passcodeLock(passcodeEntered:(()->())? = nil) {
+    func passcodeLock(passcodeEntered:(()->())? = nil, appFirstLaunch:Bool = false) {
         enteredAction = passcodeEntered
         passwordNotEntered = true
         if !presenting {
             present(presentCompletion:  { _ in
-                self.performPresentingLock()
-            })
-            if passcodeEntered == nil {
-                if #available(iOS 13.0.0, *) {
-                    self.presentSystemAuthorization()
+                self.performPresentingLock(completion: {
+                    if appFirstLaunch {
+                        if passcodeEntered == nil {
+                            if #available(iOS 13.0.0, *) {
+                                self.presentSystemAuthorization()
+                            }
+                        }
+                    }
+                })
+                if !appFirstLaunch {
+                    if passcodeEntered == nil {
+                        if #available(iOS 13.0.0, *) {
+                            self.presentSystemAuthorization()
+                        }
+                    }
                 }
-            }
+            })
+            
             
         } else {
             performPresentingLock()
@@ -127,22 +130,15 @@ class PascodeLockView: UIView, UITextFieldDelegate {
             }
         }
     }
-    private func performPresentingLock() {
+    private func performPresentingLock(completion:(()->())? = nil) {
         DispatchQueue.main.async {
             UIView.animate(withDuration: 0.3) {
                 self.appIcon.alpha = 0
                 self.backgroundColor = self.backgroundCol
-                if self.numbersStack.isHidden != false {
-                    self.numbersStack.isHidden = false
-                }
-                if self.appIcon.isHidden != true {
-                    self.appIcon.isHidden = true
-                }
-
-            } completion: { 
-                if !$0 {
-                    return
-                }
+                self.numbersStack.isHidden = false
+                self.appIcon.isHidden = true
+                
+            } completion: { _ in
                 let window = UIApplication.shared.keyWindow ?? UIWindow()
                 window.endEditing(true)
                 self.becomeFirstResponder()
@@ -158,6 +154,7 @@ class PascodeLockView: UIView, UITextFieldDelegate {
                     self.primaryStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
                     window.addSubview(self)
                 }
+                completion?()
             }
         }
     }
@@ -165,7 +162,7 @@ class PascodeLockView: UIView, UITextFieldDelegate {
     
     
     func hide() {
-   //     passwordNotEntered = false
+        //     passwordNotEntered = false
         if passwordNotEntered {
             return
         }
@@ -175,15 +172,12 @@ class PascodeLockView: UIView, UITextFieldDelegate {
             UIView.animate(withDuration: 0.3) {
                 self.backgroundColor = .clear
                 self.primaryStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, window.frame.height + 100, 0)
-
+                
                 if self.numbersStack.isHidden != true {
                     self.numbersStack.isHidden = true
                 }
                 
-            } completion: { 
-                if !$0 {
-                    return
-                }
+            } completion: { _ in
                 if let action = self.enteredAction {
                     self.enteredAction = nil
                     action()
@@ -192,10 +186,9 @@ class PascodeLockView: UIView, UITextFieldDelegate {
                 AppDelegate.properties?.ai.canHideAlert = true
                 AppDelegate.properties?.ai.hide()
             }
-
         }
     }
-
+    
     private var _enteredValue:String?
     private var enteredValue:String? {
         get { return _enteredValue }
@@ -226,19 +219,12 @@ class PascodeLockView: UIView, UITextFieldDelegate {
         }
     }
     
-    
-    
-    
+
     @IBAction private func numberPressed(_ sender: UIButton) {
-        DispatchQueue.main.async {
-            
-            if let numString = sender.title(for: .normal) {
-                if let _ = Int(numString) {
-                    AudioServicesPlaySystemSound(1104)
-                    self.enteredValue = (self.enteredValue ?? "") + numString
-                }
-                
-                
+        if let numString = sender.title(for: .normal) {
+            if let _ = Int(numString) {
+                AudioServicesPlaySystemSound(1104)
+                self.enteredValue = (self.enteredValue ?? "") + numString
             }
         }
     }
@@ -252,7 +238,7 @@ class PascodeLockView: UIView, UITextFieldDelegate {
         }
     }
     
-
+    
     class func instanceFromNib() -> UIView {
         return UINib(nibName: "PascodeLockView", bundle: nil).instantiate(withOwner: nil, options: nil)[0] as! UIView
     }

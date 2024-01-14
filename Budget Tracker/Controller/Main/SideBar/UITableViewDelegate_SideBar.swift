@@ -29,6 +29,7 @@ extension SideBar:UITableViewDelegate, UITableViewDataSource {
             cell.optionIcon.image = .init(tableData[indexPath.section].section[indexPath.row].image)
             //AppData.iconSystemNamed(tableData[indexPath.section].section[indexPath.row].image)
         }
+        cell.setCornered(indexPath: indexPath, dataCount: tableData[indexPath.section].section.count, for: cell.backgroundMainView)
         return cell
         
     }

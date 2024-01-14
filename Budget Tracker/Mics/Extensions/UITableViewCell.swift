@@ -25,6 +25,24 @@ extension UITableViewCell {
         }
     
     }
+    
+    func setCornered(indexPath:IndexPath, dataCount:Int, for view:UIView, needCorners:Bool = true, value:CGFloat = 16) {
+        let needCorners = needCorners ? (indexPath.row == 0 || indexPath.row == (dataCount - 1)) : false
+        let isFullyCornered = dataCount == 1
+        let topRadius = indexPath.row == 0
+        
+        if needCorners {
+            if isFullyCornered {
+                view.layer.cornerRadius = value
+                view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+            } else {
+                view.layer.cornerRadius(at: topRadius ? .top : .btn, value: value)
+            }
+            
+        } else {
+            view.layer.maskedCorners = []
+        }
+    }
 }
 
 extension UICollectionViewCell {

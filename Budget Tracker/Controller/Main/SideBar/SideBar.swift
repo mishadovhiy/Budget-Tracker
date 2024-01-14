@@ -12,6 +12,9 @@ import PassKit
 class SideBar: UIView {
     var tableData:[TableData] = []
 
+    var navVC:UINavigationController? {
+        return (UIApplication.shared.delegate as? AppDelegate)?.navigationVC
+    }
     
     var appData:AppData {
         AppDelegate.properties?.appData ?? .init()
@@ -24,12 +27,13 @@ class SideBar: UIView {
         
         var accpuntCell:CellData {
             return CellData(name: "Account".localize, value: db.username == "" ? "Log in".localize : db.username, segue: "", image: "person.fill", selectAction: {
-                HomeVC.shared?.navigationController?.pushViewController(LoginViewController.configure(), animated: true)
+               // HomeVC.shared?.navigationController?.pushViewController(LoginViewController.configure(), animated: true)
+                self.navVC?.pushViewController(LoginViewController.configure(), animated: true)
             })
         }
         
         let settingsCell:CellData = .init(name: "Settings".localize, value: "", segue: "", image: "gearshape.fill", selectAction: {
-            HomeVC.shared?.navigationController?.pushViewController(SettingsVC.configure(), animated: true)
+            self.navVC?.pushViewController(SettingsVC.configure(), animated: true)
         })
         
         let catsCo = db.db["categoriesDataNew"] as? [[String:Any]] ?? []
@@ -63,7 +67,7 @@ class SideBar: UIView {
         }
         
         let upcommingRemiders:CellData = .init(name: "Payment reminders".localize, value: "", segue: "", image: "bell.fill", pro: nil, notifications: notifications.1, selectAction: {
-            HomeVC.shared?.navigationController?.pushViewController(RemindersVC.configure(), animated: true)
+            self.navVC?.pushViewController(RemindersVC.configure(), animated: true)
         })//!(pro) ? 0 : nil
         let applePay:CellData = .init(name: "apple pay".localize, value: "", segue: "", image: "chart.pie.fill", selectAction: applePayPressed)
         tableData = [
@@ -116,7 +120,7 @@ class SideBar: UIView {
         DispatchQueue.main.async {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let vccc = storyboard.instantiateViewController(withIdentifier: "ViewController") as! HomeVC
-            HomeVC.shared?.navigationController?.pushViewController(vccc, animated: true)
+            self.navVC?.pushViewController(vccc, animated: true)
         }
     }
     

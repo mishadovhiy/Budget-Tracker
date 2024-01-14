@@ -30,23 +30,28 @@ extension HomeVC {
         viewModel.sideBarShowing = show
         DispatchQueue.main.async {
             let frame = self.sideBar.layer.frame
-            if show {
+            if !show {
                 UIView.animate(withDuration: 0.3, delay: 0, options: .allowUserInteraction, animations: {
                     self.sideBarContentBlockerView.alpha = show ? 1 : 0
                     
                 })
             }
-            UIView.animate(withDuration: 0.58, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: [.allowAnimatedContent, .allowUserInteraction]) {
+            UIView.animate(withDuration: 0.58, delay: 0, usingSpringWithDamping: 0.75, initialSpringVelocity: 0, options: [.allowAnimatedContent, .allowUserInteraction]) {
                 self.mainContentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
                 self.mainContentViewHelpher.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
             } completion: {
+                self.sideTableView.reloadData()
                 if !$0 {
                     return
                 }
-                if !show {
+                if show {
                     UIView.animate(withDuration: 0.3, delay: 0, options: .allowUserInteraction, animations: {
                         self.sideBarContentBlockerView.alpha = show ? 1 : 0
                         
+                    }, completion: { _ in
+                        if show != self.viewModel.sideBarShowing {
+                            self.toggleSideBar(self.viewModel.sideBarShowing, animated: true)
+                        }
                     })
                     
                 }
@@ -234,11 +239,9 @@ extension HomeVC {
             } else {
                 UIView.animate(withDuration: 0.25) {
                     self.noDataView.frame = CGRect(x: 0, y: self.view.frame.height, width: self.view.frame.width, height: self.view.frame.height / 2)
-                } completion: {
-                    if !$0 {
-                        return
-                    }
+                } completion: { _ in
                     self.noDataView.isHidden = true
+                    self.mainTableView.fadeTransition(0.09)
                     self.mainTableView.reloadData()
                 }
             }
@@ -529,10 +532,13 @@ extension HomeVC {
         }
         pinchView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:))))
         self.sideBarContentBlockerView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(sideBarPinched(_:))))
+        sideBarContentBlockerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(mainContentTap(_:))))
+        sideBarContentBlockerView.backgroundColor = view.backgroundColor?.withAlphaComponent(0.7)
+        let _ = sideBarContentBlockerView.addBluer()
         sideBar.load()
         toggleSideBar(false, animated: false)
         
-        self.mainTableView.contentInset.bottom = AppDelegate.properties?.banner.size ?? 0
+        self.additionalSafeAreaInsets.bottom = AppDelegate.properties?.banner.size ?? 0
         if #available(iOS 13.0, *) {
             BannerPublisher.valuePublisher.sink(receiveValue: {
                 self.bannerUpdated($0)

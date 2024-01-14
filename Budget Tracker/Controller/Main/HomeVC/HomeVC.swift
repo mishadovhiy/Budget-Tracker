@@ -16,7 +16,7 @@ class HomeVC: SuperViewController {
     var touchingFromShow = false
     
     @IBOutlet weak var balanceHelperView: UIView!
-    @IBOutlet weak var sideTableView: UITableView!
+    @IBOutlet weak var sideTableView: RefreshTableView!
     @IBOutlet weak var pinchView: UIView!
     @IBOutlet weak var sideBar: SideBar!
     @IBOutlet weak var addTransactionWhenEmptyButton: UIButton!
@@ -101,7 +101,8 @@ class HomeVC: SuperViewController {
     
     
     func bannerUpdated(_ value:CGFloat) {
-        self.mainTableView.contentInset.bottom = value
+        self.additionalSafeAreaInsets.bottom = value
+       // self.mainTableView.contentInset.bottom = value
     }
     
     func monthSelected(_ year:Int, _ month:Int) {

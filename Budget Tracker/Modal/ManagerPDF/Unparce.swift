@@ -168,8 +168,9 @@ class UnparcePDF {
         let paragraphStyle2 = NSMutableParagraphStyle()
 
         paragraphStyle2.lineSpacing = 10
+        print(text.string, " gerfedaefre")
         
-        var height = fontResult.calculate(inWindth:manager.pageWidth, attributes: [.paragraphStyle:paragraphStyle2], string: text.string).height
+        var height = text.string.count >= 30 ? fontResult.calculate(inWindth:manager.pageWidth, attributes: [.paragraphStyle:paragraphStyle2], string: text.string).height : 40
         if attachmentText != nil {
             height += (attachment?.displeySize.height ?? 0)
         }

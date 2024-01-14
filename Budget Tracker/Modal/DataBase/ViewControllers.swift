@@ -103,10 +103,10 @@ extension DataBase {
         
         var pdfProperties:PDFProperties {
             get {
-                return .init(dict: dict["pdfProperties"] as? [String:Any] ?? [:])
+                return .init(dict: dict["pdfPropertiesd"] as? [String:Any] ?? [:])
             }
             set {
-                dict.updateValue(newValue.dict, forKey: "pdfProperties")
+                dict.updateValue(newValue.dict, forKey: "pdfPropertiesd")
             }
         }
         

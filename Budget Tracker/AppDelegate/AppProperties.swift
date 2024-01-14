@@ -14,7 +14,8 @@ class AppProperties {
     let center = UNUserNotificationCenter.current()
     lazy var notificationManager = NotificationManager()
     
-
+    var firstLoadPasscode = true
+    
     lazy var newMessage: MessageViewLibrary = {
         return MessageViewLibrary.instanceFromNib()
     }()
@@ -120,7 +121,6 @@ extension AppProperties {
         }
     }
     
-    
     func checkPasscodeTimout() {
         guard let logoutDate = appData.backgroundEnterDate else{
             if UserSettings.Security.password != "" {
@@ -153,7 +153,11 @@ extension AppProperties {
     }
     func presentLock(passcode:Bool, passcodeVerified: (()->())? = nil ) {
         if passcode {
-            passcodeLock.passcodeLock(passcodeEntered: passcodeVerified)
+            
+            passcodeLock.passcodeLock(passcodeEntered: passcodeVerified, appFirstLaunch: firstLoadPasscode)
+            if firstLoadPasscode {
+                firstLoadPasscode = false
+            }
         } else {
             passcodeLock.present()
         }

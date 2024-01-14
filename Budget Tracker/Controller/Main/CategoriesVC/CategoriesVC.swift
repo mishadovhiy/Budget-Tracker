@@ -23,7 +23,10 @@ class CategoriesVC: SuperViewController {
     var transfaringCategories: LoginViewController.TransferingData?
     let selectionBacground = UIColor(red: 32/255, green: 32/255, blue: 32/255, alpha: 1)
     var tableDataLoaded = false
-    weak static var shared:CategoriesVC?
+    static var shared:CategoriesVC? {
+        let nav = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController
+        return nav?.viewControllers.first(where: {$0 is CategoriesVC}) as? CategoriesVC
+    }
     var _categories:[NewCategories] = []
     var _tableData:[ScreenDataStruct] = []
     var screenType: ScreenType = .categories
@@ -68,7 +71,6 @@ class CategoriesVC: SuperViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        CategoriesVC.shared = self
         stopEditing(keepIcons: true)
         if !appeareDidCall {
             toHistory = false
@@ -90,7 +92,6 @@ class CategoriesVC: SuperViewController {
     override func viewDidDismiss() {
         super.viewDidDismiss()
         stopEditing()
-        CategoriesVC.shared = nil
         historyDataStruct.removeAll()
         _categories.removeAll()
         _tableData.removeAll()

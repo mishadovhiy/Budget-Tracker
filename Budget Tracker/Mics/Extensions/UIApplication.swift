@@ -16,7 +16,7 @@ extension UIApplication {
         }
         let scene = self.connectedScenes.first(where: {($0 as? UIWindowScene)?.activationState == .foregroundActive}) as? UIWindowScene
         if #available(iOS 15.0, *) {
-            return scene?.keyWindow
+            return scene?.windows.first(where: {$0.isKeyWindow})
         } else {
             return scene?.windows.first(where: {$0.isKeyWindow})
         }

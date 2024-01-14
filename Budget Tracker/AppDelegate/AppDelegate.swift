@@ -16,6 +16,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     static var properties:AppProperties?
 
+    var navigationVC:UINavigationController? {
+        return UIApplication.shared.keyWindow?.rootViewController as? UINavigationController
+    }
+    
     var canPerformAction:Bool {
         if let properties = AppDelegate.properties {
             return !(!properties.ai.canHideAlert || properties.passcodeLock.presenting)

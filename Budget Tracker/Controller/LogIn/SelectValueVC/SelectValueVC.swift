@@ -100,7 +100,7 @@ extension SelectValueVC {
             
             vc.selectedIdxAction = selected
             vc.titleText = title
-            if let navigation = nav.navigationController {
+            if let navigation = nav.navigationController ?? nav as? UINavigationController {
                 navigation.pushViewController(vc, animated: true)
 
             } else {

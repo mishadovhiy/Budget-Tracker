@@ -33,8 +33,6 @@ class SettingsVC: SuperViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-
         title = "Settings".localize
         tableView.delegate = self
         tableView.dataSource = self
@@ -82,7 +80,6 @@ class SettingsVC: SuperViewController {
         if let nav = self.navigationController {
             SelectValueVC.presentScreen(in: nav, with: data, title: title, selected: selectedAction)
         }
-        
     }
     
 }
@@ -102,8 +99,6 @@ extension SettingsVC: IconsVCDelegate {
             }
         }
     }
-    
-    
 }
 
 
