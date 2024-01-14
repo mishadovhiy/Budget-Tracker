@@ -42,7 +42,7 @@ class ManagerPDF {
     }
     
     private func exportPDF(sender:UIView, toEdit:Bool = true) {
-      //  if !toEdit {
+        if !toEdit {
             DispatchQueue(label: "dbPdf", qos: .userInitiated).async {
                 let db = AppDelegate.properties?.db.viewControllers.pdfProperties ?? .init(dict: [:])
                 self.properties = db
@@ -80,10 +80,10 @@ class ManagerPDF {
                     }
                 }
             }
-//        } else {
-//            let newVC = PDFEditVC.configure(pdf: self)
-//            self.vc.navigationController?.pushViewController(newVC, animated: true)
-//        }
+        } else {
+            let newVC = PDFEditVC.configure(pdf: self)
+            self.vc.navigationController?.pushViewController(newVC, animated: true)
+        }
         
     }
 
