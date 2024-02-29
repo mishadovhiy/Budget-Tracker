@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TextField: UITextField {
+class BaseTextField: UITextField {
 
     private var btnLine:CALayer?
     private var firstMoved:Bool = false
@@ -18,6 +18,24 @@ class TextField: UITextField {
             view?.shouldReturn = self.shouldReturn
         }
     }
+    
+    private var firstMovedSuperview = false
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        if !firstMovedSuperview {
+            firstMovedSuperview = true
+        }
+    }
+    
+    override func removeFromSuperview() {
+        super.removeFromSuperview()
+        if firstMovedSuperview {
+            btnLine?.removeFromSuperlayer()
+            btnLine = nil
+
+        }
+    }
+    
     override func didMoveToWindow() {
         super.didMoveToWindow()
         if !firstMoved {
@@ -33,10 +51,27 @@ class TextField: UITextField {
             view.editing = self.editing(_:)
             self.delegate = view
             view.shouldReturn = shouldReturn
+            createTouchView()
         }
     }
     
 
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        moveTouchView(show: true, at:(touches.first, self))
+    }
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        moveTouchView(show: false)
+    }
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesMoved(touches, with: event)
+        moveTouchView(show: true, at:(touches.first, self))
+    }
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        moveTouchView(show: false)
+    }
     
     var _error:Bool = false
     var error:Bool {

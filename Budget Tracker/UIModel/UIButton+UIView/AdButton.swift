@@ -14,12 +14,28 @@ class AdButton: TouchButton {
     
     private var movedToWindow:Bool = false
     
+    private var firstMovedSuperview = false
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        if !firstMovedSuperview {
+            firstMovedSuperview = true
+        }
+    }
+    override func removeFromSuperview() {
+        super.removeFromSuperview()
+        if firstMovedSuperview {
+            adLabel?.removeFromSuperview()
+            adLabel = nil
+        }
+        print("AdButtonAdButton removed removeFromSuperview")
+    }
+    
     override func didMoveToWindow() {
         super.didMoveToWindow()
         if !movedToWindow && adLabel == nil {
             movedToWindow = true
             DispatchQueue(label: "db", qos: .userInitiated).async {
-                if !(AppDelegate.shared?.appData.proEnabeled ?? false) {
+                if !(AppDelegate.properties?.db.proEnabeled ?? false) {
                     DispatchQueue.main.async {
                         self.createAdView()
                     }

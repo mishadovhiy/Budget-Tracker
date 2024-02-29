@@ -39,7 +39,7 @@ class DebtDescriptionCell: UITableViewCell {
     }
     
     @IBAction func doneDatePressed(_ sender: Any) {
-        AppDelegate.shared?.ai.show { _ in
+        AppDelegate.properties?.ai.showLoading() { 
             self.changeAction?()
         }
     }

@@ -10,8 +10,15 @@ import Foundation
 import UIKit
 
 
-struct UnparcePDF {
-    let manager:ManagerPDF
+class UnparcePDF {
+    var manager:ManagerPDF!
+    init(manager: ManagerPDF!) {
+        self.manager = manager
+    }
+    deinit {
+        manager = nil
+        print("UnparcePDFUnparcePDF deinit")
+    }
     
     func dictionaryToString(_ dictionary:[String:Any], data:PDFProperties, fromCreate:Bool = false) -> ([(NSAttributedString, Bool)], CGFloat) {
         var height:CGFloat = 0
@@ -161,7 +168,9 @@ struct UnparcePDF {
         let paragraphStyle2 = NSMutableParagraphStyle()
 
         paragraphStyle2.lineSpacing = 10
-        var height = text.string.calculate(font: fontResult, inWindth: manager.pageWidth, attributes: [.paragraphStyle:paragraphStyle2]).height
+        print(text.string, " gerfedaefre")
+        
+        var height = text.string.count >= 30 ? fontResult.calculate(inWindth:manager.pageWidth, attributes: [.paragraphStyle:paragraphStyle2], string: text.string).height : 40
         if attachmentText != nil {
             height += (attachment?.displeySize.height ?? 0)
         }
@@ -217,7 +226,8 @@ struct UnparcePDF {
     private var footer:NSMutableAttributedString {
         let text:NSMutableAttributedString = .init(string: "")
         let view = UIView(frame:.init(origin: .zero, size: .init(width: manager.pageWidth, height: 90)))
-        let imageView:UIImageView = .init(image: Keys.appstoreURL.createQR())
+       
+        let imageView:UIImageView = .init(image: .init(QRcode: Keys.appstoreURL))
         imageView.frame.size = .init(width: 90, height: 90)
         imageView.layer.cornerRadius = 6
         view.addSubview(imageView)

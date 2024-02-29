@@ -27,7 +27,7 @@ struct CalendarData:Hashable, Identifiable {
     }
 }
 
-class CalendarModel {
+struct CalendarModel {
     
     init(_ data:CalendarData) {
         self.year = data.year
@@ -55,7 +55,7 @@ class CalendarModel {
     
     
     
-    func getDays() -> [Int]  {
+    mutating func getDays() -> [Int]  {
         daystoWeekStart = 0
         let dateComponents = DateComponents(year: year, month: month)
         let calendar = Calendar.current
@@ -111,7 +111,7 @@ class CalendarModel {
         return month.stringMonth
     }
     
-    func setYear() {
+    mutating func setYear() {
         if month == 13 {
             month = 1
             year = year + 1
@@ -123,7 +123,7 @@ class CalendarModel {
     }
     
     
-    func setMonth(_ month:Int) {
+    mutating func setMonth(_ month:Int) {
         self.month = month//sender.tag == 0 ? model.month - 1 : model.month + 1
         self.setYear()
         self.days = self.getDays()

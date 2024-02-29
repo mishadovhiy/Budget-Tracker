@@ -22,6 +22,22 @@ class AmountToPayCell: UITableViewCell {
     
     private var changeFunc:(() -> ())?
     private var deleteFunc:(() -> ())?
+    override func removeFromSuperview() {
+        super.removeFromSuperview()
+        if firstMovedSuperview {
+            changeFunc = nil
+            deleteFunc = nil
+        }
+        
+    }
+    
+    private var firstMovedSuperview = false
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        if !firstMovedSuperview {
+            firstMovedSuperview = true
+        }
+    }
     
     func set(_ selectedCategory:NewCategories?,
              changeAmountState:(Bool, Bool),
@@ -46,7 +62,7 @@ class AmountToPayCell: UITableViewCell {
         self.restAmountLabel.text = "\(amToPay + tEx)"
         self.amountToPayLabel.text = "\(amToPay)"
         self.progressBar.progress = Float(progress)
-        self.progressBar.progressTintColor = AppData.colorNamed(selectedCategory?.color)
+        self.progressBar.progressTintColor = .colorNamed(selectedCategory?.color)
         self.progressBar.isHidden = amToPay == 0
         amountToPayLabel.text = "\(amToPay)"
         amountToPayTextField.addTarget(self, action: #selector(tfChanged(_:)), for: .editingChanged)
@@ -76,7 +92,10 @@ class AmountToPayCell: UITableViewCell {
                         if touch.view != self.changeButton || touch.view != self.deleteButton {
                             UIView.animate(withDuration: 0.3) {
                                 self.editingStack.alpha = 0
-                            } completion: { _ in
+                            } completion: { 
+                                if !$0 {
+                                    return
+                                }
                                 HistoryVC.shared?.calendarAmountPressed = (false, false)
                                 HistoryVC.shared?.tableView.reloadData()
                             }
@@ -91,7 +110,10 @@ class AmountToPayCell: UITableViewCell {
                 
                 UIView.animate(withDuration: 0.12) {
                     self.editingStack.alpha = 1
-                } completion: { _ in
+                } completion: { 
+                    if !$0 {
+                        return
+                    }
                     HistoryVC.shared?.calendarAmountPressed.1 = true
                     HistoryVC.shared?.tableView.reloadData()
                 }
@@ -122,8 +144,8 @@ class AmountToPayCell: UITableViewCell {
                     }
                 }
                 
-                self.deleteButton.setImage(AppData.iconSystemNamed(deleteIcon), for: .normal)
-                self.changeButton.setImage(AppData.iconSystemNamed(changeIcon), for: .normal)
+                self.deleteButton.setImage(.init(deleteIcon), for: .normal)
+                self.changeButton.setImage(.init(changeIcon), for: .normal)
                 
             }
         }
@@ -159,7 +181,10 @@ class AmountToPayCell: UITableViewCell {
                 if self.amountToPayTextField.isHidden != hideTF {
                     self.amountToPayTextField.isHidden = hideTF
                 }
-            } completion: { _ in
+            } completion: { 
+                if !$0 {
+                    return
+                }
                 completionn(true)
             }
         }
@@ -168,15 +193,13 @@ class AmountToPayCell: UITableViewCell {
     
     @IBAction func changePressed(_ sender: UIButton) {
         if isEdit {
-            //  DispatchQueue.main.async {
-            HistoryVC.shared?.ai?.show(title: "Sending".localize, completion: { _ in
+            HistoryVC.shared?.properties?.ai.showLoading(title: "Sending".localize, completion: {
                 self.isEdit = false
                 self.showEdit(false, hideStack: true) { _ in
                     let text = self.amountToPayTextField.text ?? ""
                     HistoryVC.shared?.sendAmountToPay(text)
                 }
             })
-            //   }
         } else {
             self.isEdit = true
             showEdit(true, hideStack: false) { _ in
@@ -201,14 +224,11 @@ class AmountToPayCell: UITableViewCell {
         let new = !isEdit
         if !isEdit {
             if let funcc = deleteFunc {
-                //    DispatchQueue.main.async {
-                HistoryVC.shared?.ai?.show(title: "Deleting".localize, completion: { _ in
+                HistoryVC.shared?.properties?.ai.showLoading(title: "Deleting".localize, completion: {
                     self.showEdit(new, hideStack: true) { _ in
                         funcc()
-                        
                     }
                 })
-                //    }
             }
             
         } else {

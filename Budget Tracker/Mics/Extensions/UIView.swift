@@ -9,13 +9,13 @@
 import UIKit
 
 extension UIView {
-    func fadeTransition(_ duration:CFTimeInterval) {
+    func fadeTransition(_ duration:CFTimeInterval = 0.3, type:CATransitionType = .fade) {
         let animation = CATransition()
         animation.timingFunction = CAMediaTimingFunction(name:
                 .linear)
-        animation.type = .fade
+        animation.type = type
         animation.duration = duration
-        layer.add(animation, forKey: CATransitionType.fade.rawValue)
+        layer.add(animation, forKey: type.rawValue)
     }
     var toImage: UIImage {
         let renderer = UIGraphicsImageRenderer(size: bounds.size)
@@ -25,13 +25,51 @@ extension UIView {
         
     }
     
-    func shadow(opasity:Float = 0.6, black:Bool = false) {
+    func shadow(opasity:Float = 0.6, black:Bool = false, color:UIColor? = nil, radius:CGFloat? = nil) {
         DispatchQueue.main.async {
-            self.layer.shadowColor = !black ? K.Colors.secondaryBackground2.cgColor : UIColor.black.cgColor
+            let col = !black ? K.Colors.secondaryBackground2 : UIColor.black
+            self.layer.shadowColor = (color ?? col).cgColor
             self.layer.shadowOffset = .zero
-            self.layer.shadowRadius = 10
+            self.layer.shadowRadius = radius ?? 10
             self.layer.shadowOpacity = opasity
         }
+    }
+    
+    func createTouchView() {
+        if self.subviews.first(where: {$0.layer.name == "createTouchView"}) != nil {
+            return
+        }
+        let isBig = self.frame.width >= 50 ? true : false
+        let size:CGSize = .init(width: isBig ? 64 : 44, height: isBig ? 64 : 44)
+        let view = UIView(frame:.init(origin: .zero, size: size))
+        let color = K.Colors.category?.withAlphaComponent(0.34)
+        view.backgroundColor = color
+        view.layer.cornerRadius = size.width / 2
+        view.shadow(color: K.Colors.category, radius: 15)
+        view.layer.name = "createTouchView"
+        self.addSubview(view)
+        view.alpha = 0
+        self.layer.masksToBounds = true
+        view.isUserInteractionEnabled = false
+    }
+    
+    func moveTouchView(show:Bool, at:(UITouch?, UIView)? = nil) {
+        guard let view = self.subviews.first(where: {$0.layer.name == "createTouchView"}) else { return }
+        if !show {
+            view.fadeTransition(0.3)
+        }
+        view.alpha = show ? 1 : 0
+        if let at = at {
+            let touch = at.0?.location(in: at.1) ?? .zero
+            UIView.animate(withDuration: show ? 0 : 0.3) {
+                view.frame.origin = .init(x: touch.x - 23, y: touch.y - 18)
+            }
+        }
+    }
+    
+    func removeTouchView() {
+        guard let view = self.subviews.first(where: {$0.layer.name == "createTouchView"}) else { return }
+        view.removeFromSuperview()
     }
     
     func addBluer(frame:CGRect? = nil, style:UIBlurEffect.Style = (.init(rawValue: -1000) ?? .regular), insertAt:Int? = nil) -> UIVisualEffectView {
@@ -77,7 +115,10 @@ extension UIView {
     func removeWithAnimation(animation:CGFloat = 0.11, complation:(()->())? = nil) {
         UIView.animate(withDuration: animation, animations: {
             self.alpha = 0
-        }) { _ in
+        }) {
+            if !$0 {
+                return
+            }
             self.isHidden = true
             
             if let com = complation {
@@ -161,7 +202,7 @@ extension CALayer {
             case .background:
                 view.backgroundColor = ((to ?? self.to(view)) as! CGColor)
             case .stokeEnd:
-break
+                break
             }
         }
     }
@@ -249,3 +290,4 @@ break
         
     }
 }
+

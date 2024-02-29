@@ -6,45 +6,18 @@
 //  Copyright © 2022 Misha Dovhiy. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 extension String {
-    
+
     var localize: String {
         let lang = AppLocalization.launchedLocalization
         return AppLocalization.dictionary[lang]?[self] ?? self
     }
     
-    func createQR() -> UIImage? {
-        let data = self.data(using: String.Encoding.ascii)
-
-        if let filter = CIFilter(name: "CIQRCodeGenerator") {
-            filter.setValue(data, forKey: "inputMessage")
-            let transform = CGAffineTransform(scaleX: 3, y: 3)
-
-            if let output = filter.outputImage?.transformed(by: transform) {
-                return UIImage(ciImage: output)
-            }
-        }
-
-        return nil
+    var filterNumber:Int? {
+        return Int(Double(self.filter { "0123456789.".contains($0) }) ?? 0)
     }
-    
-    func calculate(font:UIFont, inWindth:CGFloat? = nil, attributes:[NSAttributedString.Key: Any]? = nil) -> CGSize {
-        let fontSize = font// ?? UIFont.systemFont(ofSize: 16)
-        let defaultWidth = AppDelegate.shared?.window?.frame.width ?? 100
-        var textAttributes: [NSAttributedString.Key: Any] = [.font: fontSize]
-        attributes?.forEach({
-            textAttributes.updateValue($0.value, forKey: $0.key)
-        })
-        let attributedText = NSAttributedString(string: self, attributes: textAttributes)
-
-        let boundingRect = attributedText.boundingRect(with: CGSize(width: inWindth ?? defaultWidth, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, context: nil)
-
-        return CGSize(width: ceil(boundingRect.size.width), height: ceil(boundingRect.size.height))
-
-    }
-
     
     func slice(from: String, to: String) -> String? {
         var text:String?
@@ -64,6 +37,7 @@ extension String {
 
 
 extension String {
+    
     var isAllNumbers:Bool {
         var result = true
         self.forEach {
@@ -98,6 +72,7 @@ extension String {
         })
         return ok
     }
+    
     func stringToCompIso(dateFormat:String="dd.MM.yyyy") -> DateComponents {
         if let date = self.iso8601withFractionalSeconds {
             return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
@@ -105,27 +80,27 @@ extension String {
             return stringToDateComponent(dateFormat: dateFormat)
         }
     }
-    func stringToDateComponent(dateFormat:String="dd.MM.yyyy", string:String? = nil) -> DateComponents {//make privat
-        let str = string ?? self
+    
+    func stringToDateComponent(dateFormat:String="dd.MM.yyyy") -> DateComponents {
+        let str = self
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = dateFormat
         let date = dateFormatter.date(from: str)
         return Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date ?? Date())
     }
-    
+
     var iso8601withFractionalSeconds: Date? {
         return Formatter.iso8601withFractionalSeconds.date(from: self)
         
     }
-    
-    
-    
-    func compToIso() -> DateComponents?  {
+        
+    func isoToDateComponents() -> DateComponents?  {
         return self == "" ? nil : stringToCompIso()
     }
 }
 
 extension Int {
+    
     var stringMonth:String {
         let months = [1:"jan",
                       2:"feb",
@@ -145,25 +120,13 @@ extension Int {
         return res.localize.capitalized
     }
     
-    func makeTwo() -> String {
-        if self < 10 {
-            return "0\(self)"
-        } else {
-            return "\(self)"
-        }
-        
-    }
-    
     var twoDec:String {
         if self < 10 {
             return "0\(self)"
         } else {
             return "\(self)"
         }
-        
     }
-    
-    
 }
 
 
@@ -173,28 +136,3 @@ extension CGFloat {
     }
 }
 
-
-
-
-extension NSAttributedString {
-    func adjustSpacing(toMaxWidth maxWidth: CGFloat, usingFont font: UIFont) -> NSAttributedString {
-        
-        let attributes: [NSAttributedString.Key: Any] = [.font: font]
-        
-        let mutableString = NSMutableAttributedString(attributedString: self)
-        
-        while true {
-            let currentWidth = mutableString.boundingRect(with: CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude), options: .usesLineFragmentOrigin, context: nil).width
-            
-            if currentWidth >= maxWidth {
-                break
-            }
-            
-            // This example adds spaces between words. You may need to refine this based on your needs.
-            let range = NSRange(location: 0, length: mutableString.length)
-            mutableString.mutableString.replaceOccurrences(of: " ", with: "  ", options: .literal, range: range) // replace each space with two spaces
-        }
-        
-        return mutableString
-    }
-}

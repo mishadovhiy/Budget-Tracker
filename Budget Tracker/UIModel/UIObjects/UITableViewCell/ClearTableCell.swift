@@ -10,9 +10,13 @@ import UIKit
 
 class ClearCell:TableCell {
     override func draw(_ rect: CGRect) {
-        super.draw(rect)
         setSelectedColor(.clear)
+        super.draw(rect)
+        
+        createTouchView()
     }
+    
+    
     
     func setSelectionBackground(view:UIView, color:UIColor? = nil) {
         let selfColor = view.backgroundColor
@@ -31,27 +35,42 @@ class ClearCell:TableCell {
             }
         }
     }
+
     
     var touchesBegunAction:((_ begun:Bool)->())?
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        moveTouchView(show: true, at: (touches.first, self))
         super.touchesBegan(touches, with: event)
         guard let action = touchesBegunAction else { return }
         action(true)
+
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        moveTouchView(show:false)
+
         super.touchesEnded(touches, with: event)
         guard let action = touchesBegunAction else { return }
         action(false)
+
+        self.reloadInputViews()
+        self.layoutIfNeeded()
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        moveTouchView(show:false)
+
         super.touchesCancelled(touches, with: event)
         guard let action = touchesBegunAction else { return }
         action(false)
     }
 
-    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        moveTouchView(show: true, at: (touches.first, self))
+
+        super.touchesMoved(touches, with: event)
+
+    }
 }
 
 
@@ -59,6 +78,7 @@ class ClearCollectionCell:UICollectionViewCell {
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         setSelectedColor(.clear)
+        createTouchView()
     }
     
     func setSelectionBackground(view:UIView, color:UIColor? = nil) {
@@ -82,6 +102,7 @@ class ClearCollectionCell:UICollectionViewCell {
     var touchesBegunAction:((_ begun:Bool)->())?
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
+        moveTouchView(show: true, at: (touches.first, self))
         guard let action = touchesBegunAction else { return }
         action(true)
     }
@@ -90,13 +111,21 @@ class ClearCollectionCell:UICollectionViewCell {
         super.touchesEnded(touches, with: event)
         guard let action = touchesBegunAction else { return }
         action(false)
+        moveTouchView(show: false)
+
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesCancelled(touches, with: event)
         guard let action = touchesBegunAction else { return }
         action(false)
+        moveTouchView(show: false)
+
     }
 
-    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesMoved(touches, with: event)
+        moveTouchView(show: true, at: (touches.first, self))
+
+    }
 }

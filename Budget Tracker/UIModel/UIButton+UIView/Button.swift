@@ -10,7 +10,16 @@ import UIKit
 
 @IBDesignable
 class Button: UIButton {
-    
+    private var moveToWindow = false
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        if !moveToWindow {
+            firstMovedToWindow()
+        }
+    }
+    func firstMovedToWindow() {
+        
+    }
     @IBInspectable open var linkBackground:Bool = false {
         didSet {
             if linkBackground {
@@ -26,9 +35,7 @@ class Button: UIButton {
         super.willMove(toWindow: newWindow)
         
         if let local = self.title(for: .normal)?.localize {
-            DispatchQueue.main.async {
-                self.setTitle(local, for: .normal)
-            }
+            self.setTitle(local, for: .normal)
         }
         //set background for mac //fix when button background is always white
         
@@ -40,13 +47,10 @@ class Button: UIButton {
     @IBInspectable open var titleWhenNoSymbols: String = "" {
         didSet {
             
-            if !AppDelegate.shared!.symbolsAllowed && (titleWhenNoSymbols != "") {
-                DispatchQueue.main.async {
-                    self.setTitle(self.titleWhenNoSymbols.localize, for: .normal)
-                    self.setImage(nil, for: .normal)
-                    self.titleLabel?.font = .systemFont(ofSize: 15)
-                    
-                }
+            if !(AppDelegate.properties?.appData.symbolsAllowed ?? true) && (titleWhenNoSymbols != "") {
+                self.setTitle(self.titleWhenNoSymbols.localize, for: .normal)
+                self.setImage(nil, for: .normal)
+                self.titleLabel?.font = .systemFont(ofSize: 15)
             }
             
         }
@@ -55,21 +59,17 @@ class Button: UIButton {
     
     @IBInspectable open var cornerRadius: CGFloat = 0 {
         didSet {
-            DispatchQueue.main.async {
-                self.layer.cornerRadius = self.cornerRadius
-            }
+            self.layer.cornerRadius = self.cornerRadius
         //    layer.masksToBounds = cornerRadius > 0
         }
     }
 
     @IBInspectable open var shadowOpasity: Float = 0 {
         didSet {
-            DispatchQueue.main.async {
-                self.layer.shadowColor = K.Colors.secondaryBackground2.cgColor
-                self.layer.shadowOffset = .zero
-                self.layer.shadowRadius = 10
-                self.layer.shadowOpacity = self.shadowOpasity
-            }
+            self.layer.shadowColor = K.Colors.secondaryBackground2.cgColor
+            self.layer.shadowOffset = .zero
+            self.layer.shadowRadius = 10
+            self.layer.shadowOpacity = self.shadowOpasity
         }
     }
     

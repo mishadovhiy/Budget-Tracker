@@ -14,6 +14,19 @@ class SwitchCell: ClearCell {
     @IBOutlet private weak var switcher: UISwitch!
     private var changedAction:((Bool)->())?
     
+    override func removeFromSuperview() {
+        super.removeFromSuperview()
+       // changedAction = nil
+    }
+    
+    private var firstMovedSuperview = false
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        if !firstMovedSuperview {
+            firstMovedSuperview = true
+        }
+    }
+    
     func set(title:String, isOn:Bool, proEnabled:Bool = false, changed:@escaping(Bool)->()) {
         switcher.isUserInteractionEnabled = !proEnabled
         switcher.alpha = !proEnabled ? 1 : 0.5

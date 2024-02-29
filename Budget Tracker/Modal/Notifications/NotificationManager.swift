@@ -10,9 +10,12 @@ import UIKit
 
 
 struct NotificationManager {
+    var db:DataBase {
+        return AppDelegate.properties?.db ?? .init()
+    }
     func loadNotifications(completion: @escaping ([String]) -> ()) {
         DispatchQueue.main.async {
-            AppDelegate.shared?.center.getDeliveredNotifications(completionHandler: { nitof in
+            AppDelegate.properties?.center.getDeliveredNotifications(completionHandler: { nitof in
                 var newIDs:[String] = []
                 for i in 0..<nitof.count {
                     let requestID = nitof[i].request.identifier
@@ -35,20 +38,32 @@ struct NotificationManager {
     
     var deliveredNotificationIDs: [String] {
         get {
-            let result = DataBase().db["deliveredNotificationIDs"] as? [String]
+            let result = db.db["deliveredNotificationIDs"] as? [String]
             print(result ?? ["-"], "deliveredNotificationIDs")
             return result ?? []
         }
         set {
-            DispatchQueue(label: "db", qos: .userInitiated).async {
-                DataBase().db.updateValue(newValue, forKey: "deliveredNotificationIDs")
+            if newValue.count != 0 {
+                self.db.db.updateValue(newValue, forKey: "deliveredNotificationIDs")
+                DispatchQueue.main.async {
+                    Notifications.getNotificationsNumber()
+                }
+            } else {
+                db.db.removeValue(forKey: "deliveredNotificationIDs")
+
                 DispatchQueue.main.async {
                     Notifications.getNotificationsNumber()
                 }
             }
             
+            
         }
     }
     
+    
+    mutating func removeAll() {
+        AppDelegate.properties?.center.removeAllDeliveredNotifications()
+        deliveredNotificationIDs = []
+    }
    
 }

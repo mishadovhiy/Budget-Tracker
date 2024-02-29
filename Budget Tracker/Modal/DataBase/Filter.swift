@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension AppData {
+extension DataBase {
     
     struct Filter {
         //add init from dict
@@ -126,8 +126,9 @@ extension AppData {
             }
         }
         
-        func getDayFromString(s: String) -> Int {
-            
+        func getDayFromString(s: String) -> Int {//refactoring
+            s.isoToDateComponents()?.day
+
             if s != "" {
                 var day = s
                 for _ in 0..<8 {

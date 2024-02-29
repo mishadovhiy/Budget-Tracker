@@ -62,7 +62,10 @@ class FilterTVC: SuperViewController {
             
             UIView.animate(withDuration: 0.2) {
                 self.tableview.layer.frame = self.frame
-            } completion: { (_) in
+            } completion: { 
+                if !$0 {
+                    return
+                }
                 self.tableview.cellLayoutMarginsFollowReadableWidth = true
                 self.tableview.endUpdates()
                 self.tableview.reloadData()
@@ -100,50 +103,50 @@ class FilterTVC: SuperViewController {
     
     func firstSectionSelected(i: Int) {
         
-        let today = appData.filter.getToday()
+        let today = db.filter.getToday()
         
         switch i {
         case 0:
-            appData.filter.from = ""
-            appData.filter.to = ""
-            appData.filter.showAll = true
+            db.filter.from = ""
+            db.filter.to = ""
+            db.filter.showAll = true
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
             }
             
         case 1:
-            appData.filter.showAll = false
+            db.filter.showAll = false
             defaultFilter()
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
             }
             
         case 2:
-            appData.filter.showAll = false
-            appData.filter.from = today
-            appData.filter.to = today
+            db.filter.showAll = false
+            db.filter.from = today
+            db.filter.to = today
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
             }
             
         case 3:
-            appData.filter.showAll = false
-            let todayInt = appData.filter.getDayFromString(s: today)
-            let month = appData.filter.getMonthFromString(s: today)
-            let year = appData.filter.getYearFromString(s: today)
+            db.filter.showAll = false
+            let todayInt = db.filter.getDayFromString(s: today)
+            let month = db.filter.getMonthFromString(s: today)
+            let year = db.filter.getYearFromString(s: today)
             
             if todayInt > 1 {
-                appData.filter.from = "\(appData.filter.makeTwo(n: todayInt - 1)).\(appData.filter.makeTwo(n: month)).\(year)"
-                appData.filter.to = appData.filter.from
+                db.filter.from = "\(db.filter.makeTwo(n: todayInt - 1)).\(db.filter.makeTwo(n: month)).\(year)"
+                db.filter.to = db.filter.from
             } else {
                 if month > 1 {
                     let prevMonth = month - 1
-                    let lastDayOfMonth = appData.filter.getLastDayOf(month: prevMonth, year: year)
-                    appData.filter.from = "\(lastDayOfMonth).\(appData.filter.makeTwo(n: prevMonth)).\(year)"
-                    appData.filter.to = appData.filter.from
+                    let lastDayOfMonth = db.filter.getLastDayOf(month: prevMonth, year: year)
+                    db.filter.from = "\(lastDayOfMonth).\(db.filter.makeTwo(n: prevMonth)).\(year)"
+                    db.filter.to = db.filter.from
                 } else {
-                    appData.filter.from = "31.12.\(year - 1)"
-                    appData.filter.to = appData.filter.from
+                    db.filter.from = "31.12.\(year - 1)"
+                    db.filter.to = db.filter.from
                 }
             }
             DispatchQueue.main.async {
@@ -151,7 +154,7 @@ class FilterTVC: SuperViewController {
             }
             
         case 4:
-            appData.filter.showAll = false
+            db.filter.showAll = false
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: K.toCalendar, sender: self)
             }
@@ -177,12 +180,12 @@ class FilterTVC: SuperViewController {
     
     func defaultFilter() {
         
-        let today = appData.filter.getToday()
-        let month = appData.filter.getMonthFromString(s: today)
-        let year = appData.filter.getYearFromString(s: today)
-        let dayTo = appData.filter.getLastDayOf(month: month, year: year)
-        appData.filter.from = "01.\(appData.filter.makeTwo(n: month)).\(year)"
-        appData.filter.to = "\(dayTo).\(appData.filter.makeTwo(n: month)).\(year)"
+        let today = db.filter.getToday()
+        let month = db.filter.getMonthFromString(s: today)
+        let year = db.filter.getYearFromString(s: today)
+        let dayTo = db.filter.getLastDayOf(month: month, year: year)
+        db.filter.from = "01.\(db.filter.makeTwo(n: month)).\(year)"
+        db.filter.to = "\(dayTo).\(db.filter.makeTwo(n: month)).\(year)"
     }
     
     func convertMonthFrom(int: Int) -> String {
@@ -195,11 +198,11 @@ class FilterTVC: SuperViewController {
     
     func secondSectionSelected(i: Int) {
 
-        appData.filter.showAll = false
+        db.filter.showAll = false
         let date = "01.\(months[i])"
-        let toIntDay = appData.filter.getLastDayOf(fullDate: date)
-        appData.filter.from = date
-        appData.filter.to = "\(toIntDay).\(months[i])"
+        let toIntDay = db.filter.getLastDayOf(fullDate: date)
+        db.filter.from = date
+        db.filter.to = "\(toIntDay).\(months[i])"
         DispatchQueue.main.async {
             self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
         }
@@ -208,9 +211,9 @@ class FilterTVC: SuperViewController {
     
     func thirdSectionSelected(i: Int) {
         
-        appData.filter.showAll = false
-        appData.filter.from = "01.01.\(years[i])"
-        appData.filter.to = "31.12.\(years[i])"
+        db.filter.showAll = false
+        db.filter.from = "01.01.\(years[i])"
+        db.filter.to = "31.12.\(years[i])"
         DispatchQueue.main.async {
             self.performSegue(withIdentifier: K.quitFilterTVC, sender: self)
         }
@@ -220,11 +223,11 @@ class FilterTVC: SuperViewController {
     @IBAction func unwindCalendarClosed(segue: UIStoryboardSegue) {
         
         DispatchQueue.global(qos: .userInteractive).async {
-            if self.appData.filter.from == "" || AppDelegate.shared?.appData.filter.to == "" {
+            if self.db.filter.from == "" || AppDelegate.properties?.db.filter.to == "" {
                 self.defaultFilter()
-                self.appData.filter.selectedPeroud = "\(self.buttonTitle[1])"
+                self.db.filter.selectedPeroud = "\(self.buttonTitle[1])"
                 ifCustom = false
-                self.appData.filter.showAll = false
+                self.db.filter.showAll = false
                 DispatchQueue.main.async {
                     self.tableview.reloadData()
                 }
@@ -239,18 +242,18 @@ class FilterTVC: SuperViewController {
     
     func prepareCustomDates() {
         
-        let day = appData.filter.getDayFromString(s: appData.filter.from)
-        let month = appData.filter.getMonthFromString(s: appData.filter.from)
-        let year = appData.filter.getYearFromString(s: appData.filter.from)
+        let day = db.filter.getDayFromString(s: db.filter.from)
+        let month = db.filter.getMonthFromString(s: db.filter.from)
+        let year = db.filter.getYearFromString(s: db.filter.from)
         
-        let dayTo = appData.filter.getDayFromString(s: appData.filter.to)
-        let monthTo = appData.filter.getMonthFromString(s: appData.filter.to)
-        let yearTo = appData.filter.getYearFromString(s: appData.filter.to)
+        let dayTo = db.filter.getDayFromString(s: db.filter.to)
+        let monthTo = db.filter.getMonthFromString(s: db.filter.to)
+        let yearTo = db.filter.getYearFromString(s: db.filter.to)
         ifCustom = true
         if yearTo == year {
-            appData.filter.selectedPeroud = month != monthTo || day != dayTo ? "\(convertMonthFrom(int: month)) \(day) → \(convertMonthFrom(int: monthTo)) \(dayTo), \(yearTo)" : "\(convertMonthFrom(int: month)) \(day), \(year)"
+            db.filter.selectedPeroud = month != monthTo || day != dayTo ? "\(convertMonthFrom(int: month)) \(day) → \(convertMonthFrom(int: monthTo)) \(dayTo), \(yearTo)" : "\(convertMonthFrom(int: month)) \(day), \(year)"
         } else {
-            appData.filter.selectedPeroud = "\(convertMonthFrom(int: month)) \(day), \(year) → \(convertMonthFrom(int: monthTo)) \(dayTo), \(yearTo)"
+            db.filter.selectedPeroud = "\(convertMonthFrom(int: month)) \(day), \(year) → \(convertMonthFrom(int: monthTo)) \(dayTo), \(yearTo)"
         }
         
         DispatchQueue.main.async {
@@ -300,8 +303,8 @@ extension FilterTVC: UITableViewDelegate, UITableViewDataSource {
         case 0:
             data = buttonTitle[indexPath.row]
         case 1:
-            let month = appData.filter.getMonthFromString(s: "01.\(months[indexPath.row])")
-            let year = appData.filter.getYearFromString(s: "01.\(months[indexPath.row])")
+            let month = db.filter.getMonthFromString(s: "01.\(months[indexPath.row])")
+            let year = db.filter.getYearFromString(s: "01.\(months[indexPath.row])")
             data = "\(convertMonthFrom(int: month)), \(year)"
             
         case 2:
@@ -311,7 +314,7 @@ extension FilterTVC: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
 
-        if data == appData.filter.selectedPeroud {
+        if data == db.filter.selectedPeroud {
             
            // cell.titleLabel.textColor = K.Colors.category
             cell.backgroundColor = K.Colors.link//UIColor(named: "darkTableColor") //K.Colors.yellow
@@ -370,7 +373,7 @@ extension FilterTVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if let cell = tableView.cellForRow(at: indexPath) as? FilterCell {
-            appData.filter.selectedPeroud = cell.titleLabel.text ?? "Unknown".localize
+            db.filter.selectedPeroud = cell.titleLabel.text ?? "Unknown".localize
             if cell.titleLabel.text != "Custom".localize {
                 ifCustom = false
             }
@@ -384,7 +387,7 @@ extension FilterTVC: UITableViewDelegate, UITableViewDataSource {
             print("def")
         }
         
-        print("filterVC: appData.filter.from: \(appData.filter.from), appData.filter.to: \(appData.filter.to)")
+        print("filterVC: db.filter.from: \(db.filter.from), db.filter.to: \(db.filter.to)")
         
     }
 }

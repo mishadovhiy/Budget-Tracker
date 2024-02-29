@@ -22,30 +22,44 @@ class PDFEditVC:SuperViewController {
     var selectingColorFor:SelectingColor = .background
     weak var settingsNav:UINavigationController?
     var selectedRow:Int?
+    
+    /**
+     let db = AppDelegate.properties?.db.viewControllers.pdfProperties ?? .init(dict: [:])
+     self.properties = db
+     */
+    
+    func loadDB() {
+        DispatchQueue(label: "db", qos: .userInteractive).async {
+            let db = AppDelegate.properties?.db.viewControllers.pdfProperties ?? .init(dict: [:])
+            self.pdfData?.properties = db
+            DispatchQueue.main.async {
+                self.updatePDF()
+            }
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         print(pdfData, " grefrwed")
         tableView.delegate = self
         tableView.dataSource = self
-        pdfData?.pageWidth = AppDelegate.shared?.window?.frame.width ?? 10
-        updatePDF()
+        pdfData?.pageWidth = UIApplication.shared.keyWindow?.frame.width ?? 10
+        loadDB()
         createSettingsContainer()
         print(containerView.frame.height, " erfwd")
-        AppDelegate.shared?.banner.fullScreenDelegates.updateValue(self, forKey: self.restorationIdentifier!)
+        AppDelegate.properties?.banner.fullScreenDelegates.updateValue(self, forKey: self.restorationIdentifier!)
         tableView.separatorStyle = .none
         tableView.layer.cornerRadius = 9
         setEditing(false, animated: false)
 
-        let bannerH = AppDelegate.shared?.banner.size ?? 0
+        let bannerH = AppDelegate.properties?.banner.size ?? 0
         self.tableView.contentInset.top = bannerH == 0 ? 0 : (bannerH + 15)
         self.tableView.scrollToRow(at: .init(row: 0, section: 0), at: .top, animated: true)
         tableView.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(tableLongPress(_:))))
     }
     
-    
     override func viewDidDismiss() {
         super.viewDidDismiss()
-        AppDelegate.shared?.banner.fullScreenDelegates.removeValue(forKey: self.restorationIdentifier!)
+        AppDelegate.properties?.banner.fullScreenDelegates.removeValue(forKey: self.restorationIdentifier!)
         updateDB(completion: {
             self.pdfData = nil
         })
@@ -56,21 +70,21 @@ class PDFEditVC:SuperViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         updateNavButtons()
-        AppDelegate.shared?.banner.setBackground(clear: true)
-        AppDelegate.shared?.banner.changeBannerPosition(top: true)
+        AppDelegate.properties?.banner.setBackground(clear: true)
+        AppDelegate.properties?.banner.changeBannerPosition(top: true)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        AppDelegate.shared?.banner.setBackground(clear: false)
+        AppDelegate.properties?.banner.setBackground(clear: false)
        // if !exportPressed {
-            AppDelegate.shared?.banner.changeBannerPosition(top: false)
+            AppDelegate.properties?.banner.changeBannerPosition(top: false)
       //  }
     }
     
     override func firstAppeared() {
         super.firstAppeared()
-        AppDelegate.shared?.banner.bannerCanShow(type: .pdf, completion: {
+        AppDelegate.properties?.banner.bannerCanShow(type: .pdf, completion: {
             self.exportPdfButton.toggleAdView(show: $0)
         })
     }
@@ -107,21 +121,33 @@ class PDFEditVC:SuperViewController {
         })))
         
         colors.append(.init(name: "Restore colors", regular: .init(disctructive:true,description: pdfData?.properties.documentProperties.colors.secondary == nil ? "Default" : "", didSelect: {
-            AppDelegate.shared?.ai.showAlert(buttons: (.init(title: "Cancel", style: .regular, close: true, action: nil), .init(title: "Yes", style: .error, action: { _ in
-                self.pdfData?.properties.documentProperties.colors = .init(dict: [:])
-                self.updatePDF()
-                self.updateDB()
-            })), title: "Are you sure you want to set all colors to default?")
+            guard let ai = AppDelegate.properties?.ai else {
+                return
+            }
+            ai.showAlertWithOK(title: "Are you sure you want to set all colors to default?", viewType: .standard, button: .with({
+                $0.title = "Yes"
+                $0.action = {
+                    self.pdfData?.properties.documentProperties.colors = .init(dict: [:])
+                    self.updatePDF()
+                    self.updateDB()
+                }
+            }), okTitle: "Cancel".localize)
         })))
         
         
         colors.append(.init(name: "Restore data", regular: .init(disctructive:true,description: pdfData?.properties.documentProperties.colors.secondary == nil ? "Default" : "", didSelect: {
-            AppDelegate.shared?.ai.showAlert(buttons: (.init(title: "Cancel", style: .regular, close: true, action: nil), .init(title: "Yes", style: .error, action: { _ in
-                self.pdfData?.properties = .init()
-
-                self.updatePDF()
-                self.updateDB()
-            })), title: "Are you sure?\nAll selected colors and data would be lost")
+            guard let ai = AppDelegate.properties?.ai else {
+                return
+            }
+            ai.showAlertWithOK(title: "Are you sure?\nAll selected colors and data would be lost", button: .with({
+                $0.title = "Yes"
+                $0.action = {
+                    self.pdfData?.properties = .init()
+                    self.updatePDF()
+                    self.updateDB()
+                }
+            }), okTitle: "Cancel".localize)
+            
         })))
         
         
@@ -168,8 +194,8 @@ class PDFEditVC:SuperViewController {
             
     func updateDB(completion:(()->())? = nil) {
         DispatchQueue(label: "db", qos: .userInitiated).async {
-            AppDelegate.shared?.db.viewControllers.pdfProperties = self.pdfData?.properties ?? .init()
-            print(AppDelegate.shared?.db.viewControllers.pdfProperties, " rtegrfwdf")
+            AppDelegate.properties?.db.viewControllers.pdfProperties = self.pdfData?.properties ?? .init()
+            print(AppDelegate.properties?.db.viewControllers.pdfProperties, " rtegrfwdf")
             if let completion = completion {
                 DispatchQueue.main.async {
                     completion()
@@ -276,7 +302,7 @@ class PDFEditVC:SuperViewController {
             self.updatePDF()
             self.exportPressed = true
             self.pdfData?.pageWidth = self.pdfData?.normalPageWidth ?? 0
-            self.pdfData?.exportPDF(sender: self.navigationController?.view ?? .init(), toEdit: false)
+            self.pdfData?.toExport(sender: self.navigationController?.view ?? .init(), toEdit: false)
         }
         
 

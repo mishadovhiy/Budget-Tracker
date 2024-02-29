@@ -26,8 +26,8 @@ struct TransactionsStruct {
     
     
     var category:NewCategories {
-        let db = DataBase()
-        return db.category(categoryID) ?? NewCategories(id: -1, name: "Unknown", icon: "", color: "", purpose: .expense)
+        let db = AppDelegate.properties?.db
+        return db?.category(categoryID) ?? NewCategories(id: -1, name: "Unknown", icon: "", color: "", purpose: .expense)
     }
     
     static func create(dictt:[String:Any]?) -> TransactionsStruct? {
@@ -67,6 +67,13 @@ struct TransactionsStruct {
             result.updateValue(reminder, forKey: "Reminder")
         }
         return result
+    }
+    
+    var apiData:String? {
+        guard let username = AppDelegate.properties?.db.username, username != "" else {
+            return nil
+        }
+        return "&Nickname=\(username)" + "&CategoryId=\(self.categoryID)" + "&Amount=\(self.value)" + "&Date=\(self.date)" + "&Comment=\(self.comment)"
     }
 }
 

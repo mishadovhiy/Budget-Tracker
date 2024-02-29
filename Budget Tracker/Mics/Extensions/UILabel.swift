@@ -9,6 +9,7 @@
 import UIKit
 
 extension UILabel {
+    
     func linkPressed(at touches: Set<UITouch>) -> URL? {
         guard let attributedText = attributedText, attributedText.length > 0 else { return nil }
         guard let touchLocation = touches.sorted(by: { $0.timestamp < $1.timestamp } ).last?.location(in: self) else { return nil }

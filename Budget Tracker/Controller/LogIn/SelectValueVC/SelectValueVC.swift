@@ -19,7 +19,7 @@ class SelectValueVC: SuperViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.registerCell([.switcher])
-        AppDelegate.shared!.ai.fastHide()
+        AppDelegate.properties?.ai.hide()
         title = titleText
         tableView.delegate = self
         tableView.dataSource = self
@@ -32,6 +32,12 @@ class SelectValueVC: SuperViewController {
     func updateTable(_ data:[SelectValueSections]) {
         self.tableData = data
         tableView.reloadData()
+    }
+    
+    override func viewDidDismiss() {
+        super.viewDidDismiss()
+        selectedIdxAction = nil
+        delegate = nil
     }
 }
 
@@ -94,7 +100,7 @@ extension SelectValueVC {
             
             vc.selectedIdxAction = selected
             vc.titleText = title
-            if let navigation = nav.navigationController {
+            if let navigation = nav.navigationController ?? nav as? UINavigationController {
                 navigation.pushViewController(vc, animated: true)
 
             } else {

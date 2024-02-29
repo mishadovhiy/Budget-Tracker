@@ -18,8 +18,6 @@ extension UITapGestureRecognizer {
         }
     }
 
-
-    
     open override func ignore(_ touch: UITouch, for event: UIEvent) {
         super.ignore(touch, for: event)
         if let touchView = self.view as? TouchView {

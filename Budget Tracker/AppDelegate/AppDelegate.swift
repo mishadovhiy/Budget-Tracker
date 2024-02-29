@@ -7,131 +7,34 @@
 //
 
 import UIKit
-import AlertViewLibrary
-import MessageViewLibrary
-//import BackgroundTasks
 import CoreData
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-    //todo: scene: shared = sctruct
-    static var shared:AppDelegate?
-    let center = UNUserNotificationCenter.current()
-    lazy var notificationManager = NotificationManager()
-    
-    var backgroundEnterDate:Date?
-    var becameActive = false
-    
-    
-    lazy var newMessage: MessageViewLibrary = {
-        return MessageViewLibrary.instanceFromNib()
-    }()
-    
-    lazy var ai: AlertViewLibrary = {
-        let ai = AlertViewLibrary.instanceFromNib(aiAppearence())
-        ai.notShowingCondition = aiNotShowingCondition
-        return ai
-    }()
-    
-    let passcodeLock = PascodeLockView.instanceFromNib() as! PascodeLockView
-    
-    lazy var banner: adBannerView = {
-        return adBannerView.instanceFromNib() as! adBannerView
-    }()
-    var coreDataManager:CoreDataDBManager?
 
-    public lazy var deviceType:DeviceType = {
-        if #available(iOS 13.0, *) {
-#if !os(iOS)
-            return .mac
-#endif
-            return .primary
+    static var properties:AppProperties?
+
+    var navigationVC:UINavigationController? {
+        return UIApplication.shared.keyWindow?.rootViewController as? UINavigationController
+    }
+    
+    var canPerformAction:Bool {
+        if let properties = AppDelegate.properties {
+            return !(!properties.ai.canHideAlert || properties.passcodeLock.presenting)
         } else {
-            return .underIos13
+            return false
         }
-    }()
-    
-    public lazy var symbolsAllowed:Bool = {
-        return deviceType != .primary ? false : true
-    }()
-    
-    lazy var db:DataBase = {
-        return DataBase()
-    }()
-    let appData = AppData()
-
-    /*
-    @available(iOS 13.0, *)
-    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-        // Called when a new scene session is being created.
-        // Use this method to select a configuration to create the new scene with.
-        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
-
-    @available(iOS 13.0, *)
-    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-        // Called when the user discards a scene session.
-        // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
-        // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
-    }
-    */
+    
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        print(UIDevice.current.identifierForVendor?.uuidString, " ikhujygthvbjnk")
-        AppDelegate.shared = self
-        coreDataManager = .init(persistentContainer: persistentContainer, appDelegate: self)
-        DispatchQueue(label: "db", qos: .userInitiated).async {
-            DataBase().checkDBUpdated()
-            let tint = AppData.linkColor
-            let today = self.appData.filter.getToday()
-            let value = self.db.db["lastLaunching"] as? String ?? ""
-            if value != today {
-                self.db.db.updateValue(today, forKey: "lastLaunching")
-                lastSelectedDate = nil
-            }
-            let pro = self.appData.proEnabeled
-            let localization = AppLocalization.udLocalization ?? (NSLocale.current.languageCode ?? "-")
-            DispatchQueue.main.async {
-                self.window?.tintColor = AppData.colorNamed(tint)
-                self.center.delegate = self
-                UNUserNotificationCenter.current().delegate = self
-                Notifications.getNotificationsNumber()
-                
-                AppLocalization.launchedLocalization = localization
-                print("LOCALIZATION: ", AppLocalization.launchedLocalization)
-                
-                if !pro {
-                    self.banner.createBanner()
-                }
-                self.setQuickActions()
-            }
-        }
-      /*  if #available(iOS 13.0, *) {
-            BGTaskScheduler.shared.register(forTaskWithIdentifier: "com.dovhiy.Developer.Budget-Tracker.transactions.backgroundRefresh", using: nil) { task in
-                self.performBackgroundFetch { error in
-                    self.scheduleAppRefresh()
-                    task.setTaskCompleted(success: true)
-                }
-            }
-            self.scheduleAppRefresh()
-        } else {
-            UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
-
-        }*/
+        AppDelegate.properties = .init()
+        AppDelegate.properties?.appLoaded()
         return true
     }
-           
-   /* @available(iOS 13.0, *)
-    func scheduleAppRefresh() {
-        let request = BGAppRefreshTaskRequest(identifier: "com.dovhiy.Developer.Budget-Tracker.transactions.backgroundRefresh")
-        request.earliestBeginDate = Date(timeIntervalSinceNow: 60 * 1)
 
-        do {
-            try BGTaskScheduler.shared.submit(request)
-        } catch {
-            print("Error scheduling background refresh: \(error)")
-        }
-    }*/
     
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
         guard let type = ShortCodeItem.init(rawValue: shortcutItem.type) else {
@@ -143,43 +46,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         case .addTransaction:
             vc = TransactionNav.configure(TransitionVC.configure())
         case .addReminder:
-            self.showPaymentReminders()
+            RemindersVC.showPaymentReminders()
             return
         case .monthlyLimits:
-            let vcc = CategoriesVC.configure()
-            vc = NavigationController(rootViewController: vcc)
+            vc = NavigationController(rootViewController: CategoriesVC.configure())
         }
-        if let vc = vc {
-            self.present(vc: vc)
+        if let vcc = vc {
+            vc = nil
+            AppDelegate.properties?.appData.present(vc: vcc)
         }
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
-        DataBase._db = nil
-        backgroundEnterDate = Date();
-        DispatchQueue(label: "local", qos: .userInitiated).async {
-            if UserSettings.Security.password != "" && !(self.passcodeLock.presenting) {
-                DispatchQueue.main.async {
-                    self.presentLock(passcode: false)
-                }
-                
-            }
-            self.db.db.updateValue(true, forKey: "BackgroundEntered")
-        }
-        
-        self.window?.endEditing(true)
-        if HomeVC.shared?.sideBarShowing ?? false {
-            HomeVC.shared?.toggleSideBar(false, animated: true)
-        }
+        AppDelegate.properties?.receinActive()
     }
     
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
-    //    DataBase._db = nil
-        AppData.categoriesHolder = nil
         DispatchQueue(label: "db", qos: .userInitiated).async {
-            if self.appData.devMode {
+            if AppDelegate.properties?.db.devMode ?? false {
                 DispatchQueue.main.async {
-                    self.ai.showAlertWithOK(title: "Memory warning!", error: true)
+                    AppDelegate.properties?.ai.showAlertWithOK(title: "Memory warning!")
                 }
             }
         }
@@ -189,12 +75,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
-        print(#function)
-        
-        checkPasscodeTimout()
-        DispatchQueue(label: "db", qos: .userInitiated).async {
-            self.db.db.updateValue(false, forKey: "BackgroundEntered")
-        }
+        AppDelegate.properties?.becomeActive()
     }
     
     func applicationWillTerminate(_ application: UIApplication) {
@@ -206,15 +87,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
     }
     
+    func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
+        // Called when a new scene session is being created.
+        // Use this method to select a configuration to create the new scene with.
+        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+    }
+
+    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
+        // Called when the user discards a scene session.
+        // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
+        // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+    }
+    
     func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        print("performFetchWithCompletionHandlerperformFetchWithCompletionHandler")
         performBackgroundFetch {
             completionHandler($0 ? .failed : .newData)
         }
     }
     
     func performBackgroundFetch(completion:((_ error:Bool)->())? = nil) {
-        print("performBackgroundFetchperformBackgroundFetch")
         DispatchQueue(label: "api", qos: .userInitiated).async {
             LoadFromDB().newTransactions(completion: { _,error  in
                 DispatchQueue.main.async {
@@ -225,31 +116,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     
-    func present(vc:UIViewController, completion:(()->())? = nil) {
-        if let presenting = window?.rootViewController?.presentedViewController {
-            presenting.dismiss(animated: true, completion: {
-                self.present(vc: vc, completion: completion)
-            })
-        } else {
-            window?.rootViewController?.present(vc, animated: true, completion: completion)
-        }
-    }
+    
 
-    func setQuickActions() {
-        DispatchQueue(label: "db", qos: .userInitiated).async {
-            let ignored = DataBase().viewControllers.ignoredActionTypes
-            var res: [UIApplicationShortcutItem] = []
-            ShortCodeItem.allCases.forEach({
-                if !ignored.contains($0.rawValue) {
-                    res.append(.init(type: $0.rawValue, localizedTitle: $0.item.title, localizedSubtitle: $0.item.subtitle, icon: .init(templateImageName: $0.item.icon)))
-                }
-            })
-            DispatchQueue.main.async {
-                UIApplication.shared.shortcutItems = res
-
-            }
-        }
-    }
+    
+    
     
     
     // MARK: - Core Data stack
@@ -298,32 +168,3 @@ protocol AppDelegateProtocol {
     func resighnActive()
 }
 
-extension AppDelegate {
-    enum ShortCodeItem:String {
-        case addTransaction = "addTransaction"
-        case addReminder = "addReminder"
-        case monthlyLimits = "monthlyLimits"
-        
-        static var allCases:[ShortCodeItem] = [.addTransaction, .addReminder, .monthlyLimits]
-        var item:Item {
-            switch self {
-            case .addTransaction:
-                return .init(title: "Add Transaction", subtitle: "", icon: "plusLined")
-            case .addReminder:
-                return .init(title: "Add Reminder", subtitle: "", icon: "reminder")
-            case .monthlyLimits:
-                return .init(title: "Spending limits", subtitle: "", icon: "monthlyLimits")
-            }
-        }
-        struct Item {
-            let title:String
-            let subtitle:String
-            let icon:String
-        }
-    }
-}
-
-
-extension AppDelegate {
-    
-}

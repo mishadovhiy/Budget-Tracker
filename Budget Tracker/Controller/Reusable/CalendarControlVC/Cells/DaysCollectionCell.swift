@@ -8,14 +8,19 @@
 import UIKit
 
 class CalendarCollectionCell: UICollectionViewCell {
-  //  let selectedColor:UIColor = K.Colors.link
+
+    @IBOutlet weak var collectionView: UICollectionView!
     var higlightDate:DateComponents?
-    weak var calendarModel:CalendarModel?
+    var calendarModel:CalendarModel?
     var didSelect:((_ day:Int)->())?
     var didSelectCell:((_ day:Int, _ cell:CalendarCell)->())?
-
-    weak var vc:CalendarControlVC?
-    @IBOutlet weak var collectionView: UICollectionView!
+    var vcData:PresentingData?
+    
+    struct PresentingData {
+        var values:[String:CGFloat] = [:]
+        var selectedDate:DateComponents?
+        var middleDate:CalendarData?
+    }
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
@@ -24,9 +29,9 @@ class CalendarCollectionCell: UICollectionViewCell {
     }
     
     
-    func set(model:CalendarModel, higlightDate:DateComponents?, vc:CalendarControlVC?, disp:Bool = false, didSelect:@escaping (_ day:Int)->(), cellSelectedAction:((_ day:Int, _ cell:CalendarCell)->())? = nil) {
+    func set(model:CalendarModel, higlightDate:DateComponents?, vc:PresentingData?, disp:Bool = false, didSelect:@escaping (_ day:Int)->(), cellSelectedAction:((_ day:Int, _ cell:CalendarCell)->())? = nil) {
+        self.vcData = vc
         self.higlightDate = higlightDate
-        self.vc = vc
         self.calendarModel = model
         /*if let action = cellSelectedAction {
             didSelectCell = action
@@ -43,18 +48,4 @@ class CalendarCollectionCell: UICollectionViewCell {
     
 }
 
-class CalendarCell: ClearCollectionCell {
-    
-    @IBOutlet weak var valueLabel: UILabel!
-    @IBOutlet weak var backgroundMainView: UIView!
-    @IBOutlet weak var dayLabel: UILabel!
-    
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        self.touchesBegunAction = { begun in
-            UIView.animate(withDuration: 0.2, animations: {
-                self.backgroundMainView.backgroundColor = begun ? K.Colors.link : .clear
-            })
-        }
-    }
-}
+

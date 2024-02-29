@@ -16,17 +16,26 @@ class TransactionsManager {
     var daysBetween = [""]
 
     func new(transactions:[TransactionsStruct]) -> [HomeVC.tableStuct] {
-        let filtered = dataToDict(transactions)
-        return dictToTable(filtered).sorted{
+        //        return dictToTable(filtered).sorted{
+        //            Calendar.current.date(from: $0.date ) ?? Date.distantFuture >
+        //                    Calendar.current.date(from: $1.date ) ?? Date.distantFuture
+        //        }
+        let today = (AppDelegate.properties?.db.filter.fromDate ?? DateComponents())
+        let filtered = transactions.filter({
+            $0.dateFromString.toDateComponents().year == today.year && (($0.dateFromString.toDateComponents().month ?? 0) == (today.month ?? -1))
+        })
+        let result = dataToDict(filtered)
+        print(filtered, " grdfsa")
+        return dictToTable(result).sorted{
             Calendar.current.date(from: $0.date ) ?? Date.distantFuture >
-                    Calendar.current.date(from: $1.date ) ?? Date.distantFuture
+            Calendar.current.date(from: $1.date ) ?? Date.distantFuture
         }
     }
     
     func total(transactions:[TransactionsStruct]) -> Double {
         var res:Double = 0
         let new = transactions
-        let thisMonth = String((AppDelegate.shared?.appData.filter.getToday() ?? "").dropFirst().dropFirst())
+        let thisMonth = String((AppDelegate.properties?.db.filter.getToday() ?? "").dropFirst().dropFirst())
         let allForThisMonth = new.filter({
             return $0.date.contains(thisMonth)
         })
@@ -38,7 +47,7 @@ class TransactionsManager {
     }
     
     func filtered(_ data:[TransactionsStruct]) -> [TransactionsStruct] {
-        let today = (AppDelegate.shared?.appData.filter.fromDate ?? DateComponents())
+        let today = (AppDelegate.properties?.db.filter.fromDate ?? DateComponents())
         return data.filter { transaction in
             return (transaction.date.stringToCompIso().year ?? 1) == (today.year ?? 0)
         }
@@ -70,7 +79,7 @@ class TransactionsManager {
     
     
     private func containsDay(curDay:String) -> Bool {
-        if (AppDelegate.shared?.appData.filter.showAll ?? false) {
+        if (AppDelegate.properties?.db.filter.showAll ?? false) {
             return true
         } else {
             return daysBetween.contains(curDay)
@@ -81,10 +90,9 @@ class TransactionsManager {
     
     func dictToTable(_ dict:[String:[TransactionsStruct]]) -> [HomeVC.tableStuct] {
         return dict.compactMap { (key: String, value: [TransactionsStruct]) in
-            let co = DateComponents()
             let transactions = value.sorted { Double($0.value) ?? 0.0 < Double($1.value) ?? 0.0 }
-            let date = co.stringToDateComponent(s: key)
-            let am = amountForTransactions(transactions)
+            let date = key.stringToDateComponent()
+            let am = self.amountForTransactions(transactions)
             let amount = Int(am.0)
             let calc = am.1
         

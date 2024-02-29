@@ -72,7 +72,10 @@ class ReminderCell: ClearCell {
                     if self.unseenIndicator.isHidden != true {
                         self.unseenIndicator.isHidden = true
                     }
-                } completion: { _ in
+                } completion: { 
+                    if !$0 {
+                        return
+                    }
                     RemindersVC.shared?.tableView.endUpdates()
                     self.animating = false
                     DispatchQueue.main.async {
