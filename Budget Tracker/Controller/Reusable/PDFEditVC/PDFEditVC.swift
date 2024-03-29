@@ -42,7 +42,7 @@ class PDFEditVC:SuperViewController {
         print(pdfData, " grefrwed")
         tableView.delegate = self
         tableView.dataSource = self
-        pdfData?.pageWidth = UIApplication.shared.keyWindow?.frame.width ?? 10
+        pdfData?.pageWidth = UIApplication.shared.sceneKeyWindow?.frame.width ?? 10
         loadDB()
         createSettingsContainer()
         print(containerView.frame.height, " erfwd")

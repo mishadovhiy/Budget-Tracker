@@ -212,7 +212,7 @@ class DataBase {
         set {
             db.updateValue(newValue, forKey: "SelectedTintColor")
             DispatchQueue.main.async {
-                let window = UIApplication.shared.keyWindow ?? UIWindow()
+                let window = UIApplication.shared.sceneKeyWindow ?? UIWindow()
                 window.tintColor = .colorNamed(newValue)
             }
         }

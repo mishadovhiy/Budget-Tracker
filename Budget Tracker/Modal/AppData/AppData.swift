@@ -24,7 +24,7 @@ class AppData {
     var becameActive = false
     
     var resultSafeArea: (CGFloat, CGFloat) {
-        let safe = UIApplication.shared.keyWindow?.safeAreaInsets ?? .zero
+        let safe = UIApplication.shared.sceneKeyWindow?.safeAreaInsets ?? .zero
         let btn = safe.top + (AppDelegate.properties?.banner.size ?? 0)
         return (btn, safe.bottom)
     }
@@ -64,13 +64,18 @@ class AppData {
 
 extension AppData {
     func present(vc:UIViewController, presentingVC:UIViewController? = nil, completion:(()->())? = nil) {
-        let window = UIApplication.shared.keyWindow
+        let window = UIApplication.shared.sceneKeyWindow
         if let presentingVC = presentingVC {
-            presentingVC.present(vc, animated: true, completion: completion)
+            if let presentVC = presentingVC.presentedViewController {
+                self.present(vc: vc, presentingVC: presentVC, completion: completion)
+            } else {
+                presentingVC.present(vc, animated: true, completion: completion)
+            }
         } else if let presenting = window?.rootViewController?.presentedViewController {
-            presenting.dismiss(animated: true, completion: {
-                self.present(vc: vc, completion: completion)
-            })
+        //    presenting.dismiss(animated: true, completion: {
+            self.present(vc: vc, presentingVC: presenting, completion: completion)
+               // self.present(vc: vc, completion: completion)
+         //   })
         } else {
              window?.rootViewController?.present(vc, animated: true, completion: completion)
         }

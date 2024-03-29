@@ -148,7 +148,7 @@ extension MoreVC {
         let safeArea = AppDelegate.properties?.appData.resultSafeArea ?? (.init(),.init())
             let safeAt = safeArea.1
             let safebt = safeArea.0 + 10
-            let window = UIApplication.shared.keyWindow ?? UIWindow()
+            let window = UIApplication.shared.sceneKeyWindow ?? UIWindow()
             let screenHeight = window.frame.height
             let additionalMargin:CGFloat = safeAt > 0 ? 45 : 40
             let tableInButtom = (screenHeight - (safeAt + safebt + additionalMargin)) - (CGFloat(contentHeight))

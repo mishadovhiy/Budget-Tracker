@@ -149,7 +149,7 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
             if dif < 20 {
                 UIView.animate(withDuration: 0.3) {
                    // self.mainStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, ((dif / 2) - 20) / 2, 0)
-                    UIApplication.shared.keyWindow?.layer.move(.top, value: ((dif / 2) - 20))
+                    UIApplication.shared.sceneKeyWindow?.layer.move(.top, value: ((dif / 2) - 20))
                 }
             }
         }
@@ -310,7 +310,7 @@ extension EnterValueVC {
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.3) {
                    // self.mainStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
-                    UIApplication.shared.keyWindow?.layer.move(.top, value: 0)
+                    UIApplication.shared.sceneKeyWindow?.layer.move(.top, value: 0)
 
                 }
             }

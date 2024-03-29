@@ -431,7 +431,7 @@ extension HomeVC {
             self.safeArreaHelperView?.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, self.safeArreaHelperViewCalc * -1, 0)
         }
         if safeArreaHelperView == nil {
-            if let window = UIApplication.shared.keyWindow {
+            if let window = UIApplication.shared.sceneKeyWindow {
                 DispatchQueue.main.async {
                     let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: safeTop))
                     self.safeArreaHelperView = view

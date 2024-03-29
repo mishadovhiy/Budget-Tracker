@@ -117,10 +117,6 @@ super.touchesEnded(touches, with: event)
         })
         
     }
-    
-    
-    
-    
 }
 
 

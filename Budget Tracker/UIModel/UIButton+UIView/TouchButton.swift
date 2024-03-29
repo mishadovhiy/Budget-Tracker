@@ -21,9 +21,7 @@ class TouchButton: Button {
     }
 
     var launch:UIColor?
-    
-
-    
+        
     func touches(_ begun:Bool, completion:(()->())? = nil) {
         if let touchAction = touchAction {
             touchAction(begun)

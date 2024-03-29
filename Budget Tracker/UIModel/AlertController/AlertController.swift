@@ -67,7 +67,7 @@ class AlertControllerManager {
     }
     
     func present() {
-        guard let vc = UIApplication.shared.keyWindow?.rootViewController as? NavigationController else {
+        guard let vc = UIApplication.shared.sceneKeyWindow?.rootViewController as? NavigationController else {
             return
         }
        // let toVC = vc.presentedViewController ?? vc

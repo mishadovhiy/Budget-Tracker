@@ -65,14 +65,14 @@ class adBannerView: UIView {
     public func createBanner() {
         GADMobileAds.sharedInstance().start { status in
             print(Thread.isMainThread, " createBannercreateBanner")
-            let window = UIApplication.shared.keyWindow ?? UIWindow()
+            let window = UIApplication.shared.sceneKeyWindow ?? UIWindow()
             let height = self.backgroundView.frame.height
             let screenWidth:CGFloat = window.frame.width > 330 ? 320 : 300
             let adSize = GADAdSizeFromCGSize(CGSize(width: screenWidth, height: height))
             self.size = height
             let bannerView = GADBannerView(adSize: adSize)
             bannerView.adUnitID = self.id
-            bannerView.rootViewController =  UIApplication.shared.keyWindow?.rootViewController
+            bannerView.rootViewController =  UIApplication.shared.sceneKeyWindow?.rootViewController
             
             bannerView.delegate = self
             self.adStack.addArrangedSubview(bannerView)
@@ -113,11 +113,16 @@ class adBannerView: UIView {
     public func appeare(force:Bool = false, completion:(()->())? = nil) {
         
         var go:Bool {
+            var canGo = true
             if #available(iOS 13.0, *) {
-                return force && !(AppDelegate.properties?.db.proEnabeled ?? false)
+                canGo = force && !(AppDelegate.properties?.db.proEnabeled ?? false)
             } else {
-                return !(AppDelegate.properties?.db.proEnabeled ?? false)
+                canGo = !(AppDelegate.properties?.db.proEnabeled ?? false)
             }
+            if UIApplication.shared.sceneKeyWindow?.rootViewController?.presentedViewController != nil {
+                canGo = false
+            }
+            return canGo
         }
      //   DispatchQueue(label: "db", qos: .userInitiated).async {
             if go {
@@ -178,7 +183,7 @@ class adBannerView: UIView {
     }
     
     private var toHide:CGFloat {
-        let window = UIApplication.shared.keyWindow ?? UIWindow()
+        let window = UIApplication.shared.sceneKeyWindow ?? UIWindow()
         return window.frame.height
     }
     
@@ -192,7 +197,7 @@ class adBannerView: UIView {
     
     
     func changeBannerPosition(top:Bool) {
-        let wind = UIApplication.shared.keyWindow ?? UIWindow()
+        let wind = UIApplication.shared.sceneKeyWindow ?? UIWindow()
         let safeAreas = wind.safeAreaInsets.top + size + wind.safeAreaInsets.bottom + (HomeVC.shared?.navigationController?.navigationBar.frame.height ?? 0)
         let topPosition = (wind.frame.height - (safeAreas + 5)) * -1
         
@@ -317,7 +322,7 @@ extension adBannerView {
         bannerWatchedFull = false
         showedBannerTime = Data()
         AppDelegate.properties?.ai.hide()
-        let shape = UIApplication.shared.keyWindow?.layer.drawSeparetor(color: K.Colors.link, y: UIApplication.shared.keyWindow?.safeAreaInsets.top, width: 3)
+        let shape = UIApplication.shared.sceneKeyWindow?.layer.drawSeparetor(color: K.Colors.link, y: UIApplication.shared.sceneKeyWindow?.safeAreaInsets.top, width: 3)
         shape?.name = "adFullBanerLine"
         shape?.performAnimation(key: .stokeEnd, to: CGFloat(1), code: .general, duration: 10, completion: {
             self.bannerWatchedFull = true
@@ -329,7 +334,7 @@ extension adBannerView {
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
         let holderCompletion = bannerShowCompletion
         bannerShowCompletion = nil
-        let layer = UIApplication.shared.keyWindow?.layer.sublayers?.first(where: {$0.name == "adFullBanerLine"})
+        let layer = UIApplication.shared.sceneKeyWindow?.layer.sublayers?.first(where: {$0.name == "adFullBanerLine"})
         
         if let _ = presentingFullType {
             if self.bannerWatchedFull {

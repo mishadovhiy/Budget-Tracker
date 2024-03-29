@@ -9,16 +9,11 @@
 import UIKit
 
 extension UIApplication {
-    var keyWindow:UIWindow? {
-        AppDelegate.properties?.appData.threadCheck(shouldMainThread: true)
-        if !Thread.isMainThread {
-            fatalError()
-        }
-        let scene = self.connectedScenes.first(where: {($0 as? UIWindowScene)?.activationState == .foregroundActive}) as? UIWindowScene
-        if #available(iOS 15.0, *) {
-            return scene?.windows.first(where: {$0.isKeyWindow})
-        } else {
-            return scene?.windows.first(where: {$0.isKeyWindow})
-        }
+    var sceneKeyWindow:UIWindow? {
+        let scene = self.connectedScenes.first(where: {
+            let window = $0 as? UIWindowScene
+            return window?.activationState == .foregroundActive && (window?.windows.contains(where: { $0.isKeyWindow && $0.layer.name == AppDelegate.properties?.selectedID}) ?? false)
+        }) as? UIWindowScene
+        return scene?.windows.last(where: {$0.isKeyWindow })
     }
 }

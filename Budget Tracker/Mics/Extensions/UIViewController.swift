@@ -85,7 +85,7 @@ extension UIViewController {
         if let superVC = self as? SuperViewController {
             superVC.backgroundData = data
         }
-        let win = UIApplication.shared.keyWindow ?? UIWindow()
+        let win = UIApplication.shared.sceneKeyWindow ?? UIWindow()
         let window = win
        // data.fromWindow ? win : (TabBarController.shared?.view ?? UIView())
         let supWindow = win
@@ -117,7 +117,7 @@ extension UIViewController {
     }
     
     func togglePresentedBackgroundView(_ data:VCpresentedBackgroundData) {
-        let sup = UIApplication.shared.keyWindow ?? UIWindow()
+        let sup = UIApplication.shared.sceneKeyWindow ?? UIWindow()
         guard let background = sup.subviews.first(where: { view in
             return view.layer.name == data.id
         }) else { return }

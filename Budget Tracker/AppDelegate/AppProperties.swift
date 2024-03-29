@@ -13,9 +13,8 @@ import MessageViewLibrary
 class AppProperties {
     let center = UNUserNotificationCenter.current()
     lazy var notificationManager = NotificationManager()
-    
+    var selectedID:String = ""
     var firstLoadPasscode = true
-    
     lazy var newMessage: MessageViewLibrary = {
         return MessageViewLibrary.instanceFromNib()
     }()
@@ -82,7 +81,7 @@ extension AppProperties {
             let tint = UIColor(self.db.linkColor)
 
             DispatchQueue.main.async {
-                UIApplication.shared.keyWindow?.tintColor = tint
+                UIApplication.shared.sceneKeyWindow?.tintColor = tint
                 self.center.delegate = self.appDelegate
                 UNUserNotificationCenter.current().delegate = self.appDelegate
                 Notifications.getNotificationsNumber()
@@ -111,7 +110,7 @@ extension AppProperties {
             self.db.db.updateValue(true, forKey: "BackgroundEntered")
         }
         
-        UIApplication.shared.keyWindow?.endEditing(true)
+        UIApplication.shared.sceneKeyWindow?.endEditing(true)
     }
     
     func becomeActive() {

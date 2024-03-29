@@ -123,7 +123,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             return bigFr //- 45
         } else {
             if newTableData.count == 0 && indexPath.section == 1{
-                let safe = UIApplication.shared.keyWindow?.safeAreaInsets.top ?? 0 + 20
+                let safe = UIApplication.shared.sceneKeyWindow?.safeAreaInsets.top ?? 0 + 20
                 return (tableView.layer.frame.height - (bigFr + (safe))).validate(min: 0)
             } else {
                 return UITableView.automaticDimension

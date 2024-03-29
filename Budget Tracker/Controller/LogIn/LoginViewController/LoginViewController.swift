@@ -438,7 +438,7 @@ class LoginViewController: SuperViewController {
         invalidateTimers()
         if fromSettings {
             DispatchQueue.main.async {
-                let window = UIApplication.shared.keyWindow ?? UIWindow()
+                let window = UIApplication.shared.sceneKeyWindow ?? UIWindow()
                 self.helperNavView?.frame = CGRect(x: 0, y: 0, width: window.frame.width, height: self.appData.resultSafeArea.0)
                 window.addSubview(self.helperNavView ?? UIView())
             }

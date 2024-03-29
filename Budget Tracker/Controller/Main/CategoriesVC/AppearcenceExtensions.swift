@@ -148,7 +148,7 @@ extension CategoriesVC {
             toggleIcons(show: false, animated: true, category: nil)
         }
         
-        UIApplication.shared.keyWindow?.endEditing(true)
+        UIApplication.shared.sceneKeyWindow?.endEditing(true)
         self.editingTF = nil
     }
     
@@ -260,7 +260,7 @@ extension CategoriesVC {
     
     
     @objc func keyboardWillHide(_ notification: Notification) {
-        UIApplication.shared.keyWindow?.endEditing(true)
+        UIApplication.shared.sceneKeyWindow?.endEditing(true)
         if !showingIcons {
             selectingIconFor = (nil, nil)
             self.tableView.removeGestureRecognizer(viewTap)

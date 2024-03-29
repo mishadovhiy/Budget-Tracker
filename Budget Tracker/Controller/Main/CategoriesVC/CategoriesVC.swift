@@ -24,7 +24,7 @@ class CategoriesVC: SuperViewController {
     let selectionBacground = UIColor(red: 32/255, green: 32/255, blue: 32/255, alpha: 1)
     var tableDataLoaded = false
     static var shared:CategoriesVC? {
-        let nav = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController
+        let nav = UIApplication.shared.sceneKeyWindow?.rootViewController as? UINavigationController
         return nav?.viewControllers.first(where: {$0 is CategoriesVC}) as? CategoriesVC
     }
     var _categories:[NewCategories] = []

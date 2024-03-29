@@ -28,7 +28,7 @@ extension UIFont {
     
     func calculate(inWindth:CGFloat? = nil, attributes:[NSAttributedString.Key: Any]? = nil, string:String) -> CGSize {
         let fontSize = self.pointSize// ?? UIFont.systemFont(ofSize: 16)
-        let defaultWidth = UIApplication.shared.keyWindow?.frame.width ?? 100
+        let defaultWidth = UIApplication.shared.sceneKeyWindow?.frame.width ?? 100
         var textAttributes: [NSAttributedString.Key: Any] = [.font: fontSize]
         attributes?.forEach({
             textAttributes.updateValue($0.value, forKey: $0.key)

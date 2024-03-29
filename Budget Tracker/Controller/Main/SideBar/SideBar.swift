@@ -20,6 +20,7 @@ class SideBar: UIView {
         AppDelegate.properties?.appData ?? .init()
     }
     func getData(){
+        print("getDatagetDatagetData")
         let db = AppDelegate.properties?.db ?? .init()
         let debts = db.debts.count
       //  let pro = appData.proEnabeled

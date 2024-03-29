@@ -52,7 +52,7 @@ class HomeVC: SuperViewController {
     @IBOutlet weak var perioudBalanceView: UIStackView!
     @IBOutlet weak var sideBarContentBlockerView: UIView!
     static var shared: HomeVC? {
-        let nav = UIApplication.shared.keyWindow?.rootViewController as? UINavigationController
+        let nav = UIApplication.shared.sceneKeyWindow?.rootViewController as? UINavigationController
         return nav?.viewControllers.first(where: {$0 is HomeVC}) as? HomeVC
     }
     var safeArreaHelperView: UIView?
@@ -77,7 +77,7 @@ class HomeVC: SuperViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        UIApplication.shared.keyWindow?.backgroundColor = K.Colors.primaryBacground
+        UIApplication.shared.sceneKeyWindow?.backgroundColor = K.Colors.primaryBacground
         super.viewWillDisappear(animated)
     }
     
@@ -93,7 +93,7 @@ class HomeVC: SuperViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        UIApplication.shared.keyWindow?.backgroundColor = .clear
+        UIApplication.shared.sceneKeyWindow?.backgroundColor = .clear
         self.navigationController?.setNavigationBarHidden(true, animated: true)
         super.viewWillAppear(animated)
         navigationController?.delegate = nil

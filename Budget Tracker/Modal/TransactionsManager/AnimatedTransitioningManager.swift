@@ -119,7 +119,7 @@ private extension AnimatedTransitioningManager {
         
         if isPresenting && fromFrame.minY <= 130 {
             UIView.animate(withDuration: duration / 1.5, animations: {
-                let window = UIApplication.shared.keyWindow?.frame ?? .zero
+                let window = UIApplication.shared.sceneKeyWindow?.frame ?? .zero
                 toView.frame.origin = .init(x: window.width / 4, y: window.height / 4)
             })
         }

@@ -60,7 +60,7 @@ class PascodeLockView: UIView, UITextFieldDelegate {
         presenting = true
         DispatchQueue.main.async {
             AppDelegate.properties?.ai.canHideAlert = false
-            let window = UIApplication.shared.keyWindow ?? UIWindow()
+            let window = UIApplication.shared.sceneKeyWindow ?? UIWindow()
             self.frame = window.frame
             self.primaryStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, window.frame.height + 100, 0)
             window.addSubview(self)
@@ -139,7 +139,7 @@ class PascodeLockView: UIView, UITextFieldDelegate {
                 self.appIcon.isHidden = true
                 
             } completion: { _ in
-                let window = UIApplication.shared.keyWindow ?? UIWindow()
+                let window = UIApplication.shared.sceneKeyWindow ?? UIWindow()
                 window.endEditing(true)
                 self.becomeFirstResponder()
                 window.bringSubviewToFront(self)
@@ -168,7 +168,7 @@ class PascodeLockView: UIView, UITextFieldDelegate {
         }
         presenting = false
         DispatchQueue.main.async {
-            let window = UIApplication.shared.keyWindow ?? UIWindow()
+            let window = UIApplication.shared.sceneKeyWindow ?? UIWindow()
             UIView.animate(withDuration: 0.3) {
                 self.backgroundColor = .clear
                 self.primaryStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, window.frame.height + 100, 0)

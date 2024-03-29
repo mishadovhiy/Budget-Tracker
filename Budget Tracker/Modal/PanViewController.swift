@@ -133,7 +133,7 @@ extension PanViewController {
         var startScrollingPosition:CGFloat = 0
         var isHidding:Bool = false
         var toHideVC:CGFloat {
-            return UIApplication.shared.keyWindow?.frame.height ?? 0
+            return UIApplication.shared.sceneKeyWindow?.frame.height ?? 0
         }
     }
 }
