@@ -6,4 +6,8 @@ lates changes in the primary branch https://github.com/mishadovhiy/Budget-Tracke
 
 ![gif](https://github.com/mishadovhiy/Budget-Tracker/assets/44978117/dc78f292-3e73-43b7-90a2-65841006b520)
 
-declared touch animation in https://github.com/mishadovhiy/Budget-Tracker/blob/primary/Budget%20Tracker/UIModel/UIButton%2BUIView/TouchButton.swift#L91
+<img src="https://mishadovhiy.com/imgs/budget-00-11-1.png">
+<img src="https://mishadovhiy.com/imgs/budget-03-11-1.png">
+<img src="https://mishadovhiy.com/imgs/budget-07-11-1.png">
+<img src="https://mishadovhiy.com/imgs/budget-01-11.png">
+<img src="https://mishadovhiy.com/imgs/budget-04-11.png">
