@@ -252,6 +252,7 @@ class DataBase {
         set(value){
             print("new username setted - \(value)")
             db.updateValue(value, forKey: "username")
+            UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")?.setValue(value, forKey: "username")
         }
     }
     

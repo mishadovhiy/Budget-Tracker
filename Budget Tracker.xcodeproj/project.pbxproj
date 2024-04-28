@@ -84,6 +84,10 @@
 		8D0C5D182AF6C16F002E2422 /* SelectionStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0C5D172AF6C16F002E2422 /* SelectionStackView.swift */; };
 		8D0C5D1A2AF6CC1F002E2422 /* Extensions_SelectionStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0C5D192AF6CC1F002E2422 /* Extensions_SelectionStackView.swift */; };
 		8D0EC25F2985DB9600EBD1ED /* Extensions_ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0EC25E2985DB9600EBD1ED /* Extensions_ViewController.swift */; };
+		8D0F8FFC2BDDCBB300681CED /* BudgetTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0F8FFB2BDDCBB300681CED /* BudgetTrackerApp.swift */; };
+		8D0F8FFE2BDDCBB300681CED /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0F8FFD2BDDCBB300681CED /* HomeView.swift */; };
+		8D0F90002BDDCBB500681CED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D0F8FFF2BDDCBB500681CED /* Assets.xcassets */; };
+		8D0F90032BDDCBB600681CED /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D0F90022BDDCBB600681CED /* Preview Assets.xcassets */; };
 		8D15BD602B047F5D00E1C444 /* PDFProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D15BD5F2B047F5D00E1C444 /* PDFProperties.swift */; };
 		8D163BA329944D2700EF6C2A /* UITapGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D163BA229944D2700EF6C2A /* UITapGestureRecognizer.swift */; };
 		8D163BA529944FA100EF6C2A /* ClearTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D163BA429944FA100EF6C2A /* ClearTableCell.swift */; };
@@ -341,6 +345,11 @@
 		8D0C5D172AF6C16F002E2422 /* SelectionStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectionStackView.swift; sourceTree = "<group>"; };
 		8D0C5D192AF6CC1F002E2422 /* Extensions_SelectionStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions_SelectionStackView.swift; sourceTree = "<group>"; };
 		8D0EC25E2985DB9600EBD1ED /* Extensions_ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions_ViewController.swift; sourceTree = "<group>"; };
+		8D0F8FF92BDDCBB200681CED /* BudgetTracker Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BudgetTracker Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D0F8FFB2BDDCBB300681CED /* BudgetTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetTrackerApp.swift; sourceTree = "<group>"; };
+		8D0F8FFD2BDDCBB300681CED /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		8D0F8FFF2BDDCBB500681CED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8D0F90022BDDCBB600681CED /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		8D15BD5F2B047F5D00E1C444 /* PDFProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFProperties.swift; sourceTree = "<group>"; };
 		8D163BA229944D2700EF6C2A /* UITapGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITapGestureRecognizer.swift; sourceTree = "<group>"; };
 		8D163BA429944FA100EF6C2A /* ClearTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearTableCell.swift; sourceTree = "<group>"; };
@@ -470,6 +479,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		8D0F8FF62BDDCBB200681CED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D5C624F2ACF4FA2005D68B0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -902,6 +918,25 @@
 			path = SelectionStackView;
 			sourceTree = "<group>";
 		};
+		8D0F8FFA2BDDCBB300681CED /* BudgetTracker Watch App */ = {
+			isa = PBXGroup;
+			children = (
+				8D0F8FFB2BDDCBB300681CED /* BudgetTrackerApp.swift */,
+				8D0F8FFD2BDDCBB300681CED /* HomeView.swift */,
+				8D0F8FFF2BDDCBB500681CED /* Assets.xcassets */,
+				8D0F90012BDDCBB500681CED /* Preview Content */,
+			);
+			path = "BudgetTracker Watch App";
+			sourceTree = "<group>";
+		};
+		8D0F90012BDDCBB500681CED /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				8D0F90022BDDCBB600681CED /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
 		8D17FABE2B07BFD0005E03FD /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -1130,6 +1165,7 @@
 				8DBA7E4E23F0316F00D8214C /* Budget Tracker */,
 				8D5C62572ACF4FA2005D68B0 /* BudgetTrackerCalendatWidget */,
 				8DE495812B1D4C610009D065 /* Budget TrackerUITests */,
+				8D0F8FFA2BDDCBB300681CED /* BudgetTracker Watch App */,
 				8DBA7E4D23F0316F00D8214C /* Products */,
 				86F76BBA55B21BFA5830DEF2 /* Pods */,
 				12BEBFEE107B283AE300DAF3 /* Frameworks */,
@@ -1142,6 +1178,7 @@
 				8DBA7E4C23F0316F00D8214C /* Budget Tracker.app */,
 				8D5C62522ACF4FA2005D68B0 /* BudgetTrackerCalendatWidgetExtension.appex */,
 				8DE495802B1D4C610009D065 /* Budget TrackerUITests.xctest */,
+				8D0F8FF92BDDCBB200681CED /* BudgetTracker Watch App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1279,6 +1316,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		8D0F8FF82BDDCBB200681CED /* BudgetTracker Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8D0F90062BDDCBB600681CED /* Build configuration list for PBXNativeTarget "BudgetTracker Watch App" */;
+			buildPhases = (
+				8D0F8FF52BDDCBB200681CED /* Sources */,
+				8D0F8FF62BDDCBB200681CED /* Frameworks */,
+				8D0F8FF72BDDCBB200681CED /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "BudgetTracker Watch App";
+			productName = "BudgetTracker Watch App";
+			productReference = 8D0F8FF92BDDCBB200681CED /* BudgetTracker Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
 		8D5C62512ACF4FA2005D68B0 /* BudgetTrackerCalendatWidgetExtension */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8D5C626A2ACF4FA5005D68B0 /* Build configuration list for PBXNativeTarget "BudgetTrackerCalendatWidgetExtension" */;
@@ -1347,10 +1401,13 @@
 		8DBA7E4423F0316F00D8214C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1500;
+				LastSwiftUpdateCheck = 1530;
 				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = "Misha Dovhiy";
 				TargetAttributes = {
+					8D0F8FF82BDDCBB200681CED = {
+						CreatedOnToolsVersion = 15.3;
+					};
 					8D5C62512ACF4FA2005D68B0 = {
 						CreatedOnToolsVersion = 15.0;
 					};
@@ -1385,11 +1442,21 @@
 				8DBA7E4B23F0316F00D8214C /* Budget Tracker */,
 				8D5C62512ACF4FA2005D68B0 /* BudgetTrackerCalendatWidgetExtension */,
 				8DE4957F2B1D4C610009D065 /* Budget TrackerUITests */,
+				8D0F8FF82BDDCBB200681CED /* BudgetTracker Watch App */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		8D0F8FF72BDDCBB200681CED /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D0F90032BDDCBB600681CED /* Preview Assets.xcassets in Resources */,
+				8D0F90002BDDCBB500681CED /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D5C62502ACF4FA2005D68B0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1469,6 +1536,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		8D0F8FF52BDDCBB200681CED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D0F8FFE2BDDCBB300681CED /* HomeView.swift in Sources */,
+				8D0F8FFC2BDDCBB300681CED /* BudgetTrackerApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D5C624E2ACF4FA2005D68B0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1719,6 +1795,79 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		8D0F90042BDDCBB600681CED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"BudgetTracker Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = FQA2XH9ZUM;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = BudgetTracker;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = .watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Debug;
+		};
+		8D0F90052BDDCBB600681CED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"BudgetTracker Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = FQA2XH9ZUM;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = BudgetTracker;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = .watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+			};
+			name = Release;
+		};
 		8D5C62682ACF4FA5005D68B0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2021,6 +2170,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		8D0F90062BDDCBB600681CED /* Build configuration list for PBXNativeTarget "BudgetTracker Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8D0F90042BDDCBB600681CED /* Debug */,
+				8D0F90052BDDCBB600681CED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		8D5C626A2ACF4FA5005D68B0 /* Build configuration list for PBXNativeTarget "BudgetTrackerCalendatWidgetExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
