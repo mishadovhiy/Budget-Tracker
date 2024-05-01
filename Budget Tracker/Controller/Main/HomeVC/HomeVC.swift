@@ -335,3 +335,8 @@ class HomeVC: SuperViewController {
 
 }
 
+extension HomeVC {
+    static func configure() -> UIViewController? {
+        return UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NavigationController")
+    }
+}

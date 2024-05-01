@@ -14,6 +14,15 @@ struct PdfDocumentProperties {
         self.dict = dict
     }
     
+    var tableStyle:TableStyle {
+        get {
+            return .init(dict: dict["tableStyle"] as? [String:Any] ?? [:])
+        }
+        set {
+            dict.updateValue(newValue.dict, forKey: "tableStyle")
+        }
+    }
+    
     var colors:PdfColors {
         get {
             return .init(dict: dict["PdfColors"] as? [String:Any] ?? [:])
@@ -103,4 +112,22 @@ struct PdfDocumentProperties {
         
     }
     
+}
+
+extension PdfDocumentProperties {
+    struct TableStyle {
+        var dict:[String:Any]
+        init(dict: [String : Any]) {
+            self.dict = dict
+        }
+        
+        var categorySepareted:Bool {
+            get {
+                dict["categorySepareted"] as? Bool ?? true
+            }
+            set {
+                dict.updateValue(newValue, forKey: "categorySepareted")
+            }
+        }
+    }
 }

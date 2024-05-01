@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = BaseWindow.init(windowScene: windowScene)
         window?.layer.name = UUID().uuidString
-        window?.rootViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NavigationController")
+        window?.rootViewController = HomeVC.configure()
         AppDelegate.properties?.selectedID = window?.layer.name ?? ""
         window?.makeKeyAndVisible()
     }

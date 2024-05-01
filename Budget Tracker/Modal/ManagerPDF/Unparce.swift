@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 
-
 class UnparcePDF {
     var manager:ManagerPDF!
     init(manager: ManagerPDF!) {
@@ -57,7 +56,7 @@ class UnparcePDF {
                 })
             } else if let val = $0.value as? [[String:Any]] {
                 val.forEach({
-                    let transactions = self.transactions($0["transactions"])
+                    let transactions = self.transactions($0["transactions"], data: data)
                     height += transactions.1
                     height += 105
                     text.append((self.category($0["category"]), false))
@@ -252,14 +251,14 @@ class UnparcePDF {
         
     }
     
-    private func transactions(_ value:Any?) -> (NSMutableAttributedString, CGFloat) {
+    private func transactions(_ value:Any?, data:PDFProperties) -> (NSMutableAttributedString, CGFloat) {
         let array = value as? [[String:Any]] ?? []
         let text:NSMutableAttributedString = .init(string: "")
         var count:CGFloat = 0
         array.forEach({
             count += 45
             let attachment = NSTextAttachment()
-            attachment.image = transactionView($0).toImage
+            attachment.image = transactionView($0, data: data).toImage
             text.append(.init(attachment: attachment))
         })
         return (text, count)
@@ -362,7 +361,20 @@ private extension UnparcePDF {
     }
     
     
-    func transactionView(_ dict:[String:Any]) -> UIView {
+    func transactionView(_ dict:[String:Any], data:PDFProperties) -> UIView {
+        if data.documentProperties.tableStyle.categorySepareted {
+            //return transactionViewRegular(dict, data: data)
+            return transactionViewRegular(dict, data: data)
+        } else {
+            return transactionViewRegular(dict, data: data)
+        }
+    }
+    
+    func transactionViewRegular(_ dict:[String:Any], data:PDFProperties) -> UIView {
+        
+    }
+    
+    func transactionViewCategorithed(_ dict:[String:Any], data:PDFProperties) -> UIView {
         let transaction = TransactionsStruct.create(dictt: dict)
         let view = UIView()
         let size:CGSize = .init(width: manager.pageWidth - 100, height: 40)
