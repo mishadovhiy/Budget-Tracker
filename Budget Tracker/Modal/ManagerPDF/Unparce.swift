@@ -363,7 +363,6 @@ private extension UnparcePDF {
     
     func transactionView(_ dict:[String:Any], data:PDFProperties) -> UIView {
         if data.documentProperties.tableStyle.categorySepareted {
-            //return transactionViewRegular(dict, data: data)
             return transactionViewRegular(dict, data: data)
         } else {
             return transactionViewRegular(dict, data: data)
@@ -371,7 +370,7 @@ private extension UnparcePDF {
     }
     
     func transactionViewRegular(_ dict:[String:Any], data:PDFProperties) -> UIView {
-        
+        return transactionViewCategorithed(dict, data: data)
     }
     
     func transactionViewCategorithed(_ dict:[String:Any], data:PDFProperties) -> UIView {
