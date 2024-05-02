@@ -469,31 +469,31 @@ private extension UnparcePDF {
         valueLabel.text = transaction?.value ?? "Amount"
         valueLabel.textAlignment = .right
         valueLabel.textColor = .init(cgColor: color1)
-        valueLabel.font = dict.isEmpty ? .systemFont(ofSize: smallFont.0, weight: smallFont.1) : .systemFont(ofSize: smallFont.0, weight: smallFont.1)
+        valueLabel.font = dict.isEmpty ? .systemFont(ofSize: exSmallFont.0, weight: exSmallFont.1) : .systemFont(ofSize: smallFont.0, weight: smallFont.1)
         view.addSubview(valueLabel)
         if !data.documentProperties.tableStyle.categorySepareted && !dict.isEmpty {
             let _ = view.layer.drawLine([
                 .init(x: 0, y: 0),
                 .init(x: size.width, y: 0)
-            ], color: UIColor(cgColor:color2), width: 0.5, opacity: 1)
+            ], color: UIColor(cgColor:color2), width: 0.5, opacity: 0.3)
             let _ = view.layer.drawLine([
                 .init(x: 0, y: 5),
                 .init(x: 0, y: size.height - (isLast ? 5 : 0))
-            ], color: UIColor(cgColor:secondaryColor as! CGColor), width: 0.5, opacity: 1)
+            ], color: UIColor(cgColor:secondaryColor as! CGColor), width: 0.5, opacity: 0.3)
             let _ = view.layer.drawLine([
                 .init(x: size.width, y: 5),
                 .init(x: size.width, y: size.height - (isLast ? 5 : 0))
-            ], color: UIColor(cgColor:color2), width: 0.5, opacity: 1)
+            ], color: UIColor(cgColor:color2), width: 0.5, opacity: 0.3)
             if isLast {
                 let _ = view.layer.drawLine([
                     .init(x: 0, y: size.height),
                     .init(x: size.width, y: size.height)
-                ], color: UIColor(cgColor:color2), width: 0.5, opacity: 1)
+                ], color: UIColor(cgColor:color2), width: 0.5, opacity: 0.3)
             }
             let _ = view.subviews.first(where: {$0.layer.name == "commentLabel"})?.layer.drawLine([
                         .init(x: 0, y: 5),
                         .init(x: 0, y: dateLabel.frame.height  - (isLast ? 5 : 0))
-                    ], color: UIColor(cgColor:color2), width: 0.5, opacity: 1)
+            ], color: UIColor(cgColor:color2), width: 0.5, opacity: 0.3)
 
         } else if !dict.isEmpty {
             dotts(in: view, size: size, data: data)

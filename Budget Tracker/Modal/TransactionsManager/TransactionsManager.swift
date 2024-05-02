@@ -9,13 +9,13 @@
 import UIKit
 
 class TransactionsManager {
-    var calculation:HomeVC.Calculations?
+    var calculation:Calculations?
     var dataTaskCount:(Int, Int)?
     var taskChanged:(((Int, Int)?)->())?
     var filterChanged:Bool = false
     var daysBetween = [""]
 
-    func new(transactions:[TransactionsStruct]) -> [HomeVC.tableStuct] {
+    func new(transactions:[TransactionsStruct]) -> [tableStuct] {
         //        return dictToTable(filtered).sorted{
         //            Calendar.current.date(from: $0.date ) ?? Date.distantFuture >
         //                    Calendar.current.date(from: $1.date ) ?? Date.distantFuture
@@ -88,7 +88,7 @@ class TransactionsManager {
         
     }
     
-    func dictToTable(_ dict:[String:[TransactionsStruct]]) -> [HomeVC.tableStuct] {
+    func dictToTable(_ dict:[String:[TransactionsStruct]]) -> [tableStuct] {
         return dict.compactMap { (key: String, value: [TransactionsStruct]) in
             let transactions = value.sorted { Double($0.value) ?? 0.0 < Double($1.value) ?? 0.0 }
             let date = key.stringToDateComponent()
@@ -100,9 +100,9 @@ class TransactionsManager {
         }
     }
     
-    private func amountForTransactions(_ transactions:[TransactionsStruct]) -> (Double,  HomeVC.Calculations) {
+    private func amountForTransactions(_ transactions:[TransactionsStruct]) -> (Double,  Calculations) {
         var result:Double = 0
-        var calcs:HomeVC.Calculations = .init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)
+        var calcs:Calculations = .init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)
         for transaction in transactions {
             let amount = (Double(transaction.value) ?? 0.0)
             result += amount
@@ -118,9 +118,22 @@ class TransactionsManager {
         let currentCalcs = calculation ?? .init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)
       //  calculations = .init(expenses: currentCalcs.expenses + calcs.expenses, income: currentCalcs.income + calcs.income, balance: calculations.balance, perioudBalance: currentCalcs.perioudBalance + calcs.perioudBalance)
        // return result
-        let calc:HomeVC.Calculations = .init(expenses: currentCalcs.expenses + calcs.expenses, income: currentCalcs.income + calcs.income, balance: currentCalcs.balance, perioudBalance: currentCalcs.perioudBalance + calcs.perioudBalance)
+        let calc:Calculations = .init(expenses: currentCalcs.expenses + calcs.expenses, income: currentCalcs.income + calcs.income, balance: currentCalcs.balance, perioudBalance: currentCalcs.perioudBalance + calcs.perioudBalance)
         self.calculation = calc
         return (result, calc)
         
     }
+}
+
+struct Calculations {
+    var expenses:Double
+    var income:Double
+    var balance:Double
+    var perioudBalance:Double
+}
+
+struct tableStuct {
+    let date: DateComponents
+    let amount: Int
+    var transactions: [TransactionsStruct]
 }

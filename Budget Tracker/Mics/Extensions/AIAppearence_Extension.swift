@@ -5,8 +5,9 @@
 //  Created by Misha Dovhiy on 25.12.2023.
 //  Copyright © 2023 Misha Dovhiy. All rights reserved.
 //
-
+#if os(iOS)
 import AlertViewLibrary
+#endif
 import UIKit
 
 extension AIAppearence {

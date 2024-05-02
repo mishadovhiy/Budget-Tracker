@@ -8,7 +8,7 @@
 
 import UIKit
 
-#if !os(iOS)
+#if os(macOS)
 import Cocoa
 #endif
 import Security

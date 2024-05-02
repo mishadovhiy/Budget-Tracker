@@ -14,6 +14,7 @@ struct NotificationManager {
         return AppDelegate.properties?.db ?? .init()
     }
     func loadNotifications(completion: @escaping ([String]) -> ()) {
+        #if os(iOS)
         DispatchQueue.main.async {
             AppDelegate.properties?.center.getDeliveredNotifications(completionHandler: { nitof in
                 var newIDs:[String] = []
@@ -25,6 +26,9 @@ struct NotificationManager {
                 completion(newIDs)
             })
         }
+        #else
+        
+        #endif
     }
     
     func containsUnseen(id:String, unseen:[String]) -> Bool {
@@ -45,15 +49,18 @@ struct NotificationManager {
         set {
             if newValue.count != 0 {
                 self.db.db.updateValue(newValue, forKey: "deliveredNotificationIDs")
+                #if os(iOS)
                 DispatchQueue.main.async {
                     Notifications.getNotificationsNumber()
                 }
+                #endif
             } else {
                 db.db.removeValue(forKey: "deliveredNotificationIDs")
-
+#if os(iOS)
                 DispatchQueue.main.async {
                     Notifications.getNotificationsNumber()
                 }
+                #endif
             }
             
             
@@ -62,7 +69,9 @@ struct NotificationManager {
     
     
     mutating func removeAll() {
+#if os(iOS)
         AppDelegate.properties?.center.removeAllDeliveredNotifications()
+        #endif
         deliveredNotificationIDs = []
     }
    

@@ -7,14 +7,19 @@
 //
 
 import UIKit
+#if os(iOS)
 import AlertViewLibrary
 import MessageViewLibrary
+#endif
 
 class AppProperties {
+#if os(iOS)
     let center = UNUserNotificationCenter.current()
+    #endif
     lazy var notificationManager = NotificationManager()
     var selectedID:String = ""
     var firstLoadPasscode = true
+#if os(iOS)
     lazy var newMessage: MessageViewLibrary = {
         return MessageViewLibrary.instanceFromNib()
     }()
@@ -24,12 +29,12 @@ class AppProperties {
         ai.setIgnorPresentLoader(self.aiNotShowingCondition)
         return ai
     }()
-    
     let passcodeLock = PascodeLockView.instanceFromNib() as! PascodeLockView
     
     lazy var banner: adBannerView = {
         return adBannerView.instanceFromNib() as! adBannerView
     }()
+    #endif
     var coreDataManager:CoreDataDBManager?
     
     lazy var db:DataBase = {
@@ -42,7 +47,12 @@ class AppProperties {
         return db.username == ""
     }
     
+    init() {
+        appLoaded()
+    }
+    
     func setQuickActions() {
+#if os(iOS)
         DispatchQueue(label: "db", qos: .userInitiated).async {
             let ignored = DataBase().viewControllers.ignoredActionTypes
             var res: [UIApplicationShortcutItem] = []
@@ -56,13 +66,19 @@ class AppProperties {
 
             }
         }
+        #endif
     }
 }
 
 extension AppProperties {
     private var appDelegate:AppDelegate {
+#if os(iOS)
         return UIApplication.shared.delegate as? AppDelegate ?? .init()
+        #else
+        return AppDelegate.shared ?? .init()
+        #endif
     }
+    
     func appLoaded() {
         if coreDataManager != nil {
             return
@@ -81,16 +97,19 @@ extension AppProperties {
             let tint = UIColor(self.db.linkColor)
 
             DispatchQueue.main.async {
+                #if os(iOS)
                 UIApplication.shared.sceneKeyWindow?.tintColor = tint
-                self.center.delegate = self.appDelegate
                 UNUserNotificationCenter.current().delegate = self.appDelegate
+                self.center.delegate = self.appDelegate
                 Notifications.getNotificationsNumber()
-                
+#endif
                 AppLocalization.launchedLocalization = localization
                 print("LOCALIZATION: ", AppLocalization.launchedLocalization)
                 
                 if !pro {
+#if os(iOS)
                     self.banner.createBanner()
+                    #endif
                 }
                 self.setQuickActions()
             }
@@ -98,6 +117,7 @@ extension AppProperties {
     }
     
     func receinActive() {
+#if os(iOS)
         appData.backgroundEnterDate = Date();
         DispatchQueue(label: "local", qos: .userInitiated).async {
             if UserSettings.Security.password != "" && !(self.passcodeLock.presenting) {
@@ -111,6 +131,7 @@ extension AppProperties {
         }
         
         UIApplication.shared.sceneKeyWindow?.endEditing(true)
+        #endif
     }
     
     func becomeActive() {
@@ -136,7 +157,9 @@ extension AppProperties {
             if ti > fiveMin {
                 if db.username != "" {
                     appData.needDownloadOnMainAppeare = false
+#if os(iOS)
                     HomeVC.shared?.downloadFromDB()
+                    #endif
                 }
             }
         }
@@ -145,20 +168,24 @@ extension AppProperties {
             if ti > timeout {
                presentLock(passcode: true)
             } else {
+#if os(iOS)
                 passcodeLock.hide()
-                
+                #endif
             }
         }
     }
     func presentLock(passcode:Bool, passcodeVerified: (()->())? = nil ) {
         if passcode {
-            
+#if os(iOS)
             passcodeLock.passcodeLock(passcodeEntered: passcodeVerified, appFirstLaunch: firstLoadPasscode)
+            #endif
             if firstLoadPasscode {
                 firstLoadPasscode = false
             }
         } else {
+#if os(iOS)
             passcodeLock.present()
+            #endif
         }
         
     }

@@ -60,10 +60,11 @@ class ServerResponse {
         }
         return array
     }
-    
+  //  #if os(iOS)
     fileprivate var appData:AppProperties? {
         return AppDelegate.properties
     }
+    //#endif
 }
 
 
@@ -80,7 +81,13 @@ extension ServerResponse {
         guard let requestArray else {
             return nil
         }
+        #if os(iOS)
         let user = username ?? appData?.db.username
+        #else
+        guard let user = username else {
+            return nil
+        }
+        #endif
         var loadedData: [[String : Any]] = []
         requestArray.forEach({
             if let dict = $0 as? NSDictionary,

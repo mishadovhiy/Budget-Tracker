@@ -991,18 +991,6 @@ extension HomeVC {
         case home
         case paymentReminders
     }
-    
-    struct Calculations {
-        var expenses:Double
-        var income:Double
-        var balance:Double
-        var perioudBalance:Double
-    }
-    struct tableStuct {
-        let date: DateComponents
-        let amount: Int
-        var transactions: [TransactionsStruct]
-    }
 }
 
 extension HomeVC {

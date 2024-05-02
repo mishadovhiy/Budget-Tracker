@@ -8,7 +8,9 @@
 
 import UIKit
 import AVFoundation
+#if os(iOS)
 import AlertViewLibrary
+#endif
 
 
 extension AppDelegate: UNUserNotificationCenterDelegate {

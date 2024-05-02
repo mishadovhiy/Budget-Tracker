@@ -111,6 +111,7 @@ extension UIColor {
 
 extension UIImage {
     convenience init?(QRcode:String) {
+        #if os(iOS)
         let data = QRcode.data(using: String.Encoding.ascii)
         if let filter = CIFilter(name: "CIQRCodeGenerator") {
             filter.setValue(data, forKey: "inputMessage")
@@ -121,6 +122,8 @@ extension UIImage {
             }
         }
         self.init()
-        
+        #else
+        self.init()
+        #endif
     }
 }

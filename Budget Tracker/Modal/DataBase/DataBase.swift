@@ -52,6 +52,7 @@ class DataBase {
     }
     
     var devMode:Bool {
+        #if os(iOS)
         if userEmailHolder.contains("dovhiy.com") {
             return true
         } else {
@@ -62,6 +63,10 @@ class DataBase {
                 return false
             }
         }
+        #else
+        return false
+        #endif
+        
     }
     
     private let testIds:[String] = [
@@ -83,13 +88,17 @@ class DataBase {
             let was = !purchasedOnThisDevice ? (db["proVersion"] as? Bool ?? false) : purchasedOnThisDevice
             db.updateValue(value, forKey: "proVersion")
             if was && !value {
+#if os(iOS)
                 DispatchQueue.main.async {
                     AppDelegate.properties?.banner.createBanner()
                 }
+                #endif
             } else if !was && value {
+#if os(iOS)
                 DispatchQueue.main.async {
                     AppDelegate.properties?.banner.hide(remove: true, ios13Hide: true)
                 }
+                #endif
             }
             
         }
@@ -211,10 +220,12 @@ class DataBase {
     var linkColor: String {
         set {
             db.updateValue(newValue, forKey: "SelectedTintColor")
+#if os(iOS)
             DispatchQueue.main.async {
                 let window = UIApplication.shared.sceneKeyWindow ?? UIWindow()
                 window.tintColor = .colorNamed(newValue)
             }
+            #endif
         }
         get {
             return db["SelectedTintColor"] as? String ?? "Yellow"

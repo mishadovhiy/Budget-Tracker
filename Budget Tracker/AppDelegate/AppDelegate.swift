@@ -8,8 +8,7 @@
 
 import UIKit
 import CoreData
-
-@UIApplicationMain
+#if os(iOS)
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
@@ -33,7 +32,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         AppDelegate.properties = .init()
-        AppDelegate.properties?.appLoaded()
         return true
     }
 
@@ -162,4 +160,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 protocol AppDelegateProtocol {
     func resighnActive()
 }
+
+#else
+class AppDelegate {
+    static var shared:AppDelegate?
+    static var properties:AppProperties?
+    init() {
+        AppDelegate.shared = self
+        AppDelegate.properties = .init()
+    }
+    
+    lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "LocalDataBase")
+        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            if let _ = error as NSError? {
+            }
+        })
+        return container
+    }()
+    
+    func saveContext () {
+        let context = persistentContainer.viewContext
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                let nserror = error as NSError
+               // fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
+    }
+}
+#endif
 

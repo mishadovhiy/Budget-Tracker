@@ -23,7 +23,7 @@ struct ViewModelHomeVC {
     var justLoaded = true
     var newTransaction: TransactionsStruct?
     var highliteCell: IndexPath?
-    var tableDHolder: [HomeVC.tableStuct] = []
+    var tableDHolder: [tableStuct] = []
     var forseSendUnsendedData = true
     var addTransFrame = CGRect.zero
     var enableLocalDataPress = false
@@ -36,7 +36,7 @@ struct ViewModelHomeVC {
     let tableCorners:CGFloat = 15
     var actionAfterAdded:((Bool) -> ())?
     var firstAppearence = true
-    var _calculations:HomeVC.Calculations = .init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)
+    var _calculations:Calculations = .init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)
     var forceLoggedOutUser = ""
     var resetPassword = false
     var _filterText: String = "Filter".localize

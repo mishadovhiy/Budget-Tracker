@@ -100,7 +100,7 @@ extension DataBase {
                 dict.updateValue(newValue, forKey: "SortOption")
             }
         }
-        
+#if os(iOS)
         var pdfProperties:PDFProperties {
             get {
                 return .init(dict: dict["pdfPropertiesd"] as? [String:Any] ?? [:])
@@ -109,7 +109,7 @@ extension DataBase {
                 dict.updateValue(newValue.dict, forKey: "pdfPropertiesd")
             }
         }
-        
+        #endif
         var cameraStorage:CameraVC {
             get {
                 return .init(dict: dict["cameraStorage"] as? [String:Any] ?? [:])

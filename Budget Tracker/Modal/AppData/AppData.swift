@@ -24,17 +24,24 @@ class AppData {
     var becameActive = false
     
     var resultSafeArea: (CGFloat, CGFloat) {
+#if os(iOS)
         let safe = UIApplication.shared.sceneKeyWindow?.safeAreaInsets ?? .zero
         let btn = safe.top + (AppDelegate.properties?.banner.size ?? 0)
         return (btn, safe.bottom)
+        #else
+        return (0, 0)
+        #endif
+        
     }
     
     static func toDeviceSettings() {
+#if os(iOS)
         if let url = URL(string: UIApplication.openSettingsURLString) {
             UIApplication.shared.open(url, options: [:]) { _ in
                 
             }
         }
+        #endif
     }
 
     let categoryColors = [
@@ -63,6 +70,7 @@ class AppData {
 
 
 extension AppData {
+#if os(iOS)
     func present(vc:UIViewController, presentingVC:UIViewController? = nil, completion:(()->())? = nil) {
         let window = UIApplication.shared.sceneKeyWindow
         if let presentingVC = presentingVC {
@@ -80,11 +88,12 @@ extension AppData {
              window?.rootViewController?.present(vc, animated: true, completion: completion)
         }
     }
-    
+    #endif
     func threadCheck(shouldMainThread:Bool = true, showError:Bool = true) {
         let error = shouldMainThread != Thread.isMainThread
         if error {
             print("!!!!!!!!!!!errororor api")
+#if os(iOS)
             if (AppDelegate.properties?.db.devMode ?? false) && showError {
                 if !Thread.isMainThread {
                     DispatchQueue.main.async {
@@ -96,6 +105,7 @@ extension AppData {
 
                 }
             }
+            #endif
         }
     }
 
@@ -104,7 +114,9 @@ extension AppData {
 
 extension AppData {
     func presentBuyProVC(selectedProduct:Int) {
+        #if os(iOS)
         BuyProVC.presentBuyProVC(selectedProduct: selectedProduct)
+        #endif
     }
 }
 
