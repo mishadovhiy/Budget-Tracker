@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 #if os(iOS)
+@UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
@@ -160,7 +161,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 protocol AppDelegateProtocol {
     func resighnActive()
 }
-
 #else
 class AppDelegate {
     static var shared:AppDelegate?
@@ -193,5 +193,6 @@ class AppDelegate {
         }
     }
 }
+
 #endif
 

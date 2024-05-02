@@ -12,6 +12,13 @@ enum ServerError {
     case internet
     case other
     case none
+    var message:MessageContent? {
+        switch self {
+        case .internet:return .init(title: "Internet error")
+        case .other:return .init(title: "Critical server error")
+        default: return nil
+        }
+    }
 }
 
 class ServerResponse {

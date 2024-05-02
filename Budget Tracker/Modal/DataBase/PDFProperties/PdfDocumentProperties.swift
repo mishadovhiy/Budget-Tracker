@@ -59,7 +59,7 @@ struct PdfDocumentProperties {
         
         var background:CGColor {
             get {
-                return getColor(defaultColor: K.Colors.background, color: dict["background"] as? String)
+                return getColor(defaultColor: K.Colors.secondaryBackground, color: dict["background"] as? String)
             }
             set {
                 dict.updateValue(UIColor(cgColor: newValue).toHex, forKey: "background")

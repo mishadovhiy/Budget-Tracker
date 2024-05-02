@@ -39,6 +39,9 @@ class RefreshTableView: UITableView {
      - UIRefreshControll located on top of the UITableView
      */
     func startRefreshing() {
+        if !Thread.isMainThread {
+            fatalError()
+        }
         activityIndicator?.startAnimating()
     }
     

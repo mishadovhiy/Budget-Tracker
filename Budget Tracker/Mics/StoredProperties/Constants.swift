@@ -60,7 +60,7 @@ struct K {
         static let negative = UIColor(named: "negativeColor")
         static let separetor = UIColor(named: "separetorColor")
         static var link:UIColor {
-            UIColor(named: AppDelegate.properties?.db.linkColor ?? "") ?? (K.Colors.yellow ?? .white)
+            return UIColor(named: AppDelegate.properties?.db.linkColor ?? "") ?? (K.Colors.yellow ?? .white)
         }
         static let yellow = UIColor(named: "yellowColor")
         static let pink = UIColor(named: "pinkColor")

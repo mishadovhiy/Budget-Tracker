@@ -68,6 +68,9 @@ class HomeVC: SuperViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if !Thread.isMainThread {
+            fatalError()
+        }
         updateUI()
     }
         
@@ -230,11 +233,11 @@ class HomeVC: SuperViewController {
     }
     
     @IBAction func homeVC(segue: UIStoryboardSegue) {
-        DispatchQueue.global(qos: .userInteractive).async {
+     //   DispatchQueue.global(qos: .userInteractive).async {
             print("HomeVC called")
-            DispatchQueue.main.async {
+        //    DispatchQueue.main.async {
                 self.dataCountLabel.text = ""
-            }
+       //     }
             self.checkDownload(force: true)
             if AppDelegate.properties?.appData.fromLoginVCMessage != "" {
                 print("appData.fromLoginVCMessage", AppDelegate.properties?.appData.fromLoginVCMessage ?? "-")
@@ -246,7 +249,7 @@ class HomeVC: SuperViewController {
                     }
                 }
             }
-        }
+     //   }
     }
     
     @IBAction func unwindToFilter(segue: UIStoryboardSegue) {

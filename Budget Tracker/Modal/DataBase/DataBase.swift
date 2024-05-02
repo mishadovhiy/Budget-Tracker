@@ -21,7 +21,7 @@ class DataBase {
                 let dbDict = AppDelegate.properties?.coreDataManager?.fetch(.general)?.data?.toDict ?? [:]
                 DataBase._db = dbDict
                 AppDelegate.properties?.appData.threadCheck(shouldMainThread: false)
-
+print(dbDict, " dbdata")
                 return dbDict
             }
             
@@ -254,10 +254,14 @@ class DataBase {
     
     var username: String {
         get{
-            if let user = db["username"] as? String {
+            if let user = self.db["username"] as? String {
                 return user
             } else {
+#if os(iOS)
                 return ""
+                #else
+                return UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")?.value(forKey: "username") as? String ?? ""
+                #endif
             }
         }
         set(value){

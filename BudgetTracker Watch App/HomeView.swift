@@ -10,6 +10,8 @@ import SwiftUI
 import UIKit
 
 struct HomeView: View {
+    @State var viewModel:ViewModelHomeView? = nil
+    
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -18,6 +20,9 @@ struct HomeView: View {
             Text("Hello, world!")
         }
         .padding()
+        .onAppear(perform: {
+            self.viewModel = .init()
+        })
     }
 }
 

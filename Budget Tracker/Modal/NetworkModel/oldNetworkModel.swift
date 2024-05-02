@@ -252,7 +252,7 @@ struct SaveToDB {
         return AppDelegate.properties?.appData ?? .init()
     }
     var db:DataBase {
-        return db
+        return AppDelegate.properties?.db ?? .init()
     }
     enum dataType {
         case transactions
@@ -462,7 +462,7 @@ struct DeleteFromDB {
         return AppDelegate.properties?.appData ?? .init()
     }
     var db:DataBase {
-        return db
+        return AppDelegate.properties?.db ?? .init()
     }
     static var shared = DeleteFromDB()
     

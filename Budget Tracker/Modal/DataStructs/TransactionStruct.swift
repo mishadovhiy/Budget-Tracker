@@ -57,10 +57,15 @@ struct TransactionsStruct {
     }
     
     var dictLocal:[String:Any] {
+        #if os(iOS)
+        let date = self.date.stringToCompIso().textDate
+        #else
+        let date = self.date.description
+        #endif
         var result:[String:Any] = [
             "CategoryId":categoryID,
             "Amount":value,
-            "Date":date.stringToCompIso().textDate,
+            "Date":date,
             "Comment":comment
         ]
         if let reminder = reminder {
