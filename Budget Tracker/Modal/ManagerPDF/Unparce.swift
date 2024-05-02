@@ -262,7 +262,7 @@ class UnparcePDF {
         let view = UIView(frame:.init(origin: .zero, size: .init(width: manager.pageWidth, height: 90)))
        
         let imageView:UIImageView = .init(image: .init(QRcode: Keys.appstoreURL))
-        imageView.frame.size = .init(width: 90, height: 90)
+        imageView.frame = .init(origin: .zero, size: .init(width: 90, height: 90))
         imageView.layer.cornerRadius = 6
         view.addSubview(imageView)
         let labelFrame:CGRect = .init(origin: .init(x: 100, y: 0), size: .init(width: 400, height: 60))
@@ -287,7 +287,30 @@ class UnparcePDF {
     }
     
     private func transactions(_ value:Any?, data:PDFProperties) -> (NSMutableAttributedString, CGFloat) {
-        let array = value as? [[String:Any]] ?? []
+        let array = (value as? [[String:Any]] ?? []).sorted(by: {
+            
+            var sort = data.documentProperties.tableStyle.sort
+            if data.documentProperties.tableStyle.categorySepareted && sort == .category {
+                sort = .amount
+            }
+            let lt = TransactionsStruct.create(dictt: $0)
+            let rt = TransactionsStruct.create(dictt: $1)
+            switch sort {
+            case .date:
+                let left = lt?.dateFromString ?? Date()
+                let right = rt?.dateFromString ?? Date()
+                return left >= right
+            case .category:
+                let left = lt?.category.name ?? ""
+                let right = rt?.category.name ?? ""
+                return left >= right
+            case .amount:
+                let left = Double(lt?.value ?? "") ?? 0
+                let right = Double(rt?.value ?? "") ?? 0
+                return left >= right
+            }
+            
+        })
         let text:NSMutableAttributedString = .init(string: "")
         var count:CGFloat = 0
         let height:CGFloat = 45

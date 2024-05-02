@@ -493,12 +493,11 @@ extension PDFEditVC {
                     self.pdfData?.properties.documentProperties.tableStyle.categorySepareted = $0
                     self.updatePDF()
                 })),
-                .init(name: "Sort", regular: .init(description:"", didSelect: {
+                .init(name: "Sort", regular: .init(didSelect: {
                     self.toSelectValueVC(title: "Sort", tableData: [
                         .init(sectionName: "", cells: PdfDocumentProperties.TableStyle.Sort.allCases.compactMap({ sort in
                                 return .init(name: sort.rawValue, regular: .init(didSelect: {
                                     self.pdfData?.properties.documentProperties.tableStyle.sort = .init(rawValue: sort.rawValue) ?? .amount
-                                    self.settingsNav?.popViewController(animated: true)
                                     self.updatePDF()
                                 }))
                         }))
