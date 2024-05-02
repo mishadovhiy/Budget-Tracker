@@ -123,11 +123,33 @@ extension PdfDocumentProperties {
         
         var categorySepareted:Bool {
             get {
-                dict["categorySepareted"] as? Bool ?? true
+                dict["categorySepareted"] as? Bool ?? false
             }
             set {
                 dict.updateValue(newValue, forKey: "categorySepareted")
             }
+        }
+        
+        var dotsSeparetor:Bool {
+            get {
+                dict["dotsSeparetor"] as? Bool ?? true
+            }
+            set {
+                dict.updateValue(newValue, forKey: "dotsSeparetor")
+            }
+        }
+        
+        var sort:Sort {
+            get {
+                .init(rawValue: dict["sort"] as? String ?? "") ?? .amount
+            }
+            set {
+                dict.updateValue(newValue.rawValue, forKey: "sort")
+            }
+        }
+        
+        enum Sort:String {
+            case date, category, amount
         }
     }
 }

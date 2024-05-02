@@ -64,16 +64,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
-        DispatchQueue(label: "db", qos: .userInitiated).async {
-            if AppDelegate.properties?.db.devMode ?? false {
-                DispatchQueue.main.async {
-                    AppDelegate.properties?.ai.showAlertWithOK(title: "Memory warning!")
-                }
-            }
-        }
-        
         print(#function)
-        
     }
     
     func applicationDidBecomeActive(_ application: UIApplication) {
