@@ -150,6 +150,9 @@ extension PdfDocumentProperties {
         
         enum Sort:String {
             case date, category, amount
+            static var allCases:[Self] {
+                return [.date, .category, .amount]
+            }
         }
     }
 }

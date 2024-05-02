@@ -94,7 +94,9 @@ class PDFEditVC:SuperViewController {
     
     var settingsData: [SelectValueVC.SelectValueSections] {
         var header: [SelectValueVC.SelectValueStruct] = []
-        
+        header.append(.init(name: "Table Style", regular: .init(didSelect: {
+            self.toSelectValueVC(title: "Table Style", tableData: self.tableStyleData)
+        })))
         header.append(.init(name: "Default header", forProUsers: 4, switcher: .init(isOn: self.pdfData?.properties.defaultHeader ?? true, switched: {
             self.pdfData?.properties.defaultHeader = $0
             self.reloadTable()
@@ -109,7 +111,6 @@ class PDFEditVC:SuperViewController {
         
         
         var colors: [SelectValueVC.SelectValueStruct] = []
-
         colors.append(.init(name: "Background color", regular: .init(description: pdfData?.properties.documentProperties.colors.background == nil ? "Default" : "", didSelect: {
             self.selectColorPressed(.background)
         })))
@@ -358,7 +359,10 @@ class PDFEditVC:SuperViewController {
         self.updateTableData()
     }
     
-    
+    var imageSelectedAction:((_ data:Data)->())?
+}
+
+extension PDFEditVC {
     private var textCustomizationData :[SelectionStackView.SelectionData] {
         let sel = enteringValuePropHolder
         print(sel?.textSize.rawValue, " rtegfwderf")
@@ -381,17 +385,7 @@ class PDFEditVC:SuperViewController {
             })
         ]
     }
-
-
     
-    var imageSelectedAction:((_ data:Data)->())?
-}
-
-
-
-
-//toAddType pressed
-extension PDFEditVC {
     private var selectTypeTableData:[SelectValueVC.SelectValueSections] {
         let cells:[SelectValueVC.SelectValueStruct] = [
             .init(name: "Date format",
@@ -492,6 +486,27 @@ extension PDFEditVC {
 
 
 extension PDFEditVC {
+    private var tableStyleData: [SelectValueVC.SelectValueSections] {
+        [
+            .init(sectionName: "", cells: [
+                .init(name: "Grouped by categories", switcher: .init(isOn: self.pdfData?.properties.documentProperties.tableStyle.categorySepareted ?? true, switched: {
+                    self.pdfData?.properties.documentProperties.tableStyle.categorySepareted = $0
+                    self.updatePDF()
+                })),
+                .init(name: "Sort", regular: .init(description:"", didSelect: {
+                    self.toSelectValueVC(title: "Sort", tableData: [
+                        .init(sectionName: "", cells: PdfDocumentProperties.TableStyle.Sort.allCases.compactMap({ sort in
+                                return .init(name: sort.rawValue, regular: .init(didSelect: {
+                                    self.pdfData?.properties.documentProperties.tableStyle.sort = .init(rawValue: sort.rawValue) ?? .amount
+                                    self.settingsNav?.popViewController(animated: true)
+                                    self.updatePDF()
+                                }))
+                        }))
+                    ])
+                }))
+            ]),
+        ]
+    }
     private var attachmentTableData:[SelectValueVC.SelectValueSections] {
         let cells: [SelectValueVC.SelectValueStruct] = [
                 .init(name: "In text position",
