@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="15px" viewBox="0 0 15 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
+    <title>ovalPlus</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ovalPlus">
+            <rect id="Rectangle" fill-opacity="0.278229827" fill="#727272" fill-rule="nonzero" x="0" y="0" width="15" height="15" rx="7.5"></rect>
+            <g id="add" transform="translate(7.627409, 7.447225) rotate(45.000000) translate(-7.627409, -7.447225) translate(4.127409, 3.947225)">
+                <g id="path-1-link" fill="#000000" fill-rule="nonzero">
+                    <path d="M3.62740857,3.62740857 L0.99943407,6.2553831 L3.62740857,3.62740857 L0.99943407,0.99943407 L3.62740857,3.62740857 Z M3.62740857,3.62740857 L6.2553831,0.99943407 L3.62740857,3.62740857 L6.2553831,6.2553831 L3.62740857,3.62740857 Z" id="path-1"></path>
+                </g>
+                <g id="path-1-link" stroke="#141414" stroke-width="1.5">
+                    <path d="M3.62740857,3.62740857 L0.99943407,6.2553831 L3.62740857,3.62740857 L0.99943407,0.99943407 L3.62740857,3.62740857 Z M3.62740857,3.62740857 L6.2553831,0.99943407 L3.62740857,3.62740857 L6.2553831,6.2553831 L3.62740857,3.62740857 Z" id="path-1"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

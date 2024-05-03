@@ -14,6 +14,18 @@ class ViewModelHomeView {
     var categories:[NewCategories] = []
     
     var error:MessageContent? = nil
+    lazy var connectivity:WatchConectivityService = .init(messageReceived: messageReceived(_:))
+    
+    func messageReceived(_ message:[String:Any]) {
+        if let username = message["username"] as? String {
+            DispatchQueue(label: "db", qos: .userInitiated).async {
+                AppDelegate.properties?.db.username = username
+                DispatchQueue.main.async(execute: {
+                    self.loadData()
+                })
+            }
+        }
+    }
     
     init(completion:@escaping()->() = {}) {
         self.loadData(completion: completion)
@@ -21,23 +33,20 @@ class ViewModelHomeView {
     
     func loadData(completion:@escaping()->() = {}) {
         DispatchQueue(label: "db", qos: .userInteractive).async { [weak self] in
-            guard let username = UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")?.value(forKey: "username") as? String else {
-                DispatchQueue.main.async {
-                    self?.error = .init(title: "No username")
-                    completion()
-                }
-                return
-            }
-            print(username, " rgterfwedw")
             self?.loadCategories(completion: {
                 self?.loadTransactions(completion: {
                     completion()
+                    if AppDelegate.properties?.db.username == "" {
+                        DispatchQueue.main.async {
+                            self?.connectivity.askUsername()
+                        }
+                    }
                     print("transactionswerer: ", self?.transactions)
                     print("categoriesadsads: ", self?.categories)
                 })
             })
         }
-
+        
     }
     private let network = LoadFromDB()
     func loadTransactions(completion:(()->())? = nil) {
@@ -55,6 +64,7 @@ class ViewModelHomeView {
         network.newCategories { list, error in
             if list.isEmpty || error != .none {
                 self.error = error.message
+                completion?()
             } else {
                 self.categories = list
                 completion?()

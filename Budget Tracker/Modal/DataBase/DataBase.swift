@@ -260,7 +260,8 @@ print(dbDict, " dbdata")
 #if os(iOS)
                 return ""
                 #else
-                return UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")?.value(forKey: "username") as? String ?? ""
+                print(UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")!.value(forKey: "username"), " grefrwedqwd")
+                return UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")!.value(forKey: "username") as? String ?? ""
                 #endif
             }
         }

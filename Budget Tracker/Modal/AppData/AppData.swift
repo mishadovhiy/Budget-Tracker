@@ -72,20 +72,20 @@ class AppData {
 extension AppData {
 #if os(iOS)
     func present(vc:UIViewController, presentingVC:UIViewController? = nil, completion:(()->())? = nil) {
-        let window = UIApplication.shared.sceneKeyWindow
+        let window = UIApplication.shared.sceneKeyWindow!
         if let presentingVC = presentingVC {
             if let presentVC = presentingVC.presentedViewController {
                 self.present(vc: vc, presentingVC: presentVC, completion: completion)
             } else {
                 presentingVC.present(vc, animated: true, completion: completion)
             }
-        } else if let presenting = window?.rootViewController?.presentedViewController {
+        } else if let presenting = window.rootViewController?.presentedViewController {
         //    presenting.dismiss(animated: true, completion: {
             self.present(vc: vc, presentingVC: presenting, completion: completion)
                // self.present(vc: vc, completion: completion)
          //   })
         } else {
-             window?.rootViewController?.present(vc, animated: true, completion: completion)
+             window.rootViewController?.present(vc, animated: true, completion: completion)
         }
     }
     #endif

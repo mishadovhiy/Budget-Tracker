@@ -198,7 +198,7 @@ class MoreOptionsData {
         let text = "Restoration code would be sent on: ".localize + email
         DispatchQueue.main.async {
             
-            self.ai?.showAlertWithOK(title: "Send code", description: text, viewType: .standard, image:.image(.init(named: "restorationCode")!), button: .with({
+            self.ai?.showAlertWithOK(title: "Send code", description: text, viewType: .standard, image:.image(.init(named: "RestCodeError")!), button: .with({
                 $0.title = "Send".localize
                 $0.action =  {
                     sendPressed(true)
@@ -492,7 +492,7 @@ class MoreOptionsData {
                     LoadFromDB.shared.Users { (loadedData, error) in
                         if error {
                             DispatchQueue.main.async {
-                                self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true, image: .init(named: "restorationCode"))
+                                self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true, image: .init(named: "RestCodeError"))
                             }
                         } else {
                             var emailToSend = ""

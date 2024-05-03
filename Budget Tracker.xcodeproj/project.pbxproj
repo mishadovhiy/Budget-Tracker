@@ -239,6 +239,7 @@
 		8DA04E442BDE75EA00CD3522 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBA7E5323F0316F00D8214C /* HomeVC.swift */; };
 		8DA2B8002AFE99F000847B43 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA2B7FF2AFE99F000847B43 /* SceneDelegate.swift */; };
 		8DA77CF4298B687E00949D98 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA77CF3298B687E00949D98 /* Filter.swift */; };
+		8DAD1AE12BE443C500FDE17B /* WatchConectivityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAD1AE02BE443C500FDE17B /* WatchConectivityService.swift */; };
 		8DADC8922810E30300CC66EF /* TransactionNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DADC8912810E30300CC66EF /* TransactionNav.swift */; };
 		8DAF26982B37A8240023573E /* oldNetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAF26972B37A8240023573E /* oldNetworkModel.swift */; };
 		8DAF26A52B37D3470023573E /* NetworkTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAF26A42B37D3470023573E /* NetworkTestView.swift */; };
@@ -482,6 +483,8 @@
 		8D2CDA332AF448A700671A72 /* SwitchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchCell.swift; sourceTree = "<group>"; };
 		8D2CDA342AF448A700671A72 /* SwitchCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SwitchCell.xib; sourceTree = "<group>"; };
 		8D39788E28083E81007A2C55 /* AppDelegateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegateExtensions.swift; sourceTree = "<group>"; };
+		8D41144F2BE40C6E00C8B752 /* BudgetTracker Watch App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "BudgetTracker Watch App.entitlements"; sourceTree = "<group>"; };
+		8D4114502BE4129000C8B752 /* BudgetTracker-Watch-App-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "BudgetTracker-Watch-App-Info.plist"; sourceTree = SOURCE_ROOT; };
 		8D4584282B3528980029AA17 /* AlertController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlertController.xib; sourceTree = "<group>"; };
 		8D45842B2B3528B00029AA17 /* AlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertController.swift; sourceTree = "<group>"; };
 		8D5206662421695200772CD5 /* StatisticBrain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticBrain.swift; sourceTree = "<group>"; };
@@ -528,6 +531,7 @@
 		8DA04E3C2BDE0B0E00CD3522 /* Budget_Tracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Budget_Tracker.entitlements; sourceTree = "<group>"; };
 		8DA2B7FF2AFE99F000847B43 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		8DA77CF3298B687E00949D98 /* Filter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
+		8DAD1AE02BE443C500FDE17B /* WatchConectivityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchConectivityService.swift; sourceTree = "<group>"; };
 		8DADC8912810E30300CC66EF /* TransactionNav.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionNav.swift; sourceTree = "<group>"; };
 		8DAF26972B37A8240023573E /* oldNetworkModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = oldNetworkModel.swift; sourceTree = "<group>"; };
 		8DAF26A42B37D3470023573E /* NetworkTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTestView.swift; sourceTree = "<group>"; };
@@ -1034,9 +1038,12 @@
 		8D0F8FFA2BDDCBB300681CED /* BudgetTracker Watch App */ = {
 			isa = PBXGroup;
 			children = (
+				8D4114502BE4129000C8B752 /* BudgetTracker-Watch-App-Info.plist */,
+				8D41144F2BE40C6E00C8B752 /* BudgetTracker Watch App.entitlements */,
 				8D0F8FFB2BDDCBB300681CED /* BudgetTrackerApp.swift */,
 				8D0F8FFD2BDDCBB300681CED /* HomeView.swift */,
 				8D1E9D812BE3CE4A00716193 /* ViewModelHomeView.swift */,
+				8DAD1AE22BE443C900FDE17B /* Services */,
 				8D1E9D832BE3D12500716193 /* StaticMessageView.swift */,
 				8D0F8FFF2BDDCBB500681CED /* Assets.xcassets */,
 				8D0F90012BDDCBB500681CED /* Preview Content */,
@@ -1284,6 +1291,14 @@
 				8D2CDA192AF3F31B00671A72 /* FilterCell.swift */,
 			);
 			path = FilterTVC;
+			sourceTree = "<group>";
+		};
+		8DAD1AE22BE443C900FDE17B /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				8DAD1AE02BE443C500FDE17B /* WatchConectivityService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		8DBA7E4323F0316F00D8214C = {
@@ -1713,6 +1728,7 @@
 				8D5C0A0B2BE33BDE00C38222 /* ViewControllers.swift in Sources */,
 				8D1E9D822BE3CE4A00716193 /* ViewModelHomeView.swift in Sources */,
 				8D5C0A052BE33BCC00C38222 /* Keychain.swift in Sources */,
+				8DAD1AE12BE443C500FDE17B /* WatchConectivityService.swift in Sources */,
 				8D5C0A3F2BE33CF400C38222 /* DateComponents.swift in Sources */,
 				8DD1DD852BE3A640005F0B86 /* localizationDictUA.swift in Sources */,
 				8D5C0A412BE33CF400C38222 /* Date.swift in Sources */,
@@ -2063,6 +2079,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_ENTITLEMENTS = "BudgetTracker Watch App/BudgetTracker Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"BudgetTracker Watch App/Preview Content\"";
@@ -2071,16 +2088,17 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "BudgetTracker-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = BudgetTracker;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.dovhiy.Developer.Budget-Tracker";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = .BTWatchOS;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker.BTWatchOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -2088,7 +2106,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+				WATCHOS_DEPLOYMENT_TARGET = 7.0;
 			};
 			name = Debug;
 		};
@@ -2100,6 +2118,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_ENTITLEMENTS = "BudgetTracker Watch App/BudgetTracker Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"BudgetTracker Watch App/Preview Content\"";
@@ -2108,23 +2127,24 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "BudgetTracker-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = BudgetTracker;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = "com.dovhiy.Developer.Budget-Tracker";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = .BTWatchOS;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker.BTWatchOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 8.0;
+				WATCHOS_DEPLOYMENT_TARGET = 7.0;
 			};
 			name = Release;
 		};
@@ -2399,7 +2419,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
@@ -2409,7 +2429,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 37.13;
+				MARKETING_VERSION = 37.19;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -2430,7 +2450,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
@@ -2440,7 +2460,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 37.13;
+				MARKETING_VERSION = 37.19;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

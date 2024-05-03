@@ -15,7 +15,6 @@ extension UIActivityIndicatorView {
     }
 }
 extension UIViewController {
-    
     func presentShareVC(vcc:UIViewController? = nil, with items:[Any], completion:(()->())? = nil, sender:UIView, dismissed:(()->())? = nil) {
         let activityViewController = UIActivityViewController(activityItems: items, applicationActivities: nil)
         activityViewController.popoverPresentationController?.sourceView = sender

@@ -9,11 +9,12 @@
 import UIKit
 import CoreData
 #if os(iOS)
+import WatchConnectivity
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-
+    
     static var properties:AppProperties?
     static var shared:AppDelegate {
         return UIApplication.shared.delegate as? AppDelegate ?? .init()
@@ -30,12 +31,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
+    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        if WCSession.isSupported() {
+            let session = WCSession.default
+            session.delegate = self
+            session.activate()
+        }
+        return true
+    }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         AppDelegate.properties = .init()
         return true
     }
-
+    
     
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
         guard let type = ShortCodeItem.init(rawValue: shortcutItem.type) else {
@@ -85,7 +94,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
     
-
+    
     
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
         // Called when the user discards a scene session.
@@ -109,22 +118,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    
-    
-
-    
-    
-    
-    
     // MARK: - Core Data stack
-
+    
     lazy var persistentContainer: NSPersistentContainer = {
         /*
          The persistent container for the application. This implementation
          creates and returns a container, having loaded the store for the
          application to it. This property is optional since there are legitimate
          error conditions that could cause the creation of the store to fail.
-        */
+         */
         let container = NSPersistentContainer(name: "LocalDataBase")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
@@ -135,14 +137,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                  * The device is out of space.
                  * The store could not be migrated to the current model version.
                  */
-            //    fatalError("Unresolved error \(error), \(error.userInfo)")
+                //    fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
         return container
     }()
-
+    
     // MARK: - Core Data Saving support
-
+    
     func saveContext () {
         let context = persistentContainer.viewContext
         if context.hasChanges {
@@ -152,10 +154,47 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nserror = error as NSError
-               // fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                // fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
     }
+}
+
+extension AppDelegate:WCSessionDelegate {
+    func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: (any Error)?) {
+        
+    }
+    
+    func sessionDidBecomeInactive(_ session: WCSession) {
+        print(session, " jtyhrtgf sessionDidBecomeInactive")
+    }
+    
+    func sessionDidDeactivate(_ session: WCSession) {
+        print(session, " thrgerfewdrgtr sessionDidDeactivate")
+    }
+    
+    func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
+        print("message received from watch: ", message)
+        let delegate = AppDelegate.properties
+        DispatchQueue(label: "db", qos: .userInitiated).async {
+            if let username = delegate?.db.username, username != "" {
+                let username = username
+                DispatchQueue.main.async {
+                    WCSession.default.sendMessage(["username":username], replyHandler: nil)
+                }
+            } else {
+                DispatchQueue.main.async {
+                    HomeVC.shared?.navigationController?.pushViewController(LoginViewController.configure(), animated: true)
+                }
+            }
+        }
+        
+    }
+    
+    func sendUsernametoWatch() {
+        
+    }
+    
 }
 
 protocol AppDelegateProtocol {
@@ -188,7 +227,7 @@ class AppDelegate {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
                 let nserror = error as NSError
-               // fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                // fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
     }

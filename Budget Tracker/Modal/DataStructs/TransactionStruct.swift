@@ -16,7 +16,7 @@ struct TransactionsStruct {
     let comment: String
     
     var reminder:[String:Any]? = nil
-    
+    let id:UUID = .init()
     func compToIso(dateStringOp:String? = nil) -> DateComponents?  {
         let date = dateStringOp ?? self.date
         let dateCo = DateComponents()

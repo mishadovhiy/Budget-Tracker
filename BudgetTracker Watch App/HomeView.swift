@@ -14,16 +14,37 @@ struct HomeView: View {
     
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            if viewModel?.error != nil {
+                StaticMessageView(message: viewModel?.error ?? .init(title: "Unknown errir"))
+            } else {
+                if #available(watchOS 8.0, *) {
+                    List {
+                        ForEach(viewModel?.transactions ?? [], id:\.id) { item in
+                            HStack(content: {
+                                Text(item.value)
+                            })
+                        }
+                    }
+                    .refreshable {
+                        self.viewModel?.loadData()
+                    }
+                } else {
+                    List {
+                        ForEach(viewModel?.transactions ?? [], id:\.id) { item in
+                            HStack(content: {
+                                Text(item.value)
+                            })
+                        }
+                    }
+                }
+            }
         }
         .padding()
         .onAppear(perform: {
             self.viewModel = .init()
         })
     }
+    
 }
 
 #Preview {
