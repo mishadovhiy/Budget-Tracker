@@ -292,6 +292,7 @@
 		8DEB84E12B158E1600AB1975 /* DetectText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEB84DF2B158E1500AB1975 /* DetectText.swift */; };
 		8DEB84E22B158E1600AB1975 /* CameraModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEB84E02B158E1500AB1975 /* CameraModel.swift */; };
 		8DECAFC12460461F0041B734 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DECAFC02460461F0041B734 /* CloudKit.framework */; };
+		8DECB3E52BE53BB100AA6346 /* ViewModelHomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1957BB2B38B05A006EC829 /* ViewModelHomeVC.swift */; };
 		8DF479DE2ADF105A0092746E /* PDFEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF479DD2ADF105A0092746E /* PDFEditVC.swift */; };
 		8DF9DCCD2815A87400C7BFA0 /* adBannerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DF9DCCC2815A87400C7BFA0 /* adBannerView.xib */; };
 		8DF9DCD02815A89400C7BFA0 /* adBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF9DCCF2815A89400C7BFA0 /* adBannerView.swift */; };
@@ -1739,6 +1740,7 @@
 				8D5C0A1F2BE33CAE00C38222 /* MessageContent.swift in Sources */,
 				8D5C0A012BE33BC100C38222 /* DataBase.swift in Sources */,
 				8DD1DD802BE3A3EF005F0B86 /* AppProperties.swift in Sources */,
+				8DECB3E52BE53BB100AA6346 /* ViewModelHomeVC.swift in Sources */,
 				8DA04E1D2BDE058000CD3522 /* ServerResponse.swift in Sources */,
 				8D5C0A172BE33C9C00C38222 /* NotificationManager.swift in Sources */,
 				8DA04E1F2BDE058700CD3522 /* oldNetworkModel.swift in Sources */,
@@ -2106,7 +2108,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 7.0;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
 			};
 			name = Debug;
 		};
@@ -2144,7 +2146,7 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 7.0;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
 			};
 			name = Release;
 		};

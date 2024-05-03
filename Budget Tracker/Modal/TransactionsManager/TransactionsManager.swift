@@ -13,7 +13,6 @@ class TransactionsManager {
     var dataTaskCount:(Int, Int)?
     var taskChanged:(((Int, Int)?)->())?
     var filterChanged:Bool = false
-    var daysBetween = [""]
 
     func new(transactions:[TransactionsStruct]) -> [tableStuct] {
         //        return dictToTable(filtered).sorted{
@@ -47,7 +46,7 @@ class TransactionsManager {
     }
     
     func filtered(_ data:[TransactionsStruct]) -> [TransactionsStruct] {
-        let today = (AppDelegate.properties?.db.filter.fromDate ?? DateComponents())
+        let today = (AppDelegate.properties!.db.filter.fromDate ?? DateComponents())
         return data.filter { transaction in
             return (transaction.date.stringToCompIso().year ?? 1) == (today.year ?? 0)
         }
@@ -66,7 +65,7 @@ class TransactionsManager {
             }
 
            // if trans.category.purpose != .debt {
-                if containsDay(curDay: trans.date) {
+            if containsDay(curDay: trans.compToIso()) {
                     var transForDay = result[trans.date] ?? []
                     transForDay.append(trans)
                     result.updateValue(transForDay, forKey: trans.date)
@@ -78,12 +77,12 @@ class TransactionsManager {
     }
     
     
-    private func containsDay(curDay:String) -> Bool {
+    private func containsDay(curDay:DateComponents?) -> Bool {
         if (AppDelegate.properties?.db.filter.showAll ?? false) {
             return true
         } else {
-            return daysBetween.contains(curDay)
-
+            let from = AppDelegate.properties?.db.filter.fromDate
+            return curDay?.year == from?.year && curDay?.month == from?.month
         }
         
     }

@@ -14,6 +14,6 @@ extension UIApplication {
             let window = $0 as? UIWindowScene
             return window?.activationState == .foregroundActive && (window?.windows.contains(where: { $0.isKeyWindow && $0.layer.name == AppDelegate.properties?.selectedID}) ?? false)
         }) as? UIWindowScene
-        return scene?.windows.last(where: {$0.isKeyWindow })
+        return scene?.windows.last(where: {$0.isKeyWindow }) ?? ((self.connectedScenes.first as? UIWindowScene)?.windows.first)
     }
 }

@@ -39,11 +39,8 @@ extension HomeVC {
             UIView.animate(withDuration: 0.58, delay: 0, usingSpringWithDamping: 0.75, initialSpringVelocity: 0, options: [.allowAnimatedContent, .allowUserInteraction]) {
                 self.mainContentView.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
                 self.mainContentViewHelpher.layer.transform = CATransform3DTranslate(CATransform3DIdentity, show ? frame.width : 0, 0, 0)
-            } completion: {
+            } completion: { _ in
                 self.sideTableView.reloadData()
-                if !$0 {
-                    return
-                }
                 if show {
                     UIView.animate(withDuration: 0.3, delay: 0, options: .allowUserInteraction, animations: {
                         self.sideBarContentBlockerView.alpha = show ? 1 : 0
@@ -87,6 +84,12 @@ extension HomeVC {
         if sender.state == .began {
             viewModel.sidescrolling = finger.x < 80
             viewModel.wasShowingSideBar = viewModel.sideBarShowing
+            print(sideTableView.description, " tregfwdas")
+            if sideTableView.delegate == nil {
+                sideTableView.delegate = self
+                sideTableView.dataSource = self
+                sideTableView.reloadData()
+            }
         }
         if viewModel.sidescrolling || viewModel.sideBarShowing {
             if sender.state == .began || sender.state == .changed {
@@ -164,46 +167,6 @@ extension HomeVC {
         }
     }
     
-    func allDaysBetween() {
-        
-        if getYearFrom(string: db.filter.to) == getYearFrom(string: db.filter.from) {
-            let today = db.filter.getToday()
-            let lastDay = "31.\(db.filter.getMonthFromString(s: today).twoDec).\(db.filter.getYearFromString(s: today))"
-            let firstDay = "01.\(db.filter.getMonthFromString(s: today).twoDec).\(db.filter.getYearFromString(s: today))"
-            if db.filter.to == "" {
-                db.filter.to = lastDay
-            }
-            if db.filter.from == "" {
-                db.filter.from = firstDay
-                
-            }
-            let to = db.filter.to
-            let monthT = db.filter.getMonthFromString(s: to)
-            let yearT = db.filter.getYearFromString(s: to)
-            let dayTo = db.filter.getLastDayOf(month: monthT, year: yearT)
-            viewModel.selectedToDayInt = dayTo
-            viewModel.selectedFromDayInt = db.filter.getDayFromString(s: db.filter.from)
-            
-            let monthDifference = getMonthFrom(string: db.filter.to) - getMonthFrom(string: db.filter.from)
-            var amount = viewModel.selectedToDayInt + (31 - viewModel.selectedFromDayInt) + (monthDifference * 31)
-            if amount < 0 {
-                amount *= -1
-            }
-            calculateDifference(amount: amount)
-            
-        } else {
-            let yearDifference = (getYearFrom(string: db.filter.to) - getYearFrom(string: db.filter.from)) - 1
-            let monthDifference = (12 - getMonthFrom(string: db.filter.from)) + (yearDifference * 12) + getMonthFrom(string: db.filter.to)
-            var amount = viewModel.selectedToDayInt + (31 - viewModel.selectedFromDayInt) + (monthDifference * 31)
-            if amount < 0 {
-                amount *= -1
-            }
-            calculateDifference(amount: amount)
-        }
-        
-        
-        
-    }
     func createTransactionsFor(date: String, filteredData: [TransactionsStruct]) -> ([TransactionsStruct], Int) {
         var result: [TransactionsStruct] = []
         var amount = 0.0
@@ -694,37 +657,6 @@ extension HomeVC: TransitionVCProtocol {
         }
     }
     
-    func calculateDifference(amount: Int) {
-        viewModel.allData = []
-        if db.filter.to != db.filter.from {
-            var dayA: Int = viewModel.selectedFromDayInt
-            var monthA: Int = getMonthFrom(string: db.filter.from)
-            var yearA: Int = getYearFrom(string: db.filter.from)
-            
-            var daysBetween: [String] = transactionManager?.daysBetween ?? []
-            daysBetween.append(db.filter.from)
-            for _ in 0..<amount {
-                dayA += 1
-                if dayA == 32 {
-                    dayA = 1
-                    monthA += 1
-                    if monthA == 13 {
-                        monthA = 1
-                        yearA += 1
-                    }
-                }
-                let new: String = "\(dayA.twoDec).\(monthA.twoDec).\(yearA.twoDec)"
-                daysBetween.append(new)
-                if new == db.filter.to {
-                    break
-                }
-            }
-            transactionManager?.daysBetween = daysBetween
-        } else {
-            transactionManager?.daysBetween.removeAll()
-            transactionManager?.daysBetween.append(db.filter.from)
-        }
-    }
     
     func prepareFilterOptions(_ data:[TransactionsStruct]? = nil) {
         let dat = data == nil ? Array(viewModel.apiTransactions) : data!

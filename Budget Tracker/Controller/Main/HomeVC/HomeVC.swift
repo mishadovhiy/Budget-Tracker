@@ -93,6 +93,7 @@ class HomeVC: SuperViewController {
         } else if AppDelegate.properties?.banner.adHidden ?? false {
             AppDelegate.properties?.banner.appeare(force: true)
         }
+        sideBar.load()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -153,7 +154,6 @@ class HomeVC: SuperViewController {
             AppDelegate.properties?.db.filter.selectedPeroud = selectedPer
         }
         
-        allDaysBetween()
         newTableData = transactionManager?.new(transactions: all) ?? []
         self.calculations = transactionManager!.calculation!
         viewModel.monthTransactions.removeAll()

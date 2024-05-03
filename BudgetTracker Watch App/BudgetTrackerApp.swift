@@ -10,6 +10,8 @@ import SwiftUI
 
 @main
 struct BudgetTracker_Watch_AppApp: App {
+    let appDelegate = AppDelegate.init()
+    
     var body: some Scene {
         WindowGroup {
             HomeView()

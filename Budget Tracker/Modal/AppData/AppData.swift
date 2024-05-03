@@ -85,7 +85,7 @@ extension AppData {
                // self.present(vc: vc, completion: completion)
          //   })
         } else {
-             window.rootViewController?.present(vc, animated: true, completion: completion)
+            window.rootViewController?.present(vc, animated: true, completion: completion)
         }
     }
     #endif

@@ -10,39 +10,41 @@ import SwiftUI
 import UIKit
 
 struct HomeView: View {
-    @State var viewModel:ViewModelHomeView? = nil
+    @ObservedObject var viewModel:ViewModelHomeView = .init()
     
     var body: some View {
         VStack {
-            if viewModel?.error != nil {
-                StaticMessageView(message: viewModel?.error ?? .init(title: "Unknown errir"))
+            Text("\(viewModel.transactions.count ?? 0) - datacount")
+            if viewModel.error != nil {
+                StaticMessageView(message: viewModel.error ?? .init(title: "Unknown errir"))
             } else {
                 if #available(watchOS 8.0, *) {
-                    List {
-                        ForEach(viewModel?.transactions ?? [], id:\.id) { item in
-                            HStack(content: {
-                                Text(item.value)
-                            })
-                        }
-                    }
+                    listView()
                     .refreshable {
-                        self.viewModel?.loadData()
+                        self.viewModel.loadData()
                     }
                 } else {
-                    List {
-                        ForEach(viewModel?.transactions ?? [], id:\.id) { item in
-                            HStack(content: {
-                                Text(item.value)
-                            })
-                        }
-                    }
+                    listView()
                 }
             }
         }
         .padding()
         .onAppear(perform: {
-            self.viewModel = .init()
+            self.viewModel.loadData()
         })
+    }
+    
+    func listView() -> some View {
+        List {
+            ForEach(viewModel.transactions ?? [], id:\.id) { item in
+                HStack(content: {
+                    Text(item.value)
+                })
+            }
+        }
+        .refreshable {
+            self.viewModel.loadData()
+        }
     }
     
 }

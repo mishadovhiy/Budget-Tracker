@@ -29,7 +29,6 @@ struct NewCategories {
             return nil
         }
         let manag = TransactionsManager()
-        manag.daysBetween = (transactions).compactMap({ $0.date })
         let total = manag.total(transactions: transactions)
         let percent = total.positive / (monthLimit ?? 0)
         print(percent, " efweefrv cat ", name)

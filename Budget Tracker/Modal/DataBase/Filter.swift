@@ -67,10 +67,17 @@ extension DataBase {
             print(date.day, " erwrw")
             print("tototo", to)
             print(date, " datedatedate")
+            if date.day == nil || date.month == nil || date.year == nil {
+                date = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+            }
             return date
         }
         var fromDate:DateComponents {
-            return from.stringToCompIso()
+            var date = from.stringToCompIso()
+            if date.day == nil || date.month == nil || date.year == nil {
+                date = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+            }
+            return date
         }
         
         var periodText:String {

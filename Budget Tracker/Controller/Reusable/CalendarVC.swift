@@ -30,8 +30,6 @@ class CalendarVC: SuperViewController {
     var canSelectOnlyOne = false
     var selectedFrom = ""
     var selectedTo = ""
-    var days = [0]
-    var daysBetween = [""]
     var selectedFromDayInt = 0
     var selectedToDayInt = 0
     var needPressDone = false
@@ -153,8 +151,6 @@ class CalendarVC: SuperViewController {
                     
                     year = getYearFrom(string: selectedFrom)
                     month = getMonthFrom(string: selectedFrom)
-                    getDays()
-                    getBetweens()
                     doneIsActive = true
                     doneButtonIsActive()
                     ifEndInvisible()
@@ -166,7 +162,6 @@ class CalendarVC: SuperViewController {
                     selectedFrom = AppDelegate.properties?.db.filter.from ?? ""
                     year = getYearFrom(string: selectedFrom)
                     month = getMonthFrom(string: selectedFrom)
-                    getDays()
                     doneIsActive = true
                     doneButtonIsActive()
                     ifEndInvisible()
@@ -213,43 +208,12 @@ class CalendarVC: SuperViewController {
         let data = AppDelegate.properties ?? .init()
         year = data.db.filter.getYearFromString(s: selectedFrom == "" ? today : selectedFrom)
         month = data.db.filter.getMonthFromString(s: selectedFrom == "" ? today : selectedFrom)
-        getDays()
         doneButtonIsActive()
 
     }
     
     var daystoWeekStart = 0
-    func getDays() {
-        daystoWeekStart = 0
-        let dateComponents = DateComponents(year: year, month: month)
-        let calendar = Calendar.current
-        let date = calendar.date(from: dateComponents)!
 
-        let range = calendar.range(of: .day, in: .month, for: date)!
-        let numDays = range.count
-        days.removeAll()
-
-        let formatter  = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        let strDate = "\(year)-\(month.twoDec)-02"
-        let datee = formatter.date(from: strDate)
-        let calendarr = Calendar(identifier: .gregorian)
-        let weekNumber = calendarr.component(.weekday, from: datee ?? Date())-3
-        
-        let weekRes = weekNumber < 0 ? 7 + weekNumber : weekNumber
-        for _ in 0..<weekRes{
-            daystoWeekStart += 1
-            days.append(0)
-        }
-        for i in 0..<numDays {
-            days.append(i+1)
-        }
-//        DispatchQueue.main.async {
-//            self.textField.text = "\(self.returnMonth(self.month)), \(self.year)"
-//        }
-        
-        
-    }
     
     func setYear() {
         if month == 13 {
@@ -274,11 +238,9 @@ class CalendarVC: SuperViewController {
         if sender.tag == 0 {
             month = month - 1
             setYear()
-            getDays()
         } else {
             month = month + 1
             setYear()
-            getDays()
         }
 //        DispatchQueue.main.async {
 //            self.collectionView.reloadData()
@@ -294,7 +256,6 @@ class CalendarVC: SuperViewController {
         
         month = month + 1
         setYear()
-        getDays()
 //        DispatchQueue.main.async {
 //            self.collectionView.reloadData()
 //        }
@@ -308,7 +269,6 @@ class CalendarVC: SuperViewController {
         
         month = month - 1
         setYear()
-        getDays()
 //        DispatchQueue.main.async {
 //            self.collectionView.reloadData()
 //        }
@@ -396,78 +356,8 @@ class CalendarVC: SuperViewController {
         return date
     }
     
-    func getBetweens() {
-        daysBetween.removeAll()
-        if selectedFrom != "" && selectedTo != "" {
-            print("daysBetween from:", selectedFrom)
-            print("daysBetween to:", selectedTo)
-            
-            if getYearFrom(string: selectedTo) == getYearFrom(string: selectedFrom) && (getMonthFrom(string: selectedTo) == getMonthFrom(string: selectedFrom)) {
-                
-                let dayFrom = AppDelegate.properties?.db.filter.getDayFromString(s: selectedFrom) ?? 0
-                print(dayFrom, "dayFromdayFromdayFromdayFromdayFrom")
-                let dayTo = AppDelegate.properties?.db.filter.getDayFromString(s: selectedTo) ?? 0
-                let between = (dayTo - dayFrom) - 1
-                var start = dayFrom + daystoWeekStart
-                for _ in 0..<between {
-                    let new = "\(days[start].twoDec).\(month.twoDec).\(year.twoDec)"
-                    daysBetween.append(new)
-                    start += 1
-                }
-                
-            } else {
-               // allDaysBetween()
-            }
-
-        }
-        
-    }
     
-    func allDaysBetween() {
-        
-        if getYearFrom(string: selectedTo) == getYearFrom(string: selectedFrom) {
-            
-            let monthDifference = (getMonthFrom(string: selectedTo) - getMonthFrom(string: selectedFrom)) - 1
-            var amount = selectedToDayInt + (31 - selectedFromDayInt) + (monthDifference * 31)
-            if amount < 0 {
-                amount *= -1
-            }
-            calculateDifference(amount: amount)
-
-        } else {
-            let yearDifference = (getYearFrom(string: selectedTo) - getYearFrom(string: selectedFrom)) - 1
-            let monthDifference = (12 - getMonthFrom(string: selectedFrom)) + (yearDifference * 12) + getMonthFrom(string: selectedTo)
-            var amount = selectedToDayInt + (31 - selectedFromDayInt) + (monthDifference * 31)
-            if amount < 0 {
-                amount *= -1
-            }
-            calculateDifference(amount: amount)
-        }
-        
-    }
     
-    func calculateDifference(amount: Int) {
-        
-        var dayA: Int = selectedFromDayInt
-        var monthA: Int = getMonthFrom(string: selectedFrom)
-        var yearA: Int = getYearFrom(string: selectedFrom)
-        for _ in 0..<amount {
-            dayA += 1
-            if dayA == 32 {
-                dayA = 1
-                monthA += 1
-                if monthA == 13 {
-                    monthA = 1
-                    yearA += 1
-                }
-            }
-            let new: String = "\(dayA.twoDec).\(monthA.twoDec).\(yearA.twoDec)"
-            if new == selectedTo {
-                break
-            }
-            daysBetween.append(new)
-        }
-    }
     
     
     func cellBackground(cell: CVCell) {
@@ -488,14 +378,14 @@ class CalendarVC: SuperViewController {
     
     func backgroundBetween(cell: CVCell) {
         
-        for i in 0..<daysBetween.count {
-            DispatchQueue.main.async {
-                if self.daysBetween[i] == cell.cellTypeLabel.text {
-                    cell.backgroundCell.backgroundColor = K.Colors.separetor
-                    cell.dayLabel.textColor = K.Colors.balanceT
-                }
-            }
-        }
+//        for i in 0..<daysBetween.count {
+//            DispatchQueue.main.async {
+//                if self.daysBetween[i] == cell.cellTypeLabel.text {
+//                    cell.backgroundCell.backgroundColor = K.Colors.separetor
+//                    cell.dayLabel.textColor = K.Colors.balanceT
+//                }
+//            }
+//        }
     }
     
 /*ovverrideTestfunc makeTwo(n: Int) -> String {
@@ -515,7 +405,6 @@ class CalendarVC: SuperViewController {
             month = getMonthFrom(string: selectedTo)
             year = getYearFrom(string: selectedTo)
         }
-        getDays()
 //        DispatchQueue.main.async {
 //            self.collectionView.reloadData()
 //        }
@@ -691,17 +580,8 @@ class CalendarVC: SuperViewController {
     
     var upToFour = (0,0)
     
-    func containdInBetween(date: String) -> Bool {
-        print(daysBetween, "daysBetweendaysBetweendaysBetweendaysBetween")
-        var result = false
-        for i in 0..<self.daysBetween.count {
-            if self.daysBetween[i] == date {
-                result = true
-                //break
-            }
-        }
-        //не добавлять дни между а просто считать больше чем "с" и меньше ли "по"
-        return result
+    func containdInBetween(date: DateComponents?) -> Bool {
+        return date?.month == month && date?.year == year
     }
     
     func dateSelectedContainer(_ date:DateComponents) {
@@ -740,13 +620,9 @@ class CalendarVC: SuperViewController {
                         self.selectedToDayInt = self.selectedFromDayInt
                         self.selectedFrom = toHolder.0
                         self.selectedFromDayInt = toHolder.1
-                        self.getBetweens()
-                    } else {
-                        self.getBetweens()
                     }
-                } else {
-                    self.getBetweens()
-                }
+                } 
+                  
                 
                 
 //                DispatchQueue.main.async {

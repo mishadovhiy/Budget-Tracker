@@ -46,7 +46,9 @@ struct ViewModelHomeVC {
     var highesLoadedCatID: Int?
     var added = false
     var allData: [[TransactionsStruct]] = []
+    #if os(iOS)
     var calendar:CalendarControlVC?
+    #endif
     var unsavedTransactionsCount = 0
     var selectedCell: IndexPath? = nil
     var animateCellWillAppear = true

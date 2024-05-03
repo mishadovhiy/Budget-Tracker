@@ -31,11 +31,7 @@ class HistoryVC: SuperViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         transactionsManager = .init()
-        historyDataStruct.forEach({
-            if !(transactionsManager?.daysBetween.contains($0.date) ?? false) {
-                transactionsManager?.daysBetween.append($0.date)
-            }
-        })
+
         print(selectedCategory, " selectedCategoryselectedCategory")
         tableView.registerCell([.amount])
         HistoryVC.shared = self

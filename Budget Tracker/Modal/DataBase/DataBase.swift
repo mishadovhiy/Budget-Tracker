@@ -18,11 +18,16 @@ class DataBase {
             if let db = DataBase._db {
                 return db
             } else {
+                #if os(iOS)
                 let dbDict = AppDelegate.properties?.coreDataManager?.fetch(.general)?.data?.toDict ?? [:]
                 DataBase._db = dbDict
                 AppDelegate.properties?.appData.threadCheck(shouldMainThread: false)
 print(dbDict, " dbdata")
                 return dbDict
+                #else
+                let dict = UserDefaults.standard.value(forKey: "DB") as? [String:Any]
+                return dict ?? [:]
+                #endif
             }
             
         }
@@ -33,11 +38,14 @@ print(dbDict, " dbdata")
             }
             DataBase._db = newValue
             AppDelegate.properties?.appData.threadCheck(shouldMainThread: false)
-
+            #if os(iOS)
             if let core:Data = .create(from: newValue) {
                 print("updating core data")
                 AppDelegate.properties?.coreDataManager?.update(.init(db: core))
             }
+            #else
+            UserDefaults.standard.setValue(newValue, forKey: "DB")
+            #endif
         }
     }
     
@@ -260,8 +268,9 @@ print(dbDict, " dbdata")
 #if os(iOS)
                 return ""
                 #else
+                
                 print(UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")!.value(forKey: "username"), " grefrwedqwd")
-                return UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")!.value(forKey: "username") as? String ?? ""
+                return "misha2023"//UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")!.value(forKey: "username") as? String ?? ""
                 #endif
             }
         }
