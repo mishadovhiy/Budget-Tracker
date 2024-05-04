@@ -129,6 +129,13 @@ struct Calculations {
     var income:Double
     var balance:Double
     var perioudBalance:Double
+    
+    init(expenses: Double = 0, income: Double = 0, balance: Double = 0, perioudBalance: Double = 0) {
+        self.expenses = expenses
+        self.income = income
+        self.balance = balance
+        self.perioudBalance = perioudBalance
+    }
 }
 
 struct tableStuct {

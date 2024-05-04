@@ -13,17 +13,20 @@ struct HomeView: View {
     @ObservedObject var viewModel:HomeViewModel = .init()
     
     var body: some View {
-        VStack {
-            if viewModel.error != nil {
-                StaticMessageView(message: viewModel.error ?? .init(title: "Unknown errir"))
-            } else {
-                listView
+        NavigationView {
+            VStack {
+                if viewModel.error != nil {
+                    StaticMessageView(message: viewModel.error ?? .init(title: "Unknown errir"))
+                } else {
+                    listView
+                }
             }
+            .padding()
+            .onAppear(perform: {
+                self.viewModel.loadData()
+            })
+            .navigationTitle("\(viewModel.month.stringMonth)")
         }
-        .padding()
-        .onAppear(perform: {
-            self.viewModel.loadData()
-        })
     }
     
     private var listView: some View {
@@ -36,25 +39,60 @@ struct HomeView: View {
         .refreshable {
             self.viewModel.loadData()
         }
+        .offset(x:viewModel.listViewOffset)
     }
     
     private var tableHead: some View {
         HStack {
-            Button("<") {
-                viewModel.changeMonth(plus: false)
-            }
-            .frame(width: 60)
-            .background(.red)
+            balanceView(.balance)
             Spacer()
-            Text("\(viewModel.month)")
-            Spacer()
-            Button(">") {
-                viewModel.changeMonth(plus: true)
+            VStack {
+                HStack {
+                    balanceView(.expences)
+                    balanceView(.income)
+                }
+                balanceView(.periodBalance)
             }
-            .frame(width: 60)
-            .background(.red)
         }
-        .background(.orange)
+        .gesture(
+            DragGesture()
+                .onChanged { value in
+                    viewModel.listViewOffset = value.translation.width
+                }
+                .onEnded { value in
+                    viewModel.changeMonth(plus: !(value.translation.width < 0))
+                    viewModel.listViewOffset = 0
+                }
+        )
+    }
+    
+    
+    private func balanceView(_ type:HomeViewModel.BalanceViewType) -> some View {
+        VStack {
+            HStack {
+                Text(type.title)
+                    .font(.system(size: 9))
+                    .foregroundStyle(.gray)
+                    .minimumScaleFactor(0.2)
+                    .lineLimit(1)
+                if type == .balance {
+                    Spacer()
+                }
+            }
+            HStack {
+                if type != .balance {
+                    Spacer()
+                }
+                Text("\(type.value(viewModel.calculations))")
+                    .font(type.fontSize)
+                    .foregroundStyle(.white)
+                    .minimumScaleFactor(0.2)
+                    .lineLimit(1)
+                if type == .balance {
+                    Spacer()
+                }
+            }
+        }
     }
     
     private func transactionCell(_ item:TransactionsStruct) -> some View {

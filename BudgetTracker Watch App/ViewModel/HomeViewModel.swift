@@ -10,9 +10,11 @@ import SwiftUI
 import Foundation
 
 class HomeViewModel:ObservableObject {
-    
+    @State var listViewOffset:CGFloat = 0
     private let transactionManager = TransactionsManager.init()
-    var calculations = Calculations.init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)
+    var calculations:Calculations {
+        transactionManager.calculation ?? .init()
+    }
     var month:Int = 0
     
     private var allApiTransactions:[TransactionsStruct] = [] {
@@ -146,6 +148,37 @@ class HomeViewModel:ObservableObject {
         self.month = AppDelegate.properties?.db.filter.fromDate.month ?? 0
         DispatchQueue.main.async {
             self.transactions = new
+        }
+    }
+}
+
+
+extension HomeViewModel {
+    enum BalanceViewType:String {
+        case balance, expences, income, periodBalance
+        var title:String {
+            switch self {
+            case .periodBalance: return "Perioud balance"
+            default: return self.rawValue.capitalized
+            }
+        }
+        
+        var fontSize:Font {
+            switch self {
+            case .balance: return .system(size: 18, weight: .black)
+            default: return .system(size: 12, weight: .medium)
+            }
+        }
+        
+        func value(_ calc:Calculations)->Int {
+            let value:Double
+            switch self {
+            case .balance: value = calc.balance
+            case .expences: value = calc.expenses
+            case .income: value = calc.income
+            case .periodBalance: value = calc.perioudBalance
+            }
+            return Int(value)
         }
     }
 }
