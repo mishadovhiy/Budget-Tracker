@@ -1042,10 +1042,9 @@
 				8D4114502BE4129000C8B752 /* BudgetTracker-Watch-App-Info.plist */,
 				8D41144F2BE40C6E00C8B752 /* BudgetTracker Watch App.entitlements */,
 				8D0F8FFB2BDDCBB300681CED /* BudgetTrackerApp.swift */,
-				8D0F8FFD2BDDCBB300681CED /* HomeView.swift */,
-				8D1E9D812BE3CE4A00716193 /* ViewModelHomeView.swift */,
 				8DAD1AE22BE443C900FDE17B /* Services */,
-				8D1E9D832BE3D12500716193 /* StaticMessageView.swift */,
+				8DC7C31B2BE68D7900BE1915 /* ViewModel */,
+				8DC7C31C2BE68D8100BE1915 /* View */,
 				8D0F8FFF2BDDCBB500681CED /* Assets.xcassets */,
 				8D0F90012BDDCBB500681CED /* Preview Content */,
 			);
@@ -1384,6 +1383,31 @@
 				8DBAD3822B1686E0004A6323 /* SelectImageCollectionCell.swift */,
 			);
 			path = SelectTextImageContainerView;
+			sourceTree = "<group>";
+		};
+		8DC7C31B2BE68D7900BE1915 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				8D1E9D812BE3CE4A00716193 /* ViewModelHomeView.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		8DC7C31C2BE68D8100BE1915 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				8D0F8FFD2BDDCBB300681CED /* HomeView.swift */,
+				8DC7C31D2BE68D8F00BE1915 /* ReusableViews */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		8DC7C31D2BE68D8F00BE1915 /* ReusableViews */ = {
+			isa = PBXGroup;
+			children = (
+				8D1E9D832BE3D12500716193 /* StaticMessageView.swift */,
+			);
+			path = ReusableViews;
 			sourceTree = "<group>";
 		};
 		8DD8134A2B0D717E00B72654 /* Cell */ = {
