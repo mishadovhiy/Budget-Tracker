@@ -14,20 +14,11 @@ class ViewModelHomeView:ObservableObject {
     
     private let transactionManager = TransactionsManager.init()
     var calculations = Calculations.init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)
+    var month:Int = 0
     
     private var allApiTransactions:[TransactionsStruct] = [] {
         didSet {
-            let all = transactionManager.filtered(allApiTransactions)
-            var new:[TransactionsStruct] = []
-            print(all.count, " refdws")
-            let newData = transactionManager.new(transactions: all)
-            print(newData.count, " rgfeds")
-            newData.forEach {
-                $0.transactions.forEach {
-                    new.append($0)
-                }
-            }
-            self.transactions = new
+            filterTransactions()
         }
     }
     
@@ -81,8 +72,8 @@ class ViewModelHomeView:ObservableObject {
                     completion?()
                 }
             } else {
+                self.allApiTransactions = list
                 DispatchQueue.main.async {
-                    self.allApiTransactions = list
                     completion?()
                 }
             }
@@ -117,5 +108,45 @@ class ViewModelHomeView:ObservableObject {
     
     func deleteCategory(_ data:NewCategories) {
         
+    }
+    
+    func changeMonth(plus:Bool) {
+        DispatchQueue(label: "db", qos: .userInitiated).async {
+            var from = AppDelegate.properties?.db.filter.fromDate ?? Date().toDateComponents()
+            if plus {
+                if from.month == 12 {
+                    from.year = (from.year ?? 0) + 1
+                    from.month = 1
+                } else {
+                    from.month = (from.month ?? 0) + 1
+                }
+            } else {
+                if from.month == 1 {
+                    from.year = (from.year ?? 0) - 1
+                    from.month = 12
+                } else {
+                    from.month = (from.month ?? 0) - 1
+                }
+            }
+            AppDelegate.properties?.db.filter.from = "\(1.twoDec).\((from.month ?? 0).twoDec).\(from.year ?? 0)"
+            self.filterTransactions()
+        }
+    }
+    
+    func filterTransactions() {
+        let all = transactionManager.filtered(allApiTransactions)
+        var new:[TransactionsStruct] = []
+        print(all.count, " refdws")
+        let newData = transactionManager.new(transactions: all)
+        print(newData.count, " rgfeds")
+        newData.forEach {
+            $0.transactions.forEach {
+                new.append($0)
+            }
+        }
+        self.month = AppDelegate.properties?.db.filter.fromDate.month ?? 0
+        DispatchQueue.main.async {
+            self.transactions = new
+        }
     }
 }

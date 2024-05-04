@@ -14,7 +14,6 @@ struct HomeView: View {
     
     var body: some View {
         VStack {
-            Text("\(viewModel.transactions.count ?? 0) - datacount")
             if viewModel.error != nil {
                 StaticMessageView(message: viewModel.error ?? .init(title: "Unknown errir"))
             } else {
@@ -36,8 +35,26 @@ struct HomeView: View {
     
     func listView() -> some View {
         List {
+            HStack {
+                Button("<") {
+                    viewModel.changeMonth(plus: false)
+                }
+                .frame(width: 60)
+                .background(.red)
+                Spacer()
+                Text("\(viewModel.month)")
+                Spacer()
+                Button(">") {
+                    viewModel.changeMonth(plus: true)
+                }
+                .frame(width: 60)
+                .background(.red)
+            }
+            .background(.orange)
             ForEach(viewModel.transactions ?? [], id:\.id) { item in
                 HStack(content: {
+                    Text(item.category.name)
+                    Spacer()
                     Text(item.value)
                 })
             }
