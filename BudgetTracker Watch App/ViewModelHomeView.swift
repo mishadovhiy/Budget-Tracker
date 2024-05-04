@@ -9,7 +9,6 @@
 import SwiftUI
 import Foundation
 
-@available(watchOS 10.0, *)
 class ViewModelHomeView:ObservableObject {
     
     private let transactionManager = TransactionsManager.init()

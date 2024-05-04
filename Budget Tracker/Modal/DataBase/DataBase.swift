@@ -25,7 +25,9 @@ class DataBase {
 print(dbDict, " dbdata")
                 return dbDict
                 #else
-                let dict = UserDefaults.standard.value(forKey: "DB") as? [String:Any]
+                //let dict = UserDefaults.standard.value(forKey: "DB") as? [String:Any]
+                                let dict = UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")!.value(forKey: "DB") as? [String:Any]
+
                 return dict ?? [:]
                 #endif
             }
@@ -44,7 +46,9 @@ print(dbDict, " dbdata")
                 AppDelegate.properties?.coreDataManager?.update(.init(db: core))
             }
             #else
-            UserDefaults.standard.setValue(newValue, forKey: "DB")
+           // UserDefaults.standard.setValue(newValue, forKey: "DB")
+                        UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")!.set(newValue, forKey: "DB")
+
             #endif
         }
     }

@@ -17,14 +17,7 @@ struct HomeView: View {
             if viewModel.error != nil {
                 StaticMessageView(message: viewModel.error ?? .init(title: "Unknown errir"))
             } else {
-                if #available(watchOS 8.0, *) {
-                    listView()
-                    .refreshable {
-                        self.viewModel.loadData()
-                    }
-                } else {
-                    listView()
-                }
+                listView
             }
         }
         .padding()
@@ -33,35 +26,43 @@ struct HomeView: View {
         })
     }
     
-    func listView() -> some View {
+    private var listView: some View {
         List {
-            HStack {
-                Button("<") {
-                    viewModel.changeMonth(plus: false)
-                }
-                .frame(width: 60)
-                .background(.red)
-                Spacer()
-                Text("\(viewModel.month)")
-                Spacer()
-                Button(">") {
-                    viewModel.changeMonth(plus: true)
-                }
-                .frame(width: 60)
-                .background(.red)
-            }
-            .background(.orange)
-            ForEach(viewModel.transactions ?? [], id:\.id) { item in
-                HStack(content: {
-                    Text(item.category.name)
-                    Spacer()
-                    Text(item.value)
-                })
+            tableHead
+            ForEach(viewModel.transactions, id:\.id) { item in
+                transactionCell(item)
             }
         }
         .refreshable {
             self.viewModel.loadData()
         }
+    }
+    
+    private var tableHead: some View {
+        HStack {
+            Button("<") {
+                viewModel.changeMonth(plus: false)
+            }
+            .frame(width: 60)
+            .background(.red)
+            Spacer()
+            Text("\(viewModel.month)")
+            Spacer()
+            Button(">") {
+                viewModel.changeMonth(plus: true)
+            }
+            .frame(width: 60)
+            .background(.red)
+        }
+        .background(.orange)
+    }
+    
+    private func transactionCell(_ item:TransactionsStruct) -> some View {
+        HStack(content: {
+            Text(item.category.name)
+            Spacer()
+            Text(item.value)
+        })
     }
     
 }

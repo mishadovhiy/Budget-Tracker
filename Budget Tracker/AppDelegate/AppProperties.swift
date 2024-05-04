@@ -80,12 +80,18 @@ extension AppProperties {
     }
     
     func appLoaded() {
+#if os(iOS)
         if coreDataManager != nil {
             return
         }
+        #endif
         coreDataManager = .init(persistentContainer: appDelegate.persistentContainer, appDelegate: appDelegate)
         DispatchQueue(label: "db", qos: .userInitiated).async {
+            #if os(iOS)
             DataBase._db = self.coreDataManager?.fetch(.general)?.data?.toDict ?? [:]
+            #else
+            DataBase._db = UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")!.value(forKey: "DB") as? [String:Any]
+            #endif
             let today = self.db.filter.getToday()
             let value = self.db.db["lastLaunching"] as? String ?? ""
             if value != today {
