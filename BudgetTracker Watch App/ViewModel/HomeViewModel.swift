@@ -9,7 +9,7 @@
 import SwiftUI
 import Foundation
 
-class ViewModelHomeView:ObservableObject {
+class HomeViewModel:ObservableObject {
     
     private let transactionManager = TransactionsManager.init()
     var calculations = Calculations.init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)

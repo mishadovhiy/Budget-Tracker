@@ -10,7 +10,7 @@ import SwiftUI
 import UIKit
 
 struct HomeView: View {
-    @ObservedObject var viewModel:ViewModelHomeView = .init()
+    @ObservedObject var viewModel:HomeViewModel = .init()
     
     var body: some View {
         VStack {
