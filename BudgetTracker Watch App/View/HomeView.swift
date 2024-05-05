@@ -112,7 +112,6 @@ struct HomeView: View {
             Spacer()
             Text(item.value)
         })
-        .background(.red)
         .padding()
         .gesture(
             TapGesture()

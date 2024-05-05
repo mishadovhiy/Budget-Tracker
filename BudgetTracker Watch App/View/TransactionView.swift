@@ -23,38 +23,7 @@ struct TransactionView: View {
     var body: some View {
         NavigationView {
             ScrollView {
-                VStack {
-                    NavigationLink(viewModel.transaction.value, destination: EnterValueView(enteringValue: .init(type: .numbers({ newValue in
-                        print(newValue, " gyhujikol")
-                        viewModel.transaction.value = "\(newValue)"
-                    }), screenTitle: "Transaction Amount", value: viewModel.transaction.value)))
-                    NavigationLink(destination:
-                        ListView(didSelect: { id in
-                            print(id, " gterfwdw")
-                            self.viewModel.transaction.categoryID = id
-                        }, tableData: viewModel.categories.compactMap({
-                            .init(title: $0.name, id: "\($0.id)")
-                        })), label: {
-                        HStack {
-                            Text("Category")
-                            Spacer()
-                            Text(viewModel.transaction.category.name)
-                        }
-                    })
-                    if #available(watchOS 10.0, *) {
-                        DatePicker("Date", selection: $viewModel.selectedDate, displayedComponents: .date)
-                            .frame(height: 60)
-                    }
-                    NavigationLink(destination: EnterValueView(enteringValue: .init(type: .string({ newValue in
-                        viewModel.transaction.comment = newValue
-                    }))), label: {
-                        HStack {
-                            Text("Comment")
-                            Spacer()
-                            Text(viewModel.transaction.comment)
-                        }
-                    })
-                }
+                contentStack
             }
             .navigationTitle(viewModel.transaction.categoryID == "" ? "Add category" : "Edit category")
             .toolbar {
@@ -66,6 +35,31 @@ struct TransactionView: View {
                     viewModel.isPresented.wrappedValue = false
                 }
             }
+        }
+    }
+    
+    private var contentStack: some View {
+        VStack {
+            NavigationLink(viewModel.transaction.value, destination: EnterValueView(enteringValue: .init(type: .numbers({ newValue in
+                viewModel.transaction.value = "\(newValue)"
+            }), value: viewModel.transaction.value)))
+            NavigationLink(destination:
+                ListView(didSelect: { id in
+                    self.viewModel.transaction.categoryID = id
+                }, tableData: viewModel.categories.compactMap({
+                    .init(title: $0.name, id: "\($0.id)")
+                })), label: {
+                HStack {
+                    Text("Category")
+                    Spacer()
+                    Text(viewModel.transaction.category.name)
+                }
+            })
+            if #available(watchOS 10.0, *) {
+                DatePicker("Date", selection: $viewModel.selectedDate, displayedComponents: .date)
+                    .frame(height: 60)
+            }
+            TextField("Comment", text: $viewModel.enteringComment)
         }
     }
 }

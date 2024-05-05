@@ -10,6 +10,11 @@ import SwiftUI
 
 struct TransactionViewModel {
     var transaction:TransactionsStruct = .init()
+    var enteringComment:String {
+        didSet {
+            transaction.comment = enteringComment
+        }
+    }
     let categories:[NewCategories]
     let donePressed:donePressedAlias
      var isPresented:Binding<Bool>
@@ -28,6 +33,7 @@ struct TransactionViewModel {
         self.categories = categories
         self.donePressed = donePressed
         selectedDate = transaction.dateFromString
+        self.enteringComment = transaction.comment
         self.isPresented = isPresented
     }
 

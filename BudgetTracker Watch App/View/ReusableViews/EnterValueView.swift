@@ -24,6 +24,18 @@ struct EnterValueView: View {
         .navigationTitle(enteringValue.value)
     }
     
+    // MARK: IBAction
+    private func calculatorPressed(_ key:CalculationValue.Right) {
+        
+    }
+    
+    private func calculatorPressed(_ key:CalculationValue.Top) {
+        
+    }
+    
+}
+
+fileprivate extension EnterValueView {
     private var calculatorView:some View {
         VStack {
             HStack {
@@ -44,7 +56,7 @@ struct EnterValueView: View {
                     }
                     Spacer()
                 }
-                .frame(width: 35)
+                .frame(width: 30)
             }
         }
     }
@@ -58,8 +70,7 @@ struct EnterValueView: View {
                     }
                 }
             }
-            HStack {
-                Spacer()
+            HStack() {
                 numberButtonView(0)
             }
         }
@@ -70,16 +81,6 @@ struct EnterValueView: View {
             print(i, " gvhjujklmm ")
         }
     }
-    
-    // MARK: IBAction
-    private func calculatorPressed(_ key:CalculationValue.Right) {
-        
-    }
-    
-    private func calculatorPressed(_ key:CalculationValue.Top) {
-        
-    }
-    
 }
 
 extension EnterValueView {
@@ -128,18 +129,6 @@ extension EnterValueView {
                     action(value)
                 }
             }
-        }
-        
-        var navigationTitle:String {
-//            if screenTitle == "" {
-//                switch type {
-//                case .numbers(_):return "Value"
-//                case .string(_):return "Value"
-//                }
-//            } else {
-//                return screenTitle
-//            }
-            return "\(self.value)"
         }
         
         enum ValueType {
