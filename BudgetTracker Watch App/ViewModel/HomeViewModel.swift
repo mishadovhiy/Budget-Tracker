@@ -15,8 +15,8 @@ class HomeViewModel:ObservableObject {
     var calculations:Calculations {
         transactionManager.calculation ?? .init()
     }
-    var month:Int = 0
-    
+    var selectedDate:DateComponents = .init()
+    var presentingTransaction:Bool = false
     private var allApiTransactions:[TransactionsStruct] = [] {
         didSet {
             filterTransactions()
@@ -145,7 +145,7 @@ class HomeViewModel:ObservableObject {
                 new.append($0)
             }
         }
-        self.month = AppDelegate.properties?.db.filter.fromDate.month ?? 0
+        self.selectedDate = AppDelegate.properties?.db.filter.fromDate ?? .init()
         DispatchQueue.main.async {
             self.transactions = new
         }

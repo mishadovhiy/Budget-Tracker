@@ -25,7 +25,7 @@ struct HomeView: View {
             .onAppear(perform: {
                 self.viewModel.loadData()
             })
-            .navigationTitle("\(viewModel.month.stringMonth)")
+            .navigationTitle("\((viewModel.selectedDate.month ?? 0).stringMonth), \(viewModel.selectedDate.year ?? 0)")
         }
     }
     
@@ -33,7 +33,11 @@ struct HomeView: View {
         List {
             tableHead
             ForEach(viewModel.transactions, id:\.id) { item in
-                transactionCell(item)
+                NavigationLink(destination: TransactionView(transaction: item, categories: viewModel.categories, donePressed: {
+                    print($0, "donepressed ")
+                }), isActive: $viewModel.presentingTransaction, label: {
+                    transactionCell(item)
+                })
             }
         }
         .refreshable {

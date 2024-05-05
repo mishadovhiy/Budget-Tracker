@@ -10,12 +10,21 @@ import UIKit
 
 
 struct TransactionsStruct {
-    let value: String
+    var value: String
     var categoryID: String
     var date: String
-    let comment: String
+    var comment: String
     
     var reminder:[String:Any]? = nil
+    
+    init(value: String = "", categoryID: String = "", date: String = "", comment: String = "", reminder: [String : Any]? = nil) {
+        self.value = value
+        self.categoryID = categoryID
+        self.date = date
+        self.comment = comment
+        self.reminder = reminder
+    }
+    
     let id:UUID = .init()
     func compToIso(dateStringOp:String? = nil) -> DateComponents?  {
         let date = dateStringOp ?? self.date

@@ -19,6 +19,7 @@ class TransactionsManager {
         //            Calendar.current.date(from: $0.date ) ?? Date.distantFuture >
         //                    Calendar.current.date(from: $1.date ) ?? Date.distantFuture
         //        }
+        calculation = .init()
         let today = (AppDelegate.properties?.db.filter.fromDate ?? DateComponents())
         let filtered = transactions.filter({
             $0.dateFromString.toDateComponents().year == today.year && (($0.dateFromString.toDateComponents().month ?? 0) == (today.month ?? -1))
