@@ -16,10 +16,28 @@ class HomeViewModel:ObservableObject {
         transactionManager.calculation ?? .init()
     }
     var selectedDate:DateComponents = .init()
-    var presentingTransaction:Bool = false
+    @Published var presentingTransaction:Bool = false {
+        didSet {
+            if !presentingTransaction {
+                self.selectedTransaction = nil
+            }
+        }
+    }
     private var allApiTransactions:[TransactionsStruct] = [] {
         didSet {
             filterTransactions()
+        }
+    }
+    
+    var selectedTransaction:TransactionsStruct? = nil {
+        didSet {
+            if presentingTransaction {
+                self.presentingTransaction = false
+            }
+            if selectedTransaction != nil {
+                self.presentingTransaction = true
+            }
+            
         }
     }
     

@@ -14,13 +14,14 @@ struct EnterValueView: View {
     
     var body: some View {
         ScrollView {
-            TextField("", text: $enteringValue.value)
-                .disabled(enteringValue.type.type == .numbers)
-                .navigationTitle(enteringValue.navigationTitle)
             if enteringValue.type.type == .numbers {
                 calculatorView
+            } else {
+                TextField("", text: $enteringValue.value)
+                    .disabled(enteringValue.type.type == .numbers)
             }
         }
+        .navigationTitle(enteringValue.value)
     }
     
     private var calculatorView:some View {
@@ -130,14 +131,15 @@ extension EnterValueView {
         }
         
         var navigationTitle:String {
-            if screenTitle == "" {
-                switch type {
-                case .numbers(_):return "Enter number"
-                case .string(_):return "Type Value"
-                }
-            } else {
-                return screenTitle
-            }
+//            if screenTitle == "" {
+//                switch type {
+//                case .numbers(_):return "Value"
+//                case .string(_):return "Value"
+//                }
+//            } else {
+//                return screenTitle
+//            }
+            return "\(self.value)"
         }
         
         enum ValueType {

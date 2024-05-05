@@ -26,18 +26,25 @@ struct HomeView: View {
                 self.viewModel.loadData()
             })
             .navigationTitle("\((viewModel.selectedDate.month ?? 0).stringMonth), \(viewModel.selectedDate.year ?? 0)")
+            
         }
+        .fullScreenCover(isPresented: $viewModel.presentingTransaction, content: {
+            TransactionView(transaction: viewModel.selectedTransaction ?? .init(), categories: viewModel.categories, donePressed: {
+                print($0, "donepressed ")
+            }, isPresented: $viewModel.presentingTransaction)
+        })
     }
     
     private var listView: some View {
         List {
             tableHead
             ForEach(viewModel.transactions, id:\.id) { item in
-                NavigationLink(destination: TransactionView(transaction: item, categories: viewModel.categories, donePressed: {
-                    print($0, "donepressed ")
-                }), isActive: $viewModel.presentingTransaction, label: {
-                    transactionCell(item)
-                })
+                //                NavigationLink(destination: TransactionView(transaction: item, categories: viewModel.categories, donePressed: {
+                //                    print($0, "donepressed ")
+                //                }), isActive: $viewModel.presentingTransaction, label: {
+                //                    transactionCell(item)
+                //                })
+                transactionCell(item)
             }
         }
         .refreshable {
@@ -105,6 +112,14 @@ struct HomeView: View {
             Spacer()
             Text(item.value)
         })
+        .background(.red)
+        .padding()
+        .gesture(
+            TapGesture()
+                .onEnded({ _ in
+                    self.viewModel.selectedTransaction = item
+                })
+        )
     }
     
 }

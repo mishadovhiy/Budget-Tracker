@@ -12,33 +12,24 @@ struct TransactionViewModel {
     var transaction:TransactionsStruct = .init()
     let categories:[NewCategories]
     let donePressed:donePressedAlias
-
+     var isPresented:Binding<Bool>
     var selectedDate: Date = .init() {
         didSet {
             self.transaction.date
         }
     }
-    var presenting = PresentingNavigation() {
-        didSet {
-            
-        }
-    }
-    
     
     init(transaction: TransactionsStruct,
          categories: [NewCategories],
-         donePressed:@escaping donePressedAlias
+         donePressed:@escaping donePressedAlias,
+         isPresented:Binding<Bool>
     ) {
         self.transaction = transaction
         self.categories = categories
         self.donePressed = donePressed
         selectedDate = transaction.dateFromString
+        self.isPresented = isPresented
     }
-    
-    struct PresentingNavigation:Codable {
-        var value:Bool = false
-        var category:Bool = false
-        var comment:Bool = false
-    }
+
     typealias donePressedAlias = (_ editedTransaction:TransactionsStruct)->()
 }

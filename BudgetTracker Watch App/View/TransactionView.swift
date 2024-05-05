@@ -14,9 +14,10 @@ struct TransactionView: View {
     
     init(transaction:TransactionsStruct = .init(),
          categories:[NewCategories],
-         donePressed:@escaping TransactionViewModel.donePressedAlias
+         donePressed:@escaping TransactionViewModel.donePressedAlias,
+         isPresented:Binding<Bool>
     ) {
-        viewModel = .init(transaction: transaction, categories: categories, donePressed: donePressed)
+        viewModel = .init(transaction: transaction, categories: categories, donePressed: donePressed, isPresented: isPresented)
     }
     
     var body: some View {
@@ -26,14 +27,14 @@ struct TransactionView: View {
                     NavigationLink(viewModel.transaction.value, destination: EnterValueView(enteringValue: .init(type: .numbers({ newValue in
                         print(newValue, " gyhujikol")
                         viewModel.transaction.value = "\(newValue)"
-                    }), screenTitle: "Transaction Amount", value: viewModel.transaction.value)), isActive: $viewModel.presenting.value)
+                    }), screenTitle: "Transaction Amount", value: viewModel.transaction.value)))
                     NavigationLink(destination:
                         ListView(didSelect: { id in
                             print(id, " gterfwdw")
                             self.viewModel.transaction.categoryID = id
                         }, tableData: viewModel.categories.compactMap({
                             .init(title: $0.name, id: "\($0.id)")
-                        })), isActive: $viewModel.presenting.category, label: {
+                        })), label: {
                         HStack {
                             Text("Category")
                             Spacer()
@@ -46,7 +47,7 @@ struct TransactionView: View {
                     }
                     NavigationLink(destination: EnterValueView(enteringValue: .init(type: .string({ newValue in
                         viewModel.transaction.comment = newValue
-                    }))), isActive: $viewModel.presenting.comment, label: {
+                    }))), label: {
                         HStack {
                             Text("Comment")
                             Spacer()
@@ -56,6 +57,15 @@ struct TransactionView: View {
                 }
             }
             .navigationTitle(viewModel.transaction.categoryID == "" ? "Add category" : "Edit category")
+            .toolbar {
+                Button("add") {
+                    self.viewModel.donePressed(self.viewModel.transaction)
+                    viewModel.isPresented.wrappedValue = false
+                }
+                Button("c") {
+                    viewModel.isPresented.wrappedValue = false
+                }
+            }
         }
     }
 }
