@@ -61,7 +61,7 @@ extension RemindersVC {
                 self.tableView.dataSource = self
             }
             self.tableView.reloadData()
-            self.ai?.hide()
+       //     self.ai?.hide()
         }
     }
 

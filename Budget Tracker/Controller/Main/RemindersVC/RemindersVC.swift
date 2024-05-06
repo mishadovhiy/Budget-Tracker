@@ -196,7 +196,7 @@ extension RemindersVC {
             vc.fromAppDelegate = true
             let nav = UINavigationController(rootViewController: vc)
             AppDelegate.properties?.appData.present(vc: nav) {
-                AppDelegate.properties?.ai.hide()
+               // AppDelegate.properties?.ai.hide()
             }
             
             nav.setBackground(.regular)
