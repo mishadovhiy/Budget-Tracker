@@ -10,6 +10,9 @@ import UIKit
 
 extension UIApplication {
     var sceneKeyWindow:UIWindow? {
+        if !Thread.isMainThread {
+            print("mainthreaderror")
+        }
         let scene = self.connectedScenes.first(where: {
             let window = $0 as? UIWindowScene
             return window?.activationState == .foregroundActive && (window?.windows.contains(where: { $0.isKeyWindow && $0.layer.name == AppDelegate.properties?.selectedID}) ?? false)

@@ -263,16 +263,6 @@ struct SaveToDB {
     static var shared = SaveToDB()
     
     func performnewTransaction(_ transaction: TransactionsStruct, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {
-        if Thread.isMainThread {
-            DispatchQueue(label: "api", qos: .userInitiated).async {
-                self.performnewTransaction(transaction, saveLocally: saveLocally, completion: completion)
-            }
-        } else {
-            performnewTransaction(transaction, saveLocally: saveLocally, completion: completion)
-        }
-    }
-    
-    func newTransaction(_ transaction: TransactionsStruct, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {
         if db.username == "" {
             db.transactions.append(transaction)
             completion(false)
@@ -292,6 +282,16 @@ struct SaveToDB {
                 
                 completion(error)
             })
+        }
+    }
+    
+    func newTransaction(_ transaction: TransactionsStruct, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {
+        if Thread.isMainThread {
+            DispatchQueue(label: "api", qos: .userInitiated).async {
+                self.performnewTransaction(transaction, saveLocally: saveLocally, completion: completion)
+            }
+        } else {
+            performnewTransaction(transaction, saveLocally: saveLocally, completion: completion)
         }
     }
     
@@ -342,8 +342,11 @@ struct SaveToDB {
     }
     //param: dont append and dont send to unsended when toDataString!= nil
     func newCategories(_ category: NewCategories, saveLocally: Bool = true, completion: @escaping (Bool) -> ()) {
-        
-        DispatchQueue(label: "api", qos: .userInitiated).async {
+        if Thread.isMainThread {
+            DispatchQueue(label: "api", qos: .userInitiated).async {
+                self.performnewCategories(category, saveLocally: saveLocally, completion: completion)
+            }
+        } else {
             self.performnewCategories(category, saveLocally: saveLocally, completion: completion)
         }
     }

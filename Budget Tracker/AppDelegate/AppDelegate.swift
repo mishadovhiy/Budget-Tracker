@@ -54,7 +54,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         var vc:UIViewController?
         switch type {
         case .addTransaction:
-            vc = TransactionNav.configure(TransitionVC.configure())
+            let transactionVC = TransitionVC.configure()
+            transactionVC.delegate = HomeVC.shared
+            vc = TransactionNav.configure(transactionVC)
         case .addReminder:
             RemindersVC.showPaymentReminders()
             return

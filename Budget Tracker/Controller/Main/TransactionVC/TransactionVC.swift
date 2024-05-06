@@ -157,7 +157,11 @@ class TransitionVC: SuperViewController {
     var panMahanger:PanViewController?
 
     lazy var defaultDate:String = {
-        return dateSet ?? (self.db.transactionDate ?? (AppDelegate.properties?.db.filter.from ?? ""))
+        var date = dateSet ?? (self.db.transactionDate ?? (AppDelegate.properties?.db.filter.from ?? (Date().toDateComponents().toShortString() ?? "")))
+        if date == "" {
+            date = Date().toDateComponents().toShortString() ?? ""
+        }
+        return date
     }()
     @IBOutlet weak var doneButton: UIButton!
 
@@ -171,7 +175,7 @@ class TransitionVC: SuperViewController {
             commentTextField.addTarget(self, action: #selector(commentCount), for: .editingChanged)
             categoryTextField.isUserInteractionEnabled = false
             categoryTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(categoryPressed)))
-
+            
             self.dateTextField.placeholder = defaultDate
             if editingDate == "" {
                 displeyingTransaction.date = defaultDate
@@ -809,7 +813,9 @@ extension TransitionVC: CalendarVCProtocol {
             self.dateTextField.text = newDate + timeString
         }
         displeyingTransaction.date = newDate
-        self.db.transactionDate = newDate
+        DispatchQueue(label: "db", qos: .userInitiated).async {
+            self.db.transactionDate = newDate
+        }
     }
 }
 
