@@ -15,6 +15,13 @@ struct TransactionViewModel {
             transaction.comment = enteringComment
         }
     }
+    var valueText:String {
+        if transaction.value != "" {
+            return (transaction.category.purpose == .expense ? "-" : "+") + transaction.value
+        } else {
+            return "Empty"
+        }
+    }
     let categories:[NewCategories]
     let donePressed:donePressedAlias
     let deletePressed:()->()

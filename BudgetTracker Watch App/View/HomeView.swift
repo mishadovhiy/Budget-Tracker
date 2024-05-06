@@ -30,9 +30,16 @@ struct HomeView: View {
         .fullScreenCover(isPresented: $viewModel.presentingTransaction, content: {
             TransactionView(transaction: viewModel.selectedTransaction ?? .init(), categories: viewModel.categories, donePressed: {
                 print($0, "donepressed ")
+                let old = viewModel.selectedTransaction
+                if $0.isNewTransaction {
+                    self.viewModel.changeTransaction(old!, to: $0)
+                } else {
+                    self.viewModel.addTransaction($0)
+                }
             }, deletePressed: {
-                let transactions = viewModel.selectedTransaction
-                print("deletetransaction ", transactions)
+                if let transactions = viewModel.selectedTransaction {
+                    viewModel.deleteTransaction(transactions)
+                }                
             }, isPresented: $viewModel.presentingTransaction)
         })
     }

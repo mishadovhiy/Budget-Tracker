@@ -64,23 +64,29 @@ class HomeViewModel:ObservableObject {
     }
         
     func loadData(completion:@escaping()->() = {}) {
-        DispatchQueue(label: "db", qos: .userInteractive).async { [weak self] in
-            self?.loadCategories(completion: {
-                self?.loadTransactions(completion: {
+        let request = {
+            self.loadCategories(completion: {
+                self.loadTransactions(completion: {
                     completion()
                     if AppDelegate.properties?.db.username == "" {
                         DispatchQueue.main.async {
-                            self?.connectivity?.askUsername()
+                            self.connectivity?.askUsername()
                         }
                     }
-                    print("transactionswerer: ", self?.transactions)
-                    print("categoriesadsads: ", self?.categories)
+                    print("transactionswerer: ", self.transactions)
+                    print("categoriesadsads: ", self.categories)
                 })
             })
         }
-        
+        if Thread.isMainThread {
+            DispatchQueue(label: "db", qos: .userInteractive).async {
+                request()
+            }
+        } else {
+            request()
+        }
     }
-
+    
     private func loadTransactions(completion:(()->())? = nil) {
         network.newTransactions { list, error in
             if list.isEmpty || error != .none {
@@ -111,20 +117,44 @@ class HomeViewModel:ObservableObject {
         }
     }
     
-    func addTransaction(_ data:TransactionsStruct) {
-        
+    func addTransaction(_ data:TransactionsStruct, completion:@escaping()->() = {}) {
+        let request = {
+            SaveToDB().newTransaction(data) { _ in
+                self.loadData(completion: completion)
+            }
+        }
+        if Thread.isMainThread {
+            DispatchQueue(label: "db", qos: .userInitiated).async {
+                request()
+            }
+        } else {
+            request()
+        }
     }
     
-    func addCategory(_ data:NewCategories) {
-        
+    func deleteTransaction(_ data:TransactionsStruct, reloadData:Bool = true, completion:@escaping()->() = {}) {
+        let request = {
+            DeleteFromDB().newTransaction(data) { _ in
+                if reloadData {
+                    self.loadData(completion: completion)
+                } else {
+                    completion()
+                }
+            }
+        }
+        if Thread.isMainThread {
+            DispatchQueue(label: "db", qos: .userInitiated).async {
+                request()
+            }
+        } else {
+            request()
+        }
     }
     
-    func deleteTransaction(_ data:TransactionsStruct) {
-        
-    }
-    
-    func deleteCategory(_ data:NewCategories) {
-        
+    func changeTransaction(_ oldValue:TransactionsStruct, to value:TransactionsStruct) {
+        deleteTransaction(oldValue, reloadData: false) {
+            self.addTransaction(value)
+        }
     }
     
     func changeMonth(plus:Bool) {

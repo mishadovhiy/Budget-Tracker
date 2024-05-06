@@ -56,7 +56,7 @@ struct TransactionView: View {
             NavigationLink(destination: EnterValueView(enteringValue: .init(type: .numbers({ newValue in
                 viewModel.transaction.value = "\(newValue)"
             }), value: viewModel.transaction.value))) {
-                cellView(title: "Value", value: viewModel.transaction.value)
+                cellView(title: "Value", value: viewModel.valueText)
             }
             NavigationLink(destination:
                 ListView(didSelect: { id in
