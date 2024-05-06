@@ -26,7 +26,10 @@ struct EnterValueView: View {
     
     // MARK: IBAction
     private func calculatorPressed(_ key:CalculationValue.Right) {
-        
+        switch key {
+        case .removeLast: enteringValue.value.removeLast()
+        case .removeAll: enteringValue.value.removeAll()
+        }
     }
     
     private func calculatorPressed(_ key:CalculationValue.Top) {
@@ -38,14 +41,14 @@ struct EnterValueView: View {
 fileprivate extension EnterValueView {
     private var calculatorView:some View {
         VStack {
-            HStack {
-                ForEach(CalculationValue.Top.allCases, id: \.rawValue) { key in
-                    Button("\(key.title)") {
-                        self.calculatorPressed(key)
-                    }
-                }
-            }
-            
+//            HStack {
+//                ForEach(CalculationValue.Top.allCases, id: \.rawValue) { key in
+//                    Button("\(key.title)") {
+//                        self.calculatorPressed(key)
+//                    }
+//                }
+//            }
+//            
             HStack {
                 numbersView
                 VStack {
@@ -66,7 +69,7 @@ fileprivate extension EnterValueView {
             ForEach(0..<3) {section in
                 HStack {
                     ForEach(0..<3) {index in
-                        numberButtonView(section + (index + (index * section)))
+                        numberButtonView((index + 1) + (3 * section))
                     }
                 }
             }
@@ -78,7 +81,9 @@ fileprivate extension EnterValueView {
     
     private func numberButtonView(_ i:Int) -> some View {
         Button("\(i)") {
-            print(i, " gvhjujklmm ")
+            if enteringValue.value.count <= 9 {
+                enteringValue.value += "\(i)"
+            }
         }
     }
 }
@@ -118,7 +123,7 @@ extension EnterValueView {
     struct EnteringValue {
         let type:ValueType
         var screenTitle:String = ""
-        
+            
         var value:String = "" {
             didSet {
                 let value = self.value

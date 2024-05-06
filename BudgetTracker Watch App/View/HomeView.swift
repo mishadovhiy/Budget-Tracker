@@ -26,11 +26,13 @@ struct HomeView: View {
                 self.viewModel.loadData()
             })
             .navigationTitle("\((viewModel.selectedDate.month ?? 0).stringMonth), \(viewModel.selectedDate.year ?? 0)")
-            
         }
         .fullScreenCover(isPresented: $viewModel.presentingTransaction, content: {
             TransactionView(transaction: viewModel.selectedTransaction ?? .init(), categories: viewModel.categories, donePressed: {
                 print($0, "donepressed ")
+            }, deletePressed: {
+                let transactions = viewModel.selectedTransaction
+                print("deletetransaction ", transactions)
             }, isPresented: $viewModel.presentingTransaction)
         })
     }
@@ -38,12 +40,12 @@ struct HomeView: View {
     private var listView: some View {
         List {
             tableHead
+            Button("Add transaction") {
+                TransactionsStruct.newTransaction(type: .expense) { new in
+                    self.viewModel.selectedTransaction = new
+                }
+            }
             ForEach(viewModel.transactions, id:\.id) { item in
-                //                NavigationLink(destination: TransactionView(transaction: item, categories: viewModel.categories, donePressed: {
-                //                    print($0, "donepressed ")
-                //                }), isActive: $viewModel.presentingTransaction, label: {
-                //                    transactionCell(item)
-                //                })
                 transactionCell(item)
             }
         }

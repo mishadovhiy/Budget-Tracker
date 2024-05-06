@@ -17,17 +17,24 @@ struct TransactionViewModel {
     }
     let categories:[NewCategories]
     let donePressed:donePressedAlias
-     var isPresented:Binding<Bool>
+    let deletePressed:()->()
+    var isPresented:Binding<Bool>
     var selectedDate: Date = .init() {
         didSet {
-            self.transaction.date
+            if let newDate = selectedDate.toDateComponents().toShortString() {
+                self.transaction.date = newDate
+                DispatchQueue(label: "db", qos: .userInitiated).async {
+                    AppDelegate.properties?.db.transactionDate = newDate
+                }
+            }
         }
     }
     
     init(transaction: TransactionsStruct,
          categories: [NewCategories],
          donePressed:@escaping donePressedAlias,
-         isPresented:Binding<Bool>
+         isPresented:Binding<Bool>,
+         deletePressed:@escaping()->()
     ) {
         self.transaction = transaction
         self.categories = categories
@@ -35,7 +42,12 @@ struct TransactionViewModel {
         selectedDate = transaction.dateFromString
         self.enteringComment = transaction.comment
         self.isPresented = isPresented
+        self.deletePressed = deletePressed
     }
-
+    
+    var validateDonePressed:Bool {
+        return transaction.categoryID != "" && transaction.value != ""
+    }
+    
     typealias donePressedAlias = (_ editedTransaction:TransactionsStruct)->()
 }

@@ -718,7 +718,6 @@ class TransitionVC: SuperViewController {
         guard let button = ActionButton.init(rawValue: sender.tag) else {
             return
         }
-        //here
         if button != .equel {
             pressedValue = ""
             enteredHolder = Double(enteringValueResult)

@@ -62,9 +62,7 @@ class HomeViewModel:ObservableObject {
     init(completion:@escaping()->() = {}) {
         self.connectivity = .init(messageReceived: messageReceived(_:))
     }
-    
-    //self.loadData(completion: completion)
-    
+        
     func loadData(completion:@escaping()->() = {}) {
         DispatchQueue(label: "db", qos: .userInteractive).async { [weak self] in
             self?.loadCategories(completion: {

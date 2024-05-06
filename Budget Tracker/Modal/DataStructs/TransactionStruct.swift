@@ -14,7 +14,7 @@ struct TransactionsStruct {
     var categoryID: String
     var date: String
     var comment: String
-    
+    var isNewTransaction:Bool = false
     var reminder:[String:Any]? = nil
     
     init(value: String = "", categoryID: String = "", date: String = "", comment: String = "", reminder: [String : Any]? = nil) {
@@ -23,6 +23,19 @@ struct TransactionsStruct {
         self.date = date
         self.comment = comment
         self.reminder = reminder
+    }
+    
+    static func newTransaction(type:LastSelected.SelectedTypeEnum, completion:@escaping(_ new:Self)->()) {
+        let appDelegate = AppDelegate.properties
+        DispatchQueue(label: "db", qos: .userInitiated).async {
+            let db = appDelegate?.db
+            let cat = db?.lastSelected.gett(valueType: type)
+            var new:Self = .init(categoryID: cat ?? "", date: db?.transactionDate ?? (Date().toDateComponents().toShortString() ?? ""))
+            new.isNewTransaction = true
+            DispatchQueue.main.async {
+                completion(new)
+            }
+        }
     }
     
     let id:UUID = .init()
