@@ -11,7 +11,7 @@ import UIKit
 @available(iOS 13.0, *)
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
+    
     var window: UIWindow?
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
@@ -21,9 +21,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = HomeVC.configure()
         AppDelegate.properties?.selectedID = window?.layer.name ?? ""
         window?.makeKeyAndVisible()
+        if let shotcutItem = connectionOptions.shortcutItem {
+            AppDelegate.shared.performShortcutAction(shotcutItem)
+        }
     }
-
-
+    
     func windowScene(_ windowScene: UIWindowScene, didUpdate previousCoordinateSpace: UICoordinateSpace, interfaceOrientation previousInterfaceOrientation: UIInterfaceOrientation, traitCollection previousTraitCollection: UITraitCollection) {
         print("uyefrdwsx fred")
     }
@@ -31,7 +33,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func sceneDidBecomeActive(_ scene: UIScene) {
         AppDelegate.properties?.becomeActive()
     }
-
+    
     func sceneWillResignActive(_ scene: UIScene) {
         AppDelegate.properties?.receinActive()
     }

@@ -47,6 +47,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
+        performShortcutAction(shortcutItem)
+    }
+    
+    func performShortcutAction(_ shortcutItem: UIApplicationShortcutItem) {
         guard let type = ShortCodeItem.init(rawValue: shortcutItem.type) else {
             print("unrecognized item pressed")
             return
@@ -65,7 +69,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         if let vcc = vc {
             vc = nil
-            AppDelegate.properties?.appData.present(vc: vcc)
+            if HomeVC.shared == nil {
+                AppDelegate.properties?.actionFromAppDelegate = {
+                    AppDelegate.properties?.appData.present(vc: vcc)
+                }
+            } else {
+                AppDelegate.properties?.appData.present(vc: vcc)
+            }
+            
         }
     }
     

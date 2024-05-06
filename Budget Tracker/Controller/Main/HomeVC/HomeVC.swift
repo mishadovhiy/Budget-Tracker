@@ -94,6 +94,8 @@ class HomeVC: SuperViewController {
             AppDelegate.properties?.banner.appeare(force: true)
         }
         sideBar.load()
+        AppDelegate.properties?.actionFromAppDelegate?()
+        AppDelegate.properties?.actionFromAppDelegate = nil
     }
     
     override func viewWillAppear(_ animated: Bool) {

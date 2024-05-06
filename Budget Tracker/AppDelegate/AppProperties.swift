@@ -36,7 +36,7 @@ class AppProperties {
     }()
     #endif
     var coreDataManager:CoreDataDBManager?
-    
+    var actionFromAppDelegate:(()->())? = nil
     lazy var db:DataBase = {
         return DataBase()
     }()
