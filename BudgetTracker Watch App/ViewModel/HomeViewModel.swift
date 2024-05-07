@@ -119,7 +119,11 @@ class HomeViewModel:ObservableObject {
     
     func addTransaction(_ data:TransactionsStruct, completion:@escaping()->() = {}) {
         let request = {
-            SaveToDB().newTransaction(data) { _ in
+            var transaction = data
+            if transaction.category.purpose == .expense {
+                transaction.value = "-" + transaction.value
+            }
+            SaveToDB().newTransaction(transaction) { _ in
                 self.loadData(completion: completion)
             }
         }

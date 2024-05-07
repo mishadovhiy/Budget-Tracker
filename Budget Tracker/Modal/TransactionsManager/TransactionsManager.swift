@@ -13,7 +13,8 @@ class TransactionsManager {
     var dataTaskCount:(Int, Int)?
     var taskChanged:(((Int, Int)?)->())?
     var filterChanged:Bool = false
-
+    private var balanceTotalHolder:Double = 0
+    
     func new(transactions:[TransactionsStruct]) -> [tableStuct] {
         //        return dictToTable(filtered).sorted{
         //            Calendar.current.date(from: $0.date ) ?? Date.distantFuture >
@@ -43,13 +44,19 @@ class TransactionsManager {
         allForThisMonth.forEach({
             res += Double($0.value) ?? 0
         })
-        return res
+        return allForThisMonth.reduce(0) { partialResult, item in
+            return partialResult + (Double(item.value) ?? 0)
+        }
     }
     
     func filtered(_ data:[TransactionsStruct]) -> [TransactionsStruct] {
-        let today = (AppDelegate.properties!.db.filter.fromDate ?? DateComponents())
+        let today = (AppDelegate.properties?.db.filter.fromDate ?? DateComponents())
+        self.balanceTotalHolder = data.reduce(0) { partialResult, item in
+            return partialResult + (Double(item.value) ?? 0)
+        }
         return data.filter { transaction in
-            return (transaction.date.stringToCompIso().year ?? 1) == (today.year ?? 0)
+            let components = transaction.date.stringToCompIso()
+            return (components.year ?? 1) == (today.year ?? 0) && components.month == today.month
         }
     }
     func dataToDict(_ transactions:[TransactionsStruct]) -> [String:[TransactionsStruct]] {
@@ -118,7 +125,7 @@ class TransactionsManager {
         let currentCalcs = calculation ?? .init(expenses: 0, income: 0, balance: 0, perioudBalance: 0)
       //  calculations = .init(expenses: currentCalcs.expenses + calcs.expenses, income: currentCalcs.income + calcs.income, balance: calculations.balance, perioudBalance: currentCalcs.perioudBalance + calcs.perioudBalance)
        // return result
-        let calc:Calculations = .init(expenses: currentCalcs.expenses + calcs.expenses, income: currentCalcs.income + calcs.income, balance: currentCalcs.balance, perioudBalance: currentCalcs.perioudBalance + calcs.perioudBalance)
+        let calc:Calculations = .init(expenses: currentCalcs.expenses + calcs.expenses, income: currentCalcs.income + calcs.income, balance: balanceTotalHolder, perioudBalance: currentCalcs.perioudBalance + calcs.perioudBalance)
         self.calculation = calc
         return (result, calc)
         

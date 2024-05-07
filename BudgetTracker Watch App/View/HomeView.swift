@@ -29,7 +29,6 @@ struct HomeView: View {
         }
         .fullScreenCover(isPresented: $viewModel.presentingTransaction, content: {
             TransactionView(transaction: viewModel.selectedTransaction ?? .init(), categories: viewModel.categories, donePressed: {
-                print($0, "donepressed ")
                 let old = viewModel.selectedTransaction
                 if $0.isNewTransaction {
                     self.viewModel.changeTransaction(old!, to: $0)
@@ -74,13 +73,14 @@ struct HomeView: View {
                 balanceView(.periodBalance)
             }
         }
+        .offset(x: viewModel.listViewOffset)
         .gesture(
             DragGesture()
                 .onChanged { value in
                     viewModel.listViewOffset = value.translation.width
                 }
                 .onEnded { value in
-                    viewModel.changeMonth(plus: !(value.translation.width < 0))
+                    viewModel.changeMonth(plus: (value.translation.width < 0))
                     viewModel.listViewOffset = 0
                 }
         )
@@ -116,10 +116,18 @@ struct HomeView: View {
     }
     
     private func transactionCell(_ item:TransactionsStruct) -> some View {
-        HStack(content: {
-            Text(item.category.name)
-            Spacer()
-            Text(item.value)
+        VStack(content: {
+            HStack(content: {
+                Text(item.category.name)
+                Spacer()
+                Text(item.value)
+            })
+            HStack {
+                Text(item.date)
+                    .font(.system(size: 9))
+                    .multilineTextAlignment(.leading)
+                Spacer()
+            }
         })
         .padding()
         .gesture(

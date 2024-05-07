@@ -17,7 +17,7 @@ struct TransactionViewModel {
     }
     var valueText:String {
         if transaction.value != "" {
-            return (transaction.category.purpose == .expense ? "-" : "+") + transaction.value
+            return (transaction.category.purpose == .expense && !transaction.value.contains("-") ? "-" : "") + transaction.value
         } else {
             return "Empty"
         }
