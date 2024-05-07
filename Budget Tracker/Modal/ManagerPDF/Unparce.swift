@@ -137,7 +137,7 @@ class UnparcePDF {
 
         let plus = UIImageView(frame: .init(origin: .init(x: manager.pageWidth / 2 - 25, y: height / 2 - 15), size: .init(width: 30, height: 30)))
         plus.shadow()
-        plus.image = .init(named: "plusIcon")
+        plus.image = .init(named: "addIcon")
         plus.contentMode = .scaleAspectFit
         view.addSubview(plus)
         let attachment = NSTextAttachment()
@@ -297,9 +297,11 @@ class UnparcePDF {
             let rt = TransactionsStruct.create(dictt: $1)
             switch sort {
             case .date:
-                let left = lt?.dateFromString ?? Date()
-                let right = rt?.dateFromString ?? Date()
-                return left >= right
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "MMM dd, yyyy"
+                let left = dateFormatter.date(from: lt?.date ?? "") ?? .init()
+                let right = dateFormatter.date(from: rt?.date ?? "") ?? .init()
+                return left > right
             case .category:
                 let left = lt?.category.name ?? ""
                 let right = rt?.category.name ?? ""

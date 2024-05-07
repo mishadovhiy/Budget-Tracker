@@ -18,12 +18,13 @@ class AttributedPreviewCell:UITableViewCell {
         setSelectedColor(K.Colors.link.withAlphaComponent(0.1))
     }
     
-    func set(_ data:NSAttributedString) {
+    func set(_ data:NSAttributedString, hideselected:Bool) {
         let atr = data
         let mutating = NSMutableAttributedString(string: "")
         mutating.append(atr)
         mutating.append(.init(string: " "))
         titleLabel.attributedText = mutating
+        selectedLineView.isHidden = hideselected
     }
     
  

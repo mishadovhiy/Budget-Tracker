@@ -15,8 +15,8 @@ extension PDFEditVC:UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AttributedPreviewCell", for: indexPath) as! AttributedPreviewCell
-        cell.selectedLineView.isHidden = !(selectedRow == indexPath.row)
-        cell.set(tableData[indexPath.row].0)
+        cell.set(tableData[indexPath.row].0,
+                 hideselected: !(selectedRow == indexPath.row))
         return cell
     }
     
