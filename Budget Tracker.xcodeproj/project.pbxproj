@@ -114,7 +114,6 @@
 		8D1D6DF92BE3BA2800DEB8AC /* TransactionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D08FD522AC9CCDF00BA0222 /* TransactionsManager.swift */; };
 		8D1D6DFA2BE3BA2900DEB8AC /* TransactionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D08FD522AC9CCDF00BA0222 /* TransactionsManager.swift */; };
 		8D1E4BCE2B222E360030BCB8 /* RefreshTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1E4BCD2B222E360030BCB8 /* RefreshTableView.swift */; };
-		8D1E9D802BE3C3D200716193 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D0F8FFF2BDDCBB500681CED /* Assets.xcassets */; };
 		8D1E9D822BE3CE4A00716193 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1E9D812BE3CE4A00716193 /* HomeViewModel.swift */; };
 		8D1E9D842BE3D12500716193 /* StaticMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1E9D832BE3D12500716193 /* StaticMessageView.swift */; };
 		8D251BBF2B2D22C6005EB934 /* Dictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D251BBE2B2D22C6005EB934 /* Dictionary.swift */; };
@@ -285,6 +284,7 @@
 		8DE495832B1D4C610009D065 /* Budget_TrackerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE495822B1D4C610009D065 /* Budget_TrackerUITests.swift */; };
 		8DE495852B1D4C610009D065 /* Budget_TrackerUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE495842B1D4C610009D065 /* Budget_TrackerUITestsLaunchTests.swift */; };
 		8DE693C22AD4A12C008501B0 /* SelectValueCollectionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE693C12AD4A12C008501B0 /* SelectValueCollectionVC.swift */; };
+		8DE873452BE9DEEE00051493 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D0F8FFF2BDDCBB500681CED /* Assets.xcassets */; };
 		8DE94B702850336800ADF861 /* MessageViewLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 8DE94B6F2850336800ADF861 /* MessageViewLibrary */; };
 		8DEB0CD928184FC0002D24D3 /* DebtDescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEB0CD828184FC0002D24D3 /* DebtDescriptionCell.swift */; };
 		8DEB0CDB28184FEA002D24D3 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DEB0CDA28184FEA002D24D3 /* Extensions.swift */; };
@@ -1658,7 +1658,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D0F90032BDDCBB600681CED /* Preview Assets.xcassets in Resources */,
-				8D1E9D802BE3C3D200716193 /* Assets.xcassets in Resources */,
+				8DE873452BE9DEEE00051493 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2123,7 +2123,7 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_ENTITLEMENTS = "BudgetTracker Watch App/BudgetTracker Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"BudgetTracker Watch App/Preview Content\"";
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				ENABLE_PREVIEWS = YES;
@@ -2162,7 +2162,7 @@
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_ENTITLEMENTS = "BudgetTracker Watch App/BudgetTracker Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"BudgetTracker Watch App/Preview Content\"";
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				ENABLE_PREVIEWS = YES;
@@ -2461,7 +2461,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
@@ -2492,7 +2492,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
