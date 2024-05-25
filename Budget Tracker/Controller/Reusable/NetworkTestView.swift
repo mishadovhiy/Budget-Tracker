@@ -22,7 +22,7 @@ struct NetworkTestView: View {
         }
     }
 }
-
+@available(iOS 13.0, *)
 class NetworkTestViewViewModel:ObservableObject {
     struct ViewData {
         var transCount:Int = 0

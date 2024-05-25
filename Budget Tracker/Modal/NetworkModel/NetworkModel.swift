@@ -17,11 +17,13 @@ struct NetworkModel {
 }
 
 extension NetworkModel {
+    @available(iOS 13.0, *)
     static func loadCategories(showError:Bool = false) async -> [NewCategories] {
         let response = await NetworkTask.load(urlPath: Keys.dbURL + "NewCategories.php")
         return response.unparseCategories(saveLocally: true) ?? []
     }
     
+    @available(iOS 13.0, *)
     static func loadTransactions() async -> [TransactionsStruct] {
         let response = await NetworkTask.load(urlPath: Keys.dbURL + "newTransactions.php")
         return response.unparseTransactions(saveLocally: true) ?? []

@@ -96,7 +96,11 @@ class RefreshTableView: UITableView {
         if activityIndicator != nil {
             return
         }
-        activityIndicator = .init(style: .medium)
+        if #available(iOS 13.0, *) {
+            activityIndicator = .init(style: .medium)
+        } else {
+            activityIndicator = .init(style: .white)
+        }
         activityIndicator?.tintColor = K.Colors.category
         self.addSubview(activityIndicator!)
         activityIndicator?.addConstaits([.centerX:0, .centerY:0], superV: self)

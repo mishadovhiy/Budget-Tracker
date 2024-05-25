@@ -9,6 +9,7 @@
 import Foundation
 
 struct NetworkTask {
+    @available(iOS 13.0, *)
     static func load(urlPath: String) async -> ServerResponse.ArrayType {
         guard let url:URL = URL(string: urlPath) else {
             print("grfdsff")

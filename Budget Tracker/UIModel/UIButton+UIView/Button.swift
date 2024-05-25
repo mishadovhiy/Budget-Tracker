@@ -79,7 +79,11 @@ class Button: UIButton {
             if self.backgroundColor == .tintColor {
                 self.backgroundColor = K.Colors.link
             }
-        } else if self.backgroundColor == .link {
+        } else if #available(iOS 13.0, *) {
+            if self.backgroundColor == .link {
+                self.backgroundColor = K.Colors.link
+            }
+        } else {
             self.backgroundColor = K.Colors.link
         }
         if #available(iOS 15.0, *) {
@@ -87,7 +91,12 @@ class Button: UIButton {
                 self.setTitleColor(K.Colors.link, for: .normal)
                 self.tintColor = K.Colors.link
             }
-        } else if self.tintColor == .link {
+        } else if #available(iOS 13.0, *) {
+            if self.tintColor == .link {
+                self.tintColor = K.Colors.link
+                self.setTitleColor(K.Colors.link, for: .normal)
+            }
+        } else {
             self.tintColor = K.Colors.link
             self.setTitleColor(K.Colors.link, for: .normal)
         }
@@ -97,7 +106,12 @@ class Button: UIButton {
                 self.setTitleColor(K.Colors.link, for: .normal)
                 self.tintColor = K.Colors.link
             }
-        } else if self.titleColor(for: .normal) == .link {
+        } else if #available(iOS 13.0, *) {
+            if self.titleColor(for: .normal) == .link {
+                self.tintColor = K.Colors.link
+                self.setTitleColor(K.Colors.link, for: .normal)
+            }
+        } else {
             self.tintColor = K.Colors.link
             self.setTitleColor(K.Colors.link, for: .normal)
         }
@@ -106,7 +120,11 @@ class Button: UIButton {
                 if touchButton.pressColor == .tintColor {
                     touchButton.pressColor = K.Colors.link
                 }
-            } else if touchButton.pressColor == .link {
+            } else if #available(iOS 13.0, *) {
+                if touchButton.pressColor == .link {
+                    touchButton.pressColor = K.Colors.link
+                }
+            } else {
                 touchButton.pressColor = K.Colors.link
             }
         }
