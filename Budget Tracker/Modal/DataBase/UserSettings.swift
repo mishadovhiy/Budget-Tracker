@@ -6,8 +6,10 @@
 //  Copyright © 2022 Misha Dovhiy. All rights reserved.
 //
 
+import Foundation
+#if canImport(UIKit)
 import UIKit
-
+#endif
 struct UserSettings {
     static var dict:[String:Any] {
         get {

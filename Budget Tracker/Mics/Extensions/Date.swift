@@ -5,9 +5,9 @@
 //  Created by Mikhailo Dovhyi on 20.03.2022.
 //  Copyright © 2022 Misha Dovhiy. All rights reserved.
 //
-
+#if canImport(UIKit)
 import UIKit
-
+#endif
 
 extension Date {
     var iso8601withFractionalSeconds: String {

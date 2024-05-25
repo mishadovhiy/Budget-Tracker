@@ -5,10 +5,10 @@
 //  Created by Mikhailo Dovhyi on 30.03.2022.
 //  Copyright © 2022 Misha Dovhiy. All rights reserved.
 //
-
+#if canImport(UIKit)
 import UIKit
-
-
+#endif
+import Foundation
 struct NotificationManager {
     var db:DataBase {
         return AppDelegate.properties?.db ?? .init()

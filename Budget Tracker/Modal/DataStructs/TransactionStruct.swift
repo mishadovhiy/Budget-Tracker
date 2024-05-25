@@ -6,8 +6,10 @@
 //  Copyright © 2022 Misha Dovhiy. All rights reserved.
 //
 
+#if canImport(UIKit)
 import UIKit
-
+#endif
+import Foundation
 
 struct TransactionsStruct {
     var value: String

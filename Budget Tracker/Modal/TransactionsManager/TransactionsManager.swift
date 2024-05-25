@@ -5,8 +5,10 @@
 //  Created by Misha Dovhiy on 01.10.2023.
 //  Copyright © 2023 Misha Dovhiy. All rights reserved.
 //
-
+#if canImport(UIKit)
 import UIKit
+#endif
+import Foundation
 
 class TransactionsManager {
     var calculation:Calculations?

@@ -6,8 +6,10 @@
 //  Copyright © 2021 Misha Dovhiy. All rights reserved.
 //
 
+#if canImport(UIKit)
 import UIKit
-
+#endif
+import Foundation
 class Icons {
     
     var icons:[IconsData]  {

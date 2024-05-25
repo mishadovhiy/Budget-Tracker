@@ -5,9 +5,10 @@
 //  Created by Misha Dovhiy on 10.02.2020.
 //  Copyright © 2020 Misha Dovhiy. All rights reserved.
 //
-
+#if canImport(UIKit)
 import UIKit
-
+#endif
+import Foundation
 struct K {
     
     static let calcCellIdent = "calcCellIdent"
