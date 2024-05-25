@@ -8,13 +8,23 @@
 
 import Foundation
 import WatchConnectivity
-
-class WatchConectivityService:WCSessionDelegate {
+import WatchKit
+//error:
+//- sending from watch to iphone: ok
+//- ios received and ios sent
+//- error: watchos not received
+///== delegate error
+class WatchConectivityService:WKInterfaceController, WCSessionDelegate {
     var messageReceived:((_ data:[String : Any])->())? = nil
     
-    init(messageReceived:@escaping (_ data:[String : Any])->()) {
+    init(messageReceived: @escaping (_: [String : Any]) -> Void) {
+      //  self.messageReceived = messageReceived
+    }
+    
+    override func awake(withContext context: Any?) {
+        super.awake(withContext: context)
         WCSession.default.delegate = self
-        self.messageReceived = messageReceived
+        WCSession.default.activate()
     }
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
@@ -22,62 +32,33 @@ class WatchConectivityService:WCSessionDelegate {
         messageReceived?(message)
     }
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: (any Error)?) {
-            
+        if error == nil {
+            askUsername()
+        } else {
+            print(error)
+        }
+        
     }
     
-    func isEqual(_ object: Any?) -> Bool {
-        true
-    }
-    
-    var hash: Int = 0
-    
-    var superclass: AnyClass?
-    
-    func `self`() -> Self {
-        self
-    }
-    
-    func perform(_ aSelector: Selector!) -> Unmanaged<AnyObject>! {
-        .none
-    }
-    
-    func perform(_ aSelector: Selector!, with object: Any!) -> Unmanaged<AnyObject>! {
-        .none
-    }
-    
-    func perform(_ aSelector: Selector!, with object1: Any!, with object2: Any!) -> Unmanaged<AnyObject>! {
-        .none
-    }
-    
-    func isProxy() -> Bool {
-        true
-    }
-    
-    func isKind(of aClass: AnyClass) -> Bool {
-        true
-    }
-    
-    func isMember(of aClass: AnyClass) -> Bool {
-        true
-    }
-    
-    func conforms(to aProtocol: Protocol) -> Bool {
-        true
-    }
-    
-    func responds(to aSelector: Selector!) -> Bool {
-        true
-    }
-    
-    var description: String = ""
+
+    private var message:[String:Any] = [:]
     
     func askUsername() {
-        if WCSession.default.isReachable {
-            let message = ["wait": "username"]
-            WCSession.default.sendMessage(message, replyHandler: nil, errorHandler: nil)
-            print(message, " rtegfwergthry")
-        } else {
-            fatalError()
+        DispatchQueue.main.async {
+            if WCSession.default.isReachable {
+                let message = ["wait": "username"]
+                print(message, " rtegfwergthry ")
+                //WCSession.default.sendMessage(message, replyHandler: nil, errorHandler: nil)
+                WCSession.default.delegate = self
+             //   WCSession.default.sendMessage(message, replyHandler: nil, errorHandler: nil)
+                WCSession.default.sendMessage(message) { reply in
+                    print(reply, " ythrtgerfed")
+                }
+                
+            } else if WCSession.default.activationState == .notActivated {
+                WCSession.default.delegate = self
+                WCSession.default.activate()
+            }
         }
     }
 }

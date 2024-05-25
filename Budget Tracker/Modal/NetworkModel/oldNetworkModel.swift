@@ -214,7 +214,227 @@ struct LoadFromDB {
         
     }
     
+    enum LoginCompletion {
+        case result(_ error:String?, _ success:Bool?)
+        case userChanged
+        case enteredEmailUsers(_ newValue:[String])
+        case hideAiDismiss(_ toHome:Bool)
+        case users(_ list:[String])
+    }
+    typealias LoginCompletionAction = (_ type:LoginCompletion)->()
     
+    func login(username:String?,
+               password:String?,forceLoggedOutUser:String, fromPro:Bool,
+               completion:@escaping LoginCompletionAction) {
+        LoadFromDB.shared.Users { (loadedData, Error) in
+            if !Error {
+                if let name = username,
+                   let password = password {
+                    if name != "" && password != "" {
+                        if !name.contains("@") {
+                           self.logIn(nickname: name, password: password, loadedData: loadedData, forceLoggedOutUser:forceLoggedOutUser, fromPro:fromPro, completion: completion)
+                           // completion(.result(login, login == nil))
+                        } else {
+                            self.checkUsers(for: name, password: password, action: completion) { ok in
+                                //
+                            }
+                        }
+                        
+                    } else {
+//                        self.actionButtonsEnabled = true
+//                        self.obthervValues = true
+//                        DispatchQueue.main.async {
+//                            self.newMessage?.show(title: "All fields are required".localize, type: .error)
+//                            self.ai?.hide()
+//                            self.showWrongFields()
+//                        }
+                        completion(.result("All fields are required", false))
+                        
+                    }
+                }
+            } else {
+                print("error!!!")
+                completion(.result(AppText.Error.InternetTitle, false))
+             //   self.actionButtonsEnabled = true
+//                DispatchQueue.main.async {
+//                    self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
+//                }
+            }
+        }
+
+    }
+    
+    
+    private func logIn(nickname: String, password: String, loadedData: [[String]], forceLoggedOutUser:String, fromPro:Bool, completion:@escaping LoginCompletionAction) {
+
+        let checkPassword = LoadFromDB.checkPassword(from: loadedData, nickname: nickname, password: password)
+        
+        if let userExists = checkPassword.1 {
+            let wrongPassword = checkPassword.0
+            if !wrongPassword {
+                performLoggin(userData: userExists, forceLoggedOutUser: forceLoggedOutUser, fromPro: fromPro, completion: completion)
+            } else {
+//                self.actionButtonsEnabled = true
+                let messageTitle = "Wrong".localize + " " + "password".localize
+//                DispatchQueue.main.async {
+//                    self.showError(title: messageTitle)
+//                }
+                completion(.result(messageTitle, false))
+            }
+        } else {
+//            self.actionButtonsEnabled = true
+//            DispatchQueue.main.async {
+//                self.showError(title: "User not found".localize)
+//            }
+            completion(.result("User not found", false))
+
+        }
+        
+
+    }
+
+    private func performLoggin(userData:[String], forceLoggedOutUser:String, fromPro:Bool, completion:@escaping LoginCompletionAction) {
+        let nickname = userData[0]
+        let password = userData[2]
+        let email = userData[1]
+        let isPro = userData[4]
+        if let keycheinPassword = KeychainService.loadPassword(account: nickname) {
+          //  if keycheinPassword != password {
+                KeychainService.updatePassword(account: nickname, data: password)
+           // }
+        } else {
+            KeychainService.savePassword(account: nickname, data: password)
+        }
+        let prevUserName = db.username
+        
+        
+        if prevUserName != nickname {
+            let dat = (self.db.categories, self.db.transactions)
+            completion(.userChanged)
+           // userChanged()
+            db.db.updateValue(prevUserName, forKey: "prevUserName")
+            
+            if prevUserName == "" && forceLoggedOutUser == "" {
+                let db = AppDelegate.properties?.db ?? .init()
+                db.localCategories = dat.0
+                db.localTransactions = dat.1
+                
+            }
+            
+            if forceLoggedOutUser == "" {
+                AppDelegate.properties?.appData.fromLoginVCMessage = "Wellcome".localize + ", \(db.username)"
+            }
+            
+        }
+        db.username = nickname
+        db.password = password
+        db.userEmailHolder = email
+        
+        
+        if !db.purchasedOnThisDevice {
+            db.proVersion = isPro == "1" ? true : db.proVersion
+        }
+        AppDelegate.properties?.appData.needDownloadOnMainAppeare = true
+        if fromPro || forceLoggedOutUser != "" {
+//            DispatchQueue.main.async {
+//                self.endAnimating()
+//                self.dismiss(animated: true) {
+//                    self.ai?.hide()
+//                }
+//            }
+            completion(.hideAiDismiss(false))
+
+        } else {
+//            DispatchQueue.main.async {
+//                self.endAnimating()
+//                self.ai?.hide {
+//                    self.performSegue(withIdentifier: "homeVC", sender: self)
+//                }
+//            }
+            completion(.hideAiDismiss(true))
+        }
+    }
+
+    
+    func loadUsers(completion:@escaping (_ results:[[String]]?, _ error:String?) -> ()) {
+      //  let load = LoadFromDB()
+        DispatchQueue(label: "api", qos: .userInitiated).async {
+            LoadFromDB.shared.Users { (users, error) in
+                if !error {
+                    completion(users, nil)
+                } else {
+//                    DispatchQueue.main.async {
+//                        self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
+//                    }
+                    completion(nil, AppText.Error.InternetTitle)
+                }
+            }
+        }
+    }
+
+    
+    private func checkUsers(for email: String, password:String, action:@escaping LoginCompletionAction, completion:@escaping(Bool)-> ()) {
+      //  DispatchQueue.main.async {
+        //    self.ai?.show { _ in
+        action(.enteredEmailUsers([]))
+               // self.enteredEmailUsers.removeAll()
+                var resultUsers: [String] = []
+        self.loadUsers { users,error  in
+                    
+                    //check password for email
+                    var passwordCurrect = false
+                    var found = false
+            for n in 0..<(users?.count ?? 0) {
+                        if email == users?[n][1] {
+                            found = true
+                            if password == users?[n][2] {
+                                passwordCurrect = true
+                                break
+                            }
+                            
+                        }
+                        
+                    }
+                    if passwordCurrect {
+                        for i in 0..<(users?.count ?? 0) {
+                            if users?[i][1] == email {
+                                resultUsers.append(users?[i][0] ?? "")
+                            }
+                        }
+                       // self.enteredEmailUsers = resultUsers
+                        action(.enteredEmailUsers(resultUsers))
+                        completion(found)
+                        print(resultUsers, " efrwd")
+                        
+//                        DispatchQueue.main.async {
+//
+//                            SelectValueVC.presentScreen(in: self, with: [], structData: [
+//                                .init(sectionName: "Select User", cells: resultUsers.compactMap({ apiUser in
+//                                    .init(name: apiUser, regular: .init(didSelect: {
+//                                        self.navigationController?.popViewController(animated: true)
+//                                        self.userSelected(user: apiUser)
+//                                    }))
+//                                }))
+//                            ], title: "User List")
+//                        }
+                    } else {
+                        let notFound = "Email not found".localize + "!"
+                        let text = !found ? notFound : "Wrong password".localize
+//                        DispatchQueue.main.async {
+//                            self.showAlert(title: text, error: true)
+//                        }
+                        action(.result(text, false))
+                        completion(false)
+                    }
+
+                    
+                    
+                }
+         //   }
+      //  }
+        
+    }
+
     
     static func checkPassword(from loadedData:[[String]], nickname:String?, password:String?) -> (Bool, [String]?) {
         guard let password, let nickname else {

@@ -87,6 +87,7 @@
 		8D0F8FFC2BDDCBB300681CED /* BudgetTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0F8FFB2BDDCBB300681CED /* BudgetTrackerApp.swift */; };
 		8D0F8FFE2BDDCBB300681CED /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0F8FFD2BDDCBB300681CED /* HomeView.swift */; };
 		8D0F90032BDDCBB600681CED /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D0F90022BDDCBB600681CED /* Preview Assets.xcassets */; };
+		8D1293A02BFD6E14000FF80F /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D12939F2BFD6E14000FF80F /* LoginView.swift */; };
 		8D15BD602B047F5D00E1C444 /* PDFProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D15BD5F2B047F5D00E1C444 /* PDFProperties.swift */; };
 		8D163BA329944D2700EF6C2A /* UITapGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D163BA229944D2700EF6C2A /* UITapGestureRecognizer.swift */; };
 		8D163BA529944FA100EF6C2A /* ClearTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D163BA429944FA100EF6C2A /* ClearTableCell.swift */; };
@@ -132,6 +133,8 @@
 		8D2CDA2D2AF43C1100671A72 /* SelectValueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2CDA2C2AF43C1100671A72 /* SelectValueCell.swift */; };
 		8D2CDA352AF448A700671A72 /* SwitchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2CDA332AF448A700671A72 /* SwitchCell.swift */; };
 		8D2CDA362AF448A700671A72 /* SwitchCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D2CDA342AF448A700671A72 /* SwitchCell.xib */; };
+		8D33918C2C00B9EB00F4DFD3 /* AppText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91F09027E58EF900B74F5A /* AppText.swift */; };
+		8D33918D2C00B9EB00F4DFD3 /* AppText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91F09027E58EF900B74F5A /* AppText.swift */; };
 		8D39788F28083E81007A2C55 /* AppDelegateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D39788E28083E81007A2C55 /* AppDelegateExtensions.swift */; };
 		8D41144E2BE3FC1D00C8B752 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B331B0A27E4128B0093BF72 /* String.swift */; };
 		8D4584292B3528980029AA17 /* AlertController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D4584282B3528980029AA17 /* AlertController.xib */; };
@@ -444,6 +447,7 @@
 		8D0F8FFD2BDDCBB300681CED /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		8D0F8FFF2BDDCBB500681CED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8D0F90022BDDCBB600681CED /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		8D12939F2BFD6E14000FF80F /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		8D15BD5F2B047F5D00E1C444 /* PDFProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFProperties.swift; sourceTree = "<group>"; };
 		8D163BA229944D2700EF6C2A /* UITapGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITapGestureRecognizer.swift; sourceTree = "<group>"; };
 		8D163BA429944FA100EF6C2A /* ClearTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearTableCell.swift; sourceTree = "<group>"; };
@@ -1407,6 +1411,7 @@
 			children = (
 				8D0F8FFD2BDDCBB300681CED /* HomeView.swift */,
 				8DC7C31E2BE6BDC900BE1915 /* TransactionView.swift */,
+				8D12939F2BFD6E14000FF80F /* LoginView.swift */,
 				8DC7C31D2BE68D8F00BE1915 /* ReusableViews */,
 			);
 			path = View;
@@ -1759,6 +1764,7 @@
 				8D41144E2BE3FC1D00C8B752 /* String.swift in Sources */,
 				8DD1DD902BE3A673005F0B86 /* IconList.swift in Sources */,
 				8D5C0A032BE33BC600C38222 /* Filter.swift in Sources */,
+				8D33918C2C00B9EB00F4DFD3 /* AppText.swift in Sources */,
 				8DC7C31F2BE6BDC900BE1915 /* TransactionView.swift in Sources */,
 				8D5C09E42BE3396300C38222 /* Keys.swift in Sources */,
 				8DD1DD842BE3A639005F0B86 /* AppLocalization.swift in Sources */,
@@ -1784,6 +1790,7 @@
 				8D5C0A172BE33C9C00C38222 /* NotificationManager.swift in Sources */,
 				8DA04E1F2BDE058700CD3522 /* oldNetworkModel.swift in Sources */,
 				8D5C0A1B2BE33CA700C38222 /* NetworkError.swift in Sources */,
+				8D1293A02BFD6E14000FF80F /* LoginView.swift in Sources */,
 				8D5C0A1D2BE33CAA00C38222 /* ShortCodeItem.swift in Sources */,
 				8DC7C3232BE6DCF900BE1915 /* ListView.swift in Sources */,
 				8DD1DD8D2BE3A66D005F0B86 /* Constants.swift in Sources */,
@@ -1858,6 +1865,7 @@
 				8DD1DD872BE3A64F005F0B86 /* localizationDictUA.swift in Sources */,
 				8D5C09E52BE3396600C38222 /* Keys.swift in Sources */,
 				8D5C0A082BE33BD200C38222 /* LastSelected.swift in Sources */,
+				8D33918D2C00B9EB00F4DFD3 /* AppText.swift in Sources */,
 				8D5C0A042BE33BC700C38222 /* Filter.swift in Sources */,
 				8D5C0A282BE33CBC00C38222 /* PagePDF.swift in Sources */,
 				8D5C09FA2BE33BAC00C38222 /* ServerResponse.swift in Sources */,
@@ -2461,7 +2469,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
@@ -2492,7 +2500,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";

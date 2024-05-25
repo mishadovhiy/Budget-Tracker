@@ -14,7 +14,7 @@ import WatchConnectivity
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-    
+    private var activationMessage:[String:Any] = [:]
     static var properties:AppProperties?
     static var shared:AppDelegate {
         return UIApplication.shared.delegate as? AppDelegate ?? .init()
@@ -32,11 +32,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        if WCSession.isSupported() {
-            let session = WCSession.default
-            session.delegate = self
-            session.activate()
-        }
+//        if WCSession.isSupported() {
+//            let session = WCSession.default
+//            session.delegate = self
+//            session.activate()
+//        }
         return true
     }
     
@@ -175,7 +175,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 extension AppDelegate:WCSessionDelegate {
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: (any Error)?) {
-        
+        DispatchQueue.main.async {
+            AppDelegate.properties?.newMessage.show(title:"activated \(self.activationMessage.isEmpty)", type: .succsess)
+        }
+        sendWatchOSMessage()
     }
     
     func sessionDidBecomeInactive(_ session: WCSession) {
@@ -186,15 +189,39 @@ extension AppDelegate:WCSessionDelegate {
         print(session, " thrgerfewdrgtr sessionDidDeactivate")
     }
     
+    private func sendWatchOSMessage() {
+        if !activationMessage.isEmpty {
+            WCSession.default.sendMessage(self.activationMessage, replyHandler: nil)
+            DispatchQueue.main.async {
+                AppDelegate.properties?.newMessage.show(title:"sent", type: .succsess)
+            }
+            activationMessage = [:]
+        }
+    }
+    //here
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
         print("message received from watch: ", message)
         let delegate = AppDelegate.properties
+        DispatchQueue.main.async {
+            delegate?.newMessage.show(title:message.keys.first ?? "?", type: .standart)
+        }
         DispatchQueue(label: "db", qos: .userInitiated).async {
             if let username = delegate?.db.username, username != "" {
                 let username = username
                 DispatchQueue.main.async {
-                    WCSession.default.sendMessage(["username":username], replyHandler: nil)
+                    WCSession.default.delegate = self
+                    self.activationMessage = ["username":username]
+                    if WCSession.default.isReachable {
+                        self.sendWatchOSMessage()
+                    } else {
+                        
+                        AppDelegate.properties?.newMessage.show(title:"activating", type: .succsess)
+                        WCSession.default.activate()
+                    }
                 }
+//                DispatchQueue.main.async {
+//                    WCSession.default.sendMessage(["username":username], replyHandler: nil)
+//                }
             } else {
                 DispatchQueue.main.async {
                     HomeVC.shared?.navigationController?.pushViewController(LoginViewController.configure(), animated: true)

@@ -10,11 +10,17 @@ import SwiftUI
 
 @main
 struct BudgetTracker_Watch_AppApp: App {
+    
     let appDelegate = AppDelegate.init()
+    @State var loggedIn:Bool = false
     
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            if !loggedIn {
+                LoginView(loggedIn: $loggedIn)
+            } else {
+                HomeView()
+            }
         }
     }
 }

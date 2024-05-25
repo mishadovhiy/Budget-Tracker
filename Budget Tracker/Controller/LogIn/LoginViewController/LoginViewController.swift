@@ -37,12 +37,12 @@ class LoginViewController: SuperViewController {
     var selectedScreen: screenTypee = .createAccount
     var fromPro = false
     
-
+    
     var messagesFromOtherScreen = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         updateUI()
         self.title = db.username == "" ? "Sign In".localize : db.username
         if db.username == "" {
@@ -55,10 +55,11 @@ class LoginViewController: SuperViewController {
         super.viewDidAppear(animated)
         let nik = db.username
         if nik != "" {
-            loadUsers { users in
-                for i in 0..<users.count {
-                    if users[i][0] == nik {
-                        self.userEmail = users[i][1]
+            let api = LoadFromDB()
+            api.loadUsers { users, error in
+                for i in 0..<(users?.count ?? 0) {
+                    if users?[i][0] == nik {
+                        self.userEmail = users?[i][1] ?? ""
                         return
                     }
                 }
@@ -80,30 +81,8 @@ class LoginViewController: SuperViewController {
                 }
             })
         }
-
+        
     }
-    
-    
-
-    func loadUsers(completion:@escaping ([[String]]) -> ()) {
-      //  let load = LoadFromDB()
-        DispatchQueue(label: "api", qos: .userInitiated).async {
-            LoadFromDB.shared.Users { (users, error) in
-                if !error {
-                    completion(users)
-                } else {
-                    DispatchQueue.main.async {
-                        self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
-                    }
-                }
-            }
-        }
-    }
-    
-   
-    
-    
-    
     
     
     @IBOutlet weak var moreButton: UIButton!
@@ -133,7 +112,7 @@ class LoginViewController: SuperViewController {
         }
     }
     
-
+    
     override func viewDidDismiss() {
         super.viewDidDismiss()
         removeKeyboardObthervers()
@@ -147,7 +126,7 @@ class LoginViewController: SuperViewController {
         hideKeyboardGestureSwipe.direction = .down
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-
+        
         let nickname =  self.forceLoggedOutUser != "" ? self.forceLoggedOutUser :  db.username
         let password = db.username == "" ? "" : db.password
         DispatchQueue.main.async {
@@ -162,8 +141,8 @@ class LoginViewController: SuperViewController {
         self.createAcount.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, self.view.frame.height * (-2), 0)
         self.logIn.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, self.view.frame.height * (-2), 0)
     }
-
-
+    
+    
     var sbvsLoaded = false
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
@@ -183,7 +162,7 @@ class LoginViewController: SuperViewController {
                 $0.tag = i
                 self.textFieldToID.updateValue("\(i)", forKey: $0.accessibilityIdentifier ?? "")
                 i += 1
-
+                
             })
         }
         
@@ -193,16 +172,16 @@ class LoginViewController: SuperViewController {
     
     
     override func viewDidDisappear(_ animated: Bool) {
-      //  AppDelegate.properties?.banner.appeare(force: true)
+        //  AppDelegate.properties?.banner.appeare(force: true)
         DispatchQueue.main.async {
             self.helperNavView?.removeFromSuperview()
         }
     }
-
+    
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: true)
-     //   AppDelegate.properties?.banner.hide(ios13Hide: true)
+        //   AppDelegate.properties?.banner.hide(ios13Hide: true)
     }
     
     var actionButtonsEnabled : Bool {
@@ -219,43 +198,59 @@ class LoginViewController: SuperViewController {
         }
     }
     
-   // let load = LoadFromDB()
+    // let load = LoadFromDB()
     
     private func performLoginPressed() {
         
-        LoadFromDB.shared.Users { (loadedData, Error) in
-            if !Error {
-                let values = self.textFieldValuesDict
-                if let name = values["log.user"],
-                   let password = values["log.password"] {
-                    if name != "" && password != "" {
-                        if !name.contains("@") {
-                            self.logIn(nickname: name, password: password, loadedData: loadedData)
-                        } else {
-                            self.checkUsers(for: name, password: password) { _ in
-                                self.actionButtonsEnabled = true
-                            }
-                        }
+        LoadFromDB.shared.login(username: textFieldValuesDict["log.user"], password: textFieldValuesDict["log.password"], forceLoggedOutUser: forceLoggedOutUser, fromPro: fromPro) { type in
+            switch type {
+            case .userChanged:
+                break
+            case .users(let list):
+                break
+            case .enteredEmailUsers(let newUsers):
+                self.enteredEmailUsers = newUsers
+                if !newUsers.isEmpty {
+                    DispatchQueue.main.async {
                         
-                    } else {
-                        self.actionButtonsEnabled = true
-                        self.obthervValues = true
-                        DispatchQueue.main.async {
-                            self.newMessage?.show(title: "All fields are required".localize, type: .error)
-                            self.ai?.hide()
-                            self.showWrongFields()
-                        }
-                        
-                        
+                        SelectValueVC.presentScreen(in: self, with: [], structData: [
+                            .init(sectionName: "Select User", cells: newUsers.compactMap({ apiUser in
+                                    .init(name: apiUser, regular: .init(didSelect: {
+                                        self.navigationController?.popViewController(animated: true)
+                                        self.userSelected(user: apiUser)
+                                    }))
+                            }))
+                        ], title: "User List")
                     }
                 }
-            } else {
-                print("error!!!")
-                self.actionButtonsEnabled = true
+            case .hideAiDismiss(let goHome):
                 DispatchQueue.main.async {
-                    self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
+                    self.endAnimating()
+                    if !goHome {
+                        self.dismiss(animated: true) {
+                            self.ai?.hide()
+                        }
+                    } else {
+                        self.ai?.hide {
+                            self.performSegue(withIdentifier: "homeVC", sender: self)
+                        }
+                    }
+                    
+                }
+            case .result(let error, let scs):
+                if error != nil || !(scs ?? false) {
+                    self.actionButtonsEnabled = true
+                    self.obthervValues = true
+                    DispatchQueue.main.async {
+                        self.newMessage?.show(title: (error ?? "Error login").localize, type: .error)
+                        self.ai?.hide()
+                        self.showWrongFields()
+                    }
+                } else {
+                    
                 }
             }
+            print(type, " performLoginPressedperformLoginPressed")
         }
     }
     
@@ -267,7 +262,7 @@ class LoginViewController: SuperViewController {
         DispatchQueue.main.async {
             UIImpactFeedbackGenerator().impactOccurred()
         }
-
+        
         self.hideKeyboard()
         self.ai?.showLoading(title: "Logging in".localize) {
             self.hideKeyboard()
@@ -280,65 +275,7 @@ class LoginViewController: SuperViewController {
         
     }
     
-
-    func performLoggin(userData:[String]) {
-        let nickname = userData[0]
-        let password = userData[2]
-        let email = userData[1]
-        let isPro = userData[4]
-        if let keycheinPassword = KeychainService.loadPassword(account: nickname) {
-          //  if keycheinPassword != password {
-                KeychainService.updatePassword(account: nickname, data: password)
-           // }
-        } else {
-            KeychainService.savePassword(account: nickname, data: password)
-        }
-        let prevUserName = db.username
-        
-        
-        if prevUserName != nickname {
-            let dat = (self.db.categories, self.db.transactions)
-            userChanged()
-            db.db.updateValue(prevUserName, forKey: "prevUserName")
-            
-            if prevUserName == "" && forceLoggedOutUser == "" {
-                let db = AppDelegate.properties?.db ?? .init()
-                db.localCategories = dat.0
-                db.localTransactions = dat.1
-                
-            }
-            
-            if forceLoggedOutUser == "" {
-                appData.fromLoginVCMessage = "Wellcome".localize + ", \(db.username)"
-            }
-            
-        }
-        db.username = nickname
-        db.password = password
-        db.userEmailHolder = email
-        
-        
-        if !db.purchasedOnThisDevice {
-            db.proVersion = isPro == "1" ? true : db.proVersion
-        }
-        appData.needDownloadOnMainAppeare = true
-        if fromPro || self.forceLoggedOutUser != "" {
-            DispatchQueue.main.async {
-                self.endAnimating()
-                self.dismiss(animated: true) {
-                    self.ai?.hide()
-                }
-            }
-        } else {
-            DispatchQueue.main.async {
-                self.endAnimating()
-                self.ai?.hide {
-                    self.performSegue(withIdentifier: "homeVC", sender: self)
-                }
-            }
-
-        }
-    }
+    
     
     
     func endAnimating() {
@@ -347,31 +284,7 @@ class LoginViewController: SuperViewController {
     }
     
     
-    func logIn(nickname: String, password: String, loadedData: [[String]]) {
-
-        let checkPassword = LoadFromDB.checkPassword(from: loadedData, nickname: nickname, password: password)
-        
-        if let userExists = checkPassword.1 {
-            let wrongPassword = checkPassword.0
-            if !wrongPassword {
-                performLoggin(userData: userExists)
-            } else {
-                self.actionButtonsEnabled = true
-                let messageTitle = "Wrong".localize + " " + "password".localize
-                DispatchQueue.main.async {
-                    self.showError(title: messageTitle)
-                }
-            }
-        } else {
-            self.actionButtonsEnabled = true
-            DispatchQueue.main.async {
-                self.showError(title: "User not found".localize)
-            }
-        }
-        
-
-    }
-
+    
     
     func showError(title:String) {
         endAnimating()
@@ -396,10 +309,10 @@ class LoginViewController: SuperViewController {
         DispatchQueue.main.async {
             UIImpactFeedbackGenerator().impactOccurred()
         }
-
+        
         self.ai?.showLoading(title: "Creating".localize) {
             self.hideKeyboard()
-
+            
             DispatchQueue(label: "api", qos: .userInitiated).async {
                 self.performCreateAccount()
             }
@@ -408,17 +321,13 @@ class LoginViewController: SuperViewController {
     }
     
     
-
-      
-    
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         hideKeyboard()
     }
     
     
-// other
+    // other
     
     var timers: [Timer] = []
     
@@ -468,7 +377,7 @@ class LoginViewController: SuperViewController {
         return maxCount > count ? nil : (!db.proVersion ? .canUpdate : .totalError)
     }
     enum EmailLimit {
-    case totalError
+        case totalError
         case canUpdate
     }
     
@@ -486,7 +395,7 @@ class LoginViewController: SuperViewController {
             }
             UIView.animate(withDuration: 0.3) {
                 tf.backgroundColor = tf.text == "" ? K.Colors.negative : .clear
-        
+                
             }
         })
         
@@ -517,7 +426,7 @@ class LoginViewController: SuperViewController {
         let secondAnimation = animation == 0 ? 0 : animation - 0.4
         let thirdAnimation = animation == 0 ? 0 : animation + 0.5
         selectedScreen = options
-
+        
         switch options {
         case .createAccount:
             DispatchQueue.main.async {
@@ -569,7 +478,7 @@ class LoginViewController: SuperViewController {
         }
         
     }
-
+    
     @IBAction func toggleScreen(_ sender: UIButton) {
         switch sender.tag {
         case 0: toggleScreen(options: .singIn)
@@ -580,7 +489,7 @@ class LoginViewController: SuperViewController {
     }
     
     @objc func keyboardWillShow(_ notification: Notification) {
-
+        
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             let keyboardHeight = keyboardRectangle.height
@@ -590,53 +499,53 @@ class LoginViewController: SuperViewController {
                     let selectedTextfieldd = self.selectedScreen == .createAccount ? self.logIn : self.createAcount
                     let dif = self.view.frame.height - CGFloat(keyboardHeight) - ((selectedTextfieldd?.frame.maxY ?? 0) + 5)
                     if dif < 20 {
-                            UIView.animate(withDuration: 0.3) {
-                                if self.selectedScreen == .createAccount {
-                                    self.logIn.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, (dif - 100), 0)
-                                } else {
-                                    if self.selectedScreen == .singIn {
-                                        self.createAcount.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, (dif - 50), 0)
-                                    }
+                        UIView.animate(withDuration: 0.3) {
+                            if self.selectedScreen == .createAccount {
+                                self.logIn.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, (dif - 100), 0)
+                            } else {
+                                if self.selectedScreen == .singIn {
+                                    self.createAcount.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, (dif - 50), 0)
                                 }
-                               
                             }
-                        }
-                    }
-            }
-        }
-        
-    }
-
-    @objc func keyboardWillHide(_ notification: Notification) {
-    //    if self.view.layer.frame.minY != 0 {
-
-            DispatchQueue.main.async {
-                UIView.animate(withDuration: 0.3) {
-
-                    if self.selectedScreen == .createAccount {
-                        self.logIn.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
-                    } else {
-                        if self.selectedScreen == .singIn {
-                            self.createAcount.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+                            
                         }
                     }
                 }
             }
-    //    }
+        }
+        
     }
-       
+    
+    @objc func keyboardWillHide(_ notification: Notification) {
+        //    if self.view.layer.frame.minY != 0 {
+        
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 0.3) {
+                
+                if self.selectedScreen == .createAccount {
+                    self.logIn.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+                } else {
+                    if self.selectedScreen == .singIn {
+                        self.createAcount.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
+                    }
+                }
+            }
+        }
+        //    }
+    }
+    
     
     var textFieldValuesDict:[String:String] = [:]
     
     @objc func textfieldValueChanged(_ textField: UITextField) {
-         //  message.hideMessage()
+        //  message.hideMessage()
         
         textFieldValuesDict.updateValue(textField.text ?? "", forKey: textField.accessibilityIdentifier ?? "")
-           if obthervValues {
-               showWrongFields()
-           }
+        if obthervValues {
+            showWrongFields()
+        }
     }
-
+    
     var textfields: [UITextField] {
         return [nicknameLabelCreate, emailLabel, passwordLabel, confirmPasswordLabel, nicknameLogLabel, passwordLogLabel]
     }
@@ -661,24 +570,24 @@ class LoginViewController: SuperViewController {
                     }
                 }
                 
-
+                
             }
         }
     }
-
+    
     
     @IBAction func emailUsersPressed(_ sender: UIButton) {
-            let vc = SelectValueVC.configure()
+        let vc = SelectValueVC.configure()
         vc.delegate = self
         vc.tableData = [.init(sectionName: "", cells: enteredEmailUsers.compactMap({ apiUser in
-            .init(name: apiUser, regular: .init(didSelect: {
-                if let nav = self.navigationController{
-                    nav.popViewController(animated: true)
-                } else {
-                    self.presentingViewController?.dismiss(animated: true)
-                }
-                self.userSelected(user: apiUser)
-            }))
+                .init(name: apiUser, regular: .init(didSelect: {
+                    if let nav = self.navigationController{
+                        nav.popViewController(animated: true)
+                    } else {
+                        self.presentingViewController?.dismiss(animated: true)
+                    }
+                    self.userSelected(user: apiUser)
+                }))
         }))]
         vc.titleText = "Select user".localize
         DispatchQueue.main.async {
@@ -735,7 +644,7 @@ extension LoginViewController {
         DispatchQueue.main.async {
             UIView.animate(withDuration: 0.3) {
                 self.navigationController?.navigationBar.alpha = 1
-            } 
+            }
         }
     }
 }

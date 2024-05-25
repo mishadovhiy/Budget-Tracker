@@ -48,7 +48,6 @@ print(dbDict, " dbdata")
             #else
            // UserDefaults.standard.setValue(newValue, forKey: "DB")
                         UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")!.set(newValue, forKey: "DB")
-
             #endif
         }
     }
@@ -274,7 +273,7 @@ print(dbDict, " dbdata")
                 #else
                 
                 print(UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")!.value(forKey: "username"), " grefrwedqwd")
-                return "misha2023"//UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")!.value(forKey: "username") as? String ?? ""
+                return UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")!.value(forKey: "username") as? String ?? ""
                 #endif
             }
         }
@@ -282,6 +281,11 @@ print(dbDict, " dbdata")
             print("new username setted - \(value)")
             db.updateValue(value, forKey: "username")
             UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")?.setValue(value, forKey: "username")
+#if os(watchOS)
+            let loggedIn = value != ""
+
+            #endif
+
         }
     }
     

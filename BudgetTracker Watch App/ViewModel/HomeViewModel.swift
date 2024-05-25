@@ -47,7 +47,7 @@ class HomeViewModel:ObservableObject {
     @Published var error:MessageContent? = nil
     var connectivity:WatchConectivityService? = nil
     private let network = LoadFromDB()
-
+    
     func messageReceived(_ message:[String:Any]) {
         if let username = message["username"] as? String {
             DispatchQueue(label: "db", qos: .userInitiated).async {
@@ -60,7 +60,7 @@ class HomeViewModel:ObservableObject {
     }
     
     init(completion:@escaping()->() = {}) {
-        self.connectivity = .init(messageReceived: messageReceived(_:))
+        //self.connectivity = .init(messageReceived: messageReceived(_:))
     }
         
     func loadData(completion:@escaping()->() = {}) {
@@ -70,7 +70,7 @@ class HomeViewModel:ObservableObject {
                     completion()
                     if AppDelegate.properties?.db.username == "" {
                         DispatchQueue.main.async {
-                            self.connectivity?.askUsername()
+                            self.askUsername()
                         }
                     }
                     print("transactionswerer: ", self.transactions)
@@ -199,6 +199,11 @@ class HomeViewModel:ObservableObject {
         DispatchQueue.main.async {
             self.transactions = new
         }
+    }
+    
+    func askUsername() {
+        self.connectivity?.askUsername()
+        
     }
 }
 
