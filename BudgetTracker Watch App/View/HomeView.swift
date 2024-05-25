@@ -46,6 +46,12 @@ struct HomeView: View {
     private var listView: some View {
         List {
             tableHead
+            if AppDelegate.properties?.db.username ?? "" == "" {
+                Button("Ask username") {
+                    viewModel.askUsername()
+                }
+            }
+
             Button("Add transaction") {
                 TransactionsStruct.newTransaction(type: .expense) { new in
                     self.viewModel.selectedTransaction = new

@@ -32,11 +32,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-//        if WCSession.isSupported() {
-//            let session = WCSession.default
-//            session.delegate = self
-//            session.activate()
-//        }
+        if WCSession.isSupported() {
+            let session = WCSession.default
+            session.delegate = self
+            session.activate()
+        }
         return true
     }
     
@@ -175,24 +175,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 extension AppDelegate:WCSessionDelegate {
+    
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: (any Error)?) {
+        print(error, " activationDidCompleteWith")
+        print(activationState, " activationDidCompleteWith state")
+
         DispatchQueue.main.async {
             AppDelegate.properties?.newMessage.show(title:"activated \(self.activationMessage.isEmpty)", type: .succsess)
         }
-        sendWatchOSMessage()
+        sendUsernametoWatch()
     }
     
     func sessionDidBecomeInactive(_ session: WCSession) {
         print(session, " jtyhrtgf sessionDidBecomeInactive")
+        session.activate()
     }
     
     func sessionDidDeactivate(_ session: WCSession) {
+        session.activate()
         print(session, " thrgerfewdrgtr sessionDidDeactivate")
     }
     
-    private func sendWatchOSMessage() {
+    private func sendWatchOSMessage(_ session: WCSession? = nil) {
         if !activationMessage.isEmpty {
-            WCSession.default.sendMessage(self.activationMessage, replyHandler: nil)
+            do {
+                try session?.updateApplicationContext(["sdd":"sad"])
+
+            } catch {
+                print(error, " verwfedq")
+            }
+            (session ?? WCSession.default).sendMessage(self.activationMessage, replyHandler: nil)
+            
             DispatchQueue.main.async {
                 AppDelegate.properties?.newMessage.show(title:"sent", type: .succsess)
             }
@@ -200,24 +213,36 @@ extension AppDelegate:WCSessionDelegate {
         }
     }
     //here
+    func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
+        let delegate = AppDelegate.properties
+        let username = delegate?.db.username
+        replyHandler(["username":username ?? "-"])
+    }
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
         print("message received from watch: ", message)
         let delegate = AppDelegate.properties
         DispatchQueue.main.async {
             delegate?.newMessage.show(title:message.keys.first ?? "?", type: .standart)
         }
+        sendUsernametoWatch(session)
+        
+    }
+    
+    func sendUsernametoWatch(_ session: WCSession? = nil) {
+        let delegate = AppDelegate.properties
         DispatchQueue(label: "db", qos: .userInitiated).async {
             if let username = delegate?.db.username, username != "" {
                 let username = username
                 DispatchQueue.main.async {
-                    WCSession.default.delegate = self
+                    (session ?? WCSession.default).delegate = self
                     self.activationMessage = ["username":username]
                     if WCSession.default.isReachable {
-                        self.sendWatchOSMessage()
+                        self.sendWatchOSMessage(session)
                     } else {
                         
                         AppDelegate.properties?.newMessage.show(title:"activating", type: .succsess)
-                        WCSession.default.activate()
+                        (session ?? WCSession.default).activate()
+                        self.sendWatchOSMessage(session)
                     }
                 }
 //                DispatchQueue.main.async {
@@ -229,11 +254,6 @@ extension AppDelegate:WCSessionDelegate {
                 }
             }
         }
-        
-    }
-    
-    func sendUsernametoWatch() {
-        
     }
     
 }

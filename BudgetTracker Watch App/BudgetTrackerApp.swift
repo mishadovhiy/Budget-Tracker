@@ -16,11 +16,11 @@ struct BudgetTracker_Watch_AppApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if !loggedIn {
-                LoginView(loggedIn: $loggedIn)
-            } else {
+//            if !loggedIn {
+//                LoginView(loggedIn: $loggedIn)
+//            } else {
                 HomeView()
-            }
+//            }
         }
     }
 }

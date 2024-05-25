@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import WatchConnectivity
 
 @available(iOS 13.0, *)
 
@@ -23,6 +24,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.makeKeyAndVisible()
         if let shotcutItem = connectionOptions.shortcutItem {
             AppDelegate.shared.performShortcutAction(shotcutItem)
+        }
+        if WCSession.isSupported() {
+            let session = WCSession.default
+            session.delegate = AppDelegate.shared
+            session.activate()
         }
     }
     

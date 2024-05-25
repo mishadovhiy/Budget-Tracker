@@ -60,7 +60,7 @@ class HomeViewModel:ObservableObject {
     }
     
     init(completion:@escaping()->() = {}) {
-        //self.connectivity = .init(messageReceived: messageReceived(_:))
+        self.connectivity = .init(messageReceived: messageReceived(_:))
     }
         
     func loadData(completion:@escaping()->() = {}) {
@@ -203,7 +203,6 @@ class HomeViewModel:ObservableObject {
     
     func askUsername() {
         self.connectivity?.askUsername()
-        
     }
 }
 
