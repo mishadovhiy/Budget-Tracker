@@ -134,7 +134,9 @@ extension WatchConectivityService {
         }
         #endif
         if error {
-            self.error?(text)
+            DispatchQueue.main.async {
+                self.error?(text)
+            }
         }
     }
     
