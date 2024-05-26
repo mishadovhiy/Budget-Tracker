@@ -45,22 +45,36 @@ class HomeViewModel:ObservableObject {
     var categories:[NewCategories] = []
     
     @Published var error:MessageContent? = nil
+    var connectivityError:MessageContent? = nil
+    
     var connectivity:WatchConectivityService? = nil
     private let network = LoadFromDB()
     
     func messageReceived(_ message:[String:Any]) {
-        if let username = message["username"] as? String {
-            DispatchQueue(label: "db", qos: .userInitiated).async {
-                AppDelegate.properties?.db.username = username
-                DispatchQueue.main.async(execute: {
-                    self.loadData()
-                })
+        if let key = message.keys.first,
+           let type = WatchConectivityService.MessageType.init(rawValue: key){
+            switch type {
+            case .sendUsername:
+                if let username = message[type.rawValue] as? String {
+                    DispatchQueue(label: "db", qos: .userInitiated).async {
+                        AppDelegate.properties?.db.username = username
+                        DispatchQueue.main.async(execute: {
+                            self.loadData()
+                        })
+                    }
+                }
+            default: 
+                print(message, " message")
             }
+            
         }
     }
     
     init(completion:@escaping()->() = {}) {
         self.connectivity = .init(messageReceived: messageReceived(_:))
+        connectivity?.error = {
+            self.connectivityError = .init(title: $0)
+        }
     }
         
     func loadData(completion:@escaping()->() = {}) {

@@ -199,6 +199,8 @@
 		8D5C625F2ACF4FA2005D68B0 /* AppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5C625E2ACF4FA2005D68B0 /* AppIntent.swift */; };
 		8D5C62612ACF4FA5005D68B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D5C62602ACF4FA5005D68B0 /* Assets.xcassets */; };
 		8D5C62652ACF4FA5005D68B0 /* BudgetTrackerCalendatWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8D5C62522ACF4FA2005D68B0 /* BudgetTrackerCalendatWidgetExtension.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8D6775412C02AA7700A7B476 /* WatchConectivityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAD1AE02BE443C500FDE17B /* WatchConectivityService.swift */; };
+		8D6775422C02AF1400A7B476 /* WatchConectivityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAD1AE02BE443C500FDE17B /* WatchConectivityService.swift */; };
 		8D6F947F2AEF15DC00103763 /* MessageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6F947E2AEF15DC00103763 /* MessageContent.swift */; };
 		8D7883122B341815008B3578 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7883112B341815008B3578 /* UIApplication.swift */; };
 		8D7883142B342ABA008B3578 /* AppProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7883132B342ABA008B3578 /* AppProperties.swift */; };
@@ -232,11 +234,9 @@
 		8DA04E382BDE0B0E00CD3522 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DA04E372BDE0B0E00CD3522 /* Assets.xcassets */; };
 		8DA04E3B2BDE0B0E00CD3522 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 8DA04E3A2BDE0B0E00CD3522 /* Base */; };
 		8DA1C4DC2C029EE000B597E0 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D5C62532ACF4FA2005D68B0 /* WidgetKit.framework */; };
-		8DA1C4DD2C029EE000B597E0 /* WidgetKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8D5C62532ACF4FA2005D68B0 /* WidgetKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8DA1C4DF2C029F0500B597E0 /* BudgetTracker Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 8D0F8FF92BDDCBB200681CED /* BudgetTracker Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8DA2B8002AFE99F000847B43 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA2B7FF2AFE99F000847B43 /* SceneDelegate.swift */; };
 		8DA77CF4298B687E00949D98 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA77CF3298B687E00949D98 /* Filter.swift */; };
-		8DAD1AE12BE443C500FDE17B /* WatchConectivityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAD1AE02BE443C500FDE17B /* WatchConectivityService.swift */; };
 		8DADC8922810E30300CC66EF /* TransactionNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DADC8912810E30300CC66EF /* TransactionNav.swift */; };
 		8DAF26982B37A8240023573E /* oldNetworkModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAF26972B37A8240023573E /* oldNetworkModel.swift */; };
 		8DAF26A52B37D3470023573E /* NetworkTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAF26A42B37D3470023573E /* NetworkTestView.swift */; };
@@ -350,17 +350,6 @@
 				8D5C62652ACF4FA5005D68B0 /* BudgetTrackerCalendatWidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		8DA1C4DE2C029EE000B597E0 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				8DA1C4DD2C029EE000B597E0 /* WidgetKit.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		8DB7C441284E8D1B001DBFB7 /* Embed Frameworks */ = {
@@ -1322,7 +1311,6 @@
 		8DAD1AE22BE443C900FDE17B /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				8DAD1AE02BE443C500FDE17B /* WatchConectivityService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1453,9 +1441,10 @@
 		8DD89D8823F1471900273904 /* Modal */ = {
 			isa = PBXGroup;
 			children = (
-				8D996D532B3792F500DF12A6 /* NetworkModel */,
 				8B26329027E69AE10086C3A8 /* AppData */,
+				8D996D532B3792F500DF12A6 /* NetworkModel */,
 				8B3F919827D31C4000BE826C /* DataBase */,
+				8DAD1AE02BE443C500FDE17B /* WatchConectivityService.swift */,
 				8B5434FB27ED83AC00417141 /* Notifications */,
 				8BB75D4527F294ED00AE71A1 /* DataStructs */,
 				8D2CDA232AF3F44200671A72 /* TransactionsManager */,
@@ -1543,7 +1532,6 @@
 				8D5C624E2ACF4FA2005D68B0 /* Sources */,
 				8D5C624F2ACF4FA2005D68B0 /* Frameworks */,
 				8D5C62502ACF4FA2005D68B0 /* Resources */,
-				8DA1C4DE2C029EE000B597E0 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1786,9 +1774,9 @@
 				8DD1DD842BE3A639005F0B86 /* AppLocalization.swift in Sources */,
 				8DA04E1B2BDE055700CD3522 /* CategoriesStruct.swift in Sources */,
 				8D5C0A0B2BE33BDE00C38222 /* ViewControllers.swift in Sources */,
+				8D6775412C02AA7700A7B476 /* WatchConectivityService.swift in Sources */,
 				8D1E9D822BE3CE4A00716193 /* HomeViewModel.swift in Sources */,
 				8D5C0A052BE33BCC00C38222 /* Keychain.swift in Sources */,
-				8DAD1AE12BE443C500FDE17B /* WatchConectivityService.swift in Sources */,
 				8D5C0A3F2BE33CF400C38222 /* DateComponents.swift in Sources */,
 				8DC7C3212BE6BE8100BE1915 /* EnterValueView.swift in Sources */,
 				8DD1DD852BE3A640005F0B86 /* localizationDictUA.swift in Sources */,
@@ -1908,6 +1896,7 @@
 				8DEB84DD2B158B0400AB1975 /* SelectTextImageContainerView.swift in Sources */,
 				8D1957C22B38BCF9006EC829 /* mainVCemptyCell.swift in Sources */,
 				8D2CDA1E2AF3F37A00671A72 /* EmptyCell.swift in Sources */,
+				8D6775422C02AF1400A7B476 /* WatchConectivityService.swift in Sources */,
 				8D193BF62B1FCE69003EB531 /* TapAnimationView.swift in Sources */,
 				8D193BE52B1FBA18003EB531 /* IconsVCCell.swift in Sources */,
 				8D193BEE2B1FBC5B003EB531 /* DataOptionCell.swift in Sources */,
@@ -2494,7 +2483,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 37.19;
+				MARKETING_VERSION = 37.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -2525,7 +2514,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 37.19;
+				MARKETING_VERSION = 37.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

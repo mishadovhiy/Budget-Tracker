@@ -15,6 +15,13 @@ extension UIActivityIndicatorView {
     }
 }
 extension UIViewController {
+    func present(_ toPresent:UIViewController) {
+        if let presented = self.presentedViewController {
+            presented.present(toPresent)
+        } else {
+            self.present(toPresent, animated: true)
+        }
+    }
     func presentShareVC(vcc:UIViewController? = nil, with items:[Any], completion:(()->())? = nil, sender:UIView, dismissed:(()->())? = nil) {
         let activityViewController = UIActivityViewController(activityItems: items, applicationActivities: nil)
         activityViewController.popoverPresentationController?.sourceView = sender

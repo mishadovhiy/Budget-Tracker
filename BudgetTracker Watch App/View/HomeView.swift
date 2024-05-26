@@ -47,8 +47,15 @@ struct HomeView: View {
         List {
             tableHead
             if AppDelegate.properties?.db.username ?? "" == "" {
-                Button("Ask username") {
-                    viewModel.askUsername()
+                VStack {
+                    Button("Ask username") {
+                        viewModel.askUsername()
+                    }
+                    if let error = viewModel.connectivityError {
+                        Text(error.title)
+                            .font(.system(size: 10))
+                            .foregroundStyle(.red)
+                    }
                 }
             }
 

@@ -25,11 +25,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if let shotcutItem = connectionOptions.shortcutItem {
             AppDelegate.shared.performShortcutAction(shotcutItem)
         }
-        if WCSession.isSupported() {
-            let session = WCSession.default
-            session.delegate = AppDelegate.shared
-            session.activate()
-        }
     }
     
     func windowScene(_ windowScene: UIWindowScene, didUpdate previousCoordinateSpace: UICoordinateSpace, interfaceOrientation previousInterfaceOrientation: UIInterfaceOrientation, traitCollection previousTraitCollection: UITraitCollection) {
