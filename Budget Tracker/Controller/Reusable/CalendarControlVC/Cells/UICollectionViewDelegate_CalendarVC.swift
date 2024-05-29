@@ -26,12 +26,12 @@ extension CalendarCollectionCell:UICollectionViewDelegate, UICollectionViewDataS
         cell.dayLabel.textColor = color
         */
         
-        let dayOpt = vc?.middleDate
+        let dayOpt = vcData?.middleDate
         let today = Date().toDateComponents()
         let isToday = today.year == dayOpt?.year && today.month == dayOpt?.month && today.day == Int(day)
         cell.dayLabel.textColor = isToday ? .red : .white
-        let selectedMonth = vc?.selectedDate
-        let value = vc?.values["\(dayOpt?.year ?? 0).\(dayOpt?.month ?? 0).\(day)"]
+        let selectedMonth = vcData?.selectedDate
+        let value = vcData?.values["\(dayOpt?.year ?? 0).\(dayOpt?.month ?? 0).\(day)"]
         let plus = (value ?? 0) > 0 ? "+" : ""
         cell.valueLabel.text = value == nil ? " " : "\(plus)\(Int(Double(value ?? 0)))"
         let selectedDate = higlightDate ?? selectedMonth

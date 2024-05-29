@@ -10,13 +10,23 @@ import UIKit
 
 @IBDesignable
 class Button: UIButton {
+    private var moveToWindow = false
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        setupLinkColors()
+        if !moveToWindow {
+            firstMovedToWindow()
+        }
+    }
+    
+    func firstMovedToWindow() {
+        
+    }
     
     @IBInspectable open var linkBackground:Bool = false {
         didSet {
             if linkBackground {
-                DispatchQueue.main.async {
-                    self.backgroundColor = K.Colors.link
-                }
+                self.backgroundColor = K.Colors.link
             }
         }
     }
@@ -26,12 +36,11 @@ class Button: UIButton {
         super.willMove(toWindow: newWindow)
         
         if let local = self.title(for: .normal)?.localize {
-            DispatchQueue.main.async {
-                self.setTitle(local, for: .normal)
-            }
+            self.setTitle(local, for: .normal)
         }
-        //set background for mac //fix when button background is always white
-        
+        if linkBackground {
+            self.backgroundColor = K.Colors.link
+        }
     }
     
     /**
@@ -40,13 +49,10 @@ class Button: UIButton {
     @IBInspectable open var titleWhenNoSymbols: String = "" {
         didSet {
             
-            if !AppDelegate.shared!.symbolsAllowed && (titleWhenNoSymbols != "") {
-                DispatchQueue.main.async {
-                    self.setTitle(self.titleWhenNoSymbols.localize, for: .normal)
-                    self.setImage(nil, for: .normal)
-                    self.titleLabel?.font = .systemFont(ofSize: 15)
-                    
-                }
+            if !(AppDelegate.properties?.appData.symbolsAllowed ?? true) && (titleWhenNoSymbols != "") {
+                self.setTitle(self.titleWhenNoSymbols.localize, for: .normal)
+                self.setImage(nil, for: .normal)
+                self.titleLabel?.font = .systemFont(ofSize: 15)
             }
             
         }
@@ -55,22 +61,72 @@ class Button: UIButton {
     
     @IBInspectable open var cornerRadius: CGFloat = 0 {
         didSet {
-            DispatchQueue.main.async {
-                self.layer.cornerRadius = self.cornerRadius
-            }
-        //    layer.masksToBounds = cornerRadius > 0
-        }
-    }
-
-    @IBInspectable open var shadowOpasity: Float = 0 {
-        didSet {
-            DispatchQueue.main.async {
-                self.layer.shadowColor = K.Colors.secondaryBackground2.cgColor
-                self.layer.shadowOffset = .zero
-                self.layer.shadowRadius = 10
-                self.layer.shadowOpacity = self.shadowOpasity
-            }
+            self.layer.cornerRadius = self.cornerRadius
         }
     }
     
+    @IBInspectable open var shadowOpasity: Float = 0 {
+        didSet {
+            self.layer.shadowColor = K.Colors.secondaryBackground2.cgColor
+            self.layer.shadowOffset = .zero
+            self.layer.shadowRadius = 10
+            self.layer.shadowOpacity = self.shadowOpasity
+        }
+    }
+    
+    private func setupLinkColors() {
+        if #available(iOS 15.0, *) {
+            if self.backgroundColor == .tintColor {
+                self.backgroundColor = K.Colors.link
+            }
+        } else if #available(iOS 13.0, *) {
+            if self.backgroundColor == .link {
+                self.backgroundColor = K.Colors.link
+            }
+        } else {
+            self.backgroundColor = K.Colors.link
+        }
+        if #available(iOS 15.0, *) {
+            if self.tintColor == UIColor.tintColor {
+                self.setTitleColor(K.Colors.link, for: .normal)
+                self.tintColor = K.Colors.link
+            }
+        } else if #available(iOS 13.0, *) {
+            if self.tintColor == .link {
+                self.tintColor = K.Colors.link
+                self.setTitleColor(K.Colors.link, for: .normal)
+            }
+        } else {
+            self.tintColor = K.Colors.link
+            self.setTitleColor(K.Colors.link, for: .normal)
+        }
+        
+        if #available(iOS 15.0, *) {
+            if self.titleColor(for: .normal) == UIColor.tintColor {
+                self.setTitleColor(K.Colors.link, for: .normal)
+                self.tintColor = K.Colors.link
+            }
+        } else if #available(iOS 13.0, *) {
+            if self.titleColor(for: .normal) == .link {
+                self.tintColor = K.Colors.link
+                self.setTitleColor(K.Colors.link, for: .normal)
+            }
+        } else {
+            self.tintColor = K.Colors.link
+            self.setTitleColor(K.Colors.link, for: .normal)
+        }
+        if let touchButton = self as? TouchButton {
+            if #available(iOS 15.0, *) {
+                if touchButton.pressColor == .tintColor {
+                    touchButton.pressColor = K.Colors.link
+                }
+            } else if #available(iOS 13.0, *) {
+                if touchButton.pressColor == .link {
+                    touchButton.pressColor = K.Colors.link
+                }
+            } else {
+                touchButton.pressColor = K.Colors.link
+            }
+        }
+    }
 }

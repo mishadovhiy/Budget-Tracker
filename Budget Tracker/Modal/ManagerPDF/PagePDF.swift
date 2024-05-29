@@ -14,7 +14,8 @@ struct PagePDF {
     func createPDFPage(fromText text: String, pageWidth:CGFloat) -> PDFPage? {
         let contentWidth = pageWidth + 80
         let textFont = UIFont.systemFont(ofSize: 12.0)
-        let textSizeCalc = text.calculate(font: textFont, inWindth: pageWidth - 100)
+        let textSizeCalc = textFont.calculate(inWindth:(pageWidth - 100),string: text)
+        //text.calculate(font: textFont, inWindth: pageWidth - 100)
         let textHeight = textSizeCalc.height >= contentWidth ? textSizeCalc.height : contentWidth
         let pageRect = CGRect(x: 0, y: 0, width: pageWidth, height: textHeight + 100)
         let textAttributes: [NSAttributedString.Key: Any] = [.font: textFont]

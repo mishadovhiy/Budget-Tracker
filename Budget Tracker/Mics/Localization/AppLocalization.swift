@@ -5,8 +5,10 @@
 //  Created by Mikhailo Dovhyi on 19.03.2022.
 //  Copyright © 2022 Misha Dovhiy. All rights reserved.
 //
-
+#if canImport(UIKit)
 import UIKit
+#endif
+import Foundation
 
 struct AppLocalization {
     
@@ -19,10 +21,10 @@ struct AppLocalization {
     
     static var udLocalization :String? {
         get {
-            return AppDelegate.shared?.db.db["Localization"] as? String
+            return AppDelegate.properties?.db.db["Localization"] as? String
         }
         set {
-            AppDelegate.shared?.db.db.updateValue(newValue ?? "eng", forKey: "Localization")
+            AppDelegate.properties?.db.db.updateValue(newValue ?? "eng", forKey: "Localization")
         }
     }
 

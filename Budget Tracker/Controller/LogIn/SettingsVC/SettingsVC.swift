@@ -33,8 +33,6 @@ class SettingsVC: SuperViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-
         title = "Settings".localize
         tableView.delegate = self
         tableView.dataSource = self
@@ -48,7 +46,7 @@ class SettingsVC: SuperViewController {
         case "toColors":
             let vc = segue.destination as! IconsVC
             vc.delegate = self
-            vc.selectedColorName = AppData.linkColor
+            vc.selectedColorName = AppDelegate.properties?.db.linkColor ?? ""
             vc.screenType = .colorsOnly
         default:
             break
@@ -82,7 +80,6 @@ class SettingsVC: SuperViewController {
         if let nav = self.navigationController {
             SelectValueVC.presentScreen(in: nav, with: data, title: title, selected: selectedAction)
         }
-        
     }
     
 }
@@ -95,15 +92,13 @@ extension SettingsVC: IconsVCDelegate {
     
     func selected(img: String, color: String) {
         DispatchQueue(label: "db", qos: .userInitiated).async {
-            AppData.linkColor = color
+            AppDelegate.properties?.db.linkColor = color
             DispatchQueue.main.async {
                 self.navigationController?.popViewController(animated: true)
                 self.loadData()
             }
         }
     }
-    
-    
 }
 
 
@@ -135,7 +130,7 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource {
                 cell.nameLabel.text = standartData.title + (standartData.description == "" ? "" : (": " + standartData.description))
                 cell.colorView.isHidden = standartData.colorNamed == "" ? true : (standartData.pro == nil ? false : true)
                 if standartData.colorNamed != "" {
-                    cell.colorView.backgroundColor = AppData.colorNamed(standartData.colorNamed)
+                    cell.colorView.backgroundColor = .init(standartData.colorNamed)
                 }
                 cell.accessoryType = standartData.showIndicator ? (standartData.pro == nil ? .disclosureIndicator : .none): .none
                 cell.proView.isHidden = standartData.pro == nil
@@ -152,14 +147,14 @@ extension SettingsVC: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         if let standartData = tableData[indexPath.section].cells[indexPath.row] as? StandartCell {
             if let proID = standartData.pro {
-                AppDelegate.shared?.appData.presentBuyProVC(selectedProduct: proID)
+                AppDelegate.properties?.appData.presentBuyProVC(selectedProduct: proID)
             } else {
                 standartData.action()
             }
         } else {
             if let trigger = tableData[indexPath.section].cells[indexPath.row] as? TriggerCell {
                 if let proID = trigger.pro {
-                    AppDelegate.shared?.appData.presentBuyProVC(selectedProduct: proID)
+                    AppDelegate.properties?.appData.presentBuyProVC(selectedProduct: proID)
                 }
             }
         }
@@ -202,14 +197,19 @@ extension SettingsVC {
 
 
 
-class StandartSettingsCell: UITableViewCell {
+class StandartSettingsCell: ClearCell {
     
     @IBOutlet weak var proView: BasicView!
     @IBOutlet weak var colorView: BasicView!
     @IBOutlet weak var nameLabel: UILabel!
+    
+    override func draw() {
+        super.draw()
+        self.setSelectedColor(K.Colors.separetor ?? .white)
+    }
 }
 
-class TriggerSettingsCell: UITableViewCell {
+class TriggerSettingsCell: ClearCell {
     
     var switchedAction:((Bool) -> ())?
     
@@ -223,6 +223,10 @@ class TriggerSettingsCell: UITableViewCell {
         }
     }
     @IBOutlet weak var valueSwitcher: UISwitch!
+    override func draw() {
+        super.draw()
+        self.setSelectedColor(K.Colors.separetor ?? .white)
+    }
 }
 
 

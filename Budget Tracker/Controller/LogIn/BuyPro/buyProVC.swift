@@ -14,13 +14,18 @@ class BuyProVC: SuperViewController {
     
     func showAlert(title:String,text:String?, error: Bool, goHome: Bool = false) {
         paymentQueueResponded = true
-        DispatchQueue.main.async {
-            self.ai?.showAlertWithOK(title: title, text: text, error: error) { _ in
+        let show = {
+            self.ai?.showAlertWithOK(title: title, description: text, viewType: error ? .error : .standard, okPressed: {
                 if goHome {
-                    DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: "homeVC", sender: self)
-                    }
+                    self.dismiss(animated: true, completion: nil)
                 }
+            })
+        }
+        if Thread.isMainThread {
+            show()
+        } else {
+            DispatchQueue.main.async {
+                show()
             }
         }
 
@@ -37,11 +42,21 @@ class BuyProVC: SuperViewController {
     @IBOutlet weak var purchasedIndicatorView: UIView!
     
 
-    
-    var requestProd = SKProductsRequest()
+    var bannerWasHidden = false
+    var fromSettings = false
+    var didappCalled = false
+    var requestProd:SKProductsRequest! = SKProductsRequest()
     var proVProduct: SKProduct?
-    
+    var restoreRequest:SKReceiptRefreshRequest! = SKReceiptRefreshRequest()
 
+
+    override func viewDidDismiss() {
+        super.viewDidDismiss()
+        requestProd = nil
+        proVProduct = nil
+        BuyProVC.shared = nil
+        restoreRequest = nil
+    }
     
     weak static var shared: BuyProVC?
     override func viewDidLoad() {
@@ -50,14 +65,14 @@ class BuyProVC: SuperViewController {
         
         DispatchQueue.main.async {
             self.tryFree.alpha = 0
-            if self.appData.proVersion || self.appData.proTrial || self.appData.trialDate != "" {
+            if self.properties!.db.proVersion || self.properties!.db.proTrial || self.properties?.db.trialDate != "" {
                 //self.tryFree.alpha = 0
             }
             self.purchasedIndicatorView.transform = CGAffineTransform(scaleX: 0.0, y: 0.0)
         }
         pageChanged(pageControll)
         DispatchQueue(label: "db", qos: .userInitiated).async {
-            if let price = DataBase().db["productPrice"] as? String {
+            if let price = AppDelegate.properties?.db.db["productPrice"] as? String {
                 DispatchQueue.main.async {
                     self.priceLabel.text = "\((Double(price)?.string()) ?? "")"
                 }
@@ -66,11 +81,10 @@ class BuyProVC: SuperViewController {
 
         self.closeButton.alpha = navigationController == nil ? 1 : 0
     }
-
-
+    
     
     func showPurchasedIndicator() {
-        if appData.proVersion {
+        if db.proVersion {
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.2) {
                     self.purchasedIndicatorView.alpha = 1
@@ -78,9 +92,7 @@ class BuyProVC: SuperViewController {
                     UIView.animate(withDuration: 0.3) {
                         //make bigger
                         self.purchasedIndicatorView.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
-                    } completion: { (_) in
-                        
-                    }
+                    } 
 
                 }
 
@@ -93,16 +105,14 @@ class BuyProVC: SuperViewController {
         navigationController?.setNavigationBarHidden(false, animated: true)
         if !appeareCalled {
             appeareCalled = true
-            bannerWasHidden = AppDelegate.shared?.banner.adHidden ?? false
+            bannerWasHidden = AppDelegate.properties?.banner.adHidden ?? false
             if !bannerWasHidden {
-                AppDelegate.shared?.banner.hide(ios13Hide: true)
+                AppDelegate.properties?.banner.hide(ios13Hide: true)
             }
         }
         
     }
-    var bannerWasHidden = false
-    var fromSettings = false
-    var didappCalled = false
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         if !didappCalled {
@@ -110,6 +120,11 @@ class BuyProVC: SuperViewController {
             proBackgroundView.alpha = 0.5
             showPurchasedIndicator()
             getProducts()
+//            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
+//                self.ai?.show(completion: { _ in
+//                    self.checkTransitionState(.purchased, transaction: .init())
+//                })
+//            })
         }
         
         
@@ -118,7 +133,7 @@ class BuyProVC: SuperViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(true)
         if !bannerWasHidden {
-            AppDelegate.shared?.banner.appeare(force: true)
+            AppDelegate.properties?.banner.appeare(force: true)
         }
        
     }
@@ -149,10 +164,10 @@ class BuyProVC: SuperViewController {
     func getUser(completion:@escaping([String]?) -> ()) {
         LoadFromDB.shared.Users { (loadedData, error) in
             if error {
-                self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
+                self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true)
                 completion(nil)
             } else {
-                let name = self.appData.username
+                let name = self.properties?.db.username
                 for i in 0..<loadedData.count {
                     if loadedData[i][0] == name {
                         completion(loadedData[i])
@@ -168,9 +183,9 @@ class BuyProVC: SuperViewController {
         DispatchQueue(label: "local", qos: .userInitiated).async {
             self.db.viewControllers.trial.trialPressed = true
         }
-        if !appData.proVersion {
-            if appData.username != "" {
-                self.ai?.show { (_) in
+        if !db.proVersion {
+            if db.username != "" {
+                self.ai?.showLoading {
                     self.getUser { loadedData in
                         if let data = loadedData {
                             if data[5] != "" {
@@ -193,15 +208,16 @@ class BuyProVC: SuperViewController {
                 }
                 
             } else {
-                let firstButton = self.ai!.prebuild_closeButton(title: "Close".localize, style: .error)
-                let secondButton:AlertViewLibrary.button? = .init(title: "Sign in".localize, style: .regular, close: true) { _ in
-                    DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: "toSingIn", sender: self)
-                    }
-                }
-                
+
                 DispatchQueue.main.async {
-                    self.ai!.showAlert(buttons: (firstButton, secondButton), title: "Sign in required".localize, type: .standard)
+                    self.ai?.showAlertWithOK(title: "Sign in required", viewType: .standard, button: .with({
+                        $0.title = "Sign in".localize
+                        $0.action = {
+                            self.performSegue(withIdentifier: "toSingIn", sender: self)
+
+                        }
+                        $0.style = .error
+                    }), okTitle:"Close".localize)
                 }
             }
         }
@@ -209,30 +225,30 @@ class BuyProVC: SuperViewController {
     
     
     func trialWithoutAcoount() {
-        appData.proTrial = true
-        appData.trialDate = appData.filter.getToday()
-        showAlert(title: Text.success, text: "Trial has been started successfully".localize, error: false, goHome: true)
+        db.proTrial = true
+        db.trialDate = db.filter.getToday()
+        showAlert(title: AppText.success, text: "Trial has been started successfully".localize, error: false, goHome: true)
     }
     
     func performTrial(loadedData:(String, String, String, String)) {
-        let today = appData.filter.getToday()
-        let toDataStringMian = "&Nickname=\(appData.username)" + "&Email=\(loadedData.0)" + "&Password=\(loadedData.1)" + "&Registration_Date=\(loadedData.2)"
+        let today = db.filter.getToday()
+        let toDataStringMian = "&Nickname=\(db.username)" + "&Email=\(loadedData.0)" + "&Password=\(loadedData.1)" + "&Registration_Date=\(loadedData.2)"
         
         let dataStringSave = toDataStringMian + "&ProVersion=0" + "&trialDate=\(today)"
         print(dataStringSave)
         let delete = DeleteFromDB()
         delete.User(toDataString: toDataStringMian) { (errorr) in
             if errorr {
-                self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
+                self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true)
             } else {
                 SaveToDB.shared.Users(toDataString: dataStringSave ) { (error) in
                 if error {
-                    self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
+                    self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true)
                 } else {
                     DispatchQueue.main.async {
-                        self.appData.proTrial = true
-                        self.appData.trialDate = today
-                        self.showAlert(title: Text.success, text: "Trial has been started successfully".localize, error: false, goHome: true)
+                        self.properties?.db.proTrial = true
+                        self.properties?.db.trialDate = today
+                        self.showAlert(title: AppText.success, text: "Trial has been started successfully".localize, error: false, goHome: true)
 
                     }
                 }
@@ -249,15 +265,15 @@ class BuyProVC: SuperViewController {
     var userData = ("","","","")
     @IBAction func buyPressed(_ sender: UIButton) {
         paymentQueueResponded = false
-        let nick = appData.username
-        if !appData.proVersion {
-            if appData.username == "" {
+        let nick = db.username
+        if !db.proVersion {
+            if db.username == "" {
                 DispatchQueue.main.async {
                     self.performSegue(withIdentifier: "toSingIn", sender: self)
                 }
             } else {
 
-                self.ai?.show { (_) in
+                self.ai?.showLoading {
                     guard let myProduct = self.proVProduct else {
                         self.showAlert(title: "Error".localize, text: "Permission denied".localize, error: true)
                         return
@@ -286,16 +302,14 @@ class BuyProVC: SuperViewController {
         
     }
     
-    let restoreRequest = SKReceiptRefreshRequest()
     @IBAction func restorePressed(_ sender: UIButton) {
         print("restorePressed")
         paymentQueueResponded = false
         if SKPaymentQueue.canMakePayments() {
-            SKPaymentQueue.default().restoreCompletedTransactions()
-            SKPaymentQueue.default().add(self)
-
-            self.ai?.show { (_) in
-                self.restoreRequest.delegate = self
+            self.restoreRequest.delegate = self
+            self.ai?.showLoading {
+                SKPaymentQueue.default().restoreCompletedTransactions()
+                SKPaymentQueue.default().add(self)
                 self.restoreRequest.start()
             }
             
@@ -307,10 +321,7 @@ class BuyProVC: SuperViewController {
     
     
     @IBAction func closePressed(_ sender: Any) {
-        print("prrrr")
-        DispatchQueue.main.async {
-            self.dismiss(animated: true, completion: nil)
-        }
+        self.dismiss(animated: true, completion: nil)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -331,7 +342,7 @@ extension BuyProVC: SKProductsRequestDelegate {
             print(product, "productproductproduct")
             proVProduct = product
             DispatchQueue(label: "db", qos: .userInitiated).async {
-                DataBase().db.updateValue("\(product.price.doubleValue)", forKey: "productPrice")
+                AppDelegate.properties?.db.db.updateValue("\(product.price.doubleValue)", forKey: "productPrice")
                 print(product.price, " rgfergtbhgref")
                 DispatchQueue.main.async {
                     self.priceLabel.text = "\(product.price.doubleValue.string())"
@@ -361,11 +372,11 @@ extension BuyProVC: SKPaymentTransactionObserver {
                 let delete = DeleteFromDB()
                 delete.User(toDataString: self.toDataString(save: false, user: user)) { (errorr) in
                     if errorr {
-                        self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
+                        self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true)
                     } else {
                         SaveToDB.shared.Users(toDataString: self.toDataString(save: true, user: user)) { (error) in
                             if error {
-                                self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
+                                self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true)
                             } else {
                                 self.scsPurchaseShow()
                             }
@@ -374,7 +385,11 @@ extension BuyProVC: SKPaymentTransactionObserver {
                     }
                 }
             } else {
-                self.showAlert(title: "Error saving purchase".localize, text: "", error: true)
+                
+                self.showAlert(title: "Purchase restored".localize, text: "", error: false)
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+                    self.ai?.showAlertWithOK(title: "Error saving purchase to your Budget Tracker account", description: "Please, log in to your account and Restore Purchase Again", viewType: .error)
+                })
             }
         }
         
@@ -385,48 +400,51 @@ extension BuyProVC: SKPaymentTransactionObserver {
     func scsPurchaseShow() {
         DispatchQueue.main.async {
             self.showPurchasedIndicator()
-            self.showAlert(title: Text.success, text: "Pro version available across all your devices".localize, error: false, goHome: true)
+            self.showAlert(title: AppText.success, text: "Pro version available across all your devices".localize, error: false, goHome: true)
           //  UIApplication().endBackgroundTask()
         }
     }
     
-    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
-        for transaction in transactions {
-            switch transaction.transactionState {
-            case .purchasing:
-                break
 
-            case .purchased, .restored:
-                print("paymentQueue pur succss")
-                if !paymentQueueResponded {
-                    paymentQueueResponded = true
+    func checkTransitionState(_ state:SKPaymentTransactionState? = nil, transaction:SKPaymentTransaction) {
+        let test = state != nil
+        switch state ?? transaction.transactionState {
+        case .purchased, .restored:
+            print("paymentQueue pur succss")
+            if !paymentQueueResponded {
+                paymentQueueResponded = true
+                if !test {
+                    print("fsdfassrgetr")
                     SKPaymentQueue.default().finishTransaction(transaction)
                     SKPaymentQueue.default().remove(self)
-                    
-                    DispatchQueue.init(label: "DB").async {
-                        self.appData.proVersion = true
-                        self.appData.purchasedOnThisDevice = true
-                        self.dbSavePurchase()
-                    }
                 }
                 
-                break
-            case .failed, .deferred:
-                print("paymentQueue pur ERROR")
-                SKPaymentQueue.default().finishTransaction(transaction)
-                SKPaymentQueue.default().remove(self)
-                DispatchQueue.main.async {
-                    self.showAlert(title: "Payment failed".localize, text: nil, error: true)
-                }
-                break
-            default:
-                DispatchQueue.main.async {
-                    self.ai?.fastHide() { (_) in
-                        SKPaymentQueue.default().finishTransaction(transaction)
-                        SKPaymentQueue.default().remove(self)
-                    }
+                DispatchQueue.init(label: "DB").async {
+                    self.properties?.db.proVersion = true
+                    self.properties?.db.purchasedOnThisDevice = true
+                    self.dbSavePurchase()
                 }
             }
+            
+            break
+        case .failed:
+            print("paymentQueue pur ERROR")
+            if !test {
+                SKPaymentQueue.default().finishTransaction(transaction)
+                SKPaymentQueue.default().remove(self)
+            }
+            DispatchQueue.main.async {
+                self.showAlert(title: "Payment failed".localize, text: nil, error: true)
+            }
+            break
+        default:
+            break
+        }
+    }
+    
+    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        transactions.forEach {
+            checkTransitionState(transaction: $0)
         }
     }
 }
@@ -434,6 +452,11 @@ extension BuyProVC: SKPaymentTransactionObserver {
 
 
 extension BuyProVC {
+    static func presentBuyProVC(selectedProduct:Int) {
+        let vc = BuyProVC.configure()
+        vc.selectedProduct = selectedProduct
+        AppDelegate.properties?.appData.present(vc: vc)
+    }
     static func configure() -> BuyProVC {
         return UIStoryboard(name: "LogIn", bundle: nil).instantiateViewController(withIdentifier: "BuyProVC") as! BuyProVC
     }

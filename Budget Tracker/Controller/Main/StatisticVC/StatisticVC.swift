@@ -86,16 +86,16 @@ class StatisticVC: SuperViewController, CALayerDelegate {
         let allData = sortAllTransactions()
         let dict:[[String:Any]] = data.compactMap({ $0.dict})
         let type = (segmentControll.selectedSegmentIndex == 0 ? "Expenses" : "Incomes")
-        let period = isAll ? "All time" : appData.filter.periodText
+        let period = isAll ? "All time" : db.filter.periodText
         //get first and last transaction if all time
-        let pdf:ManagerPDF = .init(dict: ["Budget Tracker":dict], pageTitle: "", vc: self, data: .init(duration: period, type: type, from: isAll ? allData.from ?? .init() : appData.filter.fromDate, to: isAll ? allData.to ?? .init() : appData.filter.toDate, today: Date().toDateComponents()))
-        pdf.exportPDF(sender: sender as! UIButton)
+        let pdf:ManagerPDF = .init(dict: ["Budget Tracker":dict], pageTitle: "", vc: self, data: .init(duration: period, type: type, from: isAll ? allData.from ?? .init() : db.filter.fromDate, to: isAll ? allData.to ?? .init() : db.filter.toDate, today: Date().toDateComponents()))
+        pdf.toExport(sender: sender as! UIButton, toEdit: true)
     }
     
     func sortAllTransactions() -> (from:DateComponents?, to:DateComponents?) {
-        let result = dataFromMain.sorted { ($0.date.compToIso() ?? .init()) < ($1.date.compToIso() ?? .init())
+        let result = dataFromMain.sorted { ($0.date.isoToDateComponents() ?? .init()) < ($1.date.isoToDateComponents() ?? .init())
         }
-        return (from:result.first?.date.compToIso(), to:result.last?.date.compToIso())
+        return (from:result.first?.date.isoToDateComponents(), to:result.last?.date.isoToDateComponents())
     }
     
     func updateUI() {
@@ -174,7 +174,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
             
 
         
-        let textt = (isAll ? "All period" : appData.filter.periodText).localize
+        let textt = (isAll ? "All period" : db.filter.periodText).localize
             DispatchQueue.main.async {
                 self.titleLabel.text = (self.expensesPressed ? "Expenses".localize : "Incomes".localize) + " " + "for".localize + " " + textt
                 self.totalLabel.text = "\(Int(totalAmount))"
@@ -248,7 +248,7 @@ class StatisticVC: SuperViewController, CALayerDelegate {
             let vc = segue.destination as! HistoryVC
             vc.fromStatistic = true
             vc.historyDataStruct = historyDataStruct
-            let db = DataBase()
+            let db = AppDelegate.properties?.db ?? .init()
             vc.selectedCategory = db.category(selectedCategoryName)
             vc.selectedPurposeH = segmentControll.selectedSegmentIndex
             vc.fromCategories = fromDebts
@@ -337,7 +337,7 @@ extension StatisticVC: UITableViewDelegate, UITableViewDataSource {
         let r = (100 * data.value / maxValue) / 100
         cell.progressBar.progress = Float(r)
 
-        cell.progressBar.tintColor = AppData.colorNamed(allData[indexPath.row].category.color)
+        cell.progressBar.tintColor = .init(allData[indexPath.row].category.color)
         return cell
         
     }
@@ -382,7 +382,7 @@ extension StatisticVC: CPTPieChartDataSource, CPTPieChartDelegate {
     }
     
     func sliceFill(for pieChart: CPTPieChart, record idx: UInt) -> CPTFill? {
-        let color = AppData.colorNamed(allData[Int(idx)].category.color)
+        let color = UIColor.init(allData[Int(idx)].category.color)
         return CPTFill(color: CPTColor(uiColor: color))
        
     }
@@ -429,11 +429,11 @@ struct GraphDataStruct {
 
 extension StatisticVC:GADFullScreenContentDelegate {
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        AppDelegate.shared?.banner.adDidDismissFullScreenContent(ad)
+        AppDelegate.properties?.banner.adDidDismissFullScreenContent(ad)
         
     }
     func adDidPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        AppDelegate.shared?.banner.adDidPresentFullScreenContent(ad)
+        AppDelegate.properties?.banner.adDidPresentFullScreenContent(ad)
     }
 }
 

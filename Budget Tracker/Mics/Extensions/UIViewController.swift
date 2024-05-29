@@ -7,6 +7,7 @@
 //
 
 import UIKit
+
 extension UIActivityIndicatorView {
     open override func didMoveToWindow() {
         super.didMoveToWindow()
@@ -14,7 +15,13 @@ extension UIActivityIndicatorView {
     }
 }
 extension UIViewController {
-    
+    func present(_ toPresent:UIViewController) {
+        if let presented = self.presentedViewController {
+            presented.present(toPresent)
+        } else {
+            self.present(toPresent, animated: true)
+        }
+    }
     func presentShareVC(vcc:UIViewController? = nil, with items:[Any], completion:(()->())? = nil, sender:UIView, dismissed:(()->())? = nil) {
         let activityViewController = UIActivityViewController(activityItems: items, applicationActivities: nil)
         activityViewController.popoverPresentationController?.sourceView = sender
@@ -33,7 +40,7 @@ extension UIViewController {
         if let vc = vcc {
             vc.present(activityViewController, animated: true, completion: completion)
         } else {
-            AppDelegate.shared?.present(vc: activityViewController, completion: completion)
+            AppDelegate.properties?.appData.present(vc: activityViewController, completion: completion)
         }
         
     }
@@ -67,5 +74,86 @@ extension UIViewController {
             view.addConstaits([.top: view.safeAreaInsets.top + 10, .centerX:0, .width:45, .height:4], superV: self.view)
         }
         
+    }
+}
+
+
+extension UIViewController {
+    var popupBackgroundColor:UIColor {
+        return K.Colors.popupBackground ?? .blue
+    }
+    
+    
+    /**
+     creates view on window
+     */
+    func createPopupBackgroundView(_ data:VCpresentedBackgroundData) {
+        if let superVC = self as? SuperViewController {
+            superVC.backgroundData = data
+        }
+        let win = UIApplication.shared.sceneKeyWindow ?? UIWindow()
+        let window = win
+       // data.fromWindow ? win : (TabBarController.shared?.view ?? UIView())
+        let supWindow = win
+        let backColor = popupBackgroundColor
+        
+
+        
+        let backgroundView = UIView(frame: .init(x: 0, y: -80, width: supWindow.frame.width, height: supWindow.frame.height + 80))
+        backgroundView.backgroundColor = backColor
+        backgroundView.alpha = 0
+        backgroundView.layer.name = data.id
+        backgroundView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(backgroundPressed(_:)))
+        tap.name = data.id
+        backgroundView.addGestureRecognizer(tap)
+        window.addSubview(backgroundView)
+        UIView.animate(withDuration: 0.3) {
+            backgroundView.alpha = data.alpha
+        }
+    }
+    /**
+     removes view from the window
+     */
+    func removePopupBackgroundView(_ data:VCpresentedBackgroundData) {
+        self.togglePresentedBackgroundView(.init(show: false, id: data.id, fromWindow: data.fromWindow, completion: {
+            $0.0.removeFromSuperview()
+            $0.1?.removeFromSuperview()
+        }))
+    }
+    
+    func togglePresentedBackgroundView(_ data:VCpresentedBackgroundData) {
+        let sup = UIApplication.shared.sceneKeyWindow ?? UIWindow()
+        guard let background = sup.subviews.first(where: { view in
+            return view.layer.name == data.id
+        }) else { return }
+
+        UIView.animate(withDuration: 0.3, animations: {
+            background.alpha = data.show ? 1 : 0
+        }) { _ in
+            if let comp = data.completion {
+                comp((background, nil))
+            }
+        
+        }
+    }
+    
+    
+    struct VCpresentedBackgroundData {
+        var isPopupVC = false
+        var show:Bool = false
+        var id = "VCbackgroundView"
+        var fromWindow = false
+        /**
+         for  createPopupBackgroundView method
+         */
+        var alpha:CGFloat = 1
+        var completion:((_ views:(UIView, UIView?))->())? = nil
+    }
+    
+    @objc private func backgroundPressed(_ sender:UITapGestureRecognizer) {
+        self.removePopupBackgroundView(.init(id: sender.name ?? "VCbackgroundView", fromWindow: false))
+        self.removePopupBackgroundView(.init(id: sender.name ?? "VCbackgroundView", fromWindow: true))
+        self.dismiss(animated: true)
     }
 }

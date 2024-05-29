@@ -9,9 +9,15 @@
 import Foundation
 import UIKit
 
-
-struct UnparcePDF {
-    let manager:ManagerPDF
+class UnparcePDF {
+    var manager:ManagerPDF!
+    init(manager: ManagerPDF!) {
+        self.manager = manager
+    }
+    deinit {
+        manager = nil
+        print("UnparcePDFUnparcePDF deinit")
+    }
     
     func dictionaryToString(_ dictionary:[String:Any], data:PDFProperties, fromCreate:Bool = false) -> ([(NSAttributedString, Bool)], CGFloat) {
         var height:CGFloat = 0
@@ -49,16 +55,11 @@ struct UnparcePDF {
                     text.append((self.row(($0.key, $0.value)), false))
                 })
             } else if let val = $0.value as? [[String:Any]] {
-                val.forEach({
-                    let transactions = self.transactions($0["transactions"])
-                    height += transactions.1
-                    height += 105
-                    text.append((self.category($0["category"]), false))
-                    text.append((.init(string: "\n"), false))
-                    text.append((transactions.0, false))
-                    text.append((self.total("\($0["value"] as? Double ?? 0)"), false))
-                    text.append((.init(string: "\n"), false))
-                })
+                let tableData = transactionsTable(categorized: val, data: data)
+                height += CGFloat(tableData.0)
+                tableData.1.forEach {
+                    text.append($0)
+                }
             } else {
                 text.append((self.row(($0.key, $0.value)), false))
             }
@@ -88,6 +89,46 @@ struct UnparcePDF {
     }
     
     
+    private func transactionsTable(categorized:[[String:Any]], data:PDFProperties) -> (Int, [(NSAttributedString, Bool)]) {
+        var transactions:[[String:Any]] = []
+        var height:Int = 0
+        var text:[(NSAttributedString, Bool)] = []
+        var total:Double = 0
+        categorized.forEach({
+            if data.documentProperties.tableStyle.categorySepareted {
+                let transactions = self.transactions($0["transactions"], data: data)
+                height += Int(transactions.1)
+                height += 105
+                text.append((self.category($0["category"]), false))
+                text.append((.init(string: "\n"), false))
+                text.append((transactions.0, false))
+                text.append((self.total("\($0["value"] as? Double ?? 0)"), false))
+                text.append((.init(string: "\n"), false))
+            } else {
+                let transactionsDict = $0["transactions"] as? [[String:Any]] ?? []
+                total += $0["value"] as? Double ?? 0
+                transactionsDict.forEach {
+                    let transaction = TransactionsStruct.create(dictt: $0)
+                    transactions.append(transaction?.dict ?? [:])
+                }
+            }
+          })
+        
+        if !data.documentProperties.tableStyle.categorySepareted {
+            let header = self.transactions([], data: data)
+            text.append((header.0, false))
+
+            let transactionsData = self.transactions(transactions, data: data)
+            height += Int(transactionsData.1 + header.1)
+            
+            height += 40
+            text.append((transactionsData.0, false))
+            text.append((self.total("\(total)"), false))
+        }
+        
+        return (height, text)
+    }
+    
     private func addButton(type:PDFEditVC.LinkAttributeType) -> (NSMutableAttributedString, CGFloat) {
         let height:CGFloat = 50
         let text:NSMutableAttributedString = .init(string: "")
@@ -96,7 +137,7 @@ struct UnparcePDF {
 
         let plus = UIImageView(frame: .init(origin: .init(x: manager.pageWidth / 2 - 25, y: height / 2 - 15), size: .init(width: 30, height: 30)))
         plus.shadow()
-        plus.image = .init(named: "plusIcon")
+        plus.image = .init(named: "addIcon")
         plus.contentMode = .scaleAspectFit
         view.addSubview(plus)
         let attachment = NSTextAttachment()
@@ -161,7 +202,9 @@ struct UnparcePDF {
         let paragraphStyle2 = NSMutableParagraphStyle()
 
         paragraphStyle2.lineSpacing = 10
-        var height = text.string.calculate(font: fontResult, inWindth: manager.pageWidth, attributes: [.paragraphStyle:paragraphStyle2]).height
+        print(text.string, " gerfedaefre")
+        
+        var height = text.string.count >= 30 ? fontResult.calculate(inWindth:manager.pageWidth, attributes: [.paragraphStyle:paragraphStyle2], string: text.string).height : 40
         if attachmentText != nil {
             height += (attachment?.displeySize.height ?? 0)
         }
@@ -217,8 +260,9 @@ struct UnparcePDF {
     private var footer:NSMutableAttributedString {
         let text:NSMutableAttributedString = .init(string: "")
         let view = UIView(frame:.init(origin: .zero, size: .init(width: manager.pageWidth, height: 90)))
-        let imageView:UIImageView = .init(image: Keys.appstoreURL.createQR())
-        imageView.frame.size = .init(width: 90, height: 90)
+       
+        let imageView:UIImageView = .init(image: .init(QRcode: Keys.appstoreURL))
+        imageView.frame = .init(origin: .zero, size: .init(width: 90, height: 90))
         imageView.layer.cornerRadius = 6
         view.addSubview(imageView)
         let labelFrame:CGRect = .init(origin: .init(x: 100, y: 0), size: .init(width: 400, height: 60))
@@ -242,16 +286,48 @@ struct UnparcePDF {
         
     }
     
-    private func transactions(_ value:Any?) -> (NSMutableAttributedString, CGFloat) {
-        let array = value as? [[String:Any]] ?? []
+    private func transactions(_ value:Any?, data:PDFProperties) -> (NSMutableAttributedString, CGFloat) {
+        let array = (value as? [[String:Any]] ?? []).sorted(by: {
+            
+            var sort = data.documentProperties.tableStyle.sort
+            if data.documentProperties.tableStyle.categorySepareted && sort == .category {
+                sort = .amount
+            }
+            let lt = TransactionsStruct.create(dictt: $0)
+            let rt = TransactionsStruct.create(dictt: $1)
+            switch sort {
+            case .date:
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "MMM dd, yyyy"
+                let left = dateFormatter.date(from: lt?.date ?? "") ?? .init()
+                let right = dateFormatter.date(from: rt?.date ?? "") ?? .init()
+                return left > right
+            case .category:
+                let left = lt?.category.name ?? ""
+                let right = rt?.category.name ?? ""
+                return left >= right
+            case .amount:
+                let left = Double(lt?.value ?? "") ?? 0
+                let right = Double(rt?.value ?? "") ?? 0
+                return left >= right
+            }
+            
+        })
         let text:NSMutableAttributedString = .init(string: "")
         var count:CGFloat = 0
+        let height:CGFloat = 45
         array.forEach({
-            count += 45
+            count += height
             let attachment = NSTextAttachment()
-            attachment.image = transactionView($0).toImage
+            attachment.image = transactionView($0, data: data, isLast: array.count == Int(count / height)).toImage
             text.append(.init(attachment: attachment))
         })
+        if array.isEmpty {
+            count += height
+            let attachment = NSTextAttachment()
+            attachment.image = transactionView([:], data: data).toImage
+            text.append(.init(attachment: attachment))
+        }
         return (text, count)
     }
     
@@ -352,45 +428,87 @@ private extension UnparcePDF {
     }
     
     
-    func transactionView(_ dict:[String:Any]) -> UIView {
+    func transactionView(_ dict:[String:Any], data:PDFProperties, isLast:Bool = false) -> UIView {
+        if data.documentProperties.tableStyle.categorySepareted {
+            return transactionViewRegular(dict, data: data, isLast: isLast)
+        } else {
+            return transactionViewRegular(dict, data: data, isLast: isLast)
+        }
+    }
+    
+    private func transactionViewRegular(_ dict:[String:Any], data:PDFProperties, isLast:Bool) -> UIView {
+        return transactionViewCategorithed(dict, data: data, isLast: isLast)
+    }
+    
+    private func transactionViewCategorithed(_ dict:[String:Any], data:PDFProperties, isLast:Bool) -> UIView {
         let transaction = TransactionsStruct.create(dictt: dict)
         let view = UIView()
+        let color2 = dict.isEmpty ? primaryColor as! CGColor : secondaryColor as! CGColor
+        let color1 = primaryColor as! CGColor
         let size:CGSize = .init(width: manager.pageWidth - 100, height: 40)
         let exSmallFont = font(for: .extraSmall)
         let smallFont = font(for: .small)
         view.frame.size = size
         let dateLabel = UILabel(frame: .init(origin: .zero, size: size))
-        dateLabel.text = transaction?.date ?? ""
+        dateLabel.text = transaction?.date ?? "Date"
         dateLabel.textAlignment = .left
-        dateLabel.textColor = UIColor(cgColor: secondaryColor as! CGColor)
+        dateLabel.textColor = UIColor(cgColor: color2)
         dateLabel.font = .systemFont(ofSize: exSmallFont.0, weight: exSmallFont.1)
         view.addSubview(dateLabel)
         
-        if transaction?.comment != "" {
+        if transaction?.comment != "" || !data.documentProperties.tableStyle.categorySepareted {
             let commentLabel = UILabel(frame: .init(origin: .init(x: 80, y: 0), size: .init(width: manager.pageWidth / 2, height: size.height)))
-            commentLabel.text = transaction?.comment
+            commentLabel.text = !data.documentProperties.tableStyle.categorySepareted ? transaction?.category.name ?? "Category" : transaction?.comment ?? "Comment"
             commentLabel.textAlignment = .left
-            commentLabel.textColor = UIColor(cgColor:secondaryColor as! CGColor)
+            commentLabel.textColor = UIColor(cgColor:color2)
+            commentLabel.layer.name = "commentLabel"
             commentLabel.font = .systemFont(ofSize: exSmallFont.0, weight: exSmallFont.1)
             view.addSubview(commentLabel)
         }
         
         
         let valueLabel = UILabel(frame: .init(origin: .zero, size: size))
-        valueLabel.text = transaction?.value ?? ""
+        valueLabel.text = transaction?.value ?? "Amount"
         valueLabel.textAlignment = .right
-        valueLabel.textColor = .init(cgColor: primaryColor as! CGColor)
-        valueLabel.font = .systemFont(ofSize: smallFont.0, weight: smallFont.1)
+        valueLabel.textColor = .init(cgColor: color1)
+        valueLabel.font = dict.isEmpty ? .systemFont(ofSize: exSmallFont.0, weight: exSmallFont.1) : .systemFont(ofSize: smallFont.0, weight: smallFont.1)
         view.addSubview(valueLabel)
-        dotts(in: view, size: size)
+        if !data.documentProperties.tableStyle.categorySepareted && !dict.isEmpty {
+            let _ = view.layer.drawLine([
+                .init(x: 0, y: 0),
+                .init(x: size.width, y: 0)
+            ], color: UIColor(cgColor:color2), width: 0.5, opacity: 0.3)
+            let _ = view.layer.drawLine([
+                .init(x: 0, y: 5),
+                .init(x: 0, y: size.height - (isLast ? 5 : 0))
+            ], color: UIColor(cgColor:secondaryColor as! CGColor), width: 0.5, opacity: 0.3)
+            let _ = view.layer.drawLine([
+                .init(x: size.width, y: 5),
+                .init(x: size.width, y: size.height - (isLast ? 5 : 0))
+            ], color: UIColor(cgColor:color2), width: 0.5, opacity: 0.3)
+            if isLast {
+                let _ = view.layer.drawLine([
+                    .init(x: 0, y: size.height),
+                    .init(x: size.width, y: size.height)
+                ], color: UIColor(cgColor:color2), width: 0.5, opacity: 0.3)
+            }
+            let _ = view.subviews.first(where: {$0.layer.name == "commentLabel"})?.layer.drawLine([
+                        .init(x: 0, y: 5),
+                        .init(x: 0, y: dateLabel.frame.height  - (isLast ? 5 : 0))
+            ], color: UIColor(cgColor:color2), width: 0.5, opacity: 0.3)
+
+        } else if !dict.isEmpty {
+            dotts(in: view, size: size, data: data)
+        }
         return view
     }
     
-    private func dotts(in view:UIView, size:CGSize) {
-        let separetor = 3
+    private func dotts(in view:UIView, size:CGSize, data:PDFProperties) {
+        let dotsSeparetor = data.documentProperties.tableStyle.dotsSeparetor
+        let separetor = dotsSeparetor ? 3 : 1
         for i in 0..<(Int(size.width) / separetor) {
-            let dotWidth:CGFloat = 3
-            let dott = UIView(frame: .init(x: ((CGFloat(separetor) + dotWidth) * CGFloat(i)), y: size.height - 1, width: dotWidth, height: 0.8))
+            let dotWidth:CGFloat = dotsSeparetor ? 3 : size.width
+            let dott = UIView(frame: .init(x: ((CGFloat(separetor) + dotWidth) * CGFloat(i)), y: size.height - 1, width: dotWidth, height: dotsSeparetor ? 0.8 : 0.4))
             dott.backgroundColor = UIColor(cgColor: secondaryColor as! CGColor)
             dott.layer.cornerRadius = 0.5
             view.addSubview(dott)

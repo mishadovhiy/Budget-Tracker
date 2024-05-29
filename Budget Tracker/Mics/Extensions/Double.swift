@@ -21,6 +21,15 @@ extension Double {
         return String(format: "%.\(decimals)f", self)
 
     }
+    
+    var int:Int? {
+        if Double(Int.max) > self && Double(Int.min) < self {
+            return Int(self)
+        } else {
+            return nil
+        }
+    }
+    
 }
 
 extension Float {
@@ -35,6 +44,7 @@ extension CGSize {
         return .init(width: CGFloat(dict["width"] ?? 0),
                      height: CGFloat(dict["height"] ?? 0))
     }
+    
     var dict:[String:Float] {
         return [
             "width":Float(width),

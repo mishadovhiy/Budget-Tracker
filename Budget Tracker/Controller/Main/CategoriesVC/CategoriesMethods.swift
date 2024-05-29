@@ -14,36 +14,47 @@ extension CategoriesVC {
         case categories = "Categories"
         case debts = "Debts"
         case localData = "LocalData"
+        
+        var title:String {
+            switch self {
+            case .localData:
+                return "Local data".localize
+            case .categories:
+                return "Categories".localize
+            case .debts:
+                return "Debts".localize
+            }
+        }
     }
 
     public func loadTableData(loadFromUD: Bool = false) {
-        DispatchQueue.init(label: "dbLoad", qos: .userInteractive).async {
-            if !self.fromSettings {
-                self.categories = self.db.categories
-                self.allCategoriesHolder = self.categories
-            } else {
-                if self.screenType == .categories || self.screenType == .debts {
-                    AppDelegate.shared?.notificationManager.loadNotifications { unsees in
-                        self.unseenIDs = unsees
-                        self.loadData(loadFromUD: loadFromUD)
-                    }
-                } else {
+        if !self.fromSettings {
+            self.categories = self.db.categories
+            self.allCategoriesHolder = self.categories
+        } else {
+            if self.screenType == .categories || self.screenType == .debts {
+                AppDelegate.properties?.notificationManager.loadNotifications { unsees in
+                    self.unseenIDs = unsees
                     self.loadData(loadFromUD: loadFromUD)
                 }
-                
+            } else {
+                self.loadData(loadFromUD: loadFromUD)
             }
+            
         }
     }
     
     func loadData(showError:Bool = false, loadFromUD: Bool = false) {
-
+        tableDataLoaded = false
         if screenType != .localData {
-            if !loadFromUD && appData.username != "" {
-                prerformDownload(showError: showError) { loadedData in
-                    self.allCategoriesHolder = loadedData
+            if !loadFromUD && db.username != "" {
+                
+                Task {
+                    let data = await NetworkModel.loadCategories(showError: showError)
+                    self.allCategoriesHolder = data
                     self.categories = self.categoriesContains(self.searchingText)
-                    
                 }
+
             } else {
                 allCategoriesHolder = db.categories
                 _categories = allCategoriesHolder
@@ -64,7 +75,6 @@ extension CategoriesVC {
     func deteteCategory(at: IndexPath, reload:Bool = false) {
         let delete = DeleteFromDB()
         delete.CategoriesNew(category: tableData[at.section].data[at.row].category) { _ in
-            AppData.categoriesHolder = nil
             let id = "Debts" + "\(self.tableData[at.section].data[at.row].category.id)"
             Notifications.removeNotification(id: id, pending: true)
             self.categories = self.db.categories
@@ -88,13 +98,15 @@ extension CategoriesVC {
     }
     func saveToLocal() {
         if let transfaring = transfaringCategories {
-            db.localCategories = transfaring.categories
-            db.localTransactions = transfaring.transactions
-            transfaringCategories = nil
-            screenType = .localData
-            loadData()
-            DispatchQueue.main.async {
-                self.navigationController?.popToRootViewController(animated: true)
+            DispatchQueue(label: "db", qos: .userInitiated).async {
+                self.db.localCategories = transfaring.categories
+                self.db.localTransactions = transfaring.transactions
+                self.transfaringCategories = nil
+                self.screenType = .localData
+                self.loadData()
+                DispatchQueue.main.async {
+                    self.navigationController?.popToRootViewController(animated: true)
+                }
             }
         }
         
@@ -109,17 +121,14 @@ extension CategoriesVC {
             print("new id:", newID)
             newCategory.category.id = newID
             SaveToDB.shared.newCategories(newCategory.category) { error in
-                AppData.categoriesHolder = nil
-                self.editingTF = nil
                 self.allCategoriesHolder = loadedData
                 self.tableData[section].data.insert(newCategory, at: 0)
                 self._categories.insert(newCategory.category, at: 0)
                 self.tableData[section].newCategory.category.name = ""
-                self.selectingIconFor = (nil,nil)
                 DispatchQueue.main.async {
                     UIImpactFeedbackGenerator().impactOccurred()
                     self.tableView.reloadData()
-                    self.view.endEditing(true)
+                    self.stopEditing(keepIcons: false)
                 }
             }
         }
@@ -129,52 +138,19 @@ extension CategoriesVC {
             UIImpactFeedbackGenerator().impactOccurred()
             let category = category ?? self.tableData[section].newCategory
             if category.category.name != "" {
-                self.ai?.show(title:"Saving".localize, notShowIfLoggedUser: true) { _ in
+                self.ai?.showLoading(title:"Saving".localize, canIgonre: true) { 
                     DispatchQueue.main.async {
-                        if let editTF = self.editingTF {
-                            self.editingTF = nil
-                            editTF.endEditing(true)
-                        }
+                        self.stopEditing(keepIcons: true)
                     }
                     
                     self.saveNewCategory(section: section, category: category)
                 }
             } else {
                 DispatchQueue.main.async {
-                    if let editTF = self.editingTF {
-                        self.editingTF = nil
-                        editTF.endEditing(true)
-                    }
+                    self.stopEditing(keepIcons: true)
                 }
             }
     }
-    
-    func prerformDownload(showError:Bool, completion:@escaping([NewCategories])->()) {
-        let download = {
-            LoadFromDB.shared.newCategories { data, error in
-                AppData.categoriesHolder = data
-                if error != .none {
-                    if showError {
-                        DispatchQueue.main.async {
-                            self.newMessage?.show(type: .internetError)
-                        }
-                    }
-                }
-                completion(data)
-            }
-        }
-        if !showError {
-            if let categoriesHolder = AppData.categoriesHolder {
-                completion(categoriesHolder)
-            } else {
-                download()
-            }
-        } else {
-            download()
-        }
-    }
-    
-    
     
     
     func containsINUnseen(id:String) -> Bool {
@@ -230,8 +206,6 @@ extension CategoriesVC {
 
                 }
 
-                
-                
                 data.append(ScreenCategory(category: newValue[i], transactions: transactions, progress: newValue[i].monthlyProgress))
                 
                 let newD = sort(data)
@@ -245,14 +219,14 @@ extension CategoriesVC {
                     let data = ic.icons.first?.data ?? []
                     return data[Int.random(in: 0..<data.count)]
                 }
-                let debtColor = appData.lastSelected.gett(setterType: .color, valueType: .debt) ?? appData.randomColorName
-                let debtImg = appData.lastSelected.gett(setterType: .icon, valueType: .debt) ?? ""
+                let debtColor = db.lastSelected.gett(setterType: .color, valueType: .debt) ?? db.randomColorName
+                let debtImg = db.lastSelected.gett(setterType: .icon, valueType: .debt) ?? ""
                 
-                let expenseColor = appData.lastSelected.gett(setterType: .color, valueType: .expense) ?? appData.randomColorName
-                let expenseImg = appData.lastSelected.gett(setterType: .icon, valueType: .expense) ?? ""
+                let expenseColor = db.lastSelected.gett(setterType: .color, valueType: .expense) ?? db.randomColorName
+                let expenseImg = db.lastSelected.gett(setterType: .icon, valueType: .expense) ?? ""
                 
-                let incomeColor = appData.lastSelected.gett(setterType: .color, valueType: .income) ?? appData.randomColorName
-                let incomeImg = appData.lastSelected.gett(setterType: .icon, valueType: .income) ?? ""
+                let incomeColor = db.lastSelected.gett(setterType: .color, valueType: .income) ?? db.randomColorName
+                let incomeImg = db.lastSelected.gett(setterType: .icon, valueType: .income) ?? ""
                 
                 var resultData:[ScreenDataStruct] = []
                
@@ -274,8 +248,8 @@ extension CategoriesVC {
                     let data = ic.icons.first?.data ?? []
                     return data[Int.random(in: 0..<data.count)]
                 }
-                let debtColor = appData.lastSelected.gett(setterType: .color, valueType: .debt) ?? AppData.linkColor
-                let debtImg = appData.lastSelected.gett(setterType: .icon, valueType: .debt) ?? ""
+                let debtColor = db.lastSelected.gett(setterType: .color, valueType: .debt) ?? db.linkColor
+                let debtImg = db.lastSelected.gett(setterType: .icon, valueType: .debt) ?? ""
                 self.tableData = [
                     ScreenDataStruct(title: "", data: resultDict[purpose(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: debtImg, color: debtColor, purpose: .debt), transactions: [])),
                 ]
@@ -294,14 +268,7 @@ extension CategoriesVC {
                     ScreenDataStruct(title: purpose(.debt).localize, data: resultDict[purpose(.debt)] ?? [], newCategory: ScreenCategory(category: NewCategories(id: -1, name: "", icon: "", color: "", purpose: .debt), transactions: []))
                 ]
             }
-            DispatchQueue.main.async {
-                self.selectingIconFor = (nil,nil)
-                self.editingTF?.endEditing(true)
-                self.editingTF = nil
-                self.tableView.reloadData()
-
-            }
-            
+            tableLoaded()
         }
     }
     

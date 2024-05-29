@@ -9,16 +9,17 @@ import UIKit
 
 class PanViewController {
     
-    private let vc:UIViewController
+    private var vc:UIViewController!
     var delegate:PanViewControllerProtocol?
     private var properies:ScrollProperties = .init()
     var dismissAction:(()->())? = nil
-    init(vc:UIViewController, dismissAction:(()->())? = nil) {
+    
+    init(vc:UIViewController, toView:UIView?, dismissAction:(()->())? = nil) {
         self.dismissAction = dismissAction
         self.vc = vc
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(pinched(_:)))
         gesture.name = "PanViewControllerUIPanGestureRecognizer"
-        vc.view.addGestureRecognizer(gesture)
+        (toView ?? vc.view).addGestureRecognizer(gesture)
         vc.createPanIndicator()
     }
        
@@ -28,8 +29,11 @@ class PanViewController {
         gesture?.isEnabled = false
         delegate = nil
         dismissAction = nil
+        vc = nil
     }
     
+    var canSwipeFromFull:Bool = true
+    var isIgnoring:Bool = false
     @objc private func pinched(_ sender:UIPanGestureRecognizer) {
         let finger = sender.location(in: nil)
         let height = vc.view.frame.height
@@ -74,7 +78,10 @@ class PanViewController {
         
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: .allowUserInteraction, animations: {
             self.vc.view.layer.move(.top, value: show ? 0 : self.properies.toHideVC)
-        }, completion: { _ in
+        }, completion: {
+            if !$0 {
+                return
+            }
             if !show {
                 self.properies.vcShowing = false
                 self.properies.scrolling = false
@@ -126,7 +133,7 @@ extension PanViewController {
         var startScrollingPosition:CGFloat = 0
         var isHidding:Bool = false
         var toHideVC:CGFloat {
-            return UIApplication.shared.keyWindow?.frame.height ?? 0
+            return UIApplication.shared.sceneKeyWindow?.frame.height ?? 0
         }
     }
 }

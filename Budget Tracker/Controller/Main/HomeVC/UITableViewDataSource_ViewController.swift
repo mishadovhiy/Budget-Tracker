@@ -37,7 +37,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
                     transactionsCell.isUserInteractionEnabled = true
                     transactionsCell.contentView.isUserInteractionEnabled = true
                     let data = newTableData[indexPath.section - 1].transactions[indexPath.row]
-                    transactionsCell.setupCell(data, i: indexPath.row, tableData: tableData, selectedCell: selectedCell, indexPath: indexPath)
+                transactionsCell.setupCell(data, i: indexPath.row, tableData: viewModel.tableData, selectedCell: viewModel.selectedCell, indexPath: indexPath)
                     return transactionsCell
                 }
             
@@ -50,7 +50,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section != 0 && newTableData.count != 0 {
             if newTableData[indexPath.section-1].transactions.count - 1 >= indexPath.row {
-                self.editingTransaction = self.newTableData[indexPath.section - 1].transactions[indexPath.row]
+                self.viewModel.editingTransaction = self.newTableData[indexPath.section - 1].transactions[indexPath.row]
                 let cell = tableView.cellForRow(at: indexPath) as! mainVCcell
                 self.toAddTransaction(editing: true, pressedView: cell.contentView)
             }
@@ -77,17 +77,11 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             
             cell.dateLabel.textColor = K.Colors.link
             let date = newTableData[section - 1].date
-            cell.dateLabel.text = "\(AppData.makeTwo(n: date.day ?? 0))"
+            cell.dateLabel.text = "\(date.day?.twoDec ?? "")"
             cell.monthLabel.text =  date.stringMonth
             cell.yearLabel.text = "\(date.year ?? 0)"
             let contentView = cell.contentView
-         //   cell.mainView.layer.cornerRadius = 15
-            cell.mainView.layer.cornerRadius(at: .top, value: tableCorners)
-            /*let newView = UIView(frame: newViewFrame)
-            let helperTopView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: newViewFrame.height / 2))
-            helperTopView.backgroundColor = K.Colors.primaryBacground
-            newView.addSubview(helperTopView)
-            newView.addSubview(v)*/
+            cell.mainView.layer.cornerRadius(at: .top, value: viewModel.tableCorners)
             return contentView
         }
         
@@ -110,11 +104,11 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             if indexPath.section == 0 {
                 DispatchQueue.main.async {
                     self.mainTableView.backgroundColor = K.Colors.primaryBacground
-                    UIView.animate(withDuration: self.animateCellWillAppear ? 0.2 : 0) {
+                    UIView.animate(withDuration: self.viewModel.animateCellWillAppear ? 0.2 : 0) {
                         let superframe = self.filterView.superview?.frame ?? .zero
                         let selfFrame = self.filterView.frame
                         self.filterView.frame = CGRect(x: selfFrame.minX, y: -superframe.height, width: selfFrame.width, height: selfFrame.height)
-                        self.calculationSView.frame = self.filterAndCalcFrameHolder.1
+                        self.calculationSView.frame = self.viewModel.filterAndCalcFrameHolder.1
                     }
                 }
             }
@@ -129,7 +123,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
             return bigFr //- 45
         } else {
             if newTableData.count == 0 && indexPath.section == 1{
-                let safe = AppDelegate.shared?.window?.safeAreaInsets.top ?? 0 + 20
+                let safe = UIApplication.shared.sceneKeyWindow?.safeAreaInsets.top ?? 0 + 20
                 return (tableView.layer.frame.height - (bigFr + (safe))).validate(min: 0)
             } else {
                 return UITableView.automaticDimension
@@ -147,12 +141,12 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         }
         if indexPath.section == 0 {
             DispatchQueue.main.async {
-                UIView.animate(withDuration: self.animateCellWillAppear ? 0.3 : 0) {
+                UIView.animate(withDuration: self.viewModel.animateCellWillAppear ? 0.3 : 0) {
                     self.mainTableView.backgroundColor = .clear
                     let superframe = self.calculationSView.superview?.frame ?? .zero
                     let selfFrame = self.calculationSView.frame
                     self.calculationSView.frame = CGRect(x: selfFrame.minX, y: -superframe.height, width: selfFrame.width, height: selfFrame.height)
-                    self.filterView.frame = self.filterAndCalcFrameHolder.0
+                    self.filterView.frame = self.viewModel.filterAndCalcFrameHolder.0
                 }
             }
         }
@@ -165,7 +159,7 @@ extension HomeVC: UITableViewDataSource, UITableViewDelegate {
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "mainFooterCell") as! mainFooterCell
             cell.totalLabel.text = "\(newTableData[section - 1].amount)"
-            cell.cornerView.layer.cornerRadius(at: .btn, value: tableCorners)
+            cell.cornerView.layer.cornerRadius(at: .btn, value: viewModel.tableCorners)
             cell.separatorInset.left = tableView.frame.width / 2
             cell.separatorInset.right = tableView.frame.width / 2
             return cell.contentView

@@ -13,24 +13,24 @@ protocol CategoriesVCProtocol {
     func categorySelected(category: NewCategories?, fromDebts: Bool, amount: Int)
 }
 
-class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
-    @IBOutlet weak var tableView: UITableView!
-    var refreshControl:UIRefreshControl?
+class CategoriesVC: SuperViewController {
+    @IBOutlet weak var tableView: RefreshTableView!
     var hideTitle = false
     var fromSettings = false
     var delegate: CategoriesVCProtocol?
     var searchingText = ""
     var _allCategoriesHolder: [NewCategories] = []
-    
-    
     var transfaringCategories: LoginViewController.TransferingData?
     let selectionBacground = UIColor(red: 32/255, green: 32/255, blue: 32/255, alpha: 1)
-    weak static var shared:CategoriesVC?
+    var tableDataLoaded = false
+    static var shared:CategoriesVC? {
+        let nav = UIApplication.shared.sceneKeyWindow?.rootViewController as? UINavigationController
+        return nav?.viewControllers.first(where: {$0 is CategoriesVC}) as? CategoriesVC
+    }
     var _categories:[NewCategories] = []
     var _tableData:[ScreenDataStruct] = []
     var screenType: ScreenType = .categories
     @IBOutlet weak var iconsContainer: UIView!
-    @IBOutlet weak var screenAI: UIActivityIndicatorView!
     @IBOutlet weak var moreButton: UIButton!
     @IBOutlet weak var searchBar: UISearchBar!
     var historyDataStruct: [TransactionsStruct] = []
@@ -50,60 +50,28 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     var tableContentOf:UIEdgeInsets = UIEdgeInsets.zero
     var keyHeight: CGFloat = 0.0
     var showingIcons = true
-    var subvsLayed = false
     var appeareDidCall = false
     var unseenIDs:[String] = []
     var wasEdited = false
     @IBOutlet weak var moreNavButton: Button!
     var toSelectCategory = false
+    var iconChildren:IconsVC? {
+        return children.first(where: {$0 is IconsVC}) as? IconsVC
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        searchBar.placeholder = "Category search".localize
-        CategoriesVC.shared = self
-        tableView.delegate = self
-        tableView.dataSource = self
-        searchBar.delegate = self
-        
-        selectingIconFor = (nil,nil)
-        
-        var strTitle:String {
-            switch screenType {
-            case .localData:
-                return "Local data".localize
-            case .categories:
-                return "Categories".localize
-            case .debts:
-                return "Debts".localize
-            }
-        }
-        title = strTitle
-        
         updateUI()
-
         loadTableData()
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(false, animated: true)
-        AppDelegate.shared?.banner.setBackground(clear: false)
-    }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        
-        if !subvsLayed {
-            subvsLayed = true
-            self.tableView.alpha = 0
-        }
+        AppDelegate.properties?.banner.setBackground(clear: false)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        searchBar.endEditing(true)
-            if let editTF = self.editingTF {
-                self.editingTF = nil
-                editTF.endEditing(true)
-            }
-
+        stopEditing(keepIcons: true)
         if !appeareDidCall {
             toHistory = false
             appeareDidCall = true
@@ -113,40 +81,31 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
                 toHistory = false
             }
         }
-
         self.tableView.contentInset.bottom = self.defaultTableInset
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-//        AppDelegate.shared?.window?.backgroundColor = .clear
-        AppDelegate.shared?.banner.setBackground(clear: true)
+        AppDelegate.properties?.banner.setBackground(clear: true)
     }
     
     override func viewDidDismiss() {
         super.viewDidDismiss()
-        refreshControl?.removeFromSuperview()
-        refreshControl = nil
-        editingTF = nil
-        CategoriesVC.shared = nil
+        stopEditing()
         historyDataStruct.removeAll()
         _categories.removeAll()
         _tableData.removeAll()
         removeKeyboardObthervers()
+        children.forEach({$0.removeFromParent()})
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        if !toHistory {
-            if fromSettings {
-                if !wasEdited {
-                    delegate?.categorySelected(category: nil, fromDebts: false, amount: 0)
-                } else {
-                    delegate?.categorySelected(category: nil, fromDebts: false, amount: 0)
-                }
-            }
+        if !toHistory && fromSettings {
+            delegate?.categorySelected(category: nil, fromDebts: false, amount: 0)
         }
     }
+    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         DispatchQueue.main.async {
             self.tableView.reloadData()
@@ -155,8 +114,7 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y < -60.0 {
-            hideAll()
-            
+            stopEditing()
         }
     }
     
@@ -170,23 +128,20 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         } else {
             showMoreOptions()
         }
-        
     }
     
     func showMoreOptions() {
-        appData.presentMoreVC(currentVC: self, data: [
+        MoreVC.presentMoreVC(currentVC: self, data: [
             .init(name: "Sort", description: "", showAI:false, action: showMoreVC),
             .init(name: "Default cetrgories", description: "", showAI:false, action: {
                 self.toSelectCategory = true
                 self.toggleIcons(show: true, animated: true, category: .create(dict: [:]))
             })
         ])
-
     }
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
         switch segue.identifier {
         case "toHistory":
             toHistory = true
@@ -194,10 +149,10 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             vc.historyDataStruct = historyDataStruct
             vc.selectedCategory = selectedCategory
             vc.fromCategories = true
-            vc.allowEditing = screenType != .localData ? (selectedCategory?.purpose == .debt ? true : false) : (transfaringCategories == nil ? true : false)
+            vc.allowEditing = screenType != .localData ? (selectedCategory?.purpose == .debt ? true : false) : false
             vc.mainType = screenType != .localData ? .db : transfaringCategories == nil ? .localData : .unsaved
             vc.edited = {
-               // self.loadTableData(loadFromUD: false)
+                // self.loadTableData(loadFromUD: false)
             }
         case "selectIcon":
             let vc = segue.destination as! IconsVC
@@ -210,16 +165,13 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
             break
         }
     }
-
+    
     var allCategoriesHolder: [NewCategories] {
         get {
             return _allCategoriesHolder
         }
         set {
             _allCategoriesHolder = newValue
-            if fromSettings {
-                AppData.categoriesHolder = newValue
-            }
         }
     }
     
@@ -229,26 +181,9 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
         }
         set {
             _tableData = newValue
-            DispatchQueue.main.async {
-                self.ai?.fastHide()
-                if self.refreshControl?.isRefreshing ?? false {
-                    self.refreshControl?.endRefreshing()
-                }
-                if self.tableView.alpha != 1 {
-                    if self.screenAI?.isAnimating ?? false {
-                        self.screenAI?.stopAnimating()
-                    }
-                    if self.screenAI?.isHidden != true {
-                        self.screenAI?.isHidden = true
-                    }
-                    self.moreButton.isEnabled = true
-                    UIView.animate(withDuration: 0.2) {
-                        self.tableView.alpha = 1
-                    }
-
-                }
-                
-            }
+//            DispatchQueue.main.async {
+//                self.ai?.hide()
+//            }
         }
     }
 }
@@ -256,21 +191,17 @@ class CategoriesVC: SuperViewController, UITextFieldDelegate, UITableViewDelegat
 
 extension CategoriesVC: IconsVCDelegate {
     func categorySelected(_ category: NewCategories) {
-        print("dfsdafdbgvfcd")
         addCategoryPerform(section: category.purpose == .expense ? 0 : 1, category: .init(category: category, transactions: []))
     }
     
     func selected(img: String, color: String) {
         iconSelected(img: img, color: color)
     }
-
+    
     func kayboardAppeared(_ keyboardHeight:CGFloat) {
-        DispatchQueue.main.async {
-            let height:CGFloat = keyboardHeight - self.appData.resultSafeArea.1 - self.defaultButtonInset
-            let cellEditing = (self.editingTF?.layer.name?.contains("cell") ?? false) || self.selectingIconFor.0 != nil
-            self.tableView.contentInset.bottom = height + (cellEditing ? (self.regFooterHeight * (-1)) : 0)
-
-        }
+        let height:CGFloat = keyboardHeight - (AppDelegate.properties?.appData.resultSafeArea.1 ?? 0) - self.defaultButtonInset
+        let cellEditing = (self.editingTF?.layer.name?.contains("cell") ?? false) || self.selectingIconFor.0 != nil
+        self.tableView.contentInset.bottom = height + (cellEditing ? (self.regFooterHeight * (-1)) : 0)
     }
 }
 

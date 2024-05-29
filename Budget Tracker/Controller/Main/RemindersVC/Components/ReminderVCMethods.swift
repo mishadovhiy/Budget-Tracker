@@ -10,7 +10,7 @@ import UIKit
 
 extension RemindersVC {
     func loadData() {
-        AppDelegate.shared?.notificationManager.loadNotifications { unsees in
+        AppDelegate.properties?.notificationManager.loadNotifications { unsees in
             self.loadReminders(unseen: unsees)
         }
     }
@@ -41,11 +41,11 @@ extension RemindersVC {
     
     
     private func loadReminders(unseen:[String]) {
-        let data = reminders.reminders
+        let data = ReminderManager.reminders
         var result:[ReminderStruct] = []
         for raw in data {
             var new:ReminderStruct = .init(transaction: raw.transaction, dict: raw.dict)
-            new.higlightUnseen = (AppDelegate.shared?.notificationManager.containsUnseen(id: new.id ?? "", unseen: unseen) ?? false)
+            new.higlightUnseen = (AppDelegate.properties?.notificationManager.containsUnseen(id: new.id ?? "", unseen: unseen) ?? false)
             print(new, "newnewnewnewnew")
             result.append(new)
             
@@ -61,7 +61,7 @@ extension RemindersVC {
                 self.tableView.dataSource = self
             }
             self.tableView.reloadData()
-            self.ai?.fastHide()
+       //     self.ai?.hide()
         }
     }
 
@@ -69,20 +69,26 @@ extension RemindersVC {
     
 
     
-    
+    private func performAddTransactionToHome(_ reminder: ReminderStruct) {
+        self.addNextReminder(reminder: reminder) { added in
+            let completion:(Bool) -> () = { _ in
+                self.loadData()
+                DispatchQueue.main.async {
+                    self.newMessage?.show(title: AppText.success, description: "Transaction has been added!".localize, type: .succsess)
+                }
+            }
+            DispatchQueue.main.async {
+                HomeVC.shared?.viewModel.actionAfterAdded = completion
+                HomeVC.shared?.addNewTransaction(value: reminder.transaction.value, category: reminder.transaction.categoryID, date: self.today, comment: reminder.transaction.comment, reminderTime: nil, repeated: nil)
+            }
+        }
+    }
     
     func addTransaction(idx:Int) {
         let reminder = tableData[idx]
-        ai?.show { _ in
-            self.addNextReminder(reminder: reminder) { added in
-                let completion:(Bool) -> () = { _ in
-                    self.loadData()
-                    DispatchQueue.main.async {
-                        self.newMessage?.show(title: Text.success, description: "Transaction has been added!".localize, type: .succsess)
-                    }
-                }
-                HomeVC.shared?.actionAfterAdded = completion
-                HomeVC.shared?.addNewTransaction(value: reminder.transaction.value, category: reminder.transaction.categoryID, date: self.today, comment: reminder.transaction.comment, reminderTime: nil, repeated: nil)
+        ai?.showLoading { 
+            DispatchQueue(label: "api", qos: .userInitiated).async {
+                self.performAddTransactionToHome(reminder)
             }
         }
     }
@@ -104,7 +110,7 @@ extension RemindersVC {
                     if addded {
                         completion(true)
                     } else {
-                        self.ai?.showAlertWithOK(title: "Error adding reminder", text: nil, error: true)
+                        self.ai?.showAlertWithOK(title: "Error adding reminder")
                     }
                 }
 
@@ -130,9 +136,7 @@ extension RemindersVC {
     
     func editReminder(idx:Int) {
         editingReminder = idx
-        DispatchQueue.main.async {
-            self.performSegue(withIdentifier: "goToEditVC", sender: self)
-        }
+        self.performAddReminder()
     }
     
     func deleteReminder(idx:Int) {

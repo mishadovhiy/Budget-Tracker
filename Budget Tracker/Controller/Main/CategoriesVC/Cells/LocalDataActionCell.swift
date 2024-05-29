@@ -34,12 +34,12 @@ class LocalDataActionCell: UITableViewCell {
         let deleteGesture = UITapGestureRecognizer(target: self, action: #selector(deletePress(_:)))
         self.deletePressed.addGestureRecognizer(deleteGesture)
     }
-
+    
     
     @objc func saveLocallyPress(_ sender: UITapGestureRecognizer) {
-        AppDelegate.shared?.appData.needDownloadOnMainAppeare = true
+        AppDelegate.properties?.appData.needDownloadOnMainAppeare = true
         DispatchQueue.main.async {
-            AppDelegate.shared!.ai.show(title:"Saving") { _ in
+            AppDelegate.properties?.ai.showLoading(title:"Saving".localize) {
                 if let action = self.saveAction {
                     action()
                 }
@@ -48,23 +48,19 @@ class LocalDataActionCell: UITableViewCell {
         
     }
     @objc func sendPress(_ sender: UITapGestureRecognizer) {
-        DispatchQueue.main.async {
-            AppDelegate.shared!.ai.show(title:"Preparing") { _ in
-                if let action = self.sendAction {
-            action()
-        }
+        AppDelegate.properties?.ai.showLoading(title:"Preparing".localize) {
+            if let action = self.sendAction {
+                action()
             }
-                                        }
+        }
     }
     @objc func deletePress(_ sender: UITapGestureRecognizer) {
-        DispatchQueue.main.async {
-            AppDelegate.shared!.ai.show(title:"Deleting") { _ in
-                AppDelegate.shared?.appData.needDownloadOnMainAppeare = true
-                if let action = self.deleteAction {
-            action()
-        }
+        AppDelegate.properties?.ai.showLoading(title:"Deleting".localize) {
+            AppDelegate.properties?.appData.needDownloadOnMainAppeare = true
+            if let action = self.deleteAction {
+                action()
             }
-                                        }
+        }
     }
     
 }

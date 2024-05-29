@@ -18,11 +18,15 @@ class WebViewVC: SuperViewController, UIScrollViewDelegate, WKNavigationDelegate
     public var htmlData: HtmlData?
     weak static var shared:WebViewVC?
     
-    
+    override func viewDidDismiss() {
+        super.viewDidDismiss()
+        WebViewVC.shared = nil
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         WebViewVC.shared = self
         webView.scrollView.delegate = self
+        webView.alpha = 0
         title = screenTitle
         DispatchQueue.init(label: "loadHtmlData", qos: .userInteractive).async {
             if let htmlData = self.htmlData,
@@ -34,7 +38,10 @@ class WebViewVC: SuperViewController, UIScrollViewDelegate, WKNavigationDelegate
                     self.webView.isHidden = false
                     self.screenAI?.stopAnimating()
                     self.screenAI?.isHidden = true
-                    self.webView.scrollView.contentInset.bottom = AppDelegate.shared?.banner.size ?? 0
+                    self.webView.scrollView.contentInset.bottom = AppDelegate.properties?.banner.size ?? 0
+                    UIView.animate(withDuration: 0.3) {
+                        self.webView.alpha = 1
+                    }
                 }
             } else {
                 self.errorLoading()
@@ -47,7 +54,7 @@ class WebViewVC: SuperViewController, UIScrollViewDelegate, WKNavigationDelegate
     
     
     
-    public func presentScreen(in nav:UINavigationController, data:HtmlData, screenTitle:String) {
+    static func presentScreen(in nav:UINavigationController, data:HtmlData, screenTitle:String) {
         DispatchQueue.main.async {
             let storyboard = UIStoryboard(name: "Reusable", bundle: nil)
             let vc = storyboard.instantiateViewController(withIdentifier: "WebViewVC") as! WebViewVC
@@ -81,7 +88,7 @@ class WebViewVC: SuperViewController, UIScrollViewDelegate, WKNavigationDelegate
     
     private func errorLoading() {
         DispatchQueue.main.async {
-            AppDelegate.shared?.ai.showAlertWithOK(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, hidePressed: { _ in
+            AppDelegate.properties?.ai.showAlertWithOK(title: AppText.Error.InternetTitle, description: AppText.Error.internetDescription, okPressed: {
                 DispatchQueue.main.async {
                     self.navigationController?.popViewController(animated: true)
                 }
@@ -107,7 +114,7 @@ extension WebViewVC {
 @font-face{font-family:'Open Sans', sans-serif;font-display:swap;}
 *{box-sizing:border-box;padding:0;margin:0}
 
-body{ background: #000000; padding-left: 10px; padding-right: 10px; }
+body{ background: #1D1D1D; padding-left: 10px; padding-right: 10px; }
 p, h2, h1, h3, h4, h5, ul, li{ color: #EBE9E9; font-family:'Open Sans',sans-serif; }
 p{font-size: 14px;line-height:1.65;}
 h2{ margin-top: 35px; margin-bottom: 5px; }

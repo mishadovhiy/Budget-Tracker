@@ -8,11 +8,13 @@
 
 import UIKit
 
-class LastSelected {
+struct LastSelected {
     let mainKey = "lastSelected"
-    
+    private var db:DataBase {
+        return AppDelegate.properties?.db ?? .init()
+    }
     private var dict: [String:String] {
-        return DataBase().db[mainKey] as? [String:String] ?? [:]
+        return db.db[mainKey] as? [String:String] ?? [:]
     }
     
 
@@ -20,7 +22,7 @@ class LastSelected {
         let key = settingTypeToString(setterType) + typeToString(valueType)
         var all = dict
         all.updateValue(value, forKey: key)
-        DataBase().db.updateValue(all, forKey: mainKey)
+        db.db.updateValue(all, forKey: mainKey)
     }
     
     func gett(setterType: SettingTypeEnum = .SelectedTypeEnum, valueType: SelectedTypeEnum) -> String? {
@@ -63,7 +65,7 @@ class LastSelected {
     }
 
     func resetAll() {
-        DataBase().db.removeValue(forKey: mainKey)
+        db.db.removeValue(forKey: mainKey)
     }
     
 

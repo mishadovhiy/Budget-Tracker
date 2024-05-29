@@ -16,6 +16,10 @@ final class AnimatedTransitioningManager: NSObject, UIViewControllerAnimatedTran
         self.duration = duration
     }
     
+    deinit {
+        beginTransactionPressedView = nil
+    }
+    
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return duration
     }
@@ -112,11 +116,10 @@ private extension AnimatedTransitioningManager {
             toView.backgroundColor = K.Colors.link.withAlphaComponent(0.2)
         }
         
-print(toFrame1, "rfgytrfe")
         
         if isPresenting && fromFrame.minY <= 130 {
             UIView.animate(withDuration: duration / 1.5, animations: {
-                let window = UIApplication.shared.keyWindow?.frame ?? .zero
+                let window = UIApplication.shared.sceneKeyWindow?.frame ?? .zero
                 toView.frame.origin = .init(x: window.width / 4, y: window.height / 4)
             })
         }

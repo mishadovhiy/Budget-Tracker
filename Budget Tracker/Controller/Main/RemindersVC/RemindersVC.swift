@@ -25,13 +25,13 @@ class RemindersVC: SuperViewController {
         RemindersVC.shared = self
         loadData()
         title = "Payment reminders ".localize
-        AppDelegate.shared?.banner.fullScreenDelegates.updateValue(self, forKey: self.restorationIdentifier!)
+        AppDelegate.properties?.banner.fullScreenDelegates.updateValue(self, forKey: self.restorationIdentifier!)
 
     }
 
     override func viewDidDismiss() {
         super.viewDidDismiss()
-        AppDelegate.shared?.banner.fullScreenDelegates.removeValue(forKey: self.restorationIdentifier!)
+        AppDelegate.properties?.banner.fullScreenDelegates.removeValue(forKey: self.restorationIdentifier!)
     }
     
 
@@ -47,13 +47,13 @@ class RemindersVC: SuperViewController {
         navigationController?.delegate = nil
         if !firstAppeared {
             firstAppeared = true
-            AppDelegate.shared?.banner.bannerCanShow(type: .paymentReminder, completion: {
+            AppDelegate.properties?.banner.bannerCanShow(type: .paymentReminder, completion: {
                 self.addTransactionButton.toggleAdView(show: $0)
             })
             
         }
     }
-    lazy var today = AppDelegate.shared?.appData.filter.getToday() ?? ""
+    lazy var today = AppDelegate.properties?.db.filter.getToday() ?? ""
     var editingReminder:Int?
     func performAddReminder() {
         Notifications.requestNotifications()
@@ -81,7 +81,7 @@ class RemindersVC: SuperViewController {
     private var interstitial: GADFullScreenPresentingAd?
     @IBOutlet weak var addTransactionButton: AdButton!
     @IBAction func addTransactionPressed(_ sender: Any) {
-        AppDelegate.shared?.banner.toggleFullScreenAdd(self, type: .paymentReminder, loaded: {
+        AppDelegate.properties?.banner.toggleFullScreenAdd(self, type: .paymentReminder, loaded: {
             self.interstitial = $0
             self.interstitial?.fullScreenContentDelegate = self
         }, closed: {presented in 
@@ -116,7 +116,7 @@ extension RemindersVC:UITableViewDelegate, UITableViewDataSource {
             let data = tableData[indexPath.row]
             cell.amountLabel.text = data.transaction.value
             let date = data.time
-            cell.dayNumLabel.text = "\(AppData.makeTwo(n: date?.day))"
+            cell.dayNumLabel.text = date?.day?.twoDec
             cell.dateLabel.text = (date?.stringMonth ?? "") + "\n\(date?.year ?? 0)"
             cell.timeLabel.text = date?.timeString
             cell.expiredLabel.isHidden = !(date?.expired ?? false)
@@ -152,6 +152,7 @@ extension RemindersVC :TransitionVCProtocol {
     }
     
     func editTransaction(_ transaction: TransactionsStruct, was: TransactionsStruct,reminderTime: DateComponents?, repeated: Bool?, idx:Int?) {
+        print("editTransactioneditTransactioneditTransaction")
         addReminder(wasStringID: idx, transaction: transaction, reminderTime: reminderTime, repeated: repeated)
     }
     
@@ -169,10 +170,10 @@ extension RemindersVC :TransitionVCProtocol {
 
 extension RemindersVC:GADFullScreenContentDelegate {
     func adDidPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        AppDelegate.shared?.banner.adDidPresentFullScreenContent(ad)
+        AppDelegate.properties?.banner.adDidPresentFullScreenContent(ad)
     }
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        AppDelegate.shared?.banner.adDidDismissFullScreenContent(ad)
+        AppDelegate.properties?.banner.adDidDismissFullScreenContent(ad)
     }
     
 }
@@ -188,10 +189,24 @@ extension RemindersVC:FullScreenDelegate {
 
 
 extension RemindersVC {
+    static func showPaymentReminders() {
+        DispatchQueue.main.async {
+            let strorybpard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = strorybpard.instantiateViewController(withIdentifier: "RemindersVC") as! RemindersVC
+            vc.fromAppDelegate = true
+            let nav = UINavigationController(rootViewController: vc)
+            AppDelegate.properties?.appData.present(vc: nav) {
+               // AppDelegate.properties?.ai.hide()
+            }
+            
+            nav.setBackground(.regular)
+        }
+    }
     static func configure() -> RemindersVC {
         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "RemindersVC") as! RemindersVC
         return vc
     }
 }
+
 
 

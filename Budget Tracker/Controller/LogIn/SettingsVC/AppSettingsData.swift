@@ -13,12 +13,14 @@ import UIKit
 class AppSettingsData {
     
     private var specialData:[SettingsVC.TableData]? = nil
-    let vc:SettingsVC
+    var vc:SettingsVC!
     init(vc:SettingsVC, data:[SettingsVC.TableData]? = nil) {
         self.vc = vc
         self.specialData = data
     }
-    
+    deinit {
+        vc = nil
+    }
     func getData() -> [SettingsVC.TableData] {
         if let data = specialData {
             return data
@@ -40,7 +42,7 @@ class AppSettingsData {
     
     
     func appearenceSection() -> [Any] {
-        let colorCell = SettingsVC.StandartCell(title: "Primary color".localize, description: "", colorNamed:  AppData.linkColor, pro: nil, action: {//!appData.proEnabeled ? 3 : nil
+        let colorCell = SettingsVC.StandartCell(title: "Primary color".localize, description: "", colorNamed:  AppDelegate.properties?.db.linkColor ?? "", pro: nil, action: {//!appData.proEnabeled ? 3 : nil
             DispatchQueue.main.async {
                 self.vc.performSegue(withIdentifier: "toColors", sender: self.vc)
             }
@@ -143,7 +145,7 @@ class AppSettingsData {
         let privacy = SettingsVC.StandartCell(title: pprivacyTitle, action: {
             DispatchQueue.main.async {
                 if let nav = self.vc.navigationController {
-                    WebViewVC.shared?.presentScreen(in: nav, data: .init(url: "https://mishadovhiy.com/apps/previews/budget.html", key: "Privacy".localize), screenTitle: pprivacyTitle)
+                    WebViewVC.presentScreen(in: nav, data: .init(url: "https://mishadovhiy.com/apps/previews/budget.html", key: "Privacy".localize), screenTitle: pprivacyTitle)
                 }
             }
             
@@ -167,17 +169,18 @@ class AppSettingsData {
         
         
         let appShortcodes = SettingsVC.StandartCell(title: "Application ShortCode Actions", action: {
-            let ignoring = DataBase().viewControllers.ignoredActionTypes
-            let cells:[SettingsVC.TriggerCell] = AppDelegate.ShortCodeItem.allCases.compactMap({ item in
+            let db = AppDelegate.properties?.db ?? .init()
+            let ignoring = db.viewControllers.ignoredActionTypes
+            let cells:[SettingsVC.TriggerCell] = ShortCodeItem.allCases.compactMap({ item in
                 return .init(title: item.item.title, isOn: !ignoring.contains(item.rawValue), action: { isOn in
                     DispatchQueue(label: "db", qos: .userInitiated).async {
                         if isOn {
-                            DataBase().viewControllers.ignoredActionTypes.removeAll(where: {$0.contains(item.rawValue)})
+                            db.viewControllers.ignoredActionTypes.removeAll(where: {$0.contains(item.rawValue)})
                         } else {
-                            DataBase().viewControllers.ignoredActionTypes.append(item.rawValue)
+                            db.viewControllers.ignoredActionTypes.append(item.rawValue)
                         }
                         DispatchQueue.main.async {
-                            AppDelegate.shared?.setQuickActions()
+                            AppDelegate.properties?.setQuickActions()
                         }
                     }
                 })
@@ -190,13 +193,13 @@ class AppSettingsData {
         
         
         
-        let testPro:SettingsVC.TriggerCell = SettingsVC.TriggerCell(title: "forceNotPro", isOn: AppDelegate.shared?.appData.forceNotPro ?? false, pro: nil, action: { (newValue) in
-            AppDelegate.shared?.appData.forceNotPro = newValue ? true : nil
+        let testPro:SettingsVC.TriggerCell = SettingsVC.TriggerCell(title: "forceNotPro", isOn: AppDelegate.properties?.db.forceNotPro ?? false, pro: nil, action: { (newValue) in
+            AppDelegate.properties?.db.forceNotPro = newValue ? true : nil
         })
 
         
         var cells = [otherCell, appShortcodes]
-        if AppDelegate.shared?.appData.devMode ?? false {
+        if AppDelegate.properties?.db.devMode ?? false {
             //cells.append
         }
         return cells
@@ -248,8 +251,7 @@ extension AppSettingsData {
     }
     
     func getUserPasscode(completion:@escaping() -> ()) {
-
-        AppDelegate.shared!.presentLock(passcode: true, passcodeVerified: completion)
+        AppDelegate.properties?.presentLock(passcode: true, passcodeVerified: completion)
     }
     
     
@@ -258,11 +260,11 @@ extension AppSettingsData {
         let nextAction:(String) -> () = { (newValue) in
             let repeateAction:(String) -> () = { (repeatedPascode) in
                 if newValue == repeatedPascode {
-                    AppDelegate.shared!.newMessage.show(title: "Passcode has been setted".localize, type: .succsess)
+                    AppDelegate.properties?.newMessage.show(title: "Passcode has been setted".localize, type: .succsess)
                     self.vc.toEnterValue(data: nil)
                     completion(newValue)
                 } else {
-                    AppDelegate.shared!.newMessage.show(title: "Passcodes don't match".localize, type: .error)
+                    AppDelegate.properties?.newMessage.show(title: "Passcodes don't match".localize, type: .error)
                 }
             }
             let passcodeSecondEntered = EnterValueVC.EnterValueVCScreenData(taskName: "Create".localize + " " + "passcode".localize, title: "Repeat".localize + " " + "passcode".localize, placeHolder: "Password".localize, nextAction: repeateAction, screenType: .code)

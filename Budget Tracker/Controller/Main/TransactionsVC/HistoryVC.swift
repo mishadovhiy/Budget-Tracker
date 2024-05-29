@@ -31,11 +31,7 @@ class HistoryVC: SuperViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         transactionsManager = .init()
-        historyDataStruct.forEach({
-            if !(transactionsManager?.daysBetween.contains($0.date) ?? false) {
-                transactionsManager?.daysBetween.append($0.date)
-            }
-        })
+
         print(selectedCategory, " selectedCategoryselectedCategory")
         tableView.registerCell([.amount])
         HistoryVC.shared = self
@@ -74,7 +70,7 @@ class HistoryVC: SuperViewController {
         super.viewDidDismiss()
         removeKeyboardObthervers()
     }
-
+    
     var thisMonthTotal:Double = 0
     
     func calcMonthlyLimits() {
@@ -95,16 +91,16 @@ class HistoryVC: SuperViewController {
     @IBOutlet weak var moreButton: UIButton!
     
     private var interstitial: GADFullScreenPresentingAd?
-
+    
     func monthlyLimitPressed() {
         if selectedCategory?.purpose == .debt {
             self.amountToPayEditing = true
             DispatchQueue.main.async {
                 self.tableView.reloadData()
-                self.ai?.fastHide()
+                self.ai?.hide()
             }
         } else {
-            AppDelegate.shared?.banner.toggleFullScreenAdd(self, type: .categoryLimit, loaded: { GADFullScreenPresentingAd in
+            AppDelegate.properties?.banner.toggleFullScreenAdd(self, type: .categoryLimit, loaded: { GADFullScreenPresentingAd in
                 self.interstitial = GADFullScreenPresentingAd
                 self.interstitial?.fullScreenContentDelegate = self
             }, closed: { presented in
@@ -112,7 +108,7 @@ class HistoryVC: SuperViewController {
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                     // self.tableView.scrollToRow(at: IndexPath(row: 0, section: 2), at: .bottom, animated: true)
-                    self.ai?.fastHide()
+                    self.ai?.hide()
                 }
             })
         }
@@ -120,9 +116,9 @@ class HistoryVC: SuperViewController {
     }
     
     func showMoreVC() {
-        let appData = AppData()
+        let appData = AppDelegate.properties ?? .init()
         //get screen data
-
+        
         let addDueDate = {
             self.tocalendatPressed()
             
@@ -130,11 +126,11 @@ class HistoryVC: SuperViewController {
         
         let moreData = selectedCategory?.purpose == .debt ? [
             MoreVC.ScreenData(name: "Amount to pay".localize, description: "", showAI:false, action: monthlyLimitPressed),
-            MoreVC.ScreenData(name: "Due date".localize, description: "", showAI:false, pro: appData.proEnabeled, action: addDueDate),
+            MoreVC.ScreenData(name: "Due date".localize, description: "", showAI:false, pro: db.proEnabeled, action: addDueDate),
         ] : [
             MoreVC.ScreenData(name: "Add monthly limit".localize, description: "", showAI:false, action: monthlyLimitPressed),
         ]
-        appData.presentMoreVC(currentVC: self, data: moreData, proIndex: 0)
+        MoreVC.presentMoreVC(currentVC: self, data: moreData, proIndex: 0)
     }
     
     
@@ -163,17 +159,17 @@ class HistoryVC: SuperViewController {
     
     
     var fromStatistic = false
-
+    
     
     @IBOutlet weak var footerStack: UIStackView!
     func addBennerHelper() {
-        if !appData.proEnabeled {
+        if !db.proEnabeled {
             let view = UIView()
             view.backgroundColor = .clear
             view.isHidden = true
             footerStack.addArrangedSubview(view)
             self.view.addConstraints([
-                .init(item: view, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: AppDelegate.shared?.banner.size ?? 0),
+                .init(item: view, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: AppDelegate.properties?.banner.size ?? 0),
                 .init(item: view, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: self.view.frame.width)
             ])
             view.translatesAutoresizingMaskIntoConstraints = false
@@ -185,7 +181,7 @@ class HistoryVC: SuperViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(false, animated: true)
-
+        
     }
     var helperViewAdded = false
     var bottomTableInsert:CGFloat = 50
@@ -215,7 +211,7 @@ class HistoryVC: SuperViewController {
             }
         }
         
-        
+        print("ghrdfsd selcat ", selectedCategory)
     }
     
     func stringToInterval(s: String) -> DateComponents {
@@ -229,21 +225,20 @@ class HistoryVC: SuperViewController {
         }
     }
     
-    let center = AppDelegate.shared!.center
+    weak var center = AppDelegate.properties?.center
     
     
     func getDebtData() {
-        //  if allowEditing {
         if let id = selectedCategory?.id {
             selectedCategory = db.category("\(id)")
             let hide = selectedCategory?.purpose == .income
-                DispatchQueue.main.async {
-                    if self.moreButton.isHidden != hide {
-                        self.moreButton.isHidden = hide
-                        
-                    }
-                    self.tableView.reloadData()
+            DispatchQueue.main.async {
+                if self.moreButton.isHidden != hide {
+                    self.moreButton.isHidden = hide
+                    
                 }
+                self.tableView.reloadData()
+            }
         }
         
         
@@ -259,7 +254,7 @@ class HistoryVC: SuperViewController {
             let keyboardHeight = keyboardRectangle.height
             if keyboardHeight > 1.0 {
                 DispatchQueue.main.async {
-                    self.tableView.contentInset.bottom = keyboardHeight - self.appData.resultSafeArea.1
+                    self.tableView.contentInset.bottom = keyboardHeight - (AppDelegate.properties?.appData.resultSafeArea.1 ?? 0)
                     
                 }
             }
@@ -288,7 +283,7 @@ class HistoryVC: SuperViewController {
                 if self.totalLabel.superview?.isHidden ?? (!hideLabel) != hideLabel {
                     UIView.animate(withDuration: 0.3) {
                         self.totalLabel.superview?.isHidden = hideLabel
-                    } 
+                    }
                     
                 }
             }
@@ -328,15 +323,15 @@ class HistoryVC: SuperViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "toTransVC":
-          //  self.navigationController?.delegate = transitionAppearenceManager
-
+            //  self.navigationController?.delegate = transitionAppearenceManager
+            
             break
         case "toCalendar":
             let vc = segue.destination as! CalendarVC
             vc.delegate = self
             let string = self.selectedCategory?.dueDate
-            let stringDate = "\(AppData.makeTwo(n: string?.day ?? 0)).\(AppData.makeTwo(n: string?.month ?? 0)).\(string?.year ?? 0)"
-            let time = "\(AppData.makeTwo(n: string?.hour ?? 0)):\(AppData.makeTwo(n: string?.minute ?? 0)):\(AppData.makeTwo(n: string?.second ?? 0))"
+            let stringDate = "\((string?.day ?? 0).twoDec).\((string?.month ?? 0).twoDec).\(string?.year ?? 0)"
+            let time = "\((string?.hour ?? 0).twoDec):\((string?.minute ?? 0).twoDec):\((string?.second ?? 0).twoDec)"
             vc.selectedFrom = (string == nil) ? "" : stringDate
             vc.datePickerDate = string != nil ? time : ""
             vc.vcHeaderData = headerData(title: "Create".localize + " " + "notification".localize, description: "Get notification reminder on specific date".localize)
@@ -369,7 +364,7 @@ class HistoryVC: SuperViewController {
                     self.changed = true
                     self.selectedCategory = newCategory
                     DispatchQueue.main.async {
-                        self.ai?.fastHide { (_) in
+                        self.ai?.hide {
                             self.tableView.reloadData()
                         }
                         
@@ -383,7 +378,7 @@ class HistoryVC: SuperViewController {
     
     
     func tocalendatPressed() {
-        if appData.proEnabeled {
+        if db.proEnabeled {
             Notifications.requestNotifications()
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: "toCalendar", sender: self)
@@ -400,16 +395,19 @@ class HistoryVC: SuperViewController {
         
         //   let load = LoadFromDB()
         
-        LoadFromDB.shared.newCategories { data, error in
-            if let id = self.selectedCategory?.id {
-                if let category = self.db.category("\(id)") {
-                    let delete = DeleteFromDB()
-                    delete.CategoriesNew(category: category) { errorBool in
-                        completion(data, errorBool)
+        DispatchQueue(label: "api", qos: .userInitiated).async {
+            LoadFromDB.shared.newCategories { data, error in
+                if let id = self.selectedCategory?.id {
+                    if let category = self.db.category("\(id)") {
+                        let delete = DeleteFromDB()
+                        delete.CategoriesNew(category: category) { errorBool in
+                            print(errorBool, " ythrgerfesadwe delete ", id)
+                            completion(data, errorBool)
+                        }
                     }
                 }
+                
             }
-            
         }
         
         
@@ -452,14 +450,14 @@ class HistoryVC: SuperViewController {
     var changed:Bool = false
     func sendAmountToPay(_ text: String) {
         if let _ = Double(text) {
-            self.ai?.show(title: "Sending".localize) { _ in
+            self.ai?.showLoading(title: "Sending".localize) {
                 self.changed = true
                 self.changeAmountToPay(enteredAmount: text) { (_) in
                     self.amountToPayEditing = false
-                    self.ai?.fastHide { (_) in
+                    self.ai?.hide {
                         
                         DispatchQueue.main.async {
-                          //  self.tableView.reloadData()
+                            //  self.tableView.reloadData()
                             self.calcMonthlyLimits()
                         }
                     }
@@ -483,9 +481,38 @@ class HistoryVC: SuperViewController {
 
 extension HistoryVC:GADFullScreenContentDelegate {
     func adDidPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        AppDelegate.shared?.banner.adDidPresentFullScreenContent(ad)
+        AppDelegate.properties?.banner.adDidPresentFullScreenContent(ad)
     }
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        AppDelegate.shared?.banner.adDidDismissFullScreenContent(ad)
+        AppDelegate.properties?.banner.adDidDismissFullScreenContent(ad)
+    }
+}
+
+extension HistoryVC {
+    static func showHistory(categpry: String) {
+        let db = DataBase()
+        if let categoryy = db.category(categpry) {
+            DispatchQueue.main.async {
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let vc = storyboard.instantiateViewController(withIdentifier: "HistoryVC") as! HistoryVC
+                let navController = UINavigationController(rootViewController: vc)
+                vc.fromAppDelegate = true
+                vc.historyDataStruct = db.transactions(for: categoryy)
+                vc.selectedCategory = categoryy
+                vc.fromCategories = true
+                AppDelegate.properties?.appData.present(vc: navController) {
+                    AppDelegate.properties?.ai.hide()
+                }
+                navController.setBackground(.regular)
+                
+            }
+        } else {
+            let text = AppDelegate.properties?.db.devMode ?? false ? categpry : nil
+            DispatchQueue.main.async {
+                AppDelegate.properties?.ai.showAlertWithOK(title:"Category not found".localize, description:text)
+            }
+        }
+        
+        
     }
 }

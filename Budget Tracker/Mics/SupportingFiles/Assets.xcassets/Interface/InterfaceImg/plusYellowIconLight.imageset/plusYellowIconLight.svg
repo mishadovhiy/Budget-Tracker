@@ -1,27 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 53.2 (72643) - https://sketchapp.com -->
-    <title>Group 2</title>
+    <title>plusYellowIconLight</title>
     <desc>Created with Sketch.</desc>
-    <defs>
-        <path d="M20.2548171,20.2548171 L14.9988681,14.9988681 L20.2548171,20.2548171 L14.9988681,25.5107662 L20.2548171,20.2548171 Z M20.2548171,20.2548171 L25.5107662,14.9988681 L20.2548171,20.2548171 L25.5107662,25.5107662 L20.2548171,20.2548171 Z" id="path-1"></path>
-        <filter x="-24.1%" y="-24.1%" width="148.3%" height="148.3%" filterUnits="objectBoundingBox" id="filter-2">
-            <feMorphology radius="1" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
-            <feOffset dx="0" dy="0" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
-            <feMorphology radius="1" operator="erode" in="SourceAlpha" result="shadowInner"></feMorphology>
-            <feOffset dx="0" dy="0" in="shadowInner" result="shadowInner"></feOffset>
-            <feComposite in="shadowOffsetOuter1" in2="shadowInner" operator="out" result="shadowOffsetOuter1"></feComposite>
-            <feGaussianBlur stdDeviation="1" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
-            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.203807911 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
-        </filter>
-    </defs>
-    <g id="budget-tracker" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Artboard" transform="translate(-184.000000, -331.000000)">
-            <g id="Group-2" transform="translate(184.000000, 331.000000)">
-                <rect id="Rectangle" fill="#FF8328" x="0" y="0" width="40" height="40" rx="20"></rect>
-                <g id="add" stroke-linecap="round" stroke-linejoin="round" transform="translate(20.254817, 20.254817) rotate(45.000000) translate(-20.254817, -20.254817) ">
-                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
-                    <use stroke="#141414" stroke-width="2" xlink:href="#path-1"></use>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="plusYellowIconLight">
+            <rect id="Rectangle" fill="#FF8328" fill-rule="nonzero" x="0" y="0" width="40" height="40" rx="20"></rect>
+            <g id="add" transform="translate(20.254817, 19.894451) rotate(45.000000) translate(-20.254817, -19.894451) translate(14.254817, 13.894451)">
+                <g id="path-1-link" fill="#000000" fill-rule="nonzero">
+                    <path d="M6.2548171,6.2548171 L0.9988681,0.9988681 L6.2548171,6.2548171 L0.9988681,11.5107662 L6.2548171,6.2548171 Z M6.2548171,6.2548171 L11.5107662,0.9988681 L6.2548171,6.2548171 L11.5107662,11.5107662 L6.2548171,6.2548171 Z" id="path-1"></path>
+                </g>
+                <g id="path-1-link" stroke="#141414" stroke-width="2">
+                    <path d="M6.2548171,6.2548171 L0.9988681,0.9988681 L6.2548171,6.2548171 L0.9988681,11.5107662 L6.2548171,6.2548171 Z M6.2548171,6.2548171 L11.5107662,0.9988681 L6.2548171,6.2548171 L11.5107662,11.5107662 L6.2548171,6.2548171 Z" id="path-1"></path>
                 </g>
             </g>
         </g>

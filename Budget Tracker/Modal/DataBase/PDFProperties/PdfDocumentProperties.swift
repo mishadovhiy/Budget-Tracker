@@ -14,6 +14,15 @@ struct PdfDocumentProperties {
         self.dict = dict
     }
     
+    var tableStyle:TableStyle {
+        get {
+            return .init(dict: dict["tableStyle"] as? [String:Any] ?? [:])
+        }
+        set {
+            dict.updateValue(newValue.dict, forKey: "tableStyle")
+        }
+    }
+    
     var colors:PdfColors {
         get {
             return .init(dict: dict["PdfColors"] as? [String:Any] ?? [:])
@@ -50,7 +59,7 @@ struct PdfDocumentProperties {
         
         var background:CGColor {
             get {
-                return getColor(defaultColor: K.Colors.background, color: dict["background"] as? String)
+                return getColor(defaultColor: K.Colors.secondaryBackground, color: dict["background"] as? String)
             }
             set {
                 dict.updateValue(UIColor(cgColor: newValue).toHex, forKey: "background")
@@ -103,4 +112,47 @@ struct PdfDocumentProperties {
         
     }
     
+}
+
+extension PdfDocumentProperties {
+    struct TableStyle {
+        var dict:[String:Any]
+        init(dict: [String : Any]) {
+            self.dict = dict
+        }
+        
+        var categorySepareted:Bool {
+            get {
+                dict["categorySepareted"] as? Bool ?? false
+            }
+            set {
+                dict.updateValue(newValue, forKey: "categorySepareted")
+            }
+        }
+        
+        var dotsSeparetor:Bool {
+            get {
+                dict["dotsSeparetor"] as? Bool ?? true
+            }
+            set {
+                dict.updateValue(newValue, forKey: "dotsSeparetor")
+            }
+        }
+        
+        var sort:Sort {
+            get {
+                .init(rawValue: dict["sort"] as? String ?? "") ?? .amount
+            }
+            set {
+                dict.updateValue(newValue.rawValue, forKey: "sort")
+            }
+        }
+        
+        enum Sort:String {
+            case date, category, amount
+            static var allCases:[Self] {
+                return [.date, .category, .amount]
+            }
+        }
+    }
 }

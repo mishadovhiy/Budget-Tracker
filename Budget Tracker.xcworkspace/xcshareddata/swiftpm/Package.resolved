@@ -1,4 +1,5 @@
 {
+  "originHash" : "a075aa01f0135d79b96e6a12089633f3a0ee117ecf1f2b602946ed137c24f20c",
   "pins" : [
     {
       "identity" : "alertviewlibrary",
@@ -6,7 +7,7 @@
       "location" : "https://github.com/mishadovhiy/AlertViewLibrary.git",
       "state" : {
         "branch" : "main",
-        "revision" : "eaac3df71d35bc1d582dd7fe5693a581d0166fd0"
+        "revision" : "b71e2b4b94ebe1e3cda4c4dc9f2a0ffb059439aa"
       }
     },
     {
@@ -15,9 +16,9 @@
       "location" : "https://github.com/mishadovhiy/MessageViewLibrary.git",
       "state" : {
         "branch" : "main",
-        "revision" : "fdbb0561b8424766d30338e1985816a7e780dfc8"
+        "revision" : "581414d0dff30ba9fc1a78cbcffd47386d6f667d"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

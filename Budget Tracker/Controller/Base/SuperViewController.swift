@@ -7,19 +7,29 @@
 //
 
 import UIKit
+import AlertViewLibrary
+import MessageViewLibrary
 
 class SuperViewController: UIViewController {
 
     var appeareAction:((_ vc:SuperViewController?)->())?
     var disapeareAction:((_ vc:SuperViewController?)->())?
     
-    weak var newMessage = AppDelegate.shared?.newMessage
-    weak var ai = AppDelegate.shared?.ai
+    var properties:AppProperties? {
+        return AppDelegate.properties
+    }
+    
+    var newMessage:MessageViewLibrary? {
+        return AppDelegate.properties?.newMessage
+    }
+    var ai: AlertManager? {
+        return AppDelegate.properties?.ai
+    }
     var db:DataBase {
-        return AppDelegate.shared?.db ?? DataBase()
+        return AppDelegate.properties?.db ?? DataBase()
     }
     var appData:AppData {
-        return AppDelegate.shared?.appData ?? .init()
+        return AppDelegate.properties?.appData ?? .init()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -30,7 +40,7 @@ class SuperViewController: UIViewController {
         
     }
 
-    lazy var defaultTableInset = AppDelegate.shared?.banner.size ?? 0
+    lazy var defaultTableInset = AppDelegate.properties?.banner.size ?? 0
     
 
     override func viewDidLoad() {
@@ -41,7 +51,23 @@ class SuperViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.view.endEditing(true)
-        print(navigationController?.viewControllers.count, " hygterfwed")
+        if let back = backgroundData{
+            if back.isPopupVC {
+                var backD = back
+                backD.show = false
+                togglePresentedBackgroundView(backD)
+                
+            } else {
+                removePopupBackgroundView(back)
+            }
+        }
+    }
+    
+    
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        print("ytrgtefrcds")
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -53,6 +79,10 @@ class SuperViewController: UIViewController {
         }
         
         disapeareAction?(self)
+        
+        if let back = backgroundData, back.isPopupVC {
+            removePopupBackgroundView(back)
+        }
     }
 
     var firstAppearCalled = false
@@ -71,9 +101,7 @@ class SuperViewController: UIViewController {
     }
     
     func viewDidDismiss() {
-        print("fedwe")
-        newMessage = nil
-        ai = nil
+
     }
  
     private var waitingToDisapeare = false
@@ -135,6 +163,7 @@ class SuperViewController: UIViewController {
         }
 
     }
+    var backgroundData:VCpresentedBackgroundData?
     
     func dateToString(dateFormat:String="dd.MM.yyyy", date: Date = Date()) -> String {
         let formater = DateFormatter()
@@ -217,8 +246,8 @@ class SuperViewController: UIViewController {
     
     func showHistory(categpry: String, transactions: [TransactionsStruct]) {
         print("showHistory")
-        let db = DataBase()
-        if let category = db.category(categpry) {
+        let db = AppDelegate.properties?.db
+        if let category = db?.category(categpry) {
             DispatchQueue.main.async {
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let vccc = storyboard.instantiateViewController(withIdentifier: "HistoryVC") as! HistoryVC
@@ -234,10 +263,4 @@ class SuperViewController: UIViewController {
     }
     
 }
-
-
-
-
-
-
 

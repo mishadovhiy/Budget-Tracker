@@ -15,18 +15,14 @@ extension UITableView {
         if #available(iOS 15.0, *) {
             self.sectionHeaderTopPadding = 0
         }
-     //   if self.layer.name != "disabledBanner" {
-            self.contentInset.bottom = AppDelegate.shared?.banner.size ?? 0
-       // }
+        self.contentInset.bottom = AppDelegate.properties?.banner.size ?? 0
     }
     
     func shadows(opasity:Float = 0.15, radius:CGFloat = 12) {
-        DispatchQueue.main.async {
-            self.layer.shadowColor = UIColor.black.cgColor
-            self.layer.shadowOpacity = opasity
-            self.layer.shadowOffset = .zero
-            self.layer.shadowRadius = radius
-        }
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOpacity = opasity
+        self.layer.shadowOffset = .zero
+        self.layer.shadowRadius = radius
     }
     func registerCell(_ types:[XibCell]) {
         types.forEach({
@@ -44,6 +40,6 @@ extension UITableView {
 extension UICollectionView {
     open override func draw(_ rect: CGRect) {
         super.draw(rect)
-        self.contentInset.bottom = AppDelegate.shared?.banner.size ?? 0
+        self.contentInset.bottom = AppDelegate.properties?.banner.size ?? 0
     }
 }

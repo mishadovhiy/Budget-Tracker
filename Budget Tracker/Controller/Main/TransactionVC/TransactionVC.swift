@@ -9,11 +9,6 @@
 import UIKit
 import AVFoundation
 
-///bug:
-//when quiting vc its refreshing on mainVC
-
-var lastSelectedDate:String?
-
 protocol TransitionVCProtocol {
     func addNewTransaction(value: String, category: String, date: String, comment: String, reminderTime:DateComponents?, repeated:Bool?)
     func editTransaction(_ transaction:TransactionsStruct, was:TransactionsStruct,reminderTime: DateComponents?, repeated: Bool?, idx:Int?)
@@ -24,8 +19,11 @@ protocol TransitionVCProtocol {
 class TransitionVC: SuperViewController {
     @IBOutlet weak var removeLastButton: UIButton!
     @IBOutlet weak var removeAllButton: UIButton!
+    @IBOutlet weak var cameraContainer: UIView!
+    @IBOutlet weak var valueHilderLabel: UILabel!
     @IBAction func trashPressed(_ sender: UIButton) {
         donePressed = true
+        print("trashPressedtrashPressedtrashPressed")
         DispatchQueue.main.async {
             self.dismissVC() {
                 DispatchQueue.init(label: "reload").async {
@@ -36,6 +34,9 @@ class TransitionVC: SuperViewController {
         }
         
     }
+
+    @IBOutlet weak var toggleCameraButton: TouchButton!
+    
     @IBOutlet weak var trashButton: UIButton!
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var dateTextField: CustomTextField!
@@ -45,7 +46,7 @@ class TransitionVC: SuperViewController {
     @IBOutlet weak var numbarPadView: UIView!
     @IBOutlet weak var valueLabel: UILabel!
     @IBOutlet weak var minusPlusLabel: UILabel!
-    @IBOutlet weak var commentTextField: TextField!
+    @IBOutlet weak var commentTextField: BaseTextField!
     @IBOutlet weak var commentCountLabel: UILabel!
     var dismissTransitionHolder:AnimatedTransitioningManager?
     var delegate:TransitionVCProtocol?
@@ -65,7 +66,7 @@ class TransitionVC: SuperViewController {
     var editingComment = ""
     
     var pressedValueArrey: [String] =  []
-
+    
     var dateSet:String?
     var dateChanged = false
     var sbvsloded = false
@@ -73,21 +74,54 @@ class TransitionVC: SuperViewController {
     var donePressed = false
     var selectedCategory: NewCategories?
     var fromDebts = false
+    var enteringValueResult:Int {
+        var res = "\(Int(cameraValue))"
+        
+        if editingValue != 0 {
+            "\(Int(editingValue))".forEach {
+                res.append($0)
+            }
+        }
+        var val = (Int(res) ?? (Int(editingValue)))
+        if purposeSwitcher.selectedSegmentIndex == 1 && val <= 0 {
+            val *= -1
+        }
+        if purposeSwitcher.selectedSegmentIndex == 0 && val >= 0 {
+            val *= -1
+        }
+        return val
+    }
+    var cameraValue:Int = 0
     
     var calendarSelectedTime:DateComponents?
     func dismissVC(complation:(()->())? = nil) {
         self.navigationController?.delegate = dismissTransitionHolder
-
+        
         if self.navigationController is TransactionNav {
+            complation?()
             self.dismiss(animated: true, completion: complation)
             viewDidDismiss()
         } else {
-            self.navigationController?.popViewController(animated: true)
             complation?()
+            self.navigationController?.popViewController(animated: true)
             viewDidDismiss()
         }
     }
-
+    var cameraVC:SelectTextImageContainerView?
+    func createCameraContainer() {
+        let vc = SelectTextImageContainerView.configure()
+        let nav = UINavigationController(rootViewController: vc)
+        addChild(nav)
+        guard let childView = nav.view else {
+            return
+        }
+        cameraContainer.addSubview(childView)
+        childView.addConstaits([.left:0, .right:0, .top:0, .bottom:0], superV: cameraContainer)
+        nav.didMove(toParent: self)
+        vc.delegate = self
+        nav.setBackground(.clear)
+        cameraVC = vc
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,20 +134,34 @@ class TransitionVC: SuperViewController {
         getEditingdata()
 
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        if !fromEdit {
+            createCameraContainer()
+            toggleCamera(show:fromEdit ? false : (AppDelegate.properties?.db.viewControllers.cameraStorage.addTransactionCameraEnabled ?? false), animated:false)
+
+        } else {
+            toggleCameraButton.isHidden = true
+            cameraContainer.isHidden = true
+        }
+
     }
 
     override func viewDidDismiss() {
         super.viewDidDismiss()
         dismissTransitionHolder = nil
         panMahanger = nil
-        delegate = nil
         dateSet = nil
+        cameraVC?.toggleCameraSession(pause: true, remove: true)
+        delegate = nil
     }
 
     var panMahanger:PanViewController?
 
     lazy var defaultDate:String = {
-        return dateSet ?? (lastSelectedDate ?? (AppDelegate.shared?.appData.filter.from ?? ""))
+        var date = dateSet ?? (self.db.transactionDate ?? (AppDelegate.properties?.db.filter.from ?? (Date().toDateComponents().toShortString() ?? "")))
+        if date == "" {
+            date = Date().toDateComponents().toShortString() ?? ""
+        }
+        return date
     }()
     @IBOutlet weak var doneButton: UIButton!
 
@@ -127,7 +175,7 @@ class TransitionVC: SuperViewController {
             commentTextField.addTarget(self, action: #selector(commentCount), for: .editingChanged)
             categoryTextField.isUserInteractionEnabled = false
             categoryTextField.superview?.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(categoryPressed)))
-
+            
             self.dateTextField.placeholder = defaultDate
             if editingDate == "" {
                 displeyingTransaction.date = defaultDate
@@ -150,11 +198,10 @@ class TransitionVC: SuperViewController {
         pressedValue = "0"
 
         DispatchQueue.main.async {
-                ///self.appData.objects.datePicker.datePickerMode = .date
+                ///self.properties?.appData.objects.datePicker.datePickerMode = .date
             self.valueLabel.text = self.pressedValue
             
         }
-    
     }
     
     @objc func datePressed(_ sender: UITapGestureRecognizer) {
@@ -211,7 +258,7 @@ class TransitionVC: SuperViewController {
             }
         }
     }
-    
+    var fromEdit = false
     func getEditingdata() {
         /*var lastExpense: NewCategories {
             let all = Array(db.categories)
@@ -224,7 +271,7 @@ class TransitionVC: SuperViewController {
         }
         selectedCategory = db.category(editingCategory) ?? lastExpense*/
         if editingCategory != "" {
-            selectedCategory = DataBase().category(self.editingCategory)
+            selectedCategory = AppDelegate.properties?.db.category(self.editingCategory)
             purposeSwitcher.selectedSegmentIndex = selectedPurpose != nil ? selectedPurpose! : 0
             purposeSwitched(purposeSwitcher)
             DispatchQueue.main.async {
@@ -233,6 +280,7 @@ class TransitionVC: SuperViewController {
             
         }
         if editingDate != "" {
+            fromEdit = true
             self.dateChanged = true
             displeyingTransaction.date = editingDate
             if editingValue > 0.0 {
@@ -244,7 +292,7 @@ class TransitionVC: SuperViewController {
                 self.isModalInPresentation = true
             }*/
             minusPlusLabel.alpha = 1
-            let db = DataBase()
+            let db = AppDelegate.properties?.db ?? .init()
             let category = db.category(self.editingCategory)
             selectedCategory = category
             DispatchQueue.main.async {
@@ -255,6 +303,7 @@ class TransitionVC: SuperViewController {
             editingCategoryHolder = editingCategory
             editingDateHolder = editingDate
             editingValueHolder = editingValue
+            editingValue = editingValueHolder
             editingCommentHolder = editingComment
             DispatchQueue.main.async {
                 if (self.commentTextField.text?.count ?? 0) > 0 {
@@ -327,13 +376,14 @@ class TransitionVC: SuperViewController {
     func addNew(value: String, category: String, date: String, comment: String) {
         donePressed = true
         print("addNew called", value)
+        print("isEditing ", editingDate)
         DispatchQueue.main.async {
             UIImpactFeedbackGenerator().impactOccurred()
             self.checkDate(date: date) { _ in
                 DispatchQueue.init(label: "download").async {
                 if self.editingDate != "" {
                     let new = TransactionsStruct(value: value, categoryID: category, date: date, comment: comment)
-                    let was = TransactionsStruct(value: "\(Int(self.editingValue))", categoryID: self.editingCategory, date: self.editingDate, comment: self.editingComment)
+                    let was = TransactionsStruct(value: "\(self.editingValueHolder)", categoryID: self.editingCategory, date: self.editingDate, comment: self.editingComment)
                     self.delegate?.editTransaction(new, was: was, reminderTime: self.reminder_Time, repeated: self.reminder_Repeated, idx: self.idxHolder)
                     self.quite()
 
@@ -375,15 +425,19 @@ class TransitionVC: SuperViewController {
     
     @IBOutlet weak var repeateSwitch: UISwitch!
     @IBAction func donePressed(_ sender: UIButton) {
+        doneEditingPressed()
+        
+    }
+    
+    func doneEditingPressed() {
         let newDate = self.displeyingTransaction.date == "" ? defaultDate : self.displeyingTransaction.date
         print("newDate:", newDate)
         print("egrfwd ", self.displeyingTransaction.date)
         if let category = selectedCategory {
             DispatchQueue.main.async {
                 if self.valueLabel.text != "0" {
-                    let selectedSeg = self.purposeSwitcher.selectedSegmentIndex
-                    let intValue = (Double(self.valueLabel.text ?? "") ?? 0.0) * (-1)
-                    let value = selectedSeg == 0 ? "\(Int(intValue))" : self.valueLabel.text ?? ""
+                    let valueRes = category.purpose == .expense && self.enteringValueResult >= 0 ? (self.enteringValueResult * -1) : self.enteringValueResult
+                    let value = "\(valueRes)"
                     let comment = self.commentTextField.text ?? ""
                     self.addNew(value: value, category: "\(category.id)", date: newDate, comment: comment)
                 } else {
@@ -391,7 +445,12 @@ class TransitionVC: SuperViewController {
                 }
             }
         }
-        
+    }
+    
+    var enteringValueGet:Int {
+        let intValue = (Double(self.valueLabel.text ?? "") ?? 0.0) * (-1)
+        let value = purposeSwitcher.selectedSegmentIndex == 0 ? Int(intValue) : Int(self.valueLabel.text ?? "")
+        return value ?? 0
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -445,7 +504,7 @@ class TransitionVC: SuperViewController {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: true)
         if !(navigationController is TransactionNav) {
-            AppDelegate.shared?.banner.hide(ios13Hide:true)
+            AppDelegate.properties?.banner.hide(ios13Hide:true)
         }
 
     }
@@ -453,19 +512,27 @@ class TransitionVC: SuperViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         if !(navigationController is TransactionNav) && !(self.navigationController?.viewControllers.contains(where: {$0 is TransitionVC}) ?? false) {
-            AppDelegate.shared?.banner.appeare(force:true)
+            AppDelegate.properties?.banner.appeare(force:true)
         }
     }
     
+    var viewAppeareCalled = false
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        if !viewAppeareCalled {
+            viewAppeareCalled = true
+            self.cameraVC?.toggleCameraSession(pause: fromEdit ? true : !(AppDelegate.properties?.db.viewControllers.cameraStorage.addTransactionCameraEnabled ?? false))
+
+        }
         if !(navigationController is TransactionNav) && panMahanger == nil {
-            panMahanger = .init(vc: self, dismissAction: {
+            panMahanger = .init(vc: self, toView: valueLabel.superview?.superview, dismissAction: {
                 self.navigationController?.delegate = self.dismissTransitionHolder
             })
+            panMahanger?.canSwipeFromFull = false
         } else {
             
         }
+
      //   purposeSwitcher.tintColor = K.Colors.category
     }
     @IBAction func purposeSwitched(_ sender: UISegmentedControl) {
@@ -474,8 +541,9 @@ class TransitionVC: SuperViewController {
             DispatchQueue.main.async {
                 self.categoryTextField.text = ""
             }
-            let lastSelectedID = appData.lastSelected.gett(valueType: sender.selectedSegmentIndex == 0 ? .expense : .income)
-            if let cat = db.category(lastSelectedID ?? "") {
+            let lastSelectedID = db.lastSelected.gett(valueType: sender.selectedSegmentIndex == 0 ? .expense : .income)
+            let lastCat = AppDelegate.properties?.db.categories.last(where: {$0.purpose == (sender.selectedSegmentIndex == 0 ? .expense : .income)})
+            if let cat = db.category(lastSelectedID ?? "\(lastCat?.id ?? 0)") {
                 selectedCategory = cat
                 print("last selected cat: ", cat.name)
                 placeHolder = cat.name
@@ -507,6 +575,7 @@ class TransitionVC: SuperViewController {
         
         DispatchQueue.main.async {
             self.categoryTextField.placeholder = placeHolder
+            self.valueLabel.text = "\(self.enteringValueResult)"
         }
     }
     func toggleAmountKeyboard(show:Bool) {
@@ -526,57 +595,148 @@ class TransitionVC: SuperViewController {
     
     @IBAction func numberPressed(_ sender: UIButton) {
         
+        
+        numberPressed(n: sender.currentTitle ?? "")
+        
+    }
+    
+    func numberPressed(n:String) {
         if pressedValue == "0" {
             pressedValue = ""
         }
-        if pressedValue.count != 7 {
+        print(pressedValue, " trgerfwed wass")
+        if pressedValue.count < 7 {
             AudioServicesPlaySystemSound(1104)
-            pressedValue = pressedValue + (sender.currentTitle ?? "")
+            pressedValue = pressedValue + (n)
             if pressedValue != "0" {
                 minusPlusLabel.alpha = 1
             }
         } else {
             UIImpactFeedbackGenerator().impactOccurred()
+            errorSaving()
+        }
+        let new = Double(pressedValue) ?? 0
+        let error = new.int == nil
+        if !error {
+            editingValue = new
+        } else {
+            pressedValue = "\(Int(editingValue))"
+            errorSaving()
         }
         DispatchQueue.main.async {
-            self.valueLabel.text = self.pressedValue
+            self.valueLabel.text = "\(self.enteringValueResult)"
         }
+    }
+    
+    func erasePressed(lastOnly:Bool) {
+        if lastOnly {
+            AudioServicesPlaySystemSound(1155)
+            if pressedValue.count > 0 {
+                pressedValue.removeLast()
+                
+            }
+            if pressedValue.count == 0 {
+                pressedValue.removeAll()
+                minusPlusLabel.alpha = 0
+            }
+        } else {
+            actionHolder = nil
+            enteredHolder = 0
+            AudioServicesPlaySystemSound(1156)
+            pressedValue.removeAll()
+            minusPlusLabel.alpha = 0
+        }
+        editingValue = Double(pressedValue) ?? 0
+        
+        DispatchQueue.main.async {
+            self.valueLabel.text = "\(self.enteringValueResult)"//from sfeafeds
+        }
+    }
+    
+    @IBAction func erasePressed(_ sender: UIButton) {
+        self.erasePressed(lastOnly: sender.tag == 1)
+    }
+    
+
+    var cameraShowing:Bool = false
+    private func toggleCamera(show:Bool, animated:Bool = true) {
+        cameraShowing = show
+        let hide = cameraContainer.frame.height + view.safeAreaInsets.bottom
+        DispatchQueue(label: "db", qos: .userInitiated).async {
+            AppDelegate.properties?.db.viewControllers.cameraStorage.addTransactionCameraEnabled = show
+        }
+        view.endEditing(true)
+        
+        UIView.animate(withDuration: 0.3) {
+            self.cameraContainer.layer.move(.top, value: show ? 0 : hide)
+        } completion: { 
+            if !$0 {
+                return
+            }
+            if #available(iOS 13.0, *) {
+                self.toggleCameraButton.fadeTransition(0.1)
+                self.toggleCameraButton.setImage(show ? .init(named: "closeNoBack") : .init(systemName: "camera.fill"), for:.normal)
+            }
+        }
+
+        cameraVC?.toggleCameraSession(pause: !show)
         
         
     }
     
-    @IBAction func erasePressed(_ sender: UIButton) {
-
-        if sender.tag == 1 {
-            AudioServicesPlaySystemSound(1155)
-            if pressedValue.count > 0 {
-                pressedValue.removeLast()
-                DispatchQueue.main.async {
-                    self.valueLabel.text = self.pressedValue
-                }
-            }
-            if pressedValue.count == 0 {
-                pressedValue.removeAll()
-                DispatchQueue.main.async {
-                    self.valueLabel.text? = "0"
-                }
-                minusPlusLabel.alpha = 0
-            }
-        }
-        if sender.tag == 2 {
-            AudioServicesPlaySystemSound(1156)
-            pressedValue.removeAll()
-            DispatchQueue.main.async {
-                self.valueLabel.text = "0"
-            }
-            minusPlusLabel.alpha = 0
-        }
+    @IBAction func toggleCameraPressed(_ sender: Any) {
+        toggleCamera(show: !cameraShowing)
     }
     
     @objc func keyboardWillHide(_ notification: Notification) {
         DispatchQueue.main.async {
             self.showPadPressed(self.showValueButton)
         }
+    }
+    
+    var actionHolder:ActionButton? {
+        didSet {
+            equelButton.fadeTransition()
+            equelButton.alpha = actionHolder != nil ? 1 : 0
+            actionButtonsStack.subviews.forEach({
+                if let button = $0 as? TouchButton {
+                    let need = ActionButton.init(rawValue: actionHolder?.rawValue ?? -1)?.rawValue == button.tag
+                    if button.layer.borderWidth != (need ? 2 : 0) {
+                        button.fadeTransition()
+                        button.layer.borderWidth = need ? 2 : 0
+                        button.layer.borderColor = need ? K.Colors.link.cgColor : UIColor.clear.cgColor
+                    }
+                }
+            })
+            valueHilderLabel.fadeTransition()
+            valueHilderLabel.alpha = actionHolder == nil || actionHolder == .equel ? 0 : 1
+            valueHilderLabel.text = "\(enteredHolder ?? 0)"
+        }
+    }
+    
+   
+    @IBOutlet weak var equelButton: TouchButton!
+    var enteredHolder:Double?
+    @IBOutlet weak var actionButtonsStack: UIStackView!
+    @IBAction func actionButtonPressed(_ sender:UIButton) {
+        guard let button = ActionButton.init(rawValue: sender.tag) else {
+            return
+        }
+        if button != .equel {
+            pressedValue = ""
+            enteredHolder = Double(enteringValueResult)
+            editingValue = 0
+            valueLabel.text = "\(enteringValueResult)"
+        }
+        
+        let wasAction = actionHolder
+        if button == .equel, let was = wasAction {
+           
+            self.performCalculate(pressed: was)
+        }
+        
+        actionHolder = button != .equel ? button : nil
+        
     }
 }
 
@@ -652,15 +812,50 @@ extension TransitionVC: CalendarVCProtocol {
         DispatchQueue.main.async {
             self.dateTextField.text = newDate + timeString
         }
-        lastSelectedDate = newDate
         displeyingTransaction.date = newDate
-        print(displeyingTransaction.date, " newDatenewDatenewDate")
-        print(time, " timetimetimetimetimetime")
-
+        DispatchQueue(label: "db", qos: .userInitiated).async {
+            self.db.transactionDate = newDate
+        }
     }
-    
-    
 }
+
+
+extension TransitionVC {
+    //here
+    func performCalculate(pressed:ActionButton) {
+        var result:Double = 0
+        guard let firstValue = enteredHolder else {
+            return
+        }
+        switch pressed {
+        case .divide:
+            result = firstValue / (Double(enteringValueResult))
+        case .minus:
+            result = firstValue - (Double(enteringValueResult))
+        case .multiply:
+            result = firstValue * (Double(enteringValueResult))
+        case .plus:
+            result = firstValue + (Double(enteringValueResult))
+        case .equel:
+            actionHolder = nil
+        }
+        let error = result.int == nil
+        let resVal = error ? firstValue : result
+        if error {
+            errorSaving()
+            AppDelegate.properties?.newMessage.show(title:"Value is too big", type: .error)
+        }
+        pressedValue = "\(Int(resVal))"
+        editingValue = resVal
+        valueLabel.text = "\(enteringValueResult)"
+        
+    }
+    enum ActionButton:Int {
+        case plus, minus, divide, multiply, equel
+    }
+}
+
+
 
 extension TransitionVC: CategoriesVCProtocol {
     
@@ -674,17 +869,17 @@ extension TransitionVC: CategoriesVCProtocol {
                 DispatchQueue(label: "db", qos: .userInitiated).async {
                     switch category.purpose {
                     case .expense:
-                        self.appData.lastSelected.sett(value: "\(category.id)", valueType: .expense)
+                        self.properties?.db.lastSelected.sett(value: "\(category.id)", valueType: .expense)
                     case .income:
-                        self.appData.lastSelected.sett(value: "\(category.id)", valueType: .income)
+                        self.properties?.db.lastSelected.sett(value: "\(category.id)", valueType: .income)
                     case .debt:
-                        self.appData.lastSelected.sett(value: "\(category.id)", valueType: .debt)
+                        self.properties?.db.lastSelected.sett(value: "\(category.id)", valueType: .debt)
 
                     }
                 }
             } else {
                 DispatchQueue(label: "db", qos: .userInitiated).async {
-                    self.appData.lastSelected.sett(value: "\(category.id)", valueType: .debt)
+                    self.properties?.db.lastSelected.sett(value: "\(category.id)", valueType: .debt)
                     self.selectedCategory = category
                     DispatchQueue.main.async {
                         
@@ -713,7 +908,53 @@ extension TransitionVC: CategoriesVCProtocol {
     }
     
     
+    
 }
+
+
+extension TransitionVC:SelectTextImageContainerViewProtocol {
+    func totalChanged(_ total: Int) {
+        print(total, " brgefwdas")
+        let error = Double(total).int == nil
+        if !error {
+            cameraValue = total
+            valueLabel.text = "\(enteringValueResult)"
+        } else {
+            errorSaving()
+        }
+        
+    }
+    
+    
+}
+
+
+
+extension TransitionVC {
+    override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+            guard let key = presses.first?.key else { return }
+            print(key.characters, "key.characterskey.characters")
+            switch key.keyCode {
+            case .keyboard0, .keyboard1, .keyboard2, .keyboard3, .keyboard4, .keyboard5, .keyboard6, .keyboard7, .keyboard8, .keyboard9:
+                if #available(iOS 13.4, *) {
+                    if let n = key.keyCode.number {
+                        self.numberPressed(n: "\(n)")
+                        
+                    }
+                }
+            case .keyboardDeleteForward, .keyboardDeleteOrBackspace:
+                self.erasePressed(lastOnly: true)
+            case .keyboardReturn, .keyboardReturnOrEnter:
+                self.doneEditingPressed()
+
+               
+            default:
+                super.pressesBegan(presses, with: event)
+            }
+            
+        }
+}
+
 
 extension TransitionVC {
     static func configure() -> TransitionVC {

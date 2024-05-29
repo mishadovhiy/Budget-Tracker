@@ -27,7 +27,7 @@ class categoriesVCcell: ClearCell {
     @IBOutlet weak var buttonsSeparetor: UIView!
     
     @IBOutlet weak var editingStack: UIStackView!
-    @IBOutlet weak var newCategoryTF: TextField!
+    @IBOutlet weak var newCategoryTF: BaseTextField!
     
     
     
@@ -45,7 +45,7 @@ class categoriesVCcell: ClearCell {
         super.draw(rect)
         if !drawed {
             drawed = true
-            if !AppDelegate.shared!.symbolsAllowed {
+            if !(AppDelegate.properties?.appData.symbolsAllowed ?? true) {
                 iconimage.isHidden = true
             }
             self.touchesBegunAction = { began in
@@ -95,7 +95,7 @@ class categoriesVCcell: ClearCell {
         if index != nil {
             self.newCategoryTF.delegate = self
             self.newCategoryTF.addTarget(self, action: #selector(self.textfieldValueChanged), for: .editingChanged)
-            if AppDelegate.shared!.symbolsAllowed {
+            if AppDelegate.properties?.appData.symbolsAllowed ?? false {
                 let iconPressed = UITapGestureRecognizer(target: self, action: #selector(self.iconPressed(_:)))//
                 self.iconimage.addGestureRecognizer(iconPressed)
             }
@@ -118,7 +118,10 @@ class categoriesVCcell: ClearCell {
                     DispatchQueue.main.async {
                         UIView.animate(withDuration: 0.3) {
                             self.footerBackground.backgroundColor = CategoriesVC.shared?.selectionBacground
-                        } completion: { _ in
+                        } completion: { 
+                            if !$0 {
+                                return
+                            }
                             CategoriesVC.shared?.tableView.reloadData()
                         }
 
@@ -156,7 +159,10 @@ class categoriesVCcell: ClearCell {
                 self.qntLabel.superview?.isHidden = false
                 self.categoryNameLabel.isHidden = false
                 self.dueDateStack.isHidden = false
-            } completion: { _ in
+            } completion: { 
+                if !$0 {
+                    return
+                }
                 self.cancelEditing()
                 self.editingStack.alpha = 1
             }
@@ -175,7 +181,7 @@ class categoriesVCcell: ClearCell {
                 CategoriesVC.shared?.selectingIconFor = (nil, nil)
                 CategoriesVC.shared?.editingTfIndex = (nil, nil)
                 CategoriesVC.shared?.tableView.reloadData()
-                CategoriesVC.shared?.ai?.fastHide()
+                CategoriesVC.shared?.ai?.hide()
             }
         }
     }
@@ -195,7 +201,7 @@ class categoriesVCcell: ClearCell {
                                 CategoriesVC.shared?.editingTF?.endEditing(true)
                                 CategoriesVC.shared?.editingTF = nil
                                 CategoriesVC.shared?.tableView.reloadData()
-                                CategoriesVC.shared?.ai?.fastHide()
+                                CategoriesVC.shared?.ai?.hide()
                             }
                         }
                     }
@@ -210,7 +216,7 @@ class categoriesVCcell: ClearCell {
     
     
     @IBAction func sendPressed(_ sender: UIButton) {
-            CategoriesVC.shared?.ai?.show(title:"Saving", notShowIfLoggedUser: true) { _ in
+            CategoriesVC.shared?.ai?.showLoading(title:"Saving", canIgonre: true) {
                 if let currentCategory = self.currentCategory {
                     if currentCategory.editing?.name != "" {
                         self.saveCategory(currentCategory)
@@ -235,8 +241,6 @@ extension categoriesVCcell:UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         UIView.animate(withDuration: 0.2) {
             self.footerBackground.backgroundColor = K.Colors.secondaryBackground
-        } completion: { _ in
-            
         }
 
     }
@@ -255,8 +259,6 @@ extension categoriesVCcell:UITextFieldDelegate {
                 DispatchQueue.main.async {
                     UIView.animate(withDuration: 0.3) {
                         self.footerBackground.backgroundColor = CategoriesVC.shared?.selectionBacground
-                    } completion: { _ in
-                        
                     }
                 }
 
@@ -270,7 +272,10 @@ extension categoriesVCcell:UITextFieldDelegate {
                     DispatchQueue.main.async {
                         UIView.animate(withDuration: 0.3) {
                             self.footerBackground.backgroundColor = CategoriesVC.shared?.selectionBacground
-                        } completion: { _ in
+                        } completion: { 
+                            if !$0 {
+                                return
+                            }
                             textField.becomeFirstResponder()
                         }
 

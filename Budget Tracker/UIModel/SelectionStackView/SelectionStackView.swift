@@ -10,12 +10,12 @@ import UIKit
 
 class SelectionStackView: UIView {
     //@IBOutlet weak var stackView: UIStackView!
-    lazy var stackView:UIStackView = {
+    var stackView:UIStackView {
         let view = self.subviews.first(where: {
             $0.layer.name == "backView"
         })
         return view?.subviews.first(where: {$0 is UIStackView}) as! UIStackView
-    }()
+    }
     var data:[SelectionData] = []
     let rowSubviewKey = "rowSubview"
 

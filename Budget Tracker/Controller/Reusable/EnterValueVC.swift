@@ -12,7 +12,7 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
     
     var screenData:EnterValueVCScreenData?
 
-    @IBOutlet weak var valueTextField: TextField!
+    @IBOutlet weak var valueTextField: BaseTextField!
     @IBOutlet weak var nextButton: Button!
     
     @IBOutlet weak private var codeLabel: UILabel!
@@ -46,10 +46,15 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
         nextButton.setTitle(nextButtonTitle, for: .normal)
     }
 
+    var appeared = false
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.ai?.fastHide { _ in
-            self.valueTextField.becomeFirstResponder()
+        self.ai?.hide { 
+            if !self.appeared {
+                self.appeared = true
+                self.valueTextField.becomeFirstResponder()
+
+            }
         }
     }
 
@@ -144,7 +149,7 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
             if dif < 20 {
                 UIView.animate(withDuration: 0.3) {
                    // self.mainStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, ((dif / 2) - 20) / 2, 0)
-                    AppDelegate.shared?.window?.layer.move(.top, value: ((dif / 2) - 20))
+                    UIApplication.shared.sceneKeyWindow?.layer.move(.top, value: ((dif / 2) - 20))
                 }
             }
         }
@@ -185,7 +190,7 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
     private func next() {
         print(#function, enteringValue)
         let errorAction = {
-            AppDelegate.shared!.newMessage.show(title:"Error editing".localize, type: .error)
+            AppDelegate.properties?.newMessage.show(title:"Error editing".localize, type: .error)
         }
         
         if let function = screenData?.nextAction {
@@ -255,6 +260,11 @@ class EnterValueVC:SuperViewController, UITextFieldDelegate {
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        self.view.endEditing(true)
+    }
+    
     enum screenType {
         case code
         case email
@@ -300,7 +310,7 @@ extension EnterValueVC {
             DispatchQueue.main.async {
                 UIView.animate(withDuration: 0.3) {
                    // self.mainStack.layer.transform = CATransform3DTranslate(CATransform3DIdentity, 0, 0, 0)
-                    AppDelegate.shared?.window?.layer.move(.top, value: 0)
+                    UIApplication.shared.sceneKeyWindow?.layer.move(.top, value: 0)
 
                 }
             }

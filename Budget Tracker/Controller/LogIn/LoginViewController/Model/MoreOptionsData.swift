@@ -9,51 +9,56 @@
 import UIKit
 import AlertViewLibrary
 
-
 class MoreOptionsData {
     //[MoreVC.ScreenData]
     
-    let vc:LoginViewController
+    weak var vc:LoginViewController!
     init(vc:LoginViewController) {
         self.vc = vc
         
     }
     deinit {
+        vc = nil
         print("deiniteeed")
     }
-    lazy var ai = AppDelegate.shared!.ai
+    
+    var ai:AlertManager? {
+        AppDelegate.properties?.ai
+    }
+    
+    private var db:DataBase {
+        return AppDelegate.properties?.db ?? .init()
+    }
+    
     func get(isPro:Bool) -> [MoreVC.ScreenData] {
         wrongCodeCount = 0
         forgotPasswordUsername = ""
-     //   hideKeyboard()
+        //   hideKeyboard()
         let appData = AppData()
         //get screen data
-
+        
         let forgotPassword = {
-            if appData.username != "" {
+            if self.db.username != "" {
                 self.forgotPasswordTapped()
             } else {
                 let nextAction: (String) -> () = { (newvalue2) in
-                    self.ai.show { _ in
-                   
-                    self.loadUsers { users in
-                        var found = false
-                        for i in 0..<users.count {
-                            if users[i][0] == newvalue2 {
-                                found = true
+                    self.vc.ai!.showLoading {
+                        self.loadUsers { users in
+                            var found = false
+                            for i in 0..<users.count {
+                                if users[i][0] == newvalue2 {
+                                    found = true
+                                }
                             }
+                            
+                            if !found {
+                                self.showAlert(title: "User not found".localize, text: nil, error: true)
+                            } else {
+                                self.forgotPasswordUsername = newvalue2
+                                self.sendRestorationCode(toChange: .changePassword)
+                            }
+                            
                         }
-                        
-                        if !found {
-                            self.showAlert(title: "User not found".localize, text: nil, error: true)
-                        } else {
-                           // appData.username = newValue
-                           // appData.password = ""
-                            self.forgotPasswordUsername = newvalue2
-                            self.sendRestorationCode(toChange: .changePassword)
-                        }
-                        
-                    }
                     }
                 }
                 
@@ -62,12 +67,12 @@ class MoreOptionsData {
             }
             
         }
-
+        
         
         let loggedUserData = [
-           // MoreVC.ScreenData(name: "Username", description: "", action: nil),
-           // MoreVC.ScreenData(name: "Web purchase", description: "", action: nil),
-           // MoreVC.ScreenData(name: "Device purchase", description: "", action: nil),
+            // MoreVC.ScreenData(name: "Username", description: "", action: nil),
+            // MoreVC.ScreenData(name: "Web purchase", description: "", action: nil),
+            // MoreVC.ScreenData(name: "Device purchase", description: "", action: nil),
             MoreVC.ScreenData(name: "Change Email".localize, description: vc.userEmail, action: changeEmailTapped),
             MoreVC.ScreenData(name: "Change password".localize, description: "", action: changePasswordTapped),
             MoreVC.ScreenData(name: "Forgot password".localize, description: "", action: forgotPassword),
@@ -82,15 +87,17 @@ class MoreOptionsData {
             MoreVC.ScreenData(name: "Forgot password".localize, description: "", action: forgotPassword),
         ]
         
-        return appData.username == "" ? notUserLogged : loggedUserData
+        return db.username == "" ? notUserLogged : loggedUserData
     }
     
     var forgotPasswordUsername = ""
     
     func deleteAccountPressed() {
-        self.vc.ai?.showAlert(buttons: (.init(title: "Cancel", style: .regular, close: true, action: nil), AlertViewLibrary.button.init(title: "Delete account", style: .error, close: false, action: {_ in
-            self.performDeleteAccount()
-        })), title: "Are you sure you want to delete Your Account And its content?", description: "This action cannot be undon")
+        vc.ai?.showAlertWithOK(title: "Are you sure you want to delete Your Account And its content?", description: "This action cannot be undon", viewType: .standard, button: .with({
+            $0.title = "Delete account"
+            $0.action = self.performDeleteAccount
+            $0.style = .error
+        }))
     }
     
     private func performDeleteAccount() {
@@ -101,7 +108,7 @@ class MoreOptionsData {
                 let delete = DeleteFromDB()
                 delete.User(toDataString: toDat) { (errorr) in
                     if errorr {
-                        self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
+                        self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true)
                     } else {
                         self.vc.logout()
                         DispatchQueue.main.async {
@@ -114,16 +121,16 @@ class MoreOptionsData {
     }
     
     var appData:AppData {
-        return AppDelegate.shared?.appData ?? .init()
+        return AppDelegate.properties?.appData ?? .init()
     }
     
-    func getUser(completion:@escaping([String]?) -> ()) {
+    private func performGetUsers(completion:@escaping([String]?) -> ()) {
         LoadFromDB.shared.Users { (loadedData, error) in
             if error {
-                self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true)
+                self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true)
                 completion(nil)
             } else {
-                let name = self.appData.username
+                let name = self.db.username ?? ""
                 for i in 0..<loadedData.count {
                     if loadedData[i][0] == name {
                         completion(loadedData[i])
@@ -133,173 +140,200 @@ class MoreOptionsData {
                 completion(nil)
             }
         }
-    }
-    
-    func logoutPressed() {
-        self.vc.ai?.showAlert(buttons: (.init(title: "Cancel", style: .regular, close: true, action: nil), AlertViewLibrary.button.init(title: "Logout", style: .error, close: false, action: {_ in
-            self.vc.logout()
-        })), title: "Are you sure you want to logout?", description: "")
         
     }
     
-    func forgotPasswordTapped() {
-     //   DispatchQueue.main.async {
-            self.ai.show { (_) in
-             //   let load = LoadFromDB()
-                LoadFromDB.shared.Users { (users, error) in
-                    if error {
-                        DispatchQueue.main.async {
-                            self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
-                        }
-                    } else {
-                        if self.appData.username != "" {
-                            var emailToSend = ""
-                            for i in 0..<users.count {
-                                if users[i][0] == self.appData.username {
-                                    emailToSend = users[i][1]
-                                    break
-                                }
-                            }
-
-                            self.aiRestorationCode(email: emailToSend) { okPressed in
-                                self.sendRestorationCode(toChange: .changePassword)
-                            }
-                        } else {
-                            self.sendRestorationCode(toChange: .changePassword)
-                        }
-                        
-                    }
+    func getUser(completion:@escaping([String]?) -> ()) {
+        DispatchQueue(label: "api", qos: .userInitiated).async {
+            self.performGetUsers(completion: completion)
+        }
+    }
+    
+    func logoutPressed() {
+        self.ai?.showAlertWithOK(title: "Are you sure you want to logout?", viewType: .standard, button: .with({
+            $0.title = "Logout".localize
+            $0.action =  self.vc.logout
+            $0.style = .error
+        }), okTitle:"Cancel".localize)
+    }
+    
+    private func performForgotPassword() {
+        LoadFromDB.shared.Users { (users, error) in
+            if error {
+                DispatchQueue.main.async {
+                    self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                 }
-                
-            }
-   //     }
-    }
-    
-    func aiRestorationCode(email:String, sendPressed:@escaping(Bool)->()) {
-        let firstButton:AlertViewLibrary.button  = .init(title: "Cancel".localize, style: .regular, close: true) { _ in
-        }
-        let secondButton:AlertViewLibrary.button = .init(title: "Send".localize, style: .link, close: false) { _ in
-            sendPressed(true)
-        }
-        let text = "Restoration code would be sent on: ".localize + email
-        DispatchQueue.main.async {
-            self.ai.showAlert(buttons: (secondButton, firstButton), title: "Send code".localize, description: text, type: .standard, image: .init(named: "restorationCode"))
-        }
-    }
-    
-    func changeEmailTapped() {
-        ai.show { (_) in
-         //   let load = LoadFromDB()
-            LoadFromDB.shared.Users { (users, error) in
-                if error {
-                    DispatchQueue.main.async {
-                        self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
-                    }
-                } else {
+            } else {
+                if self.db.username != "" {
                     var emailToSend = ""
                     for i in 0..<users.count {
-                        if users[i][0] == self.appData.username {
+                        if users[i][0] == self.db.username {
                             emailToSend = users[i][1]
                             break
                         }
                     }
-
+                    
+                    self.aiRestorationCode(email: emailToSend) { okPressed in
+                        self.sendRestorationCode(toChange: .changePassword)
+                    }
+                } else {
+                    self.sendRestorationCode(toChange: .changePassword)
+                }
+                
+            }
+        }
+        
+        
+    }
+    
+    func forgotPasswordTapped() {
+        self.vc.ai?.showLoading {
+            DispatchQueue(label: "api", qos: .userInitiated).async {
+                self.performForgotPassword()
+            }
+        }
+    }
+    
+    func aiRestorationCode(email:String, sendPressed:@escaping(Bool)->()) {
+        let text = "Restoration code would be sent on: ".localize + email
+        DispatchQueue.main.async {
+            
+            self.ai?.showAlertWithOK(title: "Send code", description: text, viewType: .standard, image:.image(.init(named: "RestCodeError")!), button: .with({
+                $0.title = "Send".localize
+                $0.action =  {
+                    sendPressed(true)
+                }
+                $0.style = .error
+            }), okTitle:"Cancel".localize)
+        }
+    }
+    
+    func changeEmailTapped() {
+        vc.ai?.showLoading {
+            //   let load = LoadFromDB()
+            LoadFromDB.shared.Users { (users, error) in
+                if error {
+                    DispatchQueue.main.async {
+                        self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
+                    }
+                } else {
+                    var emailToSend = ""
+                    for i in 0..<users.count {
+                        if users[i][0] == self.db.username {
+                            emailToSend = users[i][1]
+                            break
+                        }
+                    }
+                    
                     self.aiRestorationCode(email: emailToSend) { okPressed in
                         self.sendRestorationCode(toChange: .changeEmail)
                     }
-
+                    
                 }
             }
             
         }
         
     }
-
+    
     
     
     
     func loadUsers(completion:@escaping ([[String]]) -> ()) {
-      //  let load = LoadFromDB()
+        //  let load = LoadFromDB()
         LoadFromDB.shared.Users { (users, error) in
             if !error {
                 completion(users)
             } else {
                 DispatchQueue.main.async {
-                    self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                    self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                 }
             }
         }
     }
     
-    func transfereData() {
-        let chechUsername: (String) -> () = { (enteredUsss) in
-            let enteredUser = enteredUsss
-            var dbPassword = ""
-            self.loadUsers { users in
-                var found = false
-                for i in 0..<users.count {
-                    if users[i][0] == enteredUser {
-                        dbPassword = users[i][2]
-                        found = true
+    private func performChackPass(_ enteredUser:String) {
+        LoadFromDB.shared.newTransactions(otherUser: enteredUser) { loadedTransactions, errorTransactions in
+            if errorTransactions == .none {
+                //loadTransactionsCategories
+                
+                LoadFromDB.shared.newCategories(otherUser: enteredUser) { loaedCategories, categoriesError in
+                    if categoriesError == .none {
+                        
+                        let vcc = self.vc as! LoginViewController
+                        vcc.transferingData = LoginViewController.TransferingData(nickname: enteredUser, categories: loaedCategories, transactions: loadedTransactions)
+                        DispatchQueue.main.async {
+                            self.vc.performSegue(withIdentifier: "toTransfareData", sender: self)
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
+                        }
                     }
                 }
                 
-                if found {
-                    let checkPassword: (String) -> () = { (newPass) in
-                        let enteredPassword = newPass
-                        if enteredPassword == dbPassword {
-                            
-                            
-                            
-                            
-                            LoadFromDB.shared.newTransactions(otherUser: enteredUser) { loadedTransactions, errorTransactions in
-                                if errorTransactions == .none {
-                                    //loadTransactionsCategories
-                                    
-                                    LoadFromDB.shared.newCategories(otherUser: enteredUser) { loaedCategories, categoriesError in
-                                        if categoriesError == .none {
-                                            
-                                            let vcc = self.vc as! LoginViewController
-                                            vcc.transferingData = LoginViewController.TransferingData(nickname: enteredUser, categories: loaedCategories, transactions: loadedTransactions)
-                                            DispatchQueue.main.async {
-                                                self.vc.performSegue(withIdentifier: "toTransfareData", sender: self)
-                                            }
-                                        } else {
-                                            DispatchQueue.main.async {
-                                                self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
-                                            }
-                                        }
-                                    }
-                                    
-                                    
-                                } else {
-                                    DispatchQueue.main.async {
-                                        self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
-                                    }
-                                }
-                            }
-                            
-                            
-                            
-                            
-                        } else {
-                            DispatchQueue.main.async {
-                                AppDelegate.shared!.newMessage.show(title: "Wrong password".localize, type: .error)
-                            }
-                        }
-                    }
-                    
-
-                    let screenData = EnterValueVC.EnterValueVCScreenData(taskName: "Transfer data".localize, title: "Enter password".localize, placeHolder: "Password".localize, nextAction: checkPassword, screenType: .string)
-                    self.toEnterValue(data: screenData)
-                } else {
-                    DispatchQueue.main.async {
-                        AppDelegate.shared?.newMessage.show(title: "User not found".localize, description: "'\(enteredUser)'", type: .error)
-                    }
+                
+            } else {
+                DispatchQueue.main.async {
+                    self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                 }
             }
         }
-
+    }
+    
+    private func performTransfareData(enteredUser:String) {
+        var dbPassword = ""
+        self.loadUsers { users in
+            var found = false
+            for i in 0..<users.count {
+                if users[i][0] == enteredUser {
+                    dbPassword = users[i][2]
+                    found = true
+                }
+            }
+            
+            if found {
+                let checkPassword: (String) -> () = { (newPass) in
+                    let enteredPassword = newPass
+                    if enteredPassword == dbPassword {
+                        
+                        
+                        
+                        
+                        DispatchQueue(label: "api", qos: .userInitiated).async {
+                            self.performChackPass(enteredUser)
+                        }
+                        
+                        
+                        
+                        
+                    } else {
+                        DispatchQueue.main.async {
+                            AppDelegate.properties?.newMessage.show(title: "Wrong password".localize, type: .error)
+                        }
+                    }
+                }
+                
+                
+                let screenData = EnterValueVC.EnterValueVCScreenData(taskName: "Transfer data".localize, title: "Enter password".localize, placeHolder: "Password".localize, nextAction: checkPassword, screenType: .string)
+                self.toEnterValue(data: screenData)
+            } else {
+                DispatchQueue.main.async {
+                    AppDelegate.properties?.newMessage.show(title: "User not found".localize, description: "'\(enteredUser)'", type: .error)
+                }
+            }
+        }
+        
+    }
+    
+    func transfereData() {
+        let chechUsername: (String) -> () = { (enteredUsss) in
+            let enteredUser = enteredUsss
+            DispatchQueue(label: "api", qos: .userInitiated).async {
+                self.performTransfareData(enteredUser: enteredUser)
+            }
+        }
+        
         let screenData = EnterValueVC.EnterValueVCScreenData(taskName: "Transfer data".localize, title: "Enter username".localize, subTitle: nil, placeHolder: "Username".localize, nextAction: chechUsername, screenType: .string)
         toEnterValue(data: screenData)
     }
@@ -313,18 +347,18 @@ class MoreOptionsData {
     
     
     func dbChangePassword(userData: (String, String)) {
-
+        
         let repeateActionn: (String) -> () = { (fromPrev) in
-
+            
             let repeatPasAction: (String) -> () = { (new) in
                 if fromPrev != new {
                     self.showAlert(title: "Wrong password!".localize, text: nil, error: true)
-                   // EnterValueVC.shared?.clearAll(animated: true)
+                    // EnterValueVC.shared?.clearAll(animated: true)
                 } else {
-
-                    let newUser = self.forgotPasswordUsername == "" ? self.appData.username : self.forgotPasswordUsername
+                    
+                    let newUser = self.forgotPasswordUsername == "" ? self.db.username : self.forgotPasswordUsername
                     DispatchQueue(label: "db", qos: .userInitiated).async {
-                        self.appData.username = newUser
+                        self.db.username = newUser
                         DispatchQueue.main.async {
                             self.cangePasswordDB(username: newUser, newPassword: new)
                         }
@@ -342,11 +376,11 @@ class MoreOptionsData {
     
     func loadUserData(username: String, completion: @escaping ([String]?) -> ()){
         
-  //      let load = LoadFromDB()
+        //      let load = LoadFromDB()
         LoadFromDB.shared.Users { (loadedData, error) in
             if error {
                 DispatchQueue.main.async {
-                    self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                    self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                 }
                 completion(nil)
             } else {
@@ -361,7 +395,7 @@ class MoreOptionsData {
                 
             }
         }
-
+        
     }
     
     func performChanageEmail(userData: (String, String), newEmail: String) {
@@ -375,7 +409,7 @@ class MoreOptionsData {
                     SaveToDB.shared.Users(toDataString: toDataStringMian ) { (error) in
                         if error {
                             DispatchQueue.main.async {
-                                self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                                self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                             }
                         }
                         let delete = DeleteFromDB()
@@ -384,7 +418,7 @@ class MoreOptionsData {
                         delete.User(toDataString: dataStringDelete) { (errorr) in
                             if errorr {
                                 DispatchQueue.main.async {
-                                    self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                                    self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                                 }
                             } else {
                                 DispatchQueue.main.async {
@@ -400,12 +434,12 @@ class MoreOptionsData {
     func dbChangeEmail(userData: (String, String), error: Bool = false) {
         
         let emailAction: (String) -> () = { (newEmail) in
-      
-          
+            
+            
             if !(newEmail).contains("@") || !(newEmail).contains(".") {
-                AppDelegate.shared?.newMessage.show(title: "Enter valid email".localize, type: .error)
+                AppDelegate.properties?.newMessage.show(title: "Enter valid email".localize, type: .error)
             } else {
-                self.ai.show(title: nil) { _ in
+                self.ai?.showLoading(title: nil) {
                     self.performChanageEmail(userData: userData, newEmail: newEmail)
                 }
             }
@@ -415,7 +449,7 @@ class MoreOptionsData {
         let screenData = EnterValueVC.EnterValueVCScreenData(taskName: "Change email".localize, title: "Enter your new email".localize, placeHolder: "Email".localize, nextAction: emailAction, screenType: .email)
         toEnterValue(data: screenData)
         
-
+        
     }
     
     func checkRestoreCode(value: String, userData: (String, String), ifCorrect: restoreCodeAction) {
@@ -448,22 +482,17 @@ class MoreOptionsData {
     
     
     func sendRestorationCode(toChange: restoreCodeAction) {
-
-        let userHolder = appData.username == "" ? forgotPasswordUsername : appData.username
+        
+        let userHolder = db.username == "" ? forgotPasswordUsername : db.username
         let username = foundUsername != nil ? foundUsername! : userHolder
         if username != "" {
             self.currectAnsware = ""
-
-
-            self.ai.show(title: nil, appeareAnimation: true) { _ in
+            self.ai?.showLoading() {
                 DispatchQueue.init(label: "getEmail").async {
-                    
-                   // let load = LoadFromDB()
                     LoadFromDB.shared.Users { (loadedData, error) in
                         if error {
-
                             DispatchQueue.main.async {
-                                self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true, image: .init(named: "restorationCode"))
+                                self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true, image: .init(named: "RestCodeError"))
                             }
                         } else {
                             var emailToSend = ""
@@ -480,12 +509,12 @@ class MoreOptionsData {
                             SaveToDB.shared.sendCode(toDataString: "emailTo=\(emailToSend)&Nickname=\(username)&resetCode=\(code)") { (codeError) in
                                 if codeError {
                                     DispatchQueue.main.async {
-                                        self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                                        self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                                     }
                                 } else {
                                     self.currectAnsware = code
                                     self.waitingType = .code
-    
+                                    
                                     var taskNameTitle:String {
                                         switch toChange {
                                         case .changePassword:
@@ -499,7 +528,7 @@ class MoreOptionsData {
                                     
                                     let nextAction: (String) -> () = { (newVal) in
                                         if newVal.count == 4 {
-                                            self.ai.show(title: nil) { _ in
+                                            self.ai?.showLoading() {
                                                 
                                                 self.checkRestoreCode(value: newVal, userData: (username, emailToSend), ifCorrect: toChange)
                                             }
@@ -527,18 +556,16 @@ class MoreOptionsData {
                     }
                 }
             }
-    
+            
             
             
             
         } else {
-
+            
             let nextAction: (String) -> () = { (newvalue) in
-                if self.appData.username != "" {
-                    self.ai.show(title: nil) { _ in
-                    //    let load = LoadFromDB()
+                if self.db.username != "" {
+                    self.ai!.showLoading() {
                         LoadFromDB.shared.Users { (users, error) in
-                            
                             for i in 0..<users.count {
                                 if newvalue == users[i][0] {
                                     self.sendRestorationCode(toChange: toChange)
@@ -554,7 +581,7 @@ class MoreOptionsData {
             
             let screenData = EnterValueVC.EnterValueVCScreenData(taskName: "Forgot password".localize, title: "Enter your username".localize, subTitle: "You will receive restoration code".localize, placeHolder: "Username".localize, nextAction: nextAction, screenType: .password)
             toEnterValue(data: screenData)
-
+            
         }
     }
     
@@ -583,11 +610,11 @@ class MoreOptionsData {
     
     func cangePasswordDB(username: String, newPassword: String) {
         DispatchQueue.init(label: "DB").async {
-           // let load = LoadFromDB()
+            // let load = LoadFromDB()
             LoadFromDB.shared.Users { (loadedData, error) in
                 if error {
                     DispatchQueue.main.async {
-                        self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                        self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                     }
                 } else {
                     var userData: [String] = []
@@ -602,7 +629,7 @@ class MoreOptionsData {
                     SaveToDB.shared.Users(toDataString: toDataStringMian ) { (error) in
                         if error {
                             DispatchQueue.main.async {
-                                self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                                self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                             }
                         }
                         let delete = DeleteFromDB()
@@ -611,12 +638,12 @@ class MoreOptionsData {
                         delete.User(toDataString: dataStringDelete) { (errorr) in
                             if errorr {
                                 DispatchQueue.main.async {
-                                    self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
+                                    self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
                                 }
                             } else {
-                                self.appData.username = userData[0]
-                                self.appData.password = newPassword
-                                KeychainService.updatePassword(service: "BudgetTrackerApp", account: userData[0], data: newPassword)
+                                self.db.username = userData[0]
+                                self.db.password = newPassword
+                                KeychainService.updatePassword(account: userData[0], data: newPassword)
                                 //EnterValueVC.shared?.closeVC(closeMessage: "Your password has been changed")
                                 self.toEnterValue(data: nil)
                                 self.showAlert(title:"Your password has been changed".localize, error: false)
@@ -636,13 +663,13 @@ class MoreOptionsData {
             showAlert(title: "Wrong password!".localize, error: true)
         } else {
             let repeateActionn: (String) -> () = { (fromPrev) in
-            
+                
                 let repeatPasAction: (String) -> () = { (new) in
                     if fromPrev != new {
                         self.showAlert(title: "Passwords not match".localize + "!", text: nil, error: true)
-                  //      EnterValueVC.shared?.clearAll(animated: true)
+                        //      EnterValueVC.shared?.clearAll(animated: true)
                     } else {
-                        self.cangePasswordDB(username: self.appData.username, newPassword: new)
+                        self.cangePasswordDB(username: self.db.username, newPassword: new)
                     }
                 }
                 let screenDataRep = EnterValueVC.EnterValueVCScreenData(taskName: "Change password".localize, title: "Repeat password".localize, placeHolder: "Password".localize, nextAction: repeatPasAction, screenType: .password)
@@ -652,47 +679,47 @@ class MoreOptionsData {
             toEnterValue(data: screenData)
         }
         
-
+        
+    }
+    
+    private func performChangePassword(username:String) {
+        LoadFromDB.shared.Users { (allUsers, error) in
+            if !error {
+                var userData: [String] = []
+                for i in 0..<allUsers.count {
+                    if allUsers[i][0] == username {
+                        userData = allUsers[i]
+                        break
+                    }
+                }                                
+                let nextAction: (String) -> () = { (new) in
+                    self.checkChangeOldPassword(new, dbPassword: userData[2], email: userData[1])
+                }
+                
+                let userrData:((String, String)?, (String, String)?)? = (("Email".localize, userData[1]),("Nickname".localize,userData[0]))
+                
+                let screenData = EnterValueVC.EnterValueVCScreenData(taskName: "Change password".localize, title: "Enter your old password".localize, subTitle: nil, placeHolder: "Old password".localize, nextAction: nextAction, screenType: .string, descriptionTable: userrData)
+                self.toEnterValue(data: screenData)
+                
+            } else {
+                DispatchQueue.main.async {
+                    self.showAlert(title: AppText.Error.InternetTitle, text: AppText.Error.internetDescription, error: true, goToLogin: true)
+                }
+            }
+        }
+        
     }
     
     func changePasswordTapped() {
         print("changeEmailTapped")
-
-        let username = appData.username
+        
+        let username = db.username
         if username != "" {
-            self.ai.show { (_) in
-            //    let load = LoadFromDB()
-                LoadFromDB.shared.Users { (allUsers, error) in
-                    if !error {
-                        var userData: [String] = []
-                        for i in 0..<allUsers.count {
-                            if allUsers[i][0] == username {
-                                userData = allUsers[i]
-                                break
-                            }
-                        }
-
-                        //DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-
-                        
-                        let nextAction: (String) -> () = { (new) in
-                            self.checkChangeOldPassword(new, dbPassword: userData[2], email: userData[1])
-                        }
-                        
-                        let userrData:((String, String)?, (String, String)?)? = (("Email".localize, userData[1]),("Nickname".localize,userData[0]))
-                        
-                        let screenData = EnterValueVC.EnterValueVCScreenData(taskName: "Change password".localize, title: "Enter your old password".localize, subTitle: nil, placeHolder: "Old password".localize, nextAction: nextAction, screenType: .string, descriptionTable: userrData)
-                        self.toEnterValue(data: screenData)
-                       // }
-                        
-                    } else {
-                        DispatchQueue.main.async {
-                            self.showAlert(title: Text.Error.InternetTitle, text: Text.Error.internetDescription, error: true, goToLogin: true)
-                        }
-                    }
+            ai?.showLoading {
+                DispatchQueue(label: "api", qos: .userInitiated).async {
+                    self.performChangePassword(username:username)
                 }
             }
-            
         }
     }
     
@@ -706,17 +733,17 @@ class MoreOptionsData {
 extension MoreOptionsData {
     func showAlert(title:String? = nil,text:String? = nil, error: Bool, goToLogin: Bool = false, image:UIImage? = nil) {
         
-        let resultTitle = title == nil ? (error ? Text.Error.error : Text.success) : title!
+        let resultTitle = title == nil ? (error ? AppText.Error.error : AppText.success) : title!
         DispatchQueue.main.async {
-            self.ai.showAlertWithOK(title: resultTitle, text: text, error: error) { _ in
+            self.vc?.ai?.showAlertWithOK(title: resultTitle, description: text, viewType: error ? .error : .standard, okPressed: {
                 if goToLogin {
                     DispatchQueue.main.async {
                         self.vc.navigationController?.popToViewController(self.vc, animated: true)
                     }
                 }
-            }
+            })
         }
-
+        
     }
     
     

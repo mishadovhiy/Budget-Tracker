@@ -6,8 +6,9 @@
 //  Copyright © 2023 Misha Dovhiy. All rights reserved.
 //
 
+#if canImport(UIKit)
 import UIKit
-
+#endif
 extension DataBase {
     struct ViewControllers {
         var dict:[String:Any]
@@ -100,16 +101,51 @@ extension DataBase {
                 dict.updateValue(newValue, forKey: "SortOption")
             }
         }
-        
+#if os(iOS)
         var pdfProperties:PDFProperties {
             get {
-                return .init(dict: dict["pdfProperties"] as? [String:Any] ?? [:])
+                return .init(dict: dict["pdfPropertiesd"] as? [String:Any] ?? [:])
             }
             set {
-                dict.updateValue(newValue.dict, forKey: "pdfProperties")
+                dict.updateValue(newValue.dict, forKey: "pdfPropertiesd")
+            }
+        }
+        #endif
+        var cameraStorage:CameraVC {
+            get {
+                return .init(dict: dict["cameraStorage"] as? [String:Any] ?? [:])
+            }
+            set {
+                dict.updateValue(newValue.dict, forKey: "cameraStorage")
             }
         }
         
+        struct CameraVC {
+            var dict:[String:Any]
+            init(dict: [String : Any]) {
+                self.dict = dict
+            }
+            
+            var addTransactionCameraEnabled:Bool {
+                get {
+                    return dict["addTransactionCameraEnabled"] as? Bool ?? false
+                }
+                set {
+                    dict.updateValue(newValue, forKey: "addTransactionCameraEnabled")
+                }
+            }
+            
+            var autoAddAll:Bool {
+                get {
+                    return dict["autoAddAll"] as? Bool ?? false
+                }
+                set {
+                    dict.updateValue(newValue, forKey: "autoAddAll")
+                }
+            }
+            
+            
+        }
         
     }
 }

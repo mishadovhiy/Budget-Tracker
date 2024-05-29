@@ -9,69 +9,9 @@
 import UIKit
 
 extension LoginViewController: UITextFieldDelegate {
-    
-    
-    func checkUsers(for email: String, password:String, completion: @escaping (Bool) -> ()) {
-      //  DispatchQueue.main.async {
-        //    self.ai?.show { _ in
-        
-                self.enteredEmailUsers.removeAll()
-                var resultUsers: [String] = []
-                self.loadUsers { users in
-                    
-                    //check password for email
-                    var passwordCurrect = false
-                    var found = false
-                    for n in 0..<users.count {
-                        if email == users[n][1] {
-                            found = true
-                            if password == users[n][2] {
-                                passwordCurrect = true
-                                break
-                            }
-                            
-                        }
-                        
-                    }
-                    if passwordCurrect {
-                        for i in 0..<users.count {
-                            if users[i][1] == email {
-                                resultUsers.append(users[i][0])
-                            }
-                        }
-                        self.enteredEmailUsers = resultUsers
-                        completion(found)
-                        print(resultUsers, " efrwd")
-                        DispatchQueue.main.async {
 
-                            SelectValueVC.presentScreen(in: self, with: [], structData: [
-                                .init(sectionName: "Select User", cells: resultUsers.compactMap({ apiUser in
-                                    .init(name: apiUser, regular: .init(didSelect: {
-                                        self.navigationController?.popViewController(animated: true)
-                                        self.userSelected(user: apiUser)
-                                    }))
-                                }))
-                            ], title: "User List")
-                        }
-                    } else {
-                        let notFound = "Email not found".localize + "!"
-                        let text = !found ? notFound : "Wrong password".localize
-                        DispatchQueue.main.async {
-                            self.showAlert(title: text, error: true)
-                        }
-                    }
-
-                    
-                    
-                }
-         //   }
-      //  }
-        
-    }
-    
-    
     func keyChainPassword(nick: String) {
-        if let keychainPassword = KeychainService.loadPassword(service: "BudgetTrackerApp", account: nick) {
+        if let keychainPassword = KeychainService.loadPassword(account: nick) {
             self.textFieldValuesDict.updateValue(keychainPassword, forKey: "log.password")
             DispatchQueue.main.async {
                 self.passwordLogLabel.isSecureTextEntry = false

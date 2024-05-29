@@ -27,10 +27,10 @@ extension PDFEditVC {
         imgPicker.delegate = self
         imgPicker.allowsEditing = true
         imgPicker.dismissed = {
-            AppDelegate.shared?.banner.appeare(force: true)
+            AppDelegate.properties?.banner.appeare(force: true)
         }
         imageSelectedAction = selected
-        AppDelegate.shared?.banner.hide(ios13Hide: true, completion: {
+        AppDelegate.properties?.banner.hide(ios13Hide: true, completion: {
             self.present(imgPicker, animated: true)
         })
     }
@@ -96,6 +96,7 @@ extension PDFEditVC {
         vc.disapeareAction = {
             $0?.navigationController?.setNavigationBarHidden(false, animated: true)
         }
+        nav.setBackground(.regular)
     }
 
     
@@ -117,7 +118,10 @@ extension PDFEditVC {
         UIView.animate(withDuration: 0.45, animations: {
             constant?.constant = show.height
             self.containerView.layoutIfNeeded()
-        }, completion: { _ in
+        }, completion: { 
+            if !$0 {
+                return
+            }
             self.view.isUserInteractionEnabled = true
             if show == .none {
                 self.tableView.reloadData()
@@ -134,7 +138,7 @@ extension PDFEditVC {
         var height:CGFloat {
             switch self {
             case .none:
-                return 125
+                return 145
             case .color:
                 return 550
             case .text:
@@ -180,7 +184,7 @@ extension PDFEditVC:UIImagePickerControllerDelegate, UINavigationControllerDeleg
               let selected = (info[.editedImage] as? UIImage)?.pngData()
         else { return }
         
-      //  AppDelegate.shared?.banner.appeare(force: true, completion: {
+      //  AppDelegate.properties?.banner.appeare(force: true, completion: {
             selectedAction(selected)
      //   })
     }
@@ -188,7 +192,7 @@ extension PDFEditVC:UIImagePickerControllerDelegate, UINavigationControllerDeleg
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         //settingsNav?.popViewController(animated: true)
         picker.dismiss(animated: true)
-       // AppDelegate.shared?.banner.appeare(force: true)
+       // AppDelegate.properties?.banner.appeare(force: true)
     }
     
     

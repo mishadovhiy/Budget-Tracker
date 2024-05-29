@@ -9,57 +9,207 @@
 import UIKit
 import Foundation
 
-
 class DataBase {
+    let lastSelected = LastSelected()
+
     static var _db:[String:Any]?
     var db:[String:Any] {
         get {
             if let db = DataBase._db {
                 return db
             } else {
-                //let v = UserDefaults.standard.value(forKey: "DataBase") as? [String:Any] ?? [:]
-                let v = AppDelegate.shared?.coreDataManager?.fetch(.general)?.data?.toDict ?? [:]
-                DataBase._db = v
-                print(Thread.isMainThread, " dbgetThread")
-                if Thread.isMainThread {
-                    if (AppDelegate.shared?.appData.devMode ?? false) {
-                        AppDelegate.shared?.newMessage.show(title:"fatal error, from main", type: .error)
-                    }
-                    print("!!!!!!!!!!!errororor")
-                }
-                return v
+                #if os(iOS)
+                let dbDict = AppDelegate.properties?.coreDataManager?.fetch(.general)?.data?.toDict ?? [:]
+                DataBase._db = dbDict
+                AppDelegate.properties?.appData.threadCheck(shouldMainThread: false)
+print(dbDict, " dbdata")
+                return dbDict
+                #else
+                //let dict = UserDefaults.standard.value(forKey: "DB") as? [String:Any]
+                                let dict = UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")!.value(forKey: "DB") as? [String:Any]
+
+                return dict ?? [:]
+                #endif
             }
             
         }
         set {
-            DataBase._db = newValue
-            print(Thread.isMainThread, " dbsetThread")
-            if Thread.isMainThread {
-                print("!!!!!!!!!!!errororor set")
-                if (AppDelegate.shared?.appData.devMode ?? false) {
-                    AppDelegate.shared?.newMessage.show(title:"fatal error, from main", type: .error)
-                }
+            if newValue.containsNil {
+                print("db contains nill")
+                return
             }
-           // UserDefaults.standard.setValue(newValue, forKey: "DataBase")
+            DataBase._db = newValue
+            AppDelegate.properties?.appData.threadCheck(shouldMainThread: false)
+            #if os(iOS)
             if let core:Data = .create(from: newValue) {
                 print("updating core data")
-                AppDelegate.shared?.coreDataManager?.update(.init(db: core))
+                AppDelegate.properties?.coreDataManager?.update(.init(db: core))
+            }
+            #else
+           // UserDefaults.standard.setValue(newValue, forKey: "DB")
+                        UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")!.set(newValue, forKey: "DB")
+            #endif
+        }
+    }
+    
+
+    var proEnabeled:Bool {
+        let result = proTrial || proVersion
+        return devMode ? !(forceNotPro ?? !result) : result
+    }
+    
+    var randomColorName: String {
+        return db["SelectedTintColor"] as? String ?? "yellowColor"
+    }
+    
+    var devMode:Bool {
+        #if os(iOS)
+        if userEmailHolder.contains("dovhiy.com") {
+            return true
+        } else {
+            let id = UIDevice.current.identifierForVendor?.uuidString ?? ""
+            if testIds.contains(id) {
+                return true
+            } else {
+                return false
+            }
+        }
+        #else
+        return false
+        #endif
+        
+    }
+    
+    private let testIds:[String] = [
+        "092BAEA3-9810-4A80-ADEF-53ABC78F9CA0",
+        "C2F525EB-3192-4483-9F29-50F1DA63BECF",
+        "B7BC8C6F-505C-4836-B240-3326CBDD0AC2",
+        "E4636FA3-660C-4562-9D4B-999056448BB7",
+        "6F2934F2-80F9-49D2-88D3-62A51BE1933D"
+    ]
+
+
+    
+    var proVersion: Bool {
+        get{
+            let result = !purchasedOnThisDevice ? (db["proVersion"] as? Bool ?? false) : purchasedOnThisDevice
+            return result
+        }
+        set(value){
+            let was = !purchasedOnThisDevice ? (db["proVersion"] as? Bool ?? false) : purchasedOnThisDevice
+            db.updateValue(value, forKey: "proVersion")
+            if was && !value {
+#if os(iOS)
+                DispatchQueue.main.async {
+                    AppDelegate.properties?.banner.createBanner()
+                }
+                #endif
+            } else if !was && value {
+#if os(iOS)
+                DispatchQueue.main.async {
+                    AppDelegate.properties?.banner.hide(remove: true, ios13Hide: true)
+                }
+                #endif
+            }
+            
+        }
+    }
+    
+    var unsendedData:[[String: [String:Any]]] {
+        //0 - type (delete transaction)
+        //1 - toDataString
+        get {
+            return db[ "unsendedData"] as? [[String: [String:Any]]] ?? []
+        }
+        set(value){
+            db.updateValue(value, forKey: "unsendedData")
+        }
+    }
+    
+    
+    var purchasedOnThisDevice: Bool {
+        get{
+            return db["purchasedOnThisDevice"] as? Bool ?? false
+        }
+        set(value){
+            db.updateValue(value, forKey: "purchasedOnThisDevice")
+        }
+    }
+    
+    var trialDate: String {
+        get{
+            return db["trialDate"] as? String ?? ""
+        }
+        set(value){
+            db.updateValue(value, forKey: "trialDate")
+        }
+    }
+    
+    var proTrial: Bool {
+        get{
+            return db["proTrial"] as? Bool ?? false
+        }
+        set(value){
+            db.updateValue(value, forKey: "proTrial")
+        }
+    }
+    
+    var transactionDate:String? {
+        get{
+            return db["transactionDate"] as? String ?? ""
+        }
+        set(value){
+            if let value {
+                db.updateValue(value, forKey: "transactionDate")
+            } else {
+                db.removeValue(forKey: "transactionDate")
             }
         }
     }
     
-    var appUrl:String? {
-      /*  get {
-            return db["appUrl"] as? String ?? [:]
-        }
-        set {
-            if let new = newValue {
-                
-            } ele {
-                
+    
+    
+    
+
+    
+    
+    func emailFromLoadedDataPurch(_ data:[[String]]) -> String? {
+        //get user email
+        //loadedData.append([name, email, password, registrationDate, pro, trialDate])
+        if !purchasedOnThisDevice {
+            let currnt = username
+            var emailOptional:String?
+            for i in 0..<data.count {
+                if data[i][0] == currnt {
+                    emailOptional = data[i][1]
+                }
             }
-            db.updateValue(newValue, forKey: "appUrl")
-        }*/
+            if let email = emailOptional {
+                var dbPurch = false
+                for i in 0..<data.count {
+                    if !dbPurch {
+                        if data[i][1] == email {
+                            if data[i][4] == "1" {
+                                dbPurch = true
+                                break
+                            }
+                        }
+                    }
+                }
+                if proVersion != dbPurch {
+                    proVersion = dbPurch
+                }
+                print("dbPurch:", dbPurch)
+                return email
+            }
+            
+        }
+        return nil
+    }
+    
+    
+    var appUrl:String? {
+
         get {
             return ""
         }
@@ -68,34 +218,107 @@ class DataBase {
         }
     }
     
+    
+    
     func removeAll() {
-        
-        let holder = self
+        transactions = []
+        categories = []
+       username = ""
+        AppDelegate.properties?.notificationManager.removeAll()
 
-        lastSelectedDate = nil
-        AppData.categoriesHolder = nil
-        self.db.removeAll()
-       
-        //old db
-        UserDefaults.standard.setValue(nil, forKey: "lastSelected")
-        UserDefaults.standard.setValue(true, forKey: "checkTrialDate")
-        UserDefaults.standard.setValue(false, forKey: "trialPressed")
-        UserDefaults.standard.setValue(nil, forKey: "trialToExpireDays")
-        UserDefaults.standard.setValue(nil, forKey: "username")
-        UserDefaults.standard.setValue(nil, forKey: "password")
-        self.appUrl = holder.appUrl
-        self.viewControllers = holder.viewControllers
-        self.db.updateValue(holder.db["lastSelected"] as? [String:String] ?? [:], forKey: "lastSelected")
     }
     
-    func checkDBUpdated() -> Bool {
-        if let oldDB = UserDefaults.standard.value(forKey: "DataBase") as? [String:Any] {
-            UserDefaults.standard.removeObject(forKey: "DataBase")
-            self.db = oldDB
-            return false
+    var linkColor: String {
+        set {
+            db.updateValue(newValue, forKey: "SelectedTintColor")
+#if os(iOS)
+            DispatchQueue.main.async {
+                let window = UIApplication.shared.sceneKeyWindow ?? UIWindow()
+                window.tintColor = .colorNamed(newValue)
+            }
+            #endif
         }
-        return true
+        get {
+            return db["SelectedTintColor"] as? String ?? "Yellow"
+        }
     }
+    var filter:Filter {
+        get {
+            let dict = db["Filter"] as? [String : Any] ?? [:]
+            return .init(dict: dict)
+        }
+        set {
+            db.updateValue(newValue.dict, forKey: "Filter")
+        }
+    }
+    var forceNotPro: Bool? {
+        get{
+
+            return nil//db.db["forcePro"] as? Bool
+        }
+        set(value){
+            db.updateValue(value ?? false, forKey: "forcePro")
+        }
+    }
+    
+
+    
+    var username: String {
+        get{
+            if let user = self.db["username"] as? String {
+                return user
+            } else {
+#if os(iOS)
+                return ""
+                #else
+                
+                print(UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")!.value(forKey: "username"), " grefrwedqwd")
+                return UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")!.value(forKey: "username") as? String ?? ""
+                #endif
+            }
+        }
+        set(value){
+            print("new username setted - \(value)")
+            db.updateValue(value, forKey: "username")
+            UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")?.setValue(value, forKey: "username")
+#if os(watchOS)
+            let loggedIn = value != ""
+
+            #endif
+
+        }
+    }
+    
+
+
+    var password: String {
+        get{
+            if let user = db["password"] as? String {
+                return user
+            } else {
+                return ""
+            }
+        }
+        set(value){
+            print("new password setted - \(value)")
+            db.updateValue(value, forKey: "password")
+        }
+    }
+    
+    var userEmailHolder: String {
+        get{
+            if let user = db["userEmailHolder"] as? String {
+                return user
+            } else {
+                return ""
+            }
+        }
+        set(value){
+            print("new password setted - \(value)")
+            db.updateValue(value, forKey: "userEmailHolder")
+        }
+    }
+    
     
     var viewControllers:ViewControllers {
         get {
@@ -216,10 +439,16 @@ class DataBase {
             return result
         }
         set {
-            let result = transactionsToDict(newValue: newValue)
-            db.updateValue(result, forKey: transactionsKey)
-            print(result.count, " rhtgerfweg")
-            UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")?.setValue(result, forKey: "transactionsDataNew")
+            if newValue.count != 0 {
+                let result = transactionsToDict(newValue: newValue)
+                db.updateValue(result, forKey: transactionsKey)
+                print(result.count, " rhtgerfweg")
+                UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")?.setValue(result, forKey: "transactionsDataNew")
+            } else {
+                db.removeValue(forKey: transactionsKey)
+                UserDefaults(suiteName: "group.com.dovhiy.detectAppClose")?.removeObject(forKey: "transactionsDataNew")
+            }
+
         }
     }
     var localTransactions:[TransactionsStruct] {
@@ -251,7 +480,10 @@ class DataBase {
         return result
     }
     
-    
+    var categoriesHolder:[NewCategories] {
+        let all = db[categoriesKey] as? [[String:Any]] ?? []
+        return dictToCategories(all: all)
+    }
 
     var categories: [NewCategories] {
         get {
@@ -261,8 +493,13 @@ class DataBase {
         }
         
         set {
-            let result = categoriesToDict(newValue: newValue)
-            db.updateValue(result, forKey: categoriesKey)
+            if newValue.count != 0 {
+                let result = categoriesToDict(newValue: newValue)
+                db.updateValue(result, forKey: categoriesKey)
+            } else {
+                db.removeValue(forKey: categoriesKey)
+            }
+            
         }
     }
     var localCategories: [NewCategories] {
@@ -319,7 +556,7 @@ class DataBase {
         return result
     }
 
-    
+
 }
 
 

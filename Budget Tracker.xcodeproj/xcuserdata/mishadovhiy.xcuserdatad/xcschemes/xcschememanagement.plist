@@ -9,14 +9,29 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
-		<key>BudgetTrackerCalendatWidgetExtension.xcscheme_^#shared#^_</key>
+		<key>Budget-Tracker.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>11</integer>
+		</dict>
+		<key>BudgetTracker Watch App.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>9</integer>
 		</dict>
+		<key>BudgetTrackerCalendatWidgetExtension.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>10</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>8D0F8FF82BDDCBB200681CED</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>8DBA7E4B23F0316F00D8214C</key>
 		<dict>
 			<key>primary</key>
