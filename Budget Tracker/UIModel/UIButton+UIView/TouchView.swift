@@ -115,7 +115,6 @@ super.touchesEnded(touches, with: event)
         UIView.animate(withDuration: 0.3, delay: 0, options: [.allowUserInteraction], animations: {
             self.backgroundColor = begun ? darker : self.launch
         })
-        
     }
 }
 

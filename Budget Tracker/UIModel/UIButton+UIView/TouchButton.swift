@@ -9,6 +9,7 @@
 import UIKit
 
 class TouchButton: Button {
+    // for changing views animatable paramenetrs when Touch Begun (true) and ended (false)
     var touchAction:((Bool)->())?
     var pressedAction:(()->())?
 
