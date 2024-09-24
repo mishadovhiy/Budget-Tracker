@@ -13,11 +13,11 @@ extension LoginViewController {
     func createAccoun(loadedData: [[String]]) {
         hideKeyboard()
         let values = textFieldValuesDict
-     //   DispatchQueue.main.async {
-            if let name = values["create.username"],
-               let email = values["create.email"],
-                let password = values["create.password"] {
-                let regDate = AppDelegate.properties?.db.filter.getToday()
+        //   DispatchQueue.main.async {
+        if let name = values["create.username"],
+           let email = values["create.email"],
+           let password = values["create.password"] {
+            let regDate = AppDelegate.properties?.db.filter.getToday()
             if password == values["create.password.repeate"] ?? "" {
                 if name != "" && !name.contains("@") && email != "" && password != "" {
                     let emailLimitOp = self.canAddForEmail(email, loadedData: loadedData)
@@ -40,9 +40,9 @@ extension LoginViewController {
                                 }))
                                 
                             }
-
+                            
                         } else {
-                           // let save = SaveToDB()
+                            // let save = SaveToDB()
                             let toDataString = "&Nickname=\(name)" + "&Email=\(email)" + "&Password=\(password)" + "&Registration_Date=\(regDate ?? "-")"
                             print(toDataString, "toDataStringtoDataStringtoDataString")
                             SaveToDB.shared.Users(toDataString: toDataString) { (error) in
@@ -73,9 +73,9 @@ extension LoginViewController {
                                     if self.fromPro || self.forceLoggedOutUser != "" {
                                         DispatchQueue.main.async {
                                             self.endAnimating()
-                                                self.dismiss(animated: true) {
-                                                    self.ai?.hide()
-                                                }
+                                            self.dismiss(animated: true) {
+                                                self.ai?.hide()
+                                            }
                                         }
                                     } else {
                                         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
@@ -95,7 +95,9 @@ extension LoginViewController {
                                     self.newMessage?.show(title: "You have reached the maximum amount of usernames".localize, type: .error)
                                 }
                             } else {
-                                AppDelegate.properties?.appData.presentBuyProVC(selectedProduct: 3)
+                                DispatchQueue.main.async {
+                                    AppDelegate.properties?.appData.presentBuyProVC(selectedProduct: 3)
+                                }
                                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                                     self.newMessage?.show(title: "You have reached the maximum amount of usernames".localize, description: "Update to Pro".localize + " " + "to create new username".localize, type: .standart)
                                 }
@@ -109,116 +111,116 @@ extension LoginViewController {
                         }
                         
                     }
-                
+                    
                 } else {
                     self.actionButtonsEnabled = true
                     self.obthervValues = true
-                    self.showWrongFields()
-
+                    
                     DispatchQueue.main.async {
-                    self.newMessage?.show(title: "All fields are required".localize, type: .error)
+                        self.showWrongFields()
+                        self.newMessage?.show(title: "All fields are required".localize, type: .error)
                         self.ai?.hide()
                     }
-                  
+                    
                 }
             } else {
                 self.actionButtonsEnabled = true
                 self.newMessage?.show(title: "Passwords not match".localize, type: .error)
-                    self.ai?.hide()
-            }
-            } else {
-                DispatchQueue.main.async {
-                    self.showError(title: "all fields are required")
-                }
-            }
-    
-    
-    
-        func logInPerf(nickname:String, password:String,  loadedData: [[String]]) {
-        
-        let DBusernameIndex = 0
-        let DBpasswordIndex = 2
-        let DBEmailIndex = 1
-        var psswordFromDB = ""
- 
-        if userExists(name: nickname, loadedData: loadedData) {
-            for i in 0..<loadedData.count {
-                if loadedData[i][DBusernameIndex] == nickname {
-                    print(loadedData[i], "loadedData[i]loadedData[i]loadedData[i]")
-                    psswordFromDB = loadedData[i][DBpasswordIndex]
-                    print(psswordFromDB, "psswordFromDBpsswordFromDBpsswordFromDBpsswordFromDB")
-                    if password != psswordFromDB {
-                        self.actionButtonsEnabled = true
-                        let messageTitle = "Wrong".localize + " " + "password".localize
-                        DispatchQueue.main.async {
-                            self.newMessage?.show(title: messageTitle, type: .error)
-                            self.ai?.hide()
-                        }
-                        return
-                    } else {
-                        if let keycheinPassword = KeychainService.loadPassword(account: nickname) {
-                            if keycheinPassword != password {
-                                KeychainService.updatePassword(account: nickname, data: password)
-                            }
-                        } else {
-                            KeychainService.savePassword(account: nickname, data: password)
-                        }
-                        let prevUserName = AppDelegate.properties?.db.username
-                        
-                        
-                        if prevUserName != nickname {
-                            let dat = (db.categories, db.transactions)
-                            userChanged()
-                            db.db.updateValue(prevUserName, forKey: "prevUserName")
-                            
-                            if prevUserName == "" && forceLoggedOutUser == "" {
-                                db.localCategories = dat.0
-                                db.localTransactions = dat.1
-                                
-                            }
-                            
-                            if forceLoggedOutUser == "" {
-                                AppDelegate.properties?.appData.fromLoginVCMessage = "Wellcome".localize + ", \(AppDelegate.properties?.db.username ?? "")"
-                            }
-                            
-                        }
-                        AppDelegate.properties?.db.username = nickname
-                        AppDelegate.properties?.db.password = password
-                        AppDelegate.properties?.db.userEmailHolder = loadedData[i][DBEmailIndex]
-                        
-                        if !(AppDelegate.properties?.db.purchasedOnThisDevice ?? false) {
-                            AppDelegate.properties?.db.proVersion = loadedData[i][4] == "1" ? true : (AppDelegate.properties?.db.proVersion ?? false)
-                        }
-                        if fromPro || self.forceLoggedOutUser != "" {
-                            DispatchQueue.main.async {
-                                self.dismiss(animated: true) {
-                                    self.ai?.hide()
-                                }
-                            }
-                        } else {
-                            DispatchQueue.main.async {
-                                self.ai?.hide {
-                                    self.performSegue(withIdentifier: "homeVC", sender: self)
-                                }
-                            }
-
-                        }
-                        
-                    }
-                    return
-                }
+                self.ai?.hide()
             }
         } else {
-            self.actionButtonsEnabled = true
             DispatchQueue.main.async {
-                DispatchQueue.main.async {
-                    self.newMessage?.show(title: "User not found".localize, type: .error)
-                    self.ai?.hide()
-                }
-
+                self.showError(title: "all fields are required")
             }
         }
         
-    }
+        
+        
+        func logInPerf(nickname:String, password:String,  loadedData: [[String]]) {
+            
+            let DBusernameIndex = 0
+            let DBpasswordIndex = 2
+            let DBEmailIndex = 1
+            var psswordFromDB = ""
+            
+            if userExists(name: nickname, loadedData: loadedData) {
+                for i in 0..<loadedData.count {
+                    if loadedData[i][DBusernameIndex] == nickname {
+                        print(loadedData[i], "loadedData[i]loadedData[i]loadedData[i]")
+                        psswordFromDB = loadedData[i][DBpasswordIndex]
+                        print(psswordFromDB, "psswordFromDBpsswordFromDBpsswordFromDBpsswordFromDB")
+                        if password != psswordFromDB {
+                            self.actionButtonsEnabled = true
+                            let messageTitle = "Wrong".localize + " " + "password".localize
+                            DispatchQueue.main.async {
+                                self.newMessage?.show(title: messageTitle, type: .error)
+                                self.ai?.hide()
+                            }
+                            return
+                        } else {
+                            if let keycheinPassword = KeychainService.loadPassword(account: nickname) {
+                                if keycheinPassword != password {
+                                    KeychainService.updatePassword(account: nickname, data: password)
+                                }
+                            } else {
+                                KeychainService.savePassword(account: nickname, data: password)
+                            }
+                            let prevUserName = AppDelegate.properties?.db.username
+                            
+                            
+                            if prevUserName != nickname {
+                                let dat = (db.categories, db.transactions)
+                                userChanged()
+                                db.db.updateValue(prevUserName, forKey: "prevUserName")
+                                
+                                if prevUserName == "" && forceLoggedOutUser == "" {
+                                    db.localCategories = dat.0
+                                    db.localTransactions = dat.1
+                                    
+                                }
+                                
+                                if forceLoggedOutUser == "" {
+                                    AppDelegate.properties?.appData.fromLoginVCMessage = "Wellcome".localize + ", \(AppDelegate.properties?.db.username ?? "")"
+                                }
+                                
+                            }
+                            AppDelegate.properties?.db.username = nickname
+                            AppDelegate.properties?.db.password = password
+                            AppDelegate.properties?.db.userEmailHolder = loadedData[i][DBEmailIndex]
+                            
+                            if !(AppDelegate.properties?.db.purchasedOnThisDevice ?? false) {
+                                AppDelegate.properties?.db.proVersion = loadedData[i][4] == "1" ? true : (AppDelegate.properties?.db.proVersion ?? false)
+                            }
+                            if fromPro || self.forceLoggedOutUser != "" {
+                                DispatchQueue.main.async {
+                                    self.dismiss(animated: true) {
+                                        self.ai?.hide()
+                                    }
+                                }
+                            } else {
+                                DispatchQueue.main.async {
+                                    self.ai?.hide {
+                                        self.performSegue(withIdentifier: "homeVC", sender: self)
+                                    }
+                                }
+                                
+                            }
+                            
+                        }
+                        return
+                    }
+                }
+            } else {
+                self.actionButtonsEnabled = true
+                DispatchQueue.main.async {
+                    DispatchQueue.main.async {
+                        self.newMessage?.show(title: "User not found".localize, type: .error)
+                        self.ai?.hide()
+                    }
+                    
+                }
+            }
+            
+        }
     }
 }

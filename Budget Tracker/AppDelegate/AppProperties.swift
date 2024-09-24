@@ -30,7 +30,7 @@ class AppProperties {
         ai.setIgnorPresentLoader(self.aiNotShowingCondition)
         return ai
     }()
-    let passcodeLock = PascodeLockView.instanceFromNib() as! PascodeLockView
+    lazy var passcodeLock = PascodeLockView.instanceFromNib() as! PascodeLockView
     
     lazy var banner: adBannerView = {
         return adBannerView.instanceFromNib() as! adBannerView

@@ -181,9 +181,9 @@ class CategoriesVC: SuperViewController {
         }
         set {
             _tableData = newValue
-//            DispatchQueue.main.async {
-//                self.ai?.hide()
-//            }
+            DispatchQueue.main.async {
+                self.ai?.hide()
+            }
         }
     }
 }

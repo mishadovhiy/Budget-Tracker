@@ -71,8 +71,9 @@ class LoginViewController: SuperViewController {
     func showAlert(title:String? = nil,text:String? = nil, error: Bool, goToLogin: Bool = false) {
         
         let resultTitle = title ?? (error ? "Error".localize : "Success".localize)
-        endAnimating()
+        
         DispatchQueue.main.async {
+            self.endAnimating()
             self.ai?.showAlertWithOK(title: resultTitle, description: text, viewType: error ? .error : .standard, okPressed: {
                 if goToLogin {
                     DispatchQueue.main.async {
@@ -287,9 +288,11 @@ class LoginViewController: SuperViewController {
     
     
     func showError(title:String) {
-        endAnimating()
-        self.newMessage?.show(title: title, type: .error)
-        self.ai?.hide()
+        DispatchQueue.main.async {
+            self.endAnimating()
+            self.newMessage?.show(title: title, type: .error)
+            self.ai?.hide()
+        }
     }
     
     private func performCreateAccount() {
@@ -542,7 +545,9 @@ class LoginViewController: SuperViewController {
         
         textFieldValuesDict.updateValue(textField.text ?? "", forKey: textField.accessibilityIdentifier ?? "")
         if obthervValues {
-            showWrongFields()
+            DispatchQueue.main.async {
+                self.showWrongFields()
+            }
         }
     }
     

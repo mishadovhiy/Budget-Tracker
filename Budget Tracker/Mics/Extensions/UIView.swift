@@ -9,6 +9,16 @@
 import UIKit
 
 extension UIView {
+    func textFieldBottomConstraint(stickyView:UIView, constant:CGFloat = 0) {
+        stickyView.bottomAnchor.constraint(lessThanOrEqualTo: self.safeAreaLayoutGuide.bottomAnchor, constant: constant).isActive = true
+        if #available(iOS 17.0, *) {
+            self.keyboardLayoutGuide.usesBottomSafeArea = false
+        }
+        if #available(iOS 15.0, *) {
+            stickyView.bottomAnchor.constraint(equalTo: self.keyboardLayoutGuide.topAnchor).isActive = true
+        }
+    }
+    
     func fadeTransition(_ duration:CFTimeInterval = 0.3, type:CATransitionType = .fade) {
         let animation = CATransition()
         animation.timingFunction = CAMediaTimingFunction(name:
