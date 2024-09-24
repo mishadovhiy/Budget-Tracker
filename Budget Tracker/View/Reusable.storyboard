@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_72" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -123,8 +123,9 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="DEq-YN-Q1v">
                                         <rect key="frame" x="210" y="0.0" width="120" height="35"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jkq-5Q-nCS">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jkq-5Q-nCS" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="60" height="35"/>
+                                                <color key="backgroundColor" systemColor="tintColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="60" id="SSb-Q1-0F1"/>
                                                 </constraints>
@@ -133,8 +134,9 @@
                                                     <action selector="toggleMonth:" destination="mFy-5n-K0f" eventType="touchUpInside" id="YtZ-QQ-4pj"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jaU-i1-gnc">
+                                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jaU-i1-gnc" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                                 <rect key="frame" x="60" y="0.0" width="60" height="35"/>
+                                                <color key="backgroundColor" systemColor="tintColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="60" id="cEp-fB-9g2"/>
                                                 </constraints>
@@ -544,7 +546,7 @@
                                         <rect key="frame" x="65" y="0.0" width="361" height="44"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera.aperture" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="PBi-58-zoR">
-                                                <rect key="frame" x="165.66666666666666" y="7.9999999999999982" width="30" height="28.666666666666664"/>
+                                                <rect key="frame" x="165.66666666666666" y="7.6666666666666661" width="30" height="28.666666666666671"/>
                                                 <color key="tintColor" name="CategoryColor1"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="30" id="0Ws-27-KSa"/>
@@ -958,32 +960,6 @@
             <point key="canvasLocation" x="3636.2790697674418" y="818.88412017167389"/>
         </scene>
     </scenes>
-    <designables>
-        <designable name="EEe-TY-xAJ">
-            <size key="intrinsicContentSize" width="24" height="15.666666666666666"/>
-        </designable>
-        <designable name="Gpt-Na-WJG">
-            <size key="intrinsicContentSize" width="25.666666666666668" height="15.666666666666666"/>
-        </designable>
-        <designable name="RU5-F0-Nx4">
-            <size key="intrinsicContentSize" width="29.666666666666668" height="15.666666666666666"/>
-        </designable>
-        <designable name="T04-sT-3MF">
-            <size key="intrinsicContentSize" width="27.333333333333332" height="15.666666666666666"/>
-        </designable>
-        <designable name="d9Q-Qs-93K">
-            <size key="intrinsicContentSize" width="48" height="30"/>
-        </designable>
-        <designable name="j4h-St-yMg">
-            <size key="intrinsicContentSize" width="31" height="15.666666666666666"/>
-        </designable>
-        <designable name="pD0-5N-RQ9">
-            <size key="intrinsicContentSize" width="19.333333333333332" height="15.666666666666666"/>
-        </designable>
-        <designable name="rKd-KE-fcC">
-            <size key="intrinsicContentSize" width="27.333333333333332" height="15.666666666666666"/>
-        </designable>
-    </designables>
     <resources>
         <image name="arrowshape.left" catalog="system" width="128" height="104"/>
         <image name="arrowshape.left.fill" catalog="system" width="128" height="104"/>
@@ -1005,7 +981,7 @@
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="SecondaryBacroundColor">
-            <color red="0.078000001609325409" green="0.086000002920627594" blue="0.086000002920627594" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+            <color red="0.059000000357627869" green="0.059000000357627869" blue="0.059000000357627869" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="balanceTitleColor">
             <color red="0.15700000524520874" green="0.15700000524520874" blue="0.15700000524520874" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>

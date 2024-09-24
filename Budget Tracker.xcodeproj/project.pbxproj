@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		297BDB649113044757C2CEF2 /* Pods_Budget_Tracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F84A1AEB24B0EC857F848E0 /* Pods_Budget_Tracker.framework */; };
+		8212A9F22CA2B1ED00B895BD /* OutlinedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8212A9F12CA2B1ED00B895BD /* OutlinedLabel.swift */; };
 		8B20751227D9A7AF00CF2172 /* PascodeLockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B20751127D9A7AF00CF2172 /* PascodeLockView.swift */; };
 		8B26327E27E66B060086C3A8 /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B26327D27E66B060086C3A8 /* AppLocalization.swift */; };
 		8B26328227E677930086C3A8 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B26328127E677930086C3A8 /* Label.swift */; };
@@ -368,6 +369,7 @@
 		4495115F0F67B3D07EA6B233 /* Pods-Budget Tracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Budget Tracker.debug.xcconfig"; path = "Target Support Files/Pods-Budget Tracker/Pods-Budget Tracker.debug.xcconfig"; sourceTree = "<group>"; };
 		5F84A1AEB24B0EC857F848E0 /* Pods_Budget_Tracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Budget_Tracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60EB2258A12489890A827616 /* Pods-Budget Tracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Budget Tracker.release.xcconfig"; path = "Target Support Files/Pods-Budget Tracker/Pods-Budget Tracker.release.xcconfig"; sourceTree = "<group>"; };
+		8212A9F12CA2B1ED00B895BD /* OutlinedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlinedLabel.swift; sourceTree = "<group>"; };
 		8B20751127D9A7AF00CF2172 /* PascodeLockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PascodeLockView.swift; sourceTree = "<group>"; };
 		8B26327D27E66B060086C3A8 /* AppLocalization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLocalization.swift; sourceTree = "<group>"; };
 		8B26328127E677930086C3A8 /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
@@ -943,6 +945,7 @@
 				8DBB38F62AC8D46C009B56DD /* BaseTextField.swift */,
 				8D45842A2B35289F0029AA17 /* AlertController */,
 				8D1E4BCD2B222E360030BCB8 /* RefreshTableView.swift */,
+				8212A9F12CA2B1ED00B895BD /* OutlinedLabel.swift */,
 				8D0C5D162AF6C162002E2422 /* SelectionStackView */,
 				8D2CDA142AF3F26B00671A72 /* UITableViewCell */,
 				8B26328327E67D1D0086C3A8 /* SegmentedControl.swift */,
@@ -1905,6 +1908,7 @@
 				8D08FD552ACA010800BA0222 /* ManagerPDF.swift in Sources */,
 				8B5434F827ED80F400417141 /* UITableView.swift in Sources */,
 				8B6BA97927E6E2500067FF58 /* AppSettingsData.swift in Sources */,
+				8212A9F22CA2B1ED00B895BD /* OutlinedLabel.swift in Sources */,
 				8B82A04127E2BDBD0011EC80 /* UITextField.swift in Sources */,
 				8B63312F260FD65200D9E117 /* buyProVC.swift in Sources */,
 				8DEB0CE0281887E0002D24D3 /* UITextFieldDelegate.swift in Sources */,

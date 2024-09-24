@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="fAO-8x-ux9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="fAO-8x-ux9">
     <device id="retina6_72" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -45,7 +45,7 @@
                                                             <subviews>
                                                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="imageView:Kpf-Vl-IUu:image" translatesAutoresizingMaskIntoConstraints="NO" id="Kpf-Vl-IUu">
                                                                     <rect key="frame" x="0.0" y="3.6666666666666661" width="30" height="18"/>
-                                                                    <color key="tintColor" name="balanceTitleColor"/>
+                                                                    <color key="tintColor" systemColor="tintColor"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="30" id="bNn-Tt-R6h"/>
                                                                         <constraint firstAttribute="height" constant="18" id="bvB-kz-6l8"/>
@@ -412,10 +412,10 @@
                                         <inset key="separatorInset" minX="12" minY="0.0" maxX="12" maxY="0.0"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="calcCell" id="2M8-ex-hH0" customClass="calcCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="50" width="430" height="51.666667938232422"/>
+                                                <rect key="frame" x="0.0" y="50" width="430" height="43.666667938232422"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="2M8-ex-hH0" id="rAH-8U-e22">
-                                                    <rect key="frame" x="0.0" y="0.0" width="430" height="51.666667938232422"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="430" height="43.666667938232422"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </tableViewCellContentView>
@@ -426,7 +426,7 @@
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="mainHeaderCell" rowHeight="60" id="Hrx-81-BnX" customClass="mainHeaderCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="101.66666793823242" width="430" height="60"/>
+                                                <rect key="frame" x="0.0" y="93.666667938232422" width="430" height="60"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Hrx-81-BnX" id="2Mm-7q-i7s">
                                                     <rect key="frame" x="0.0" y="0.0" width="430" height="60"/>
@@ -438,7 +438,7 @@
                                                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="fwf-UB-prE">
                                                                     <rect key="frame" x="15" y="10" width="66.666666666666671" height="40"/>
                                                                     <subviews>
-                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="01" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WVh-GT-Viz">
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="01" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WVh-GT-Viz" customClass="OutlinedLabel" customModule="Budget_Tracker" customModuleProvider="target">
                                                                             <rect key="frame" x="0.0" y="0.0" width="34" height="40"/>
                                                                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="30"/>
                                                                             <color key="textColor" systemColor="tintColor"/>
@@ -489,7 +489,7 @@
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="TableViewCell" id="Yoe-FZ-wge" customClass="mainVCcell" customModule="Budget_Tracker" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="161.66666793823242" width="430" height="70.333335876464844"/>
+                                                <rect key="frame" x="0.0" y="153.66666793823242" width="430" height="70.333335876464844"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Yoe-FZ-wge" id="rhd-hO-2oH" userLabel="Cell View">
                                                     <rect key="frame" x="0.0" y="0.0" width="430" height="70.333335876464844"/>
@@ -606,7 +606,7 @@
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="mainFooterCell" id="YbM-kx-EJN" customClass="mainFooterCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="232.00000381469727" width="430" height="43"/>
+                                                <rect key="frame" x="0.0" y="224.00000381469727" width="430" height="43"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="YbM-kx-EJN" id="gz3-vh-s1H">
                                                     <rect key="frame" x="0.0" y="0.0" width="430" height="43"/>
@@ -664,7 +664,7 @@
                                                 </connections>
                                             </tableViewCell>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="mainVCemptyCell" id="iDG-o3-1PH" customClass="mainVCemptyCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="275.00000381469727" width="430" height="110.33333587646484"/>
+                                                <rect key="frame" x="0.0" y="267.00000381469727" width="430" height="110.33333587646484"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="iDG-o3-1PH" id="RhM-fM-hsU">
                                                     <rect key="frame" x="0.0" y="0.0" width="430" height="110.33333587646484"/>
@@ -1231,7 +1231,7 @@
                                                                     <rect key="frame" x="2" y="8" width="111" height="34"/>
                                                                     <subviews>
                                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="square.and.arrow.down" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="0Pn-zq-aVP">
-                                                                            <rect key="frame" x="0.0" y="-1.6666666666666679" width="111" height="20.333333333333336"/>
+                                                                            <rect key="frame" x="0.0" y="-1.3333333333333357" width="111" height="20.333333333333336"/>
                                                                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="19" id="E2f-in-9Up"/>
@@ -1383,7 +1383,7 @@
                                                                             </constraints>
                                                                         </imageView>
                                                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="SdI-JX-14i">
-                                                                            <rect key="frame" x="50" y="5" width="283" height="50"/>
+                                                                            <rect key="frame" x="50" y="17.666666666666668" width="283" height="25.000000000000004"/>
                                                                             <subviews>
                                                                                 <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Category" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="3" translatesAutoresizingMaskIntoConstraints="NO" id="IhM-qn-Xr4">
                                                                                     <rect key="frame" x="0.0" y="0.0" width="283" height="0.0"/>
@@ -1391,21 +1391,21 @@
                                                                                     <color key="textColor" name="CategoryColor"/>
                                                                                     <nil key="highlightedColor"/>
                                                                                 </label>
-                                                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="fGo-ky-tdN" userLabel="editingStack">
-                                                                                    <rect key="frame" x="0.0" y="0.0" width="283" height="50"/>
+                                                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="fGo-ky-tdN" userLabel="editingStack">
+                                                                                    <rect key="frame" x="0.0" y="0.0" width="283" height="25"/>
                                                                                     <subviews>
                                                                                         <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="New category" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ue0-e9-Woe" customClass="BaseTextField" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                                            <rect key="frame" x="0.0" y="0.0" width="182" height="50"/>
+                                                                                            <rect key="frame" x="0.0" y="3" width="182" height="18.666666666666668"/>
                                                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                             <color key="textColor" name="CategoryColor"/>
                                                                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                                             <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                                                                         </textField>
                                                                                         <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="oLb-gV-vE3">
-                                                                                            <rect key="frame" x="182" y="0.0" width="101" height="50"/>
+                                                                                            <rect key="frame" x="182" y="0.0" width="101" height="25"/>
                                                                                             <subviews>
                                                                                                 <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yG8-rV-0Py" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="25"/>
                                                                                                     <constraints>
                                                                                                         <constraint firstAttribute="width" constant="50" id="a4w-li-L6B"/>
                                                                                                     </constraints>
@@ -1425,10 +1425,10 @@
                                                                                                     </connections>
                                                                                                 </button>
                                                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Pqa-2q-ebK">
-                                                                                                    <rect key="frame" x="55" y="0.0" width="1" height="50"/>
+                                                                                                    <rect key="frame" x="55" y="0.0" width="1" height="25"/>
                                                                                                     <subviews>
                                                                                                         <view alpha="0.10000000000000001" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Upv-7e-7oJ">
-                                                                                                            <rect key="frame" x="0.0" y="15" width="1" height="20"/>
+                                                                                                            <rect key="frame" x="0.0" y="2.3333333333333321" width="1" height="20"/>
                                                                                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                                                             <constraints>
                                                                                                                 <constraint firstAttribute="width" constant="1" id="NmE-wg-80x"/>
@@ -1444,7 +1444,8 @@
                                                                                                     </constraints>
                                                                                                 </view>
                                                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xfe-uw-b7y" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
-                                                                                                    <rect key="frame" x="61" y="0.0" width="40" height="50"/>
+                                                                                                    <rect key="frame" x="61" y="0.0" width="40" height="25"/>
+                                                                                                    <color key="backgroundColor" systemColor="tintColor"/>
                                                                                                     <constraints>
                                                                                                         <constraint firstAttribute="width" constant="40" id="z55-We-nK0"/>
                                                                                                     </constraints>
@@ -1458,7 +1459,7 @@
                                                                                                             <color key="value" name="PrimaryBackgroundColor"/>
                                                                                                         </userDefinedRuntimeAttribute>
                                                                                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                                                                                            <real key="value" value="6"/>
+                                                                                                            <integer key="value" value="9"/>
                                                                                                         </userDefinedRuntimeAttribute>
                                                                                                     </userDefinedRuntimeAttributes>
                                                                                                     <connections>
@@ -1466,6 +1467,9 @@
                                                                                                     </connections>
                                                                                                 </button>
                                                                                             </subviews>
+                                                                                            <constraints>
+                                                                                                <constraint firstAttribute="height" constant="25" id="Zm4-xd-YZ1"/>
+                                                                                            </constraints>
                                                                                         </stackView>
                                                                                     </subviews>
                                                                                 </stackView>
@@ -1863,7 +1867,7 @@
             <objects>
                 <viewController storyboardIdentifier="TransitionVC" id="o1K-SN-bUx" customClass="TransitionVC" customModule="Budget_Tracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="405-H3-8an">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="813"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="814"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c9d-cL-RPP" userLabel="doneButton" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
@@ -1921,7 +1925,7 @@
                                 </connections>
                             </segmentedControl>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0o7-y6-JW8">
-                                <rect key="frame" x="15" y="80" width="400" height="413"/>
+                                <rect key="frame" x="15" y="80" width="400" height="414"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="17f-0J-k9a" userLabel="valueView">
                                         <rect key="frame" x="0.0" y="0.0" width="400" height="60"/>
@@ -1979,7 +1983,7 @@
                                         </variation>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V1P-Cy-4Mn">
-                                        <rect key="frame" x="0.0" y="208" width="400" height="205"/>
+                                        <rect key="frame" x="0.0" y="208" width="400" height="206"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -2147,7 +2151,7 @@
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3iV-TP-Myd" userLabel="padView">
-                                <rect key="frame" x="0.0" y="513" width="430" height="300"/>
+                                <rect key="frame" x="0.0" y="514" width="430" height="300"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dtl-DA-9aX" userLabel="backgroundView">
                                         <rect key="frame" x="0.0" y="0.0" width="430" height="300"/>
@@ -2567,7 +2571,7 @@
                                 </constraints>
                             </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Te-KM-v7g">
-                                <rect key="frame" x="0.0" y="246" width="430" height="567"/>
+                                <rect key="frame" x="0.0" y="246" width="430" height="568"/>
                                 <connections>
                                     <segue destination="E1b-0F-r81" kind="embed" id="Vmv-tm-uoN"/>
                                 </connections>
@@ -3138,14 +3142,14 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="EmptyCell" id="WWi-IV-wdY" customClass="EmptyCell" customModule="Budget_Tracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="168.99999618530273" width="430" height="51.666667938232422"/>
+                                        <rect key="frame" x="0.0" y="168.99999618530273" width="430" height="43.666667938232422"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="WWi-IV-wdY" id="CNH-Ks-tDv">
-                                            <rect key="frame" x="0.0" y="0.0" width="430" height="51.666667938232422"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="430" height="43.666667938232422"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ShP-z6-IWQ">
-                                                    <rect key="frame" x="90" y="12.666666666666666" width="250" height="26.333333333333336"/>
+                                                    <rect key="frame" x="90" y="8.6666666666666661" width="250" height="26.333333333333336"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" alpha="0.14999999999999999" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No transactions history" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Bz-pA-1Zk" customClass="Label" customModule="Budget_Tracker" customModuleProvider="target">
                                                             <rect key="frame" x="0.0" y="0.0" width="250" height="26.333333333333332"/>
@@ -3802,7 +3806,7 @@
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TGK-Ax-n0d" customClass="TouchButton" customModule="Budget_Tracker" customModuleProvider="target">
                                         <rect key="frame" x="380" y="10" width="40" height="40"/>
-                                        <color key="backgroundColor" systemColor="tintColor"/>
+                                        <color key="backgroundColor" systemColor="linkColor"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="40" id="Gq0-8B-tPe"/>
                                             <constraint firstAttribute="height" constant="40" id="fHb-8H-WqJ"/>
@@ -4047,7 +4051,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="3cL-kn-iw3"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" largeTitles="YES" id="DoX-Gq-L35">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="109"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="108"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" name="PrimaryBackgroundColor"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -4201,7 +4205,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="GWk-gq-nU5"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" translucent="NO" largeTitles="YES" id="6yA-bn-Whm">
-                        <rect key="frame" x="0.0" y="59" width="430" height="97"/>
+                        <rect key="frame" x="0.0" y="59" width="430" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" name="PrimaryBackgroundColor"/>
                         <color key="tintColor" name="CategoryColor"/>
@@ -4227,7 +4231,7 @@
             <objects>
                 <viewController id="E1b-0F-r81" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="VGw-fv-gbi">
-                        <rect key="frame" x="0.0" y="0.0" width="430" height="567"/>
+                        <rect key="frame" x="0.0" y="0.0" width="430" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="7bi-dY-wKj"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -4238,198 +4242,6 @@
             <point key="canvasLocation" x="1186" y="-888"/>
         </scene>
     </scenes>
-    <designables>
-        <designable name="0oV-VO-FeH">
-            <size key="intrinsicContentSize" width="13" height="22"/>
-        </designable>
-        <designable name="1vj-92-UOQ">
-            <size key="intrinsicContentSize" width="30" height="39"/>
-        </designable>
-        <designable name="2Jn-7a-agR">
-            <size key="intrinsicContentSize" width="30" height="55"/>
-        </designable>
-        <designable name="2np-os-Y0H">
-            <size key="intrinsicContentSize" width="19" height="22"/>
-        </designable>
-        <designable name="5Bz-pA-1Zk">
-            <size key="intrinsicContentSize" width="226.66666666666666" height="26.333333333333332"/>
-        </designable>
-        <designable name="60g-sX-kVw">
-            <size key="intrinsicContentSize" width="30" height="35"/>
-        </designable>
-        <designable name="6QC-Nh-XH7">
-            <size key="intrinsicContentSize" width="30" height="55"/>
-        </designable>
-        <designable name="7DN-DG-lHp"/>
-        <designable name="8Qd-Zo-Mqf">
-            <size key="intrinsicContentSize" width="89.333333333333329" height="30"/>
-        </designable>
-        <designable name="8lL-T5-97L">
-            <size key="intrinsicContentSize" width="63" height="18"/>
-        </designable>
-        <designable name="9iz-tv-iMd">
-            <size key="intrinsicContentSize" width="30" height="55"/>
-        </designable>
-        <designable name="CJF-1D-UVd">
-            <size key="intrinsicContentSize" width="58" height="15.666666666666666"/>
-        </designable>
-        <designable name="CxJ-K9-I6v">
-            <size key="intrinsicContentSize" width="30" height="55"/>
-        </designable>
-        <designable name="GhQ-Pl-q1R">
-            <size key="intrinsicContentSize" width="30" height="36"/>
-        </designable>
-        <designable name="HCu-31-FZE">
-            <size key="intrinsicContentSize" width="34" height="16"/>
-        </designable>
-        <designable name="HRs-9q-ZqI">
-            <size key="intrinsicContentSize" width="47" height="15.666666666666666"/>
-        </designable>
-        <designable name="IhO-B5-kQQ">
-            <size key="intrinsicContentSize" width="45.333333333333336" height="13.333333333333334"/>
-        </designable>
-        <designable name="JIF-7p-C1E">
-            <size key="intrinsicContentSize" width="103.66666666666667" height="18"/>
-        </designable>
-        <designable name="JJR-Nl-rYc">
-            <size key="intrinsicContentSize" width="15" height="20.333333333333332"/>
-        </designable>
-        <designable name="JQu-2B-c5Z">
-            <size key="intrinsicContentSize" width="30" height="30"/>
-        </designable>
-        <designable name="Jds-VY-N0Z">
-            <size key="intrinsicContentSize" width="30" height="55"/>
-        </designable>
-        <designable name="KvP-WS-BeQ">
-            <size key="intrinsicContentSize" width="30" height="28"/>
-        </designable>
-        <designable name="NXe-cX-Hfu">
-            <size key="intrinsicContentSize" width="76.666666666666671" height="26.333333333333332"/>
-        </designable>
-        <designable name="O46-Bh-qBM">
-            <size key="intrinsicContentSize" width="174.66666666666666" height="30"/>
-        </designable>
-        <designable name="OgK-5z-ssL">
-            <size key="intrinsicContentSize" width="30" height="36"/>
-        </designable>
-        <designable name="OyJ-pP-66Q">
-            <size key="intrinsicContentSize" width="78.333333333333329" height="13.333333333333334"/>
-        </designable>
-        <designable name="QH9-Ow-4a2">
-            <size key="intrinsicContentSize" width="44.333333333333336" height="15.666666666666666"/>
-        </designable>
-        <designable name="TGK-Ax-n0d">
-            <size key="intrinsicContentSize" width="30" height="36"/>
-        </designable>
-        <designable name="TTP-GQ-6kd">
-            <size key="intrinsicContentSize" width="33.333333333333336" height="15.666666666666666"/>
-        </designable>
-        <designable name="VZM-jH-tpn">
-            <size key="intrinsicContentSize" width="38.333333333333336" height="13.333333333333334"/>
-        </designable>
-        <designable name="Vsx-oo-isP">
-            <size key="intrinsicContentSize" width="19" height="22"/>
-        </designable>
-        <designable name="W31-Wn-OVi">
-            <size key="intrinsicContentSize" width="50.333333333333336" height="13.333333333333334"/>
-        </designable>
-        <designable name="WI4-9c-ADb">
-            <size key="intrinsicContentSize" width="106" height="16"/>
-        </designable>
-        <designable name="ZDZ-cE-jf2">
-            <size key="intrinsicContentSize" width="30" height="55"/>
-        </designable>
-        <designable name="ZwM-nG-kM6">
-            <size key="intrinsicContentSize" width="26.666666666666668" height="12"/>
-        </designable>
-        <designable name="aI2-8y-K70">
-            <size key="intrinsicContentSize" width="30" height="48"/>
-        </designable>
-        <designable name="b3m-HC-uqJ">
-            <size key="intrinsicContentSize" width="30" height="35"/>
-        </designable>
-        <designable name="c9d-cL-RPP">
-            <size key="intrinsicContentSize" width="30" height="34"/>
-        </designable>
-        <designable name="dSw-Y8-OrZ">
-            <size key="intrinsicContentSize" width="23.666666666666668" height="18"/>
-        </designable>
-        <designable name="daM-fM-aqs">
-            <size key="intrinsicContentSize" width="34" height="36"/>
-        </designable>
-        <designable name="fSh-jG-SY9">
-            <size key="intrinsicContentSize" width="30" height="35"/>
-        </designable>
-        <designable name="fvx-Dm-VKG">
-            <size key="intrinsicContentSize" width="30" height="30"/>
-        </designable>
-        <designable name="gIt-0L-4IJ">
-            <size key="intrinsicContentSize" width="30" height="48"/>
-        </designable>
-        <designable name="gve-Pc-cyc">
-            <size key="intrinsicContentSize" width="76" height="32"/>
-        </designable>
-        <designable name="gwp-y1-Jmr">
-            <size key="intrinsicContentSize" width="88.333333333333329" height="15.666666666666666"/>
-        </designable>
-        <designable name="hSo-nA-Zbw">
-            <size key="intrinsicContentSize" width="30" height="55"/>
-        </designable>
-        <designable name="ieF-m1-ryE">
-            <size key="intrinsicContentSize" width="48" height="15.666666666666666"/>
-        </designable>
-        <designable name="j8N-A3-4Wm">
-            <size key="intrinsicContentSize" width="36" height="30"/>
-        </designable>
-        <designable name="jBw-Wl-arg">
-            <size key="intrinsicContentSize" width="32.333333333333336" height="18"/>
-        </designable>
-        <designable name="jDM-Q8-4VJ">
-            <size key="intrinsicContentSize" width="30" height="55"/>
-        </designable>
-        <designable name="jaM-jn-Fof">
-            <size key="intrinsicContentSize" width="51" height="16"/>
-        </designable>
-        <designable name="kJN-OX-a2c">
-            <size key="intrinsicContentSize" width="30" height="35"/>
-        </designable>
-        <designable name="kdg-LE-BIm">
-            <size key="intrinsicContentSize" width="30" height="55"/>
-        </designable>
-        <designable name="pK6-4E-O38">
-            <size key="intrinsicContentSize" width="17.333333333333332" height="22"/>
-        </designable>
-        <designable name="qT6-jw-Pe1">
-            <size key="intrinsicContentSize" width="30" height="30"/>
-        </designable>
-        <designable name="rGq-Aj-Zje">
-            <size key="intrinsicContentSize" width="94.666666666666671" height="27.666666666666668"/>
-        </designable>
-        <designable name="rol-B0-EZ3">
-            <size key="intrinsicContentSize" width="26.333333333333332" height="12"/>
-        </designable>
-        <designable name="sug-Eq-lTO">
-            <size key="intrinsicContentSize" width="30" height="55"/>
-        </designable>
-        <designable name="uFQ-us-rIo">
-            <size key="intrinsicContentSize" width="51.666666666666664" height="44.333333333333336"/>
-        </designable>
-        <designable name="uIj-ta-GpH">
-            <size key="intrinsicContentSize" width="51.333333333333336" height="17"/>
-        </designable>
-        <designable name="xfe-uw-b7y">
-            <size key="intrinsicContentSize" width="30" height="34"/>
-        </designable>
-        <designable name="yG8-rV-0Py">
-            <size key="intrinsicContentSize" width="30" height="34"/>
-        </designable>
-        <designable name="ydl-Nt-YBv">
-            <size key="intrinsicContentSize" width="30" height="36"/>
-        </designable>
-        <designable name="zDz-M6-AUL">
-            <size key="intrinsicContentSize" width="30" height="48"/>
-        </designable>
-    </designables>
     <inferredMetricsTieBreakers>
         <segue reference="HlC-bb-GVq"/>
         <segue reference="Ega-tn-GzY"/>
@@ -4640,7 +4452,7 @@ AAAAAAIBAAAAAAAAAGEAAAAAAAAAAAAAAAAAAChAA
             <color red="0.74000000953674316" green="0.74000000953674316" blue="0.74000000953674316" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="PrimaryBackgroundColor">
-            <color red="0.11400000005960464" green="0.11400000005960464" blue="0.11400000005960464" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>
         <namedColor name="SecondaryBacroundColor">
             <color red="0.059000000357627869" green="0.059000000357627869" blue="0.059000000357627869" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>

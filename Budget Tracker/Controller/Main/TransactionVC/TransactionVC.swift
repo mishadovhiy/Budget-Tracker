@@ -136,15 +136,10 @@ class TransitionVC: SuperViewController {
         NotificationCenter.default.addObserver( self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         if !fromEdit {
             createCameraContainer()
-            toggleCamera(show:fromEdit ? false : (AppDelegate.properties?.db.viewControllers.cameraStorage.addTransactionCameraEnabled ?? false), animated:false)
-
-        } else {
-            toggleCameraButton.isHidden = true
-            cameraContainer.isHidden = true
         }
 
     }
-
+    
     override func viewDidDismiss() {
         super.viewDidDismiss()
         dismissTransitionHolder = nil
@@ -522,7 +517,14 @@ class TransitionVC: SuperViewController {
         if !viewAppeareCalled {
             viewAppeareCalled = true
             self.cameraVC?.toggleCameraSession(pause: fromEdit ? true : !(AppDelegate.properties?.db.viewControllers.cameraStorage.addTransactionCameraEnabled ?? false))
+            if !fromEdit {
+             //   createCameraContainer()
+                toggleCamera(show:fromEdit ? false : (AppDelegate.properties?.db.viewControllers.cameraStorage.addTransactionCameraEnabled ?? false), animated:true)
 
+            } else {
+                toggleCameraButton.isHidden = true
+                cameraContainer.isHidden = true
+            }
         }
         if !(navigationController is TransactionNav) && panMahanger == nil {
             panMahanger = .init(vc: self, toView: valueLabel.superview?.superview, dismissAction: {
