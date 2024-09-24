@@ -22,6 +22,7 @@ class mainVCcell: ClearCell {
 
     override func draw(_ rect: CGRect) {
         super.draw(rect)
+        self.shadow(opasity: 0.05, color: K.Colors.link)
         let selected = UIView(frame: .zero)
         selected.backgroundColor = .clear
         self.selectedBackgroundView = selected

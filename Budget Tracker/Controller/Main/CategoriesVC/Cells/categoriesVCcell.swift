@@ -44,6 +44,8 @@ class categoriesVCcell: ClearCell {
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         if !drawed {
+            self.shadow(opasity: 0.05, color: K.Colors.link)
+
             drawed = true
             if !(AppDelegate.properties?.appData.symbolsAllowed ?? true) {
                 iconimage.isHidden = true
