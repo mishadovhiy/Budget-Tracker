@@ -212,7 +212,6 @@ extension HomeVC {
     }
     
     func tableDataLoaded(_ newValue:[tableStuct]) {
-        
         if transactionManager?.filterChanged ?? false{
             transactionManager?.filterChanged = false
         } else {
@@ -220,6 +219,10 @@ extension HomeVC {
             viewModel.selectedCell = nil
             self.viewModel.completedFiltering = true
             DispatchQueue.main.async {
+                self.viewModel.fetchCategories { newCategories in
+                    self.viewModel.dbAllCategories = newCategories
+                    self.viewModel.setLimits()
+                }
                 self.toggleNoData(show: false, addButtonHidden: true)
                 self.calculationSView.alpha = 0
                 UIView.animate(withDuration: 0.8) {

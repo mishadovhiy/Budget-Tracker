@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		297BDB649113044757C2CEF2 /* Pods_Budget_Tracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F84A1AEB24B0EC857F848E0 /* Pods_Budget_Tracker.framework */; };
 		8212A9F22CA2B1ED00B895BD /* OutlinedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8212A9F12CA2B1ED00B895BD /* OutlinedLabel.swift */; };
+		82CF0E5B2DC7B63F0093C696 /* LimitListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CF0E5A2DC7B63F0093C696 /* LimitListCell.swift */; };
 		8B20751227D9A7AF00CF2172 /* PascodeLockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B20751127D9A7AF00CF2172 /* PascodeLockView.swift */; };
 		8B26327E27E66B060086C3A8 /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B26327D27E66B060086C3A8 /* AppLocalization.swift */; };
 		8B26328227E677930086C3A8 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B26328127E677930086C3A8 /* Label.swift */; };
@@ -370,6 +371,7 @@
 		5F84A1AEB24B0EC857F848E0 /* Pods_Budget_Tracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Budget_Tracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60EB2258A12489890A827616 /* Pods-Budget Tracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Budget Tracker.release.xcconfig"; path = "Target Support Files/Pods-Budget Tracker/Pods-Budget Tracker.release.xcconfig"; sourceTree = "<group>"; };
 		8212A9F12CA2B1ED00B895BD /* OutlinedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlinedLabel.swift; sourceTree = "<group>"; };
+		82CF0E5A2DC7B63F0093C696 /* LimitListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitListCell.swift; sourceTree = "<group>"; };
 		8B20751127D9A7AF00CF2172 /* PascodeLockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PascodeLockView.swift; sourceTree = "<group>"; };
 		8B26327D27E66B060086C3A8 /* AppLocalization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLocalization.swift; sourceTree = "<group>"; };
 		8B26328127E677930086C3A8 /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
@@ -1249,6 +1251,7 @@
 				8D2CDA162AF3F2B800671A72 /* calcCell.swift */,
 				8D2CDA152AF3F29400671A72 /* mainVCcell.swift */,
 				8D1957C12B38BCF9006EC829 /* mainVCemptyCell.swift */,
+				82CF0E5A2DC7B63F0093C696 /* LimitListCell.swift */,
 				8D1957BD2B38BCCB006EC829 /* mainFooterCell.swift */,
 				8D1957BF2B38BCDE006EC829 /* mainHeaderCell.swift */,
 				8D2CDA1A2AF3F33300671A72 /* CVCell.swift */,
@@ -1750,9 +1753,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Budget Tracker/Pods-Budget Tracker-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Budget Tracker/Pods-Budget Tracker-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2003,6 +2010,7 @@
 				8DB23E0D2B3A05B3004AB0C2 /* AIAppearence_Extension.swift in Sources */,
 				8D2CDA252AF3F47C00671A72 /* AdButton.swift in Sources */,
 				8D251BC52B2D2DE3005EB934 /* UIFont.swift in Sources */,
+				82CF0E5B2DC7B63F0093C696 /* LimitListCell.swift in Sources */,
 				8BD3A3D927E4097400547022 /* BasicView.swift in Sources */,
 				8B78559F27F0CA2A00169A93 /* ReminderCell.swift in Sources */,
 				8D08FD532AC9CCE000BA0222 /* TransactionsManager.swift in Sources */,
@@ -2477,7 +2485,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
@@ -2487,7 +2495,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 37.22;
+				MARKETING_VERSION = 38.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -2508,7 +2516,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
@@ -2518,7 +2526,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 37.22;
+				MARKETING_VERSION = 38.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dovhiy.Developer.Budget-Tracker";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

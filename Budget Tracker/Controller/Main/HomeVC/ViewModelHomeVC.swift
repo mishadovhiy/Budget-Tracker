@@ -33,6 +33,40 @@ struct ViewModelHomeVC {
     var correctFrameBackground:CGRect = .zero
     var tableData:[TransactionsStruct] = []
     var completedFiltering = false
+    typealias LimitList = [NewCategories:Int]
+    var limits:[NewCategories:Int] = [:]
+    var dbAllCategories:[NewCategories] = []
+    mutating func fetchCategories(completion:@escaping(_ newCategories:[NewCategories])->()) {
+        let app = AppDelegate.properties?.db
+        DispatchQueue(label: "db", qos: .userInitiated).async {
+            let db = app?.categories ?? []
+            DispatchQueue.main.async {
+                completion(db)
+            }
+        }
+    }
+    mutating func setLimits() {
+        let limits = dbAllCategories.filter {
+            $0.purpose != .debt && ($0.monthLimit ?? 0) >= 1
+        }.sorted(by: {$0.name >= $1.name})
+        self.limits.removeAll()
+        var transactions = Array(monthTransactions)
+        limits.forEach { category in
+            if category.purpose != .debt && (category.monthLimit ?? 0) >= 1 {
+                let categoryTransactions = transactions.filter({
+                    $0.categoryID == "\(category.id)"
+                })
+                let results = categoryTransactions.reduce(0) { partialResult, transaction in
+                    partialResult + (Int(transaction.value) ?? 0)
+                }
+                transactions.removeAll(where: {$0.category.id == category.id})
+                if !categoryTransactions.isEmpty {
+                    self.limits.updateValue(Int(results), forKey: category)
+                }
+            }
+            
+        }
+    }
     let tableCorners:CGFloat = 15
     var actionAfterAdded:((Bool) -> ())?
     var firstAppearence = true

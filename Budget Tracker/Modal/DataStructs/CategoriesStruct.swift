@@ -9,7 +9,7 @@
 import UIKit
 
 
-struct NewCategories {
+struct NewCategories:Hashable {
     var id: Int
     var name: String
     var icon: String

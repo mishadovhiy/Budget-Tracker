@@ -107,7 +107,8 @@ class HomeVC: SuperViewController {
     
     
     func bannerUpdated(_ value:CGFloat) {
-        self.additionalSafeAreaInsets.bottom = value
+        self.mainTableView.contentInset.bottom = value
+//        self.additionalSafeAreaInsets.bottom = value / 2
        // self.mainTableView.contentInset.bottom = value
     }
     

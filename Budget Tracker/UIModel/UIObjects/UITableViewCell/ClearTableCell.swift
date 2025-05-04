@@ -17,6 +17,10 @@ class ClearCell:TableCell {
     }
     
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        moveTouchView(show: false)
+    }
     
     func setSelectionBackground(view:UIView, color:UIColor? = nil) {
         let selfColor = view.backgroundColor
@@ -79,6 +83,11 @@ class ClearCollectionCell:UICollectionViewCell {
         super.draw(rect)
         setSelectedColor(.clear)
         createTouchView()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        moveTouchView(show: false)
     }
     
     func setSelectionBackground(view:UIView, color:UIColor? = nil) {
