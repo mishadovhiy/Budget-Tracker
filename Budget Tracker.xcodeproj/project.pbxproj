@@ -10,6 +10,8 @@
 		297BDB649113044757C2CEF2 /* Pods_Budget_Tracker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F84A1AEB24B0EC857F848E0 /* Pods_Budget_Tracker.framework */; };
 		8212A9F22CA2B1ED00B895BD /* OutlinedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8212A9F12CA2B1ED00B895BD /* OutlinedLabel.swift */; };
 		82CF0E5B2DC7B63F0093C696 /* LimitListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CF0E5A2DC7B63F0093C696 /* LimitListCell.swift */; };
+		82CF0E712DC7E0460093C696 /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CF0E702DC7E0460093C696 /* StoreKitManager.swift */; };
+		82CF0E722DC7E0460093C696 /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82CF0E702DC7E0460093C696 /* StoreKitManager.swift */; };
 		8B20751227D9A7AF00CF2172 /* PascodeLockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B20751127D9A7AF00CF2172 /* PascodeLockView.swift */; };
 		8B26327E27E66B060086C3A8 /* AppLocalization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B26327D27E66B060086C3A8 /* AppLocalization.swift */; };
 		8B26328227E677930086C3A8 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B26328127E677930086C3A8 /* Label.swift */; };
@@ -372,6 +374,7 @@
 		60EB2258A12489890A827616 /* Pods-Budget Tracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Budget Tracker.release.xcconfig"; path = "Target Support Files/Pods-Budget Tracker/Pods-Budget Tracker.release.xcconfig"; sourceTree = "<group>"; };
 		8212A9F12CA2B1ED00B895BD /* OutlinedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlinedLabel.swift; sourceTree = "<group>"; };
 		82CF0E5A2DC7B63F0093C696 /* LimitListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LimitListCell.swift; sourceTree = "<group>"; };
+		82CF0E702DC7E0460093C696 /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
 		8B20751127D9A7AF00CF2172 /* PascodeLockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PascodeLockView.swift; sourceTree = "<group>"; };
 		8B26327D27E66B060086C3A8 /* AppLocalization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLocalization.swift; sourceTree = "<group>"; };
 		8B26328127E677930086C3A8 /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
@@ -1451,6 +1454,7 @@
 				8D996D532B3792F500DF12A6 /* NetworkModel */,
 				8B3F919827D31C4000BE826C /* DataBase */,
 				8DAD1AE02BE443C500FDE17B /* WatchConectivityService.swift */,
+				82CF0E702DC7E0460093C696 /* StoreKitManager.swift */,
 				8B5434FB27ED83AC00417141 /* Notifications */,
 				8BB75D4527F294ED00AE71A1 /* DataStructs */,
 				8D2CDA232AF3F44200671A72 /* TransactionsManager */,
@@ -1787,6 +1791,7 @@
 				8D6775412C02AA7700A7B476 /* WatchConectivityService.swift in Sources */,
 				8D1E9D822BE3CE4A00716193 /* HomeViewModel.swift in Sources */,
 				8D5C0A052BE33BCC00C38222 /* Keychain.swift in Sources */,
+				82CF0E722DC7E0460093C696 /* StoreKitManager.swift in Sources */,
 				8D5C0A3F2BE33CF400C38222 /* DateComponents.swift in Sources */,
 				8DC7C3212BE6BE8100BE1915 /* EnterValueView.swift in Sources */,
 				8DD1DD852BE3A640005F0B86 /* localizationDictUA.swift in Sources */,
@@ -1949,6 +1954,7 @@
 				8BFA15D427E8E87B0078856A /* LocalDataActionCell.swift in Sources */,
 				8DFEA8A52B0C5073003410D7 /* PdfTextProperties.swift in Sources */,
 				8BB75D4227F26CA000AE71A1 /* ReminderStruct.swift in Sources */,
+				82CF0E712DC7E0460093C696 /* StoreKitManager.swift in Sources */,
 				8DA77CF4298B687E00949D98 /* Filter.swift in Sources */,
 				8BF63E8B276294F2002E8601 /* SelectValueVC.swift in Sources */,
 				8DFEA8A72B0C5091003410D7 /* PdfDocumentProperties.swift in Sources */,
@@ -2485,7 +2491,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
@@ -2516,7 +2522,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "Budget Tracker/Budget Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = FQA2XH9ZUM;
 				INFOPLIST_FILE = "Budget Tracker/Info.plist";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";

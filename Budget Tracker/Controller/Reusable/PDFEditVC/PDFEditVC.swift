@@ -304,6 +304,13 @@ class PDFEditVC:SuperViewController {
             self.exportPressed = true
             self.pdfData?.pageWidth = self.pdfData?.normalPageWidth ?? 0
             self.pdfData?.toExport(sender: self.navigationController?.view ?? .init(), toEdit: false)
+            if !(AppDelegate.properties?.db.ratePressed ?? false) {
+                StorekitModel().requestReview()
+                let db = AppDelegate.properties?.db
+                DispatchQueue(label: "db", qos: .userInitiated).async {
+                    db?.ratePressed = true
+                }
+            }
         }
         
 

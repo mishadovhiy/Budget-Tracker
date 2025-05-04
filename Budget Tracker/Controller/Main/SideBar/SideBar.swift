@@ -61,10 +61,13 @@ class SideBar: UIView {
         let trialCell = CellData(name: "Trail till", value: "\(7 - trialDays)", segue: "", image: "clock.fill", selectAction: {
             AppDelegate.properties?.appData.present(vc: BuyProVC.configure())
         })
+        let rateCell = CellData(name: "Rate app", value: "", segue: "", image: "support.fill", selectAction: {
+            StorekitModel().requestReview()
+        })
 
 
         var accountSection:[CellData] {
-            return trialDays == 0 ? [accpuntCell, settingsCell] : [accpuntCell, settingsCell, trialCell]
+            return trialDays == 0 ? [accpuntCell, settingsCell, rateCell] : [accpuntCell, settingsCell, trialCell, rateCell]
         }
         
         let upcommingRemiders:CellData = .init(name: "Payment reminders".localize, value: "", segue: "", image: "bell.fill", pro: nil, notifications: notifications.1, selectAction: {

@@ -90,6 +90,15 @@ print(dbDict, " dbdata")
 
 
     
+    var ratePressed:Bool {
+        get {
+            db["ratePressed"] as? Bool ?? false
+        }
+        set {
+            db.updateValue(newValue, forKey: "ratePressed")
+        }
+    }
+    
     var proVersion: Bool {
         get{
             let result = !purchasedOnThisDevice ? (db["proVersion"] as? Bool ?? false) : purchasedOnThisDevice

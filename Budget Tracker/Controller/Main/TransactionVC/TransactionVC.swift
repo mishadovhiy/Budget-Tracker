@@ -435,6 +435,13 @@ class TransitionVC: SuperViewController {
                     let value = "\(valueRes)"
                     let comment = self.commentTextField.text ?? ""
                     self.addNew(value: value, category: "\(category.id)", date: newDate, comment: comment)
+                    if !(AppDelegate.properties?.db.ratePressed ?? false) {
+                        StorekitModel().requestReview()
+                        let db = AppDelegate.properties?.db
+                        DispatchQueue(label: "db", qos: .userInitiated).async {
+                            db?.ratePressed = true
+                        }
+                    }
                 } else {
                     self.errorSaving()
                 }

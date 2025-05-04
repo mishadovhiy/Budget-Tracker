@@ -77,6 +77,14 @@ class RemindersVC: SuperViewController {
         transitionAppearenceManager.canDivideFrame = false
 
         self.navigationController?.pushViewController(vc, animated: true)
+        
+        if !(AppDelegate.properties?.db.ratePressed ?? false) {
+            StorekitModel().requestReview()
+            let db = AppDelegate.properties?.db
+            DispatchQueue(label: "db", qos: .userInitiated).async {
+                db?.ratePressed = true
+            }
+        }
     }
     private var interstitial: GADFullScreenPresentingAd?
     @IBOutlet weak var addTransactionButton: AdButton!
